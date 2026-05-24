@@ -26,6 +26,50 @@ The CMP Backend enqueues an asynchronous background task to execute Terraform.
    - Terraform configures ArgoCD to access the private repository. It creates a Kubernetes Secret in the `argocd` namespace containing the GitHub App credentials (App ID, Installation ID, and Private Key).
    - Terraform applies the ArgoCD `Application` Custom Resource (CR) pointing to the repository.
 
+```mermaid
+graph TD
+    %% --- Nodes ---
+    dev["👤 Developer"]
+    ui["💻 CMP Frontend - Next.js"]
+    api["⚙️ CMP Backend - FastAPI"]
+    db[("💾 CMP Database - SQLite")]
+    keycloak["🔑 Keycloak - SSO and User Profile"]
+    tf["🛠️ Terraform Executor"]
+    s3[("📦 S3 Bucket - TF States")]
+    gh_app["🐙 GitHub App - CNP-Portal"]
+    vault["🔒 HashiCorp Vault - Secrets"]
+    cloudflare["🌐 Cloudflare - DNS"]
+    argocd["🐙 ArgoCD - GitOps Controller"]
+    k3s_ns["☸️ K3s Target Namespace"]
+
+    %% --- Actions & Flows ---
+    dev -->|1. Fills form and clicks Deploy| ui
+    ui -->|2. Sends POST deployments| api
+    
+    api -->|3a. Read user profile and installation ID| keycloak
+    api -->|3b. Store PENDING status| db
+    
+    api -->|4a. Sign JWT with Private Key| gh_app
+    gh_app -->|4b. Return temporary token| api
+    
+    api -->|5. Enqueue background task| tf
+    tf -->|6. Dynamic init and lock state| s3
+    
+    tf -->|7a. Create private repo and push code| gh_app
+    tf -->|7b. Create path and write secrets| vault
+    tf -->|7c. Create CNAME record| cloudflare
+    tf -->|7d. Apply ArgoCD App CRD and Repo Secret| k3s_ns
+
+    k3s_ns -->|8a. Exposes App CRD| argocd
+    argocd -->|8b. Pulls values yaml via App Creds| gh_app
+    argocd -->|8c. Mounts Secrets via K8s Role| vault
+    argocd -->|8d. Deploys Generic Chart| k3s_ns
+    
+    api -->|9a. Queries App Health| argocd
+    api -->|9b. Updates status to RUNNING| db
+    ui -->|9c. Polls status every 3s| api
+```
+
 ## Phase 2: GitOps Delivery (ArgoCD)
 Once Terraform successfully completes Phase 1, the CMP marks the deployment state as `RUNNING` in its internal database. From this point forward, ArgoCD is fully responsible for the state of the cluster.
 

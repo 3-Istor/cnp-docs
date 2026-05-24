@@ -104,3 +104,40 @@ To provide a modern PaaS experience, developers can manage their app via the CMP
 - **No Configuration Drift:** Because the CMP writes to Git instead of the K8s API, the CMP and the Git repository are never out of sync.
 - **Auditability:** Every infrastructure change made via the CMP results in a Git commit. The commit history acts as a perfect audit log (e.g., `"CMP: Scaled replicas from 2 to 4"`).
 - **Rollback Capability:** If a user breaks their app via the CMP, they can simply revert the Git commit, or click "Rollback" in the CMP (which just reverts the last commit via the GitHub API).
+
+```mermaid
+graph TD
+    %% --- Nodes ---
+    dev["👤 Developer"]
+    ide["💻 Developer Local IDE"]
+    ui["💻 CMP Frontend - Next.js"]
+    api["⚙️ CMP Backend - FastAPI"]
+    db[("💾 CMP Database - SQLite")]
+    gh["🐙 GitHub Private Repo - deploy/values.yaml"]
+    argocd["🐙 ArgoCD - GitOps Controller"]
+    k3s["☸️ K3s Target Namespace - Pods"]
+    envoy["🌐 Envoy Gateway - SecurityPolicy"]
+
+    %% --- Path A: Direct Git / Code ---
+    dev -->|Option A. Manual change in IDE| ide
+    ide -->|1a. Push commit to main branch| gh
+
+    %% --- Path B: CMP UI / Dashboard ---
+    dev -->|Option B. Click toggle or slider in UI| ui
+    ui -->|1b. Sends POST to config endpoint| api
+    
+    api -->|2b. Read current values yaml via API| gh
+    api -->|3b. Commit modified values yaml| gh
+    api -->|4b. Update status to SYNCING| db
+
+    %% --- Common Delivery & Reconciliation ---
+    gh -->|5. ArgoCD detects Git commit| argocd
+    
+    argocd -->|6a. Reconcile K8s deployment replicas| k3s
+    argocd -->|6b. Update Envoy SecurityPolicy if SSO changed| envoy
+
+    %% --- Status Feedback Loop ---
+    argocd -->|7. Report successful sync| api
+    api -->|8. Update status to RUNNING| db
+    ui -->|9. Poll status to refresh dashboard| api
+```
