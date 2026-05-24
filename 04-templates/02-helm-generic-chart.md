@@ -4,7 +4,13 @@ Rather than maintaining custom Kubernetes manifests for every single application
 
 ArgoCD points to this central Helm Chart and merges the specific `deploy/values.yaml` from the application's repository.
 
-## 1. Chart Architecture & Structure
+## 1. From Kustomize to Helm
+Legacy implementations relied on raw Kubernetes manifests (Deployments, Services, Secrets) managed via Kustomize. 
+While Kustomize is great for static overlays, it lacks the dynamic conditional logic (`if/else`) required for a PaaS.
+
+By migrating to Helm, the cluster can dynamically provision complex resources (like VaultSecrets, Envoy SecurityPolicies, or CloudNativePG databases) simply by toggling boolean values in the developer's `values.yaml`.
+
+## 2. Chart Architecture & Structure
 The Generic Chart contains templates for every possible Kubernetes resource an application might need. Resources are rendered conditionally based on the `values.yaml`.
 
 ```text
@@ -15,7 +21,7 @@ cnp-generic-chart/
     ├── _helpers.tpl                # Naming conventions & labels
     ├── deployment.yaml             # K8s Deployment
     ├── service.yaml                # K8s Service
-    ├── ingress-httproute.yaml      # Envoy Gateway HTTPRoute
+    ├── httproute.yaml              # Envoy Gateway HTTPRoute
     ├── envoy-securitypolicy.yaml   # Edge SSO Auth (Conditional)
     ├── vaultsecret.yaml            # Ricoberger VaultSecret (Conditional)
     ├── database-cnpg.yaml          # CloudNativePG Cluster (Conditional)
@@ -24,7 +30,7 @@ cnp-generic-chart/
 
 ---
 
-## 2. Conditional Rendering Logic
+## 3. Conditional Rendering Logic
 
 The power of the Generic Chart lies in Go template `if` statements.
 
@@ -77,7 +83,7 @@ spec:
 
 ---
 
-## 3. Database Provisioning via CloudNativePG (CNPG)
+## 4. Database Provisioning via CloudNativePG (CNPG)
 When an application requires a database, the Generic Chart does not rely on heavy subcharts. Instead, it conditionally renders a native **CloudNativePG Cluster** resource. 
 
 This model is multi-cloud ready, allowing cross-cluster streaming replication and S3-backed continuous archiving (via Garage S3 or AWS S3).
