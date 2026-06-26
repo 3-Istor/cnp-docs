@@ -228,9 +228,7 @@ Les champs Kubernetes sont `null` pour les déploiements legacy :
 
 ```bash
 # GitHub App Integration (requis pour Kubernetes)
-GITHUB_APP_PRIVATE_KEY="-----BEGIN RSA PRIVATE KEY-----
-...
------END RSA PRIVATE KEY-----"
+GITHUB_APP_PRIVATE_KEY=""
 
 # S3 Backend (requis pour Terraform state)
 TF_BACKEND_S3_ENABLED=true

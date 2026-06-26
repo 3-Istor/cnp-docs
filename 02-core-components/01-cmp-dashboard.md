@@ -1,105 +1,112 @@
-# Cloud Management Platform (CMP): Core Dashboard & API
+# CMP Portal Architecture & Dashboard
 
-The CMP is the developer-facing IDP (Internal Developer Portal). It supports a **Multi-Provider Hybrid Architecture**, allowing developers to deploy legacy IaaS stacks (AWS ASG + OpenStack DB) alongside modern Cloud-Native GitOps stacks (Kubernetes + ArgoCD) from a single unified interface.
-
----
-
-## 1. Catalog & UX Restructuring
-
-To prevent confusing the user, the CMP Frontend separates the offerings into distinct catalogs.
-
-### A. The Catalog View
-- **Category 1: Infrastructure as a Service (IaaS)**
-  - Templates combining Raw VMs, AWS Auto Scaling Groups, and OpenStack nodes (The legacy templates).
-- **Category 2: Platform as a Service (K8s / GitOps)**
-  - Templates deploying standardized Microservices via ArgoCD to the K3s cluster.
-
-### B. User Onboarding (GitHub Link)
-Located in `AccountPage.tsx`. To use the PaaS catalog, users must link their GitHub account.
-1. User clicks **"Link GitHub Account"**.
-2. Redirected to the GitHub App installation page.
-3. Upon callback, the FastAPI backend receives the `installation_id`.
-4. **Storage:** The backend updates the user's profile in the **Keycloak API**, saving `github_installation_id` as a custom user attribute. This avoids creating complex user tables in SQLite.
+The Cloud Management Platform (CMP) is the developer-facing Internal Developer Portal (IDP). It is designed as a **Multi-Provider Hybrid Portal**, allowing developers to deploy and manage legacy IaaS stacks (AWS Auto Scaling Groups + OpenStack DB) alongside modern K3s GitOps workloads from a single interface.
 
 ---
 
-## 2. Data Model Extension (FastAPI / SQLAlchemy)
+## 1. Directory & Codebase Layout
 
-We preserve the existing `deployments` table to avoid breaking the legacy AWS/OpenStack workflows, but we extend it to support the new Multi-Tenant and GitOps paradigms.
+The CMP codebase is structured as a monorepo to maintain strong contract alignments between the Next.js frontend schemas and the FastAPI routers.
 
-### Extended `deployments` Table
-- `id` (Integer / Primary Key)
-- `name` (String, unique)
-- `project_id` (String - References the Keycloak Project Group)
-- `template_id` (String)
-- `status` (Enum: `PENDING`, `DEPLOYING`, `RUNNING`, `DEGRADED`, `FAILED`, `DELETED`)
-- **Discriminator:**
-  - `provider_type` (Enum: `LEGACY_HYBRID`, `KUBERNETES`)
-- **Legacy Hybrid Fields (Preserved):**
-  - `os_vm_db1_id`, `aws_asg_name`, etc.
-- **New Kubernetes Fields:**
-  - `github_repo_url` (String - Link to the developer's GitOps repo)
-  - `argocd_app_name` (String - The CRD name in ArgoCD)
-  - `k8s_namespace` (String - The target namespace)
-
----
-
-## 3. Backend Orchestration (The Saga Pattern)
-
-The `saga_orchestrator.py` is updated to route the deployment workflow based on the template's `provider_type`.
-
-### Path A: Legacy Hybrid Workflow
-Maintains the existing logic:
-1. Terraform provisions OpenStack VMs (Stateful).
-2. Terraform provisions AWS ASG (Stateless).
-3. Rollbacks if AWS fails.
-
-### Path B: Kubernetes GitOps Workflow
-Executes the new Day-0 provisioning:
-1. **GitHub Auth:** Fetch the user's `github_installation_id` from Keycloak, generate a dynamic GitHub App token.
-2. **Terraform Bootstrap:** Create the GitHub Repo, setup Branch Protection, inject base `values.yaml`.
-3. **Vault & K8s:** Create Vault Path, configure ArgoCD App CRD.
-4. ArgoCD takes over the actual pod deployment (Day-1).
+```text
+arcl-cmp/
+├── backend/
+│   ├── app/
+│   │   ├── core/              # Config, DB connections, and WAL initialization
+│   │   ├── models/            # SQLAlchemy database entities (Deployments, Project Owners)
+│   │   ├── schemas/           # Pydantic payloads and validation models
+│   │   ├── routers/           # FastAPI HTTP endpoints (deployments, projects, catalog, account)
+│   │   ├── services/          # Pure domain logic (SAGA, Keycloak admin, GitHub App, Vault VSO)
+│   │   └── terraform/         # Day-0 Bootstrapping local modules (github_bootstrap)
+│   └── alembic/               # Database migrations
+└── frontend/
+    └── src/
+        ├── app/               # Next.js App Router folders (account, projects, auth)
+        ├── components/        
+        │   ├── account/       # GitHubLinkButton (OAuth installation callback)
+        │   ├── catalog/       # CatalogGrid, DeployModal
+        │   ├── dashboard/     # Overall health summaries
+        │   └── projects/      # AppCard, AppConfigPanel (GitOps), MembersPanel
+        ├── lib/               # API clients, custom React hooks
+        └── types/             # Shared TypeScript interface definitions
+```
 
 ---
 
-## 4. Multi-Provider Health Monitoring
+## 2. Backend Orchestration (The SAGA Strategy)
 
-The `monitoring_service.py` is refactored using a Strategy Pattern to handle different infrastructure backends.
+The `saga_orchestrator.py` service acts as the central workflow router. It executes different state-machine paths depending on the template's `provider_type`.
 
-### A. Global Infrastructure Health
-Continues to poll the base components:
-- AWS VPN Gateways (Boto3).
-- OpenStack Hypervisors (OpenStackSDK).
-- Kubernetes Core Components (ArgoCD API Health, Cilium Status).
+### A. The SAGA Execution Flow:
 
-### B. Application Health (`AppHealthResponse`)
-When the frontend requests the health of a specific deployment, the backend checks the `provider_type`:
+```mermaid
+flowchart TD
+    Start([POST /api/deployments]) --> Validate[Validate Pydantic Schema]
+    Validate --> Route{Check provider_type}
 
-**If `LEGACY_HYBRID`:**
-- Connects to AWS (ASG Target Groups) and OpenStack (VM Status) as currently implemented.
+    %% Kubernetes Path
+    Route -->|KUBERNETES| PathK8s[Kubernetes GitOps Flow]
+    PathK8s --> K8s_Token[1. Mint GitHub App Token]
+    K8s_Token --> K8s_TF[2. Execute github_bootstrap module]
+    K8s_TF -->|Writes-back values.yaml, applies App CRD| K8s_DB[3. Save State S3 path & outputs to DB]
+    K8s_DB --> K8s_Argo[4. Handover to ArgoCD]
+    K8s_Argo --> K8s_Success([Status: RUNNING])
 
-**If `KUBERNETES`:**
-- The backend makes a REST API call to the **ArgoCD Server API**.
-- `GET /api/v1/applications/{argocd_app_name}`
-- Maps ArgoCD statuses to CMP statuses:
-  - ArgoCD `Healthy` & `Synced` ➔ CMP `healthy`
-  - ArgoCD `Progressing` ➔ CMP `deploying`
-  - ArgoCD `Degraded` or `OutOfSync` ➔ CMP `degraded`
+    %% Legacy Path
+    Route -->|LEGACY_HYBRID| PathLegacy[Legacy Hybrid Flow]
+    PathLegacy --> Leg_OS[1. Provision OpenStack DB VMs]
+    Leg_OS -->|Success| Leg_AWS[2. Provision AWS ASG & ALB]
+    Leg_AWS -->|Success| Leg_Success([Status: RUNNING])
+
+    %% Legacy Rollback
+    Leg_AWS -->|Failure| Leg_Rollback[SAGA Rollback: Terminate OpenStack VMs]
+    Leg_Rollback --> Leg_Fail([Status: FAILED])
+    Leg_OS -->|Failure| Leg_Fail
+```
 
 ---
 
-## 5. Dashboard Capabilities
+## 3. Multi-Provider Health Monitoring (Strategy Pattern)
 
-### A. Project Dashboards
-Users can create "Projects" in the CMP.
-- Creating a Project invokes the Keycloak API to create a `project-<name>-admin` and `project-<name>-member` group.
-- The UI queries Keycloak directly to display the members of the project.
+The `monitoring_service.py` is implemented using a Strategy Pattern. When the frontend or the background poller queries the health status of a deployment, the service routes the request to the correct cloud provider SDK:
 
-### B. Dynamic Deployment Cards
-The `DeploymentCard.tsx` adapts its UI based on the `provider_type`:
-- **Legacy Hybrid Apps:** Show outputs for ALB URLs and direct OpenStack IP addresses.
-- **Kubernetes Apps:** Show quick-action buttons for:
-  - `[ View in ArgoCD ]`
-  - `[ Open GitHub Repo ]`
-  - `[ Manage Secrets in Vault ]`
+```mermaid
+flowchart LR
+    CMP[GET /api/deployments/id] --> Check{Check provider_type}
+    
+    %% Legacy Routing
+    Check -->|LEGACY_HYBRID| MonitorLegacy[Legacy Strategy]
+    MonitorLegacy -->|Boto3 API| AWS_ALB[Query AWS ALB Target Group]
+    MonitorLegacy -->|OpenStack SDK| OS_VMs[Query OpenStack compute.servers]
+    AWS_ALB & OS_VMs --> MergeLegacy[Consolidate States]
+    
+    %% Kubernetes Routing
+    Check -->|KUBERNETES| MonitorK8s[Kubernetes Strategy]
+    MonitorK8s -->|ArgoCD REST API| Argo_Server[Query /api/v1/applications/name]
+    Argo_Server --> MergeK8s[Map ArgoCD Status to CMP Status]
+
+    MergeLegacy & MergeK8s --> Return[Return AppHealthResponse]
+```
+
+### ArgoCD to CMP Status Mapping:
+When querying a Kubernetes-native GitOps deployment, the backend translates ArgoCD's statuses into standardized CMP states:
+* ArgoCD `Healthy` & `Synced` ➔ CMP `healthy`
+* ArgoCD `Progressing` ➔ CMP `deploying`
+* ArgoCD `Degraded` or `OutOfSync` ➔ CMP `degraded`
+* ArgoCD `Missing` or `Unknown` ➔ CMP `failed`
+
+---
+
+## 4. Frontend Dynamic Components
+
+The Next.js frontend uses conditional rendering to adapt components to the underlying infrastructure type.
+
+### A. The Dynamic `DeploymentCard.tsx`
+* **For Legacy Deployments**: Displays the public AWS Application Load Balancer DNS endpoint and raw OpenStack VM IP addresses.
+* **For Kubernetes Deployments**: Renders deep-link action buttons pointing directly to the Git repository, the matching ArgoCD Application dashboard, and the project's HashiCorp Vault namespace.
+
+### B. The `AppConfigPanel.tsx` (Day-2 GitOps Editor)
+When viewing a `kubernetes` deployment, the frontend renders a dedicated configuration editor. It fetches the live, commented `values.yaml` from GitHub, renders inputs (sliders for replicas, switches for SSO), and executes deep-merge PATCH commits on save, bypassing the Kubernetes API.
+
+---
+**Next Step**: Continue to [Keycloak Identity & Access Management](02-identity-keycloak.md).

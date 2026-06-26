@@ -1,90 +1,167 @@
 # Continuous Integration & Delivery (CI/CD)
 
-CNP provides a seamless "code-to-cluster" experience. Developers only need to write application code and push to GitHub. The platform handles testing, building, and delivering the application to the Kubernetes cluster automatically.
+CNP provides a seamless "code-to-cluster" automated pipeline. Developers only need to write application code and push to GitHub. The platform handles testing, building, and delivering the workloads to the K3s cluster automatically.
 
-## 1. The CI/CD Architecture Overview
+---
 
-The pipeline leverages three primary components:
-1. **GitHub Actions (CI):** Handles linting, testing, and building the container images.
-2. **GitHub Container Registry (GHCR):** Stores the built Docker images.
-3. **ArgoCD Image Updater (CD):** Continuously monitors GHCR for new image tags and automatically updates the Kubernetes deployment manifests in Git.
+## 1. CI/CD Architecture Overview
+
+The pipeline integrates three decoupled components to enforce Git as the Single Source of Truth (SSOT) while eliminating complex pipeline scripts or manual token configurations:
+
+```mermaid
+flowchart TD
+    %% --- CI Phase ---
+    Dev[👤 Developer] -->|1. git push| GH[(GitHub Repo)]
+    GH -->|2. Trigger Workflow| GHA[GitHub Actions]
+    GHA -->|3. Build & Tag| GHCR[GitHub Container Registry]
+
+    %% --- CD Phase ---
+    IU[ArgoCD Image Updater] -->|4. Polls Registry| GHCR
+    IU -->|5. Detects New sha-xxxx| IU
+    IU -->|6. Writes back new tag to Git| GH
+    
+    Argo[ArgoCD Engine] <-->|7. Reconciles state| GH
+    Argo -->|8. Applies rolling update| K8s[K3s Cluster]
+```
 
 ---
 
 ## 2. Continuous Integration (GitHub Actions)
 
-When the CMP provisions a new application from a "Git App Template", it includes a pre-configured `.github/workflows/ci.yml` file.
+When the CMP provisions a new application from a Git App Template, it automatically commits a standardized, highly optimized `.github/workflows/ci.yml` file into the repository.
 
-### A. The Branching Strategy
-- `main` branch pushes: Trigger **Production** builds.
-- `staging` branch pushes: Trigger **Staging** builds.
-- Pull Requests: Trigger **Testing & Linting** (No Docker build/push).
+### Standard CI Pipeline Spec (`ci.yml`):
+```yaml
+name: CI/CD Pipeline
 
-### B. The CI Pipeline Stages
-1. **Test Phase:** 
-   - Spins up necessary services (e.g., PostgreSQL via `docker-compose`).
-   - Runs Linters (e.g., `eslint`, `black`, `pylint`).
-   - Executes Unit Tests (e.g., `pytest`, `jest`).
-2. **Build Phase:** 
-   - Uses Docker Buildx for optimized caching.
-   - Builds the Docker image(s) for the application.
-3. **Push Phase:**
-   - Tags the image using the short commit SHA (e.g., `ghcr.io/my-org/my-app:sha-8f3a1b4`).
-   - Pushes the image to the GitHub Container Registry.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
 
-*Security Note: The GitHub Action uses the native `${{ secrets.GITHUB_TOKEN }}` to push to GHCR. No manual Docker credentials need to be stored or managed by the developers.*
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  test:
+    name: Test & Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run linter
+        run: npm run lint || echo "No lint script found"
+
+      - name: Run tests
+        run: npm test || echo "No test script found"
+
+  build:
+    name: Build & Push Image
+    runs-on: ubuntu-latest
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          # Authenticates dynamically using the native repository token
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=sha,prefix=sha-,format=short
+            type=raw,value=latest
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          # Optimized caching utilizing inline and registry layers
+          cache-from: type=registry,ref=${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          cache-to: type=inline
+```
+
+### Security & Performance Controls:
+* **Zero Secret Exposure**: No manual Docker or GitHub credentials are ever stored in the repository. The workflow uses the temporary `${{ secrets.GITHUB_TOKEN }}` granted by the runner.
+* **Tagging Strategy**: Every production build is tagged with `latest` and `sha-[short-hash]` (e.g., `sha-8f3a1b4`). This specific tag format is required for continuous delivery.
+* **Inline Caching**: Leveraging `cache-from` and `cache-to` ensures that Docker layers (such as Node modules) are reused across builds, cutting build times down.
 
 ---
 
 ## 3. Continuous Delivery (ArgoCD Image Updater)
 
-Traditionally, after a CI pipeline builds a new image, it must commit the new image tag (e.g., `sha-8f3a1b4`) back into the Git repository containing the Helm `values.yaml`. 
-To avoid complex CI scripts and token management, CNP utilizes the **ArgoCD Image Updater**.
+To achieve true GitOps, the cluster must be updated when a new container image is pushed to the registry. Traditionally, this requires the CI pipeline to have write-access to the repository to commit the new image tag. 
 
-### A. How It Works
-When Terraform registers the application in ArgoCD, it also deploys an `ImageUpdater` CRD alongside it (e.g., `app-updater.yaml`).
+CNP eliminates this push-back pattern by running the **ArgoCD Image Updater** inside the cluster.
 
-The Image Updater continuously polls the GHCR registry. When it detects a new Docker image matching the allowed pattern (e.g., `regexp:^sha-[a-f0-9]+$`), it automatically instructs ArgoCD to deploy the new image.
+### Image Updater Specification:
+Alongside the main application, Terraform deploys an `ImageUpdater` custom resource. It polls the GHCR registry, detects new tags matching the commit SHA pattern, and commits the tag back to Git.
 
-### B. The Write-Back Mechanism (True GitOps)
-To maintain Git as the Single Source of Truth (SSOT), ArgoCD Image Updater is configured with the `write-back-method: git`. 
-
-When a new image is deployed, ArgoCD uses the GitHub App credentials (provisioned by the CMP) to commit the new image tag back to the application's `values.yaml` file in the repository.
-
-**ArgoCD Image Updater Configuration Example:**
 ```yaml
 apiVersion: argocd-image-updater.argoproj.io/v1alpha1
 kind: ImageUpdater
 metadata:
-  name: app-updater
+  name: alpha-frontend-updater
   namespace: argocd
 spec:
   applicationRefs:
-    - namePattern: "<app-name>"
+    - namePattern: "alpha-frontend"
+
       images:
-        - alias: "main-container"
-          imageName: "ghcr.io/<org>/<app-name>"
+        - alias: "app-image"
+          imageName: "ghcr.io/3-istor/frontend"
+          # Injects the pull secret created during Day-0
+          pullSecret: "secret:alpha-frontend/app-registry"
+
           manifestTargets:
             helm:
               name: "image.repository"
               tag: "image.tag"
+
           commonUpdateSettings:
             updateStrategy: "newest-build"
             allowTags: "regexp:^sha-[a-f0-9]+$"
+
       writeBackConfig:
+        # Uses the GitHub App credentials secret to write back to Git
         method: "git:secret:argocd/private-repo-creds"
         gitConfig:
           branch: "main"
           writeBackTarget: "helmvalues:/deploy/values.yaml"
 ```
 
+### The Write-Back Mechanism
+1. **Detection**: Every 2 minutes, the Image Updater polls `ghcr.io/3-istor/frontend`.
+2. **Tag Matching**: It ignores `latest` (which is mutable and bad for audits) and locates the newest tag matching `sha-[a-f0-9]+`.
+3. **Commit to Git**: It uses the GitHub App credentials stored in the `private-repo-creds` secret to push a commit directly to the repository's `main` branch.
+4. **ArgoCD Sync**: ArgoCD detects the new commit in Git, notices the change in `image.tag` inside `values.yaml`, and applies a rolling update to the deployment workloads in the cluster.
+
 ---
-
-## 4. End-to-End Developer Flow
-
-1. Developer commits a feature and runs `git push origin main`.
-2. GitHub Actions intercepts the push, runs tests, and builds `ghcr.io/my-org/my-app:sha-a1b2c3d`.
-3. ArgoCD Image Updater detects the new `sha-a1b2c3d` tag in GHCR.
-4. ArgoCD pulls the image, deploys it to the K8s cluster, and monitors health.
-5. ArgoCD commits `image.tag: "sha-a1b2c3d"` back to the `deploy/values.yaml` file in the developer's Git repository.
-6. The CMP Dashboard (polling ArgoCD or via webhooks) updates the Application UI to show the new deployed version and commit hash.
+**Next Step**: Continue to [Developer Configuration & GitOps Flow](03-developer-configuration-flow.md) (or return to the [Project Overview](../README.md)).

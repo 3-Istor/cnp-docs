@@ -1,406 +1,248 @@
-# Deployment API Specification
+# Deployment API Specifications
 
-## Overview
-
-The Deployment API manages application deployments across multiple infrastructure providers. As of Phase 3, it supports both legacy hybrid (OpenStack + AWS) and modern Kubernetes (GitOps) deployments.
+The Deployment API manages the full lifecycle of application instances, supporting initial Day-0 provisioning, real-time log streaming, and Day-2 GitOps configuration write-back.
 
 ---
 
-## Data Model
+## 1. Create Deployment
 
-### Deployment Object
+Starts the SAGA or Terraform provisioning flow. This is an asynchronous operation returning `202 Accepted` immediately so the UI can initiate polling.
 
+* **HTTP Method**: `POST`
+* **Path**: `/api/deployments`
+* **Content-Type**: `application/json`
+* **Request Headers**:
+  * `Authorization: Bearer <JWT>`
+* **Payload Schema (`DeploymentCreate`)**:
+
+| Field | Type | Required | Description |
+| :--- | :--- | :--- | :--- |
+| `name` | String | Yes | Name of the application (lowercase, alphanumeric, hyphens). |
+| `template_id` | String | Yes | ID of the template in the catalog (e.g., `k3s-gitops-app`). |
+| `provider_type` | String | No | Discriminator: `kubernetes` or `legacy_hybrid` (Default: `legacy_hybrid`). |
+| `project_id` | String | No | Target project boundary (Keycloak group prefix). Required for Kubernetes. |
+| `app_config` | Object | Yes | Map of template-specific configuration variables. |
+
+### Example Request (Kubernetes GitOps)
+```bash
+curl -X POST "https://cmp.3istor.com/api/deployments" \
+  -H "Authorization: Bearer eyJhbGci..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "frontend",
+    "template_id": "k3s-gitops-app",
+    "provider_type": "kubernetes",
+    "project_id": "alpha",
+    "app_config": {
+      "template_repo_name": "template-html-css",
+      "app_type": "static",
+      "github_owner": "3-Istor",
+      "project_name": "alpha",
+      "github_installation_id": "98765432"
+    }
+  }'
+```
+
+**Expected Response (`202 Accepted`)**:
 ```json
 {
-  "id": 1,
-  "name": "my-app",
-  "template_id": "kubernetes-fastapi",
-  "status": "running",
-  "step_message": "✅ Running - ArgoCD syncing from https://github.com/...",
-
-  // Provider discriminator (NEW in Phase 3)
-  "provider_type": "kubernetes", // or "legacy_hybrid"
-
-  // Multi-tenancy (NEW in Phase 3)
-  "project_id": "project-alpha",
-
-  // Kubernetes-specific fields (NEW in Phase 3)
-  "github_repo_url": "https://github.com/user/my-app",
-  "argocd_app_name": "project-alpha-my-app",
-  "k8s_namespace": "project-alpha-my-app",
-
-  // Common fields
-  "terraform_outputs": "{...}", // JSON string
-  "terraform_state_path": "cmp/projects/project-alpha/my-app.tfstate",
-  "resource_count": 5,
-  "app_config": "{...}", // JSON string
-
-  // Template metadata
-  "template_name": "FastAPI + React",
+  "id": 42,
+  "name": "frontend",
+  "template_id": "k3s-gitops-app",
+  "template_name": "Kubernetes App (GitOps)",
   "template_icon": "🚀",
   "template_category": "paas",
-
-  // Timestamps
-  "created_at": "2026-05-24T10:00:00Z",
-  "updated_at": "2026-05-24T10:05:00Z"
-}
-```
-
-### Provider Types
-
-- **`legacy_hybrid`**: OpenStack VMs + AWS Auto Scaling Groups (legacy SAGA pattern)
-- **`kubernetes`**: GitHub + Terraform + ArgoCD (modern GitOps pattern)
-
-### Deployment Status
-
-- `pending`: Initial state, waiting to start
-- `initializing`: Setting up prerequisites
-- `planning`: Terraform planning phase
-- `deploying`: Active deployment in progress
-- `running`: Successfully deployed and operational
-- `degraded`: Deployed but experiencing issues
-- `failed`: Deployment failed
-- `deleting`: Deletion in progress
-- `deleted`: Successfully deleted
-
----
-
-## API Endpoints
-
-### Create Deployment
-
-**POST** `/api/deployments`
-
-Creates a new deployment. The behavior depends on the `provider_type`.
-
-**Request Body (Kubernetes)**:
-
-```json
-{
-  "name": "my-app",
-  "template_id": "kubernetes-fastapi",
-  "provider_type": "kubernetes",
-  "app_config": {
-    "project_name": "project-alpha",
-    "github_installation_id": "12345678",
-    "replica_count": 2,
-    "sso_protected": false
-  }
-}
-```
-
-**Request Body (Legacy Hybrid)**:
-
-```json
-{
-  "name": "my-app",
-  "template_id": "hybrid-web-db",
-  "provider_type": "legacy_hybrid",
-  "app_config": {
-    "instance_type": "t3.micro",
-    "db_size": "small"
-  }
-}
-```
-
-**Response**: `201 Created`
-
-```json
-{
-  "id": 1,
-  "name": "my-app",
   "status": "pending",
+  "step_message": "Queued...",
   "provider_type": "kubernetes",
-  "created_at": "2026-05-24T10:00:00Z"
+  "project_id": "alpha",
+  "github_repo_url": null,
+  "argocd_app_name": null,
+  "k8s_namespace": null,
+  "terraform_outputs": null,
+  "resource_count": 0,
+  "created_at": "2026-06-26T15:49:00Z",
+  "updated_at": "2026-06-26T15:49:00Z"
 }
 ```
 
 ---
 
-### Get Deployment
+## 2. List & Filter Deployments
 
-**GET** `/api/deployments/{id}`
+Retrieves all active deployments. Supports filtering by project boundary and provider type.
 
-Retrieves a single deployment by ID.
-
-**Response**: `200 OK`
-
-```json
-{
-  "id": 1,
-  "name": "my-app",
-  "status": "running",
-  "provider_type": "kubernetes",
-  "github_repo_url": "https://github.com/user/my-app",
-  "argocd_app_name": "project-alpha-my-app",
-  "k8s_namespace": "project-alpha-my-app",
-  ...
-}
-```
-
----
-
-### List Deployments
-
-**GET** `/api/deployments`
-
-Lists all deployments. Supports filtering by provider type.
-
-**Query Parameters**:
-
-- `provider_type` (optional): Filter by `kubernetes` or `legacy_hybrid`
-- `project_id` (optional): Filter by project (Kubernetes only)
-- `status` (optional): Filter by status
-
-**Response**: `200 OK`
+* **HTTP Method**: `GET`
+* **Path**: `/api/deployments`
+* **Query Parameters**:
+  * `provider_type` (Optional): `kubernetes` | `legacy_hybrid`
+  * `project_id` (Optional): String filter.
+* **Response (`200 OK`)**:
 
 ```json
-{
-  "deployments": [
-    {
-      "id": 1,
-      "name": "my-app",
-      "provider_type": "kubernetes",
-      "status": "running",
-      ...
-    }
-  ],
-  "total": 1
-}
-```
-
----
-
-### Delete Deployment
-
-**DELETE** `/api/deployments/{id}`
-
-Deletes a deployment and all associated resources.
-
-For Kubernetes deployments:
-
-- Executes `terraform destroy` on the micro-state
-- Removes GitHub repository (archives it by default)
-- Removes Kubernetes namespace
-- Removes Vault secrets
-- Removes ArgoCD Application
-
-**Response**: `202 Accepted`
-
-```json
-{
-  "message": "Deletion started",
-  "deployment_id": 1
-}
-```
-
----
-
-## Frontend Integration Guide
-
-### Detecting Provider Type
-
-When rendering deployment cards, check the `provider_type` field:
-
-```typescript
-if (deployment.provider_type === "kubernetes") {
-  // Show Kubernetes-specific UI
-  // - GitHub repo link
-  // - ArgoCD app link
-  // - Namespace info
-} else {
-  // Show legacy hybrid UI
-  // - AWS ALB URL
-  // - OpenStack VM IPs
-}
-```
-
-### GitHub Installation ID
-
-For Kubernetes deployments, the frontend must provide the `github_installation_id` in the `app_config`. This is obtained from:
-
-1. User links their GitHub account (OAuth flow)
-2. GitHub redirects back with `installation_id`
-3. Store in Keycloak user profile
-4. Fetch when creating deployment
-
-**Example Flow**:
-
-```typescript
-// 1. User clicks "Link GitHub"
-window.location.href = "https://github.com/apps/cnp-portal/installations/new";
-
-// 2. GitHub redirects back
-// URL: /api/github/callback?installation_id=12345678
-
-// 3. Store in user profile
-await updateKeycloakProfile({ github_installation_id: "12345678" });
-
-// 4. Use when creating deployment
-const deployment = await createDeployment({
-  name: "my-app",
-  provider_type: "kubernetes",
-  app_config: {
-    github_installation_id: user.github_installation_id,
-    ...
-  }
-});
-```
-
-### Deployment Status Polling
-
-Poll the deployment status every 3-5 seconds while `status` is `deploying`:
-
-```typescript
-const pollStatus = async (deploymentId: number) => {
-  const interval = setInterval(async () => {
-    const deployment = await fetchDeployment(deploymentId);
-
-    if (deployment.status === "running" || deployment.status === "failed") {
-      clearInterval(interval);
-    }
-
-    updateUI(deployment);
-  }, 3000);
-};
-```
-
-### Action Buttons by Provider Type
-
-**Kubernetes Deployments**:
-
-- 🐙 View in ArgoCD
-- 📦 Open GitHub Repo
-- 🔒 Manage Secrets (Vault)
-- 📊 View Logs (K8s)
-
-**Legacy Hybrid Deployments**:
-
-- 🌐 Open Application (ALB URL)
-- ☁️ View AWS Console
-- 🖥️ View OpenStack Dashboard
-
----
-
-## Error Handling
-
-### Common Error Responses
-
-**400 Bad Request**:
-
-```json
-{
-  "error": "Invalid provider_type",
-  "message": "provider_type must be 'kubernetes' or 'legacy_hybrid'"
-}
-```
-
-**404 Not Found**:
-
-```json
-{
-  "error": "Deployment not found",
-  "deployment_id": 999
-}
-```
-
-**500 Internal Server Error**:
-
-```json
-{
-  "error": "Deployment failed",
-  "message": "GitHub App authentication failed: Invalid installation ID",
-  "deployment_id": 1
-}
-```
-
-### Deployment Failure States
-
-When `status` is `failed`, check `step_message` for details:
-
-```json
-{
-  "status": "failed",
-  "step_message": "❌ GitHub App authentication failed: Invalid installation ID"
-}
-```
-
-Common failure reasons:
-
-- **Kubernetes**: Invalid GitHub installation ID, Terraform errors, ArgoCD sync failures
-- **Legacy Hybrid**: OpenStack quota exceeded, AWS capacity issues, network errors
-
----
-
-## Migration Notes (Phase 3)
-
-### Breaking Changes
-
-**None**. The API is fully backward compatible.
-
-### New Fields
-
-All new fields are optional and only populated for Kubernetes deployments:
-
-- `provider_type` (defaults to `legacy_hybrid`)
-- `project_id`
-- `github_repo_url`
-- `argocd_app_name`
-- `k8s_namespace`
-
-### Frontend Changes Required
-
-1. **Catalog View**: Separate IaaS and PaaS templates
-2. **Account Page**: Add "Link GitHub Account" button
-3. **Deployment Cards**: Conditional rendering based on `provider_type`
-4. **Create Form**: Add project selection for Kubernetes deployments
-
----
-
-## Examples
-
-### Create Kubernetes Deployment (Full Example)
-
-```bash
-curl -X POST http://localhost:8000/api/deployments \
-  -H "Content-Type: application/json" \
-  -H "Authorization: Bearer $TOKEN" \
-  -d '{
-    "name": "my-fastapi-app",
-    "template_id": "kubernetes-fastapi",
+[
+  {
+    "id": 42,
+    "name": "frontend",
+    "template_id": "k3s-gitops-app",
+    "template_name": "Kubernetes App (GitOps)",
+    "template_icon": "🚀",
+    "template_category": "paas",
+    "status": "running",
+    "step_message": "✅ Running - loadbalancer_ip: 192.168.1.215",
     "provider_type": "kubernetes",
-    "app_config": {
-      "project_name": "project-alpha",
-      "github_installation_id": "12345678",
-      "replica_count": 3,
+    "project_id": "alpha",
+    "github_repo_url": "https://github.com/3-Istor/frontend",
+    "argocd_app_name": "alpha-frontend",
+    "k8s_namespace": "alpha-frontend",
+    "terraform_outputs": "{\"github_repo_url\":\"https://github.com/3-Istor/frontend\",\"k8s_namespace\":\"alpha-frontend\",\"argocd_app_name\":\"alpha-frontend\"}",
+    "resource_count": 8,
+    "created_at": "2026-06-26T15:49:00Z",
+    "updated_at": "2026-06-26T15:52:00Z"
+  }
+]
+```
+
+---
+
+## 3. Get Deployment Details
+
+Retrieves the live record of a single deployment.
+
+* **HTTP Method**: `GET`
+* **Path**: `/api/deployments/{id}`
+* **Response (`200 OK`)**: Matches object schema returned in List API.
+
+---
+
+## 4. Fetch Terraform Outputs
+
+Returns only the parsed, unescaped JSON object containing the outputs declared in the Terraform module.
+
+* **HTTP Method**: `GET`
+* **Path**: `/api/deployments/{id}/outputs`
+* **Response (`200 OK`)**:
+
+```json
+{
+  "github_repo_url": "https://github.com/3-Istor/frontend",
+  "k8s_namespace": "alpha-frontend",
+  "argocd_app_name": "alpha-frontend",
+  "vault_path": "kvv2/data/projects/alpha/frontend"
+}
+```
+
+---
+
+## 5. Stream Real-Time Logs (Server-Sent Events)
+
+Streams stdout/stderr logs from the background Terraform worker in real-time using standard W3C Server-Sent Events (SSE).
+
+* **HTTP Method**: `GET`
+* **Path**: `/api/deployments/{id}/logs/stream`
+* **Response Headers**:
+  * `Content-Type: text/event-stream`
+  * `Cache-Control: no-cache`
+  * `Connection: keep-alive`
+
+### Example Stream Output
+```text
+data: [TF] Initializing the backend...
+data: [TF] 
+data: [TF] Successfully configured the backend "s3"!
+data: [TF] 
+data: [TF] github_repository.app: Creating...
+```
+
+---
+
+## 6. Fetch GitOps Configuration (Day-2)
+
+Pulls the raw, commented `values.yaml` directly from the application's private GitHub repository using the GitHub App token.
+
+* **HTTP Method**: `GET`
+* **Path**: `/api/deployments/{id}/config`
+* **Required Roles**: `project-<project_id>-members` | `project-<project_id>-admins`
+* **Response (`200 OK`)**:
+
+```json
+{
+  "repo": "3-Istor/frontend",
+  "file_path": "deploy/values.yaml",
+  "_sha": "25a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4",
+  "config": {
+    "project_name": "alpha",
+    "app_name": "frontend",
+    "replicaCount": 2,
+    "image": {
+      "repository": "ghcr.io/3-istor/frontend",
+      "tag": "sha-8f3a1b4"
+    },
+    "ingress": {
+      "enabled": true,
+      "hostname": "frontend-alpha.3istor.com",
+      "sso_protected": false
+    }
+  }
+}
+```
+
+---
+
+## 7. Update GitOps Configuration (Day-2 Write-Back)
+
+Deep-merges new values into the `values.yaml` file in the GitHub repository and triggers an automated commit, preserving existing formatting and comments.
+
+* **HTTP Method**: `PATCH`
+* **Path**: `/api/deployments/{id}/config`
+* **Required Roles**: `project-<project_id>-admins`
+* **Request Payload**: Must include the active `_sha` of the file (to detect stale writes) and the key-value modifications.
+
+### Example Request
+```bash
+curl -X PATCH "https://cmp.3istor.com/api/deployments/42/config" \
+  -H "Authorization: Bearer eyJhbGci..." \
+  -H "Content-Type: application/json" \
+  -d '{
+    "_sha": "25a6b7c8d9e0f1a2b3c4d5e6f7a8b9c0d1e2f3a4",
+    "replicaCount": 4,
+    "ingress": {
       "sso_protected": true
     }
   }'
 ```
 
-### Get Deployment with Kubernetes Fields
-
-```bash
-curl http://localhost:8000/api/deployments/1 \
-  -H "Authorization: Bearer $TOKEN"
+**Expected Response (`200 OK`)**:
+```json
+{
+  "message": "Configuration updated successfully. ArgoCD will sync shortly.",
+  "repo": "3-Istor/frontend",
+  "file_path": "deploy/values.yaml",
+  "commit_sha": "a1b2c3d4e5f6g7h8i9j0k1l2m3n4o5p6q7r8s9t0",
+  "changed_keys": [
+    "replicaCount",
+    "ingress"
+  ]
+}
 ```
 
-**Response**:
+---
+
+## 8. Delete Deployment
+
+Triggers a non-blocking background `terraform destroy` command to wipe out all cloud resources.
+
+* **HTTP Method**: `DELETE`
+* **Path**: `/api/deployments/{id}`
+* **Required Roles**: `project-<project_id>-admins` (Only admins can delete)
+* **Response (`202 Accepted`)**:
 
 ```json
 {
-  "id": 1,
-  "name": "my-fastapi-app",
-  "template_id": "kubernetes-fastapi",
-  "status": "running",
-  "step_message": "✅ Running - ArgoCD syncing from https://github.com/user/my-fastapi-app",
-  "provider_type": "kubernetes",
-  "project_id": "project-alpha",
-  "github_repo_url": "https://github.com/user/my-fastapi-app",
-  "argocd_app_name": "project-alpha-my-fastapi-app",
-  "k8s_namespace": "project-alpha-my-fastapi-app",
-  "terraform_state_path": "cmp/projects/project-alpha/my-fastapi-app.tfstate",
-  "created_at": "2026-05-24T10:00:00Z",
-  "updated_at": "2026-05-24T10:05:00Z"
+  "message": "Deletion started",
+  "id": 42
 }
 ```
+
+---
+**Next Step**: Continue to [Projects & RBAC API Contract](04-cmp-projects-api.md) (or return to the [Project Overview](../README.md)).

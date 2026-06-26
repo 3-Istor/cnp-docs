@@ -1,143 +1,161 @@
 # Developer Configuration & GitOps Flow
 
-To achieve true self-service infrastructure without overwhelming developers with Kubernetes complexities, CNP relies on a "Pure GitOps" configuration model. 
-
-The contract between the developer and the platform is a single, simplified `values.yaml` file located in the application's repository.
-
-## 1. The GitOps Paradigm
-In the CNP ecosystem, **Git is the absolute Single Source of Truth (SSOT)**. 
-
-Neither the developer nor the Cloud Management Platform (CMP) interacts directly with the Kubernetes API to change application states (like scaling replicas or exposing ports). All changes must pass through Git.
-
-### The Two Ways to Update Infrastructure
-1. **Developer-Driven (Code):** The developer edits the `values.yaml` file in their IDE and pushes to GitHub.
-2. **UI-Driven (CMP Dashboard):** The developer uses the CMP web interface (e.g., moving a slider to increase replicas). The CMP backend uses the GitHub App API to automatically create a commit in the developer's repository.
-
-In both scenarios, **ArgoCD** detects the change in the Git repository and applies the state to the K3s cluster.
+To achieve true developer autonomy without exposing raw Kubernetes manifests, CNP implements a dual-pathway configuration model. The single interface between the developer and the infrastructure is the simplified `deploy/values.yaml` file located in the application's repository.
 
 ---
 
-## 2. The Configuration Interface (`values.yaml`)
+## 1. The Dual-Pathway Mutation Model
 
-When the CMP provisions a new application from a "Git App Template", it injects a highly curated `deploy/values.yaml` file. 
+All changes must pass through Git before reaching the cluster. This model supports two concurrent workflows: **Developer-Driven (Code)** and **UI-Driven (CMP Dashboard)**. Both pathways converge at the Git repository, guaranteeing zero configuration drift.
 
-This file overrides the defaults of the "Generic Microservice Helm Chart". It exposes only the variables that the developer needs to care about, abstracting away complex Kubernetes resources (Services, Ingresses, NetworkPolicies, VaultSecrets).
+```mermaid
+flowchart TD
+    %% --- Pathway A: Code ---
+    SubA[Option A: Developer-Driven Code] --> IDE[Local IDE]
+    IDE -->|1a. git push commit| GH_Repo[(GitHub Private Repo)]
 
-**Example of the generated `deploy/values.yaml`:**
+    %% --- Pathway B: UI ---
+    SubB[Option B: UI-Driven Dashboard] --> CMP_UI[CMP Frontend Dashboard]
+    CMP_UI -->|1b. PATCH /api/deployments/config| CMP_API[CMP FastAPI Backend]
+    CMP_API -->|2b. Read current values.yaml & SHA| GH_Repo
+    CMP_API -->|3b. Perform round-trip deep merge| CMP_API
+    CMP_API -->|4b. Push new commit| GH_Repo
+
+    %% --- GitOps Reconciliation ---
+    GH_Repo -->|5. Triggers sync event| Argo[ArgoCD Engine]
+    Argo -->|6. Renders Generic Helm Chart| Argo
+    Argo -->|7. Applies rolling update| K8s[K3s Cluster Workloads]
+```
+
+---
+
+## 2. The Configuration Interface (`deploy/values.yaml`)
+
+This curated configuration interface abstracts complex resources (such as `HTTPRoute`, `SecurityPolicy`, `VaultSecret`, `Cluster`, and `OffhoursSchedule`) into a highly readable, developer-friendly YAML schema.
+
 ```yaml
+# deploy/values.yaml
 # ==============================================================================
 # 🚀 CNP Application Configuration
 # ==============================================================================
-# This file is the source of truth for your application's infrastructure.
-# You can edit these values manually or via the CMP Dashboard.
-# ArgoCD will automatically apply changes to the cluster.
+# This file is the single source of truth for your application's infrastructure.
+# You can edit these values manually via your IDE or through the CMP Dashboard.
 
 # -- Number of application pods running simultaneously
 replicaCount: 2
 
-# -- Container Image (Automatically updated by CI/CD & ArgoCD Image Updater)
+# -- Container Image (Tag managed automatically by GHA & Image Updater)
 image:
-  repository: ghcr.io/my-org/my-app
-  tag: "sha-a1b2c3d" # DO NOT EDIT MANUALLY
+  repository: ghcr.io/3-istor/t1
+  tag: "latest"
+imagePullSecrets:
+  - name: app-registry
 
-# -- Compute Resources (CPU & Memory)
+# -- Compute Resources (Enforced by Kyverno limits/requests policy)
 resources:
   requests:
-    cpu: 250m
-    memory: 256Mi
+    cpu: "50m"
+    memory: "128Mi"
   limits:
-    memory: 512Mi
+    cpu: "100m"
+    memory: "128Mi"
 
 # -- Networking & Edge Security
 ingress:
   enabled: true
-  # If true, Envoy Gateway will enforce Keycloak SSO authentication
-  sso_protected: false
+  hostname: "t1-test.3istor.com"
+  sso_protected: true # Toggles OIDC SSO at the cluster edge
 
-# -- Environment Variables
-env:
-  NODE_ENV: "production"
-  LOG_LEVEL: "info"
+# -- Vault Secrets Integration
+secrets:
+  enabled: true
+  vaultPath: "project-test/t1"
+  vaultRole: "test-t1-role"
 
-# Note: Sensitive secrets should not be placed here.
-# They are automatically injected by the Vault Secrets Operator 
-# via the 'secrets' Vault path assigned to your project.
+# -- Database Provisioning (CloudNativePG)
+db:
+  enabled: true
+  name: t1
+  storage: "1Gi"
+
+# -- Gatus Monitoring
+monitoring:
+  enabled: true
+  path: "/"
+
+# -- FinOps Offhours scheduling
+offhours:
+  enabled: true
+  sleepAt: "0 1 * * *"
+  wakeAt: "0 7 * * *"
+  timezone: "Europe/Paris"
 ```
 
 ---
 
-## 3. Day-0: Initial Provisioning
-When the developer clicks "Deploy" in the CMP Catalog:
-1. The CMP collects the initial form inputs (App Name, Replicas, SSO toggle).
-2. The CMP's Terraform executor dynamically generates the `deploy/values.yaml` file using a template function.
-3. Terraform commits this file as the very first commit to the newly created private GitHub repository.
-4. ArgoCD performs the initial sync.
+## 3. Deep-Dive: UI-Driven Mutation Mechanics
+
+When a developer modifies a slider or a switch on the CMP UI, the platform must commit the changes to Git. 
+
+To prevent erasing the developer's comments, block alignments, or formatting in `values.yaml`, the FastAPI backend uses a **Round-Trip-Aware YAML Parser** (`ruamel.yaml`) rather than standard `PyYAML`.
+
+### The Python Deep-Merge Logic (`app/routers/deployments.py`):
+```python
+from io import StringIO
+from ruamel.yaml import YAML
+
+# Initialize the round-trip engine
+yaml = YAML()
+yaml.preserve_quotes = True
+
+def deep_merge(base: dict, updates: dict) -> dict:
+    """
+    Recursively merges updates into base, preserving 
+    ruamel.yaml CommentedMap formatting and comments.
+    """
+    for key, value in updates.items():
+        if key in base and isinstance(base[key], dict) and isinstance(value, dict):
+            deep_merge(base[key], value)
+        else:
+            base[key] = value
+    return base
+
+def apply_config_patch(raw_yaml_from_github: str, payload_updates: dict) -> str:
+    # 1. Parse raw YAML string preserving comments
+    parsed_config = yaml.load(raw_yaml_from_github)
+    
+    # 2. Deep merge user updates from PATCH API
+    deep_merge(parsed_config, payload_updates)
+    
+    # 3. Serialize back to formatted string
+    out = StringIO()
+    yaml.dump(parsed_config, out)
+    return out.getvalue()
+```
 
 ---
 
-## 4. Day-2: Operations via the CMP Dashboard
+## 4. Architectural Advantages
 
-To provide a modern PaaS experience, developers can manage their app via the CMP Web UI.
+### A. Zero Configuration Drift
+Because the CMP Control Plane writes changes to Git instead of making direct mutations on the Kubernetes API, the CMP Dashboard, the GitHub repository, and the live cluster state are always in perfect synchronization.
 
-**The Update Sequence:**
-```text
-[ Developer UI ] 
-      | 1. Clicks "Enable SSO" in the App Dashboard
-      v
-[ CMP Backend (FastAPI) ]
-      | 2. Fetches current values.yaml from GitHub API
-      | 3. Parses YAML, sets `ingress.sso_protected = true`
-      | 4. Commits and pushes the updated YAML back to GitHub
-      v
-[ GitHub Repository ]
-      | 5. Triggers Webhook / ArgoCD Poll
-      v
-[ ArgoCD ]
-      | 6. Detects drift in values.yaml
-      | 7. Renders the Generic Helm Chart with new values
-      | 8. Patches the Envoy SecurityPolicy CRD in Kubernetes
-      v
-[ K3s Cluster ] (App is now secured by SSO)
+### B. Instant Audit Trails
+Every infrastructure modification (e.g., scaling up instances or enabling SSO) made via the CMP results in an explicit Git commit signed by the platform. The git commit history acts as a detailed, permanent audit log:
+
+```bash
+$ git log --oneline
+a1b2c3d chore: update app configuration via CMP (Modified keys: replicaCount)
+f7e6d5c feat: add main backend controller logic
+e4d3c2b chore: Initialize CNP GitOps configuration
 ```
 
-### Advantages of this approach:
-- **No Configuration Drift:** Because the CMP writes to Git instead of the K8s API, the CMP and the Git repository are never out of sync.
-- **Auditability:** Every infrastructure change made via the CMP results in a Git commit. The commit history acts as a perfect audit log (e.g., `"CMP: Scaled replicas from 2 to 4"`).
-- **Rollback Capability:** If a user breaks their app via the CMP, they can simply revert the Git commit, or click "Rollback" in the CMP (which just reverts the last commit via the GitHub API).
-
-```mermaid
-graph TD
-    %% --- Nodes ---
-    dev["👤 Developer"]
-    ide["💻 Developer Local IDE"]
-    ui["💻 CMP Frontend - Next.js"]
-    api["⚙️ CMP Backend - FastAPI"]
-    db[("💾 CMP Database - SQLite")]
-    gh["🐙 GitHub Private Repo - deploy/values.yaml"]
-    argocd["🐙 ArgoCD - GitOps Controller"]
-    k3s["☸️ K3s Target Namespace - Pods"]
-    envoy["🌐 Envoy Gateway - SecurityPolicy"]
-
-    %% --- Path A: Direct Git / Code ---
-    dev -->|Option A. Manual change in IDE| ide
-    ide -->|1a. Push commit to main branch| gh
-
-    %% --- Path B: CMP UI / Dashboard ---
-    dev -->|Option B. Click toggle or slider in UI| ui
-    ui -->|1b. Sends POST to config endpoint| api
-    
-    api -->|2b. Read current values yaml via API| gh
-    api -->|3b. Commit modified values yaml| gh
-    api -->|4b. Update status to SYNCING| db
-
-    %% --- Common Delivery & Reconciliation ---
-    gh -->|5. ArgoCD detects Git commit| argocd
-    
-    argocd -->|6a. Reconcile K8s deployment replicas| k3s
-    argocd -->|6b. Update Envoy SecurityPolicy if SSO changed| envoy
-
-    %% --- Status Feedback Loop ---
-    argocd -->|7. Report successful sync| api
-    api -->|8. Update status to RUNNING| db
-    ui -->|9. Poll status to refresh dashboard| api
+### C. Bulletproof Rollbacks
+If a developer misconfigures their application via the CMP (e.g., setting replica count to an invalid size), the recovery path is identical to code recovery:
+* **Via Code**: Simply run `git revert` on the repository.
+* **Via CMP**: The "Rollback" button in the CMP invokes the GitHub API to revert the last auto-generated commit, and ArgoCD automatically restores the previous healthy cluster state.
 ```
+
+---
+
+**Next Step**: Continue to [GitHub Repositories Landscape](../04-templates/00-github-repositories-landscape.md) (or return to the [Project Overview](../README.md)).

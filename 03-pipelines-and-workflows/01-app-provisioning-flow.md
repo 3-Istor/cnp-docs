@@ -1,85 +1,140 @@
-# Application Provisioning Workflow
+# Application Provisioning Pipeline (Day-0 Workflow)
 
-This document details the exact sequence of events when a developer requests a new application via the CMP.
+## 1. Overview
+The Day-0 Application Provisioning Pipeline is a fully automated, asynchronous workflow managed by the CMP backend. When a developer triggers a deployment, the system mints temporary tokens, initializes isolated Terraform state files, provisions multi-tenant cloud assets, and hands over control plane operations to ArgoCD.
 
-## The Trigger
-The user selects a template (e.g., "FastAPI + React Stack") from the CMP Catalog, fills out the basic variables (App Name, Project Name, Replicas), and clicks **Deploy**.
+---
 
-## Phase 1: CMP & Terraform Bootstrapping
-The CMP Backend enqueues an asynchronous background task to execute Terraform.
+## 2. End-to-End Orchestration Topology
 
-1. **Dynamic Token Retrieval:**
-   - The CMP Backend fetches the Project's GitHub `installation_id` from the DB.
-   - It requests a short-lived **Installation Access Token** from GitHub using the CNP App Private Key.
-   - It injects this temporary token as a Terraform variable.
-
-2. **GitHub Provisioning (Terraform):**
-   - Terraform uses the temporary token to create a new Private GitHub repository inside the developer's chosen Organization or User account.
-   - It pushes the initial "Git App Template" codebase (including the default `values.yaml` configurations) to the repository.
-   - It sets up branch protection on the `main` branch.
-
-3. **Kubernetes Namespace:** Terraform creates the K8s namespace `<project-name>-<app-name>`.
-
-4. **Secret Generation:** Terraform generates initial random credentials (e.g., Database passwords) and stores them in Vault at `kvv2/projects/<project-name>/<app-name>`.
-
-5. **ArgoCD Registration:**
-   - Terraform configures ArgoCD to access the private repository. It creates a Kubernetes Secret in the `argocd` namespace containing the GitHub App credentials (App ID, Installation ID, and Private Key).
-   - Terraform applies the ArgoCD `Application` Custom Resource (CR) pointing to the repository.
+The diagram below details the operational boundaries and sequence during the Day-0 provisioning cycle:
 
 ```mermaid
-graph TD
-    %% --- Nodes ---
-    dev["👤 Developer"]
-    ui["💻 CMP Frontend - Next.js"]
-    api["⚙️ CMP Backend - FastAPI"]
-    db[("💾 CMP Database - SQLite")]
-    keycloak["🔑 Keycloak - SSO and User Profile"]
-    tf["🛠️ Terraform Executor"]
-    s3[("📦 S3 Bucket - TF States")]
-    gh_app["🐙 GitHub App - CNP-Portal"]
-    vault["🔒 HashiCorp Vault - Secrets"]
-    cloudflare["🌐 Cloudflare - DNS"]
-    argocd["🐙 ArgoCD - GitOps Controller"]
-    k3s_ns["☸️ K3s Target Namespace"]
+sequenceDiagram
+    autonumber
+    actor Dev as Developer
+    participant BE as CMP Backend (FastAPI)
+    participant GH_API as GitHub App API
+    participant TF as Terraform Runner (github_bootstrap)
+    participant K3s as K3s API Server
+    participant Argo as ArgoCD Controller
 
-    %% --- Actions & Flows ---
-    dev -->|1. Fills form and clicks Deploy| ui
-    ui -->|2. Sends POST deployments| api
+    Dev->>BE: POST /api/deployments (template_id, project_id, config)
+    Note over BE: Status: pending<br/>Enqueues async background task
     
-    api -->|3a. Read user profile and installation ID| keycloak
-    api -->|3b. Store PENDING status| db
-    
-    api -->|4a. Sign JWT with Private Key| gh_app
-    gh_app -->|4b. Return temporary token| api
-    
-    api -->|5. Enqueue background task| tf
-    tf -->|6. Dynamic init and lock state| s3
-    
-    tf -->|7a. Create private repo and push code| gh_app
-    tf -->|7b. Create path and write secrets| vault
-    tf -->|7c. Create CNAME record| cloudflare
-    tf -->|7d. Apply ArgoCD App CRD and Repo Secret| k3s_ns
+    %% --- Token Minting ---
+    rect rgb(240, 253, 244)
+        Note over BE, GH_API: Phase 1: Temporary Token Minting
+        BE->>BE: Generate signed JWT using App Private Key (Expires in 10m)
+        BE->>GH_API: POST /app/installations/{installation_id}/access_tokens
+        GH_API-->>BE: Returns short-lived Installation Access Token (Expires in 1h)
+    end
 
-    k3s_ns -->|8a. Exposes App CRD| argocd
-    argocd -->|8b. Pulls values yaml via App Creds| gh_app
-    argocd -->|8c. Mounts Secrets via K8s Role| vault
-    argocd -->|8d. Deploys Generic Chart| k3s_ns
-    
-    api -->|9a. Queries App Health| argocd
-    api -->|9b. Updates status to RUNNING| db
-    ui -->|9c. Polls status every 3s| api
+    %% --- Infrastructure Provisioning ---
+    rect rgb(238, 242, 255)
+        Note over BE, TF: Phase 2: Isolated Terraform Execution
+        BE->>BE: Write logs to logs/deployments/{id}.log
+        BE->>BE: Initialize S3 dynamic State Key
+        BE->>TF: Run 'terraform init' with -backend-config
+        BE->>TF: Run 'terraform apply' (Injecting secrets as TF_VAR_*)
+        
+        critical Terraform Provider Execution
+            TF->>GH_API: Create private GitHub Repository
+            TF->>GH_API: Push deploy/values.yaml, Dockerfile, & ci.yml
+            TF->>TF: Write randomized passwords to Vault (kvv2/)
+            TF->>TF: Create Vault K8s Auth Role & Policy
+            TF->>K3s: Create namespace & inject registry credentials
+            TF->>K3s: Create ArgoCD Application CRD & Repository Secret
+        end
+    end
+
+    %% --- Handover ---
+    rect rgb(255, 241, 242)
+        Note over BE, Argo: Phase 3: GitOps Delivery Handover
+        TF-->>BE: Returns outputs (repo_url, namespace)
+        BE->>BE: Write outputs to SQLite deployments table
+        BE->>BE: Status: RUNNING
+        Argo->>GH_API: Pull values.yaml from repo using Git secret
+        Argo->>K3s: Reconcile & deploy application workloads
+    end
 ```
 
-## Phase 2: GitOps Delivery (ArgoCD)
-Once Terraform successfully completes Phase 1, the CMP marks the deployment state as `RUNNING` in its internal database. From this point forward, ArgoCD is fully responsible for the state of the cluster.
+---
 
-1. ArgoCD detects the new `Application` CR.
-2. It uses the GitHub App credentials to dynamically authenticate with GitHub and pull the `values.yaml` from the private repository.
-3. It fetches the "Generic Microservice Helm Chart" from the central Helm registry.
-4. It merges the values and deploys the resulting manifests (Deployments, Services, Ingress, VaultSecret) into the application's namespace.
+## 3. Deep-Dive Step Execution & Mechanics
 
-## Phase 3: Developer Day-2 Operations
-- The developer clones their new private repository.
-- To change infrastructure settings (e.g., scale from 2 to 5 replicas), the developer edits the `values.yaml` located in the `deploy/` folder of their repo.
-- The developer commits and pushes the change to the `main` branch.
-- ArgoCD automatically detects the drift, syncs the new replica count, and updates the cluster without any intervention from the CMP or Terraform.
+### Step 1: Decentralized Token Exchange
+To prevent security leaks, the CMP Backend never uses static personal access tokens (PATs). It mints an ephemeral token on-the-fly:
+
+1. **JWT Generation**: The backend reads `GITHUB_APP_PRIVATE_KEY` and signs a JSON Web Token (JWT) with the RS256 algorithm:
+   ```python
+   payload = {
+       "iat": int(now.timestamp()),
+       "exp": int((now + timedelta(minutes=10)).timestamp()),
+       "iss": "3836905" # CNP GitHub App ID
+   }
+   ```
+2. **Access Token Request**: The JWT is exchanged for an installation access token:
+   ```bash
+   curl -X POST "https://api.github.com/app/installations/98765432/access_tokens" \
+     -H "Authorization: Bearer <JWT>" \
+     -H "Accept: application/vnd.github+json"
+   ```
+3. **Scoping**: The returned token (valid for 60 minutes) is injected into the Terraform environment as `TF_VAR_github_token`.
+
+---
+
+### Step 2: Isolated S3 State Configuration
+To allow concurrent deployments without state-locking collisions, every deployment receives an isolated `.tfstate` key inside the S3 bucket:
+
+```bash
+# Executed programmatically by the Terraform Executor
+terraform init \
+  -backend-config="bucket=3-istor-tf-infra-aws" \
+  -backend-config="key=cmp/projects/alpha/frontend.tfstate" \
+  -backend-config="region=eu-west-3" \
+  -backend-config="encrypt=true" \
+  -backend-config="dynamodb_table=terraform-state-lock" \
+  -reconfigure
+```
+
+---
+
+### Step 3: Resource Provisioning (Terraform Apply)
+During the `terraform apply` phase, the `github_bootstrap` module executes the following resources:
+* **`github_repository.app`**: Provisions a private repository under the user's organization.
+* **`github_repository_file.values_yaml`**: Generates and pushes the initial `deploy/values.yaml` containing the customized environment overrides.
+* **`vault_generic_secret.app_secrets`**: Generates high-entropy passwords (32 characters) and stores them in Vault under `kvv2/data/projects/{project_name}/{app_name}`.
+* **`vault_kubernetes_auth_backend_role.app`**: Binds the application service account in the new namespace to the Vault access policy.
+* **`kubernetes_namespace.app`**: Provisions the isolated namespace with standard security labels (`pod-security.kubernetes.io/enforce: restricted`).
+* **`kubernetes_manifest.argocd_app`**: Deploys the ArgoCD `Application` CRD.
+
+---
+
+### Step 4: GitOps Handover
+Once Terraform outputs are captured and written to the CMP database, the deployment status transitions to `running`.
+1. **Repository Authentication**: ArgoCD reads the custom K8s Secret `private-repo-creds` containing the GitHub App credentials.
+2. **Reconciliation**: ArgoCD pulls the `deploy/values.yaml` from the newly created repository, renders the generic Helm chart, and deploys the workload.
+
+---
+
+## 4. Error Handling & SAGA Compensations
+
+If any provisioning step fails (e.g., S3 backend timeout, GitHub API rate limits, or invalid cluster credentials), the platform executes a **compensating transaction** to prevent orphaned resources.
+
+```
+[ Step Failed ] ──► [ Trigger Compensation ] ──► [ run_deletion Task ]
+                                                          │
+                                                    (Rollback)
+                                                          │
+                                                          ▼
+                                            [ Execute terraform destroy ]
+                                                          │
+                                                          ▼
+                                            [ Mark DB status: FAILED ]
+```
+
+### Compensation Actions:
+1. **State Recovery**: The background task catches the exception and immediately invokes the `run_deletion` task.
+2. **Resource Destruction**: It re-initializes the Terraform executor using the identical S3 state key and executes `terraform destroy -auto-approve`.
+3. **Database Update**: The deployment status is updated to `failed`, and the raw CLI error log is written to `step_message` so the developer can diagnose the failure from the dashboard.
