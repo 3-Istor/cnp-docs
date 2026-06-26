@@ -72,6 +72,7 @@ markdown_extensions:
 # Plan du site / Navigation
 nav:
   - Accueil: index.md
+  - Guide Développeur: developer-onboarding-guide.md
   - Roadmap: README_ROADMAP.md
   - 1. Architecture & Topologies:
       - Vue d'ensemble du système: 01-architecture/01-system-overview.md
