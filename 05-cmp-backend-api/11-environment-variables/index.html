@@ -1,0 +1,2135 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation technique et d'architecture de la Cloud Native Platform">
+      
+      
+        <meta name="author" content="3-Istor Team">
+      
+      
+      
+        <link rel="prev" href="../10-cmp-onboarding-runbook/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Tableau des Variables d'Env - Cloud Native Platform (CNP) Docs ⚡</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#variables-denvironnement-de-la-plateforme-cnp" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-header__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cloud Native Platform (CNP) Docs ⚡
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Tableau des Variables d'Env
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passer au mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passer au mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../README_ROADMAP/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../01-architecture/01-system-overview/" class="md-tabs__link">
+          
+  
+  
+  1. Architecture & Topologies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-core-components/01-cmp-dashboard/" class="md-tabs__link">
+          
+  
+  
+  2. Composants Clés
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-tabs__link">
+          
+  
+  
+  3. Pipelines & Workflows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-templates/00-github-repositories-landscape/" class="md-tabs__link">
+          
+  
+  
+  4. Modèles & Templates
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-global-api-standards/" class="md-tabs__link">
+          
+  
+  
+  5. Spécifications API CMP
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-nav__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    Cloud Native Platform (CNP) Docs ⚡
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../README_ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Architecture & Topologies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1. Architecture & Topologies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/01-system-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble du système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/02-tenancy-and-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-tenancerie & Isolation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/03-network-topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topologie Réseau & Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/04-disaster-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan de Reprise d'Activité (PRA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Composants Clés
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2. Composants Clés
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/01-cmp-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Portail & Dashboard CMP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/02-identity-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identités & Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/03-secrets-vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets & HashiCorp Vault
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/04-gitops-argocd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synchronisation GitOps ArgoCD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/05-github-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intégration GitHub App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/06-database-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schéma Base de Données
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/07-frontend-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Frontend (Next.js)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Pipelines & Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3. Pipelines & Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisioning Day-0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/02-ci-cd-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines de CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/03-developer-configuration-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Développeur (cnp.yaml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/04-system-flows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrammes de Flux Système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/05-testing-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stratégie de Test & Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Modèles & Templates
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    4. Modèles & Templates
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/00-github-repositories-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dépôts GitHub & Cartographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/01-git-app-templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modèles d'Applications (Git)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/02-helm-generic-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart Helm Umbrella Générique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/03-terraform-provisioner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisionneur Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Spécifications API CMP
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    5. Spécifications API CMP
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-global-api-standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standards Globaux & Sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-cmp-deployment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Déploiement (Contracts)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-cmp-phase3-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Évolutions de Phase 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-cmp-frontend-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide d'Intégration Frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-cmp-projects-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Projets & RBAC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-catalog-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-cmp-infra-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Infrastructure & Santé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-cmp-account-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Compte & Liaison GitHub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-cmp-local-development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spécification Dev Local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-cmp-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conteneurisation & Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-cmp-onboarding-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbook d'Onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tableau des Variables d'Env
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tableau des Variables d'Env
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-de-reference-des-variables-denvironnement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Table de Référence des Variables d'Environnement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#securite-et-injection-dynamique-tf_var_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 Sécurité et Injection Dynamique (TF_VAR_*)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#orchestration-de-base-de-donnees-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🐋 Orchestration de Base de Données (Docker Compose)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-de-reference-des-variables-denvironnement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        📋 Table de Référence des Variables d'Environnement
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#securite-et-injection-dynamique-tf_var_" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🔒 Sécurité et Injection Dynamique (TF_VAR_*)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#orchestration-de-base-de-donnees-docker-compose" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        🐋 Orchestration de Base de Données (Docker Compose)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="variables-denvironnement-de-la-plateforme-cnp">Variables d'environnement de la Plateforme (CNP) ⚡<a class="headerlink" href="#variables-denvironnement-de-la-plateforme-cnp" title="Permanent link">&para;</a></h1>
+<p>Ce document recense l'intégralité des variables d'environnement configurées et utilisées au sein de l'écosystème Cloud Native Platform (CNP). Ces variables sont réparties entre le Backend (FastAPI), le Frontend (Next.js/Vite), la Base de données, les runners Terraform de bootstrapping, et les pipelines d'intégration continue (CI/CD).</p>
+<p>Pour des détails sur la configuration locale ou l'exécution de ces composants, consultez :
+* Le guide de développement local : <a href="file:///home/brian/Documents/aepita/ing2/3-Istor/cnp-docs/05-cmp-backend-api/08-cmp-local-development.md">08-cmp-local-development.md</a>
+* Le guide des conteneurs : <a href="file:///home/brian/Documents/aepita/ing2/3-Istor/cnp-docs/05-cmp-backend-api/09-cmp-containers.md">09-cmp-containers.md</a>
+* Le fonctionnement du provisionneur : <a href="file:///home/brian/Documents/aepita/ing2/3-Istor/cnp-docs/04-templates/03-terraform-provisioner.md">03-terraform-provisioner.md</a></p>
+<hr />
+<h2 id="table-de-reference-des-variables-denvironnement">📋 Table de Référence des Variables d'Environnement<a class="headerlink" href="#table-de-reference-des-variables-denvironnement" title="Permanent link">&para;</a></h2>
+<p>Le tableau ci-dessous regroupe toutes les variables d'environnement utilisées dans le projet :</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Nom</th>
+<th style="text-align: left;">Composant Cible</th>
+<th style="text-align: left;">Type</th>
+<th style="text-align: left;">Statut</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong><code>DB_ENABLED</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>Boolean</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Active ou désactive la connexion à la base de données. Si désactivée, les appels d'API dépendant de la DB échoueront. (Défaut : <code>true</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>DB_TYPE</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Spécifie le type de base de données pour le stockage CMP. Supporte principalement <code>sqlite</code> et <code>postgres</code>. (Défaut : <code>sqlite</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>SQLITE_PATH</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Chemin vers le fichier de base de données SQLite local. Requis uniquement si <code>DB_TYPE</code> est configuré sur <code>sqlite</code>. (Défaut : <code>./app.db</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>DB_NAME</code></strong></td>
+<td style="text-align: left;">Backend / Docker Compose</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Nom de la base de données PostgreSQL externe ou de conteneur. (Défaut : <code>app_db</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>DB_USER</code></strong></td>
+<td style="text-align: left;">Backend / Docker Compose</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Nom d'utilisateur de connexion à la base de données PostgreSQL. (Défaut : <code>postgres</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>DB_PASSWORD</code></strong></td>
+<td style="text-align: left;">Backend / Docker Compose</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Mot de passe associé à l'utilisateur de base de données PostgreSQL. (Défaut : <code>postgres</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>GITHUB_APP_PRIVATE_KEY</code></strong></td>
+<td style="text-align: left;">Backend / Terraform</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Clé privée RSA (format PEM) de l'application GitHub (<code>CNP-Portal</code>) pour l'authentification et l'échange de jetons d'accès temporaires (60 min).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>GITHUB_INSTALLATION_ID</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code> / <code>Integer</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Identifiant de l'installation de l'application GitHub sur le compte ou l'organisation ciblée pour l'automatisation.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>KEYCLOAK_URL</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>URL</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">URL racine du serveur d'identité Keycloak (IdP) pour la gestion du SSO et des protocoles OIDC (ex: <code>https://auth.3istor.com</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>KEYCLOAK_CLIENT_ID</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Identifiant client OIDC défini dans Keycloak pour l'application CMP (ex: <code>arcl-cmp</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>KEYCLOAK_CLIENT_SECRET</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Secret client OIDC associé au client ID Keycloak confidentiel pour l'authentification backend.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>KEYCLOAK_ADMIN_USERNAME</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Nom d'utilisateur de l'administrateur Keycloak pour la gestion des API d'administration et la synchronisation des locataires. (Défaut : <code>admin</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>KEYCLOAK_ADMIN_PASSWORD</code></strong></td>
+<td style="text-align: left;">Backend / Terraform</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Mot de passe associé à l'administrateur Keycloak pour les appels d'API admin (passé également en variable de runner Terraform).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>VAULT_URL</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>URL</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">URL de base de l'instance HashiCorp Vault (ex: <code>https://vault.3istor.com</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>VAULT_TOKEN</code></strong></td>
+<td style="text-align: left;">Backend / Terraform</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Jeton d'accès Vault (<code>hvs.xxx</code>) permettant au backend et à Terraform de créer des chemins de secrets et de les y injecter.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>CLOUDFLARE_API_TOKEN</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Jeton d'accès API Cloudflare pour configurer dynamiquement les DNS et tunnels lors du déploiement.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>CLOUDFLARE_ZONE_ID</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Identifiant de la zone DNS Cloudflare associée au domaine géré (ex: <code>3istor.com</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>CLOUDFLARE_ACCOUNT_ID</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong></td>
+<td style="text-align: left;">Identifiant de compte Cloudflare hébergeant les tunnels de routage <code>cloudflared</code>.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_BACKEND_S3_ENABLED</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>Boolean</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Indique si le stockage distant de l'état Terraform (Micro-State) doit s'effectuer à distance sur AWS S3. (Défaut : <code>false</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_BACKEND_S3_BUCKET</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (si S3 actif)</td>
+<td style="text-align: left;">Nom du bucket AWS S3 hébergeant les fichiers d'état <code>.tfstate</code> du CMP.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_BACKEND_S3_DYNAMODB_TABLE</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (si S3 actif)</td>
+<td style="text-align: left;">Nom de la table DynamoDB de verrouillage d'état concurrent pour Terraform.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_BACKEND_AWS_REGION</code></strong></td>
+<td style="text-align: left;">Backend (FastAPI)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (si S3 actif)</td>
+<td style="text-align: left;">Région AWS hébergeant le bucket S3 et la table DynamoDB de verrouillage d'état.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PYTHONUNBUFFERED</code></strong></td>
+<td style="text-align: left;">Backend (Docker)</td>
+<td style="text-align: left;"><code>Boolean</code> (<code>0</code>/<code>1</code>)</td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Désactive la mise en mémoire tampon de la sortie standard de Python, pour un affichage direct des logs de conteneur. (Défaut : <code>1</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>PYTHONPATH</code></strong></td>
+<td style="text-align: left;">Backend (Local)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Configure le chemin de recherche des modules Python dans l'environnement local (ex: <code>$PYTHONPATH:.</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>BACKEND_HOST</code></strong></td>
+<td style="text-align: left;">Frontend (Vite)</td>
+<td style="text-align: left;"><code>URL</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">URL cible du backend FastAPI, utilisée par le proxy de développement Vite pour rediriger les requêtes vers <code>/api</code>. (Défaut : <code>http://localhost:8000</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>POSTGRES_DB</code></strong></td>
+<td style="text-align: left;">Base de données (DB)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (interne)</td>
+<td style="text-align: left;">Configure le nom de la base de données PostgreSQL générée au premier démarrage du conteneur (dérivé de <code>DB_NAME</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>POSTGRES_USER</code></strong></td>
+<td style="text-align: left;">Base de données (DB)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (interne)</td>
+<td style="text-align: left;">Configure le nom d'utilisateur administrateur PostgreSQL généré au premier démarrage (dérivé de <code>DB_USER</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>POSTGRES_PASSWORD</code></strong></td>
+<td style="text-align: left;">Base de données (DB)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (interne)</td>
+<td style="text-align: left;">Configure le mot de passe administrateur PostgreSQL généré au premier démarrage (dérivé de <code>DB_PASSWORD</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_VAR_vault_token</code></strong></td>
+<td style="text-align: left;">Terraform Runner</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (injectée)</td>
+<td style="text-align: left;">Jeton Vault injecté automatiquement par le backend dans l'environnement du processus Terraform.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_VAR_keycloak_admin_password</code></strong></td>
+<td style="text-align: left;">Terraform Runner</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (injectée)</td>
+<td style="text-align: left;">Mot de passe de l'administrateur Keycloak injecté pour mapper les identités OIDC des tenants.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_VAR_github_app_private_key</code></strong></td>
+<td style="text-align: left;">Terraform Runner</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (injectée)</td>
+<td style="text-align: left;">Clé privée de l'app GitHub injectée pour la configuration initiale du dépôt Git d'application.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>TF_VAR_github_token</code></strong></td>
+<td style="text-align: left;">Terraform Runner</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (injectée)</td>
+<td style="text-align: left;">Jeton temporaire d'installation (valide 60 min) généré dynamiquement et injecté sous forme de variable Terraform.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>REGISTRY</code></strong></td>
+<td style="text-align: left;">CI/CD (GitHub Actions)</td>
+<td style="text-align: left;"><code>String</code> / <code>URL</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Adresse du registre de conteneurs cible pour les builds d'images (Défaut : <code>ghcr.io</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>IMAGE_NAME</code></strong></td>
+<td style="text-align: left;">CI/CD (GitHub Actions)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;">Optionnelle</td>
+<td style="text-align: left;">Nom de l'image de conteneur générée par GitHub Actions, basée sur <code>${{ github.repository }}</code>).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong><code>GITHUB_TOKEN</code></strong></td>
+<td style="text-align: left;">CI/CD (GitHub Actions)</td>
+<td style="text-align: left;"><code>String</code></td>
+<td style="text-align: left;"><strong>Requise</strong> (fournie)</td>
+<td style="text-align: left;">Secret fourni dynamiquement par le runner GitHub Actions pour s'authentifier auprès de GHCR.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="securite-et-injection-dynamique-tf_var_">🔒 Sécurité et Injection Dynamique (<code>TF_VAR_*</code>)<a class="headerlink" href="#securite-et-injection-dynamique-tf_var_" title="Permanent link">&para;</a></h2>
+<p>Pour empêcher toute fuite d'informations sensibles (tokens Vault, secrets Keycloak, clés d'API) dans l'historique d'exécution système (visible via les commandes <code>ps aux</code> ou les logs de processus), le backend du CMP n'utilise jamais de drapeaux de ligne de commande <code>-var</code>.</p>
+<p>À la place, il utilise le préfixe <code>TF_VAR_</code> reconnu nativement par Terraform. Les variables correspondantes sont injectées directement dans l'environnement système du sous-processus d'exécution :</p>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># app/services/terraform_executor.py</span>
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="n">env</span><span class="p">[</span><span class="s2">&quot;TF_VAR_vault_token&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">VAULT_TOKEN</span>
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="n">env</span><span class="p">[</span><span class="s2">&quot;TF_VAR_keycloak_admin_password&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">KEYCLOAK_ADMIN_PASSWORD</span>
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a><span class="n">env</span><span class="p">[</span><span class="s2">&quot;TF_VAR_github_app_private_key&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">GITHUB_APP_PRIVATE_KEY</span>
+</span></code></pre></div>
+<hr />
+<h2 id="orchestration-de-base-de-donnees-docker-compose">🐋 Orchestration de Base de Données (Docker Compose)<a class="headerlink" href="#orchestration-de-base-de-donnees-docker-compose" title="Permanent link">&para;</a></h2>
+<p>Lorsqu'on utilise la base de données PostgreSQL intégrée via le profil docker compose <code>postgres</code>, le conteneur PostgreSQL (<code>db</code>) consomme les variables d'environnement système pour instancier la base et configurer les privilèges de connexion :</p>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># Extrait du docker-compose.yml</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="nt">db</span><span class="p">:</span>
+</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="nt">image</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres:16-alpine</span>
+</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="nt">container_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres-db</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="nt">profiles</span><span class="p">:</span>
+</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgres</span>
+</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nt">ports</span><span class="p">:</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="s">&quot;5432:5432&quot;</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">  </span><span class="nt">environment</span><span class="p">:</span>
+</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">    </span><span class="nt">POSTGRES_DB</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DB_NAME:-app_db}</span>
+</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="w">    </span><span class="nt">POSTGRES_USER</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DB_USER:-postgres}</span>
+</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a><span class="w">    </span><span class="nt">POSTGRES_PASSWORD</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">${DB_PASSWORD:-postgres}</span>
+</span></code></pre></div>
+<p><em>Note : Les variables <code>${DB_NAME}</code>, <code>${DB_USER}</code>, et <code>${DB_PASSWORD}</code> proviennent du fichier local <code>.env</code> configuré à la racine du projet et sont transmises par substitution.</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
