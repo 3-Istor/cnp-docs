@@ -173,4 +173,4 @@ def upgrade() -> None:
 ```
 
 ---
-**Next Step**: Continue to [Frontend Architecture Specification](07-frontend-architecture.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Frontend Architecture Specification](07-frontend-architecture.md) (or return to the [Project Overview](../index.md)).

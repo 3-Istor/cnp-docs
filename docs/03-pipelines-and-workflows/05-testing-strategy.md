@@ -202,4 +202,4 @@ poetry run pytest -v
 *Note : L'option `-v` active le mode verbeux détaillant chaque scénario validé.*
 
 ---
-**Next Step**: Continue to [GitHub Repositories Landscape](../04-templates/00-github-repositories-landscape.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [GitHub Repositories Landscape](../04-templates/00-github-repositories-landscape.md) (or return to the [Project Overview](../index.md)).

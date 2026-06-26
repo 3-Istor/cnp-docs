@@ -160,4 +160,4 @@ sequenceDiagram
 4. **Compensating Actions**: The SAGA manager executes the rollback pipeline sequentially, cleaning up partial AWS assets and force-deleting the OpenStack database VMs, restoring the system to a clean state.
 
 ---
-**Next Step**: Continue to [Platform Testing Strategy](05-testing-strategy.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Platform Testing Strategy](05-testing-strategy.md) (or return to the [Project Overview](../index.md)).

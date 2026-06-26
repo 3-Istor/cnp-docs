@@ -147,4 +147,4 @@ docker compose down -v
 ```
 
 ---
-**Next Step**: Continue to [Onboarding Runbook & Guide](10-cmp-onboarding-runbook.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Onboarding Runbook & Guide](10-cmp-onboarding-runbook.md) (or return to the [Project Overview](../index.md)).

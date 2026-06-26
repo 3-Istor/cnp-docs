@@ -158,4 +158,4 @@ If a developer misconfigures their application via the CMP (e.g., setting replic
 
 ---
 
-**Next Step**: Continue to [GitHub Repositories Landscape](../04-templates/00-github-repositories-landscape.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [GitHub Repositories Landscape](../04-templates/00-github-repositories-landscape.md) (or return to the [Project Overview](../index.md)).

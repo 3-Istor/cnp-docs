@@ -33,11 +33,11 @@ Built on top of a highly robust stack (Next.js, FastAPI, Kubernetes, ArgoCD, Ter
 
 This repository contains the architectural decisions, workflows, and specifications of the CNP ecosystem. It is structured for both human engineers and AI assistants to quickly grasp the system design.
 
-- **[01. Architecture & Topologies](./01-architecture/)**: System overviews, Tenancy models, and Networking.
-- **[02. Core Components](./02-core-components/)**: Deep dives into the CMP, Keycloak, Vault, and ArgoCD configurations.
-- **[03. Pipelines & Workflows](./03-pipelines-and-workflows/)**: Sequential flows for app provisioning, CI/CD, and the `cnp.yaml` GitOps cycle.
-- **[04. Templates Design](./04-templates/)**: Specifications for Git App Templates, Generic Helm Charts, and Terraform wrappers.
-- **[05. CMP Backend API](./05-cmp-backend-api/)**: ⭐ **NEW** - API specifications and integration guides for the Cloud Management Platform.
+- **[01. Architecture & Topologies](./01-architecture/01-system-overview.md)**: System overviews, Tenancy models, and Networking.
+- **[02. Core Components](./02-core-components/01-cmp-dashboard.md)**: Deep dives into the CMP, Keycloak, Vault, and ArgoCD configurations.
+- **[03. Pipelines & Workflows](./03-pipelines-and-workflows/01-app-provisioning-flow.md)**: Sequential flows for app provisioning, CI/CD, and the `cnp.yaml` GitOps cycle.
+- **[04. Templates Design](./04-templates/00-github-repositories-landscape.md)**: Specifications for Git App Templates, Generic Helm Charts, and Terraform wrappers.
+- **[05. CMP Backend API](./05-cmp-backend-api/00-global-api-standards.md)**: ⭐ **NEW** - API specifications and integration guides for the Cloud Management Platform.
 
 ## 📋 Project Documentation
 

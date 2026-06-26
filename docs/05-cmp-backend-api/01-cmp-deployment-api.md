@@ -245,4 +245,4 @@ Triggers a non-blocking background `terraform destroy` command to wipe out all c
 ```
 
 ---
-**Next Step**: Continue to [Projects & RBAC API Contract](04-cmp-projects-api.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Projects & RBAC API Contract](04-cmp-projects-api.md) (or return to the [Project Overview](../index.md)).

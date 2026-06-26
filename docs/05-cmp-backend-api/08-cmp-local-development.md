@@ -123,4 +123,4 @@ poetry run pytest
 ```
 
 ---
-**Next Step**: Continue to [Containerization & Docker Compose Specs](09-cmp-containers.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Containerization & Docker Compose Specs](09-cmp-containers.md) (or return to the [Project Overview](../index.md)).

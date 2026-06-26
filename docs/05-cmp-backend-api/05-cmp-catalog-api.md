@@ -123,4 +123,4 @@ data/templates/templates/
 ```
 
 ---
-**Next Step**: Continue to [Infrastructure & Health API Contract](06-cmp-infra-api.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Infrastructure & Health API Contract](06-cmp-infra-api.md) (or return to the [Project Overview](../index.md)).

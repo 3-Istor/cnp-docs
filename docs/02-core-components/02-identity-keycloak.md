@@ -143,4 +143,4 @@ resource "keycloak_openid_group_membership_protocol_mapper" "group_mapper" {
 * **Vault**: Maps the `groups` claim to a Vault identity group alias, granting access to the `kvv2/data/projects/alpha/*` path.
 
 ---
-**Next Step**: Continue to [ArgoCD GitOps Delivery Specifications](04-gitops-argocd.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [ArgoCD GitOps Delivery Specifications](04-gitops-argocd.md) (or return to the [Project Overview](../index.md)).

@@ -192,4 +192,4 @@ export function useDeployment(id: number) {
 ```
 
 ---
-**Next Step**: Continue to [App Provisioning Flow](../03-pipelines-and-workflows/01-app-provisioning-flow.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [App Provisioning Flow](../03-pipelines-and-workflows/01-app-provisioning-flow.md) (or return to the [Project Overview](../index.md)).

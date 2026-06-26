@@ -212,4 +212,4 @@ aws s3 rm s3://3-istor-tf-infra-aws/cmp/projects/alpha/frontend.tfstate
 ```
 
 ---
-**Next Step**: Continue to [CMP Core Dashboard & API](../02-core-components/01-cmp-dashboard.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [CMP Core Dashboard & API](../02-core-components/01-cmp-dashboard.md) (or return to the [Project Overview](../index.md)).

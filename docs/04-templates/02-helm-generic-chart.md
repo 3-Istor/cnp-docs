@@ -244,4 +244,4 @@ deploy/
 *ArgoCD independently renders the `cnp-generic-app` chart twice, securely linking the frontend to the edge gateway and the backend to the database, achieving total separation of concerns without writing custom Helm subcharts.*
 
 ---
-**Next Step**: Continue to [Project Base Infrastructure Chart](03-project-base-chart.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Terraform Provisioner](03-terraform-provisioner.md) (or return to the [Project Overview](../index.md)).

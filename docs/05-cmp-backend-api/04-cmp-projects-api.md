@@ -206,4 +206,4 @@ curl -X DELETE "https://cmp.3istor.com/api/projects/alpha" \
 **Expected Response (`204 No Content`)**: No body returned on successful deletion.
 
 ---
-**Next Step**: Continue to [Catalog API Contract](05-cmp-catalog-api.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Catalog API Contract](05-cmp-catalog-api.md) (or return to the [Project Overview](../index.md)).

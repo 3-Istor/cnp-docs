@@ -120,4 +120,4 @@ sequenceDiagram
 ```
 
 ---
-**Next Step**: Return to the [Project Overview](../README.md).
+**Next Step**: Return to the [Project Overview](../index.md).

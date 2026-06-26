@@ -164,4 +164,4 @@ spec:
 4. **ArgoCD Sync**: ArgoCD detects the new commit in Git, notices the change in `image.tag` inside `values.yaml`, and applies a rolling update to the deployment workloads in the cluster.
 
 ---
-**Next Step**: Continue to [Developer Configuration & GitOps Flow](03-developer-configuration-flow.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Developer Configuration & GitOps Flow](03-developer-configuration-flow.md) (or return to the [Project Overview](../index.md)).

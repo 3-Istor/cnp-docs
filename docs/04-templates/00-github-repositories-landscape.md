@@ -84,4 +84,4 @@ These repositories are treated as immutable blueprints. The CMP clones them to s
 * **Status**: Active.
 
 ---
-**Next Step**: Continue to [Git App Templates & Bootstrapping Specifications](01-git-app-templates.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Git App Templates & Bootstrapping Specifications](01-git-app-templates.md) (or return to the [Project Overview](../index.md)).

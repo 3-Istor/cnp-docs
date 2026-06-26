@@ -130,4 +130,4 @@ Terraform destroys the remaining native resources (namespaces, Keycloak clients,
 To prevent accidental loss of code history, the GitHub App API does not permanently delete the repository on the user's account; it modifies the repository metadata to set `"archived": true`, putting the code into a **read-only** state.
 
 ---
-**Next Step**: Continue to [Global API Standards & Authorization](../05-cmp-backend-api/00-global-api-standards.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Global API Standards & Authorization](../05-cmp-backend-api/00-global-api-standards.md) (or return to the [Project Overview](../index.md)).

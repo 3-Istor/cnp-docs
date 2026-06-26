@@ -159,4 +159,4 @@ spec:
 ```
 
 ---
-**Next Step**: Continue to [Terraform Provisioner & State Management Specs](../04-templates/03-terraform-provisioner.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Terraform Provisioner & State Management Specs](../04-templates/03-terraform-provisioner.md) (or return to the [Project Overview](../index.md)).

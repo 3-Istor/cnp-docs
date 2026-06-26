@@ -162,4 +162,4 @@ resource "vault_kubernetes_auth_backend_role" "app_role" {
 }
 ```
 ---
-**Next Step**: Continue to [Network Topology & Infrastructure Specifications](03-network-topology.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Network Topology & Infrastructure Specifications](03-network-topology.md) (or return to the [Project Overview](../index.md)).

@@ -125,4 +125,4 @@ flowchart TD
 * **`unknown`**: Downstream cloud provider API queries return 401/403 errors, or no physical VMs matching the namespace can be located.
 
 ---
-**Next Step**: Continue to [Account & GitHub Link API Contracts](07-cmp-account-api.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Account & GitHub Link API Contracts](07-cmp-account-api.md) (or return to the [Project Overview](../index.md)).
