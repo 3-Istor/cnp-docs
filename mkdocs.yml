@@ -2,9 +2,6 @@ site_name: Cloud Native Platform (CNP) Docs ⚡
 site_description: Documentation technique et d'architecture de la Cloud Native Platform
 site_author: 3-Istor Team
 
-# Utiliser le répertoire racine comme source de documentation
-docs_dir: .
-
 theme:
   name: material
   language: fr
@@ -74,7 +71,7 @@ markdown_extensions:
 
 # Plan du site / Navigation
 nav:
-  - Accueil: README.md
+  - Accueil: index.md
   - Roadmap: README_ROADMAP.md
   - 1. Architecture & Topologies:
       - Vue d'ensemble du système: 01-architecture/01-system-overview.md

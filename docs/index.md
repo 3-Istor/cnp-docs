@@ -33,18 +33,18 @@ Built on top of a highly robust stack (Next.js, FastAPI, Kubernetes, ArgoCD, Ter
 
 This repository contains the architectural decisions, workflows, and specifications of the CNP ecosystem. It is structured for both human engineers and AI assistants to quickly grasp the system design.
 
-- **[01. Architecture & Topologies](./docs/01-architecture/)**: System overviews, Tenancy models, and Networking.
-- **[02. Core Components](./docs/02-core-components/)**: Deep dives into the CMP, Keycloak, Vault, and ArgoCD configurations.
-- **[03. Pipelines & Workflows](./docs/03-pipelines-and-workflows/)**: Sequential flows for app provisioning, CI/CD, and the `cnp.yaml` GitOps cycle.
-- **[04. Templates Design](./docs/04-templates/)**: Specifications for Git App Templates, Generic Helm Charts, and Terraform wrappers.
-- **[05. CMP Backend API](./docs/05-cmp-backend-api/)**: ⭐ **NEW** - API specifications and integration guides for the Cloud Management Platform.
+- **[01. Architecture & Topologies](./01-architecture/)**: System overviews, Tenancy models, and Networking.
+- **[02. Core Components](./02-core-components/)**: Deep dives into the CMP, Keycloak, Vault, and ArgoCD configurations.
+- **[03. Pipelines & Workflows](./03-pipelines-and-workflows/)**: Sequential flows for app provisioning, CI/CD, and the `cnp.yaml` GitOps cycle.
+- **[04. Templates Design](./04-templates/)**: Specifications for Git App Templates, Generic Helm Charts, and Terraform wrappers.
+- **[05. CMP Backend API](./05-cmp-backend-api/)**: ⭐ **NEW** - API specifications and integration guides for the Cloud Management Platform.
 
 ## 📋 Project Documentation
 
-- **[CHANGELOG.md](../CHANGELOG.md)**: Version history and release notes
-- **[README_ROADMAP.md](./docs/README_ROADMAP.md)**: Implementation roadmap and phase tracking
-- **[PHASE3_TEAM_HANDOFF.md](../PHASE3_TEAM_HANDOFF.md)**: Team handoff document for Phase 3
-- **[PHASE3_SUMMARY.md](../PHASE3_SUMMARY.md)**: Quick summary of Phase 3 changes
+- **[CHANGELOG.md](../../CHANGELOG.md)**: Version history and release notes
+- **[README_ROADMAP.md](./README_ROADMAP.md)**: Implementation roadmap and phase tracking
+- **[PHASE3_TEAM_HANDOFF.md](../../PHASE3_TEAM_HANDOFF.md)**: Team handoff document for Phase 3
+- **[PHASE3_SUMMARY.md](../../PHASE3_SUMMARY.md)**: Quick summary of Phase 3 changes
 
 ```
 cnp-docs/
