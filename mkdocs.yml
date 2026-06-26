@@ -1,0 +1,115 @@
+site_name: Cloud Native Platform (CNP) Docs ⚡
+site_description: Documentation technique et d'architecture de la Cloud Native Platform
+site_author: 3-Istor Team
+
+# Utiliser le répertoire racine comme source de documentation
+docs_dir: .
+
+theme:
+  name: material
+  language: fr
+  icon:
+    logo: material/cloud-flash
+  palette:
+    # Mode clair
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-sunny
+        name: Passer au mode sombre
+    # Mode sombre
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/weather-night
+        name: Passer au mode clair
+  features:
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.top
+    - navigation.tracking
+    - search.suggest
+    - search.highlight
+    - content.code.copy
+
+plugins:
+  - search
+
+markdown_extensions:
+  - admonition
+  - toc:
+      permalink: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.critique
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_index: !!python/name:pymdownx.emoji.twemoji
+      emoji_generator: !!python/name:pymdownx.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+# Plan du site / Navigation
+nav:
+  - Accueil: README.md
+  - Roadmap: README_ROADMAP.md
+  - 1. Architecture & Topologies:
+      - Vue d'ensemble du système: 01-architecture/01-system-overview.md
+      - Multi-tenancerie & Isolation: 01-architecture/02-tenancy-and-isolation.md
+      - Topologie Réseau & Ingress: 01-architecture/03-network-topology.md
+      - Plan de Reprise d'Activité (PRA): 01-architecture/04-disaster-recovery.md
+  - 2. Composants Clés:
+      - Portail & Dashboard CMP: 02-core-components/01-cmp-dashboard.md
+      - Identités & Keycloak: 02-core-components/02-identity-keycloak.md
+      - Secrets & HashiCorp Vault: 02-core-components/03-secrets-vault.md
+      - Synchronisation GitOps ArgoCD: 02-core-components/04-gitops-argocd.md
+      - Intégration GitHub App: 02-core-components/05-github-integration.md
+      - Schéma Base de Données: 02-core-components/06-database-schema.md
+      - Architecture Frontend (Next.js): 02-core-components/07-frontend-architecture.md
+  - 3. Pipelines & Workflows:
+      - Provisioning Day-0: 03-pipelines-and-workflows/01-app-provisioning-flow.md
+      - Pipelines de CI/CD: 03-pipelines-and-workflows/02-ci-cd-pipelines.md
+      - Configuration Développeur (cnp.yaml): 03-pipelines-and-workflows/03-developer-configuration-flow.md
+      - Diagrammes de Flux Système: 03-pipelines-and-workflows/04-system-flows.md
+      - Stratégie de Test & Mocking: 03-pipelines-and-workflows/05-testing-strategy.md
+  - 4. Modèles & Templates:
+      - Dépôts GitHub & Cartographie: 04-templates/00-github-repositories-landscape.md
+      - Modèles d'Applications (Git): 04-templates/01-git-app-templates.md
+      - Chart Helm Umbrella Générique: 04-templates/02-helm-generic-chart.md
+      - Provisionneur Terraform: 04-templates/03-terraform-provisioner.md
+  - 5. Spécifications API CMP:
+      - Standards Globaux & Sécurité: 05-cmp-backend-api/00-global-api-standards.md
+      - API Déploiement (Contracts): 05-cmp-backend-api/01-cmp-deployment-api.md
+      - Évolutions de Phase 3: 05-cmp-backend-api/02-cmp-phase3-changes.md
+      - Guide d'Intégration Frontend: 05-cmp-backend-api/03-cmp-frontend-integration.md
+      - API Projets & RBAC: 05-cmp-backend-api/04-cmp-projects-api.md
+      - API Catalogue: 05-cmp-backend-api/05-cmp-catalog-api.md
+      - API Infrastructure & Santé: 05-cmp-backend-api/06-cmp-infra-api.md
+      - API Compte & Liaison GitHub: 05-cmp-backend-api/07-cmp-account-api.md
+      - Spécification Dev Local: 05-cmp-backend-api/08-cmp-local-development.md
+      - Conteneurisation & Compose: 05-cmp-backend-api/09-cmp-containers.md
+      - Runbook d'Onboarding: 05-cmp-backend-api/10-cmp-onboarding-runbook.md
+      - Tableau des Variables d'Env: 05-cmp-backend-api/11-environment-variables.md

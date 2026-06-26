@@ -66,7 +66,7 @@ cnp-docs/
 ├── 03-pipelines-and-workflows/
 │   ├── 01-app-provisioning-flow.md       # App creation sequence (Terraform -> Git -> ArgoCD)
 │   ├── 02-ci-cd-pipelines.md             # GitHub Actions (Build, Push)
-│   ├── 03-developer-cnp-yaml.md          # cnp.yaml spec and translation
+│   ├── 03-developer-configuration-flow.md # cnp.yaml spec and translation
 │   ├── 04-system-flows.md                # Sequence diagrams for core platform workflows
 │   └── 05-testing-strategy.md            # Backend test architecture and mocks
 ├── 04-templates/
