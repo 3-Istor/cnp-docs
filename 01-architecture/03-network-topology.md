@@ -114,4 +114,4 @@ To prevent routing conflicts across the hybrid environment, the platform strictl
 | **AWS VPC** | `10.1.0.0/16` | Public/Private subnets (Non-overlapping with local mesh) |
 
 ---
-**Next Step**: Continue to [CMP Core Dashboard & API](../02-core-components/01-cmp-dashboard.md) (or return to the [Project Overview](../README.md)).
+**Next Step**: Continue to [Disaster Recovery Plan (PRA)](04-disaster-recovery.md) (or return to the [Project Overview](../README.md)).

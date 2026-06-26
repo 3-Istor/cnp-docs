@@ -53,19 +53,22 @@ cnp-docs/
 ├── 01-architecture/
 │   ├── 01-system-overview.md               # Global architecture (Frontend, Backend, K8s, Git)
 │   ├── 02-tenancy-and-isolation.md         # Project > App model (RBAC, Network, Vault)
-│   └── 03-network-topology.md              # Envoy Gateway, Cilium, Ingress, DNS
+│   ├── 03-network-topology.md              # Envoy Gateway, Cilium, Ingress, DNS
+│   └── 04-disaster-recovery.md             # Disaster recovery procedures (PRA)
 ├── 02-core-components/
 │   ├── 01-cmp-dashboard.md                 # Frontend/Backend specifications
 │   ├── 02-identity-keycloak.md            # SSO flows, Groups, OIDC
 │   ├── 03-secrets-vault.md                # Secrets management, VSO
 │   ├── 04-gitops-argocd.md                 # Cluster synchronization
 │   ├── 05-github-integration.md           # Dedicated GitHub App Model integration
-│   └── 06-database-schema.md              # Database schemas, ERD, and WAL mode
+│   ├── 06-database-schema.md              # Database schemas, ERD, and WAL mode
+│   └── 07-frontend-architecture.md        # Next.js frontend structure and flows
 ├── 03-pipelines-and-workflows/
 │   ├── 01-app-provisioning-flow.md       # App creation sequence (Terraform -> Git -> ArgoCD)
 │   ├── 02-ci-cd-pipelines.md             # GitHub Actions (Build, Push)
 │   ├── 03-developer-cnp-yaml.md          # cnp.yaml spec and translation
-│   └── 04-system-flows.md                # Sequence diagrams for core platform workflows
+│   ├── 04-system-flows.md                # Sequence diagrams for core platform workflows
+│   └── 05-testing-strategy.md            # Backend test architecture and mocks
 ├── 04-templates/
 │   ├── 01-git-app-templates.md           # Application repository structure
 │   ├── 02-helm-umbrella-chart.md         # Generic Helm chart
@@ -81,7 +84,8 @@ cnp-docs/
     ├── 07-cmp-account-api.md              # Account & GitHub link API specification
     ├── 08-cmp-local-development.md        # Local development specifications
     ├── 09-cmp-containers.md               # Containerization & Docker Compose setup
-    └── 10-cmp-onboarding-runbook.md       # Onboarding checklist & test run scenarios
+    ├── 10-cmp-onboarding-runbook.md       # Onboarding checklist & test run scenarios
+    └── 11-environment-variables.md        # Environment variables reference table
 ```
 
 ---
