@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
     
     
       
@@ -31,7 +31,7 @@
       
     
     
-      <link rel="stylesheet" href="../../assets/stylesheets/main.484c7ddc.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.ec1eaa64.min.css">
       
         
         <link rel="stylesheet" href="../../assets/stylesheets/palette.ab4e12ef.min.css">
@@ -2123,14 +2123,14 @@
 * <strong>The Constraint</strong>: The user must possess the <code>openid_client_access</code> role.
 * <strong>The Action</strong>: If the condition <code>negate = "true"</code> (the user does NOT possess the role) is met, Keycloak triggers the <code>deny-access-authenticator</code>, blocking token generation.</p>
 <div class="language-hcl highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># terraform/auth_flow.tf extract</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;keycloak_authentication_execution_config&quot;</span><span class="w"> </span><span class="nv">&quot;condition_role_config&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">"keycloak_authentication_execution_config"</span><span class="w"> </span><span class="nv">"condition_role_config"</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a><span class="w">  </span><span class="na">realm_id</span><span class="w">     </span><span class="o">=</span><span class="w"> </span><span class="nv">keycloak_realm.kube_lab.id</span>
 </span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a><span class="w">  </span><span class="na">execution_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">keycloak_authentication_execution.condition_role.id</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="na">alias</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;deny-if-not-3-istor-access&quot;</span>
+</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a><span class="w">  </span><span class="na">alias</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="s2">"deny-if-not-3-istor-access"</span>
 </span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>
 </span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a><span class="w">  </span><span class="nb">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="na">condUserRole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;openid_client_access&quot;</span>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="na">negate</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;true&quot;</span><span class="c1"> # Triggers downstream deny-access-authenticator if absent</span>
+</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a><span class="w">    </span><span class="na">condUserRole</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"openid_client_access"</span>
+</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a><span class="w">    </span><span class="na">negate</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="s2">"true"</span><span class="c1"> # Triggers downstream deny-access-authenticator if absent</span>
 </span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a><span class="w">  </span><span class="p">}</span>
 </span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a><span class="p">}</span>
 </span></code></pre></div>
@@ -2144,18 +2144,18 @@
 <h3 id="oidc-scope-mapping-groups-scope">OIDC Scope Mapping (<code>groups</code> scope)<a class="headerlink" href="#oidc-scope-mapping-groups-scope" title="Permanent link">&para;</a></h3>
 <p>To transmit these memberships securely to downstream consumers (ArgoCD, Envoy Gateway, Vault), Keycloak maps group memberships into the JWT token payload.</p>
 <div class="language-hcl highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># terraform/scopes.tf extract</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;keycloak_openid_client_scope&quot;</span><span class="w"> </span><span class="nv">&quot;groups&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">"keycloak_openid_client_scope"</span><span class="w"> </span><span class="nv">"groups"</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="na">realm_id</span><span class="w">               </span><span class="o">=</span><span class="w"> </span><span class="nv">keycloak_realm.kube_lab.id</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="na">name</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;groups&quot;</span>
+</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">  </span><span class="na">name</span><span class="w">                   </span><span class="o">=</span><span class="w"> </span><span class="s2">"groups"</span>
 </span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">  </span><span class="na">include_in_token_scope</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="no">true</span>
 </span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="p">}</span>
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">&quot;keycloak_openid_group_membership_protocol_mapper&quot;</span><span class="w"> </span><span class="nv">&quot;group_mapper&quot;</span><span class="w"> </span><span class="p">{</span>
+</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="kr">resource</span><span class="w"> </span><span class="nc">"keycloak_openid_group_membership_protocol_mapper"</span><span class="w"> </span><span class="nv">"group_mapper"</span><span class="w"> </span><span class="p">{</span>
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">  </span><span class="na">realm_id</span><span class="w">        </span><span class="o">=</span><span class="w"> </span><span class="nv">keycloak_realm.kube_lab.id</span>
 </span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="na">client_scope_id</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nv">keycloak_openid_client_scope.groups.id</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="na">name</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;group-mapper&quot;</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="na">claim_name</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;groups&quot;</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="na">full_path</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="no">false</span><span class="c1"> # Outputs flat &quot;project-alpha-admins&quot; instead of &quot;/project-alpha-admins&quot;</span>
+</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="w">  </span><span class="na">name</span><span class="w">            </span><span class="o">=</span><span class="w"> </span><span class="s2">"group-mapper"</span>
+</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="w">  </span><span class="na">claim_name</span><span class="w">      </span><span class="o">=</span><span class="w"> </span><span class="s2">"groups"</span>
+</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="w">  </span><span class="na">full_path</span><span class="w">       </span><span class="o">=</span><span class="w"> </span><span class="no">false</span><span class="c1"> # Outputs flat "project-alpha-admins" instead of "/project-alpha-admins"</span>
 </span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="p">}</span>
 </span></code></pre></div>
 <h3 id="downstream-consumption-matrix">Downstream Consumption Matrix:<a class="headerlink" href="#downstream-consumption-matrix" title="Permanent link">&para;</a></h3>
@@ -2224,7 +2224,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      <script src="../../assets/javascripts/bundle.d7400e89.min.js"></script>
       
     
   </body>
