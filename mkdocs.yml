@@ -111,3 +111,10 @@ nav:
       - Conteneurisation & Compose: 05-cmp-backend-api/09-cmp-containers.md
       - Runbook d'Onboarding: 05-cmp-backend-api/10-cmp-onboarding-runbook.md
       - Tableau des Variables d'Env: 05-cmp-backend-api/11-environment-variables.md
+  - 6. Chantier Multicloud:
+      - Vue d'ensemble: 06-multicloud/00-index.md
+      - Invariants & Périmètre: 06-multicloud/01-invariants-et-perimetre.md
+      - Décisions D-01 à D-13: 06-multicloud/02-decisions.md
+      - Contrat Équipe Cluster: 06-multicloud/03-contrat-equipe-cluster.md
+      - Chantiers & Séquencement: 06-multicloud/04-chantiers-et-sequencement.md
+      - Nettoyage & Décommissionnement: 06-multicloud/05-nettoyage-et-decommissionnement.md
