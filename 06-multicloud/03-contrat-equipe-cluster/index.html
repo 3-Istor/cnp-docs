@@ -13,10 +13,10 @@
       
       
       
-        <link rel="prev" href="../02-helm-generic-chart/">
+        <link rel="prev" href="../02-decisions/">
       
       
-        <link rel="next" href="../../05-cmp-backend-api/00-global-api-standards/">
+        <link rel="next" href="../04-chantiers-et-sequencement/">
       
       
         
@@ -27,7 +27,7 @@
     
     
       
-        <title>Provisionneur Terraform - Cloud Native Platform (CNP) Docs ⚡</title>
+        <title>Contrat Équipe Cluster - Cloud Native Platform (CNP) Docs ⚡</title>
       
     
     
@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#terraform-provisioner-state-management" class="md-skip">
+        <a href="#contrat-dinterface-avec-lequipe-cluster" class="md-skip">
           Aller au contenu
         </a>
       
@@ -114,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Provisionneur Terraform
+              Contrat Équipe Cluster
             
           </span>
         </div>
@@ -324,13 +324,11 @@
   
   
   
-    
-  
   
     
     
-      <li class="md-tabs__item md-tabs__item--active">
-        <a href="../00-github-repositories-landscape/" class="md-tabs__link">
+      <li class="md-tabs__item">
+        <a href="../../04-templates/00-github-repositories-landscape/" class="md-tabs__link">
           
   
   
@@ -366,11 +364,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../06-multicloud/00-index/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-index/" class="md-tabs__link">
           
   
   
@@ -1125,29 +1125,24 @@
       
   
   
-    
   
   
-  
     
     
     
     
       
-        
-        
-      
       
     
     
-    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" checked>
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
         
           
-          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="">
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
             
   
   
@@ -1165,7 +1160,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="true">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
           <label class="md-nav__title" for="__nav_7">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1183,7 +1178,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../00-github-repositories-landscape/" class="md-nav__link">
+      <a href="../../04-templates/00-github-repositories-landscape/" class="md-nav__link">
         
   
   
@@ -1211,7 +1206,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../01-git-app-templates/" class="md-nav__link">
+      <a href="../../04-templates/01-git-app-templates/" class="md-nav__link">
         
   
   
@@ -1239,7 +1234,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../02-helm-generic-chart/" class="md-nav__link">
+      <a href="../../04-templates/02-helm-generic-chart/" class="md-nav__link">
         
   
   
@@ -1264,37 +1259,10 @@
                 
   
   
-    
   
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-        <label class="md-nav__link md-nav__link--active" for="__toc">
-          
-  
-  
-  <span class="md-ellipsis">
-    
-  
-    Provisionneur Terraform
-  
-
-    
-  </span>
-  
-  
-
-          <span class="md-nav__icon md-icon"></span>
-        </label>
-      
-      <a href="./" class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../../04-templates/03-terraform-provisioner/" class="md-nav__link">
         
   
   
@@ -1310,182 +1278,6 @@
   
 
       </a>
-      
-        
-
-<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
-  
-  
-  
-    
-  
-  
-    <label class="md-nav__title" for="__toc">
-      <span class="md-nav__icon md-icon"></span>
-      Table des matières
-    </label>
-    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
-      
-        <li class="md-nav__item">
-  <a href="#1-the-micro-state-pattern-s3-state-isolation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. The Micro-State Pattern (S3 State Isolation)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="1. The Micro-State Pattern (S3 State Isolation)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#s3-state-directory-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        S3 State Directory Structure:
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dynamic-backend-initialization" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dynamic Backend Initialization
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#2-provisioner-responsibilities-step-execution-day-0" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Provisioner Responsibilities &amp; Step Execution (Day-0)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="2. Provisioner Responsibilities &amp; Step Execution (Day-0)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-provider-overrides-generation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1: Provider Overrides Generation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-secure-secret-injection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2: Secure Secret Injection
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-resource-provisioning-terraform-apply" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Resource Provisioning (Terraform Apply)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#3-day-2-deletion-saga-rollback" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Day-2 Deletion &amp; SAGA Rollback
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. Day-2 Deletion &amp; SAGA Rollback">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-crd-api-validation-bypass" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The CRD API Validation Bypass
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The CRD API Validation Bypass">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-strip-custom-resources-from-state" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Strip Custom Resources from State
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#2-run-destroy-with-safety-overrides" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        2. Run Destroy with Safety Overrides
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#3-soft-archive-repositories" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        3. Soft-Archive Repositories
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-    </ul>
-  
-</nav>
-      
     </li>
   
 
@@ -1895,24 +1687,29 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" checked>
         
           
-          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="">
             
   
   
@@ -1930,7 +1727,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_9">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1948,7 +1745,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-multicloud/00-index/" class="md-nav__link">
+      <a href="../00-index/" class="md-nav__link">
         
   
   
@@ -1976,7 +1773,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-multicloud/01-invariants-et-perimetre/" class="md-nav__link">
+      <a href="../01-invariants-et-perimetre/" class="md-nav__link">
         
   
   
@@ -2004,7 +1801,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-multicloud/02-decisions/" class="md-nav__link">
+      <a href="../02-decisions/" class="md-nav__link">
         
   
   
@@ -2029,10 +1826,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../06-multicloud/03-contrat-equipe-cluster/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contrat Équipe Cluster
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -2048,6 +1872,81 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#partage-des-responsabilites" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Partage des responsabilités
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#exigences-cote-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exigences côté cluster
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#flux-autorises-sur-le-vpn" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Flux autorisés sur le VPN
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ce-que-cnp-sengage-a-ne-pas-faire" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ce que CNP s'engage à ne pas faire
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#points-a-confirmer-avec-lequipe-cluster-avant-la-phase-3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Points à confirmer avec l'équipe cluster avant la phase 3
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -2060,7 +1959,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-multicloud/04-chantiers-et-sequencement/" class="md-nav__link">
+      <a href="../04-chantiers-et-sequencement/" class="md-nav__link">
         
   
   
@@ -2088,7 +1987,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../06-multicloud/05-nettoyage-et-decommissionnement/" class="md-nav__link">
+      <a href="../05-nettoyage-et-decommissionnement/" class="md-nav__link">
         
   
   
@@ -2143,158 +2042,57 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-the-micro-state-pattern-s3-state-isolation" class="md-nav__link">
+  <a href="#partage-des-responsabilites" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. The Micro-State Pattern (S3 State Isolation)
+        Partage des responsabilités
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="1. The Micro-State Pattern (S3 State Isolation)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#s3-state-directory-structure" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        S3 State Directory Structure:
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#dynamic-backend-initialization" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Dynamic Backend Initialization
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-provisioner-responsibilities-step-execution-day-0" class="md-nav__link">
+  <a href="#exigences-cote-cluster" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Provisioner Responsibilities &amp; Step Execution (Day-0)
+        Exigences côté cluster
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="2. Provisioner Responsibilities &amp; Step Execution (Day-0)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#step-1-provider-overrides-generation" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 1: Provider Overrides Generation
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-2-secure-secret-injection" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 2: Secure Secret Injection
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#step-3-resource-provisioning-terraform-apply" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        Step 3: Resource Provisioning (Terraform Apply)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-day-2-deletion-saga-rollback" class="md-nav__link">
+  <a href="#flux-autorises-sur-le-vpn" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Day-2 Deletion &amp; SAGA Rollback
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. Day-2 Deletion &amp; SAGA Rollback">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#the-crd-api-validation-bypass" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        The CRD API Validation Bypass
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="The CRD API Validation Bypass">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#1-strip-custom-resources-from-state" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        1. Strip Custom Resources from State
+        Flux autorisés sur le VPN
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#2-run-destroy-with-safety-overrides" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#ce-que-cnp-sengage-a-ne-pas-faire" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Run Destroy with Safety Overrides
+        Ce que CNP s'engage à ne pas faire
       
     </span>
   </a>
   
 </li>
-        
-          <li class="md-nav__item">
-  <a href="#3-soft-archive-repositories" class="md-nav__link">
+      
+        <li class="md-nav__item">
+  <a href="#points-a-confirmer-avec-lequipe-cluster-avant-la-phase-3" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Soft-Archive Repositories
+        Points à confirmer avec l'équipe cluster avant la phase 3
       
     </span>
   </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
@@ -2315,104 +2113,156 @@
 
 
 
-<h1 id="terraform-provisioner-state-management">Terraform Provisioner &amp; State Management<a class="headerlink" href="#terraform-provisioner-state-management" title="Permanent link">&para;</a></h1>
-<p>The Terraform App Provisioner is the automation engine utilized by the CMP Backend during the <strong>Day-0 (Bootstrapping)</strong> phase of an application. It prepares external APIs and local cluster environments before ArgoCD takes over the continuous delivery cycle.</p>
-<hr />
-<h2 id="1-the-micro-state-pattern-s3-state-isolation">1. The Micro-State Pattern (S3 State Isolation)<a class="headerlink" href="#1-the-micro-state-pattern-s3-state-isolation" title="Permanent link">&para;</a></h2>
-<p>To prevent risk, latency, and state-locking conflicts associated with a single monolithic state file, CNP implements a <strong>Micro-State Pattern</strong>. Every application deployment and project bootstrap managed by the CMP receives its own isolated <code>.tfstate</code> file stored in AWS S3.</p>
-<h3 id="s3-state-directory-structure">S3 State Directory Structure:<a class="headerlink" href="#s3-state-directory-structure" title="Permanent link">&para;</a></h3>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>3-istor-tf-infra-aws (S3 Bucket)
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>├── infra/
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>│   └── k3s-master/
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>│       └── terraform.tfstate             # Static Base Infrastructure State
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>└── cmp/
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>    └── projects/
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>        └── project-alpha/
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>            ├── bootstrap.tfstate         # Isolated Project Bootstrap State
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>            ├── app-frontend.tfstate      # Isolated Frontend App State
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>            └── app-backend.tfstate       # Isolated Backend App State
-</span></code></pre></div>
-<h3 id="dynamic-backend-initialization">Dynamic Backend Initialization<a class="headerlink" href="#dynamic-backend-initialization" title="Permanent link">&para;</a></h3>
-<p>When the CMP Backend triggers a deployment, it does not use a hardcoded state key. Instead, the <code>TerraformExecutor</code> configures the S3 backend dynamically during <code>terraform init</code> using command-line <code>-backend-config</code> flags.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a><span class="c1"># app/services/terraform_executor.py extract</span>
-</span><span id="__span-1-2"><a id="__codelineno-1-2" name="__codelineno-1-2" href="#__codelineno-1-2"></a><span class="k">def</span><span class="w"> </span><span class="nf">_get_backend_config</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
-</span><span id="__span-1-3"><a id="__codelineno-1-3" name="__codelineno-1-3" href="#__codelineno-1-3"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">use_s3_backend</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">settings</span><span class="o">.</span><span class="n">TF_BACKEND_S3_BUCKET</span><span class="p">:</span>
-</span><span id="__span-1-4"><a id="__codelineno-1-4" name="__codelineno-1-4" href="#__codelineno-1-4"></a>        <span class="k">return</span> <span class="p">[]</span>
-</span><span id="__span-1-5"><a id="__codelineno-1-5" name="__codelineno-1-5" href="#__codelineno-1-5"></a>
-</span><span id="__span-1-6"><a id="__codelineno-1-6" name="__codelineno-1-6" href="#__codelineno-1-6"></a>    <span class="c1"># Dynamic path mapping: cmp/projects/{project_id}/{app_name}</span>
-</span><span id="__span-1-7"><a id="__codelineno-1-7" name="__codelineno-1-7" href="#__codelineno-1-7"></a>    <span class="n">s3_key</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"cmp/projects/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">project_id</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">deployment_name</span><span class="si">}</span><span class="s2">.tfstate"</span>
-</span><span id="__span-1-8"><a id="__codelineno-1-8" name="__codelineno-1-8" href="#__codelineno-1-8"></a>
-</span><span id="__span-1-9"><a id="__codelineno-1-9" name="__codelineno-1-9" href="#__codelineno-1-9"></a>    <span class="k">return</span> <span class="p">[</span>
-</span><span id="__span-1-10"><a id="__codelineno-1-10" name="__codelineno-1-10" href="#__codelineno-1-10"></a>        <span class="sa">f</span><span class="s2">"-backend-config=bucket=</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">TF_BACKEND_S3_BUCKET</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-</span><span id="__span-1-11"><a id="__codelineno-1-11" name="__codelineno-1-11" href="#__codelineno-1-11"></a>        <span class="sa">f</span><span class="s2">"-backend-config=key=</span><span class="si">{</span><span class="n">s3_key</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-</span><span id="__span-1-12"><a id="__codelineno-1-12" name="__codelineno-1-12" href="#__codelineno-1-12"></a>        <span class="sa">f</span><span class="s2">"-backend-config=region=</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">TF_BACKEND_AWS_REGION</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-</span><span id="__span-1-13"><a id="__codelineno-1-13" name="__codelineno-1-13" href="#__codelineno-1-13"></a>        <span class="s2">"-backend-config=encrypt=true"</span><span class="p">,</span>
-</span><span id="__span-1-14"><a id="__codelineno-1-14" name="__codelineno-1-14" href="#__codelineno-1-14"></a>        <span class="sa">f</span><span class="s2">"-backend-config=dynamodb_table=</span><span class="si">{</span><span class="n">settings</span><span class="o">.</span><span class="n">TF_BACKEND_S3_DYNAMODB_TABLE</span><span class="si">}</span><span class="s2">"</span> <span class="c1"># Prevents concurrent applies</span>
-</span><span id="__span-1-15"><a id="__codelineno-1-15" name="__codelineno-1-15" href="#__codelineno-1-15"></a>    <span class="p">]</span>
-</span></code></pre></div>
-<hr />
-<h2 id="2-provisioner-responsibilities-step-execution-day-0">2. Provisioner Responsibilities &amp; Step Execution (Day-0)<a class="headerlink" href="#2-provisioner-responsibilities-step-execution-day-0" title="Permanent link">&para;</a></h2>
-<p>When <code>terraform apply</code> is executed with the dynamic S3 state, the provisioner executes resources sequentially across four major planes:</p>
-<pre class="mermaid"><code>flowchart TD
-    Start([Start Day-0 Provisioning]) --&gt; Step1[1. Generate Provider Overrides]
-    Step1 --&gt; Step2[2. Dynamic Backend Init]
-    Step2 --&gt; Step3[3. Run Plan &amp; Secure Apply]
-    Step3 --&gt; Step4[4. Capture JSON Outputs]
-    Step4 --&gt; Complete([Handover to ArgoCD])</code></pre>
-<h3 id="step-1-provider-overrides-generation">Step 1: Provider Overrides Generation<a class="headerlink" href="#step-1-provider-overrides-generation" title="Permanent link">&para;</a></h3>
-<p>The template files in the repository contain generic provider bindings. To prevent localhost routing loops inside containers, the <code>TerraformExecutor</code> generates a <code>cmp_override.tf</code> file on the fly before initialization. This dynamically routes OpenStack and Kubernetes APIs to the real cluster endpoints.</p>
-<div class="language-hcl highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># Generated cmp_override.tf example</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="nb">terraform</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="w">  </span><span class="nb">required_providers</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="w">    </span><span class="nb">openstack</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a><span class="w">      </span><span class="na">source</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"terraform-provider-openstack/openstack"</span>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="p">}</span>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="kr">provider</span><span class="w"> </span><span class="nv">"openstack"</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="w">  </span><span class="na">auth_url</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">"http://192.168.1.210:5000/v3"</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a><span class="c1">  # Credentials extracted from env settings...</span>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="p">}</span>
-</span></code></pre></div>
-<h3 id="step-2-secure-secret-injection">Step 2: Secure Secret Injection<a class="headerlink" href="#step-2-secure-secret-injection" title="Permanent link">&para;</a></h3>
-<p>CNP enforces a strict zero-leakage security policy. Sensitive parameters (Vault tokens, Keycloak admin passwords, GitHub keys) are <strong>never</strong> passed as command-line <code>-var</code> flags (which would expose them in the system's process list). Instead, they are injected directly into the subprocess environment using <code>TF_VAR_*</code> variables.</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># app/services/terraform_executor.py extract</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="n">env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="c1"># Injected via environment, hidden from 'ps aux'</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="n">env</span><span class="p">[</span><span class="s2">"TF_VAR_vault_token"</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">VAULT_TOKEN</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="n">env</span><span class="p">[</span><span class="s2">"TF_VAR_keycloak_admin_password"</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">KEYCLOAK_ADMIN_PASSWORD</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="n">env</span><span class="p">[</span><span class="s2">"TF_VAR_github_app_private_key"</span><span class="p">]</span> <span class="o">=</span> <span class="n">settings</span><span class="o">.</span><span class="n">GITHUB_APP_PRIVATE_KEY</span>
-</span></code></pre></div>
-<h3 id="step-3-resource-provisioning-terraform-apply">Step 3: Resource Provisioning (Terraform Apply)<a class="headerlink" href="#step-3-resource-provisioning-terraform-apply" title="Permanent link">&para;</a></h3>
-<p>During the <code>terraform apply</code> phase, the <code>github_bootstrap</code> module executes the following resources:
-* <strong><code>github_repository.app</code></strong>: Provisions a private repository under the user's organization.
-* <strong><code>github_repository_file.values_yaml</code></strong>: Generates and pushes the initial <code>deploy/values.yaml</code> containing the customized environment overrides.
-* <strong><code>vault_generic_secret.app_secrets</code></strong>: Generates high-entropy passwords (32 characters) and stores them in Vault under <code>kvv2/data/projects/{project_name}/{app_name}</code>.
-* <strong><code>vault_kubernetes_auth_backend_role.app</code></strong>: Binds the application service account in the new namespace to the Vault access policy.
-* <strong><code>kubernetes_namespace.app</code></strong>: Provisions the isolated namespace with standard security labels (<code>pod-security.kubernetes.io/enforce: restricted</code>).
-* <strong><code>kubernetes_manifest.argocd_app</code></strong>: Deploys the ArgoCD <code>Application</code> CRD.</p>
-<hr />
-<h2 id="3-day-2-deletion-saga-rollback">3. Day-2 Deletion &amp; SAGA Rollback<a class="headerlink" href="#3-day-2-deletion-saga-rollback" title="Permanent link">&para;</a></h2>
-<p>When a developer deletes an application, or when the SAGA pattern triggers a rollback, resources must be destroyed cleanly.</p>
-<h3 id="the-crd-api-validation-bypass">The CRD API Validation Bypass<a class="headerlink" href="#the-crd-api-validation-bypass" title="Permanent link">&para;</a></h3>
-<p>When deleting an application, if the target K3s cluster has already lost its custom resource definitions (CRDs), <code>terraform destroy</code> will fail because the Terraform Kubernetes provider cannot validate the schemas of resources like <code>ArgoCD Application</code> or <code>VaultSecret</code>.</p>
-<p>To bypass this and guarantee a clean deletion, the platform's destruction pipeline uses a <strong>three-step cleanup strategy</strong>:</p>
-<pre class="mermaid"><code>flowchart TD
-    Start([Request App Deletion]) --&gt; Step1[1. Strip K8s CRDs from TF State]
-    Step1 --&gt; Step2[2. Execute terraform destroy]
-    Step2 --&gt; Step3[3. Soft-Archive GitHub Repository]
-    Step3 --&gt; Complete([Slate Cleared])</code></pre>
-<h4 id="1-strip-custom-resources-from-state">1. Strip Custom Resources from State<a class="headerlink" href="#1-strip-custom-resources-from-state" title="Permanent link">&para;</a></h4>
-<p>The orchestrator programmatically removes the CRDs from the state before running destroy, preventing validation errors from blocking the execution:
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># Automated cleanup snippet</span>
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>terraform<span class="w"> </span>state<span class="w"> </span>rm<span class="w"> </span>kubernetes_manifest.argocd_app
-</span></code></pre></div></p>
-<h4 id="2-run-destroy-with-safety-overrides">2. Run Destroy with Safety Overrides<a class="headerlink" href="#2-run-destroy-with-safety-overrides" title="Permanent link">&para;</a></h4>
-<p>Terraform destroys the remaining native resources (namespaces, Keycloak clients, Vault engines).</p>
-<h4 id="3-soft-archive-repositories">3. Soft-Archive Repositories<a class="headerlink" href="#3-soft-archive-repositories" title="Permanent link">&para;</a></h4>
-<p>To prevent accidental loss of code history, the GitHub App API does not permanently delete the repository on the user's account; it modifies the repository metadata to set <code>"archived": true</code>, putting the code into a <strong>read-only</strong> state.</p>
-<hr />
-<p><strong>Next Step</strong>: Continue to <a href="../../05-cmp-backend-api/00-global-api-standards/">Global API Standards &amp; Authorization</a> (or return to the <a href="../../">Project Overview</a>).</p>
+<h1 id="contrat-dinterface-avec-lequipe-cluster">Contrat d'interface avec l'équipe cluster<a class="headerlink" href="#contrat-dinterface-avec-lequipe-cluster" title="Permanent link">&para;</a></h1>
+<p>Monter et exploiter les clusters AWS/GCP, leurs VPC, l'IAM cloud et les tunnels VPN sont
+hors du périmètre CNP. Ces clusters sont consommés comme des cibles déjà connectées.
+Ce document existe parce que « déjà connectées » recouvre une série d'hypothèses qui,
+laissées implicites, se découvrent en phase 3 au lieu d'être convenues en phase 0.</p>
+<h2 id="partage-des-responsabilites">Partage des responsabilités<a class="headerlink" href="#partage-des-responsabilites" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Objet</th>
+<th>Équipe cluster</th>
+<th>CNP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cluster Kubernetes, nœuds, mises à jour</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td>VPC, sous-réseaux, IAM cloud, quotas</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Tunnel VPN vers on-prem</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td>CNI avec support des <code>NetworkPolicy</code></td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Contrôleur Envoy Gateway et <code>GatewayClass</code></td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr>
+<td>Objet <code>Gateway</code> d'un projet, <code>HTTPRoute</code>, <code>ClientTrafficPolicy</code></td>
+<td>—</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Namespaces de projet, <code>NetworkPolicy</code> de projet</td>
+<td>—</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Connecteur Cloudflare par projet</td>
+<td>—</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Keycloak IAMaaS par projet</td>
+<td>—</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Opérateur de secrets, <code>vmagent</code>, <code>blackbox_exporter</code>, <code>offhours-guard</code></td>
+<td>—</td>
+<td>✅ (profil de cluster)</td>
+</tr>
+<tr>
+<td>Enregistrement du cluster dans Argo CD</td>
+<td>—</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h2 id="exigences-cote-cluster">Exigences côté cluster<a class="headerlink" href="#exigences-cote-cluster" title="Permanent link">&para;</a></h2>
+<p>Ce que CNP a besoin de trouver sur un cluster pour pouvoir le consommer.</p>
+<ol>
+<li><strong>Sortie internet</strong> depuis les pods, vers Cloudflare (connecteurs de tunnel) et vers
+   <code>ghcr.io</code> (images). Aucune IP publique entrante, aucun load balancer cloud n'est
+   demandé — l'ingress se fait exclusivement par des connexions sortantes (I-4).</li>
+<li><strong><code>GatewayClass</code> installée et fonctionnelle</strong>, avec le contrôleur Envoy Gateway. CNP
+   crée et détruit les objets <code>Gateway</code> au niveau projet ; il ne touche pas à la classe.</li>
+<li><strong>CNI supportant les <code>NetworkPolicy</code></strong> en <em>default-deny</em>. Cilium on-prem ; l'équivalent
+   fonctionnel est requis sur les clusters cloud (D-12).</li>
+<li><strong>Classe de stockage bloc</strong> disponible et nommée, communiquée à CNP pour alimenter le
+   profil du cluster (D-08). <code>local-path</code> n'existe pas ailleurs qu'on-prem.</li>
+<li><strong>API server joignable depuis on-prem par le VPN</strong>, pour Argo CD.</li>
+<li><strong>Endpoint <code>TokenReview</code> joignable depuis Vault par le VPN</strong>, pour l'authentification
+   Kubernetes par cluster retenue en D-07.</li>
+<li><strong>CA du cluster et JWT de revue</strong> fournis à CNP pour configurer le mount
+   d'authentification Vault de ce cluster.</li>
+</ol>
+<h2 id="flux-autorises-sur-le-vpn">Flux autorisés sur le VPN<a class="headerlink" href="#flux-autorises-sur-le-vpn" title="Permanent link">&para;</a></h2>
+<p>Le VPN ne porte que du plan de contrôle. Tout autre flux qui le traverse est un bug de
+conception, pas une commodité.</p>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Destination</th>
+<th>Protocole / port</th>
+<th>Raison</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Argo CD (on-prem)</td>
+<td>API server du cluster cible</td>
+<td>HTTPS 6443</td>
+<td>Synchronisation GitOps (D-03)</td>
+</tr>
+<tr>
+<td>Opérateur de secrets (cluster cible)</td>
+<td>Vault (on-prem)</td>
+<td>HTTPS 8200</td>
+<td>Récupération des secrets du projet</td>
+</tr>
+<tr>
+<td>Vault (on-prem)</td>
+<td>API server du cluster cible</td>
+<td>HTTPS 6443</td>
+<td><code>TokenReview</code> au login (D-07)</td>
+</tr>
+<tr>
+<td><code>vmagent</code> (cluster cible)</td>
+<td>VictoriaMetrics (on-prem)</td>
+<td>HTTPS</td>
+<td><code>remote_write</code>, tamponné sur disque (D-10)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Explicitement absent de cette liste :</strong> le trafic applicatif entrant. Il va de
+Cloudflare Edge au connecteur du projet, dans le cluster du projet, et ne traverse jamais
+le VPN (I-1). Si un jour du trafic utilisateur apparaît sur ce lien, c'est une
+régression sur l'invariant central du chantier.</p>
+<h2 id="ce-que-cnp-sengage-a-ne-pas-faire">Ce que CNP s'engage à ne pas faire<a class="headerlink" href="#ce-que-cnp-sengage-a-ne-pas-faire" title="Permanent link">&para;</a></h2>
+<ul>
+<li>Ne pas demander d'IP publique ni de load balancer cloud pour l'ingress.</li>
+<li>Ne pas utiliser de service propriétaire d'un fournisseur sur le chemin applicatif :
+  compute, L4/L7, stockage bloc et Postgres générique uniquement (I-3).</li>
+<li>Ne pas exiger de credentials Terraform permanents sur l'API server des clusters
+  distants : depuis D-02, seul Argo CD détient des credentials sur les clusters.</li>
+<li>Ne rien laisser derrière lui à la suppression d'un projet : tout objet créé porte
+  <code>cnp.project</code>, <code>cnp.cloud</code> et <code>cnp.env</code>, et le job de nettoyage s'appuie dessus (D-13).</li>
+</ul>
+<h2 id="points-a-confirmer-avec-lequipe-cluster-avant-la-phase-3">Points à confirmer avec l'équipe cluster avant la phase 3<a class="headerlink" href="#points-a-confirmer-avec-lequipe-cluster-avant-la-phase-3" title="Permanent link">&para;</a></h2>
+<ul class="task-list">
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Quel cloud est le pilote, et un cluster est-il réellement consommable aujourd'hui ?</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Nom de la classe de stockage bloc sur chaque cluster cible.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Confirmation du support <code>NetworkPolicy</code> en default-deny sur les clusters cloud.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Qui, nommément, porte ce contrat côté équipe cluster.</li>
+</ul>
 
 
 
