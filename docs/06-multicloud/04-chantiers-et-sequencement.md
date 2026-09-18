@@ -77,10 +77,11 @@ realms, les game days restants, `cnp-docs` à jour, runbooks, transfert.
 
 ## Sur les estimations
 
-Délibérément aucune ici. Les deux variables dominantes — le périmètre Prod/Staging
-(tranché : reporté, D-11) et la migration des realms existants (toujours sans réponse) —
-conditionnent le dimensionnement de WS-5, qui est le chemin critique. Un chiffre produit
-avant cette réponse serait faux d'un facteur, pas d'un pourcentage.
+Délibérément aucune ici. Les deux variables dominantes étaient le périmètre Prod/Staging
+(tranché : reporté, D-11) et la migration des realms existants — tranchée le 2026-09-18 :
+négligeable, aucun projet existant n'a de vrais utilisateurs finaux, WS-5 se limite aux
+nouveaux projets. Les deux inconnues qui empêchaient de chiffrer WS-5 sont donc levées ;
+reste à produire une estimation réelle avant de lancer la phase 2.
 
 ## Registre des risques
 
