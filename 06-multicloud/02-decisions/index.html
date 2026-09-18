@@ -2385,9 +2385,9 @@ peine d'être payée ; une base Postgres par projet, non. Un cluster CNPG mutual
 cluster cible, une base par projet à l'intérieur, et Keycloak réglé sur un petit tas
 mémoire. À cent projets, cela fait cent petits pods et un cluster de base de données par
 cloud, pas deux cents pods.</p>
-<p><strong>Reste à trancher.</strong> Le nombre de projets ayant de vrais utilisateurs finaux dans leur
-realm actuel décide si WS-5 est « les nouveaux projets seulement » ou « double
-exécution puis migration ». Tant que cette réponse manque, WS-5 n'est pas dimensionnable.</p>
+<p><strong>Tranché (2026-09-18).</strong> Négligeable — aucun projet existant n'a de vrais utilisateurs
+finaux dans son realm actuel. WS-5 se limite donc aux nouveaux projets ; pas de double
+exécution ni de migration de realm à prévoir.</p>
 <hr />
 <h2 id="d-05-un-gateway-par-projet-avec-un-service-stable-devant">D-05 — Un Gateway par projet, avec un Service stable devant<a class="headerlink" href="#d-05-un-gateway-par-projet-avec-un-service-stable-devant" title="Permanent link">&para;</a></h2>
 <p><strong>Décision déjà actée en v4.</strong> Un Gateway par projet ; l'équipe cluster possède la
