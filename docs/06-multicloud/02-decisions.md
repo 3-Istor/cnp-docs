@@ -111,9 +111,9 @@ cluster cible, une base par projet à l'intérieur, et Keycloak réglé sur un p
 mémoire. À cent projets, cela fait cent petits pods et un cluster de base de données par
 cloud, pas deux cents pods.
 
-**Reste à trancher.** Le nombre de projets ayant de vrais utilisateurs finaux dans leur
-realm actuel décide si WS-5 est « les nouveaux projets seulement » ou « double
-exécution puis migration ». Tant que cette réponse manque, WS-5 n'est pas dimensionnable.
+**Tranché (2026-09-18).** Négligeable — aucun projet existant n'a de vrais utilisateurs
+finaux dans son realm actuel. WS-5 se limite donc aux nouveaux projets ; pas de double
+exécution ni de migration de realm à prévoir.
 
 ---
 
