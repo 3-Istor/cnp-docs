@@ -1,0 +1,121 @@
+id: runtime-request-path
+title: "CNP · Runtime · Request path & tenant isolation"
+subtitle: "How a user request reaches a tenant app, where it is authenticated, and what keeps tenants apart."
+meta:
+  - "Scope: on-prem K3s cluster · main as of 2026-09-26 · derived from code (infra-templates, K3s, CMP templates)"
+  - "Out of scope: AWS/GCP clusters · observability · deployment pipeline · admin SSH access"
+  - "v0.4 · source: architecture/specs/runtime-request-path.yaml"
+width: 2340
+height: 1800
+
+zones:
+  - {id: z-internet, kind: region, color: slate, icon: globe, label: "INTERNET", x: 40, y: 200, w: 220, h: 760}
+  - {id: z-cloudflare, kind: region, color: orange, icon: cloudflare, label: "CLOUDFLARE", sub: "SaaS", x: 320, y: 200, w: 320, h: 760}
+  - {id: z-cluster, kind: region, color: cyan, icon: rack, label: "K3S CLUSTER · ON-PREM", sub: "OpenStack pae · Cilium 1.20", x: 720, y: 200, w: 1580, h: 1080}
+  - {id: g-connectivity, kind: group, color: amber, icon: cloudflare, label: "CONNECTIVITY", sub: "ns cloudflared", x: 760, y: 260, w: 280, h: 170}
+  - {id: g-gateway, kind: group, color: emerald, icon: envoy-gateway, label: "GATEWAY API", sub: "Envoy Gateway", x: 1120, y: 260, w: 400, h: 320}
+  - {id: g-identity, kind: group, color: rose, icon: keycloak, label: "IDENTITY", sub: "ns keycloak", x: 1600, y: 360, w: 320, h: 220}
+  - {id: g-secrets, kind: group, color: violet, icon: vault, label: "SECRETS", sub: "ns vault · vso", x: 2000, y: 260, w: 280, h: 320}
+  - {id: g-tenant-a, kind: group, color: indigo, icon: k8s-ns, label: "TENANT <project>-<app>", sub: "1 namespace / app", x: 760, y: 660, w: 1520, h: 420}
+  - {id: g-tenant-b, kind: group, color: slate, icon: k8s-ns, label: "OTHER TENANT", x: 760, y: 1150, w: 1520, h: 110}
+
+nodes:
+  - {id: user, kind: frontend, shape: actor, icon: user, title: "User", desc: "web browser", x: 100, y: 452, w: 56, h: 56}
+
+  - {id: cf-edge, kind: cloud, icon: cloudflare, title: "Cloudflare Edge", badge: G3, tech: "[SaaS reverse proxy]", desc: "TLS ends here, routes to tunnels", x: 350, y: 420, w: 260, h: 120}
+
+  - {id: cloudflared-platform, kind: cloud, icon: cloudflare, title: "cloudflared", tech: "[Deployment · ns cloudflared]", desc: "Platform tunnel connector", x: 790, y: 320, w: 240, h: 80}
+
+  - {id: client-traffic-policy, kind: security, icon: k8s-crd, title: "ClientTrafficPolicy", tech: "[Envoy Gateway CRD]", desc: "Trusts 1 proxy hop (XFF)", x: 1160, y: 310, w: 320, h: 72}
+  - {id: envoy-shared-gateway, kind: backend, icon: envoy, title: "Envoy proxy", badge: "G4 G6", tech: "[Gateway API · shared-gateway]", desc: "Routes *.3istor.com, runs OIDC", x: 1160, y: 420, w: 320, h: 120}
+
+  - {id: keycloak, kind: security, icon: keycloak, title: "Keycloak", tech: "[OIDC IdP · realm 3istor]", desc: "Login + token endpoint", x: 1640, y: 420, w: 250, h: 100}
+
+  - {id: vso, kind: database, icon: vault, title: "Vault Secrets Operator", tech: "[K8s operator]", desc: "Syncs Vault → Secrets", x: 2030, y: 310, w: 220, h: 80}
+  - {id: vault, kind: database, icon: vault, title: "Vault", tech: "[KV v2 · tls_disable]", desc: "kvv2/projects/<p>/<a>", x: 2030, y: 460, w: 220, h: 80}
+
+  - {id: cloudflared-app, kind: cloud, icon: cloudflare, title: "cloudflared", badge: G5, tech: "[Deployment · per release]", desc: "App tunnel connector", x: 790, y: 740, w: 230, h: 80}
+  - {id: httproute, kind: backend, icon: k8s-crd, title: "HTTPRoute", tech: "[Gateway API route]", desc: "<app>-<project>.3istor.com", x: 1160, y: 740, w: 240, h: 80}
+  - {id: app-service, kind: backend, icon: k8s-svc, title: "Service", tech: "[ClusterIP]", desc: "Stable VIP for the app", x: 1480, y: 740, w: 220, h: 80}
+  - {id: app-pods, kind: backend, icon: k8s-deploy, title: "App pods", tech: "[Deployment · generic chart]", desc: "Tenant workload", x: 1800, y: 740, w: 240, h: 80}
+  - {id: security-policy, kind: security, icon: k8s-crd, title: "SecurityPolicy", badge: G2, tech: "[Envoy Gateway CRD]", desc: "OIDC login, no authz rule", x: 1160, y: 920, w: 240, h: 90}
+  - {id: app-secret, kind: database, icon: k8s-secret, title: "Secret", tech: "[Secret <app>-secrets]", desc: "Written by VSO", x: 1480, y: 920, w: 220, h: 80}
+  - {id: cnpg, kind: database, shape: cylinder, icon: cnpg, title: "CloudNativePG", tech: "[PostgreSQL cluster]", desc: "1 instance · no backup", x: 1800, y: 920, w: 240, h: 100}
+
+  - {id: tenant-b-pods, kind: external, icon: k8s-pod, title: "Other tenant pods", tech: "[any other project]", desc: "Must stay unreachable", x: 1160, y: 1180, w: 300, h: 64}
+
+edges:
+  # Nominal request path (data plane): an already signed-in user. One number per connection.
+  - {id: e-1-browser-edge, kind: flow, from: user, to: cf-edge, port: "TCP 443", label: "[1] GET app · HTTPS", path: [[156, 480], [350, 480]]}
+  - {id: e-2-tunnel-app, kind: tunnel, from: cloudflared-app, to: cf-edge, port: "UDP 7844", against_flow: true, label: "[2] relayed via tunnel ◀<br>opened outbound · QUIC", label_at: [680, 655], path: [[790, 780], [680, 780], [680, 530], [610, 530]]}
+  - {id: e-3-connector-envoy, kind: flow, from: cloudflared-app, to: envoy-shared-gateway, port: "TCP 80", label: "[3] forward · HTTP", label_at: [1100, 650], path: [[1020, 780], [1100, 780], [1100, 525], [1160, 525]]}
+  - {id: e-4-envoy-service, kind: flow, from: envoy-shared-gateway, to: app-service, port: "TCP 8000", label: "[4] proxy · HTTP", label_at: [1515, 700], path: [[1440, 540], [1440, 700], [1590, 700], [1590, 740]]}
+  - {id: e-5-service-pods, kind: flow, from: app-service, to: app-pods, port: "TCP 8080", label: "[5] DNAT", path: [[1700, 790], [1800, 790]]}
+  - {id: e-6-pods-db, kind: flow, from: app-pods, to: cnpg, port: "TCP 5432", label: "[6] query · SQL", path: [[1920, 820], [1920, 920]]}
+
+  # Authentication connections. Not numbered here: the order lives in the OIDC sequence diagram.
+  - {id: e-oidc-platform-tunnel, kind: tunnel, from: cloudflared-platform, to: cf-edge, port: "UDP 7844", against_flow: true, label: "platform tunnel<br>opened outbound · QUIC", label_at: [700, 400], path: [[790, 360], [700, 360], [700, 440], [610, 440]]}
+  - {id: e-oidc-platform-envoy, kind: auth, from: cloudflared-platform, to: envoy-shared-gateway, port: "TCP 80", label: "auth.3istor.com · HTTP", label_at: [1100, 405], path: [[1030, 360], [1100, 360], [1100, 472], [1160, 472]]}
+  - {id: e-oidc-envoy-keycloak, kind: auth, from: envoy-shared-gateway, to: keycloak, port: "TCP 80", label: "OIDC · HTTP", path: [[1480, 480], [1640, 480]]}
+  - {id: e-oidc-token-hairpin, kind: auth, from: envoy-shared-gateway, to: cf-edge, port: "TCP 443", against_flow: true, label: "OIDC token call · HTTPS · !!⚠ G6!!", label_at: [900, 495], path: [[1160, 495], [610, 495]]}
+
+  # Background (control plane), lettered.
+  - {id: e-a-vso-vault, kind: async, from: vso, to: vault, port: "TCP 8200", label: "[A] read · HTTP", path: [[2140, 390], [2140, 460]]}
+  - {id: e-b-vso-secret, kind: async, from: vso, to: app-secret, label: "[B] write Secret · K8s API", label_at: [2150, 880], path: [[2250, 350], [2265, 350], [2265, 880], [1590, 880], [1590, 920]]}
+
+  # Object references: configuration, not traffic.
+  - {id: r-ctp-gateway, kind: link, from: client-traffic-policy, to: envoy-shared-gateway, label: "targetRef", path: [[1320, 382], [1320, 420]]}
+  - {id: r-route-gateway, kind: link, from: httproute, to: envoy-shared-gateway, label: "parentRef", path: [[1280, 740], [1280, 540]]}
+  - {id: r-policy-route, kind: link, from: security-policy, to: httproute, label: "targetRef", path: [[1280, 920], [1280, 820]]}
+  - {id: r-policy-secret, kind: link, from: security-policy, to: app-secret, label: "clientSecret", path: [[1400, 960], [1480, 960]]}
+  - {id: r-pods-secret, kind: link, from: app-pods, to: app-secret, label: "envFrom", label_at: [1730, 960], path: [[1800, 812], [1760, 812], [1760, 960], [1700, 960]]}
+
+  - {id: x-cross-tenant, kind: blocked, from: g-tenant-a, to: g-tenant-b, label: "cross-tenant traffic: no Cilium policy in code · !!⚠ G1!!", label_at: [840, 1115], label_offset: [178, 0], path: [[840, 1080], [840, 1150]]}
+
+notes:
+  - {id: n-302, text: "Without a session, Envoy replies **302** to auth.3istor.com at [3]. The login that follows is in the OIDC sequence diagram.", x: 52, y: 590, w: 196, h: 90}
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true, x: 40, y: 1340, w: 540, h: 420}
+  - id: card-data-plane
+    title: "Request path · data plane"
+    color: cyan
+    x: 610
+    y: 1340
+    w: 620
+    h: 420
+    lines:
+      - "Nominal path of a user who already has a session."
+      - "[1] Browser sends GET https://<app>-<project>.3istor.com. Cloudflare terminates TLS."
+      - "[2] The edge relays the request back through the app tunnel, which cloudflared opened outbound at startup. No inbound port on-prem."
+      - "[3] cloudflared forwards it to Envoy over plain HTTP. Envoy matches the HTTPRoute and checks the OIDC session cookie."
+      - "[4] Envoy proxies to the Service."
+      - "[5] Cilium DNATs the Service VIP to an app pod."
+      - "[6] The app queries its CloudNativePG cluster."
+      - "Pink connections carry the OIDC login. Their order is in the OIDC sequence diagram."
+  - id: card-control-plane
+    title: "Background · control plane"
+    color: violet
+    x: 1260
+    y: 1340
+    w: 460
+    h: 420
+    lines:
+      - "[A] VSO logs in with a namespace-bound role and reads kvv2."
+      - "[B] VSO writes the K8s Secret through the API server."
+      - "Both cloudflared connectors open their tunnels outbound at startup."
+      - "Dotted lines are object references (parentRef, targetRef, envFrom, clientSecret), not traffic."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    x: 1750
+    y: 1340
+    w: 550
+    h: 420
+    lines:
+      - "!!G1!! **Network isolation.** Docs describe a default-deny CCNP per project. None in code: Cilium runs without tenant policy."
+      - "!!G2!! **Authorization.** No groups-claim check: any account in realm 3istor opens any SSO app."
+      - "!!G3!! **Transport.** TLS ends at Cloudflare. In-cluster hops are plain HTTP, Vault included (tls_disable)."
+      - "!!G4!! **Coupling.** Tunnels target Envoy's hashed Service (ac1e5388). Blocks AWS/GCP. Covered by D-05."
+      - "!!G5!! **Tunnels.** One per app, cloudflared on :latest. D-06 moves to one per project."
+      - "!!G6!! **Token call.** The template expects a cluster-local path to auth.3istor.com. None found in code: likely hairpins via Cloudflare. To verify."
