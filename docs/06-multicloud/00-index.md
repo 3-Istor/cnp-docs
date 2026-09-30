@@ -10,6 +10,16 @@ Une application déjà déployée continue de servir, d'authentifier ses utilisa
 rafraîchir leurs jetons **même si le cluster on-prem devient injoignable**. Déployer et
 provisionner peuvent s'arrêter ; servir, non.
 
+## Vue d'ensemble
+
+![CNP multicloud](../01-architecture/diagrams/multicloud.light.png#only-light)
+![CNP multicloud](../01-architecture/diagrams/multicloud.dark.png#only-dark)
+
+Un projet générique sur un cluster cible `<cloud-a>` (AWS d'abord, puis GCP), encore
+hachuré : seul `onprem` est enregistré aujourd'hui. La carte *Gaps* liste ce que le code
+n'a pas encore rattrapé des décisions ci-dessous. Généré depuis le code avec noodle, source
+dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp).
+
 ## Documents
 
 | Document | Ce qu'il contient |

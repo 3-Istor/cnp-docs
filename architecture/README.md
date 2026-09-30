@@ -10,6 +10,7 @@ one diagram, and `layouts/` places the topology views.
 | `app-runtime` | Seen from inside one app: who reaches it, what it reaches, what should stay out, what the platform hands it | Tenancy and isolation |
 | `runtime` | How a request reaches a tenant app, where it is authenticated, what keeps tenants apart | Network topology |
 | `oidc-login` | The login when there is no session | Network topology |
+| `multicloud` | What stays on the on-prem hub, what goes with each project to its target cloud, which paths cross the VPN | Multicloud index |
 
 To change a diagram, edit the model (facts), the view (what is shown) or the layout
 (where), then rebuild every view, dark and light, into `docs/01-architecture/diagrams/`:

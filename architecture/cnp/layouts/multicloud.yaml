@@ -1,0 +1,59 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2540, height: 1790}
+
+# Element boxes are relative to their parent zone. Edge waypoints and labels are
+# canvas coordinates.
+lanes:
+  argocd-up: {x: 1140}
+  vault-in: {x: 1180}
+  hub-argocd: {y: 1070}
+  hub-secrets: {y: 1030}
+  hub-metrics: {y: 1050}
+  target-west: {x: 1990}
+  secrets-east: {x: 2330}
+  metrics-east: {x: 2350}
+
+elements:
+  z-internet: {x: 40, y: 220, w: 220, h: 420}
+  user: {x: 82, y: 150, w: 56, h: 56}
+  z-cloudflare: {x: 320, y: 220, w: 320, h: 420}
+  cf-edge: {x: 30, y: 120, w: 260, h: 120}
+  z-cloud-a: {x: 720, y: 220, w: 1760, h: 770}
+  g-cloud-project: {x: 40, y: 70, w: 1200, h: 380}
+  p-tunnel: {x: 40, y: 80, w: 260, h: 90}
+  p-gateway: {x: 480, y: 80, w: 260, h: 100}
+  p-keycloak: {x: 900, y: 80, w: 260, h: 100}
+  p-gatus: {x: 40, y: 240, w: 260, h: 90}
+  p-offhours: {x: 900, y: 240, w: 260, h: 90}
+  g-cloud-app: {x: 40, y: 510, w: 1200, h: 230}
+  p-secret: {x: 40, y: 80, w: 240, h: 90}
+  p-app: {x: 480, y: 80, w: 260, h: 90}
+  p-db: {x: 900, y: 70, w: 260, h: 110}
+  p-apiserver: {x: 1300, y: 100, w: 260, h: 90}
+  p-secret-operator: {x: 1300, y: 280, w: 260, h: 90}
+  p-vmagent: {x: 1300, y: 460, w: 260, h: 90}
+  z-cluster: {x: 720, y: 1100, w: 1760, h: 300}
+  g-gitops: {x: 40, y: 70, w: 340, h: 190}
+  argocd: {x: 40, y: 70, w: 260, h: 90}
+  g-secrets: {x: 500, y: 70, w: 340, h: 190}
+  vault: {x: 40, y: 70, w: 240, h: 90}
+  g-ops: {x: 1100, y: 70, w: 420, h: 190}
+  observability: {x: 40, y: 70, w: 280, h: 90}
+
+edges:
+  e-1-browser-edge: {from: user.right, to: cf-edge.left}
+  c-ptunnel-edge: {from: p-tunnel.left, to: cf-edge.right, against_flow: true}
+  c-ptunnel-gateway: {from: p-tunnel.right, to: p-gateway.left@70px}
+  c-pgateway-app: {from: p-gateway.bottom, to: p-app.top}
+  c-papp-db: {from: p-app.right, to: p-db.left@65px}
+  c-pgateway-keycloak: {from: p-gateway.right, to: p-keycloak.left@70px}
+  r-papp-secret: {from: p-app.left, to: p-secret.right}
+  c-argocd-target: {from: argocd.right, to: p-apiserver.top@130px, waypoints: [lane:argocd-up, lane:hub-argocd, lane:target-west, [1990, 300], [2150, 300]]}
+  c-psecretop-vault: {from: p-secret-operator.right, to: vault.left@65px, waypoints: [lane:secrets-east, lane:hub-secrets, lane:vault-in]}
+  c-vmagent-vm: {from: p-vmagent.right, to: observability.top@200px, waypoints: [lane:metrics-east, lane:hub-metrics], label_at: [2180, 1050]}
+
+cards:
+  card-legend: {x: 40, y: 1460, w: 520, h: 290}
+  card-status: {x: 590, y: 1460, w: 900, h: 290}
+  card-gaps: {x: 1520, y: 1460, w: 980, h: 290}

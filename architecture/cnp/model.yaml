@@ -19,6 +19,9 @@ elements:
   - {id: g-data, kind: group, parent: z-cluster, color: cyan, icon: cnpg, title: "DATA & STORAGE"}
   - {id: g-ops, kind: group, parent: z-cluster, color: emerald, icon: kubernetes, title: "OPERATIONS"}
   - {id: z-github, kind: region, color: slate, icon: github, title: "GITHUB", sub: "SaaS · org 3-Istor"}
+  - {id: z-cloud-a, kind: region, color: amber, icon: kubernetes, title: "<cloud-a> TARGET CLUSTER", sub: "AWS first, then GCP · Argo CD cluster secret, not registered yet", status: planned}
+  - {id: g-cloud-project, kind: group, parent: z-cloud-a, color: indigo, icon: k8s-ns, title: "<project>-system", sub: "cnp-project-base · one per project"}
+  - {id: g-cloud-app, kind: group, parent: z-cloud-a, color: sky, icon: k8s-ns, title: "<project>-<app>", sub: "infra-templates · prod and staging"}
 
   - {id: user, kind: frontend, parent: z-internet, shape: actor, icon: user, title: "User", desc: "web browser"}
 
@@ -73,6 +76,18 @@ elements:
   - {id: offhours-guard, kind: backend, parent: g-ops, icon: k8s-deploy, title: "offhours-guard", tech: "[scale-to-zero]", desc: "Scales apps down off hours"}
   - {id: observability, kind: backend, parent: g-ops, icon: grafana-alloy, title: "Observability", tech: "[Grafana · Loki · Alloy]", desc: "Logs, metrics, alerts"}
 
+  - {id: p-tunnel, kind: cloud, parent: g-cloud-project, icon: cloudflare, title: "cloudflared", tech: "[per project · D-06]", desc: "Local tunnel exit"}
+  - {id: p-gateway, kind: backend, parent: g-cloud-project, icon: envoy-gateway, title: "Gateway", tech: "[per project · D-05]", desc: "Routes the project's hostnames", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: p-keycloak, kind: security, parent: g-cloud-project, icon: keycloak, title: "Keycloak IAMaaS", tech: "[per project · D-04]", desc: "End-user login, stays up alone", ports: [{name: http, protocol: TCP, port: 8080}]}
+  - {id: p-gatus, kind: backend, parent: g-cloud-project, icon: k8s-deploy, title: "Gatus", tech: "[per project]", desc: "Health checks, alerts to Discord"}
+  - {id: p-offhours, kind: backend, parent: g-cloud-project, icon: k8s-deploy, title: "offhours-guard", tech: "[per project]", desc: "Scales staging to zero locally"}
+  - {id: p-secret, kind: database, parent: g-cloud-app, icon: k8s-secret, title: "Secret", tech: "[synced from Vault]", desc: "Stays if Vault is unreachable"}
+  - {id: p-app, kind: backend, parent: g-cloud-app, icon: k8s-deploy, title: "App pods", tech: "[front · back]", desc: "The project's workload", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: p-db, kind: database, parent: g-cloud-app, shape: cylinder, icon: cnpg, title: "CloudNativePG", tech: "[PostgreSQL]", desc: "Per app, on the same cloud", ports: [{name: postgres, protocol: TCP, port: 5432}]}
+  - {id: p-apiserver, kind: backend, parent: z-cloud-a, icon: kubernetes, title: "kube-apiserver", tech: "[managed by the cluster team]", desc: "Target of Argo CD syncs", ports: [{name: https, protocol: TCP, port: 6443}]}
+  - {id: p-secret-operator, kind: security, parent: z-cloud-a, icon: vault, title: "Secret operator", tech: "[vault-secrets-operator]", desc: "Pulls project secrets from Vault"}
+  - {id: p-vmagent, kind: backend, parent: z-cloud-a, icon: grafana-alloy, title: "vmagent", tech: "[D-10 · buffers to disk]", desc: "Ships metrics to the hub"}
+
   - {id: github, kind: external, parent: z-github, icon: github, title: "GitHub", tech: "[cnp-projects · charts]", desc: "Project registry, templates", ports: [{name: https, protocol: TCP, port: 443}]}
 
 connections:
@@ -102,6 +117,17 @@ connections:
   - {id: c-argocd-github, from: argocd, to: github, port: https, protocol: HTTPS, verb: poll Git, kind: async}
   - {id: c-argocd-apiserver, from: argocd, to: kube-apiserver, port: https, protocol: HTTPS, verb: apply, kind: async}
 
+  # Multicloud target (docs/06-multicloud): user traffic stays on the target cloud,
+  # only the control plane crosses the VPN to the on-prem hub.
+  - {id: c-ptunnel-edge, from: p-tunnel, to: cf-edge, port: quic, protocol: QUIC, verb: open tunnel, kind: tunnel}
+  - {id: c-ptunnel-gateway, from: p-tunnel, to: p-gateway, port: http, protocol: HTTP, verb: forward, kind: flow}
+  - {id: c-pgateway-app, from: p-gateway, to: p-app, port: http, protocol: HTTP, verb: proxy, kind: flow}
+  - {id: c-papp-db, from: p-app, to: p-db, port: postgres, protocol: SQL, verb: query, kind: flow}
+  - {id: c-pgateway-keycloak, from: p-gateway, to: p-keycloak, port: http, protocol: HTTP, verb: OIDC, kind: auth}
+  - {id: c-argocd-target, from: argocd, to: p-apiserver, port: https, protocol: HTTPS, verb: sync via VPN, kind: async}
+  - {id: c-psecretop-vault, from: p-secret-operator, to: vault, port: http, protocol: HTTP, verb: read via VPN, kind: async}
+  - {id: c-vmagent-vm, from: p-vmagent, to: observability, protocol: HTTPS, verb: remote_write via VPN, kind: async}
+
   # Must not happen. No enforced_by: nothing in code enforces it yet (G1).
   - {id: x-cross-tenant, from: g-tenant-a, to: g-tenant-b, verb: cross-tenant traffic, kind: flow, denied: true}
 
@@ -111,6 +137,7 @@ references:
   - {id: r-policy-route, from: security-policy, to: httproute, kind: targetRef}
   - {id: r-policy-secret, from: security-policy, to: app-secret, kind: clientSecret}
   - {id: r-pods-secret, from: app-pods, to: app-secret, kind: envFrom}
+  - {id: r-papp-secret, from: p-app, to: p-secret, kind: envFrom}
 
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}
@@ -123,3 +150,7 @@ annotations:
   - {id: G8, severity: high, title: "Pod sandbox", targets: [app-pods]}
   - {id: G9, severity: medium, title: "Keycloak ReferenceGrant", targets: [security-policy]}
   - {id: G10, severity: medium, title: "Shared gateway label", targets: [httproute]}
+  - {id: G11, severity: medium, title: "Vault auth per cloud", targets: [c-psecretop-vault]}
+  - {id: G12, severity: medium, title: "Storage class", targets: [p-db]}
+  - {id: G13, severity: medium, title: "Secret operator", targets: [p-secret-operator]}
+  - {id: G14, severity: medium, title: "Per-project edge off", targets: [p-gateway]}

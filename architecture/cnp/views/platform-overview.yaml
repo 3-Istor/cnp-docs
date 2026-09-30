@@ -8,6 +8,7 @@ meta:
   - "Out of scope: AWS/GCP clusters · Day-0 Terraform (Keycloak clients, Vault engines, Cloudflare DNS) · CI pipelines · dashboards content"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
+include: [z-internet/**, z-cloudflare/**, z-cluster/**, z-github/**]
 steps: [e-1-browser-edge, e-2-tunnel-app, e-3-connector-envoy, e-4-envoy-service, e-5-service-pods, e-6-pods-db]
 background: [c-cmp-github, c-argocd-github, c-argocd-apiserver, e-a-vso-vault, e-b-vso-secret]
 
