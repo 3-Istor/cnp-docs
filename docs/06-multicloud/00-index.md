@@ -15,7 +15,8 @@ provisionner peuvent s'arrêter ; servir, non.
 ![CNP multicloud](../01-architecture/diagrams/multicloud.light.png#only-light)
 ![CNP multicloud](../01-architecture/diagrams/multicloud.dark.png#only-dark)
 
-Un projet générique sur un cluster cible `<cloud-a>` (AWS d'abord, puis GCP), encore
+Deux clusters cibles, `onprem` et un `<cloud-a>` générique (AWS d'abord, puis GCP), un
+projet chacun, pilotés par le hub d'administration (Argo CD, Vault). `<cloud-a>` est encore
 hachuré : seul `onprem` est enregistré aujourd'hui. La carte *Gaps* liste ce que le code
 n'a pas encore rattrapé des décisions ci-dessous. Généré depuis le code avec noodle, source
 dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp).
