@@ -26,6 +26,18 @@ The platform maps team boundaries (Projects) to isolated cluster boundaries (App
 
 ## 2. Multi-Tenant Security Boundaries
 
+### What one application sees
+
+![CNP application runtime view](diagrams/app-runtime.light.png#only-light)
+![CNP application runtime view](diagrams/app-runtime.dark.png#only-dark)
+
+Generated from code with [noodle](https://github.com/TheGostsniperfr/Noodle): the sources are in [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp), see [`architecture/README.md`](https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md) to update them. The *Gaps* card lists where this page and the code disagree.
+
+!!! warning "Target model, not yet in code"
+    As of 2026-09-30 the code has no Cilium tenant policy (G1), no groups-claim check at the gateway (G2), and pods run as root without probes (G8). The sections below describe the intended model.
+
+### Intended boundaries
+
 ```mermaid
 flowchart TD
     subgraph K3s_Cluster [K3s Cluster Isolation]

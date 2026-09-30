@@ -1,0 +1,58 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Runtime · Request path & tenant isolation"
+subtitle: "How a user request reaches a tenant app, where it is authenticated, and what keeps tenants apart."
+meta:
+  - "Scope: on-prem K3s cluster · main as of 2026-09-26 · derived from code (infra-templates, K3s, CMP templates)"
+  - "Out of scope: AWS/GCP clusters · observability · deployment pipeline · admin SSH access"
+  - "v0.5 · source: cnp-docs/architecture/cnp"
+
+include: [z-internet/**, z-cloudflare/**, z-cluster, g-connectivity/**, g-gateway/**, g-identity/**, g-secrets/**, g-tenant-a/**, g-tenant-b/**]
+steps: [e-1-browser-edge, e-2-tunnel-app, e-3-connector-envoy, e-4-envoy-service, e-5-service-pods, e-6-pods-db]
+background: [e-a-vso-vault, e-b-vso-secret]
+
+labels:
+  e-2-tunnel-app: "relayed via tunnel ◀<br>opened outbound · QUIC"
+  e-oidc-platform-tunnel: "platform tunnel<br>opened outbound · QUIC"
+  e-oidc-platform-envoy: "auth.3istor.com · HTTP"
+  x-cross-tenant: "cross-tenant traffic: no Cilium policy in code"
+
+notes:
+  - {id: n-302, text: "Without a session, Envoy replies **302** to auth.3istor.com at [3]. The login that follows is in the OIDC sequence diagram."}
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-data-plane
+    title: "Request path · data plane"
+    color: cyan
+    lines:
+      - "Nominal path of a user who already has a session."
+      - "[1] Browser sends GET https://<app>-<project>.3istor.com. Cloudflare terminates TLS."
+      - "[2] The edge relays the request back through the app tunnel, which cloudflared opened outbound at startup. No inbound port on-prem."
+      - "[3] cloudflared forwards it to Envoy over plain HTTP. Envoy matches the HTTPRoute and checks the OIDC session cookie."
+      - "[4] Envoy proxies to the Service."
+      - "[5] Cilium DNATs the Service VIP to an app pod."
+      - "[6] The app queries its CloudNativePG cluster."
+      - "Pink connections carry the OIDC login. Their order is in the OIDC sequence diagram."
+  - id: card-control-plane
+    title: "Background · control plane"
+    color: violet
+    lines:
+      - "[A] VSO logs in with a namespace-bound role and reads kvv2."
+      - "[B] VSO writes the K8s Secret through the API server."
+      - "Both cloudflared connectors open their tunnels outbound at startup."
+      - "Dotted lines are object references (parentRef, targetRef, envFrom, clientSecret), not traffic."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!G1!! **Network isolation.** Docs describe a default-deny CCNP per project. None in code: Cilium runs without tenant policy."
+      - "!!G2!! **Authorization.** No groups-claim check: any account in realm 3istor opens any SSO app."
+      - "!!G3!! **Transport.** TLS ends at Cloudflare. In-cluster hops are plain HTTP, Vault included (tls_disable)."
+      - "!!G4!! **Coupling.** Tunnels target Envoy's hashed Service (ac1e5388). Blocks AWS/GCP. Covered by D-05."
+      - "!!G5!! **Tunnels.** One per app, cloudflared on :latest. D-06 moves to one per project."
+      - "!!G6!! **Token call.** The template expects a cluster-local path to auth.3istor.com. None found in code: likely hairpins via Cloudflare. To verify."
+      - "!!G8!! **Pod sandbox.** The chart declares securityContext and probes but never renders them: pods run as root, no probes."
+      - "!!G9!! **ReferenceGrant.** Envoy reaches Keycloak only from 8 hand-listed namespaces. A new project's namespace is not added."
+      - "!!G10!! **Gateway label.** The shared gateway needs prod-gateway-access, which the current pipeline never sets on new app namespaces."

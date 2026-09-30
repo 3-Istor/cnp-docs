@@ -1,0 +1,49 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Runtime · OIDC login"
+subtitle: "What happens when a user without a session opens a tenant app, until Envoy sets the session cookie."
+meta:
+  - "Scope: the connections of views/runtime.yaml, in time order · main as of 2026-09-26 · derived from code"
+  - "The Keycloak login form is collapsed into one note. After the last step the user follows the nominal path of the runtime view."
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+participants: [user, cf-edge, cloudflared-app, cloudflared-platform, envoy-shared-gateway, keycloak]
+
+steps:
+  # No session: Envoy sends the browser to Keycloak.
+  - {id: get, from: user, to: cf-edge, over: e-1-browser-edge, text: "GET app · HTTPS"}
+  - {id: get-relay, from: cf-edge, to: cloudflared-app, over: e-2-tunnel-app, text: "relay GET app ◀ app tunnel"}
+  - {id: get-fwd, from: cloudflared-app, to: envoy-shared-gateway, over: e-3-connector-envoy}
+  - {note: envoy-shared-gateway, text: "no session cookie"}
+  - {reply: get-fwd, text: "302 → auth.3istor.com /auth"}
+  - {reply: get-relay}
+  - {reply: get, text: "302"}
+
+  # Login at Keycloak, through the platform tunnel.
+  - {id: auth, from: user, to: cf-edge, over: e-1-browser-edge, text: "GET auth.3istor.com /auth"}
+  - {id: auth-relay, from: cf-edge, to: cloudflared-platform, over: e-oidc-platform-tunnel, text: "relay ◀ platform tunnel"}
+  - {id: auth-fwd, from: cloudflared-platform, to: envoy-shared-gateway, over: e-oidc-platform-envoy, text: "forward · HTTP"}
+  - {id: auth-kc, from: envoy-shared-gateway, to: keycloak, over: e-oidc-envoy-keycloak, text: "GET /auth · HTTP"}
+  - {note: keycloak, text: "login form, user signs in"}
+  - {reply: auth-kc, text: "302 → app /oauth2/callback?code"}
+  - {reply: auth-fwd}
+  - {reply: auth-relay}
+  - {reply: auth, text: "302"}
+
+  # Callback: Envoy trades the code for tokens. G6: that call likely hairpins via Cloudflare.
+  - {id: cb, from: user, to: cf-edge, over: e-1-browser-edge, text: "GET app /oauth2/callback?code"}
+  - {id: cb-relay, from: cf-edge, to: cloudflared-app, over: e-2-tunnel-app, text: "relay ◀ app tunnel"}
+  - {id: cb-fwd, from: cloudflared-app, to: envoy-shared-gateway, over: e-3-connector-envoy}
+  - {id: token, from: envoy-shared-gateway, to: cf-edge, over: e-oidc-token-hairpin, text: "POST auth.3istor.com /token"}
+  - {id: token-relay, from: cf-edge, to: cloudflared-platform, over: e-oidc-platform-tunnel, text: "relay ◀ platform tunnel"}
+  - {id: token-fwd, from: cloudflared-platform, to: envoy-shared-gateway, over: e-oidc-platform-envoy, text: "forward · HTTP"}
+  - {id: token-kc, from: envoy-shared-gateway, to: keycloak, over: e-oidc-envoy-keycloak, text: "POST /token · HTTP"}
+  - {reply: token-kc, text: "ID + access tokens"}
+  - {reply: token-fwd}
+  - {reply: token-relay}
+  - {reply: token, text: "tokens"}
+  - {note: envoy-shared-gateway, text: "set session cookie"}
+  - {reply: cb-fwd, text: "302 → app"}
+  - {reply: cb-relay}
+  - {reply: cb, text: "302 → app"}

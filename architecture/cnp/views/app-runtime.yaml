@@ -1,0 +1,40 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Application runtime view"
+subtitle: "Seen from inside one app: who reaches it, what it reaches, what should stay out, and what the platform hands it."
+meta:
+  - "Scope: one generic app <project>-<app> built from infra-templates · on-prem K3s · main as of 2026-09-30 · derived from code"
+  - "Out of scope: how the project is created (platform overview) · the login flow (OIDC sequence) · per-project gateway and Keycloak, both off by default"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include: [z-cluster, g-gateway, envoy-shared-gateway, g-identity/**, g-secrets/**, g-tenant-a/**, g-tenant-b/**]
+steps: [e-3-connector-envoy, e-4-envoy-service, e-5-service-pods, e-6-pods-db]
+background: [e-a-vso-vault, e-b-vso-secret]
+
+labels:
+  x-cross-tenant: "not blocked: no Cilium policy"
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-contract
+    title: "Runtime contract"
+    color: indigo
+    lines:
+      - "**Env.** DB_HOST=<fullname>-db-rw, DB_PORT=5432, DB_NAME; DB_USER and DB_PASSWORD from the Secret. envFrom <fullname>-secrets adds every key synced from Vault."
+      - "**Secrets.** A VaultSecret reads kvv2 project-<project>/<app>; VSO, with its own service account, writes <fullname>-secrets. The image pull secret app-registry arrives the same way."
+      - "**Identity.** OIDC client cnp-<project>-<app> in realm 3istor, callback /oauth2/callback. Envoy runs the login before the app sees a request."
+      - "**Endpoints.** HTTP on the Service target port (backend 8000, frontend 3001), /health expected. Probes are declared, not rendered !!G8!!."
+      - "**Sandbox.** No securityContext rendered and images without USER: root, default capabilities, writable filesystem !!G8!!."
+      - "**Sizing.** CMP defaults: requests 50m / 256Mi, limits 500m backend or 250m frontend / 256Mi. Kyverno only warns on missing limits."
+      - "**Database.** CloudNativePG, PostgreSQL 16, 1 instance, 1Gi, no backup. **Off hours:** offhours-guard can scale the app to zero."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!G1!! **Network isolation.** Docs describe a default-deny CCNP per project. None in code: other tenants reach the app's Service."
+      - "!!G2!! **Authorization.** No groups-claim check: any account in realm 3istor opens the app."
+      - "!!G8!! **Pod sandbox.** See the runtime contract: root, no probes."
+      - "!!G9!! **ReferenceGrant.** Envoy reaches Keycloak only from 8 hand-listed namespaces; a new app's is not added."
+      - "!!G10!! **Gateway label.** New app namespaces never get prod-gateway-access: routes on the shared gateway are not accepted."
+      - "!!G4!! Tunnels target Envoy's Service by name. !!G5!! One tunnel per app on :latest. !!G6!! The token call likely hairpins via Cloudflare."

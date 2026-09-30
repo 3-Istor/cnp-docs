@@ -1,0 +1,55 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Platform overview"
+subtitle: "What runs on the CNP cluster, and which path do a request, a new project, a deployment and a secret take?"
+meta:
+  - "Scope: on-prem K3s cluster · main as of 2026-09-30 · derived from code (K3s, infra-templates, cnp-project-base, CMP, app-templates)"
+  - "Out of scope: AWS/GCP clusters · Day-0 Terraform (Keycloak clients, Vault engines, Cloudflare DNS) · CI pipelines · dashboards content"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+steps: [e-1-browser-edge, e-2-tunnel-app, e-3-connector-envoy, e-4-envoy-service, e-5-service-pods, e-6-pods-db]
+background: [c-cmp-github, c-argocd-github, c-argocd-apiserver, e-a-vso-vault, e-b-vso-secret]
+
+labels:
+  e-2-tunnel-app: "relayed via tunnel ◀<br>opened outbound · QUIC"
+  e-oidc-platform-tunnel: "platform tunnel<br>opened outbound · QUIC"
+  e-oidc-platform-envoy: "auth.3istor.com · HTTP"
+  x-cross-tenant: "cross-tenant traffic: no Cilium policy in code"
+  c-envoy-cmp-backend: "/api · HTTP · no OIDC"
+
+notes:
+  - {id: n-302, text: "Without a session, Envoy replies **302** to auth.3istor.com at [3]. The login is in the OIDC sequence diagram."}
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-data-plane
+    title: "Request path · data plane"
+    color: cyan
+    lines:
+      - "[1] Browser sends GET https://<app>-<project>.3istor.com. Cloudflare terminates TLS."
+      - "[2] The edge relays it back through the app tunnel, opened outbound by cloudflared."
+      - "[3] cloudflared forwards to Envoy over HTTP; Envoy checks the OIDC session."
+      - "[4] Envoy proxies to the Service. [5] Cilium DNATs to a pod. [6] The app queries its CNPG cluster."
+      - "The CMP portal and Keycloak are reached the same way, through the platform tunnel."
+  - id: card-control-plane
+    title: "Background · control plane"
+    color: violet
+    lines:
+      - "**New project.** The CMP backend writes registry/projects/<name>.yaml in cnp-projects [A], then a Terraform bootstrap creates the Keycloak groups, the Vault policy and the Argo CD AppProject."
+      - "**Deployment.** Argo CD polls the registry and the charts [B] and applies each project's apps through the API server [C]."
+      - "**Secrets.** VSO reads Vault [D] and writes the app Secret [E]."
+      - "Kyverno checks resource limits in Audit mode. offhours-guard scales apps to zero off hours."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!G7!! **CMP API auth.** The /api route has no OIDC policy and the backend decodes JWTs without checking signature or expiry: a forged token is accepted."
+      - "!!G1!! **Network isolation.** Docs describe a default-deny CCNP per project. None in code."
+      - "!!G2!! **Authorization.** No groups-claim check: any account in realm 3istor opens any SSO app."
+      - "!!G8!! **Pod sandbox.** securityContext and probes are declared, never rendered: pods run as root."
+      - "!!G3!! **Transport.** TLS ends at Cloudflare; in-cluster hops are plain HTTP, Vault included."
+      - "!!G4!! **Coupling.** Tunnels target Envoy's Service by name. !!G5!! **Tunnels.** One per app on :latest; D-06 moves to one per project."
+      - "!!G6!! **Token call.** No cluster-local path to auth.3istor.com found: likely hairpins via Cloudflare."
+      - "!!G9!! **ReferenceGrant.** Envoy reaches Keycloak only from 8 hand-listed namespaces."
+      - "!!G10!! **Gateway label.** New app namespaces never get prod-gateway-access, needed by the shared gateway."

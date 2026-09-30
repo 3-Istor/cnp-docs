@@ -1,0 +1,44 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2240, height: 1500}
+
+# Element boxes are relative to their parent zone. Edge waypoints and labels are
+# canvas coordinates.
+elements:
+  z-cluster: {x: 40, y: 220, w: 2160, h: 840}
+  g-gateway: {x: 40, y: 70, w: 400, h: 230}
+  envoy-shared-gateway: {x: 20, y: 80, w: 260, h: 120}
+  g-identity: {x: 520, y: 70, w: 320, h: 230}
+  keycloak: {x: 40, y: 80, w: 250, h: 100}
+  g-secrets: {x: 920, y: 70, w: 740, h: 230}
+  vso: {x: 40, y: 80, w: 240, h: 90}
+  vault: {x: 460, y: 80, w: 240, h: 90}
+  g-tenant-a: {x: 40, y: 380, w: 1480, h: 400}
+  cloudflared-app: {x: 40, y: 60, w: 240, h: 90}
+  httproute: {x: 360, y: 60, w: 240, h: 80}
+  app-service: {x: 680, y: 60, w: 220, h: 80}
+  app-pods: {x: 1060, y: 60, w: 240, h: 80}
+  security-policy: {x: 360, y: 280, w: 240, h: 90}
+  app-secret: {x: 680, y: 280, w: 220, h: 80}
+  cnpg: {x: 1060, y: 270, w: 240, h: 100}
+  g-tenant-b: {x: 1720, y: 380, w: 400, h: 260}
+  tenant-b-pods: {x: 40, y: 120, w: 300, h: 64}
+
+edges:
+  e-3-connector-envoy: {from: cloudflared-app.right, to: envoy-shared-gateway.top@180px, waypoints: [[400, 705], [400, 340], [280, 340]]}
+  e-4-envoy-service: {from: envoy-shared-gateway.bottom@220px, to: app-service.top, waypoints: [[320, 560], [870, 560]]}
+  e-5-service-pods: {from: app-service.right, to: app-pods.left@55px}
+  e-6-pods-db: {from: app-pods.bottom, to: cnpg.top}
+  e-oidc-envoy-keycloak: {from: envoy-shared-gateway.right, to: keycloak.left}
+  e-a-vso-vault: {from: vso.right, to: vault.left@60px}
+  e-b-vso-secret: {from: vso.bottom@150px, to: app-secret.top, waypoints: [[1150, 575], [720, 575], [720, 850], [870, 850]], label_at: [1060, 575]}
+  x-cross-tenant: {from: g-tenant-a.right@60px, to: g-tenant-b.left}
+  r-route-gateway: {from: httproute.top@40px, to: envoy-shared-gateway.bottom, waypoints: [[480, 545], [240, 545]]}
+  r-policy-route: {from: security-policy.top, to: httproute.bottom}
+  r-policy-secret: {from: security-policy.right, to: app-secret.left}
+  r-pods-secret: {from: app-pods.bottom@40px, to: app-secret.top, waypoints: [[1180, 800], [930, 800]]}
+
+cards:
+  card-legend: {x: 40, y: 1120, w: 520, h: 340}
+  card-contract: {x: 590, y: 1120, w: 900, h: 340}
+  card-gaps: {x: 1520, y: 1120, w: 680, h: 340}

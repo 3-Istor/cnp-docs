@@ -6,6 +6,16 @@ To host services securely on a private bare-metal network without exposing publi
 
 ## 1. Global Ingress Traffic Flow
 
+![CNP request path and tenant isolation](diagrams/runtime.light.png#only-light)
+![CNP request path and tenant isolation](diagrams/runtime.dark.png#only-dark)
+
+The login that happens when there is no session:
+
+![CNP OIDC login sequence](diagrams/oidc-login.light.png#only-light)
+![CNP OIDC login sequence](diagrams/oidc-login.dark.png#only-dark)
+
+Generated from code with [noodle](https://github.com/TheGostsniperfr/Noodle): the sources are in [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp), see [`architecture/README.md`](https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md) to update them. The *Gaps* card lists where this page and the code disagree.
+
 No inbound ports (such as `80` or `443`) are opened on the local network router. Instead, a lightweight `cloudflared` daemon running inside the cluster initiates secure outbound TCP connections to the Cloudflare Edge network.
 
 ```text
