@@ -1,0 +1,8 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: access
+title: "CNP · Access · Root accounts, what changes"
+subtitle: "What does the plan change for the root credentials?"
+meta: ["Scope: identities and grants of the CNP platform; OpenStack is out of scope", "Source: architecture/cnp · segregation plan phases P1 to P4"]
+focus: {subject: root}
+state: diff
