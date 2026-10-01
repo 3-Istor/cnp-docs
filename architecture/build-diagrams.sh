@@ -21,17 +21,27 @@ for system in */; do
   [[ -f $system/model.yaml ]] || continue
   for view in "$system"/views/*.yaml; do
     id=$(basename "$view" .yaml)
-    for theme in dark light; do
-      out=$out_dir/$id.$theme
-      noodle render "$system" -view "$id" -icons "$icons" -theme "$theme" -o "$out.drawio"
-      drawio -x -f png -s 2 --border 20 -o "$out.png" "$out.drawio" >/dev/null 2>&1
-      if [[ $quality != off ]]; then
-        # 98 and 99: the result would be larger or below the minimum quality; keep the export.
-        status=0
-        pngquant --quality "$quality" --speed 1 --skip-if-larger --force --output "$out.png" "$out.png" || status=$?
-        [[ $status == 0 || $status == 98 || $status == 99 ]] || exit "$status"
+    # The view itself, then one output per lens it declares (noodle -lens, ADR-0020).
+    lenses=$(sed -n 's/^  - {id: \([a-z0-9-]*\), subject:.*/\1/p' "$view")
+    for lens in "" $lenses; do
+      name=$id
+      args=(-view "$id")
+      if [[ -n $lens ]]; then
+        name=$id.$lens
+        args+=(-lens "$lens")
       fi
-      echo "built $out"
+      for theme in dark light; do
+        out=$out_dir/$name.$theme
+        noodle render "$system" "${args[@]}" -icons "$icons" -theme "$theme" -o "$out.drawio"
+        drawio -x -f png -s 2 --border 20 -o "$out.png" "$out.drawio" >/dev/null 2>&1
+        if [[ $quality != off ]]; then
+          # 98 and 99: the result would be larger or below the minimum quality; keep the export.
+          status=0
+          pngquant --quality "$quality" --speed 1 --skip-if-larger --force --output "$out.png" "$out.png" || status=$?
+          [[ $status == 0 || $status == 98 || $status == 99 ]] || exit "$status"
+        fi
+        echo "built $out"
+      done
     done
   done
 done
