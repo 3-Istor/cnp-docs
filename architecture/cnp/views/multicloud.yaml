@@ -8,7 +8,43 @@ meta:
   - "Out of scope: building the cloud clusters and the VPN (cluster team) · project creation in the CMP · per-project Keycloak brokering to the central realm"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
-include: [z-internet/**, z-cloudflare/**, z-onprem-target/**, z-cloud-a/**, z-cluster, g-gitops, argocd, g-secrets, vault]
+# Explicit, so an element added to the model enters this view only when listed here.
+include:
+  - z-internet
+  - user
+  - z-cloudflare
+  - cf-edge
+  - z-onprem-target
+  - g-a-system
+  - g-a-app-a
+  - g-a-app-b
+  - a-tunnel
+  - a-gateway
+  - a-keycloak
+  - a1-front
+  - a1-back
+  - a1-db
+  - a2-front
+  - a2-back
+  - a2-db
+  - a-apiserver
+  - a-secret-op
+  - z-cloud-a
+  - g-b-system
+  - g-b-app
+  - b-tunnel
+  - b-gateway
+  - b-keycloak
+  - b1-front
+  - b1-back
+  - b1-db
+  - b-apiserver
+  - b-secret-op
+  - z-cluster
+  - g-gitops
+  - argocd
+  - g-secrets
+  - vault
 steps: [e-1-browser-edge, c-a-tunnel-edge, c-a-tunnel-gw, c-a-gw-a1, c-a1-front-back, c-a1-back-db]
 background: [c-argocd-a, c-argocd-b, c-asecret-vault, c-bsecret-vault]
 

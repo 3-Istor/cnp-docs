@@ -8,7 +8,26 @@ meta:
   - "Out of scope: how the project is created (platform overview) · the login flow (OIDC sequence) · per-project gateway and Keycloak, both off by default"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
-include: [z-cluster, g-gateway, envoy-shared-gateway, g-identity/**, g-secrets/**, g-tenant-a/**, g-tenant-b/**]
+# Explicit, so an element added to the model enters this view only when listed here.
+include:
+  - z-cluster
+  - g-gateway
+  - envoy-shared-gateway
+  - g-identity
+  - keycloak
+  - g-secrets
+  - vso
+  - vault
+  - g-tenant-a
+  - cloudflared-app
+  - httproute
+  - app-service
+  - app-pods
+  - security-policy
+  - app-secret
+  - cnpg
+  - g-tenant-b
+  - tenant-b-pods
 steps: [e-3-connector-envoy, e-4-envoy-service, e-5-service-pods, e-6-pods-db]
 background: [e-a-vso-vault, e-b-vso-secret]
 

@@ -11,6 +11,7 @@ one diagram, and `layouts/` places the topology views.
 | `runtime` | How a request reaches a tenant app, where it is authenticated, what keeps tenants apart | Network topology |
 | `oidc-login` | The login when there is no session | Network topology |
 | `multicloud` | What stays on the on-prem hub, what goes with each project to its target cloud, which paths cross the VPN | Multicloud index |
+| `access-matrix` | Who may act on what, and what the segregation plan changes, phase by phase | Access segregation |
 
 To change a diagram, edit the model (facts), the view (what is shown) or the layout
 (where), then rebuild every view, dark and light, into `docs/01-architecture/diagrams/`:
@@ -29,3 +30,9 @@ app-templates). Where the docs say otherwise, the diagram draws the code and add
 `Gx` badge with an entry in its *Gaps* card.
 
 Project logos not bundled with noodle live in `.noodle/icons/`.
+
+Access: `memberships` and `grants` in the model say who may act on what. `deprecated`
+marks what the segregation plan removes, `planned` what it adds, with the phase as
+`target`. The `access-matrix` view needs noodle with matrix views (phase 6b,
+TheGostsniperfr/Noodle#54). Topology views list their elements explicitly, so the
+access elements never enter them.
