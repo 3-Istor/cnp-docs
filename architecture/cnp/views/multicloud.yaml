@@ -1,0 +1,75 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Multicloud · Where a project runs"
+subtitle: "What stays on the admin hub, what goes with each project to its target cluster, and which paths still cross the VPN?"
+meta:
+  - "Scope: two target clusters, onprem and a generic <cloud-a>, one project each · main as of 2026-09-30 · derived from code and docs/06-multicloud (D-01 to D-10)"
+  - "Out of scope: building the cloud clusters and the VPN (cluster team) · project creation in the CMP · per-project Keycloak brokering to the central realm"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+# Explicit, so an element added to the model enters this view only when listed here.
+include:
+  - z-internet
+  - user
+  - z-cloudflare
+  - cf-edge
+  - z-onprem-target
+  - g-a-system
+  - g-a-app-a
+  - g-a-app-b
+  - a-tunnel
+  - a-gateway
+  - a-keycloak
+  - a1-front
+  - a1-back
+  - a1-db
+  - a2-front
+  - a2-back
+  - a2-db
+  - a-apiserver
+  - a-secret-op
+  - z-cloud-a
+  - g-b-system
+  - g-b-app
+  - b-tunnel
+  - b-gateway
+  - b-keycloak
+  - b1-front
+  - b1-back
+  - b1-db
+  - b-apiserver
+  - b-secret-op
+  - z-cluster
+  - g-gitops
+  - argocd
+  - g-secrets
+  - vault
+steps: [e-1-browser-edge, c-a-tunnel-edge, c-a-tunnel-gw, c-a-gw-a1, c-a1-front-back, c-a1-back-db]
+background: [c-argocd-a, c-argocd-b, c-asecret-vault, c-bsecret-vault]
+
+labels:
+  c-a-tunnel-edge: "relayed via tunnel ◀<br>opened outbound · QUIC"
+  c-b-tunnel-edge: "relayed via tunnel ◀<br>opened outbound · QUIC"
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-status
+    title: "Where things stand"
+    color: amber
+    lines:
+      - "**Admin hub**: Argo CD and Vault stay on-prem, alone. Today the hub and the onprem target are the same K3s cluster, registered twice in Argo CD (in-cluster and onprem)."
+      - "**onprem** is the only registered target: tested end to end. **<cloud-a>**: the aws and gcp cluster secrets exist, left out of Argo CD until their Vault path is filled."
+      - "A project lives on one cloud: its record in cnp-projects carries **target_cloud**, and all its apps, prod and staging, go there. Two clouds, two projects."
+      - "[1] to [6]: user traffic enters through the project's own tunnel and gateway on its cluster, never through the hub (invariant I-1). <app-b> and <project-b> follow the same path, unnumbered."
+      - "[A] [B] Argo CD syncs each target, [C] [D] each secret operator reads Vault. Only <cloud-a> crosses the VPN, best effort. If the hub is down, running apps keep serving and logging users in."
+  - id: card-gaps
+    title: "Gaps between the plan and the code"
+    color: orange
+    lines:
+      - "!!G14!! **Per-project edge.** Gateway, tunnel and Keycloak IAMaaS are in cnp-project-base, off by default: live projects still use the hub's shared gateway and tunnel."
+      - "!!G11!! **Vault auth.** One Kubernetes auth mount for every cluster (D-07 not built)."
+      - "!!G12!! **Storage class.** local-path is hardcoded; no per-cloud profile (D-08)."
+      - "!!G13!! **Secret operator.** The Ricoberger operator, not HashiCorp VSO: whether a synced Secret survives a Vault outage is untested (GD-1)."
+      - "!!G3!! **Transport.** TLS ends at Cloudflare; behind the tunnel, hops are plain HTTP."
+      - "vmagent per cluster and the blackbox probes (D-10) are not started."

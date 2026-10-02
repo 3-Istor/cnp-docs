@@ -69,6 +69,9 @@ markdown_extensions:
       custom_checkbox: true
   - pymdownx.tilde
 
+exclude_docs: |
+  *.drawio
+
 # Plan du site / Navigation
 nav:
   - Accueil: index.md
@@ -79,6 +82,7 @@ nav:
       - Multi-tenancerie & Isolation: 01-architecture/02-tenancy-and-isolation.md
       - Topologie Réseau & Ingress: 01-architecture/03-network-topology.md
       - Plan de Reprise d'Activité (PRA): 01-architecture/04-disaster-recovery.md
+      - Ségrégation des accès: 01-architecture/05-access-segregation.md
   - 2. Composants Clés:
       - Portail & Dashboard CMP: 02-core-components/01-cmp-dashboard.md
       - Identités & Keycloak: 02-core-components/02-identity-keycloak.md

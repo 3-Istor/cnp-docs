@@ -1,0 +1,82 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2300, height: 2860}
+
+# Element boxes are relative to their parent zone. Edge waypoints and labels are
+# canvas coordinates. The two targets are stacked so both tunnels reach Cloudflare on
+# the left; the control plane climbs from the hub through lanes on the right.
+lanes:
+  tunnel-a: {x: 660}
+  tunnel-b: {x: 680}
+  hub-argocd-a: {y: 2090}
+  hub-argocd-b: {y: 2060}
+  hub-secrets-a: {y: 2120}
+  hub-secrets-b: {y: 2150}
+  east-argocd-a: {x: 2220}
+  east-argocd-b: {x: 2200}
+  east-secrets-a: {x: 2240}
+  east-secrets-b: {x: 2260}
+
+elements:
+  z-internet: {x: 40, y: 220, w: 220, h: 1820}
+  user: {x: 82, y: 670, w: 56, h: 56}
+  z-cloudflare: {x: 320, y: 220, w: 300, h: 1820}
+  cf-edge: {x: 20, y: 640, w: 260, h: 120}
+  z-onprem-target: {x: 700, y: 220, w: 1460, h: 870}
+  g-a-system: {x: 40, y: 70, w: 1120, h: 190}
+  a-tunnel: {x: 40, y: 70, w: 240, h: 90}
+  a-gateway: {x: 440, y: 70, w: 260, h: 100}
+  a-keycloak: {x: 840, y: 70, w: 240, h: 100}
+  g-a-app-a: {x: 40, y: 330, w: 540, h: 500}
+  a1-front: {x: 160, y: 80, w: 220, h: 80}
+  a1-back: {x: 160, y: 230, w: 220, h: 80}
+  a1-db: {x: 160, y: 360, w: 220, h: 100}
+  g-a-app-b: {x: 640, y: 330, w: 520, h: 500}
+  a2-front: {x: 160, y: 80, w: 220, h: 80}
+  a2-back: {x: 160, y: 230, w: 220, h: 80}
+  a2-db: {x: 160, y: 360, w: 220, h: 100}
+  a-apiserver: {x: 1220, y: 100, w: 220, h: 80}
+  a-secret-op: {x: 1220, y: 260, w: 220, h: 80}
+  z-cloud-a: {x: 700, y: 1170, w: 1460, h: 870}
+  g-b-system: {x: 40, y: 70, w: 1120, h: 190}
+  b-tunnel: {x: 40, y: 70, w: 240, h: 90}
+  b-gateway: {x: 440, y: 70, w: 260, h: 100}
+  b-keycloak: {x: 840, y: 70, w: 240, h: 100}
+  g-b-app: {x: 40, y: 330, w: 540, h: 500}
+  b1-front: {x: 160, y: 80, w: 220, h: 80}
+  b1-back: {x: 160, y: 230, w: 220, h: 80}
+  b1-db: {x: 160, y: 360, w: 220, h: 100}
+  b-apiserver: {x: 1220, y: 100, w: 220, h: 80}
+  b-secret-op: {x: 1220, y: 260, w: 220, h: 80}
+  z-cluster: {x: 700, y: 2160, w: 1460, h: 300}
+  g-gitops: {x: 40, y: 70, w: 340, h: 190}
+  argocd: {x: 40, y: 70, w: 260, h: 90}
+  g-secrets: {x: 800, y: 70, w: 380, h: 190}
+  vault: {x: 120, y: 70, w: 240, h: 90}
+
+edges:
+  e-1-browser-edge: {from: user.right, to: cf-edge.left}
+  c-a-tunnel-edge: {from: a-tunnel.left, to: cf-edge.right@30px, waypoints: [lane:tunnel-a], against_flow: true}
+  c-b-tunnel-edge: {from: b-tunnel.left, to: cf-edge.right@90px, waypoints: [lane:tunnel-b], against_flow: true}
+  c-a-tunnel-gw: {from: a-tunnel.right, to: a-gateway.left@70px}
+  c-a-gw-kc: {from: a-gateway.right, to: a-keycloak.left@70px}
+  c-a-gw-a1: {from: a-gateway.bottom@40px, to: a1-front.top@100px, waypoints: [[1220, 515], [1000, 515]]}
+  c-a1-front-back: {from: a1-front.bottom, to: a1-back.top}
+  c-a1-back-db: {from: a1-back.bottom, to: a1-db.top}
+  c-a-gw-a2: {from: a-gateway.bottom@220px, to: a2-front.top@100px, waypoints: [[1400, 530], [1600, 530]]}
+  c-a2-front-back: {from: a2-front.bottom, to: a2-back.top}
+  c-a2-back-db: {from: a2-back.bottom, to: a2-db.top}
+  c-b-tunnel-gw: {from: b-tunnel.right, to: b-gateway.left@70px}
+  c-b-gw-kc: {from: b-gateway.right, to: b-keycloak.left@70px}
+  c-b-gw-b1: {from: b-gateway.bottom@40px, to: b1-front.top@100px, waypoints: [[1220, 1465], [1000, 1465]]}
+  c-b1-front-back: {from: b1-front.bottom, to: b1-back.top}
+  c-b1-back-db: {from: b1-back.bottom, to: b1-db.top}
+  c-argocd-a: {from: argocd.right, to: a-apiserver.top@110px, waypoints: [[1100, 2345], lane:hub-argocd-a, lane:east-argocd-a, [2220, 300], [2030, 300]], label_at: [1350, 2090]}
+  c-argocd-b: {from: argocd.right@25px, to: b-apiserver.top@110px, waypoints: [[1120, 2325], lane:hub-argocd-b, lane:east-argocd-b, [2200, 1250], [2030, 1250]], label_at: [1650, 2060]}
+  c-asecret-vault: {from: a-secret-op.right, to: vault.top@120px, waypoints: [lane:east-secrets-a, lane:hub-secrets-a], label_at: [1900, 2120]}
+  c-bsecret-vault: {from: b-secret-op.right, to: vault.top@220px, waypoints: [lane:east-secrets-b, lane:hub-secrets-b], label_at: [2150, 2150]}
+
+cards:
+  card-legend: {x: 40, y: 2520, w: 520, h: 300}
+  card-status: {x: 590, y: 2520, w: 860, h: 300}
+  card-gaps: {x: 1480, y: 2520, w: 780, h: 300}
