@@ -671,6 +671,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="2. Multi-Tenant Security Boundaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-one-application-sees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What one application sees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intended-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intended boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -814,6 +842,34 @@
     
   
     Plan de Reprise d'Activité (PRA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
   
 
     
@@ -2117,6 +2173,34 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="2. Multi-Tenant Security Boundaries">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-one-application-sees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What one application sees
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#intended-boundaries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Intended boundaries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2268,6 +2352,15 @@
 </table>
 <hr />
 <h2 id="2-multi-tenant-security-boundaries">2. Multi-Tenant Security Boundaries<a class="headerlink" href="#2-multi-tenant-security-boundaries" title="Permanent link">&para;</a></h2>
+<h3 id="what-one-application-sees">What one application sees<a class="headerlink" href="#what-one-application-sees" title="Permanent link">&para;</a></h3>
+<p><img alt="CNP application runtime view" src="../diagrams/app-runtime.light.png#only-light" />
+<img alt="CNP application runtime view" src="../diagrams/app-runtime.dark.png#only-dark" /></p>
+<p>Generated from code with <a href="https://github.com/TheGostsniperfr/Noodle">noodle</a>: the sources are in <a href="https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp"><code>architecture/cnp</code></a>, see <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a> to update them. The <em>Gaps</em> card lists where this page and the code disagree.</p>
+<div class="admonition warning">
+<p class="admonition-title">Target model, not yet in code</p>
+<p>As of 2026-09-30 the code has no Cilium tenant policy (G1), no groups-claim check at the gateway (G2), and pods run as root without probes (G8). The sections below describe the intended model.</p>
+</div>
+<h3 id="intended-boundaries">Intended boundaries<a class="headerlink" href="#intended-boundaries" title="Permanent link">&para;</a></h3>
 <pre class="mermaid"><code>flowchart TD
     subgraph K3s_Cluster [K3s Cluster Isolation]
         subgraph Namespace_Alpha [Namespace: alpha-frontend]

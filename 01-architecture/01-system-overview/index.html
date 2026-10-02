@@ -632,6 +632,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="1. Architectural Paradigm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#platform-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform map
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -775,6 +792,34 @@
     
   
     Plan de Reprise d'Activité (PRA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
   
 
     
@@ -2067,6 +2112,23 @@
     </span>
   </a>
   
+    <nav class="md-nav" aria-label="1. Architectural Paradigm">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#platform-map" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Platform map
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
 </li>
       
         <li class="md-nav__item">
@@ -2151,6 +2213,10 @@
 <h2 id="1-architectural-paradigm">1. Architectural Paradigm<a class="headerlink" href="#1-architectural-paradigm" title="Permanent link">&para;</a></h2>
 <p>The CNP relies on a decoupled, asynchronous, and GitOps-driven architecture. Instead of the Cloud Management Platform (CMP) directly interfacing with Kubernetes API servers to deploy pods, it acts as an <strong>Orchestrator of Orchestrators</strong>. </p>
 <p>The Single Source of Truth (SSOT) is always Git.</p>
+<h3 id="platform-map">Platform map<a class="headerlink" href="#platform-map" title="Permanent link">&para;</a></h3>
+<p><img alt="CNP platform overview" src="../diagrams/platform-overview.light.png#only-light" />
+<img alt="CNP platform overview" src="../diagrams/platform-overview.dark.png#only-dark" /></p>
+<p>Generated from code with <a href="https://github.com/TheGostsniperfr/Noodle">noodle</a>: the sources are in <a href="https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp"><code>architecture/cnp</code></a>, see <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a> to update them. The <em>Gaps</em> card lists where this page and the code disagree.</p>
 <hr />
 <h2 id="2-global-component-interaction">2. Global Component Interaction<a class="headerlink" href="#2-global-component-interaction" title="Permanent link">&para;</a></h2>
 <p>The platform is structured into four functional planes, ensuring clear segregation of duties:</p>

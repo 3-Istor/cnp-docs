@@ -664,6 +664,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -1816,6 +1844,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#vue-densemble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vue d'ensemble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documents" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2042,6 +2081,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#vue-densemble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vue d'ensemble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#documents" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2099,6 +2149,14 @@ avant d'être considérée comme livrée.</p>
 <p>Une application déjà déployée continue de servir, d'authentifier ses utilisateurs et de
 rafraîchir leurs jetons <strong>même si le cluster on-prem devient injoignable</strong>. Déployer et
 provisionner peuvent s'arrêter ; servir, non.</p>
+<h2 id="vue-densemble">Vue d'ensemble<a class="headerlink" href="#vue-densemble" title="Permanent link">&para;</a></h2>
+<p><img alt="CNP multicloud" src="../../01-architecture/diagrams/multicloud.light.png#only-light" />
+<img alt="CNP multicloud" src="../../01-architecture/diagrams/multicloud.dark.png#only-dark" /></p>
+<p>Deux clusters cibles, <code>onprem</code> et un <code>&lt;cloud-a&gt;</code> générique (AWS d'abord, puis GCP), un
+projet chacun, pilotés par le hub d'administration (Argo CD, Vault). <code>&lt;cloud-a&gt;</code> est encore
+hachuré : seul <code>onprem</code> est enregistré aujourd'hui. La carte <em>Gaps</em> liste ce que le code
+n'a pas encore rattrapé des décisions ci-dessous. Généré depuis le code avec noodle, source
+dans <a href="https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp"><code>architecture/cnp</code></a>.</p>
 <h2 id="documents">Documents<a class="headerlink" href="#documents" title="Permanent link">&para;</a></h2>
 <table>
 <thead>

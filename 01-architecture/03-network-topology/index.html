@@ -805,6 +805,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2185,6 +2213,12 @@
 <p>To host services securely on a private bare-metal network without exposing public router ports, CNP implements a <strong>Zero-Trust Ingress Topology</strong> using Cloudflare Tunnels (<code>cloudflared</code>) and the Kubernetes Gateway API (powered by Envoy Gateway).</p>
 <hr />
 <h2 id="1-global-ingress-traffic-flow">1. Global Ingress Traffic Flow<a class="headerlink" href="#1-global-ingress-traffic-flow" title="Permanent link">&para;</a></h2>
+<p><img alt="CNP request path and tenant isolation" src="../diagrams/runtime.light.png#only-light" />
+<img alt="CNP request path and tenant isolation" src="../diagrams/runtime.dark.png#only-dark" /></p>
+<p>The login that happens when there is no session:</p>
+<p><img alt="CNP OIDC login sequence" src="../diagrams/oidc-login.light.png#only-light" />
+<img alt="CNP OIDC login sequence" src="../diagrams/oidc-login.dark.png#only-dark" /></p>
+<p>Generated from code with <a href="https://github.com/TheGostsniperfr/Noodle">noodle</a>: the sources are in <a href="https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp"><code>architecture/cnp</code></a>, see <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a> to update them. The <em>Gaps</em> card lists where this page and the code disagree.</p>
 <p>No inbound ports (such as <code>80</code> or <code>443</code>) are opened on the local network router. Instead, a lightweight <code>cloudflared</code> daemon running inside the cluster initiates secure outbound TCP connections to the Cloudflare Edge network.</p>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>[ Developer Browser ] ──(HTTPS)──► [ Cloudflare Edge ] ◄──(Secure Tunnel)──► [ cloudflared Pod ]
 </span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>                                                                                   │
