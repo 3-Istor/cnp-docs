@@ -1,0 +1,42 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: matrix
+title: CNP · Access matrix · what the segregation plan changes
+subtitle: One row per identity, one column per resource by access plane. A cell shows the level after the plan, and what the plan changed to get there.
+meta:
+  - "Read a row: everything an identity can do. Read a column: who can touch a resource. A workload column touched by another project's identity is a leak."
+  - "Not verified: the policy of the CMP's Vault token (drawn as the root token, the worst case) and the scope of its Cloudflare token (G15, G16). Plan phases: P1 root accounts, P2 CMP rights, P3 tenant isolation, P4 cloud accounts."
+state: diff
+identities:
+  - {title: Break-glass, items: [root]}
+  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, auditor, finops, grp-a-admins, dev-a, grp-k3s-dev]}
+  - {title: Service accounts, items: [cmp-backend, vso, argocd]}
+resources:
+  - {title: Control plane, sub: identity and rules, color: indigo, items: [keycloak, vault-sys]}
+  - {title: Management plane, sub: what runs and deploys the platform, color: cyan, items: [apps-platform, kube-apiserver, github, cf-edge, tfstate, vault-kvv2]}
+  - {title: Workloads plane, sub: a project is a closed box, color: slate, items: [vault-a, apps-a, g-tenant-a, vault-b, apps-b, g-tenant-b]}
+  - {title: AWS accounts, sub: created in P4, color: sky, items: [aws-account-mgmt, aws-account-logs, aws-account-workloads]}
+labels:
+  keycloak: "Keycloak<br>realm 3istor"
+  vault-sys: "Vault<br>config"
+  apps-platform: "Argo CD<br>platform apps"
+  kube-apiserver: "Kubernetes<br>cluster"
+  github: "GitHub<br>project repos"
+  cf-edge: "Cloudflare<br>DNS, tunnels"
+  tfstate: "Terraform<br>state"
+  vault-kvv2: "Vault<br>kvv2/"
+  vault-a: "Project A<br>secrets"
+  apps-a: "Project A<br>apps"
+  g-tenant-a: "Project A<br>namespace"
+  vault-b: "Project B<br>secrets"
+  apps-b: "Project B<br>apps"
+  g-tenant-b: "Project B<br>namespace"
+  aws-account-mgmt: "management"
+  aws-account-logs: "log-archive"
+  aws-account-workloads: "workloads"
+  root: Root accounts
+  grp-a-admins: Project A admins
+  dev-a: Project A developer
+  grp-k3s-dev: k3s-dev members
+  cmp-backend: CMP backend
+  argocd: Argo CD controller

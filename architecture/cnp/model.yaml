@@ -108,7 +108,7 @@ elements:
   # grants need. No topology view includes them; access views and lenses read them.
   - {id: z-team, kind: region, color: slate, icon: user, title: "TEAM", sub: "people and root accounts"}
   - {id: g-rbac, kind: group, parent: z-cluster, color: sky, icon: k8s-ns, title: "KUBERNETES RBAC"}
-  - {id: z-aws-shared, kind: region, color: orange, icon: globe, title: "AWS", sub: "shared-services · not set up yet"}
+  - {id: z-aws-shared, kind: region, color: orange, icon: globe, title: "AWS", sub: "organization from P4 · not set up yet"}
   - {id: admin, kind: frontend, parent: z-team, shape: actor, icon: user, title: Platform admin, desc: groups infra and member}
   - {id: dev-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> dev", desc: groups member and project-a}
   - {id: auditor, kind: frontend, parent: z-team, shape: actor, icon: user, title: Auditor, desc: security review, status: planned, target: P3}
@@ -153,6 +153,14 @@ elements:
   - {id: aws-root, kind: cloud, parent: z-aws-shared, icon: k8s-secret, title: Management root, tech: "[AWS root user]", desc: "MFA, no access key", status: planned, target: P4}
   - {id: aws-role, kind: cloud, parent: z-aws-shared, icon: terraform, title: tfstate role, tech: "[IAM role via Vault]", desc: Assumed for 1 hour, status: planned, target: P4}
   - {id: tfstate, kind: cloud, parent: z-aws-shared, shape: cylinder, icon: terraform, title: Terraform state, tech: "[S3 + DynamoDB]", desc: Every project's state}
+  - {id: grp-k3s-admin, kind: security, parent: g-identity, icon: keycloak, title: k3s-admin, tech: "[Keycloak group]", desc: kubectl cluster-admin over OIDC}
+  - {id: crb-admin, kind: security, parent: g-rbac, icon: k8s-crd, title: oidc-admin-binding, tech: "[ClusterRoleBinding]", desc: "k3s-admin: cluster-admin"}
+  - {id: crb-argocd, kind: security, parent: g-rbac, icon: k8s-crd, title: argocd-application-controller, tech: "[ClusterRoleBinding]", desc: Argo CD deploys anywhere}
+  - {id: finops, kind: frontend, parent: z-team, shape: actor, icon: user, title: FinOps, desc: cost review, status: planned, target: P4}
+  - {id: grp-finops, kind: security, parent: g-identity, icon: keycloak, title: finops, tech: "[Keycloak group]", desc: Billing read, status: planned, target: P4}
+  - {id: aws-account-mgmt, kind: cloud, parent: z-aws-shared, icon: globe, title: management account, tech: "[AWS account]", desc: "Organization, billing, SCPs", status: planned, target: P4}
+  - {id: aws-account-logs, kind: cloud, parent: z-aws-shared, icon: globe, title: log-archive account, tech: "[AWS account]", desc: Every account's trail, status: planned, target: P4}
+  - {id: aws-account-workloads, kind: cloud, parent: z-aws-shared, icon: globe, title: workloads account, tech: "[AWS account]", desc: Project clusters, status: planned, target: P4}
 connections:
   # Request path.
   - {id: e-1-browser-edge, from: user, to: cf-edge, port: https, protocol: HTTPS, verb: GET app, kind: flow}
@@ -220,7 +228,7 @@ annotations:
   - {id: G4, severity: medium, title: "Coupling", targets: [envoy-shared-gateway]}
   - {id: G5, severity: low, title: "Tunnels", targets: [cloudflared-app]}
   - {id: G6, severity: medium, title: "Token call", targets: [envoy-shared-gateway, e-oidc-token-hairpin]}
-  - {id: G7, severity: critical, title: "CMP API auth", targets: [cmp-backend, c-envoy-cmp-backend]}
+  - {id: G7, severity: high, title: "CMP API auth", targets: [cmp-backend, c-envoy-cmp-backend]}
   - {id: G8, severity: high, title: "Pod sandbox", targets: [app-pods]}
   - {id: G9, severity: medium, title: "Keycloak ReferenceGrant", targets: [security-policy]}
   - {id: G10, severity: medium, title: "Shared gateway label", targets: [httproute]}
@@ -243,6 +251,8 @@ memberships:
   - {id: m-vso, subject: vso, group: role-vso, auth: {method: k8s-sa, lifetime: 24h}}
   - {id: m-cmp-role, subject: cmp-backend, group: role-cmp, auth: {method: k8s-sa, lifetime: 1h}, status: planned, target: P2}
 
+  - {id: m-admin-k3s-admin, subject: admin, group: grp-k3s-admin, auth: {method: oidc, mfa: true}, status: planned, target: P1}
+  - {id: m-finops, subject: finops, group: grp-finops, auth: {method: oidc, mfa: true}, status: planned, target: P4}
 grants:
   # Platform admins
   - {id: g-infra-vault-sys, subject: grp-infra, resource: vault-sys, level: admin, via: [policy-vault-admin]}
@@ -253,20 +263,20 @@ grants:
   - {id: g-infra-apps-a, subject: grp-infra, resource: apps-a, level: admin, via: [argocd-admin]}
   - {id: g-infra-apps-b, subject: grp-infra, resource: apps-b, level: admin, via: [argocd-admin]}
   - {id: g-infra-realm, subject: grp-infra, resource: keycloak, level: admin, via: [kc-realm-admin], status: planned, target: P1}
-  - {id: g-admin-kube-platform, subject: admin, resource: kube-apiserver, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated}
-  - {id: g-admin-kube-a, subject: admin, resource: g-tenant-a, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated}
-  - {id: g-admin-kube-b, subject: admin, resource: g-tenant-b, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated}
+  - {id: g-admin-kube-platform, subject: admin, resource: kube-apiserver, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated, target: P1}
+  - {id: g-admin-kube-a, subject: admin, resource: g-tenant-a, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated, target: P1}
+  - {id: g-admin-kube-b, subject: admin, resource: g-tenant-b, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated, target: P1}
 
   # Every team member, today
-  - {id: g-member-apps-platform, subject: grp-member, resource: apps-platform, level: read, via: [argocd-readonly], status: deprecated}
-  - {id: g-member-apps-a, subject: grp-member, resource: apps-a, level: read, via: [argocd-readonly], status: deprecated}
-  - {id: g-member-apps-b, subject: grp-member, resource: apps-b, level: read, via: [argocd-readonly], status: deprecated}
-  - {id: g-k3s-dev-platform, subject: grp-k3s-dev, resource: kube-apiserver, level: read, via: [crb-view], status: deprecated}
-  - {id: g-k3s-dev-a, subject: grp-k3s-dev, resource: g-tenant-a, level: read, via: [crb-view], status: deprecated}
-  - {id: g-k3s-dev-b, subject: grp-k3s-dev, resource: g-tenant-b, level: read, via: [crb-view], status: deprecated}
+  - {id: g-member-apps-platform, subject: grp-member, resource: apps-platform, level: read, via: [argocd-readonly], status: deprecated, target: P3}
+  - {id: g-member-apps-a, subject: grp-member, resource: apps-a, level: read, via: [argocd-readonly], status: deprecated, target: P3}
+  - {id: g-member-apps-b, subject: grp-member, resource: apps-b, level: read, via: [argocd-readonly], status: deprecated, target: P3}
+  - {id: g-k3s-dev-platform, subject: grp-k3s-dev, resource: kube-apiserver, level: read, via: [crb-view], status: deprecated, target: P3}
+  - {id: g-k3s-dev-a, subject: grp-k3s-dev, resource: g-tenant-a, level: read, via: [crb-view], status: deprecated, target: P3}
+  - {id: g-k3s-dev-b, subject: grp-k3s-dev, resource: g-tenant-b, level: read, via: [crb-view], status: deprecated, target: P3}
 
   # Tenant groups
-  - {id: g-a-members-vault, subject: grp-a-members, resource: vault-a, level: write, via: [policy-a-dev], status: deprecated}
+  - {id: g-a-members-vault, subject: grp-a-members, resource: vault-a, level: write, via: [policy-a-dev], status: deprecated, target: P3}
   - {id: g-a-members-vault-read, subject: grp-a-members, resource: vault-a, level: read, via: [policy-a-read], status: planned, target: P3}
   - {id: g-a-admins-vault, subject: grp-a-admins, resource: vault-a, level: write, via: [policy-a-dev]}
   - {id: g-a-members-apps, subject: grp-a-members, resource: apps-a, level: read, via: [approle-a-members]}
@@ -286,13 +296,13 @@ grants:
   - {id: g-vso-b, subject: role-vso, resource: vault-b, level: read, via: [policy-vso]}
 
   # CMP, today
-  - {id: g-cmp-vault-sys, subject: cmp-backend, resource: vault-sys, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated}
-  - {id: g-cmp-vault-kvv2, subject: cmp-backend, resource: vault-kvv2, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated}
-  - {id: g-cmp-vault-a, subject: cmp-backend, resource: vault-a, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated}
-  - {id: g-cmp-vault-b, subject: cmp-backend, resource: vault-b, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated}
-  - {id: g-cmp-realm, subject: cmp-backend, resource: keycloak, level: admin, via: [kc-master-admin], auth: {method: password}, status: deprecated}
-  - {id: g-cmp-tfstate, subject: cmp-backend, resource: tfstate, level: admin, via: [aws-key], auth: {method: access-key}, status: deprecated}
-  - {id: g-cmp-cf, subject: cmp-backend, resource: cf-edge, level: write, via: [cf-token], auth: {method: static-token}, status: deprecated}
+  - {id: g-cmp-vault-sys, subject: cmp-backend, resource: vault-sys, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P2}
+  - {id: g-cmp-vault-kvv2, subject: cmp-backend, resource: vault-kvv2, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P2}
+  - {id: g-cmp-vault-a, subject: cmp-backend, resource: vault-a, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P2}
+  - {id: g-cmp-vault-b, subject: cmp-backend, resource: vault-b, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P2}
+  - {id: g-cmp-realm, subject: cmp-backend, resource: keycloak, level: admin, via: [kc-master-admin], auth: {method: password}, status: deprecated, target: P2}
+  - {id: g-cmp-tfstate, subject: cmp-backend, resource: tfstate, level: admin, via: [aws-key], auth: {method: access-key}, status: deprecated, target: P4}
+  - {id: g-cmp-cf, subject: cmp-backend, resource: cf-edge, level: write, via: [cf-token], auth: {method: static-token}, status: deprecated, target: P2}
   - {id: g-cmp-gh, subject: cmp-backend, resource: github, level: write, scope: project repos, via: [github-app], auth: {method: federated, lifetime: 1h}}
   # CMP, target
   - {id: g-cmp-new-vault-sys, subject: role-cmp, resource: vault-sys, level: write, scope: "project-* mounts, policies, roles", via: [policy-cmp], status: planned, target: P2}
@@ -303,9 +313,27 @@ grants:
   - {id: g-cmp-new-tfstate, subject: cmp-backend, resource: tfstate, level: write, scope: "projects/*", via: [aws-role], auth: {method: federated, lifetime: 1h}, status: planned, target: P4}
 
   # Root accounts: used daily today, break-glass only after P1 and P4
-  - {id: g-root-vault, subject: root, resource: vault-sys, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated}
-  - {id: g-root-realm, subject: root, resource: keycloak, level: admin, via: [kc-master-admin], auth: {method: password}, status: deprecated}
-  - {id: g-root-tfstate, subject: root, resource: tfstate, level: admin, via: [aws-key], auth: {method: access-key}, status: deprecated}
+  - {id: g-root-vault, subject: root, resource: vault-sys, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
+  - {id: g-root-realm, subject: root, resource: keycloak, level: admin, via: [kc-master-admin], auth: {method: password}, status: deprecated, target: P1}
+  - {id: g-root-tfstate, subject: root, resource: tfstate, level: admin, via: [aws-key], auth: {method: access-key}, status: deprecated, target: P4}
   - {id: g-root-vault-bg, subject: root, resource: vault-sys, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
   - {id: g-root-realm-bg, subject: root, resource: keycloak, level: breakglass, via: [kc-master-admin], status: planned, target: P1}
   - {id: g-root-tfstate-bg, subject: root, resource: tfstate, level: breakglass, via: [aws-root], auth: {method: password, mfa: true}, status: planned, target: P4}
+
+  # kubectl for platform admins over OIDC, replacing the committed kubeconfig
+  - {id: g-k3s-admin-platform, subject: grp-k3s-admin, resource: kube-apiserver, level: admin, via: [crb-admin]}
+  - {id: g-k3s-admin-a, subject: grp-k3s-admin, resource: g-tenant-a, level: admin, via: [crb-admin]}
+  - {id: g-k3s-admin-b, subject: grp-k3s-admin, resource: g-tenant-b, level: admin, via: [crb-admin]}
+
+  # Argo CD's controller can apply anything anywhere: tier zero in practice
+  - {id: g-argocd-platform, subject: argocd, resource: kube-apiserver, level: admin, via: [crb-argocd]}
+  - {id: g-argocd-a, subject: argocd, resource: g-tenant-a, level: admin, via: [crb-argocd]}
+  - {id: g-argocd-b, subject: argocd, resource: g-tenant-b, level: admin, via: [crb-argocd]}
+
+  # AWS organization (P4)
+  - {id: g-root-aws-mgmt, subject: root, resource: aws-account-mgmt, level: breakglass, via: [aws-root], status: planned, target: P4}
+  - {id: g-infra-aws-workloads, subject: grp-infra, resource: aws-account-workloads, level: admin, status: planned, target: P4}
+  - {id: g-auditor-aws-logs, subject: grp-auditor, resource: aws-account-logs, level: read, status: planned, target: P4}
+  - {id: g-auditor-aws-workloads, subject: grp-auditor, resource: aws-account-workloads, level: read, status: planned, target: P4}
+  - {id: g-auditor-keycloak, subject: grp-auditor, resource: keycloak, level: read, scope: events, status: planned, target: P3}
+  - {id: g-finops-aws-mgmt, subject: grp-finops, resource: aws-account-mgmt, level: read, scope: billing, status: planned, target: P4}
