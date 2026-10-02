@@ -16,16 +16,16 @@
         <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:13px&quot;&gt;One row per identity, one column per resource by access plane. A cell shows the level after the plan, and what the plan changed to get there.&lt;/font&gt;&lt;br&gt;Read a row: everything an identity can do. Read a column: who can touch a resource. A workload column touched by another project&amp;#39;s identity is a leak.&lt;br&gt;Not verified: the policy of the CMP&amp;#39;s Vault token (drawn as the root token, the worst case) and the scope of its Cloudflare token (G15, G16). Plan phases: P1 root accounts, P2 CMP rights, P3 tenant isolation, P4 cloud accounts.&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#475569;" vertex="1" parent="1">
           <mxGeometry x="64" y="74" width="1994" height="80" as="geometry" />
         </mxCell>
-        <mxCell id="mx-frame0" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=#4f46e5;fillOpacity=4;strokeColor=#4f46e5;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
+        <mxCell id="mx-frame0" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=none;strokeColor=#4f46e5;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
           <mxGeometry x="297" y="163" width="226" height="856" as="geometry" />
         </mxCell>
-        <mxCell id="mx-frame1" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=#0891b2;fillOpacity=4;strokeColor=#0891b2;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
+        <mxCell id="mx-frame1" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=none;strokeColor=#0891b2;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
           <mxGeometry x="529" y="163" width="658" height="856" as="geometry" />
         </mxCell>
-        <mxCell id="mx-frame2" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=#64748b;fillOpacity=4;strokeColor=#64748b;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
+        <mxCell id="mx-frame2" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=none;strokeColor=#64748b;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
           <mxGeometry x="1193" y="163" width="658" height="856" as="geometry" />
         </mxCell>
-        <mxCell id="mx-frame3" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=#0284c7;fillOpacity=4;strokeColor=#0284c7;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
+        <mxCell id="mx-frame3" value="" style="rounded=1;absoluteArcSize=1;arcSize=10;fillColor=none;strokeColor=#0284c7;strokeWidth=1.2;dashed=1;dashPattern=4 4;movable=0;" vertex="1" parent="1">
           <mxGeometry x="1857" y="163" width="334" height="856" as="geometry" />
         </mxCell>
         <mxCell id="mx-legend-card" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#64748b&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Legend&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
