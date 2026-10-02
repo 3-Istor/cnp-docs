@@ -153,6 +153,13 @@ elements:
   - {id: aws-root, kind: cloud, parent: z-aws-shared, icon: k8s-secret, title: Management root, tech: "[AWS root user]", desc: "MFA, no access key", status: planned, target: P4}
   - {id: aws-role, kind: cloud, parent: z-aws-shared, icon: terraform, title: tfstate role, tech: "[IAM role via Vault]", desc: Assumed for 1 hour, status: planned, target: P4}
   - {id: tfstate, kind: cloud, parent: z-aws-shared, shape: cylinder, icon: terraform, title: Terraform state, tech: "[S3 + DynamoDB]", desc: Every project's state}
+  - {id: gh-owner, kind: external, parent: z-github, icon: github, title: Org owner, tech: "[GitHub role]", desc: Full control of the org}
+  - {id: gh-base, kind: external, parent: z-github, icon: github, title: Member write, tech: "[GitHub permission]", desc: "Push to main, no protection"}
+  - {id: gh-ruleset, kind: external, parent: z-github, icon: github, title: main ruleset, tech: "[GitHub ruleset]", desc: "PR, 1 review, CODEOWNERS", status: planned, target: P3}
+  - {id: gh-project-repos, kind: external, parent: z-github, icon: github, title: App repos, tech: "[GitHub · one per project]", desc: Created by the CMP from templates}
+  - {id: grp-infra-elevated, kind: security, parent: g-identity, icon: keycloak, title: infra-elevated, tech: "[Keycloak group · JIT]", desc: "Granted on request, 1 hour", status: planned, target: P3}
+  - {id: policy-vault-data, kind: database, parent: g-secrets, icon: vault, title: vault_data_admin, tech: "[Vault policy]", desc: "project-*/*, audited", status: planned, target: P3}
+  - {id: audit-logs, kind: database, parent: g-ops, shape: cylinder, icon: grafana-alloy, title: Audit logs, tech: "[Loki · append-only]", desc: "Vault, K3s, Keycloak, Argo CD", status: planned, target: P1}
   - {id: grp-k3s-admin, kind: security, parent: g-identity, icon: keycloak, title: k3s-admin, tech: "[Keycloak group]", desc: kubectl cluster-admin over OIDC}
   - {id: crb-admin, kind: security, parent: g-rbac, icon: k8s-crd, title: oidc-admin-binding, tech: "[ClusterRoleBinding]", desc: "k3s-admin: cluster-admin"}
   - {id: crb-argocd, kind: security, parent: g-rbac, icon: k8s-crd, title: argocd-application-controller, tech: "[ClusterRoleBinding]", desc: Argo CD deploys anywhere}
@@ -237,6 +244,7 @@ annotations:
   - {id: G13, severity: medium, title: "Secret operator", targets: [a-secret-op, b-secret-op]}
   - {id: G14, severity: medium, title: "Per-project edge off", targets: [a-gateway]}
   - {id: G15, severity: high, title: "CMP Vault token", text: "The CMP's VAULT_TOKEN comes from kvv2/arcl-cmp; its policy was not checked. Drawn as the root token, the worst case.", targets: [vault-root-token]}
+  - {id: G17, severity: high, title: "GitOps write", text: "main is unprotected on K3s, cnp-projects, cnp-project-base, app-templates and CMP (checked 2026-10-02); the members' base permission was not checked. Whoever pushes to the GitOps repos deploys anywhere through Argo CD.", targets: [gh-base]}
   - {id: G16, severity: medium, title: "Cloudflare token scope", text: "CLOUDFLARE_API_TOKEN scope was not checked. Drawn as write on the zone and tunnels.", targets: [cf-token]}
 
 # Who may act on what, today and after the segregation plan. deprecated: the plan removes
@@ -257,8 +265,8 @@ grants:
   # Platform admins
   - {id: g-infra-vault-sys, subject: grp-infra, resource: vault-sys, level: admin, via: [policy-vault-admin]}
   - {id: g-infra-vault-kvv2, subject: grp-infra, resource: vault-kvv2, level: admin, via: [policy-vault-admin]}
-  - {id: g-infra-vault-a, subject: grp-infra, resource: vault-a, level: admin, via: [policy-vault-admin]}
-  - {id: g-infra-vault-b, subject: grp-infra, resource: vault-b, level: admin, via: [policy-vault-admin]}
+  - {id: g-infra-vault-a, subject: grp-infra, resource: vault-a, level: admin, via: [policy-vault-admin], status: deprecated, target: P3}
+  - {id: g-infra-vault-b, subject: grp-infra, resource: vault-b, level: admin, via: [policy-vault-admin], status: deprecated, target: P3}
   - {id: g-infra-apps-platform, subject: grp-infra, resource: apps-platform, level: admin, via: [argocd-admin]}
   - {id: g-infra-apps-a, subject: grp-infra, resource: apps-a, level: admin, via: [argocd-admin]}
   - {id: g-infra-apps-b, subject: grp-infra, resource: apps-b, level: admin, via: [argocd-admin]}
@@ -303,7 +311,8 @@ grants:
   - {id: g-cmp-realm, subject: cmp-backend, resource: keycloak, level: admin, via: [kc-master-admin], auth: {method: password}, status: deprecated, target: P2}
   - {id: g-cmp-tfstate, subject: cmp-backend, resource: tfstate, level: admin, via: [aws-key], auth: {method: access-key}, status: deprecated, target: P4}
   - {id: g-cmp-cf, subject: cmp-backend, resource: cf-edge, level: write, via: [cf-token], auth: {method: static-token}, status: deprecated, target: P2}
-  - {id: g-cmp-gh, subject: cmp-backend, resource: github, level: write, scope: project repos, via: [github-app], auth: {method: federated, lifetime: 1h}}
+  - {id: g-cmp-gh, subject: cmp-backend, resource: github, level: write, scope: project records, via: [github-app], auth: {method: federated, lifetime: 1h}}
+  - {id: g-cmp-gh-repos, subject: cmp-backend, resource: gh-project-repos, level: write, scope: creates them, via: [github-app], auth: {method: federated, lifetime: 1h}}
   # CMP, target
   - {id: g-cmp-new-vault-sys, subject: role-cmp, resource: vault-sys, level: write, scope: "project-* mounts, policies, roles", via: [policy-cmp], status: planned, target: P2}
   - {id: g-cmp-new-vault-a, subject: role-cmp, resource: vault-a, level: write, scope: "project-*", via: [policy-cmp], status: planned, target: P2}
@@ -337,3 +346,24 @@ grants:
   - {id: g-auditor-aws-workloads, subject: grp-auditor, resource: aws-account-workloads, level: read, status: planned, target: P4}
   - {id: g-auditor-keycloak, subject: grp-auditor, resource: keycloak, level: read, scope: events, status: planned, target: P3}
   - {id: g-finops-aws-mgmt, subject: grp-finops, resource: aws-account-mgmt, level: read, scope: billing, status: planned, target: P4}
+
+  # Platform admins manage the platform; tenant data only through a time-bound elevation
+  - {id: g-elevated-vault-a, subject: grp-infra-elevated, resource: vault-a, level: admin, via: [policy-vault-data], status: planned, target: P3}
+  - {id: g-elevated-vault-b, subject: grp-infra-elevated, resource: vault-b, level: admin, via: [policy-vault-data], status: planned, target: P3}
+
+  # GitOps repos: writing them deploys anywhere, so they are guarded like the cluster
+  - {id: g-admin-gh-owner, subject: admin, resource: github, level: admin, via: [gh-owner], status: deprecated, target: P1}
+  - {id: g-root-gh-owner, subject: root, resource: github, level: breakglass, via: [gh-owner], status: planned, target: P1}
+  - {id: g-member-gh-push, subject: grp-member, resource: github, level: write, via: [gh-base], status: deprecated, target: P3}
+  - {id: g-infra-gh-pr, subject: grp-infra, resource: github, level: write, scope: through reviewed PRs, via: [gh-ruleset], status: planned, target: P3}
+  - {id: g-a-admins-gh-repos, subject: grp-a-admins, resource: gh-project-repos, level: write, scope: project A repos}
+  - {id: g-a-members-gh-repos, subject: grp-a-members, resource: gh-project-repos, level: write, scope: project A repos}
+
+  # Cloudflare account
+  - {id: g-admin-cf, subject: admin, resource: cf-edge, level: admin, status: deprecated, target: P1}
+  - {id: g-root-cf, subject: root, resource: cf-edge, level: breakglass, status: planned, target: P1}
+
+  # Audit trail: everyone who administers reads it, nobody but break-glass deletes it
+  - {id: g-infra-audit, subject: grp-infra, resource: audit-logs, level: read, status: planned, target: P1}
+  - {id: g-auditor-audit, subject: grp-auditor, resource: audit-logs, level: read, status: planned, target: P3}
+  - {id: g-root-audit, subject: root, resource: audit-logs, level: breakglass, status: planned, target: P1}
