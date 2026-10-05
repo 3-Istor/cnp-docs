@@ -10,7 +10,7 @@ meta:
 state: diff
 identities:
   - {title: Break-glass, items: [root]}
-  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, grp-infra-elevated, auditor, finops, grp-member, grp-a-admins, dev-a, grp-k3s-dev]}
+  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, grp-infra-elevated, auditor, finops, grp-member, admin-a, dev-a, grp-k3s-dev]}
   - {title: Service accounts, items: [cmp-backend, vso, argocd]}
 resources:
   - {title: Control plane, sub: identity and rules, color: indigo, items: [keycloak, vault-sys, audit-logs]}
@@ -38,10 +38,10 @@ labels:
   aws-account-logs: "log-archive"
   aws-account-workloads: "workloads"
   root: Root accounts
-  grp-a-admins: Project A admins
+  admin-a: Project A admin
   dev-a: Project A developer
   grp-infra-elevated: Platform admin, elevated
   grp-member: All team members
-  grp-k3s-dev: k3s-dev members
+  grp-k3s-dev: k3s-dev, k3s-view members
   cmp-backend: CMP backend
   argocd: Argo CD controller

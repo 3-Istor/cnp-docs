@@ -111,11 +111,12 @@ elements:
   - {id: z-aws-shared, kind: region, color: orange, icon: globe, title: "AWS", sub: "organization from P4 · not set up yet"}
   - {id: admin, kind: frontend, parent: z-team, shape: actor, icon: user, title: Platform admin, desc: groups infra and member}
   - {id: dev-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> dev", desc: groups member and project-a}
+  - {id: admin-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> admin", desc: "groups member, project-a, its admins"}
   - {id: auditor, kind: frontend, parent: z-team, shape: actor, icon: user, title: Auditor, desc: security review, status: planned, target: P3}
   - {id: root, kind: external, parent: z-team, shape: actor, icon: user, title: Root accounts, desc: holder of the root credentials}
   - {id: grp-infra, kind: security, parent: g-identity, icon: keycloak, title: infra, tech: "[Keycloak group]", desc: Platform admins}
   - {id: grp-member, kind: security, parent: g-identity, icon: keycloak, title: member, tech: "[Keycloak group]", desc: Every team member}
-  - {id: grp-k3s-dev, kind: security, parent: g-identity, icon: keycloak, title: k3s-dev, tech: "[Keycloak group]", desc: Cluster-wide kubectl view}
+  - {id: grp-k3s-dev, kind: security, parent: g-identity, icon: keycloak, title: "k3s-dev, k3s-view", tech: "[Keycloak groups]", desc: Cluster-wide kubectl view}
   - {id: grp-a-members, kind: security, parent: g-identity, icon: keycloak, title: "project-<a>-members", tech: "[Keycloak group]", desc: Made by project-bootstrap}
   - {id: grp-a-admins, kind: security, parent: g-identity, icon: keycloak, title: "project-<a>-admins", tech: "[Keycloak group]", desc: Made by project-bootstrap}
   - {id: grp-auditor, kind: security, parent: g-identity, icon: keycloak, title: security-auditor, tech: "[Keycloak group]", desc: Reads everything, status: planned, target: P3}
@@ -255,6 +256,9 @@ memberships:
   - {id: m-admin-member, subject: admin, group: grp-member, auth: {method: oidc, mfa: true}}
   - {id: m-dev-member, subject: dev-a, group: grp-member, auth: {method: oidc, mfa: true}}
   - {id: m-dev-a, subject: dev-a, group: grp-a-members, auth: {method: oidc, mfa: true}}
+  - {id: m-admin-a-member, subject: admin-a, group: grp-member, auth: {method: oidc, mfa: true}}
+  - {id: m-admin-a-members, subject: admin-a, group: grp-a-members, auth: {method: oidc, mfa: true}}
+  - {id: m-admin-a-admins, subject: admin-a, group: grp-a-admins, auth: {method: oidc, mfa: true}}
   - {id: m-auditor, subject: auditor, group: grp-auditor, auth: {method: oidc, mfa: true}, status: planned, target: P3}
   - {id: m-vso, subject: vso, group: role-vso, auth: {method: k8s-sa, lifetime: 24h}}
   - {id: m-cmp-role, subject: cmp-backend, group: role-cmp, auth: {method: k8s-sa, lifetime: 1h}, status: planned, target: P2}
@@ -293,9 +297,13 @@ grants:
   - {id: g-a-admins-ns, subject: grp-a-admins, resource: g-tenant-a, level: write, via: [rb-a-edit], status: planned, target: P3}
 
   # Security auditor
-  - {id: g-auditor-vault, subject: grp-auditor, resource: vault-sys, level: read, scope: audit log, status: planned, target: P3}
+  - {id: g-auditor-vault, subject: grp-auditor, resource: vault-sys, level: read, scope: "policies, auth roles", status: planned, target: P3}
   - {id: g-auditor-apps, subject: grp-auditor, resource: apps-platform, level: read, status: planned, target: P3}
+  - {id: g-auditor-apps-a, subject: grp-auditor, resource: apps-a, level: read, status: planned, target: P3}
+  - {id: g-auditor-apps-b, subject: grp-auditor, resource: apps-b, level: read, status: planned, target: P3}
   - {id: g-auditor-ns, subject: grp-auditor, resource: kube-apiserver, level: read, status: planned, target: P3}
+  - {id: g-auditor-ns-a, subject: grp-auditor, resource: g-tenant-a, level: read, status: planned, target: P3}
+  - {id: g-auditor-ns-b, subject: grp-auditor, resource: g-tenant-b, level: read, status: planned, target: P3}
   - {id: g-auditor-tfstate, subject: grp-auditor, resource: tfstate, level: read, status: planned, target: P4}
 
   # vault-secrets-operator: one identity reads every project's secrets, by design
@@ -323,9 +331,15 @@ grants:
 
   # Root accounts: used daily today, break-glass only after P1 and P4
   - {id: g-root-vault, subject: root, resource: vault-sys, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
+  - {id: g-root-vault-kvv2, subject: root, resource: vault-kvv2, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
+  - {id: g-root-vault-a, subject: root, resource: vault-a, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
+  - {id: g-root-vault-b, subject: root, resource: vault-b, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
   - {id: g-root-realm, subject: root, resource: keycloak, level: admin, via: [kc-master-admin], auth: {method: password}, status: deprecated, target: P1}
   - {id: g-root-tfstate, subject: root, resource: tfstate, level: admin, via: [aws-key], auth: {method: access-key}, status: deprecated, target: P4}
   - {id: g-root-vault-bg, subject: root, resource: vault-sys, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
+  - {id: g-root-vault-kvv2-bg, subject: root, resource: vault-kvv2, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
+  - {id: g-root-vault-a-bg, subject: root, resource: vault-a, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
+  - {id: g-root-vault-b-bg, subject: root, resource: vault-b, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
   - {id: g-root-realm-bg, subject: root, resource: keycloak, level: breakglass, via: [kc-master-admin], status: planned, target: P1}
   - {id: g-root-tfstate-bg, subject: root, resource: tfstate, level: breakglass, via: [aws-root], auth: {method: password, mfa: true}, status: planned, target: P4}
 
