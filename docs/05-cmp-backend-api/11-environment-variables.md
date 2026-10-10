@@ -35,7 +35,6 @@ Le tableau ci-dessous regroupe toutes les variables d'environnement utilisées d
 | **`CLOUDFLARE_ACCOUNT_ID`** | Backend (FastAPI) | `String` | **Requise** | Identifiant de compte Cloudflare hébergeant les tunnels de routage `cloudflared`. |
 | **`TF_BACKEND_S3_ENABLED`** | Backend (FastAPI) | `Boolean` | Optionnelle | Indique si le stockage distant de l'état Terraform (Micro-State) doit s'effectuer à distance sur AWS S3. (Défaut : `false`). |
 | **`TF_BACKEND_S3_BUCKET`** | Backend (FastAPI) | `String` | **Requise** (si S3 actif) | Nom du bucket AWS S3 hébergeant les fichiers d'état `.tfstate` du CMP. |
-| **`TF_BACKEND_S3_DYNAMODB_TABLE`** | Backend (FastAPI) | `String` | **Requise** (si S3 actif) | Nom de la table DynamoDB de verrouillage d'état concurrent pour Terraform. |
 | **`TF_BACKEND_AWS_REGION`** | Backend (FastAPI) | `String` | **Requise** (si S3 actif) | Région AWS hébergeant le bucket S3 et la table DynamoDB de verrouillage d'état. |
 | **`PYTHONUNBUFFERED`** | Backend (Docker) | `Boolean` (`0`/`1`) | Optionnelle | Désactive la mise en mémoire tampon de la sortie standard de Python, pour un affichage direct des logs de conteneur. (Défaut : `1`). |
 | **`PYTHONPATH`** | Backend (Local) | `String` | Optionnelle | Configure le chemin de recherche des modules Python dans l'environnement local (ex: `$PYTHONPATH:.`). |
