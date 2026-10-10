@@ -819,6 +819,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#archive-immuable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archive immuable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requetes-utiles" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2175,6 +2186,17 @@
 </li>
       
         <li class="md-nav__item">
+  <a href="#archive-immuable" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Archive immuable
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#requetes-utiles" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2253,6 +2275,7 @@
 </tr>
 </tbody>
 </table>
+<p>Chaque heure d'audit Kubernetes, Vault et Keycloak est en plus copiée dans un bucket verrouillé 30 jours (voir <a href="#archive-immuable">Archive immuable</a>).</p>
 <pre class="mermaid"><code>flowchart LR
   api[kube-apiserver&lt;br/&gt;audit.log] --&gt;|loki.source.file| alloy[Alloy]
   vault[Vault&lt;br/&gt;audit stdout] --&gt;|logs du pod| alloy
@@ -2510,6 +2533,24 @@ des règles qu'elle doit court-circuiter.</p>
 <li>les namespaces <code>vault</code> et <code>keycloak</code> sont à 30 jours, ainsi que l'audit Kubernetes.</li>
 </ul>
 <p>Toute autre valeur retombe sur 14 jours, pour garder le label à faible cardinalité.</p>
+<h2 id="archive-immuable">Archive immuable<a class="headerlink" href="#archive-immuable" title="Permanent link">&para;</a></h2>
+<p>Le CronJob <code>observability/audit-archive</code> tourne à la minute 7 de chaque heure :</p>
+<ol>
+<li><code>logcli</code> exporte l'heure précédente depuis Loki : <code>{job="k8s-audit"}</code>, les réponses Vault, les events Keycloak. L'export lit par lots de 1 000 lignes, car 5 000 events d'audit dépassent la taille des messages gRPC internes de Loki.</li>
+<li><code>aws-cli</code> envoie les fichiers gzip dans le bucket RGW <code>cnp-audit-archive</code>, sous <code>audit/&lt;source&gt;/AAAA/MM/JJ/HH.jsonl.gz</code>.</li>
+<li>Le bucket a l'Object Lock en mode COMPLIANCE, 30 jours : ni supprimer une version ni raccourcir sa rétention n'est possible, même avec la permission de contournement.</li>
+<li>L'utilisateur RGW vient d'un <code>CephObjectStoreUser</code> Rook, dont le secret <code>rook-ceph-object-user-openstack-rgw-audit-archive</code> est monté dans le job.</li>
+<li>Un passage en échec déclenche l'alerte vmalert <code>AuditArchiveFailed</code>.</li>
+</ol>
+<div class="admonition warning">
+<p class="admonition-title">Limite</p>
+<p>L'Object Lock protège contre quiconque n'a que des accès S3 ou Kubernetes. Un admin Ceph
+sur les nœuds OpenStack peut toujours effacer le bucket avec <code>radosgw-admin</code>. Une vraie
+immuabilité demande une copie hors de notre contrôle, par exemple un bucket S3 AWS avec
+Object Lock dans un compte dédié.</p>
+</div>
+<p>Relancer une heure à la main : <code>kubectl -n observability create job audit-archive-manual --from=cronjob/audit-archive</code>.
+Ré-envoyer une heure déjà archivée crée une nouvelle version ; l'ancienne reste verrouillée.</p>
 <h2 id="requetes-utiles">Requêtes utiles<a class="headerlink" href="#requetes-utiles" title="Permanent link">&para;</a></h2>
 <div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a># Qui a ouvert un shell, et où
 </span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>{job="k8s-audit"} |= `"subresource":"exec"` | json | line_format "{{.user_username}} {{.objectRef_namespace}}/{{.objectRef_name}} {{.requestURI}}"
