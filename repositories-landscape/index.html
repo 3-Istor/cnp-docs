@@ -1,0 +1,3704 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation technique et d'architecture de la Cloud Native Platform">
+      
+      
+        <meta name="author" content="3-Istor Team">
+      
+      
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.7">
+    
+    
+      
+        <title>Cartographie des dépôts et workflows CNP - Cloud Native Platform (CNP) Docs ⚡</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.ec1eaa64.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#cartographie-des-depots-et-workflows-cnp" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href=".." title="Cloud Native Platform (CNP) Docs ⚡" class="md-header__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cloud Native Platform (CNP) Docs ⚡
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Cartographie des dépôts et workflows CNP
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passer au mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passer au mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../developer-onboarding-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Guide Développeur
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../README_ROADMAP/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../01-architecture/01-system-overview/" class="md-tabs__link">
+          
+  
+  
+  1. Architecture & Topologies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../02-core-components/01-cmp-dashboard/" class="md-tabs__link">
+          
+  
+  
+  2. Composants Clés
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-tabs__link">
+          
+  
+  
+  3. Pipelines & Workflows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../04-templates/00-github-repositories-landscape.md" class="md-tabs__link">
+          
+  
+  
+  4. Modèles & Templates
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../05-cmp-backend-api/00-global-api-standards/" class="md-tabs__link">
+          
+  
+  
+  5. Spécifications API CMP
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../06-multicloud/00-index/" class="md-tabs__link">
+          
+  
+  
+  6. Chantier Multicloud
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Cloud Native Platform (CNP) Docs ⚡" class="md-nav__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    Cloud Native Platform (CNP) Docs ⚡
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../developer-onboarding-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide Développeur
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../README_ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Architecture & Topologies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1. Architecture & Topologies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-architecture/01-system-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble du système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-architecture/02-tenancy-and-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-tenancerie & Isolation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-architecture/03-network-topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topologie Réseau & Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-architecture/04-disaster-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan de Reprise d'Activité (PRA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-architecture/05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-architecture/06-audit-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Journaux d'audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Composants Clés
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2. Composants Clés
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-core-components/01-cmp-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Portail & Dashboard CMP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-core-components/02-identity-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identités & Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-core-components/03-secrets-vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets & HashiCorp Vault
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-core-components/04-gitops-argocd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synchronisation GitOps ArgoCD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-core-components/05-github-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intégration GitHub App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-core-components/06-database-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schéma Base de Données
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../02-core-components/07-frontend-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Frontend (Next.js)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Pipelines & Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3. Pipelines & Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisioning Day-0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-pipelines-and-workflows/02-ci-cd-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines de CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-pipelines-and-workflows/03-developer-configuration-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Développeur (cnp.yaml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-pipelines-and-workflows/04-system-flows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrammes de Flux Système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-pipelines-and-workflows/05-testing-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stratégie de Test & Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Modèles & Templates
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    4. Modèles & Templates
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-templates/00-github-repositories-landscape.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dépôts GitHub & Cartographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-templates/01-git-app-templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modèles d'Applications (Git)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-templates/02-helm-generic-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart Helm Umbrella Générique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-templates/03-terraform-provisioner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisionneur Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Spécifications API CMP
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    5. Spécifications API CMP
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/00-global-api-standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standards Globaux & Sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/01-cmp-deployment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Déploiement (Contracts)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/02-cmp-phase3-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Évolutions de Phase 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/03-cmp-frontend-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide d'Intégration Frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/04-cmp-projects-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Projets & RBAC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/05-cmp-catalog-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/06-cmp-infra-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Infrastructure & Santé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/07-cmp-account-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Compte & Liaison GitHub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/08-cmp-local-development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spécification Dev Local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/09-cmp-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conteneurisation & Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/10-cmp-onboarding-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbook d'Onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/11-environment-variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tableau des Variables d'Env
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Chantier Multicloud
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    6. Chantier Multicloud
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-multicloud/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-multicloud/01-invariants-et-perimetre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Invariants & Périmètre
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-multicloud/02-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décisions D-01 à D-13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-multicloud/03-contrat-equipe-cluster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contrat Équipe Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-multicloud/04-chantiers-et-sequencement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chantiers & Séquencement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-multicloud/05-nettoyage-et-decommissionnement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nettoyage & Décommissionnement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#vue-densemble" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Vue d’ensemble
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#schema-des-echanges-inter-repo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Schéma des échanges inter-repo
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#fiches-des-depots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fiches des dépôts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Fiches des dépôts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#cmp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CMP
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CMP">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Cloud
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Cloud">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#k3s" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        K3s
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="K3s">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#app-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        app-templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="app-templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_3" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cnp-docs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cnp-docs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cnp-docs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_4" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cnp-projects" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        cnp-projects
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="cnp-projects">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_5" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#extern-project-analyzer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        extern-project-analyzer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="extern-project-analyzer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_6" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#infra-templates" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        infra-templates
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="infra-templates">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_7" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-app-webapp-python-fastapi-react" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template-app-webapp-python-fastapi-react
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="template-app-webapp-python-fastapi-react">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_8" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#template-html-css" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        template-html-css
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="template-html-css">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_9" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#test-import" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        test-import
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="test-import">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#role_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Rôle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#technologies_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Technologies
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#entrees_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Entrées
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sorties-et-consommateurs_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#documentation-cnp_10" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Documentation CNP
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#workflows-entre-depots" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Workflows entre dépôts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Workflows entre dépôts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-preparer-le-socle" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Préparer le socle
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-provisionner-un-projet-puis-une-application" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Provisionner un projet puis une application
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-generer-et-synchroniser-les-ressources-gitops" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Générer et synchroniser les ressources GitOps
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-construire-et-livrer-les-images" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Construire et livrer les images
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#5-analyser-un-depot-externe" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Analyser un dépôt externe
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#6-maintenir-et-publier-la-documentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Maintenir et publier la documentation
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#liens-vers-les-documents-detailles" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Liens vers les documents détaillés
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="cartographie-des-depots-et-workflows-cnp">Cartographie des dépôts et workflows CNP<a class="headerlink" href="#cartographie-des-depots-et-workflows-cnp" title="Permanent link">&para;</a></h1>
+<p>Cette page centralise l’architecture Git et les échanges entre les <strong>11 dépôts locaux</strong> de la CNP, inspectés le <strong>6 octobre 2026</strong>. Les noms correspondent aux dépôts GitHub <code>3-Istor</code> ; <code>CMP</code> conserve des noms techniques historiques <code>arcl-cmp</code> pour certains charts, ressources et packages.</p>
+<p>Les descriptions proviennent du code, des configurations et des pipelines locaux. Elles ne vérifient ni l’état des dépôts distants, ni l’exécution des pipelines, ni l’état en production. Les références à des composants absents et les évolutions prévues sont signalées explicitement.</p>
+<h2 id="vue-densemble">Vue d’ensemble<a class="headerlink" href="#vue-densemble" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Dépôt</th>
+<th>Rôle</th>
+<th>Principaux échanges</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="#cmp">CMP</a></td>
+<td>Portail et orchestration de la plateforme</td>
+<td>Consomme le catalogue Terraform ; écrit le registre et initialise les applications.</td>
+</tr>
+<tr>
+<td><a href="#cloud">Cloud</a></td>
+<td>Socle physique, OpenStack, VPN et cloud</td>
+<td>Prépare les ressources cloud, le réseau et les accès utilisés par la plateforme.</td>
+</tr>
+<tr>
+<td><a href="#k3s">K3s</a></td>
+<td>Configuration GitOps et services du cluster</td>
+<td>Lit le registre, les charts et les valeurs applicatives via Argo CD.</td>
+</tr>
+<tr>
+<td><a href="#app-templates">app-templates</a></td>
+<td>Catalogue Terraform de provisioning</td>
+<td>Fournit les plans Terraform à CMP et initialise les dépôts depuis les templates GitHub.</td>
+</tr>
+<tr>
+<td><a href="#cnp-docs">cnp-docs</a></td>
+<td>Documentation et cartographie centrales</td>
+<td>Centralise les contrats et workflows ; sous-module déclaré dans CMP.</td>
+</tr>
+<tr>
+<td><a href="#cnp-projects">cnp-projects</a></td>
+<td>Registre Git des projets et applications</td>
+<td>Reçoit les écritures CMP ; fournit les ProjectRecord aux ApplicationSet.</td>
+</tr>
+<tr>
+<td><a href="#extern-project-analyzer">extern-project-analyzer</a></td>
+<td>Analyse statique de dépôts externes</td>
+<td>Reçoit une URL GitHub ; retourne un rapport JSON au client appelant.</td>
+</tr>
+<tr>
+<td><a href="#infra-templates">infra-templates</a></td>
+<td>Chart Helm générique des applications</td>
+<td>Reçoit les valeurs applicatives au rendu ; fournit les manifests Helm à Argo CD.</td>
+</tr>
+<tr>
+<td><a href="#template-app-webapp-python-fastapi-react">template-app-webapp-python-fastapi-react</a></td>
+<td>Modèle applicatif FastAPI et React</td>
+<td>Fournit une base fullstack, deux images et deux fichiers de valeurs.</td>
+</tr>
+<tr>
+<td><a href="#template-html-css">template-html-css</a></td>
+<td>Modèle applicatif HTML/CSS</td>
+<td>Fournit une base statique, une image et un fichier de valeurs.</td>
+</tr>
+<tr>
+<td><a href="#test-import">test-import</a></td>
+<td>Application statique de test</td>
+<td>Produit une image statique de test ; consommateur GitOps non établi.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="schema-des-echanges-inter-repo">Schéma des échanges inter-repo<a class="headerlink" href="#schema-des-echanges-inter-repo" title="Permanent link">&para;</a></h2>
+<p>Une flèche va du <strong>fournisseur vers le consommateur</strong> : son libellé indique ce qui est transmis. Une écriture va donc de son auteur vers le dépôt modifié. Les blocs « Argo CD » et « dépôts applicatifs créés » représentent des intermédiaires, pas des dépôts supplémentaires inventoriés. Le groupe autonome indique les deux dépôts dont aucun consommateur CNP n’est établi.</p>
+<ul>
+<li>Flèche pleine : échange technique configuré dans le code ou les manifests.</li>
+<li>Flèche pointillée : relation documentaire, explicitement libellée.</li>
+<li>Flèche épaisse : prérequis d’infrastructure fourni par Cloud, sans automatisation inter-repo établie.</li>
+<li><code>cnp-project-base</code> : dépendance Git référencée mais absente localement ; son contenu n’a pas été audité.</li>
+</ul>
+<pre class="mermaid"><code>%%{init: {"flowchart": {"nodeSpacing": 20, "rankSpacing": 40}}}%%
+flowchart TB
+    Cloud["Cloud"] ==&gt;|"Socle et accès"| CMP["CMP"]
+    Cloud ==&gt;|"Cluster et réseau"| K3s["K3s"]
+    Plans["app-templates"] --&gt;|"Plans Terraform"| CMP
+    Docs["cnp-docs"] -.-&gt;|"Documentation&lt;br/&gt;en sous-module"| CMP
+    CMP --&gt;|"Création et valeurs&lt;br/&gt;via Terraform"| Apps["Dépôts applicatifs&lt;br/&gt;créés"]
+    CMP --&gt;|"Commits du registre"| Registry["cnp-projects"]
+    CMP --&gt;|"Images et chart&lt;br/&gt;via GHCR"| K3s
+    Static["template-html-css"] --&gt;|"Copie GitHub"| Apps
+    Fullstack["template-app-webapp-&lt;br/&gt;python-fastapi-react"] --&gt;|"Copie GitHub"| Apps
+    K3s --&gt;|"Déclare les&lt;br/&gt;ApplicationSet"| Argo["Argo CD"]
+    Registry --&gt;|"Projets et applications"| Argo
+    Apps --&gt;|"Valeurs deploy/*.yaml"| Argo
+    Infra["infra-templates"] --&gt;|"Chart applicatif"| Argo
+    Base["cnp-project-base&lt;br/&gt;absent localement"] --&gt;|"Chart de projet&lt;br/&gt;référencé"| Argo
+    subgraph Independent["Dépôts autonomes"]
+        Analyzer["extern-project-analyzer&lt;br/&gt;URL GitHub → rapport JSON au client"]
+        Test["test-import&lt;br/&gt;Site statique → image GHCR"]
+    end</code></pre>
+<p>La copie des templates et l’écriture des valeurs sont réalisées par les plans de <code>app-templates</code> exécutés dans CMP. Argo CD est un service configuré par <code>K3s</code> : les lectures de <code>cnp-projects</code>, <code>infra-templates</code> et des dépôts applicatifs passent par lui.</p>
+<p><code>test-import</code> publie une image par sa CI ; son déploiement CNP n’est pas établi. Aucun appel de CMP à l’analyseur externe n’a été trouvé. Les relations documentaires indiquent le rôle de <code>cnp-docs</code>, sans suggérer un échange de données à l’exécution.</p>
+<h2 id="fiches-des-depots">Fiches des dépôts<a class="headerlink" href="#fiches-des-depots" title="Permanent link">&para;</a></h2>
+<h3 id="cmp">CMP<a class="headerlink" href="#cmp" title="Permanent link">&para;</a></h3>
+<h4 id="role">Rôle<a class="headerlink" href="#role" title="Permanent link">&para;</a></h4>
+<p>Portail de gestion de la CNP : catalogue, projets, déploiements et suivi des ressources. Le backend orchestre Terraform et publie les projets et applications dans le registre Git ; le frontend expose ces opérations aux utilisateurs.</p>
+<h4 id="technologies">Technologies<a class="headerlink" href="#technologies" title="Permanent link">&para;</a></h4>
+<p>Python 3.12+, FastAPI, SQLAlchemy/Alembic ; TypeScript, Next.js 16, React 19, Tailwind CSS ; Terraform, Docker, Helm et GitHub Actions.</p>
+<h4 id="entrees">Entrées<a class="headerlink" href="#entrees" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>app-templates</td>
+<td>Clone Git du catalogue : <code>templates/*/manifest.json</code>, modules et configurations Terraform.</td>
+</tr>
+<tr>
+<td>cnp-projects</td>
+<td>Lecture des <code>registry/projects/*.yaml</code> via la GitHub App avant mise à jour du registre.</td>
+</tr>
+<tr>
+<td>Services de plateforme</td>
+<td>Identité Keycloak, secrets Vault, API GitHub, Cloudflare et fournisseurs cloud ; paramètres de déploiement saisis par les utilisateurs.</td>
+</tr>
+<tr>
+<td>cnp-docs</td>
+<td>Documentation déclarée comme sous-module dans <code>.kiro/steering/docs</code> pour les développeurs et assistants.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cnp-projects</td>
+<td>Création et mise à jour des ProjectRecord et de leur liste d’applications par commits via la GitHub App.</td>
+</tr>
+<tr>
+<td>Dépôts applicatifs</td>
+<td>Création et configuration via les templates Terraform exécutés : sources initiales et valeurs <code>deploy/*.yaml</code>.</td>
+</tr>
+<tr>
+<td>K3s / opérateurs</td>
+<td>Images backend/frontend et chart <code>arcl-cmp</code> publiés dans GHCR ; consommés par la configuration GitOps de K3s.</td>
+</tr>
+<tr>
+<td>Utilisateurs / clients API</td>
+<td>API HTTP, interface web, état des opérations, URL et outputs Terraform.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp">Documentation CNP<a class="headerlink" href="#documentation-cnp" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/CMP/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/services/template_repository.py">backend/app/services/template_repository.py</a>, <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/services/project_registry.py">backend/app/services/project_registry.py</a>, <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/services/terraform_orchestrator.py">backend/app/services/terraform_orchestrator.py</a>, <a href="https://github.com/3-Istor/CMP/blob/main/.gitmodules">.gitmodules</a>, <a href="https://github.com/3-Istor/CMP/blob/main/.github/workflows/build-and-push.yml">.github/workflows/build-and-push.yml</a>, <a href="https://github.com/3-Istor/CMP/blob/main/.github/workflows/helm-release.yml">.github/workflows/helm-release.yml</a>.</p>
+<h3 id="cloud">Cloud<a class="headerlink" href="#cloud" title="Permanent link">&para;</a></h3>
+<h4 id="role_1">Rôle<a class="headerlink" href="#role_1" title="Permanent link">&para;</a></h4>
+<p>Configuration du socle physique et cloud : nœuds NUC, OpenStack, réseau VPN et infrastructures Terraform OpenStack/AWS. Ce dépôt prépare les environnements sur lesquels la plateforme et ses applications peuvent fonctionner.</p>
+<h4 id="technologies_1">Technologies<a class="headerlink" href="#technologies_1" title="Permanent link">&para;</a></h4>
+<p>Terraform/HCL, OpenStack et Kolla-Ansible, WireGuard, Netplan, scripts Shell ; configurations Kubernetes et scripts Python pour le chemin EKS.</p>
+<h4 id="entrees_1">Entrées<a class="headerlink" href="#entrees_1" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Opérateurs / fournisseurs cloud</td>
+<td>Inventaire des machines, paramètres réseau, accès OpenStack/AWS et variables Terraform.</td>
+</tr>
+<tr>
+<td>Autres dépôts CNP</td>
+<td>Aucune consommation automatisée de fichiers d’un autre dépôt CNP identifiée dans le périmètre inspecté.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_1">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_1" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K3s / opérateurs</td>
+<td>Machines, réseau et accès nécessaires au bootstrap du cluster ; relation de prérequis d’infrastructure, sans clone automatique de Cloud par K3s identifié.</td>
+</tr>
+<tr>
+<td>app-templates / CMP</td>
+<td>API et ressources cloud utilisables par les providers Terraform ; environnement OpenStack utilisé pour les déploiements.</td>
+</tr>
+<tr>
+<td>Opérateurs</td>
+<td>Procédures de connexion, configuration du VPN et des nœuds, définitions Terraform et données FinOps.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_1">Documentation CNP<a class="headerlink" href="#documentation-cnp_1" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/Cloud/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/Cloud/blob/main/nuc_config/README.md">nuc_config/README.md</a>, <a href="https://github.com/3-Istor/Cloud/blob/main/vpn_mesh/README.md">vpn_mesh/README.md</a>, <a href="https://github.com/3-Istor/Cloud/blob/main/terraform/openstack/projects/3-istor-cloud/instances.tf">terraform/openstack/projects/3-istor-cloud/instances.tf</a>, <a href="https://github.com/3-Istor/Cloud/blob/main/terraform/public/aws/EKS/README.md">terraform/public/aws/EKS/README.md</a>.</p>
+<h3 id="k3s">K3s<a class="headerlink" href="#k3s" title="Permanent link">&para;</a></h3>
+<h4 id="role_2">Rôle<a class="headerlink" href="#role_2" title="Permanent link">&para;</a></h4>
+<p>Dépôt GitOps du cluster et des services de plateforme. Il installe les composants communs et contient les ApplicationSet qui génèrent les projets et applications depuis le registre CNP.</p>
+<h4 id="technologies_2">Technologies<a class="headerlink" href="#technologies_2" title="Permanent link">&para;</a></h4>
+<p>Kubernetes YAML, Kustomize, Helm, Argo CD/ApplicationSet ; configuration de Keycloak, Vault, opérateur de secrets, Envoy Gateway, stockage et observabilité ; GitHub Actions.</p>
+<h4 id="entrees_2">Entrées<a class="headerlink" href="#entrees_2" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cloud / opérateurs</td>
+<td>Cluster, réseau et accès préalablement préparés ; prérequis d’infrastructure.</td>
+</tr>
+<tr>
+<td>cnp-projects</td>
+<td><code>registry/projects/*.yaml</code> pour les ApplicationSet et <code>projects/</code> pour l’Application racine historique.</td>
+</tr>
+<tr>
+<td>infra-templates / dépôts applicatifs</td>
+<td>Chart Helm générique et valeurs <code>deploy/values.yaml</code> ou <code>deploy/values-{frontend,backend}.yaml</code>, lus par Argo CD.</td>
+</tr>
+<tr>
+<td>cnp-project-base (absent localement)</td>
+<td>Chart référencé pour générer les AppProject et les services par projet.</td>
+</tr>
+<tr>
+<td>CMP / GHCR et charts externes</td>
+<td>Images CMP et chart OCI <code>arcl-cmp</code>, plus les charts et manifests des composants de plateforme.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_2">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_2" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Argo CD / clusters cibles</td>
+<td>Manifests de plateforme, ApplicationSet et Applications déclarant les ressources à réconcilier.</td>
+</tr>
+<tr>
+<td>CMP / applications</td>
+<td>Services d’identité, secrets, réseau, stockage et livraison GitOps.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_2">Documentation CNP<a class="headerlink" href="#documentation-cnp_2" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/K3s/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/K3s/blob/main/k8s/config/argocd/kustomization.yaml">k8s/config/argocd/kustomization.yaml</a>, <a href="https://github.com/3-Istor/K3s/blob/main/k8s/config/argocd/applicationset-projects.yaml">k8s/config/argocd/applicationset-projects.yaml</a>, <a href="https://github.com/3-Istor/K3s/blob/main/k8s/config/argocd/applicationset-apps.yaml">k8s/config/argocd/applicationset-apps.yaml</a>, <a href="https://github.com/3-Istor/K3s/blob/main/k8s/app/cnp-projects-root.yaml">k8s/app/cnp-projects-root.yaml</a>, <a href="https://github.com/3-Istor/K3s/blob/main/k8s/config/arcl-cmp/kustomization.yaml">k8s/config/arcl-cmp/kustomization.yaml</a>, <a href="https://github.com/3-Istor/K3s/blob/main/k8s/config/arcl-cmp/cmp-values.yaml">k8s/config/arcl-cmp/cmp-values.yaml</a>.</p>
+<h3 id="app-templates">app-templates<a class="headerlink" href="#app-templates" title="Permanent link">&para;</a></h3>
+<h4 id="role_3">Rôle<a class="headerlink" href="#role_3" title="Permanent link">&para;</a></h4>
+<p>Catalogue des plans de provisioning exécutés par CMP. Les templates assemblent les modules d’infrastructure et de configuration ; <code>project-bootstrap</code> prépare un projet et <code>k3s-gitops-app</code> initialise une application GitOps.</p>
+<h4 id="technologies_3">Technologies<a class="headerlink" href="#technologies_3" title="Permanent link">&para;</a></h4>
+<p>Terraform/HCL, manifests JSON, templates cloud-init et YAML, scripts Shell ; providers OpenStack, AWS, GitHub, Keycloak, Vault et Cloudflare selon le template.</p>
+<h4 id="entrees_3">Entrées<a class="headerlink" href="#entrees_3" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP</td>
+<td>Variables du projet et de l’application, cloud cible, paramètres et accès nécessaires à l’exécution Terraform.</td>
+</tr>
+<tr>
+<td>template-html-css / template-app-webapp-python-fastapi-react</td>
+<td>Dépôt source choisi via <code>template_repo_name</code> ; copie par le mécanisme GitHub repository template.</td>
+</tr>
+<tr>
+<td>Cloud / services externes</td>
+<td>Infrastructure cloud et API accessibles, identité, secrets et DNS nécessaires aux providers.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_3">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_3" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP</td>
+<td>Catalogue <code>manifest.json</code> et plans Terraform récupérés par clone Git ; outputs de l’exécution.</td>
+</tr>
+<tr>
+<td>Dépôts applicatifs</td>
+<td>Dépôts privés initialisés à partir du template choisi et fichiers <code>deploy/*.yaml</code> configurés.</td>
+</tr>
+<tr>
+<td>Services cloud / identité / secrets</td>
+<td>Ressources provisionnées par le template sélectionné. Sur le chemin <code>k3s-gitops-app</code>, GitHub, Keycloak, Vault et DNS sont configurés ; les objets applicatifs Kubernetes sont générés par Argo CD depuis le registre.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_3">Documentation CNP<a class="headerlink" href="#documentation-cnp_3" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/app-templates/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/app-templates/blob/main/templates/k3s-gitops-app/manifest.json">templates/k3s-gitops-app/manifest.json</a>, <a href="https://github.com/3-Istor/app-templates/blob/main/templates/k3s-gitops-app/main.tf">templates/k3s-gitops-app/main.tf</a>, <a href="https://github.com/3-Istor/app-templates/blob/main/templates/k3s-gitops-app/outputs.tf">templates/k3s-gitops-app/outputs.tf</a>, <a href="https://github.com/3-Istor/app-templates/blob/main/templates/project-bootstrap/main.tf">templates/project-bootstrap/main.tf</a>.</p>
+<h3 id="cnp-docs">cnp-docs<a class="headerlink" href="#cnp-docs" title="Permanent link">&para;</a></h3>
+<h4 id="role_4">Rôle<a class="headerlink" href="#role_4" title="Permanent link">&para;</a></h4>
+<p>Documentation centrale de la CNP : architecture, contrats, composants, workflows et cartographie des dépôts. Les README locaux décrivent leur dépôt et renvoient ici pour comprendre l’ensemble.</p>
+<h4 id="technologies_4">Technologies<a class="headerlink" href="#technologies_4" title="Permanent link">&para;</a></h4>
+<p>Markdown, MkDocs Material, Mermaid, YAML et GitHub Actions ; modèles Noodle et exports draw.io/PNG pour les diagrammes d’architecture existants.</p>
+<h4 id="entrees_4">Entrées<a class="headerlink" href="#entrees_4" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Les dix autres dépôts locaux</td>
+<td>Code, manifests et workflows consultés par les rédacteurs pour vérifier les descriptions et dépendances ; aucune génération automatique des fiches.</td>
+</tr>
+<tr>
+<td>Contributeurs</td>
+<td>Décisions et procédures techniques documentées, modèles et vues d’architecture.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_4">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_4" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Équipe CNP / lecteurs</td>
+<td>Site de documentation construit avec MkDocs et publié par le workflow GitHub Pages.</td>
+</tr>
+<tr>
+<td>CMP / développeurs et assistants</td>
+<td>Sources Markdown référencées comme sous-module dans <code>.kiro/steering/docs</code>.</td>
+</tr>
+<tr>
+<td>Tous les dépôts CNP</td>
+<td>Cartographie centrale vers laquelle pointent les README locaux.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_4">Documentation CNP<a class="headerlink" href="#documentation-cnp_4" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/cnp-docs/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/cnp-docs/blob/main/mkdocs.yml">mkdocs.yml</a>, <a href="https://github.com/3-Istor/cnp-docs/blob/main/.github/workflows/deploy-docs.yml">.github/workflows/deploy-docs.yml</a>, <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md">architecture/README.md</a>.</p>
+<h3 id="cnp-projects">cnp-projects<a class="headerlink" href="#cnp-projects" title="Permanent link">&para;</a></h3>
+<h4 id="role_5">Rôle<a class="headerlink" href="#role_5" title="Permanent link">&para;</a></h4>
+<p>Registre Git des projets CNP : chaque ProjectRecord décrit le placement cloud, les environnements, fonctionnalités et applications d’un projet. Le répertoire <code>projects/</code> racine est distinct et destiné aux manifests de l’Application Argo CD historique.</p>
+<h4 id="technologies_5">Technologies<a class="headerlink" href="#technologies_5" title="Permanent link">&para;</a></h4>
+<p>YAML, JSON Schema, validateur Python, Make et GitHub Actions ; données consommées par Argo CD.</p>
+<h4 id="entrees_5">Entrées<a class="headerlink" href="#entrees_5" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP</td>
+<td>Écritures des projets et des applications via la GitHub App dans <code>registry/projects/&lt;nom&gt;.yaml</code>.</td>
+</tr>
+<tr>
+<td>Opérateurs</td>
+<td>Modifications Git du registre, soumises au schéma et aux contraintes de placement.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_5">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_5" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K3s / Argo CD</td>
+<td>ProjectRecord lus par les ApplicationSet pour générer AppProject, services et applications ; <code>spec.targetCloud</code> choisit la destination.</td>
+</tr>
+<tr>
+<td>cnp-project-base (absent localement)</td>
+<td>Valeurs de projet, fonctionnalités et hostnames transmises au chart par les ApplicationSet.</td>
+</tr>
+<tr>
+<td>CMP / contributeurs</td>
+<td>Registre lisible par API GitHub, schéma et validation locale/CI. CMP conserve un miroir du placement en base.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_5">Documentation CNP<a class="headerlink" href="#documentation-cnp_5" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/cnp-projects/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/cnp-projects/blob/main/registry/README.md">registry/README.md</a>, <a href="https://github.com/3-Istor/cnp-projects/blob/main/registry/schema.json">registry/schema.json</a>, <a href="https://github.com/3-Istor/cnp-projects/blob/main/scripts/validate-registry.py">scripts/validate-registry.py</a>, <a href="https://github.com/3-Istor/cnp-projects/blob/main/.github/workflows/validate-registry.yml">.github/workflows/validate-registry.yml</a>.</p>
+<h3 id="extern-project-analyzer">extern-project-analyzer<a class="headerlink" href="#extern-project-analyzer" title="Permanent link">&para;</a></h3>
+<h4 id="role_6">Rôle<a class="headerlink" href="#role_6" title="Permanent link">&para;</a></h4>
+<p>Service d’analyse statique de dépôts GitHub externes : clone temporaire, détection des langages et frameworks, recommandation de template et de commandes. Il lit les fichiers sans exécuter le code analysé.</p>
+<h4 id="technologies_6">Technologies<a class="headerlink" href="#technologies_6" title="Permanent link">&para;</a></h4>
+<p>Python, FastAPI, Pydantic, Git, pytest, Docker/Compose et GitHub Actions.</p>
+<h4 id="entrees_6">Entrées<a class="headerlink" href="#entrees_6" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Client HTTP / dépôt GitHub externe</td>
+<td><code>POST /analyze</code> reçoit <code>github_url</code>, un <code>token</code> facultatif pour un dépôt privé et une <code>branch</code> facultative ; les fichiers sont clonés temporairement.</td>
+</tr>
+<tr>
+<td>CMP</td>
+<td>Aucun appel à ce service trouvé dans le backend ou le frontend CMP inspectés.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_6">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_6" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Client HTTP appelant</td>
+<td>Réponse JSON : dépôt, template principal, langages, frameworks, confiance, indices et commandes recommandées.</td>
+</tr>
+<tr>
+<td>GHCR / opérateurs</td>
+<td>Image Docker construite et publiée par CI ; aucun consommateur CNP automatisé identifié localement.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_6">Documentation CNP<a class="headerlink" href="#documentation-cnp_6" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/extern-project-analyzer/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/extern-project-analyzer/blob/main/app/main.py">app/main.py</a>, <a href="https://github.com/3-Istor/extern-project-analyzer/blob/main/app/schemas.py">app/schemas.py</a>, <a href="https://github.com/3-Istor/extern-project-analyzer/blob/main/app/analyzer.py">app/analyzer.py</a>, <a href="https://github.com/3-Istor/extern-project-analyzer/blob/main/.github/workflows/docker-image.yml">.github/workflows/docker-image.yml</a>.</p>
+<h3 id="infra-templates">infra-templates<a class="headerlink" href="#infra-templates" title="Permanent link">&para;</a></h3>
+<h4 id="role_7">Rôle<a class="headerlink" href="#role_7" title="Permanent link">&para;</a></h4>
+<p>Chart Helm <code>cnp-generic-app</code> commun aux applications CNP. Il transforme les valeurs d’un dépôt applicatif en ressources Kubernetes et peut être rendu par Argo CD ou utilisé manuellement avec Helm.</p>
+<h4 id="technologies_7">Technologies<a class="headerlink" href="#technologies_7" title="Permanent link">&para;</a></h4>
+<p>Helm 3, templates Go et YAML Kubernetes ; ressource <code>VaultSecret</code> de l’opérateur <code>ricoberger.de</code> lorsque les secrets sont activés.</p>
+<h4 id="entrees_7">Entrées<a class="headerlink" href="#entrees_7" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dépôts applicatifs</td>
+<td>Valeurs <code>deploy/*.yaml</code> : image/tag, ports, ressources, configuration et chemin Vault éventuel.</td>
+</tr>
+<tr>
+<td>K3s / Argo CD ou opérateurs</td>
+<td>Nom de release, namespace et paramètres du rendu Helm ; opérateur de secrets disponible si <code>secrets.enabled=true</code>.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_7">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_7" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>K3s / Argo CD</td>
+<td>Chart récupéré depuis Git pour rendre Deployment, Service, ConfigMap et VaultSecret selon les valeurs.</td>
+</tr>
+<tr>
+<td>Clusters / opérateurs</td>
+<td>Manifests appliqués par Argo CD ou Helm ; aucune image applicative construite dans ce dépôt.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_7">Documentation CNP<a class="headerlink" href="#documentation-cnp_7" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/infra-templates/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/infra-templates/blob/main/Chart.yaml">Chart.yaml</a>, <a href="https://github.com/3-Istor/infra-templates/blob/main/values.yaml">values.yaml</a>, <a href="https://github.com/3-Istor/infra-templates/blob/main/templates/deployment.yaml">templates/deployment.yaml</a>, <a href="https://github.com/3-Istor/infra-templates/blob/main/templates/vaultsecret.yaml">templates/vaultsecret.yaml</a>.</p>
+<h3 id="template-app-webapp-python-fastapi-react">template-app-webapp-python-fastapi-react<a class="headerlink" href="#template-app-webapp-python-fastapi-react" title="Permanent link">&para;</a></h3>
+<h4 id="role_8">Rôle<a class="headerlink" href="#role_8" title="Permanent link">&para;</a></h4>
+<p>Modèle de dépôt applicatif fullstack : backend FastAPI et frontend React/Vite, configurations locales, conteneurs et valeurs de déploiement distinctes pour les deux composants.</p>
+<h4 id="technologies_8">Technologies<a class="headerlink" href="#technologies_8" title="Permanent link">&para;</a></h4>
+<p>Python, FastAPI, Uvicorn, SQLAlchemy et Pydantic Settings ; JavaScript/JSX, React 19, Vite, Docker/Compose, YAML Helm et GitHub Actions. Les Dockerfiles utilisent Python 3.14 et Node.js 26.</p>
+<h4 id="entrees_8">Entrées<a class="headerlink" href="#entrees_8" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP / app-templates</td>
+<td>Sélection comme template GitHub ; lors du provisioning, <code>k3s-gitops-app</code> écrit les valeurs du projet dans la copie créée.</td>
+</tr>
+<tr>
+<td>Développeurs / environnement applicatif</td>
+<td>Code métier, variables d’environnement et base SQLite/PostgreSQL facultative.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_8">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_8" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dépôts applicatifs / développeurs</td>
+<td>Sources backend/frontend, Dockerfiles, CI et configurations copiés par GitHub lors de la création du dépôt.</td>
+</tr>
+<tr>
+<td>GHCR / cluster cible</td>
+<td>Deux images, <code>&lt;owner&gt;/&lt;repo&gt;/frontend</code> et <code>&lt;owner&gt;/&lt;repo&gt;/backend</code>, construites par la CI du dépôt.</td>
+</tr>
+<tr>
+<td>K3s / Argo CD / infra-templates</td>
+<td><code>deploy/values-frontend.yaml</code> et <code>deploy/values-backend.yaml</code> de la copie applicative, utilisés pour rendre le chart générique.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_8">Documentation CNP<a class="headerlink" href="#documentation-cnp_8" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/requirements.txt">backend/requirements.txt</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/package.json">frontend/package.json</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/Dockerfile">backend/Dockerfile</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/Dockerfile">frontend/Dockerfile</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-frontend.yaml">deploy/values-frontend.yaml</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-backend.yaml">deploy/values-backend.yaml</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/workflows/ci.yml">.github/workflows/ci.yml</a>.</p>
+<h3 id="template-html-css">template-html-css<a class="headerlink" href="#template-html-css" title="Permanent link">&para;</a></h3>
+<h4 id="role_9">Rôle<a class="headerlink" href="#role_9" title="Permanent link">&para;</a></h4>
+<p>Modèle de dépôt applicatif statique : site HTML/CSS servi par Nginx, accompagné d’une CI Docker et de valeurs de déploiement Kubernetes.</p>
+<h4 id="technologies_9">Technologies<a class="headerlink" href="#technologies_9" title="Permanent link">&para;</a></h4>
+<p>HTML5, CSS, Nginx Alpine, Docker, YAML Helm et GitHub Actions.</p>
+<h4 id="entrees_9">Entrées<a class="headerlink" href="#entrees_9" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CMP / app-templates</td>
+<td>Sélection comme template GitHub ; <code>k3s-gitops-app</code> configure <code>deploy/values.yaml</code> dans la copie applicative.</td>
+</tr>
+<tr>
+<td>Développeurs</td>
+<td>Pages, styles et contenu du site.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_9">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_9" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Dépôts applicatifs / développeurs</td>
+<td>Site, Dockerfile, CI et valeurs de déploiement copiés lors de la création GitHub.</td>
+</tr>
+<tr>
+<td>GHCR / cluster cible</td>
+<td>Image <code>&lt;owner&gt;/&lt;repo&gt;</code> contenant le site servi par Nginx.</td>
+</tr>
+<tr>
+<td>K3s / Argo CD / infra-templates</td>
+<td><code>deploy/values.yaml</code> de la copie applicative, consommé avec le chart générique.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_9">Documentation CNP<a class="headerlink" href="#documentation-cnp_9" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/template-html-css/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/template-html-css/blob/main/Dockerfile">Dockerfile</a>, <a href="https://github.com/3-Istor/template-html-css/blob/main/deploy/values.yaml">deploy/values.yaml</a>, <a href="https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml">.github/workflows/ci.yml</a>.</p>
+<h3 id="test-import">test-import<a class="headerlink" href="#test-import" title="Permanent link">&para;</a></h3>
+<h4 id="role_10">Rôle<a class="headerlink" href="#role_10" title="Permanent link">&para;</a></h4>
+<p>Dépôt applicatif de test contenant une base HTML/CSS semblable au template statique. Il permet de travailler sur un exemple d’application ; son nom seul ne prouve pas un workflow d’import CMP.</p>
+<h4 id="technologies_10">Technologies<a class="headerlink" href="#technologies_10" title="Permanent link">&para;</a></h4>
+<p>HTML5, CSS, Nginx Alpine, Docker, YAML Helm et GitHub Actions.</p>
+<h4 id="entrees_10">Entrées<a class="headerlink" href="#entrees_10" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Développeurs</td>
+<td>Contenu du site et changements de code.</td>
+</tr>
+<tr>
+<td>template-html-css</td>
+<td>Contenu et configuration similaires présents localement ; la provenance de création n’est pas établie par cette inspection.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="sorties-et-consommateurs_10">Sorties et consommateurs<a class="headerlink" href="#sorties-et-consommateurs_10" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>Origine / destinataire</th>
+<th>Contenu et transmission</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GHCR / utilisateurs</td>
+<td>Image <code>ghcr.io/3-istor/test-import</code> produite par la CI et site statique.</td>
+</tr>
+<tr>
+<td>Éventuel déploiement Helm</td>
+<td><code>deploy/values.yaml</code> disponible, mais il référence encore <code>ghcr.io/3-istor/template-html-css</code>. Aucun enregistrement de <code>test-import</code> trouvé dans le registre local ; aucun déploiement CNP de ce dépôt n’est établi.</td>
+</tr>
+</tbody>
+</table>
+<h4 id="documentation-cnp_10">Documentation CNP<a class="headerlink" href="#documentation-cnp_10" title="Permanent link">&para;</a></h4>
+<p><a href="https://github.com/3-Istor/test-import/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/test-import/blob/main/Dockerfile">Dockerfile</a>, <a href="https://github.com/3-Istor/test-import/blob/main/deploy/values.yaml">deploy/values.yaml</a>, <a href="https://github.com/3-Istor/test-import/blob/main/.github/workflows/ci.yml">.github/workflows/ci.yml</a>.</p>
+<h2 id="workflows-entre-depots">Workflows entre dépôts<a class="headerlink" href="#workflows-entre-depots" title="Permanent link">&para;</a></h2>
+<h3 id="1-preparer-le-socle">1. Préparer le socle<a class="headerlink" href="#1-preparer-le-socle" title="Permanent link">&para;</a></h3>
+<p>Les opérateurs utilisent <code>Cloud</code> pour configurer les nœuds, le VPN, OpenStack et les ressources cloud. Ils préparent un cluster et ses accès avant de lancer le bootstrap décrit dans le README de <code>K3s</code>. Les manifests Kustomize/Helm de <code>K3s</code> déclarent Argo CD et les autres composants communs.</p>
+<p>Cette relation est un prérequis d’exploitation : aucun pipeline local n’établit une chaîne automatique <code>Cloud → K3s</code>. Les chemins AWS/EKS présents dans Cloud ne prouvent pas qu’un cluster distant est en service. La configuration Argo CD inclut le cluster <code>onprem</code> ; l’ajout des clusters AWS/GCP reste conditionné à leur préparation et à leurs secrets.</p>
+<h3 id="2-provisionner-un-projet-puis-une-application">2. Provisionner un projet puis une application<a class="headerlink" href="#2-provisionner-un-projet-puis-une-application" title="Permanent link">&para;</a></h3>
+<ol>
+<li>CMP récupère <code>app-templates</code> via son service de catalogue et lit les manifests activés.</li>
+<li>CMP publie le ProjectRecord dans <code>cnp-projects/registry/projects/</code> via la GitHub App, puis lance en tâche de fond le bootstrap Terraform <code>project-bootstrap</code> avec les paramètres et accès requis. La publication du registre précède donc la fin du provisioning.</li>
+<li>Pour une application GitOps, CMP exécute <code>k3s-gitops-app</code>. Terraform utilise le template GitHub statique ou fullstack choisi, crée le dépôt privé, puis renseigne ses valeurs <code>deploy/*.yaml</code>. Il configure aussi les éléments d’identité, secrets et DNS prévus dans ce module.</li>
+<li>CMP ajoute l’application au ProjectRecord : type, URL du dépôt et hostname. Cette écriture permet sa découverte par Argo CD et l’alimentation de la configuration de routage du projet.</li>
+</ol>
+<p>Le module applicatif actuel de <code>app-templates</code> n’enregistre pas directement une Application dans l’API Kubernetes. Les objets GitOps sont générés à partir du registre. Un module interne historique <code>CMP/backend/app/terraform/github_bootstrap</code> et son orchestrateur SAGA existent aussi ; ils ne doivent pas être confondus avec le chemin catalogue <code>k3s-gitops-app</code> décrit ici.</p>
+<p>L’écriture du registre applicatif est traitée en « best effort » dans <code>terraform_orchestrator.py</code> : un apply réussi peut être suivi d’une erreur de registre journalisée. Dans ce cas, le succès Terraform seul ne garantit ni la découverte de l’application ni son routage.</p>
+<p><strong>Sources :</strong> <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/services/template_repository.py">catalogue CMP</a>, <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/services/project_bootstrap.py">bootstrap projet CMP</a>, <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/routers/projects.py">route projets</a>, <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/services/terraform_orchestrator.py">orchestrateur Terraform</a>, <a href="https://github.com/3-Istor/CMP/blob/main/backend/app/terraform/github_bootstrap/main.tf">module historique</a>.</p>
+<h3 id="3-generer-et-synchroniser-les-ressources-gitops">3. Générer et synchroniser les ressources GitOps<a class="headerlink" href="#3-generer-et-synchroniser-les-ressources-gitops" title="Permanent link">&para;</a></h3>
+<p>Les ApplicationSet présents dans <code>K3s</code> lisent les ProjectRecord de <code>cnp-projects</code> :</p>
+<ul>
+<li><code>applicationset-projects.yaml</code> référence <code>cnp-project-base</code> pour les AppProject sur le plan de contrôle et les services par projet sur le cluster cible. Les valeurs sont construites à partir du placement, des fonctionnalités et des hostnames du registre. Le contenu du chart absent n’a pas été vérifié.</li>
+<li><code>applicationset-apps.yaml</code> crée une Application par composant applicatif. Une application statique utilise <code>deploy/values.yaml</code> ; une application fullstack utilise une Application frontend et une backend avec leurs fichiers de valeurs respectifs.</li>
+<li>Chaque Application associe deux sources Git : <code>infra-templates</code> fournit le chart et le dépôt applicatif fournit les valeurs via la référence <code>$values</code>. <code>spec.targetCloud</code> sélectionne la destination Argo CD.</li>
+</ul>
+<p>Argo CD rend les charts et synchronise les ressources Kubernetes. Il consomme des déclarations Git ; les pods téléchargent les images depuis le registre de conteneurs. Le répertoire <code>cnp-projects/projects/</code>, lu par l’Application racine historique, reste distinct des ProjectRecord.</p>
+<p><strong>Sources :</strong> <a href="https://github.com/3-Istor/K3s/blob/main/k8s/config/argocd/applicationset-projects.yaml">ApplicationSet projets</a>, <a href="https://github.com/3-Istor/K3s/blob/main/k8s/config/argocd/applicationset-apps.yaml">ApplicationSet applications</a>, <a href="https://github.com/3-Istor/cnp-projects/blob/main/registry/README.md">contrat du registre</a>.</p>
+<h3 id="4-construire-et-livrer-les-images">4. Construire et livrer les images<a class="headerlink" href="#4-construire-et-livrer-les-images" title="Permanent link">&para;</a></h3>
+<p>Les workflows des templates sont copiés avec les sources applicatives :</p>
+<ul>
+<li>Le template statique construit une image Nginx <code>ghcr.io/&lt;owner&gt;/&lt;repo&gt;</code> ; les pushes publient l’image, les pull requests effectuent la construction sans publication.</li>
+<li>Le template fullstack teste le backend et construit le frontend, puis publie deux images sur un push vers <code>main</code> : <code>ghcr.io/&lt;owner&gt;/&lt;repo&gt;/frontend</code> et <code>/backend</code>.</li>
+<li><code>test-import</code> possède sa propre CI statique. Son fichier de valeurs référence encore l’image du template d’origine ; la présence de ce fichier n’établit pas une livraison de sa propre image par la CNP.</li>
+<li>CMP publie ses images sur tags <code>v*.*.*</code> et son chart OCI sur tags <code>helm-v*.*.*</code>. <code>K3s</code> déclare le chart et les images CMP, ainsi qu’un ImageUpdater CMP dont la méthode de mise à jour actuelle est <code>argocd</code> : elle modifie l’Application Argo CD plutôt que de créer un commit Git. Le fichier indique que le retour à l’écriture Git dépend du rétablissement des permissions du bot.</li>
+</ul>
+<p>Une publication d’image ne garantit pas à elle seule le déploiement d’une nouvelle version : les valeurs Git, la stratégie de mise à jour et la synchronisation Argo CD déterminent la version exécutée. L’exécution effective des workflows et de l’ImageUpdater n’a pas été testée ici.</p>
+<p><strong>Sources :</strong> <a href="https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml">CI statique</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/workflows/ci.yml">CI fullstack</a>, <a href="https://github.com/3-Istor/test-import/blob/main/.github/workflows/ci.yml">CI test-import</a>, <a href="https://github.com/3-Istor/K3s/blob/main/k8s/app/arcl-cmp/arcl-cmp-updater.yaml">ImageUpdater CMP</a>.</p>
+<h3 id="5-analyser-un-depot-externe">5. Analyser un dépôt externe<a class="headerlink" href="#5-analyser-un-depot-externe" title="Permanent link">&para;</a></h3>
+<p>Un client appelle <code>POST /analyze</code> avec une URL GitHub et, si nécessaire, une branche et un token. <code>extern-project-analyzer</code> clone le dépôt dans un répertoire temporaire, lit les fichiers, retourne un rapport JSON puis supprime le clone. Les commandes proposées dans le rapport ne sont pas exécutées.</p>
+<p>L’intégration à un parcours CMP reste non établie : aucun appel au service trouvé dans le backend ou le frontend locaux. Le service est donc documenté comme autonome.</p>
+<h3 id="6-maintenir-et-publier-la-documentation">6. Maintenir et publier la documentation<a class="headerlink" href="#6-maintenir-et-publier-la-documentation" title="Permanent link">&para;</a></h3>
+<p>Les contributeurs actualisent les README et cette page lorsque les contrats changent. <code>cnp-docs</code> construit le site MkDocs ; son workflow publie vers GitHub Pages lors des pushes sur les branches configurées. CMP déclare les sources de documentation comme sous-module pour les outils de développement ; cette déclaration ne prouve pas que le checkout local du sous-module est initialisé ou à jour.</p>
+<h2 id="liens-vers-les-documents-detailles">Liens vers les documents détaillés<a class="headerlink" href="#liens-vers-les-documents-detailles" title="Permanent link">&para;</a></h2>
+<ul>
+<li><a href="../01-architecture/01-system-overview.md">Vue d’ensemble du système</a>.</li>
+<li><a href="../03-pipelines-and-workflows/01-app-provisioning-flow.md">Provisioning des applications</a>.</li>
+<li><a href="../03-pipelines-and-workflows/02-ci-cd-pipelines.md">Pipelines CI/CD</a>.</li>
+<li><a href="../03-pipelines-and-workflows/04-system-flows.md">Diagrammes de flux système</a>.</li>
+<li><a href="01-git-app-templates.md">Templates applicatifs et bootstrap</a>.</li>
+<li><a href="02-helm-generic-chart.md">Chart Helm générique</a>.</li>
+<li><a href="03-terraform-provisioner.md">Provisionneur Terraform</a>.</li>
+<li><a href="../06-multicloud/00-index.md">Chantier multicloud</a>.</li>
+</ul>
+<p>Ces pages donnent le détail de leur sujet et peuvent contenir des objectifs d’architecture ou des étapes de transition. Pour les échanges inter-repo, les sources citées ci-dessus établissent le comportement local inspecté.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.d7400e89.min.js"></script>
+      
+    
+  </body>
+</html>

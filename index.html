@@ -328,7 +328,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="04-templates/00-github-repositories-landscape/" class="md-tabs__link">
+        <a href="04-templates/00-github-repositories-landscape.md" class="md-tabs__link">
           
   
   
@@ -1412,7 +1412,7 @@
   
   
     <li class="md-nav__item">
-      <a href="04-templates/00-github-repositories-landscape/" class="md-nav__link">
+      <a href="04-templates/00-github-repositories-landscape.md" class="md-nav__link">
         
   
   
@@ -2319,12 +2319,13 @@
 
 
 <h1 id="cloud-native-platform-cnp-documentation">Cloud Native Platform (CNP) ⚡ - Documentation<a class="headerlink" href="#cloud-native-platform-cnp-documentation" title="Permanent link">&para;</a></h1>
+<p><a href="04-templates/00-github-repositories-landscape.md"><strong>Cartographie des 11 dépôts et workflows inter-repo</strong></a> : rôle, technologies, entrées, sorties et schéma des dépendances Git.</p>
 <h2 id="project-overview">📖 Project Overview<a class="headerlink" href="#project-overview" title="Permanent link">&para;</a></h2>
 <p>The Cloud Native Platform (CNP) is a modern <strong>Internal Developer Portal (IDP)</strong> designed to completely abstract infrastructure complexity. It empowers developers to provision, manage, and monitor containerized applications on Kubernetes through standardized "Golden Paths".</p>
 <p>Built on top of a highly robust stack (Next.js, FastAPI, Kubernetes, ArgoCD, Terraform, Vault, and Keycloak), CNP shifts the paradigm from traditional IaaS (VM deployment) to modern PaaS/CaaS (Platform/Container as a Service).</p>
 <h2 id="core-objectives">🎯 Core Objectives<a class="headerlink" href="#core-objectives" title="Permanent link">&para;</a></h2>
 <ol>
-<li><strong>Developer Autonomy:</strong> Self-service provisioning of full-stack applications via a visual dashboard (CMP) or a GitOps configuration file (<code>cnp.yaml</code>).</li>
+<li><strong>Developer Autonomy:</strong> Self-service provisioning of applications via the CMP dashboard. The GitOps inputs verified in the local code are the project registry and application <code>deploy/*.yaml</code> values; see the <a href="04-templates/00-github-repositories-landscape.md">repository landscape</a>.</li>
 <li><strong>Strict Multi-Tenancy:</strong> A hierarchical <code>Project &gt; Application</code> model ensuring absolute isolation (Network, Secrets, RBAC) between different teams.</li>
 <li><strong>End-to-End Automation:</strong> Seamless integration from GitHub repository creation, CI/CD bootstrapping, Kubernetes deployment (Helm + ArgoCD), to DNS and Secret injection.</li>
 </ol>
@@ -2350,7 +2351,7 @@
 <li><strong><a href="01-architecture/01-system-overview/">01. Architecture &amp; Topologies</a></strong>: System overviews, Tenancy models, and Networking.</li>
 <li><strong><a href="02-core-components/01-cmp-dashboard/">02. Core Components</a></strong>: Deep dives into the CMP, Keycloak, Vault, and ArgoCD configurations.</li>
 <li><strong><a href="03-pipelines-and-workflows/01-app-provisioning-flow/">03. Pipelines &amp; Workflows</a></strong>: Sequential flows for app provisioning, CI/CD, and the <code>cnp.yaml</code> GitOps cycle.</li>
-<li><strong><a href="04-templates/00-github-repositories-landscape/">04. Templates Design</a></strong>: Specifications for Git App Templates, Generic Helm Charts, and Terraform wrappers.</li>
+<li><strong><a href="./04-templates/00-github-repositories-landscape.md">04. Templates Design</a></strong>: Specifications for Git App Templates, Generic Helm Charts, and Terraform wrappers.</li>
 <li><strong><a href="05-cmp-backend-api/00-global-api-standards/">05. CMP Backend API</a></strong>: ⭐ <strong>NEW</strong> - API specifications and integration guides for the Cloud Management Platform.</li>
 </ul>
 <h2 id="project-documentation">📋 Project Documentation<a class="headerlink" href="#project-documentation" title="Permanent link">&para;</a></h2>
@@ -2416,11 +2417,12 @@
 
     %% --- Provisioning Plane ---
     subgraph Provisioning Plane [Provisioning Plane - Terraform]
-        SAGA --&gt;|Executes Day-0| TF[Terraform Runner]
+        BE --&gt;|Executes catalogue templates| TF[Terraform Runner]
         TF --&gt;|1. Creates Private Repo| GH_App[GitHub App API]
         TF --&gt;|2. Maps Tenant Groups| KC[Keycloak Admin API]
         TF --&gt;|3. Mounts Secrets Path| Vault[HashiCorp Vault]
-        TF --&gt;|4. Registers App CRD| Argo[ArgoCD API]
+        BE --&gt;|4. Publishes project and app records| Registry[(cnp-projects Git registry)]
+        Registry --&gt;|ApplicationSet discovery| Argo[ArgoCD]
     end
 
     %% --- Delivery Plane ---
@@ -2443,7 +2445,7 @@
     classDef delivery fill:#f0fdf4,stroke:#16a34a,stroke-width:2px;
     classDef security fill:#fff1f2,stroke:#e11d48,stroke-width:2px;
 
-    class BE,DB,SAGA,TF control;
+    class BE,DB,SAGA,TF,Registry control;
     class Argo,K3s delivery;
     class KC,Vault,Envoy,VSO security;</code></pre>
 <hr />
