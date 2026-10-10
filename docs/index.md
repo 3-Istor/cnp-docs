@@ -1,5 +1,7 @@
 # Cloud Native Platform (CNP) ⚡ - Documentation
 
+[**Cartographie des 11 dépôts et workflows inter-repo**](04-templates/00-github-repositories-landscape.md) : rôle, technologies, entrées, sorties et schéma des dépendances Git.
+
 ## 📖 Project Overview
 
 The Cloud Native Platform (CNP) is a modern **Internal Developer Portal (IDP)** designed to completely abstract infrastructure complexity. It empowers developers to provision, manage, and monitor containerized applications on Kubernetes through standardized "Golden Paths".
@@ -8,7 +10,7 @@ Built on top of a highly robust stack (Next.js, FastAPI, Kubernetes, ArgoCD, Ter
 
 ## 🎯 Core Objectives
 
-1. **Developer Autonomy:** Self-service provisioning of full-stack applications via a visual dashboard (CMP) or a GitOps configuration file (`cnp.yaml`).
+1. **Developer Autonomy:** Self-service provisioning of applications via the CMP dashboard. The GitOps inputs verified in the local code are the project registry and application `deploy/*.yaml` values; see the [repository landscape](04-templates/00-github-repositories-landscape.md).
 2. **Strict Multi-Tenancy:** A hierarchical `Project > Application` model ensuring absolute isolation (Network, Secrets, RBAC) between different teams.
 3. **End-to-End Automation:** Seamless integration from GitHub repository creation, CI/CD bootstrapping, Kubernetes deployment (Helm + ArgoCD), to DNS and Secret injection.
 
@@ -108,11 +110,12 @@ flowchart TD
 
     %% --- Provisioning Plane ---
     subgraph Provisioning Plane [Provisioning Plane - Terraform]
-        SAGA -->|Executes Day-0| TF[Terraform Runner]
+        BE -->|Executes catalogue templates| TF[Terraform Runner]
         TF -->|1. Creates Private Repo| GH_App[GitHub App API]
         TF -->|2. Maps Tenant Groups| KC[Keycloak Admin API]
         TF -->|3. Mounts Secrets Path| Vault[HashiCorp Vault]
-        TF -->|4. Registers App CRD| Argo[ArgoCD API]
+        BE -->|4. Publishes project and app records| Registry[(cnp-projects Git registry)]
+        Registry -->|ApplicationSet discovery| Argo[ArgoCD]
     end
 
     %% --- Delivery Plane ---
@@ -135,7 +138,7 @@ flowchart TD
     classDef delivery fill:#f0fdf4,stroke:#16a34a,stroke-width:2px;
     classDef security fill:#fff1f2,stroke:#e11d48,stroke-width:2px;
     
-    class BE,DB,SAGA,TF control;
+    class BE,DB,SAGA,TF,Registry control;
     class Argo,K3s delivery;
     class KC,Vault,Envoy,VSO security;
 ```
