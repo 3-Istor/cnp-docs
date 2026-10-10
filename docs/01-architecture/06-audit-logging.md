@@ -11,6 +11,8 @@ Qui a fait quoi sur la plateforme, et qui est prévenu quand ça compte. Quatre 
 | Keycloak | Logins, échecs, admin events, sur tous les realms | `K3s/terraform/audit.tf`, `project-bootstrap`, `cnp-project-base` | 30 j |
 | Cilium (Hubble) | Flux refusés par une network policy | `K3s/k8s/config/kube-system/values.yaml` | 14 j |
 
+Chaque heure d'audit Kubernetes, Vault et Keycloak est en plus copiée dans un bucket verrouillé 30 jours (voir [Archive immuable](#archive-immuable)).
+
 ```mermaid
 flowchart LR
   api[kube-apiserver<br/>audit.log] -->|loki.source.file| alloy[Alloy]
@@ -167,6 +169,25 @@ Loki supprime par défaut après 14 jours. Le label `cnp.3istor.com/log-retentio
 - les namespaces `vault` et `keycloak` sont à 30 jours, ainsi que l'audit Kubernetes.
 
 Toute autre valeur retombe sur 14 jours, pour garder le label à faible cardinalité.
+
+## Archive immuable
+
+Le CronJob `observability/audit-archive` tourne à la minute 7 de chaque heure :
+
+1. `logcli` exporte l'heure précédente depuis Loki : `{job="k8s-audit"}`, les réponses Vault, les events Keycloak. L'export lit par lots de 1 000 lignes, car 5 000 events d'audit dépassent la taille des messages gRPC internes de Loki.
+2. `aws-cli` envoie les fichiers gzip dans le bucket RGW `cnp-audit-archive`, sous `audit/<source>/AAAA/MM/JJ/HH.jsonl.gz`.
+3. Le bucket a l'Object Lock en mode COMPLIANCE, 30 jours : ni supprimer une version ni raccourcir sa rétention n'est possible, même avec la permission de contournement.
+4. L'utilisateur RGW vient d'un `CephObjectStoreUser` Rook, dont le secret `rook-ceph-object-user-openstack-rgw-audit-archive` est monté dans le job.
+5. Un passage en échec déclenche l'alerte vmalert `AuditArchiveFailed`.
+
+!!! warning "Limite"
+    L'Object Lock protège contre quiconque n'a que des accès S3 ou Kubernetes. Un admin Ceph
+    sur les nœuds OpenStack peut toujours effacer le bucket avec `radosgw-admin`. Une vraie
+    immuabilité demande une copie hors de notre contrôle, par exemple un bucket S3 AWS avec
+    Object Lock dans un compte dédié.
+
+Relancer une heure à la main : `kubectl -n observability create job audit-archive-manual --from=cronjob/audit-archive`.
+Ré-envoyer une heure déjà archivée crée une nouvelle version ; l'ancienne reste verrouillée.
 
 ## Requêtes utiles
 
