@@ -1,0 +1,75 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Multicloud · Who may reach a project"
+subtitle: "What may reach a project's workloads on each cluster, and what enforces it?"
+meta:
+  - "Scope: ingress to one project's namespaces on on-prem (K3s), EKS and GKE, plus the cloud perimeter · main as of 2026-10-18 · derived from code, matrix of 18/10 checked live (marked live)"
+  - "Out of scope: egress (open everywhere) · traffic inside the WireGuard tunnel · the hub's own namespaces. Drawn as a topology: a matrix holds grants, not network rules."
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-pol-in
+  - z-pol-out
+  - z-pol-target
+  - z-pol-perim
+  - z-pol-enf
+  - pol-same-ns
+  - pol-gateway
+  - pol-cnpg
+  - pol-obs
+  - pol-kubelet
+  - pol-other-proj
+  - pol-default
+  - pol-internet
+  - pol-operator
+  - pol-wg-onprem
+  - pol-argo-op
+  - pol-workloads
+  - pol-wg
+  - pol-api
+  - pol-ccnp
+  - pol-np-eks
+  - pol-np-gke
+  - pol-perimeter
+  - pol-no-lb
+
+labels:
+  c-pol-same: "allow (live, clouds)"
+  c-pol-gateway: "allow"
+  c-pol-cnpg: "allow"
+  c-pol-obs: "allow"
+  c-pol-kubelet: "allow (live, clouds)"
+  c-pol-other: "denied (CCNP / NetworkPolicy)"
+  c-pol-default: "denied (NetworkPolicy · live, clouds)"
+  c-pol-internet: "denied (no LoadBalancer)"
+  c-pol-internet-api: "denied (outside allow-list)"
+  c-pol-wg: "UDP, K3s IP only"
+  c-pol-api: "allow (K3s IP)"
+  c-pol-operator-api: "allow (operator IP)"
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-rules
+    title: "Per cluster"
+    color: rose
+    lines:
+      - "**On-prem:** one CiliumClusterwideNetworkPolicy per project, cnp-project-<p>-ingress. It allows the project's namespaces, envoy-gateway-system, observability, cnpg-system and host / remote-node (probes). Everything else is dropped."
+      - "**EKS, GKE:** one NetworkPolicy cnp-project-ingress per project namespace, same sources, no host rule. Enforced by the VPC CNI agent (enableNetworkPolicy) on EKS and Dataplane V2 on GKE."
+      - "**Both policies exist only when features.workloads and features.networkIsolation are on (default true).**"
+      - "**Live 18/10, EKS and GKE only:** same namespace allowed, same project other namespace allowed, default to project blocked, kubelet probes OK, DNS and Internet egress OK."
+      - "**Cloud perimeter:** UDP 31820 only from vpn_source_cidrs (the K3s egress), API :443 only from api_allowed_cidrs (K3s egress IP and the operator's IP). EKS API access entry for the operator only."
+      - "**Inbound:** no LoadBalancer exists (cnp.sh down aborts if one does), GKE HTTP LB add-on disabled. Apps leave through outbound Cloudflare tunnels."
+  - id: card-guard
+    title: "GitOps guard rails"
+    color: orange
+    lines:
+      - "**Tenant AppProject <p>:** blacklists cilium.io/*, NetworkPolicy, ResourceQuota and LimitRange. A tenant app cannot weaken or remove its own isolation. Destinations: only <p>-<app> namespaces on its target cloud."
+      - "**Platform AppProject <p>-platform:** only the chart cnp-project-base, which installs the policies. Destinations: <p>-system, plus the app namespaces on clouds; a few whitelisted cluster objects."
+  - id: card-sources
+    title: "Sources"
+    color: slate
+    lines:
+      - "cnp-project-base/templates/{ccnp,networkpolicy,app-project}.yaml · infra-templates/templates/ · K3s/k8s/config/argocd"
+      - "Cloud/terraform/public/aws/EKS/main.tf (VPC CNI, security group) · Cloud/terraform/public/gcp/GKE/main.tf (Dataplane V2, firewall) · Cloud/terraform/public/modules/cluster-addons"
+      - "Live matrix 18/10 on letestaws (EKS) and letestgcp (GKE)."

@@ -1,0 +1,86 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2740, height: 2300}
+
+# Left: operator and the buckets it writes. Then the hub, the clouds, GitHub. Hub to cloud
+# links cross corridor 2 (x 1060-1360); the links to GitHub run under the clouds. against_flow:
+# a cloud or the operator calling towards the hub or the buckets, against the reading direction.
+elements:
+  z-operator: {x: 40, y: 260, w: 420, h: 190}
+  operator: {x: 30, y: 60, w: 360, h: 90}
+  z-aws-shared: {x: 40, y: 510, w: 420, h: 440}
+  endpoint-bucket: {x: 30, y: 60, w: 360, h: 90}
+  tfstate-s3: {x: 30, y: 180, w: 360, h: 90}
+  ssm-kubeconfig: {x: 30, y: 300, w: 360, h: 90}
+  z-gcp-shared: {x: 40, y: 1010, w: 420, h: 190}
+  tfstate-gcs: {x: 30, y: 60, w: 360, h: 100}
+
+  z-cluster: {x: 600, y: 260, w: 460, h: 1512}
+  g-secrets: {x: 40, y: 70, w: 380, h: 414}
+  vso: {x: 40, y: 60, w: 300, h: 80}
+  vault: {x: 40, y: 200, w: 300, h: 80}
+  vault-auth: {x: 40, y: 304, w: 300, h: 80}
+  g-vpn: {x: 40, y: 544, w: 380, h: 274}
+  wireguard-onprem: {x: 40, y: 60, w: 300, h: 80}
+  wireguard-onprem-gcp: {x: 40, y: 164, w: 300, h: 80}
+  g-gitops: {x: 40, y: 878, w: 380, h: 274}
+  argocd: {x: 40, y: 60, w: 300, h: 80}
+  image-updater: {x: 40, y: 164, w: 300, h: 80}
+  g-cmp: {x: 40, y: 1292, w: 380, h: 170}
+  cmp-backend: {x: 40, y: 60, w: 300, h: 80}
+  z-cloud-a: {x: 1360, y: 260, w: 700, h: 610}
+  b-apiserver: {x: 40, y: 60, w: 260, h: 150}
+  b-wireguard: {x: 40, y: 240, w: 260, h: 100}
+  b-allow: {x: 400, y: 90, w: 260, h: 220}
+  b-nodes: {x: 400, y: 350, w: 260, h: 90}
+  g-b-platform: {x: 20, y: 380, w: 300, h: 190}
+  b-secret-op: {x: 20, y: 60, w: 260, h: 90}
+  z-cloud-b: {x: 1360, y: 930, w: 700, h: 610}
+  gke-apiserver: {x: 40, y: 60, w: 260, h: 150}
+  gke-wireguard: {x: 40, y: 240, w: 260, h: 100}
+  gke-allow: {x: 400, y: 90, w: 260, h: 220}
+  gke-nodes: {x: 400, y: 350, w: 260, h: 90}
+  g-gke-platform: {x: 20, y: 380, w: 300, h: 190}
+  gke-secret-op: {x: 20, y: 60, w: 260, h: 90}
+  z-github: {x: 2260, y: 1460, w: 420, h: 410}
+  github: {x: 30, y: 60, w: 360, h: 150}
+  ghcr: {x: 30, y: 240, w: 360, h: 130}
+
+notes:
+  n-vault: {x: 40, y: 1260, w: 420, h: 150}
+
+edges:
+  c-argocd-b: {from: argocd.right@15px, to: b-apiserver.left@60px, waypoints: [[1144, 1213], [1144, 380]], label_at: [1144, 945]}
+  c-argocd-gke: {from: argocd.right@40px, to: gke-apiserver.left@60px, waypoints: [[1180, 1238], [1180, 1050]], label_at: [1180, 1150]}
+  c-vault-b-apiserver: {from: vault-auth.right@25px, to: b-apiserver.left@95px, waypoints: [[1108, 659], [1108, 415]], label_at: [1108, 500]}
+  c-vault-gke-apiserver: {from: vault-auth.right@55px, to: gke-apiserver.left@95px, waypoints: [[1198, 689], [1198, 1085]], label_at: [1198, 800]}
+  c-wg-eks: {from: wireguard-onprem.right@30px, to: b-wireguard.left@55px, waypoints: [[1162, 894], [1162, 555]], label_at: [1162, 700]}
+  c-wg-gke: {from: wireguard-onprem-gcp.right@30px, to: gke-wireguard.left@55px, waypoints: [[1216, 998], [1216, 1225]], label_at: [1216, 1100]}
+  c-bsecret-vault: {from: b-secret-op.left@45px, to: vault.right@15px, waypoints: [[1126, 745], [1126, 545]], against_flow: true, label_at: [1126, 700]}
+  c-gkesecret-vault: {from: gke-secret-op.left@45px, to: vault.right@45px, waypoints: [[1252, 1415], [1252, 575]], against_flow: true, label_at: [1252, 1000]}
+  e-a-vso-vault: {from: vso.bottom@150px, to: vault.top@150px, waypoints: []}
+  c-op-b-api: {from: operator.right@20px, to: b-apiserver.left@130px, waypoints: [[545, 340], [545, 215], [1090, 215], [1090, 450]], label_at: [900, 215]}
+  c-op-gke-api: {from: operator.right@35px, to: gke-apiserver.left@130px, waypoints: [[560, 355], [560, 225], [1234, 225], [1234, 1120]], label_at: [1000, 225]}
+  c-op-vault: {from: operator.right@45px, to: vault.left@62px, waypoints: [[530, 365], [530, 592]], label_at: [530, 450]}
+  c-op-endpoint: {from: operator.bottom@300px, to: endpoint-bucket.top@300px, waypoints: []}
+  c-wg-endpoint: {from: wireguard-onprem.left@45px, to: endpoint-bucket.right@55px, waypoints: [[575, 909], [575, 625]], against_flow: true, label_at: [575, 760]}
+  c-op-ssm: {from: operator.right@60px, to: ssm-kubeconfig.right@45px, waypoints: [[500, 380], [500, 855]], against_flow: true, label_at: [500, 700]}
+  c-op-state-s3: {from: operator.right@70px, to: tfstate-s3.right@45px, waypoints: [[485, 390], [485, 735]], against_flow: true, label_at: [485, 650]}
+  c-op-state-gcs: {from: operator.right@80px, to: tfstate-gcs.right@60px, waypoints: [[470, 400], [470, 1130]], against_flow: true, label_at: [470, 1000]}
+  c-argocd-github: {from: argocd.right@70px, to: github.left@60px, waypoints: [[1270, 1268], [1270, 1580]], label_at: [1700, 1580]}
+  c-updater-github: {from: image-updater.right@25px, to: github.left@90px, waypoints: [[1288, 1327], [1288, 1610]], label_at: [1800, 1610]}
+  c-cmp-github: {from: cmp-backend.right@64px, to: github.left@120px, waypoints: [[1318, 1676], [1318, 1640]], label_at: [2000, 1640]}
+  c-updater-ghcr: {from: image-updater.right@55px, to: ghcr.left@60px, waypoints: [[1306, 1357], [1306, 1760]], label_at: [1900, 1760]}
+  c-b-nodes-ghcr: {from: b-nodes.right@45px, to: ghcr.left@90px, waypoints: [[2120, 655], [2120, 1790]], label_at: [2120, 900]}
+  c-gke-nodes-ghcr: {from: gke-nodes.right@45px, to: ghcr.left@115px, waypoints: [[2150, 1325], [2150, 1815]], label_at: [2150, 1500]}
+  r-b-allow-api: {from: b-allow.left@30px, to: b-apiserver.right@60px, waypoints: []}
+  r-b-allow-wg: {from: b-allow.left@200px, to: b-wireguard.right@50px, waypoints: []}
+  r-gke-allow-api: {from: gke-allow.left@30px, to: gke-apiserver.right@60px, waypoints: []}
+  r-gke-allow-wg: {from: gke-allow.left@200px, to: gke-wireguard.right@50px, waypoints: []}
+
+cards:
+  card-legend: {x: 40, y: 1930, w: 560, h: 360}
+  card-bg: {x: 630, y: 1930, w: 700, h: 360}
+  card-allow: {x: 1360, y: 1930, w: 480, h: 360}
+  card-tunnel: {x: 1870, y: 1930, w: 430, h: 360}
+  card-gaps: {x: 2330, y: 1930, w: 380, h: 360}

@@ -10,7 +10,10 @@ one diagram, and `layouts/` places the topology views.
 | `app-runtime` | Seen from inside one app: who reaches it, what it reaches, what should stay out, what the platform hands it | Tenancy and isolation |
 | `runtime` | How a request reaches a tenant app, where it is authenticated, what keeps tenants apart | Network topology |
 | `oidc-login` | The login when there is no session | Network topology |
-| `multicloud` | What stays on the on-prem hub, what goes with each project to its target cloud, which paths cross the VPN | Multicloud index |
+| `multicloud` | What runs where between the on-prem hub, EKS and GKE, and which links cross between them? | Multicloud index, Multicloud schemas |
+| `multicloud-links` | Which links cross between the on-prem hub and the public clouds, who opens them, and what allows them? | Multicloud schemas |
+| `multicloud-policies` | What may reach a project's workloads on each cluster, and what enforces it? | Multicloud schemas |
+| `cloud-up` | What happens, in order, when an operator runs `cnp.sh up` for a public cloud, and what survives `cnp.sh down`? | Multicloud schemas |
 | `access-matrix` | Who may act on what, and what the segregation plan changes, phase by phase | Access segregation |
 
 To change a diagram, edit the model (facts), the view (what is shown) or the layout
