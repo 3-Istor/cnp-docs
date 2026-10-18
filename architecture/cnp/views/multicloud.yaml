@@ -4,9 +4,9 @@ type: topology
 title: "CNP · Multicloud · Where a project runs"
 subtitle: "What runs where between the on-prem hub, EKS and GKE, and which links cross between them?"
 meta:
-  - "Scope: hub (K3s) and its onprem target, EKS cnp-eks and GKE cnp-gke with one project and one app each · main as of 2026-10-18 · derived from code (Cloud, K3s, cnp-project-base, infra-templates), cluster behaviour checked live on 18/10"
-  - "Out of scope: CMP up/down buttons (CNP-109) · per-project Keycloak (unused on clouds) · tenants and operators of the hub · observability · the access segregation plan · project bootstrap Terraform detail"
-  - "v0.2 · source: cnp-docs/architecture/cnp"
+  - "Scope: hub (K3s) and its onprem target, EKS cnp-eks and GKE cnp-gke with one project and one app each · main as of 2026-10-18 · derived from code, cluster behaviour checked live on 18/10"
+  - "Out of scope: CMP and its project bootstrap · Image Updater · buckets, GitHub and the operator · per-project Keycloak (unused on clouds) · observability. Detail of every link between clusters, with the same letters: see multicloud-links."
+  - "v0.4 · source: cnp-docs/architecture/cnp"
 
 # Explicit, so an element added to the model enters this view only when listed here.
 include:
@@ -55,73 +55,18 @@ include:
   - z-cluster
   - g-gitops
   - argocd
-  - appsets
-  - image-updater
   - g-secrets
   - vault
-  - g-identity
-  - keycloak
-  - g-cmp
-  - cmp-backend
   - g-vpn
   - wireguard-onprem
   - wireguard-onprem-gcp
-  - z-operator
-  - operator
-  - z-aws-shared
-  - tfstate-s3
-  - endpoint-bucket
-  - z-gcp-shared
-  - tfstate-gcs
-  - z-github
-  - github
-  - ghcr
-steps: [e-1-browser-edge, c-b-tunnel-edge, c-b-tunnel-gw, c-b-gw-b1, c-b1-front-back, c-b1-back-db]
-background:
-  - c-argocd-b
-  - c-argocd-gke
-  - c-vault-b-apiserver
-  - c-vault-gke-apiserver
-  - c-bsecret-vault
-  - c-gkesecret-vault
-  - c-wg-eks
-  - c-wg-gke
-  - c-op-vault
-  - c-op-endpoint
-  - c-wg-endpoint
-  - c-argocd-github
-  - c-updater-ghcr
-  - c-updater-github
-  - c-cmp-github
-  - c-op-state-s3
-  - c-op-state-gcs
+steps: [e-1-browser-edge, c-b-tunnel-gw, c-b-gw-b1, c-b1-front-back, c-b1-back-db]
+background: [c-argocd-b, c-argocd-gke, c-bsecret-vault, c-gkesecret-vault, c-wg-eks, c-wg-gke, c-vault-b-apiserver, c-vault-gke-apiserver, e-a-vso-vault, c-op-b-api, c-op-gke-api, c-op-vault, c-op-endpoint, c-wg-endpoint, c-op-ssm, c-op-state-s3, c-op-state-gcs, c-argocd-github, c-cmp-github, c-updater-github, c-updater-ghcr, c-b-nodes-ghcr, c-gke-nodes-ghcr, c-a-tunnel-edge, c-b-tunnel-edge, c-gke-tunnel-edge]
 
-# "" keeps the badge alone: the corridors are too dense, the cards carry the text.
 labels:
-  c-b-tunnel-edge: "relayed via tunnel ◀<br>opened outbound · QUIC"
-  c-a-tunnel-edge: ""
-  c-gke-tunnel-edge: ""
-  c-argocd-b: ""
-  c-argocd-gke: ""
-  c-vault-b-apiserver: ""
-  c-vault-gke-apiserver: ""
-  c-bsecret-vault: ""
-  c-gkesecret-vault: ""
-  c-wg-eks: ""
-  c-wg-gke: ""
-  c-op-vault: ""
-  c-op-endpoint: ""
-  c-wg-endpoint: ""
-  c-argocd-github: ""
-  c-updater-ghcr: ""
-  c-updater-github: ""
-  c-cmp-github: ""
-  c-op-state-s3: ""
-  c-op-state-gcs: ""
+  c-b-tunnel-gw: "via tunnel"
+  e-1-browser-edge: ""
   c-a-tunnel-gw: ""
-  c-b-tunnel-gw: ""
-  c-b1-front-back: ""
-  c-b1-back-db: ""
   c-a-gw-a1: ""
   c-a1-front-back: ""
   c-a1-back-db: ""
@@ -129,6 +74,35 @@ labels:
   c-gke-gw-front: ""
   c-gke-front-back: ""
   c-gke-back-db: ""
+  c-b-gw-b1: ""
+  c-b1-front-back: ""
+  c-b1-back-db: ""
+  c-argocd-b: ""
+  c-argocd-gke: ""
+  c-bsecret-vault: ""
+  c-gkesecret-vault: ""
+  c-wg-eks: ""
+  c-wg-gke: ""
+  c-vault-b-apiserver: ""
+  c-vault-gke-apiserver: ""
+  e-a-vso-vault: ""
+  c-op-b-api: ""
+  c-op-gke-api: ""
+  c-op-vault: ""
+  c-op-endpoint: ""
+  c-wg-endpoint: ""
+  c-op-ssm: ""
+  c-op-state-s3: ""
+  c-op-state-gcs: ""
+  c-argocd-github: ""
+  c-cmp-github: ""
+  c-updater-github: ""
+  c-updater-ghcr: ""
+  c-b-nodes-ghcr: ""
+  c-gke-nodes-ghcr: ""
+  c-a-tunnel-edge: ""
+  c-b-tunnel-edge: ""
+  c-gke-tunnel-edge: ""
 
 cards:
   - {id: card-legend, title: "Legend", color: slate, legend: true}
@@ -136,38 +110,34 @@ cards:
     title: "Where things stand (2026-10-18)"
     color: amber
     lines:
-      - "**One Argo CD** on the K3s hub drives onprem, EKS and GKE. Each cloud is a cluster Secret synced by VSO from Vault kvv2/argocd/clusters/<cloud>. Vault, central Keycloak and the CMP stay on the hub, which is also the onprem target."
-      - "**EKS and GKE** each get the platform base (Envoy Gateway, VSO, CNPG, local-path) from the platform-clouds ApplicationSet, plus one live project: letestaws / test-aws on EKS, letestgcp / test-gcp on GKE. A project lives on one cloud (target_cloud)."
-      - "**The operator** creates the clusters by hand with cnp.sh up / down. Terraform registers the cluster in Vault, writes the auth config and publishes the node IP; Argo CD then syncs by itself (under a minute, checked live on a GKE down/up)."
-      - "**[1] to [6]** user traffic reaches the app only through the project's own outbound tunnel, never through the hub; no LoadBalancer exists. GKE and onprem follow the same path, unnumbered."
-      - "**WireGuard** [G] [H] only carries test relays. Argo CD, Vault and app traffic go over the public Internet, limited by allow-lists on the hub egress IP."
+      - "**One Argo CD** on the K3s hub drives onprem, EKS and GKE. Vault and the central Keycloak stay on the hub, which is also the onprem target."
+      - "**EKS and GKE** each run the platform base (Envoy Gateway, secret operator, CNPG, local-path) plus one live project: letestaws / test-aws, letestgcp / test-gcp."
+      - "**The operator** creates the clusters by hand with cnp.sh; Argo CD then syncs by itself, in under a minute."
+      - "User traffic reaches the app only through the project's own outbound tunnel, never through the hub. onprem and GKE follow the same path, unnumbered."
   - id: card-steps
     title: "Request path · data plane (EKS)"
     color: cyan
     lines:
-      - "[1] The user opens <app>-<project>.3istor.com on Cloudflare (HTTPS 443, CNAME to the project tunnel)."
-      - "[2] letestaws-tunnel, on EKS, opened a QUIC 7844 tunnel outbound; the request is relayed back over it."
-      - "[3] cloudflared sends it to the letestaws-gateway-front Service, then Envoy (Gateway class eg, HTTP 80). With SSO, Envoy replies 302 to the central Keycloak."
-      - "[4] HTTPRoute to the frontend Service :80 (nginx :3001)."
-      - "[5] nginx proxies /api/ to the backend Service :8000."
-      - "[6] The backend queries CNPG test-aws-db-rw :5432, on a local-path PVC."
+      - "[1] The user opens <app>-<project>.3istor.com on Cloudflare (HTTPS 443)."
+      - "[2] Cloudflare relays the request to the letestaws-gateway Service (Envoy, HTTP 80) through the tunnel opened outbound by [Y]."
+      - "[3] HTTPRoute to the frontend Service :80 (nginx :3001)."
+      - "[4] nginx proxies /api/ to the backend :8000."
+      - "[5] The backend queries CNPG test-aws-db-rw :5432, on a local-path PVC."
   - id: card-background
     title: "Background · control plane"
     color: orange
     lines:
-      - "[A] [B] Argo CD calls the EKS / GKE API :443 with the argocd-manager token."
-      - "[C] [D] Vault calls the same API for TokenReview (SA vault-auth), mounts kubernetes-aws / -gcp."
-      - "[E] [F] Cloud VSO logs in to vault.3istor.com and syncs app-registry, secrets and tunnel token."
-      - "[G] [H] On-prem WireGuard pods initiate UDP 31820 to the cloud node (NodePort, pod 51820)."
-      - "[I] [J] Terraform writes the cluster entry and auth config into Vault, and the node IP into the endpoint bucket."
-      - "[K] The on-prem pod re-reads the endpoint every ~60 s when the last handshake is older than 180 s."
-      - "[L] Argo CD polls cnp-projects. [M] [N] Image Updater reads GHCR tags, writes back to Git. [O] CMP writes the registry record. [P] [Q] Terraform state (S3, GCS)."
+      - "[A] [B] Argo CD syncs the EKS / GKE API server (:443)."
+      - "[C] [D] The cloud secret operator logs in to Vault at vault.3istor.com :443, public, through Cloudflare."
+      - "[E] [F] The on-prem WireGuard pods initiate UDP 31820 to the cloud node. Only test relays use it today."
+      - "[X] [Y] [Z] Each project tunnel is opened outbound to Cloudflare (QUIC 7844)."
+      - "Letters follow multicloud-links, which lists every link: [G] to [W] are there."
   - id: card-gaps
     title: "Gaps between the plan and the code"
     color: orange
     lines:
-      - "!!G18!! **Sync after a long down.** Argo CD keeps retrying against the destroyed cluster's address; manual unblock (CNP-112)."
-      - "!!G19!! **Frontend start order.** nginx resolves the backend at start and crashes until the Service exists (CNP-114)."
-      - "!!G20!! **Shared VaultSecret.** Fullstack apps render app-registry from both Applications; one stays OutOfSync (CNP-115)."
-      - "!!G3!! **Transport.** TLS ends at Cloudflare; behind the tunnel, hops are plain HTTP."
-      - "Resolved since 09-30 (CNP-105, CNP-106): per-cloud Vault auth, per-project edge, cloud storage. G13 closed: clouds run HashiCorp VSO 3.0.0."
+      - "!!G18!! Argo CD keeps retrying against a destroyed cluster (CNP-112)."
+      - "!!G19!! nginx crashes until the backend Service exists (CNP-114)."
+      - "!!G20!! app-registry VaultSecret rendered twice, one OutOfSync (CNP-115)."
+      - "!!G13!! Ricoberger operator: behaviour in a Vault outage untested."
+      - "!!G3!! TLS ends at Cloudflare; behind the tunnel, plain HTTP."

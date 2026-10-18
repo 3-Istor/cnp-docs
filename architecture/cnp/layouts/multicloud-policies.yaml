@@ -1,0 +1,51 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2300, height: 1580}
+
+# Callers left, the protected workloads in the middle, what enforces on the right. Each
+# caller reaches the workloads on its own lane: allowed edges first, denied ones below.
+elements:
+  z-pol-in: {x: 40, y: 210, w: 400, h: 730}
+  pol-same-ns: {x: 40, y: 70, w: 320, h: 72}
+  pol-gateway: {x: 40, y: 166, w: 320, h: 72}
+  pol-cnpg: {x: 40, y: 262, w: 320, h: 72}
+  pol-obs: {x: 40, y: 358, w: 320, h: 72}
+  pol-kubelet: {x: 40, y: 454, w: 320, h: 72}
+  pol-other-proj: {x: 40, y: 550, w: 320, h: 72}
+  pol-default: {x: 40, y: 646, w: 320, h: 72}
+  z-pol-out: {x: 40, y: 1000, w: 400, h: 500}
+  pol-internet: {x: 40, y: 70, w: 320, h: 72}
+  pol-argo-op: {x: 40, y: 166, w: 320, h: 72}
+  pol-operator: {x: 40, y: 262, w: 320, h: 72}
+  pol-wg-onprem: {x: 40, y: 398, w: 320, h: 72}
+  z-pol-target: {x: 760, y: 390, w: 380, h: 430}
+  pol-workloads: {x: 40, y: 70, w: 300, h: 330}
+  z-pol-perim: {x: 760, y: 1070, w: 380, h: 450}
+  pol-api: {x: 40, y: 72, w: 300, h: 200}
+  pol-wg: {x: 40, y: 306, w: 300, h: 110}
+  z-pol-enf: {x: 1240, y: 210, w: 420, h: 600}
+  pol-ccnp: {x: 40, y: 70, w: 340, h: 80}
+  pol-np-eks: {x: 40, y: 174, w: 340, h: 80}
+  pol-np-gke: {x: 40, y: 278, w: 340, h: 80}
+  pol-perimeter: {x: 40, y: 382, w: 340, h: 80}
+  pol-no-lb: {x: 40, y: 486, w: 340, h: 80}
+
+edges:
+  c-pol-same: {from: pol-same-ns.right, to: pol-workloads.left@36px, waypoints: [[730, 316], [730, 496]]}
+  c-pol-gateway: {from: pol-gateway.right, to: pol-workloads.left@72px, waypoints: [[715, 412], [715, 532]]}
+  c-pol-cnpg: {from: pol-cnpg.right, to: pol-workloads.left@108px, waypoints: [[700, 508], [700, 568]]}
+  c-pol-obs: {from: pol-obs.right, to: pol-workloads.left@144px}
+  c-pol-kubelet: {from: pol-kubelet.right, to: pol-workloads.left@180px, waypoints: [[700, 700], [700, 640]]}
+  c-pol-other: {from: pol-other-proj.right, to: pol-workloads.left@216px, waypoints: [[715, 796], [715, 676]]}
+  c-pol-default: {from: pol-default.right, to: pol-workloads.left@252px, waypoints: [[730, 892], [730, 712]]}
+  c-pol-internet: {from: pol-internet.right@24px, to: pol-workloads.left@288px, waypoints: [[745, 1094], [745, 748]]}
+  c-pol-internet-api: {from: pol-internet.right@52px, to: pol-api.left@108px, waypoints: [[480, 1122], [480, 1250]]}
+  c-pol-api: {from: pol-argo-op.right, to: pol-api.left@60px, label_at: [640, 1202]}
+  c-pol-operator-api: {from: pol-operator.right, to: pol-api.left@156px}
+  c-pol-wg: {from: pol-wg-onprem.right, to: pol-wg.left@58px}
+
+cards:
+  card-legend: {x: 1740, y: 210, w: 500, h: 290}
+  card-rules: {x: 1740, y: 540, w: 500, h: 540}
+  card-guard: {x: 1240, y: 850, w: 420, h: 330}
+  card-sources: {x: 1740, y: 1120, w: 500, h: 270}

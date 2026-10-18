@@ -30,6 +30,8 @@ dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architec
 | [Contrat d'interface avec l'équipe cluster](03-contrat-equipe-cluster.md) | Ce que CNP possède, ce que l'équipe cluster possède, les flux autorisés sur le VPN |
 | [Chantiers et séquencement](04-chantiers-et-sequencement.md) | WS-0 à WS-9, phases, portes de passage |
 | [Nettoyage et décommissionnement](05-nettoyage-et-decommissionnement.md) | Le job de clean par projet et par cloud |
+| [Schémas](06-schemas.md) | Les quatre vues : où tourne quoi, liens, politiques d'accès, `cnp.sh up` |
+| [Procédures opérateur EKS/GKE](07-procedures-operateur.md) | Prérequis, `cnp.sh`, vérifications, `down`, problèmes connus |
 
 ## État
 

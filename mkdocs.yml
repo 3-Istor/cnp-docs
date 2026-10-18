@@ -123,3 +123,5 @@ nav:
       - Contrat Équipe Cluster: 06-multicloud/03-contrat-equipe-cluster.md
       - Chantiers & Séquencement: 06-multicloud/04-chantiers-et-sequencement.md
       - Nettoyage & Décommissionnement: 06-multicloud/05-nettoyage-et-decommissionnement.md
+      - Schémas: 06-multicloud/06-schemas.md
+      - Procédures opérateur EKS/GKE: 06-multicloud/07-procedures-operateur.md

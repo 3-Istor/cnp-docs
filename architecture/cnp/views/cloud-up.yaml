@@ -1,0 +1,48 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Multicloud · cnp.sh up"
+subtitle: "What happens, in order, when an operator runs cnp.sh up for a public cloud?"
+meta:
+  - "Scope: EKS and GKE alike, written <cloud> · main as of 2026-10-18 · derived from code (Cloud/terraform/public, modules/cluster-addons, K3s Argo CD) · GKE down then up checked live on 18/10: everything Synced and Healthy in under a minute, no manual sync"
+  - "Prerequisites: VAULT_ADDR=https://vault.3istor.com and vault login · AWS_PROFILE=cnp · gcloud ADC (GKE) · terraform.tfvars. Once by hand: vault kv put kvv2/cnp-vpn/<cloud> and the mount kubernetes-<cloud>. What down removes: docs/06-multicloud/07-procedures-operateur.md"
+  - "Arrows: purple = background request, red = authentication, amber = tunnel. Notes in grey say what survives cnp.sh down and the known gaps."
+  - "v0.2 · source: cnp-docs/architecture/cnp"
+
+participants: [operator, cloud-control, cloud-api, vault, endpoint-bucket, vso, argocd, cloud-vso, up-wg-onprem, cloud-wg]
+
+steps:
+  # Terraform, by hand: cluster, node, then the cluster-addons module.
+  - {note: operator, text: "cnp.sh up = terraform apply"}
+  - {id: apply, from: operator, to: cloud-control, over: c-up-op-cloud, text: "create cluster, node group, firewall UDP 31820"}
+  - {note: cloud-control, text: "cluster, node disk, SSM kubeconfig: lost at down"}
+  - {id: sas, from: operator, to: cloud-api, over: c-up-op-api, text: "create SAs argocd-manager, vault-auth"}
+  - {id: entry, from: operator, to: vault, over: c-op-vault, text: "write kvv2/argocd/clusters/<cloud>"}
+  - {id: auth, from: operator, to: vault, over: c-op-vault, text: "write auth/kubernetes-<cloud>/config"}
+  - {id: key, from: operator, to: vault, over: c-op-vault, text: "read kvv2/cnp-vpn/<cloud>"}
+  - {reply: key, text: "WireGuard private key"}
+  - {note: vault, text: "kept across down: cluster entry, auth mount + CMP roles, kvv2/cnp-vpn keys"}
+  - {id: secret, from: operator, to: cloud-api, over: c-up-op-api, text: "create ns cnp-vpn + Secret wireguard-key"}
+  - {id: endpoint, from: operator, to: endpoint-bucket, over: c-op-endpoint, text: "put <cloud> = node IP:31820"}
+  - {note: endpoint-bucket, text: "object lost at down, bucket kept"}
+  - {note: operator, text: "apply done: nothing else by hand"}
+
+  # Automatic: the hub registers the cluster, Argo CD syncs.
+  - {id: vso-read, from: vso, to: vault, over: e-a-vso-vault, text: "read cluster entry (< 1 min)"}
+  - {note: vso, text: "refresh Argo CD cluster Secret"}
+  - {id: sync-base, from: argocd, to: cloud-api, over: c-up-argocd-api, text: "sync platform-<cloud>, wireguard-<cloud> (retry -1)"}
+  - {note: argocd, text: "Applications kept at down (Unknown). CNP-112: after a long down, sync retries the old address"}
+  - {id: login, from: cloud-vso, to: vault, over: c-up-cvso-vault, text: "login auth/kubernetes-<cloud>"}
+  - {id: review, from: vault, to: cloud-api, over: c-up-vault-api, text: "TokenReview (SA vault-auth)"}
+  - {reply: login, text: "token"}
+  - {note: cloud-vso, text: "secrets synced"}
+  - {id: sync-boot, from: argocd, to: cloud-api, over: c-up-argocd-api, text: "sync project bootstraps"}
+  - {id: sync-apps, from: argocd, to: cloud-api, over: c-up-argocd-api, text: "sync apps"}
+  - {note: argocd, text: "CNP-114 frontend restarts until backend exists · CNP-115 app-registry OutOfSync"}
+
+  # Automatic: the tunnel comes back.
+  - {note: up-wg-onprem, text: "no handshake for 180 s"}
+  - {id: reread, from: up-wg-onprem, to: endpoint-bucket, over: c-up-wg-endpoint, text: "re-read <cloud> (every ~60 s)"}
+  - {reply: reread, text: "node IP:31820"}
+  - {id: hs, from: up-wg-onprem, to: cloud-wg, over: c-up-wg-cloud, text: "handshake · UDP 31820"}
+  - {note: cloud-wg, text: "tunnel up"}
