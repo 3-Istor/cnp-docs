@@ -1,82 +1,130 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 2300, height: 2860}
+canvas: {width: 3060, height: 4000}
 
-# Element boxes are relative to their parent zone. Edge waypoints and labels are
-# canvas coordinates. The two targets are stacked so both tunnels reach Cloudflare on
-# the left; the control plane climbs from the hub through lanes on the right.
-lanes:
-  tunnel-a: {x: 660}
-  tunnel-b: {x: 680}
-  hub-argocd-a: {y: 2090}
-  hub-argocd-b: {y: 2060}
-  hub-secrets-a: {y: 2120}
-  hub-secrets-b: {y: 2150}
-  east-argocd-a: {x: 2220}
-  east-argocd-b: {x: 2200}
-  east-secrets-a: {x: 2240}
-  east-secrets-b: {x: 2260}
-
+# Element boxes are relative to their parent zone. Edge waypoints are canvas
+# coordinates. Left to right: user, Cloudflare, the three clusters stacked, the
+# externals. The hub is last; its control-plane edges leave through the gap above it
+# (y 2595-2715), climb the east corridor (x 2365-2485) and enter the cloud API
+# servers and WireGuard pods from the east (against_flow).
 elements:
-  z-internet: {x: 40, y: 220, w: 220, h: 1820}
-  user: {x: 82, y: 670, w: 56, h: 56}
-  z-cloudflare: {x: 320, y: 220, w: 300, h: 1820}
-  cf-edge: {x: 20, y: 640, w: 260, h: 120}
-  z-onprem-target: {x: 700, y: 220, w: 1460, h: 870}
-  g-a-system: {x: 40, y: 70, w: 1120, h: 190}
-  a-tunnel: {x: 40, y: 70, w: 240, h: 90}
-  a-gateway: {x: 440, y: 70, w: 260, h: 100}
-  a-keycloak: {x: 840, y: 70, w: 240, h: 100}
-  g-a-app-a: {x: 40, y: 330, w: 540, h: 500}
-  a1-front: {x: 160, y: 80, w: 220, h: 80}
-  a1-back: {x: 160, y: 230, w: 220, h: 80}
-  a1-db: {x: 160, y: 360, w: 220, h: 100}
-  g-a-app-b: {x: 640, y: 330, w: 520, h: 500}
-  a2-front: {x: 160, y: 80, w: 220, h: 80}
-  a2-back: {x: 160, y: 230, w: 220, h: 80}
-  a2-db: {x: 160, y: 360, w: 220, h: 100}
-  a-apiserver: {x: 1220, y: 100, w: 220, h: 80}
-  a-secret-op: {x: 1220, y: 260, w: 220, h: 80}
-  z-cloud-a: {x: 700, y: 1170, w: 1460, h: 870}
-  g-b-system: {x: 40, y: 70, w: 1120, h: 190}
-  b-tunnel: {x: 40, y: 70, w: 240, h: 90}
-  b-gateway: {x: 440, y: 70, w: 260, h: 100}
-  b-keycloak: {x: 840, y: 70, w: 240, h: 100}
-  g-b-app: {x: 40, y: 330, w: 540, h: 500}
-  b1-front: {x: 160, y: 80, w: 220, h: 80}
-  b1-back: {x: 160, y: 230, w: 220, h: 80}
-  b1-db: {x: 160, y: 360, w: 220, h: 100}
-  b-apiserver: {x: 1220, y: 100, w: 220, h: 80}
-  b-secret-op: {x: 1220, y: 260, w: 220, h: 80}
-  z-cluster: {x: 700, y: 2160, w: 1460, h: 300}
-  g-gitops: {x: 40, y: 70, w: 340, h: 190}
-  argocd: {x: 40, y: 70, w: 260, h: 90}
-  g-secrets: {x: 800, y: 70, w: 380, h: 190}
-  vault: {x: 120, y: 70, w: 240, h: 90}
+  z-internet: {x: 40, y: 220, w: 220, h: 2350}
+  user: {x: 82, y: 787, w: 56, h: 56}
+  z-cloudflare: {x: 320, y: 220, w: 300, h: 2350}
+  cf-edge: {x: 20, y: 755, w: 260, h: 120}
+
+  z-onprem-target: {x: 700, y: 220, w: 1640, h: 570}
+  g-a-system: {x: 40, y: 70, w: 620, h: 190}
+  a-tunnel: {x: 40, y: 60, w: 240, h: 90}
+  a-gateway: {x: 340, y: 60, w: 240, h: 90}
+  g-a-app-a: {x: 300, y: 330, w: 980, h: 190}
+  a1-front: {x: 40, y: 60, w: 260, h: 80}
+  a1-back: {x: 360, y: 60, w: 260, h: 80}
+  a1-db: {x: 680, y: 60, w: 260, h: 100}
+
+  z-cloud-a: {x: 700, y: 860, w: 1640, h: 820}
+  g-b-system: {x: 40, y: 70, w: 620, h: 190}
+  b-tunnel: {x: 40, y: 60, w: 240, h: 90}
+  b-gateway: {x: 340, y: 60, w: 240, h: 90}
+  g-b-app: {x: 300, y: 330, w: 980, h: 190}
+  b1-front: {x: 40, y: 60, w: 260, h: 80}
+  b1-back: {x: 360, y: 60, w: 260, h: 80}
+  b1-db: {x: 680, y: 60, w: 260, h: 100}
+  g-b-platform: {x: 300, y: 580, w: 1240, h: 190}
+  b-envoy: {x: 40, y: 60, w: 260, h: 90}
+  b-cnpg: {x: 340, y: 60, w: 260, h: 90}
+  b-localpath: {x: 640, y: 60, w: 260, h: 90}
+  b-secret-op: {x: 940, y: 60, w: 260, h: 90}
+  b-apiserver: {x: 1360, y: 100, w: 240, h: 80}
+  b-wireguard: {x: 1360, y: 220, w: 240, h: 90}
+
+  z-cloud-b: {x: 700, y: 1750, w: 1640, h: 820}
+  g-gke-system: {x: 40, y: 70, w: 620, h: 190}
+  gke-tunnel: {x: 40, y: 60, w: 240, h: 90}
+  gke-gateway: {x: 340, y: 60, w: 240, h: 90}
+  g-gke-app: {x: 300, y: 330, w: 980, h: 190}
+  gke-front: {x: 40, y: 60, w: 260, h: 80}
+  gke-back: {x: 360, y: 60, w: 260, h: 80}
+  gke-db: {x: 680, y: 60, w: 260, h: 100}
+  g-gke-platform: {x: 300, y: 580, w: 1240, h: 190}
+  gke-envoy: {x: 40, y: 60, w: 260, h: 90}
+  gke-cnpg: {x: 340, y: 60, w: 260, h: 90}
+  gke-localpath: {x: 640, y: 60, w: 260, h: 90}
+  gke-secret-op: {x: 940, y: 60, w: 260, h: 90}
+  gke-apiserver: {x: 1360, y: 100, w: 240, h: 80}
+  gke-wireguard: {x: 1360, y: 220, w: 240, h: 90}
+
+  z-cluster: {x: 700, y: 2740, w: 1640, h: 760}
+  g-gitops: {x: 40, y: 70, w: 360, h: 400}
+  argocd: {x: 50, y: 60, w: 260, h: 80}
+  appsets: {x: 50, y: 164, w: 260, h: 80}
+  image-updater: {x: 50, y: 268, w: 260, h: 80}
+  g-secrets: {x: 460, y: 70, w: 340, h: 190}
+  vault: {x: 30, y: 60, w: 280, h: 100}
+  g-identity: {x: 460, y: 320, w: 340, h: 160}
+  keycloak: {x: 30, y: 60, w: 280, h: 80}
+  g-vpn: {x: 860, y: 70, w: 640, h: 190}
+  wireguard-onprem: {x: 30, y: 60, w: 260, h: 90}
+  wireguard-onprem-gcp: {x: 350, y: 60, w: 260, h: 90}
+  g-cmp: {x: 1180, y: 320, w: 320, h: 160}
+  cmp-backend: {x: 30, y: 60, w: 260, h: 80}
+
+  z-operator: {x: 2620, y: 2500, w: 400, h: 190}
+  operator: {x: 30, y: 60, w: 340, h: 90}
+  z-aws-shared: {x: 2620, y: 2760, w: 400, h: 310}
+  endpoint-bucket: {x: 30, y: 60, w: 340, h: 90}
+  tfstate-s3: {x: 30, y: 180, w: 340, h: 90}
+  z-github: {x: 2620, y: 3150, w: 400, h: 385}
+  github: {x: 30, y: 75, w: 340, h: 150}
+  ghcr: {x: 30, y: 255, w: 340, h: 90}
+  z-gcp-shared: {x: 2620, y: 3600, w: 400, h: 190}
+  tfstate-gcs: {x: 30, y: 60, w: 340, h: 100}
 
 edges:
+  # Request path, EKS.
   e-1-browser-edge: {from: user.right, to: cf-edge.left}
-  c-a-tunnel-edge: {from: a-tunnel.left, to: cf-edge.right@30px, waypoints: [lane:tunnel-a], against_flow: true}
-  c-b-tunnel-edge: {from: b-tunnel.left, to: cf-edge.right@90px, waypoints: [lane:tunnel-b], against_flow: true}
-  c-a-tunnel-gw: {from: a-tunnel.right, to: a-gateway.left@70px}
-  c-a-gw-kc: {from: a-gateway.right, to: a-keycloak.left@70px}
-  c-a-gw-a1: {from: a-gateway.bottom@40px, to: a1-front.top@100px, waypoints: [[1220, 515], [1000, 515]]}
-  c-a1-front-back: {from: a1-front.bottom, to: a1-back.top}
-  c-a1-back-db: {from: a1-back.bottom, to: a1-db.top}
-  c-a-gw-a2: {from: a-gateway.bottom@220px, to: a2-front.top@100px, waypoints: [[1400, 530], [1600, 530]]}
-  c-a2-front-back: {from: a2-front.bottom, to: a2-back.top}
-  c-a2-back-db: {from: a2-back.bottom, to: a2-db.top}
-  c-b-tunnel-gw: {from: b-tunnel.right, to: b-gateway.left@70px}
-  c-b-gw-kc: {from: b-gateway.right, to: b-keycloak.left@70px}
-  c-b-gw-b1: {from: b-gateway.bottom@40px, to: b1-front.top@100px, waypoints: [[1220, 1465], [1000, 1465]]}
-  c-b1-front-back: {from: b1-front.bottom, to: b1-back.top}
-  c-b1-back-db: {from: b1-back.bottom, to: b1-db.top}
-  c-argocd-a: {from: argocd.right, to: a-apiserver.top@110px, waypoints: [[1100, 2345], lane:hub-argocd-a, lane:east-argocd-a, [2220, 300], [2030, 300]], label_at: [1350, 2090]}
-  c-argocd-b: {from: argocd.right@25px, to: b-apiserver.top@110px, waypoints: [[1120, 2325], lane:hub-argocd-b, lane:east-argocd-b, [2200, 1250], [2030, 1250]], label_at: [1650, 2060]}
-  c-asecret-vault: {from: a-secret-op.right, to: vault.top@120px, waypoints: [lane:east-secrets-a, lane:hub-secrets-a], label_at: [1900, 2120]}
-  c-bsecret-vault: {from: b-secret-op.right, to: vault.top@220px, waypoints: [lane:east-secrets-b, lane:hub-secrets-b], label_at: [2150, 2150]}
+  c-b-tunnel-edge: {from: b-tunnel.left, to: cf-edge.right@60px, against_flow: true}
+  c-b-tunnel-gw: {from: b-tunnel.right@70px, to: b-gateway.left@70px}
+  c-b-gw-b1: {from: b-gateway.bottom@210px, to: b1-front.top@250px}
+  c-b1-front-back: {from: b1-front.right@60px, to: b1-back.left@60px}
+  c-b1-back-db: {from: b1-back.right@60px, to: b1-db.left@60px}
+  # Same path, onprem and GKE.
+  c-a-tunnel-edge: {from: a-tunnel.left, to: cf-edge.right@30px, waypoints: [[645, 395], [645, 1005]], against_flow: true}
+  c-a-tunnel-gw: {from: a-tunnel.right@70px, to: a-gateway.left@70px}
+  c-a-gw-a1: {from: a-gateway.bottom@210px, to: a1-front.top@250px}
+  c-a1-front-back: {from: a1-front.right@60px, to: a1-back.left@60px}
+  c-a1-back-db: {from: a1-back.right@60px, to: a1-db.left@60px}
+  c-gke-tunnel-edge: {from: gke-tunnel.left, to: cf-edge.right@90px, waypoints: [[685, 1925], [685, 1065]], against_flow: true}
+  c-gke-tunnel-gw: {from: gke-tunnel.right@70px, to: gke-gateway.left@70px}
+  c-gke-gw-front: {from: gke-gateway.bottom@210px, to: gke-front.top@250px}
+  c-gke-front-back: {from: gke-front.right@60px, to: gke-back.left@60px}
+  c-gke-back-db: {from: gke-back.right@60px, to: gke-db.left@60px}
+
+  # Hub to cloud API servers and WireGuard pods.
+  c-argocd-b: {from: argocd.right@25px, to: b-apiserver.right@20px, waypoints: [[1115, 2895], [1115, 2595], [2365, 2595], [2365, 980]], against_flow: true, label_at: [1300, 2595]}
+  c-argocd-gke: {from: argocd.right@55px, to: gke-apiserver.right@20px, waypoints: [[1130, 2925], [1130, 2610], [2380, 2610], [2380, 1870]], against_flow: true, label_at: [1420, 2610]}
+  c-vault-b-apiserver: {from: vault.right@25px, to: b-apiserver.right@60px, waypoints: [[1515, 2895], [1515, 2625], [2395, 2625], [2395, 1020]], against_flow: true, label_at: [1650, 2625]}
+  c-vault-gke-apiserver: {from: vault.right@55px, to: gke-apiserver.right@60px, waypoints: [[1530, 2925], [1530, 2640], [2410, 2640], [2410, 1910]], against_flow: true, label_at: [1750, 2640]}
+  c-wg-eks: {from: wireguard-onprem.right@30px, to: b-wireguard.right@45px, waypoints: [[1880, 2900], [1880, 2655], [2425, 2655], [2425, 1125]], against_flow: true, label_at: [2000, 2655]}
+  c-wg-gke: {from: wireguard-onprem-gcp.right@30px, to: gke-wireguard.right@45px, waypoints: [[2190, 2900], [2190, 2670], [2440, 2670], [2440, 2015]], against_flow: true, label_at: [2300, 2670]}
+  # Cloud VSO to Vault.
+  c-bsecret-vault: {from: b-secret-op.right@45px, to: vault.top@190px, waypoints: [[2455, 1545], [2455, 2685], [1380, 2685]], label_at: [2060, 2685]}
+  c-gkesecret-vault: {from: gke-secret-op.right@45px, to: vault.top@220px, waypoints: [[2470, 2435], [2470, 2700], [1410, 2700]], label_at: [1500, 2700]}
+  # Operator.
+  c-op-vault: {from: operator.bottom@30px, to: vault.top@250px, waypoints: [[2680, 2715], [1440, 2715]], label_at: [2560, 2715]}
+  c-op-endpoint: {from: operator.bottom@290px, to: endpoint-bucket.top@290px, label_at: [2940, 2735]}
+  c-op-state-s3: {from: operator.bottom@110px, to: tfstate-s3.left@70px, waypoints: [[2760, 2735], [2580, 2735], [2580, 3010]], label_at: [2670, 2735]}
+  c-op-state-gcs: {from: operator.bottom@150px, to: tfstate-gcs.left@70px, waypoints: [[2800, 2745], [2595, 2745], [2595, 3730]], label_at: [2595, 3100]}
+  # Hub to the externals, along the bottom margin of the hub.
+  c-wg-endpoint: {from: wireguard-onprem.bottom@130px, to: endpoint-bucket.left@70px, waypoints: [[1720, 3235], [2530, 3235], [2530, 2890]], label_at: [2300, 3235]}
+  c-argocd-github: {from: argocd.right@75px, to: github.left@85px, waypoints: [[1145, 2945], [1145, 3310]], label_at: [1400, 3310]}
+  c-cmp-github: {from: cmp-backend.bottom@130px, to: github.left@60px, waypoints: [[2040, 3285]], label_at: [2200, 3285]}
+  c-updater-github: {from: image-updater.right@60px, to: github.left@110px, waypoints: [[1115, 3138], [1115, 3335]], label_at: [2400, 3335]}
+  c-updater-ghcr: {from: image-updater.right@25px, to: ghcr.left@55px, waypoints: [[1130, 3103], [1130, 3460]], label_at: [1500, 3460]}
 
 cards:
-  card-legend: {x: 40, y: 2520, w: 520, h: 300}
-  card-status: {x: 590, y: 2520, w: 860, h: 300}
-  card-gaps: {x: 1480, y: 2520, w: 780, h: 300}
+  card-legend: {x: 40, y: 3570, w: 440, h: 400}
+  card-status: {x: 510, y: 3570, w: 520, h: 400}
+  card-steps: {x: 1060, y: 3570, w: 440, h: 400}
+  card-background: {x: 1530, y: 3570, w: 500, h: 400}
+  card-gaps: {x: 2060, y: 3570, w: 480, h: 400}
