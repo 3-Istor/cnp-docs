@@ -87,15 +87,16 @@ Once you run `git push origin main`, the **ArgoCD Engine** automatically interce
 
 ---
 
-## 🤖 Pathway 3: Conversational AI (Future MCP Integration)
+## 🤖 Pathway 3: Your AI assistant
 
-For a futuristic "chat-to-deploy" experience, developers can interact with an AI Assistant (such as Claude Code, Cursor, or Copilot) equipped with the **CNP Model Context Protocol (MCP)** server.
+Claude (web, desktop, Claude Code), ChatGPT, Codex, OpenCode, Cursor or VS Code can use CNP for you: connect it to `https://cmp.3istor.com/mcp`, sign in with your company account and approve it on the CMP page. Setup per assistant: [cmp.3istor.com/connect-ai](https://cmp.3istor.com/connect-ai).
 
-Instead of navigating the UI or writing YAML, you can instruct your local editor assistant:
-* *"Scale my alpha-frontend application to 5 replicas"*
-* *"Add a Postgres database to my billing service"*
+You can then ask, in plain language:
+* *"Put a page with the agenda of the October seminar online"*
+* *"Why is the canary of billing-api stuck? Read the logs first"*
+* *"Release what is on main as a minor version and follow the rollout"*
 
-The AI assistant connects to the CMP MCP server, reads the specifications, performs the deep-merge modifications on `deploy/values.yaml`, and commits the changes directly to your repository.
+The assistant acts with your rights, through the CMP. What it may do on its own depends on the project's stake level (sandbox, demo, standard, critical), set in the project's **AI assistants** tab. In Claude Code, the plugin `cnp@cnp-agent-kit` adds the platform guides. Details: [CMP MCP integration](05-cmp-backend-api/11-cmp-mcp-integration.md).
 
 ---
 
