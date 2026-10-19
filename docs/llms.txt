@@ -1,0 +1,22 @@
+# Cloud Native Platform (CNP)
+
+> CNP is the 3-Istor internal developer platform: teams create projects and deploy apps from templates (static or FastAPI + React + PostgreSQL) onto Kubernetes through GitOps, with SSO, Vault secrets, monitoring, FinOps and canary releases. The CMP (https://cmp.3istor.com) is its portal. AI assistants use it through the MCP server https://cmp.3istor.com/mcp.
+
+## Use CNP from an AI assistant
+
+- [Connect an assistant](https://cmp.3istor.com/connect-ai): setup for Claude, ChatGPT, Codex, OpenCode, Cursor, VS Code
+- [CMP MCP integration](https://3-istor.github.io/cnp-docs/05-cmp-backend-api/11-cmp-mcp-integration/): OAuth flow, stake policy, tools
+- [CNP agent kit](https://github.com/3-Istor/cnp-agent-kit): platform guides (skills), Claude Code plugin, doctrine rules
+
+## Platform
+
+- [Developer playbook](https://3-istor.github.io/cnp-docs/developer-onboarding-guide/): the three ways to use CNP
+- [System overview](https://3-istor.github.io/cnp-docs/01-architecture/01-system-overview/)
+- [Tenancy and isolation](https://3-istor.github.io/cnp-docs/01-architecture/02-tenancy-and-isolation/)
+- [App provisioning flow](https://3-istor.github.io/cnp-docs/03-pipelines-and-workflows/01-app-provisioning-flow/)
+- [Git app templates](https://3-istor.github.io/cnp-docs/04-templates/01-git-app-templates/)
+
+## Optional
+
+- [Repository landscape](https://3-istor.github.io/cnp-docs/repositories-landscape/)
+- [Roadmap](https://3-istor.github.io/cnp-docs/README_ROADMAP/)
