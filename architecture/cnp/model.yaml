@@ -157,7 +157,7 @@ elements:
   - {id: gh-owner, kind: external, parent: z-github, icon: github, title: Org owner, tech: "[GitHub role]", desc: Full control of the org}
   - {id: gh-base, kind: external, parent: z-github, icon: github, title: Member write, tech: "[GitHub permission]", desc: "Push to main, no protection"}
   - {id: gh-ruleset, kind: external, parent: z-github, icon: github, title: main ruleset, tech: "[GitHub ruleset]", desc: "PR, 1 review, CODEOWNERS", status: planned, target: P3}
-  - {id: gh-project-repos, kind: external, parent: z-github, icon: github, title: App repos, tech: "[GitHub · one per project]", desc: Created by the CMP from templates}
+  - {id: gh-project-repos, kind: external, parent: z-github, icon: github, title: App repos, tech: "[GitHub · one per project]", desc: Created by the CMP from templates, ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: grp-infra-elevated, kind: security, parent: g-identity, icon: keycloak, title: infra-elevated, tech: "[Keycloak group · JIT]", desc: "Granted on request, 1 hour", status: planned, target: P3}
   - {id: policy-vault-data, kind: database, parent: g-secrets, icon: vault, title: vault_data_admin, tech: "[Vault policy]", desc: "project-*/*, audited", status: planned, target: P3}
   - {id: audit-logs, kind: database, parent: g-ops, shape: cylinder, icon: grafana-alloy, title: Audit logs, tech: "[Loki · append-only]", desc: "Vault, K3s, Keycloak, Argo CD", status: planned, target: P1}
@@ -243,6 +243,16 @@ elements:
   - {id: cloud-vso, kind: security, icon: vault, title: "Cloud VSO", tech: "[platform-<cloud>]", desc: "Logs in at auth/kubernetes-<cloud>"}
   - {id: cloud-wg, kind: cloud, icon: k8s-pod, title: "Cloud WireGuard", tech: "[wireguard-<cloud>]", desc: "Listens on the node", ports: [{name: wg, protocol: UDP, port: 31820}]}
   - {id: up-wg-onprem, kind: cloud, icon: k8s-pod, title: "On-prem WireGuard", tech: "[ns wireguard]", desc: "Initiates, keepalive 25 s"}
+
+  # AI assistants through the CMP's MCP server (CMP v0.3.45, CMP#95, K3s#128).
+  - {id: z-assistants, kind: region, color: violet, icon: claude, title: "AI ASSISTANTS", sub: "the user's own subscription"}
+  - {id: assistant-remote, kind: external, parent: z-assistants, icon: claude, title: "claude.ai · ChatGPT", tech: "[remote MCP connector]", desc: "Calls tools for the signed-in user"}
+  - {id: assistant-local, kind: external, parent: z-assistants, icon: claude, title: "Claude Code · Codex", tech: "[MCP client · cnp plugin]", desc: "Same tools, skills installed"}
+  - {id: cmp-mcp, kind: backend, parent: g-cmp, icon: mcp, title: "MCP server", tech: "[FastMCP · /mcp · backend pod]", desc: "18 tools, guides as skill:// resources", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: cmp-oauth, kind: security, parent: g-cmp, icon: fastapi, title: "OAuth server", tech: "[MCP SDK · backend pod]", desc: "Registers assistants, issues tokens", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: stake-policy, kind: security, parent: g-cmp, icon: k8s-crd, title: "Stake policy", tech: "[policy.yaml · per project]", desc: "allow, ask, PR, approve or deny"}
+  - {id: cmp-mcp-route, kind: backend, parent: g-gateway, icon: k8s-crd, title: "HTTPRoute cmp-mcp", tech: "[no Keycloak JWT policy]", desc: "/mcp and the OAuth endpoints"}
+  - {id: agent-kit-repo, kind: external, parent: z-github, icon: github, title: "cnp-agent-kit", tech: "[public repo]", desc: "Skills, plugin, doctrine", ports: [{name: https, protocol: TCP, port: 443}]}
 
 connections:
   # Request path.
@@ -345,6 +355,18 @@ connections:
   - {id: c-up-wg-endpoint, from: up-wg-onprem, to: endpoint-bucket, port: https, protocol: HTTPS, verb: re-read endpoint, kind: async}
   - {id: c-up-wg-cloud, from: up-wg-onprem, to: cloud-wg, port: wg, protocol: WireGuard, verb: initiate tunnel, kind: tunnel}
 
+  # AI assistants
+  - {id: c-assistant-edge, from: assistant-remote, to: cf-edge, port: https, protocol: HTTPS, verb: POST /mcp, kind: flow}
+  - {id: c-local-assistant-edge, from: assistant-local, to: cf-edge, port: https, protocol: HTTPS, verb: POST /mcp, kind: flow}
+  - {id: c-envoy-cmp-mcp, from: envoy-shared-gateway, to: cmp-mcp, port: http, protocol: HTTP, verb: route /mcp, kind: flow}
+  - {id: c-envoy-cmp-oauth, from: envoy-shared-gateway, to: cmp-oauth, port: http, protocol: HTTP, verb: route /token /register, kind: auth}
+  - {id: c-mcp-api, from: cmp-mcp, to: cmp-backend, port: http, protocol: ASGI, verb: call REST in-process, kind: flow}
+  - {id: c-mcp-app-repos, from: cmp-mcp, to: gh-project-repos, port: https, protocol: HTTPS, verb: commit · tag vX.Y.Z, kind: flow}
+  - {id: c-mcp-agent-kit, from: cmp-mcp, to: agent-kit-repo, port: https, protocol: HTTPS, verb: read skills every 10 min, kind: async}
+  - {id: c-repos-ghcr, from: gh-project-repos, to: ghcr, port: https, protocol: HTTPS, verb: CI pushes image, kind: async}
+  - {id: c-updater-app-repos, from: image-updater, to: gh-project-repos, port: https, protocol: HTTPS, verb: write back tag, kind: async}
+  - {id: c-argocd-app-repos, from: argocd, to: gh-project-repos, port: https, protocol: HTTPS, verb: poll values, kind: async}
+
 references:
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
@@ -355,6 +377,8 @@ references:
   - {id: r-policy-route, from: security-policy, to: httproute, kind: targetRef}
   - {id: r-policy-secret, from: security-policy, to: app-secret, kind: clientSecret}
   - {id: r-pods-secret, from: app-pods, to: app-secret, kind: envFrom}
+  - {id: r-mcp-policy, from: cmp-mcp, to: stake-policy, kind: evaluates}
+  - {id: r-mcp-route-gateway, from: cmp-mcp-route, to: envoy-shared-gateway, kind: parentRef}
 
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}

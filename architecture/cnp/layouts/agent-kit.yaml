@@ -1,0 +1,61 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2560, height: 2080}
+elements:
+  z-assistants: {x: 40, y: 290, w: 340, h: 360}
+  assistant-remote: {x: 30, y: 70, w: 280, h: 100}
+  assistant-local: {x: 30, y: 220, w: 280, h: 100}
+  z-cloudflare: {x: 460, y: 290, w: 320, h: 230}
+  cf-edge: {x: 30, y: 80, w: 260, h: 100}
+  z-cluster: {x: 860, y: 210, w: 1280, h: 1060}
+  g-connectivity: {x: 40, y: 70, w: 320, h: 200}
+  cloudflared-platform: {x: 30, y: 70, w: 260, h: 96}
+  g-gateway: {x: 40, y: 330, w: 320, h: 360}
+  envoy-shared-gateway: {x: 30, y: 70, w: 260, h: 100}
+  cmp-mcp-route: {x: 30, y: 220, w: 260, h: 100}
+  g-cmp: {x: 440, y: 70, w: 380, h: 900}
+  cmp-frontend: {x: 40, y: 70, w: 300, h: 100}
+  cmp-oauth: {x: 40, y: 230, w: 300, h: 100}
+  cmp-mcp: {x: 40, y: 390, w: 300, h: 110}
+  stake-policy: {x: 40, y: 560, w: 300, h: 100}
+  cmp-backend: {x: 40, y: 740, w: 300, h: 100}
+  g-identity: {x: 900, y: 70, w: 340, h: 200}
+  keycloak: {x: 30, y: 70, w: 280, h: 100}
+  g-gitops: {x: 900, y: 330, w: 340, h: 520}
+  argocd: {x: 30, y: 70, w: 280, h: 100}
+  image-updater: {x: 30, y: 370, w: 280, h: 100}
+  kube-apiserver: {x: 30, y: 210, w: 280, h: 100}
+  z-github: {x: 2220, y: 210, w: 320, h: 760}
+  agent-kit-repo: {x: 20, y: 80, w: 280, h: 100}
+  gh-project-repos: {x: 20, y: 320, w: 280, h: 100}
+  ghcr: {x: 20, y: 600, w: 280, h: 100}
+edges:
+  c-assistant-edge: {from: assistant-remote.right@70px, to: cf-edge.left@60px}
+  c-local-assistant-edge: {from: assistant-local.right, to: cf-edge.left@85px, waypoints: [[410, 560], [410, 455]]}
+  e-oidc-platform-tunnel: {from: cloudflared-platform.left@30px, to: cf-edge.right@10px, against_flow: true}
+  e-oidc-platform-envoy: {from: cloudflared-platform.bottom@220px, to: envoy-shared-gateway.top@220px}
+  e-oidc-token-hairpin: {from: envoy-shared-gateway.left@50px, to: cf-edge.bottom@200px, waypoints: [[820, 660], [820, 500], [690, 500]], against_flow: true}
+  c-envoy-cmp-frontend: {from: envoy-shared-gateway.right@15px, to: cmp-frontend.left@50px, waypoints: [[1235, 625], [1235, 400]]}
+  c-envoy-cmp-oauth: {from: envoy-shared-gateway.right@35px, to: cmp-oauth.left@50px, waypoints: [[1250, 645], [1250, 560]]}
+  e-oidc-envoy-keycloak: {from: envoy-shared-gateway.right@55px, to: keycloak.left@50px, waypoints: [[1280, 665], [1280, 235], [1750, 235], [1750, 400]]}
+  c-envoy-cmp-mcp: {from: envoy-shared-gateway.right@75px, to: cmp-mcp.left@60px, waypoints: [[1290, 685], [1290, 730]]}
+  c-envoy-cmp-backend: {from: envoy-shared-gateway.right@95px, to: cmp-backend.left@50px, waypoints: [[1265, 705], [1265, 1070]]}
+  r-mcp-route-gateway: {from: cmp-mcp-route.top, to: envoy-shared-gateway.bottom}
+  r-mcp-policy: {from: cmp-mcp.bottom, to: stake-policy.top}
+  c-mcp-app-repos: {from: cmp-mcp.right@20px, to: gh-project-repos.top@100px, waypoints: [[1720, 690], [1720, 500], [2340, 500]]}
+  c-mcp-agent-kit: {from: cmp-mcp.right@40px, to: agent-kit-repo.left@50px, waypoints: [[1735, 710], [1735, 250], [2175, 250], [2175, 340]]}
+  c-mcp-api: {from: cmp-mcp.right@80px, to: cmp-backend.top@260px, waypoints: [[1665, 750], [1665, 990], [1600, 990]]}
+  c-repos-ghcr: {from: gh-project-repos.bottom@140px, to: ghcr.top@140px}
+  c-argocd-app-repos: {from: argocd.right@50px, to: gh-project-repos.left@50px, waypoints: [[2205, 660], [2205, 580]]}
+  c-argocd-apiserver: {from: argocd.bottom, to: kube-apiserver.top}
+  c-updater-app-repos: {from: image-updater.right@60px, to: gh-project-repos.left@80px, waypoints: [[2175, 970], [2175, 610]]}
+  c-updater-ghcr: {from: image-updater.right@30px, to: ghcr.left@60px, waypoints: [[2160, 940], [2160, 870]]}
+notes:
+  n-401: {x: 40, y: 730, w: 340, h: 90}
+  n-policy: {x: 40, y: 850, w: 340, h: 110}
+cards:
+  card-steps: {x: 40, y: 1330, w: 1220, h: 220}
+  card-background: {x: 1300, y: 1330, w: 1220, h: 220}
+  card-other: {x: 40, y: 1580, w: 1220, h: 200}
+  card-gaps: {x: 40, y: 1810, w: 1220, h: 230}
+  card-legend: {x: 1300, y: 1580, w: 1220, h: 460}
