@@ -1804,6 +1804,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#where-it-plugs-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where it plugs in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-an-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting an assistant
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#design-choices" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2160,6 +2182,28 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
+  <a href="#where-it-plugs-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Where it plugs in
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#connecting-an-assistant" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Connecting an assistant
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
   <a href="#design-choices" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2211,20 +2255,23 @@
 
 <h1 id="cmp-mcp-integration-cnp-agent-kit">CMP MCP integration (CNP Agent Kit)<a class="headerlink" href="#cmp-mcp-integration-cnp-agent-kit" title="Permanent link">&para;</a></h1>
 <p>AI assistants use CNP through a remote MCP server served by the CMP.</p>
-<pre class="mermaid"><code>sequenceDiagram
-    participant A as Assistant (Claude, ChatGPT, Codex...)
-    participant C as CMP (OAuth server + /mcp)
-    participant K as Keycloak
-    A-&gt;&gt;C: POST /mcp (no token)
-    C--&gt;&gt;A: 401, resource_metadata
-    A-&gt;&gt;C: discovery, POST /register (redirect URI allowlist)
-    A-&gt;&gt;C: /authorize (PKCE), in the user's browser
-    C-&gt;&gt;K: usual login (OIDC)
-    C--&gt;&gt;A: consent page in the CMP, then code
-    A-&gt;&gt;C: POST /token
-    C--&gt;&gt;A: CMP token (user's Keycloak sub, 15 min, refresh 30 days)
-    A-&gt;&gt;C: tools/call with Bearer
-    C-&gt;&gt;C: stake policy, then REST API in-process (RBAC + audit)</code></pre>
+<h2 id="where-it-plugs-in">Where it plugs in<a class="headerlink" href="#where-it-plugs-in" title="Permanent link">&para;</a></h2>
+<p>The assistant reaches the CMP like any browser: Cloudflare, the platform tunnel,
+then Envoy, where the <code>cmp-mcp</code> HTTPRoute sends <code>/mcp</code> and the OAuth endpoints to
+the backend. The MCP server lives in the CMP backend pod, reads the stake policy,
+calls the CMP REST API in-process with the assistant's token, and writes code and
+release tags to the app repository. The usual GitOps loop (CI, Image Updater,
+Argo CD) then deploys it.</p>
+<p><img alt="CNP AI assistants topology" src="../../01-architecture/diagrams/agent-kit.light.png#only-light" />
+<img alt="CNP AI assistants topology" src="../../01-architecture/diagrams/agent-kit.dark.png#only-dark" /></p>
+<h2 id="connecting-an-assistant">Connecting an assistant<a class="headerlink" href="#connecting-an-assistant" title="Permanent link">&para;</a></h2>
+<p>The first call has no token: the CMP answers 401 and the assistant runs OAuth
+against the CMP itself. The user signs in with the usual Keycloak login and
+approves the assistant on a CMP page; the CMP then issues the assistant's token.</p>
+<p><img alt="Connecting an assistant to CNP" src="../../01-architecture/diagrams/agent-connect.light.png#only-light" />
+<img alt="Connecting an assistant to CNP" src="../../01-architecture/diagrams/agent-connect.dark.png#only-dark" /></p>
+<p>Sources: <code>architecture/cnp/views/agent-kit.yaml</code> and <code>agent-connect.yaml</code>, built
+with <code>./architecture/build-diagrams.sh</code>.</p>
 <h2 id="design-choices">Design choices<a class="headerlink" href="#design-choices" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
