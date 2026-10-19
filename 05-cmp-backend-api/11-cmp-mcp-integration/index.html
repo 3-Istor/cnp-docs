@@ -13,6 +13,10 @@
       
       
       
+        <link rel="prev" href="../11-environment-variables/">
+      
+      
+        <link rel="next" href="../../06-multicloud/00-index/">
       
       
         
@@ -23,7 +27,7 @@
     
     
       
-        <title>FastAPI OpenAPI Optimization & MCP Server Integration - Cloud Native Platform (CNP) Docs ⚡</title>
+        <title>Assistants IA (MCP) - Cloud Native Platform (CNP) Docs ⚡</title>
       
     
     
@@ -74,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#fastapi-openapi-optimization-mcp-server-integration" class="md-skip">
+        <a href="#cmp-mcp-integration-cnp-agent-kit" class="md-skip">
           Aller au contenu
         </a>
       
@@ -110,7 +114,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              FastAPI OpenAPI Optimization &amp; MCP Server Integration
+              Assistants IA (MCP)
             
           </span>
         </div>
@@ -340,10 +344,12 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
+      <li class="md-tabs__item md-tabs__item--active">
         <a href="../00-global-api-standards/" class="md-tabs__link">
           
   
@@ -1344,24 +1350,29 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" checked>
         
           
-          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="">
             
   
   
@@ -1379,7 +1390,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_8">
             <span class="md-nav__icon md-icon"></span>
             
@@ -1726,6 +1737,114 @@
 
               
             
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistants IA (MCP)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistants IA (MCP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#design-choices" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Design choices
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#stake-levels" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stake levels
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#code" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Code
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2041,116 +2160,32 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#1-enhancing-fastapi-openapi-swagger-ui" class="md-nav__link">
+  <a href="#design-choices" class="md-nav__link">
     <span class="md-ellipsis">
       
-        1. Enhancing FastAPI OpenAPI (Swagger UI)
+        Design choices
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="1. Enhancing FastAPI OpenAPI (Swagger UI)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#a-implementing-oauth2-authorization-code-flow-appmainpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        A. Implementing OAuth2 Authorization Code Flow (app/main.py)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#2-building-the-cnp-mcp-server-python" class="md-nav__link">
+  <a href="#stake-levels" class="md-nav__link">
     <span class="md-ellipsis">
       
-        2. Building the CNP MCP Server (Python)
+        Stake levels
       
     </span>
   </a>
-  
-    <nav class="md-nav" aria-label="2. Building the CNP MCP Server (Python)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#a-installing-the-dependencies" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        A. Installing the Dependencies
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#b-creating-the-mcp-server-backendappmcp_serverpy" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        B. Creating the MCP Server (backend/app/mcp_server.py)
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#3-registering-the-mcp-server-in-your-ide-cursor-claude" class="md-nav__link">
+  <a href="#code" class="md-nav__link">
     <span class="md-ellipsis">
       
-        3. Registering the MCP Server in Your IDE (Cursor / Claude)
-      
-    </span>
-  </a>
-  
-    <nav class="md-nav" aria-label="3. Registering the MCP Server in Your IDE (Cursor / Claude)">
-      <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#a-cursor-ide-setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        A. Cursor IDE Setup
-      
-    </span>
-  </a>
-  
-</li>
-        
-          <li class="md-nav__item">
-  <a href="#b-claude-desktop-setup" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        B. Claude Desktop Setup
-      
-    </span>
-  </a>
-  
-</li>
-        
-      </ul>
-    </nav>
-  
-</li>
-      
-        <li class="md-nav__item">
-  <a href="#testing-the-ai-integration-loop" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        🦾 Testing the AI Integration Loop
+        Code
       
     </span>
   </a>
@@ -2174,217 +2209,161 @@
 
 
 
-<h1 id="fastapi-openapi-optimization-mcp-server-integration">FastAPI OpenAPI Optimization &amp; MCP Server Integration<a class="headerlink" href="#fastapi-openapi-optimization-mcp-server-integration" title="Permanent link">&para;</a></h1>
-<p>This guide provides a comprehensive tutorial on optimizing your FastAPI OpenAPI schema (Swagger UI) for OIDC Keycloak security and building a dedicated <strong>Model Context Protocol (MCP)</strong> server. The MCP server acts as an AI-native bridge, allowing AI coding assistants (such as Cursor or Claude Desktop) to dynamically query platform documentation, check container status, and execute deployment workflows.</p>
-<hr />
-<h2 id="1-enhancing-fastapi-openapi-swagger-ui">1. Enhancing FastAPI OpenAPI (Swagger UI)<a class="headerlink" href="#1-enhancing-fastapi-openapi-swagger-ui" title="Permanent link">&para;</a></h2>
-<p>FastAPI automatically generates an OpenAPI schema. To make the interactive <code>/docs</code> UI functional in a secured production environment, you must register your Keycloak realm as an OAuth2 security scheme.</p>
-<h3 id="a-implementing-oauth2-authorization-code-flow-appmainpy">A. Implementing OAuth2 Authorization Code Flow (<code>app/main.py</code>)<a class="headerlink" href="#a-implementing-oauth2-authorization-code-flow-appmainpy" title="Permanent link">&para;</a></h3>
-<p>Modify your FastAPI initialization code to register Keycloak OIDC inside the Swagger UI:</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="c1"># app/main.py extract</span>
-</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastAPI</span>
-</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.openapi.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_openapi</span>
-</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">fastapi.security</span><span class="w"> </span><span class="kn">import</span> <span class="n">OAuth2AuthorizationCodeBearer</span>
-</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
-</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a><span class="c1"># Define Keycloak OAuth2 Flow</span>
-</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a><span class="n">oauth2_scheme</span> <span class="o">=</span> <span class="n">OAuth2AuthorizationCodeBearer</span><span class="p">(</span>
-</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>    <span class="n">authorizationUrl</span><span class="o">=</span><span class="s2">"https://auth.3istor.com/realms/3istor/protocol/openid-connect/auth"</span><span class="p">,</span>
-</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>    <span class="n">tokenUrl</span><span class="o">=</span><span class="s2">"https://auth.3istor.com/realms/3istor/protocol/openid-connect/token"</span><span class="p">,</span>
-</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>    <span class="n">scopes</span><span class="o">=</span><span class="p">{</span>
-</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>        <span class="s2">"openid"</span><span class="p">:</span> <span class="s2">"Required for authentication"</span><span class="p">,</span>
-</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>        <span class="s2">"profile"</span><span class="p">:</span> <span class="s2">"Access user profile metadata"</span><span class="p">,</span>
-</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>        <span class="s2">"groups"</span><span class="p">:</span> <span class="s2">"Project boundary mappings"</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>    <span class="p">}</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="p">)</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="n">app</span> <span class="o">=</span> <span class="n">FastAPI</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s2">"CNP Portal API"</span><span class="p">)</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
-</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="c1"># Custom OpenAPI Schema Generator</span>
-</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a><span class="k">def</span><span class="w"> </span><span class="nf">custom_openapi</span><span class="p">():</span>
-</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>    <span class="k">if</span> <span class="n">app</span><span class="o">.</span><span class="n">openapi_schema</span><span class="p">:</span>
-</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>        <span class="k">return</span> <span class="n">app</span><span class="o">.</span><span class="n">openapi_schema</span>
-</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>
-</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>    <span class="n">openapi_schema</span> <span class="o">=</span> <span class="n">get_openapi</span><span class="p">(</span>
-</span><span id="__span-0-25"><a id="__codelineno-0-25" name="__codelineno-0-25" href="#__codelineno-0-25"></a>        <span class="n">title</span><span class="o">=</span><span class="s2">"Cloud Native Platform API"</span><span class="p">,</span>
-</span><span id="__span-0-26"><a id="__codelineno-0-26" name="__codelineno-0-26" href="#__codelineno-0-26"></a>        <span class="n">version</span><span class="o">=</span><span class="s2">"1.0.0"</span><span class="p">,</span>
-</span><span id="__span-0-27"><a id="__codelineno-0-27" name="__codelineno-0-27" href="#__codelineno-0-27"></a>        <span class="n">description</span><span class="o">=</span><span class="s2">"Core API for provisioning and managing GitOps applications."</span><span class="p">,</span>
-</span><span id="__span-0-28"><a id="__codelineno-0-28" name="__codelineno-0-28" href="#__codelineno-0-28"></a>        <span class="n">routes</span><span class="o">=</span><span class="n">app</span><span class="o">.</span><span class="n">routes</span><span class="p">,</span>
-</span><span id="__span-0-29"><a id="__codelineno-0-29" name="__codelineno-0-29" href="#__codelineno-0-29"></a>    <span class="p">)</span>
-</span><span id="__span-0-30"><a id="__codelineno-0-30" name="__codelineno-0-30" href="#__codelineno-0-30"></a>
-</span><span id="__span-0-31"><a id="__codelineno-0-31" name="__codelineno-0-31" href="#__codelineno-0-31"></a>    <span class="c1"># Inject OIDC Security Scheme</span>
-</span><span id="__span-0-32"><a id="__codelineno-0-32" name="__codelineno-0-32" href="#__codelineno-0-32"></a>    <span class="n">openapi_schema</span><span class="p">[</span><span class="s2">"components"</span><span class="p">][</span><span class="s2">"securitySchemes"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-0-33"><a id="__codelineno-0-33" name="__codelineno-0-33" href="#__codelineno-0-33"></a>        <span class="s2">"KeycloakOAuth2"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-0-34"><a id="__codelineno-0-34" name="__codelineno-0-34" href="#__codelineno-0-34"></a>            <span class="s2">"type"</span><span class="p">:</span> <span class="s2">"oauth2"</span><span class="p">,</span>
-</span><span id="__span-0-35"><a id="__codelineno-0-35" name="__codelineno-0-35" href="#__codelineno-0-35"></a>            <span class="s2">"flows"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-0-36"><a id="__codelineno-0-36" name="__codelineno-0-36" href="#__codelineno-0-36"></a>                <span class="s2">"authorizationCode"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-0-37"><a id="__codelineno-0-37" name="__codelineno-0-37" href="#__codelineno-0-37"></a>                    <span class="s2">"authorizationUrl"</span><span class="p">:</span> <span class="s2">"https://auth.3istor.com/realms/3istor/protocol/openid-connect/auth"</span><span class="p">,</span>
-</span><span id="__span-0-38"><a id="__codelineno-0-38" name="__codelineno-0-38" href="#__codelineno-0-38"></a>                    <span class="s2">"tokenUrl"</span><span class="p">:</span> <span class="s2">"https://auth.3istor.com/realms/3istor/protocol/openid-connect/token"</span><span class="p">,</span>
-</span><span id="__span-0-39"><a id="__codelineno-0-39" name="__codelineno-0-39" href="#__codelineno-0-39"></a>                    <span class="s2">"scopes"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-0-40"><a id="__codelineno-0-40" name="__codelineno-0-40" href="#__codelineno-0-40"></a>                        <span class="s2">"openid"</span><span class="p">:</span> <span class="s2">"Required for authentication"</span><span class="p">,</span>
-</span><span id="__span-0-41"><a id="__codelineno-0-41" name="__codelineno-0-41" href="#__codelineno-0-41"></a>                        <span class="s2">"profile"</span><span class="p">:</span> <span class="s2">"Access user profile metadata"</span><span class="p">,</span>
-</span><span id="__span-0-42"><a id="__codelineno-0-42" name="__codelineno-0-42" href="#__codelineno-0-42"></a>                        <span class="s2">"groups"</span><span class="p">:</span> <span class="s2">"Project boundary mappings"</span>
-</span><span id="__span-0-43"><a id="__codelineno-0-43" name="__codelineno-0-43" href="#__codelineno-0-43"></a>                    <span class="p">}</span>
-</span><span id="__span-0-44"><a id="__codelineno-0-44" name="__codelineno-0-44" href="#__codelineno-0-44"></a>                <span class="p">}</span>
-</span><span id="__span-0-45"><a id="__codelineno-0-45" name="__codelineno-0-45" href="#__codelineno-0-45"></a>            <span class="p">}</span>
-</span><span id="__span-0-46"><a id="__codelineno-0-46" name="__codelineno-0-46" href="#__codelineno-0-46"></a>        <span class="p">}</span>
-</span><span id="__span-0-47"><a id="__codelineno-0-47" name="__codelineno-0-47" href="#__codelineno-0-47"></a>    <span class="p">}</span>
-</span><span id="__span-0-48"><a id="__codelineno-0-48" name="__codelineno-0-48" href="#__codelineno-0-48"></a>
-</span><span id="__span-0-49"><a id="__codelineno-0-49" name="__codelineno-0-49" href="#__codelineno-0-49"></a>    <span class="c1"># Enforce global security on all non-public endpoints</span>
-</span><span id="__span-0-50"><a id="__codelineno-0-50" name="__codelineno-0-50" href="#__codelineno-0-50"></a>    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">openapi_schema</span><span class="p">[</span><span class="s2">"paths"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-</span><span id="__span-0-51"><a id="__codelineno-0-51" name="__codelineno-0-51" href="#__codelineno-0-51"></a>        <span class="k">for</span> <span class="n">method</span> <span class="ow">in</span> <span class="n">path</span><span class="o">.</span><span class="n">values</span><span class="p">():</span>
-</span><span id="__span-0-52"><a id="__codelineno-0-52" name="__codelineno-0-52" href="#__codelineno-0-52"></a>            <span class="k">if</span> <span class="s2">"security"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">method</span><span class="p">:</span>
-</span><span id="__span-0-53"><a id="__codelineno-0-53" name="__codelineno-0-53" href="#__codelineno-0-53"></a>                <span class="n">method</span><span class="p">[</span><span class="s2">"security"</span><span class="p">]</span> <span class="o">=</span> <span class="p">[{</span><span class="s2">"KeycloakOAuth2"</span><span class="p">:</span> <span class="p">[]}]</span>
-</span><span id="__span-0-54"><a id="__codelineno-0-54" name="__codelineno-0-54" href="#__codelineno-0-54"></a>
-</span><span id="__span-0-55"><a id="__codelineno-0-55" name="__codelineno-0-55" href="#__codelineno-0-55"></a>    <span class="n">app</span><span class="o">.</span><span class="n">openapi_schema</span> <span class="o">=</span> <span class="n">openapi_schema</span>
-</span><span id="__span-0-56"><a id="__codelineno-0-56" name="__codelineno-0-56" href="#__codelineno-0-56"></a>    <span class="k">return</span> <span class="n">app</span><span class="o">.</span><span class="n">openapi_schema</span>
-</span><span id="__span-0-57"><a id="__codelineno-0-57" name="__codelineno-0-57" href="#__codelineno-0-57"></a>
-</span><span id="__span-0-58"><a id="__codelineno-0-58" name="__codelineno-0-58" href="#__codelineno-0-58"></a><span class="n">app</span><span class="o">.</span><span class="n">openapi</span> <span class="o">=</span> <span class="n">custom_openapi</span>
-</span></code></pre></div>
-<p>Now, developers visiting <code>https://cmp.3istor.com/docs</code> can click <strong>Authorize</strong>, complete the Keycloak SSO flow, and test API endpoints directly from their browsers.</p>
-<hr />
-<h2 id="2-building-the-cnp-mcp-server-python">2. Building the CNP MCP Server (Python)<a class="headerlink" href="#2-building-the-cnp-mcp-server-python" title="Permanent link">&para;</a></h2>
-<p>The <strong>Model Context Protocol (MCP)</strong> allows local AI clients to consume resources (data/docs) and tools (API execution). We implement this using the official Python <code>mcp</code> SDK.</p>
-<h3 id="a-installing-the-dependencies">A. Installing the Dependencies<a class="headerlink" href="#a-installing-the-dependencies" title="Permanent link">&para;</a></h3>
-<p>Inside your <code>backend/</code> directory, add the required package:</p>
-<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1"><a id="__codelineno-1-1" name="__codelineno-1-1" href="#__codelineno-1-1"></a>poetry<span class="w"> </span>add<span class="w"> </span>mcp
-</span></code></pre></div>
-<h3 id="b-creating-the-mcp-server-backendappmcp_serverpy">B. Creating the MCP Server (<code>backend/app/mcp_server.py</code>)<a class="headerlink" href="#b-creating-the-mcp-server-backendappmcp_serverpy" title="Permanent link">&para;</a></h3>
-<p>Create a new file to act as your AI-native gateway. It exposes <strong>Resources</strong> (read-only architectural documentation) and <strong>Tools</strong> (actions to orchestrate deployments):</p>
-<div class="language-python highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># app/mcp_server.py</span>
-</span><span id="__span-2-2"><a id="__codelineno-2-2" name="__codelineno-2-2" href="#__codelineno-2-2"></a><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
-</span><span id="__span-2-3"><a id="__codelineno-2-3" name="__codelineno-2-3" href="#__codelineno-2-3"></a><span class="kn">import</span><span class="w"> </span><span class="nn">httpx</span>
-</span><span id="__span-2-4"><a id="__codelineno-2-4" name="__codelineno-2-4" href="#__codelineno-2-4"></a><span class="kn">from</span><span class="w"> </span><span class="nn">mcp.server.fastmcp</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastMCP</span>
-</span><span id="__span-2-5"><a id="__codelineno-2-5" name="__codelineno-2-5" href="#__codelineno-2-5"></a>
-</span><span id="__span-2-6"><a id="__codelineno-2-6" name="__codelineno-2-6" href="#__codelineno-2-6"></a><span class="c1"># Initialize FastMCP Server</span>
-</span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="n">mcp</span> <span class="o">=</span> <span class="n">FastMCP</span><span class="p">(</span><span class="s2">"CNP Portal"</span><span class="p">)</span>
-</span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a>
-</span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="n">DOCS_DIR</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">parent</span> <span class="o">/</span> <span class="s2">".kiro"</span> <span class="o">/</span> <span class="s2">"steering"</span> <span class="o">/</span> <span class="s2">"docs"</span>
-</span><span id="__span-2-10"><a id="__codelineno-2-10" name="__codelineno-2-10" href="#__codelineno-2-10"></a><span class="n">CMP_API_URL</span> <span class="o">=</span> <span class="s2">"http://localhost:8000/api"</span>
-</span><span id="__span-2-11"><a id="__codelineno-2-11" name="__codelineno-2-11" href="#__codelineno-2-11"></a>
-</span><span id="__span-2-12"><a id="__codelineno-2-12" name="__codelineno-2-12" href="#__codelineno-2-12"></a><span class="c1"># ═══════════════════════════════════════════════════════════════════════════</span>
-</span><span id="__span-2-13"><a id="__codelineno-2-13" name="__codelineno-2-13" href="#__codelineno-2-13"></a><span class="c1"># 1. MCP RESOURCES (Allows AI to read project documentation)</span>
-</span><span id="__span-2-14"><a id="__codelineno-2-14" name="__codelineno-2-14" href="#__codelineno-2-14"></a><span class="c1"># ═══════════════════════════════════════════════════════════════════════════</span>
-</span><span id="__span-2-15"><a id="__codelineno-2-15" name="__codelineno-2-15" href="#__codelineno-2-15"></a>
-</span><span id="__span-2-16"><a id="__codelineno-2-16" name="__codelineno-2-16" href="#__codelineno-2-16"></a><span class="nd">@mcp</span><span class="o">.</span><span class="n">resource</span><span class="p">(</span><span class="s2">"docs://</span><span class="si">{category}</span><span class="s2">/</span><span class="si">{filename}</span><span class="s2">"</span><span class="p">)</span>
-</span><span id="__span-2-17"><a id="__codelineno-2-17" name="__codelineno-2-17" href="#__codelineno-2-17"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_documentation</span><span class="p">(</span><span class="n">category</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="__span-2-18"><a id="__codelineno-2-18" name="__codelineno-2-18" href="#__codelineno-2-18"></a><span class="w">    </span><span class="sd">"""Retrieve specific architectural documentation files.</span>
-</span><span id="__span-2-19"><a id="__codelineno-2-19" name="__codelineno-2-19" href="#__codelineno-2-19"></a>
-</span><span id="__span-2-20"><a id="__codelineno-2-20" name="__codelineno-2-20" href="#__codelineno-2-20"></a><span class="sd">    Example topics: '01-architecture/02-tenancy-and-isolation.md'</span>
-</span><span id="__span-2-21"><a id="__codelineno-2-21" name="__codelineno-2-21" href="#__codelineno-2-21"></a><span class="sd">    """</span>
-</span><span id="__span-2-22"><a id="__codelineno-2-22" name="__codelineno-2-22" href="#__codelineno-2-22"></a>    <span class="n">file_path</span> <span class="o">=</span> <span class="n">DOCS_DIR</span> <span class="o">/</span> <span class="n">category</span> <span class="o">/</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">.md"</span>
-</span><span id="__span-2-23"><a id="__codelineno-2-23" name="__codelineno-2-23" href="#__codelineno-2-23"></a>
-</span><span id="__span-2-24"><a id="__codelineno-2-24" name="__codelineno-2-24" href="#__codelineno-2-24"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">file_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
-</span><span id="__span-2-25"><a id="__codelineno-2-25" name="__codelineno-2-25" href="#__codelineno-2-25"></a>        <span class="k">return</span> <span class="sa">f</span><span class="s2">"Error: Documentation file '</span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">' not found."</span>
-</span><span id="__span-2-26"><a id="__codelineno-2-26" name="__codelineno-2-26" href="#__codelineno-2-26"></a>
-</span><span id="__span-2-27"><a id="__codelineno-2-27" name="__codelineno-2-27" href="#__codelineno-2-27"></a>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf-8"</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
-</span><span id="__span-2-28"><a id="__codelineno-2-28" name="__codelineno-2-28" href="#__codelineno-2-28"></a>        <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
-</span><span id="__span-2-29"><a id="__codelineno-2-29" name="__codelineno-2-29" href="#__codelineno-2-29"></a>
-</span><span id="__span-2-30"><a id="__codelineno-2-30" name="__codelineno-2-30" href="#__codelineno-2-30"></a><span class="c1"># ═══════════════════════════════════════════════════════════════════════════</span>
-</span><span id="__span-2-31"><a id="__codelineno-2-31" name="__codelineno-2-31" href="#__codelineno-2-31"></a><span class="c1"># 2. MCP TOOLS (Allows AI to trigger actions and deployments)</span>
-</span><span id="__span-2-32"><a id="__codelineno-2-32" name="__codelineno-2-32" href="#__codelineno-2-32"></a><span class="c1"># ═══════════════════════════════════════════════════════════════════════════</span>
-</span><span id="__span-2-33"><a id="__codelineno-2-33" name="__codelineno-2-33" href="#__codelineno-2-33"></a>
-</span><span id="__span-2-34"><a id="__codelineno-2-34" name="__codelineno-2-34" href="#__codelineno-2-34"></a><span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
-</span><span id="__span-2-35"><a id="__codelineno-2-35" name="__codelineno-2-35" href="#__codelineno-2-35"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">list_active_deployments</span><span class="p">(</span><span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="__span-2-36"><a id="__codelineno-2-36" name="__codelineno-2-36" href="#__codelineno-2-36"></a><span class="w">    </span><span class="sd">"""List all current application deployments registered in the portal."""</span>
-</span><span id="__span-2-37"><a id="__codelineno-2-37" name="__codelineno-2-37" href="#__codelineno-2-37"></a>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"Authorization"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">}</span>
-</span><span id="__span-2-38"><a id="__codelineno-2-38" name="__codelineno-2-38" href="#__codelineno-2-38"></a>
-</span><span id="__span-2-39"><a id="__codelineno-2-39" name="__codelineno-2-39" href="#__codelineno-2-39"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-</span><span id="__span-2-40"><a id="__codelineno-2-40" name="__codelineno-2-40" href="#__codelineno-2-40"></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">CMP_API_URL</span><span class="si">}</span><span class="s2">/deployments"</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
-</span><span id="__span-2-41"><a id="__codelineno-2-41" name="__codelineno-2-41" href="#__codelineno-2-41"></a>
-</span><span id="__span-2-42"><a id="__codelineno-2-42" name="__codelineno-2-42" href="#__codelineno-2-42"></a>        <span class="k">if</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">!=</span> <span class="mi">200</span><span class="p">:</span>
-</span><span id="__span-2-43"><a id="__codelineno-2-43" name="__codelineno-2-43" href="#__codelineno-2-43"></a>            <span class="k">return</span> <span class="sa">f</span><span class="s2">"Error: Failed to fetch deployments (HTTP </span><span class="si">{</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="si">}</span><span class="s2">)"</span>
-</span><span id="__span-2-44"><a id="__codelineno-2-44" name="__codelineno-2-44" href="#__codelineno-2-44"></a>
-</span><span id="__span-2-45"><a id="__codelineno-2-45" name="__codelineno-2-45" href="#__codelineno-2-45"></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
-</span><span id="__span-2-46"><a id="__codelineno-2-46" name="__codelineno-2-46" href="#__codelineno-2-46"></a>
-</span><span id="__span-2-47"><a id="__codelineno-2-47" name="__codelineno-2-47" href="#__codelineno-2-47"></a><span class="nd">@mcp</span><span class="o">.</span><span class="n">tool</span><span class="p">()</span>
-</span><span id="__span-2-48"><a id="__codelineno-2-48" name="__codelineno-2-48" href="#__codelineno-2-48"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">deploy_new_app</span><span class="p">(</span>
-</span><span id="__span-2-49"><a id="__codelineno-2-49" name="__codelineno-2-49" href="#__codelineno-2-49"></a>    <span class="n">token</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="__span-2-50"><a id="__codelineno-2-50" name="__codelineno-2-50" href="#__codelineno-2-50"></a>    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="__span-2-51"><a id="__codelineno-2-51" name="__codelineno-2-51" href="#__codelineno-2-51"></a>    <span class="n">project_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
-</span><span id="__span-2-52"><a id="__codelineno-2-52" name="__codelineno-2-52" href="#__codelineno-2-52"></a>    <span class="n">template_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"k3s-gitops-app"</span><span class="p">,</span>
-</span><span id="__span-2-53"><a id="__codelineno-2-53" name="__codelineno-2-53" href="#__codelineno-2-53"></a>    <span class="n">github_installation_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"98765432"</span>
-</span><span id="__span-2-54"><a id="__codelineno-2-54" name="__codelineno-2-54" href="#__codelineno-2-54"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
-</span><span id="__span-2-55"><a id="__codelineno-2-55" name="__codelineno-2-55" href="#__codelineno-2-55"></a><span class="w">    </span><span class="sd">"""Triggers Day-0 provisioning of a new Kubernetes GitOps application."""</span>
-</span><span id="__span-2-56"><a id="__codelineno-2-56" name="__codelineno-2-56" href="#__codelineno-2-56"></a>    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-2-57"><a id="__codelineno-2-57" name="__codelineno-2-57" href="#__codelineno-2-57"></a>        <span class="s2">"Authorization"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"Bearer </span><span class="si">{</span><span class="n">token</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-</span><span id="__span-2-58"><a id="__codelineno-2-58" name="__codelineno-2-58" href="#__codelineno-2-58"></a>        <span class="s2">"Content-Type"</span><span class="p">:</span> <span class="s2">"application/json"</span>
-</span><span id="__span-2-59"><a id="__codelineno-2-59" name="__codelineno-2-59" href="#__codelineno-2-59"></a>    <span class="p">}</span>
-</span><span id="__span-2-60"><a id="__codelineno-2-60" name="__codelineno-2-60" href="#__codelineno-2-60"></a>
-</span><span id="__span-2-61"><a id="__codelineno-2-61" name="__codelineno-2-61" href="#__codelineno-2-61"></a>    <span class="n">payload</span> <span class="o">=</span> <span class="p">{</span>
-</span><span id="__span-2-62"><a id="__codelineno-2-62" name="__codelineno-2-62" href="#__codelineno-2-62"></a>        <span class="s2">"name"</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
-</span><span id="__span-2-63"><a id="__codelineno-2-63" name="__codelineno-2-63" href="#__codelineno-2-63"></a>        <span class="s2">"template_id"</span><span class="p">:</span> <span class="n">template_id</span><span class="p">,</span>
-</span><span id="__span-2-64"><a id="__codelineno-2-64" name="__codelineno-2-64" href="#__codelineno-2-64"></a>        <span class="s2">"provider_type"</span><span class="p">:</span> <span class="s2">"kubernetes"</span><span class="p">,</span>
-</span><span id="__span-2-65"><a id="__codelineno-2-65" name="__codelineno-2-65" href="#__codelineno-2-65"></a>        <span class="s2">"project_id"</span><span class="p">:</span> <span class="n">project_name</span><span class="p">,</span>
-</span><span id="__span-2-66"><a id="__codelineno-2-66" name="__codelineno-2-66" href="#__codelineno-2-66"></a>        <span class="s2">"app_config"</span><span class="p">:</span> <span class="p">{</span>
-</span><span id="__span-2-67"><a id="__codelineno-2-67" name="__codelineno-2-67" href="#__codelineno-2-67"></a>            <span class="s2">"template_repo_name"</span><span class="p">:</span> <span class="s2">"template-html-css"</span><span class="p">,</span>
-</span><span id="__span-2-68"><a id="__codelineno-2-68" name="__codelineno-2-68" href="#__codelineno-2-68"></a>            <span class="s2">"app_type"</span><span class="p">:</span> <span class="s2">"static"</span><span class="p">,</span>
-</span><span id="__span-2-69"><a id="__codelineno-2-69" name="__codelineno-2-69" href="#__codelineno-2-69"></a>            <span class="s2">"github_owner"</span><span class="p">:</span> <span class="s2">"3-Istor"</span><span class="p">,</span>
-</span><span id="__span-2-70"><a id="__codelineno-2-70" name="__codelineno-2-70" href="#__codelineno-2-70"></a>            <span class="s2">"project_name"</span><span class="p">:</span> <span class="n">project_name</span><span class="p">,</span>
-</span><span id="__span-2-71"><a id="__codelineno-2-71" name="__codelineno-2-71" href="#__codelineno-2-71"></a>            <span class="s2">"github_installation_id"</span><span class="p">:</span> <span class="n">github_installation_id</span>
-</span><span id="__span-2-72"><a id="__codelineno-2-72" name="__codelineno-2-72" href="#__codelineno-2-72"></a>        <span class="p">}</span>
-</span><span id="__span-2-73"><a id="__codelineno-2-73" name="__codelineno-2-73" href="#__codelineno-2-73"></a>    <span class="p">}</span>
-</span><span id="__span-2-74"><a id="__codelineno-2-74" name="__codelineno-2-74" href="#__codelineno-2-74"></a>
-</span><span id="__span-2-75"><a id="__codelineno-2-75" name="__codelineno-2-75" href="#__codelineno-2-75"></a>    <span class="k">async</span> <span class="k">with</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">()</span> <span class="k">as</span> <span class="n">client</span><span class="p">:</span>
-</span><span id="__span-2-76"><a id="__codelineno-2-76" name="__codelineno-2-76" href="#__codelineno-2-76"></a>        <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
-</span><span id="__span-2-77"><a id="__codelineno-2-77" name="__codelineno-2-77" href="#__codelineno-2-77"></a>            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">CMP_API_URL</span><span class="si">}</span><span class="s2">/deployments"</span><span class="p">,</span>
-</span><span id="__span-2-78"><a id="__codelineno-2-78" name="__codelineno-2-78" href="#__codelineno-2-78"></a>            <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span>
-</span><span id="__span-2-79"><a id="__codelineno-2-79" name="__codelineno-2-79" href="#__codelineno-2-79"></a>            <span class="n">json</span><span class="o">=</span><span class="n">payload</span>
-</span><span id="__span-2-80"><a id="__codelineno-2-80" name="__codelineno-2-80" href="#__codelineno-2-80"></a>        <span class="p">)</span>
-</span><span id="__span-2-81"><a id="__codelineno-2-81" name="__codelineno-2-81" href="#__codelineno-2-81"></a>        <span class="k">return</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span>
-</span><span id="__span-2-82"><a id="__codelineno-2-82" name="__codelineno-2-82" href="#__codelineno-2-82"></a>
-</span><span id="__span-2-83"><a id="__codelineno-2-83" name="__codelineno-2-83" href="#__codelineno-2-83"></a><span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
-</span><span id="__span-2-84"><a id="__codelineno-2-84" name="__codelineno-2-84" href="#__codelineno-2-84"></a>    <span class="c1"># Runs the MCP server over standard input/output (stdio) for local IDE link</span>
-</span><span id="__span-2-85"><a id="__codelineno-2-85" name="__codelineno-2-85" href="#__codelineno-2-85"></a>    <span class="n">mcp</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
-</span></code></pre></div>
-<hr />
-<h2 id="3-registering-the-mcp-server-in-your-ide-cursor-claude">3. Registering the MCP Server in Your IDE (Cursor / Claude)<a class="headerlink" href="#3-registering-the-mcp-server-in-your-ide-cursor-claude" title="Permanent link">&para;</a></h2>
-<p>To make your local AI agent aware of your documentation and provisioning tools, register the MCP server in your local client configurations.</p>
-<h3 id="a-cursor-ide-setup">A. Cursor IDE Setup<a class="headerlink" href="#a-cursor-ide-setup" title="Permanent link">&para;</a></h3>
-<ol>
-<li>Open Cursor and go to <strong>Settings</strong> → <strong>Features</strong> → <strong>MCP</strong>.</li>
-<li>Click <strong>+ New MCP Server</strong>.</li>
-<li>Fill out the fields:</li>
-<li><strong>Name</strong>: <code>CNP Portal</code></li>
-<li><strong>Type</strong>: <code>command</code></li>
-<li><strong>Command</strong>: <code>poetry run python app/mcp_server.py</code> (Make sure your cwd matches <code>backend/</code>)</li>
-</ol>
-<h3 id="b-claude-desktop-setup">B. Claude Desktop Setup<a class="headerlink" href="#b-claude-desktop-setup" title="Permanent link">&para;</a></h3>
-<p>Add the configuration to your local config file:</p>
-<ul>
-<li>MacOS: <code>~/Library/Application Support/Claude/claude_desktop_config.json</code></li>
-<li>Windows: <code>%APPDATA%\Claude\claude_desktop_config.json</code></li>
-</ul>
-<div class="language-json highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="p">{</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">"mcpServers"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">    </span><span class="nt">"cnp-portal"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">      </span><span class="nt">"command"</span><span class="p">:</span><span class="w"> </span><span class="s2">"poetry"</span><span class="p">,</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">      </span><span class="nt">"args"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">        </span><span class="s2">"run"</span><span class="p">,</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">        </span><span class="s2">"python"</span><span class="p">,</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">        </span><span class="s2">"/absolute/path/to/arcl-cmp/backend/app/mcp_server.py"</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">      </span><span class="p">],</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">      </span><span class="nt">"env"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">        </span><span class="nt">"KEYCLOAK_URL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://auth.3istor.com"</span><span class="p">,</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">        </span><span class="nt">"VAULT_URL"</span><span class="p">:</span><span class="w"> </span><span class="s2">"https://vault.3istor.com"</span>
-</span><span id="__span-3-13"><a id="__codelineno-3-13" name="__codelineno-3-13" href="#__codelineno-3-13"></a><span class="w">      </span><span class="p">}</span>
-</span><span id="__span-3-14"><a id="__codelineno-3-14" name="__codelineno-3-14" href="#__codelineno-3-14"></a><span class="w">    </span><span class="p">}</span>
-</span><span id="__span-3-15"><a id="__codelineno-3-15" name="__codelineno-3-15" href="#__codelineno-3-15"></a><span class="w">  </span><span class="p">}</span>
-</span><span id="__span-3-16"><a id="__codelineno-3-16" name="__codelineno-3-16" href="#__codelineno-3-16"></a><span class="p">}</span>
-</span></code></pre></div>
-<hr />
-<h2 id="testing-the-ai-integration-loop">🦾 Testing the AI Integration Loop<a class="headerlink" href="#testing-the-ai-integration-loop" title="Permanent link">&para;</a></h2>
-<p>Once registered, you can ask your AI Agent (such as Cursor's Composer or Claude):</p>
-<blockquote>
-<p><em>"Read the documentation on tenancy and explain how Vault Secrets are isolated in our cluster. If it looks correct, deploy a new static HTML app named 'billing-web' inside the project 'test-alpha'."</em></p>
-</blockquote>
-<p>The AI agent will sequentially:</p>
-<ol>
-<li><strong>Call Resource</strong>: <code>docs://01-architecture/02-tenancy-and-isolation</code> to read your dynamic Vault role configurations.</li>
-<li><strong>Explain</strong>: Synthesize the isolation boundaries.</li>
-<li><strong>Call Tool</strong>: <code>deploy_new_app</code> using your active OIDC token to trigger the backend provisioning SAGA, compiling the infrastructure in real-time.</li>
-</ol>
-<hr />
-<p><em>Back to <a href="../01-cmp-deployment-api/">CMP Backend API Specs</a> or return to the <a href="../README.md">Project Overview</a>.</em></p>
+<h1 id="cmp-mcp-integration-cnp-agent-kit">CMP MCP integration (CNP Agent Kit)<a class="headerlink" href="#cmp-mcp-integration-cnp-agent-kit" title="Permanent link">&para;</a></h1>
+<p>AI assistants use CNP through a remote MCP server served by the CMP.</p>
+<pre class="mermaid"><code>sequenceDiagram
+    participant A as Assistant (Claude, ChatGPT, Codex...)
+    participant C as CMP (OAuth server + /mcp)
+    participant K as Keycloak
+    A-&gt;&gt;C: POST /mcp (no token)
+    C--&gt;&gt;A: 401, resource_metadata
+    A-&gt;&gt;C: discovery, POST /register (redirect URI allowlist)
+    A-&gt;&gt;C: /authorize (PKCE), in the user's browser
+    C-&gt;&gt;K: usual login (OIDC)
+    C--&gt;&gt;A: consent page in the CMP, then code
+    A-&gt;&gt;C: POST /token
+    C--&gt;&gt;A: CMP token (user's Keycloak sub, 15 min, refresh 30 days)
+    A-&gt;&gt;C: tools/call with Bearer
+    C-&gt;&gt;C: stake policy, then REST API in-process (RBAC + audit)</code></pre>
+<h2 id="design-choices">Design choices<a class="headerlink" href="#design-choices" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Choice</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>The CMP is the OAuth server of its MCP; Keycloak stays the identity provider behind the login</td>
+<td>Assistants only talk to the platform; no Keycloak client per assistant, no Keycloak upgrade (CIMD)</td>
+</tr>
+<tr>
+<td>Opaque tokens, stored hashed, tied to a grant</td>
+<td>Revoking a grant in <code>/account</code> cuts the assistant at its next call</td>
+</tr>
+<tr>
+<td>Tools call the CMP REST API in-process with the assistant's token</td>
+<td>RBAC, validation and the audit journal apply unchanged; the journal records the assistant (<code>via</code>)</td>
+</tr>
+<tr>
+<td>MCP mounted in the CMP backend, stateless Streamable HTTP</td>
+<td>No extra pod on a memory-tight cluster</td>
+</tr>
+<tr>
+<td>Stake policy (<code>backend/app/services/agents/policy.yaml</code>)</td>
+<td>Guardrails proportional to what is at stake: allow, ask the user, pull request, approval in the CMP, refused</td>
+</tr>
+<tr>
+<td>Guides served as <code>skill://</code> resources and by <code>get_guide</code>, from <code>3-Istor/cnp-agent-kit</code></td>
+<td>One source for the Claude Code plugin and for assistants without plugins (progressive disclosure)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stake-levels">Stake levels<a class="headerlink" href="#stake-levels" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>sandbox</th>
+<th>demo</th>
+<th>standard</th>
+<th>critical</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Read</td>
+<td>allow</td>
+<td>allow</td>
+<td>allow</td>
+<td>allow</td>
+</tr>
+<tr>
+<td>Create an app</td>
+<td>allow</td>
+<td>allow</td>
+<td>allow</td>
+<td>approval in the CMP</td>
+</tr>
+<tr>
+<td>Push application code</td>
+<td>allow</td>
+<td>allow</td>
+<td>allow</td>
+<td>pull request</td>
+</tr>
+<tr>
+<td>Change CI, Dockerfile, <code>deploy/</code></td>
+<td>refused</td>
+<td>ask</td>
+<td>pull request</td>
+<td>pull request</td>
+</tr>
+<tr>
+<td>Release, promote, retry, skip</td>
+<td>allow</td>
+<td>allow</td>
+<td>ask</td>
+<td>approval in the CMP</td>
+</tr>
+<tr>
+<td>Abort a rollout</td>
+<td>allow</td>
+<td>allow</td>
+<td>allow</td>
+<td>ask</td>
+</tr>
+<tr>
+<td>Delete an app</td>
+<td>ask</td>
+<td>ask</td>
+<td>CMP only</td>
+<td>CMP only</td>
+</tr>
+</tbody>
+</table>
+<p>Abort and retry are always allowed while an alert fires on the app. A project
+owner can open an autonomous window of 1 to 8 hours on a standard project.</p>
+<h2 id="code">Code<a class="headerlink" href="#code" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>What</th>
+<th>Where</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Tools, resources, prompts</td>
+<td><code>CMP/backend/app/mcp_server.py</code></td>
+</tr>
+<tr>
+<td>OAuth provider and token store</td>
+<td><code>CMP/backend/app/services/agents/provider.py</code>, <code>store.py</code></td>
+</tr>
+<tr>
+<td>Policy</td>
+<td><code>CMP/backend/app/services/agents/policy.yaml</code>, <code>policy.py</code></td>
+</tr>
+<tr>
+<td>Consent, approval, settings API</td>
+<td><code>CMP/backend/app/routers/agents.py</code></td>
+</tr>
+<tr>
+<td>Pages</td>
+<td><code>CMP/frontend/src/app/connect/</code>, <code>connect-ai/</code>, <code>components/agents/</code></td>
+</tr>
+<tr>
+<td>Route</td>
+<td><code>K3s/k8s/config/arcl-cmp/mcp-route.yaml</code></td>
+</tr>
+<tr>
+<td>Guides, plugin, doctrine</td>
+<td><code>3-Istor/cnp-agent-kit</code></td>
+</tr>
+</tbody>
+</table>
 
 
 

@@ -604,10 +604,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pathway-3-conversational-ai-future-mcp-integration" class="md-nav__link">
+  <a href="#pathway-3-your-ai-assistant" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🤖 Pathway 3: Conversational AI (Future MCP Integration)
+        🤖 Pathway 3: Your AI assistant
       
     </span>
   </a>
@@ -1940,6 +1940,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-cmp-backend-api/11-cmp-mcp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistants IA (MCP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -2344,10 +2372,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#pathway-3-conversational-ai-future-mcp-integration" class="md-nav__link">
+  <a href="#pathway-3-your-ai-assistant" class="md-nav__link">
     <span class="md-ellipsis">
       
-        🤖 Pathway 3: Conversational AI (Future MCP Integration)
+        🤖 Pathway 3: Your AI assistant
       
     </span>
   </a>
@@ -2504,12 +2532,13 @@ Once you run <code>git push origin main</code>, the <strong>ArgoCD Engine</stron
 The continuous integration pipeline automatically updates this field. When you push application code, GitHub Actions builds the image, pushes it to GHCR, and the <strong>ArgoCD Image Updater</strong> automatically writes the new commit tag (e.g., <code>sha-8f3a1b4</code>) back to your values file.</p>
 </blockquote>
 <hr />
-<h2 id="pathway-3-conversational-ai-future-mcp-integration">🤖 Pathway 3: Conversational AI (Future MCP Integration)<a class="headerlink" href="#pathway-3-conversational-ai-future-mcp-integration" title="Permanent link">&para;</a></h2>
-<p>For a futuristic "chat-to-deploy" experience, developers can interact with an AI Assistant (such as Claude Code, Cursor, or Copilot) equipped with the <strong>CNP Model Context Protocol (MCP)</strong> server.</p>
-<p>Instead of navigating the UI or writing YAML, you can instruct your local editor assistant:
-* <em>"Scale my alpha-frontend application to 5 replicas"</em>
-* <em>"Add a Postgres database to my billing service"</em></p>
-<p>The AI assistant connects to the CMP MCP server, reads the specifications, performs the deep-merge modifications on <code>deploy/values.yaml</code>, and commits the changes directly to your repository.</p>
+<h2 id="pathway-3-your-ai-assistant">🤖 Pathway 3: Your AI assistant<a class="headerlink" href="#pathway-3-your-ai-assistant" title="Permanent link">&para;</a></h2>
+<p>Claude (web, desktop, Claude Code), ChatGPT, Codex, OpenCode, Cursor or VS Code can use CNP for you: connect it to <code>https://cmp.3istor.com/mcp</code>, sign in with your company account and approve it on the CMP page. Setup per assistant: <a href="https://cmp.3istor.com/connect-ai">cmp.3istor.com/connect-ai</a>.</p>
+<p>You can then ask, in plain language:
+* <em>"Put a page with the agenda of the October seminar online"</em>
+* <em>"Why is the canary of billing-api stuck? Read the logs first"</em>
+* <em>"Release what is on main as a minor version and follow the rollout"</em></p>
+<p>The assistant acts with your rights, through the CMP. What it may do on its own depends on the project's stake level (sandbox, demo, standard, critical), set in the project's <strong>AI assistants</strong> tab. In Claude Code, the plugin <code>cnp@cnp-agent-kit</code> adds the platform guides. Details: <a href="../05-cmp-backend-api/11-cmp-mcp-integration/">CMP MCP integration</a>.</p>
 <hr />
 <h2 id="architectural-brick-navigator">🗺️ Architectural Brick Navigator<a class="headerlink" href="#architectural-brick-navigator" title="Permanent link">&para;</a></h2>
 <p>When your application is live, you can monitor and manage its auxiliary resources across our platform's functional bricks:</p>
