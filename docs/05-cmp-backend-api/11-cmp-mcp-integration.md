@@ -2,22 +2,29 @@
 
 AI assistants use CNP through a remote MCP server served by the CMP.
 
-```mermaid
-sequenceDiagram
-    participant A as Assistant (Claude, ChatGPT, Codex...)
-    participant C as CMP (OAuth server + /mcp)
-    participant K as Keycloak
-    A->>C: POST /mcp (no token)
-    C-->>A: 401, resource_metadata
-    A->>C: discovery, POST /register (redirect URI allowlist)
-    A->>C: /authorize (PKCE), in the user's browser
-    C->>K: usual login (OIDC)
-    C-->>A: consent page in the CMP, then code
-    A->>C: POST /token
-    C-->>A: CMP token (user's Keycloak sub, 15 min, refresh 30 days)
-    A->>C: tools/call with Bearer
-    C->>C: stake policy, then REST API in-process (RBAC + audit)
-```
+## Where it plugs in
+
+The assistant reaches the CMP like any browser: Cloudflare, the platform tunnel,
+then Envoy, where the `cmp-mcp` HTTPRoute sends `/mcp` and the OAuth endpoints to
+the backend. The MCP server lives in the CMP backend pod, reads the stake policy,
+calls the CMP REST API in-process with the assistant's token, and writes code and
+release tags to the app repository. The usual GitOps loop (CI, Image Updater,
+Argo CD) then deploys it.
+
+![CNP AI assistants topology](../01-architecture/diagrams/agent-kit.light.png#only-light)
+![CNP AI assistants topology](../01-architecture/diagrams/agent-kit.dark.png#only-dark)
+
+## Connecting an assistant
+
+The first call has no token: the CMP answers 401 and the assistant runs OAuth
+against the CMP itself. The user signs in with the usual Keycloak login and
+approves the assistant on a CMP page; the CMP then issues the assistant's token.
+
+![Connecting an assistant to CNP](../01-architecture/diagrams/agent-connect.light.png#only-light)
+![Connecting an assistant to CNP](../01-architecture/diagrams/agent-connect.dark.png#only-dark)
+
+Sources: `architecture/cnp/views/agent-kit.yaml` and `agent-connect.yaml`, built
+with `./architecture/build-diagrams.sh`.
 
 ## Design choices
 

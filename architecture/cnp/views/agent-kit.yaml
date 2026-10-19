@@ -1,0 +1,100 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · AI assistants · Agent Kit"
+subtitle: "How does an AI assistant reach CNP, what checks its calls, and where do its changes land?"
+meta:
+  - "Scope: CMP v0.3.45 (CMP#95, K3s#128) · main as of 2026-10-19 · derived from code"
+  - "Out of scope: the OAuth connection (see the agent-connect sequence) · the app's own request path (platform-overview) · CI internals"
+  - "Inferred: cmp.3istor.com reaches Envoy through the remotely managed platform tunnel, like auth.3istor.com"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-assistants
+  - assistant-remote
+  - assistant-local
+  - z-cloudflare
+  - cf-edge
+  - z-cluster
+  - g-connectivity
+  - cloudflared-platform
+  - g-gateway
+  - envoy-shared-gateway
+  - cmp-mcp-route
+  - g-cmp
+  - cmp-frontend
+  - cmp-oauth
+  - cmp-mcp
+  - stake-policy
+  - cmp-backend
+  - g-identity
+  - keycloak
+  - g-gitops
+  - argocd
+  - image-updater
+  - kube-apiserver
+  - z-github
+  - agent-kit-repo
+  - gh-project-repos
+  - ghcr
+
+steps: [c-assistant-edge, e-oidc-platform-tunnel, e-oidc-platform-envoy, c-envoy-cmp-mcp, c-mcp-api, c-mcp-app-repos]
+background: [c-mcp-agent-kit, c-repos-ghcr, c-updater-app-repos, c-argocd-app-repos, c-argocd-apiserver]
+
+labels:
+  c-assistant-edge: ""
+  c-local-assistant-edge: ""
+  c-envoy-cmp-mcp: ""
+  c-envoy-cmp-frontend: ""
+  c-envoy-cmp-oauth: ""
+  c-mcp-api: ""
+  c-argocd-app-repos: ""
+  e-oidc-token-hairpin: ""
+  c-updater-ghcr: ""
+  e-oidc-platform-envoy: ""
+  e-oidc-platform-tunnel: ""
+  e-oidc-envoy-keycloak: ""
+  c-envoy-cmp-backend: ""
+
+notes:
+  - {id: n-401, text: "No or revoked token: /mcp answers 401 with resource_metadata, the assistant starts the OAuth connection."}
+  - {id: n-policy, text: "Before acting, the tool reads the project's stake: allow, ask the user, open a PR, wait for an approval in the CMP, or refuse."}
+
+cards:
+  - id: card-steps
+    title: "Request path · a tool call that changes an app"
+    color: emerald
+    lines:
+      - "[1] The assistant calls a tool, e.g. push_files, with its CMP token (opaque, 15 min, user's Keycloak sub)."
+      - "[2] Cloudflare relays it through the platform tunnel."
+      - "[3] cloudflared forwards cmp.3istor.com to Envoy."
+      - "[4] HTTPRoute cmp-mcp sends /mcp to the backend, without the Keycloak JWT policy: the backend checks its own tokens."
+      - "[5] After the stake policy, the tool calls the CMP REST API in-process with the same token: RBAC, validation and the audit journal (via = assistant) apply."
+      - "[6] Code and release tags go to the app repository through the GitHub App, in one commit, or in a pull request on a critical project."
+  - id: card-background
+    title: "Background · control plane"
+    color: amber
+    lines:
+      - "[A] The MCP server reads the guides from cnp-agent-kit every 10 minutes and serves them as skill:// resources and get_guide."
+      - "[B] On a vX.Y.Z tag, the app's CI pushes the image to GHCR."
+      - "[C] Image Updater writes the new tag back to the app repository."
+      - "[D] Argo CD polls the app values."
+      - "[E] Argo CD applies them; a canary runs when the app has one."
+  - id: card-other
+    title: "Other connections drawn"
+    color: sky
+    lines:
+      - "Claude Code, Codex, Cursor and VS Code take the same path as [1]."
+      - "Envoy → OAuth server: /authorize, /token, /register, /revoke and /.well-known/oauth-*, see the agent-connect sequence."
+      - "Envoy → CMP frontend: the consent page /connect/authorize and the approval page /connect/confirm/<id>."
+      - "Envoy → CMP backend: /api for the web UI; it keeps the Keycloak JWT SecurityPolicy."
+      - "Envoy → Keycloak: the usual OIDC login of the CMP, which the consent page relies on."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!G3!! **Transport.** TLS ends at Cloudflare. In-cluster hops are plain HTTP."
+      - "!!G4!! **Coupling.** Tunnels target Envoy's hashed Service. Covered by D-05."
+      - "!!G6!! **Token call.** The CMP's OIDC token call likely hairpins via Cloudflare. To verify."
+      - "!!G7!! **CMP API auth.** Since this view was first drawn, the backend verifies signature, issuer and expiry, and cmp-api-jwt checks JWTs at the edge. Audience is still not checked. /mcp uses the CMP's own tokens, checked by the backend."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

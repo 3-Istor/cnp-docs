@@ -14,6 +14,8 @@ one diagram, and `layouts/` places the topology views.
 | `multicloud-links` | Which links cross between the on-prem hub and the public clouds, who opens them, and what allows them? | Multicloud schemas |
 | `multicloud-policies` | What may reach a project's workloads on each cluster, and what enforces it? | Multicloud schemas |
 | `cloud-up` | What happens, in order, when an operator runs `cnp.sh up` for a public cloud, and what survives `cnp.sh down`? | Multicloud schemas |
+| `agent-kit` | How does an AI assistant reach CNP, what checks its calls, and where do its changes land? | CMP MCP integration |
+| `agent-connect` | What happens the first time an assistant calls CNP, until its first tool call runs with the user's rights | CMP MCP integration |
 | `access-matrix` | Who may act on what, and what the segregation plan changes, phase by phase | Access segregation |
 
 To change a diagram, edit the model (facts), the view (what is shown) or the layout

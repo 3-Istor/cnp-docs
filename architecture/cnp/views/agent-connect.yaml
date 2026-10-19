@@ -1,0 +1,64 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · AI assistants · Connecting an assistant"
+subtitle: "What happens the first time an assistant calls CNP, until its first tool call runs with the user's rights."
+meta:
+  - "Scope: the connections of views/agent-kit.yaml, in time order · CMP v0.3.45 · derived from code"
+  - "After the first exchange, every call crosses Cloudflare, the platform tunnel and Envoy the same way: those hops are collapsed into one note."
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+participants: [user, assistant-remote, cf-edge, cloudflared-platform, envoy-shared-gateway, cmp-oauth, cmp-frontend, keycloak, cmp-backend, cmp-mcp]
+
+steps:
+  # Discovery: no token yet.
+  - {id: probe, from: assistant-remote, to: cf-edge, over: c-assistant-edge, text: "POST /mcp, no token"}
+  - {id: probe-relay, from: cf-edge, to: cloudflared-platform, over: e-oidc-platform-tunnel, text: "relay ◀ platform tunnel"}
+  - {id: probe-fwd, from: cloudflared-platform, to: envoy-shared-gateway, over: e-oidc-platform-envoy, text: "forward cmp.3istor.com"}
+  - {id: probe-mcp, from: envoy-shared-gateway, to: cmp-mcp, over: c-envoy-cmp-mcp, text: "POST /mcp (HTTPRoute cmp-mcp)"}
+  - {reply: probe-mcp, text: "401 · resource_metadata"}
+  - {reply: probe-fwd}
+  - {reply: probe-relay}
+  - {reply: probe, text: "401"}
+  - {note: cf-edge, text: "from here on, every call takes the same tunnel and Envoy path"}
+
+  # Registration (dynamic client registration).
+  - {id: reg, from: assistant-remote, to: cf-edge, over: c-assistant-edge, text: "GET /.well-known/oauth-*, POST /register"}
+  - {id: reg-oauth, from: envoy-shared-gateway, to: cmp-oauth, over: c-envoy-cmp-oauth, text: "POST /register"}
+  - {note: cmp-oauth, text: "redirect URI must match the allowlist"}
+  - {reply: reg-oauth, text: "client_id"}
+  - {reply: reg}
+
+  # Authorization in the user's browser.
+  - {id: auth, from: user, to: cf-edge, over: e-1-browser-edge, text: "GET /authorize · PKCE"}
+  - {id: auth-oauth, from: envoy-shared-gateway, to: cmp-oauth, over: c-envoy-cmp-oauth, text: "GET /authorize"}
+  - {reply: auth-oauth, text: "302 → /connect/authorize?request=…"}
+  - {reply: auth}
+  - {id: consent, from: user, to: cf-edge, over: e-1-browser-edge, text: "GET /connect/authorize"}
+  - {id: consent-page, from: envoy-shared-gateway, to: cmp-frontend, over: c-envoy-cmp-frontend, text: "GET /connect/authorize"}
+  - {note: cmp-frontend, text: "no CMP session: usual Keycloak login"}
+  - {id: login, from: envoy-shared-gateway, to: keycloak, over: e-oidc-envoy-keycloak, text: "login (realm 3istor)"}
+  - {reply: login, text: "session"}
+  - {reply: consent-page, text: "consent page: assistant, rights, read-only switch"}
+  - {reply: consent}
+  - {id: approve, from: user, to: cf-edge, over: e-1-browser-edge, text: "Allow"}
+  - {id: approve-api, from: envoy-shared-gateway, to: cmp-backend, over: c-envoy-cmp-backend, text: "POST /api/agents/requests/{id}/approve · Keycloak JWT"}
+  - {note: cmp-backend, text: "refused for an assistant's own token"}
+  - {reply: approve-api, text: "redirect_url with code"}
+  - {reply: approve, text: "302 → assistant callback ?code"}
+
+  # Token.
+  - {id: token, from: assistant-remote, to: cf-edge, over: c-assistant-edge, text: "POST /token · code + verifier"}
+  - {id: token-oauth, from: envoy-shared-gateway, to: cmp-oauth, over: c-envoy-cmp-oauth, text: "POST /token"}
+  - {reply: token-oauth, text: "CMP access token 15 min + refresh 30 d"}
+  - {reply: token}
+
+  # First tool call.
+  - {id: call, from: assistant-remote, to: cf-edge, over: c-assistant-edge, text: "tools/call create_app · Bearer"}
+  - {id: call-mcp, from: envoy-shared-gateway, to: cmp-mcp, over: c-envoy-cmp-mcp, text: "POST /mcp"}
+  - {note: cmp-mcp, text: "stake policy: allow, ask, PR, approve or deny"}
+  - {id: call-api, from: cmp-mcp, to: cmp-backend, over: c-mcp-api, text: "POST /api/deployments · same token"}
+  - {note: cmp-backend, text: "RBAC from the user's sub · audit via = assistant"}
+  - {reply: call-api, text: "202"}
+  - {reply: call-mcp, text: "app created, next: wait_for_app"}
+  - {reply: call}
