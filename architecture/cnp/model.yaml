@@ -254,6 +254,33 @@ elements:
   - {id: cmp-mcp-route, kind: backend, parent: g-gateway, icon: k8s-crd, title: "HTTPRoute cmp-mcp", tech: "[no Keycloak JWT policy]", desc: "/mcp and the OAuth endpoints"}
   - {id: agent-kit-repo, kind: external, parent: z-github, icon: github, title: "cnp-agent-kit", tech: "[public repo]", desc: "Skills, plugin, doctrine", ports: [{name: https, protocol: TCP, port: 443}]}
 
+  # AI landing zone (proposal, 2026-10-22): an AI gateway on the existing Envoy Gateway,
+  # hosted agents, Gemini and the homelab GPU as model backends. Nothing here is deployed yet.
+  - {id: g-ai-gateway, kind: group, parent: z-cluster, color: orange, icon: envoy-gateway, title: "AI GATEWAY", sub: "ns ai-gateway · Agent Router", status: planned, target: IA-1}
+  - {id: g-agents, kind: group, parent: z-cluster, color: amber, icon: k8s-ns, title: "AGENTS", sub: "1 namespace / agent · gVisor", status: planned, target: IA-2}
+  - {id: g-mcp-tools, kind: group, parent: z-cluster, color: slate, icon: mcp, title: "MCP TOOLS", sub: "ns mcp-tools · ToolHive", status: planned, target: IA-2}
+  - {id: z-google-ai, kind: region, color: amber, icon: gemini, title: "GOOGLE AI", sub: "SaaS · Gemini API", status: planned, target: IA-1}
+  - {id: z-homelab-gpu, kind: region, color: emerald, icon: rack, title: "HOMELAB GPU", sub: "RTX 5080 · 16 GB VRAM", status: planned, target: IA-1}
+  - {id: hosted-agent, kind: backend, parent: g-agents, icon: k8s-pod, title: "<agent> pod", tech: "[Sandbox CRD · gVisor]", desc: "Hosted agent, no provider key", status: planned, target: IA-2}
+  - {id: ai-gw-proxy, kind: backend, parent: g-ai-gateway, icon: envoy, title: "AI gateway proxy", tech: "[Envoy · Agent Router ext_proc]", desc: "Routes LLM and MCP calls, counts tokens", ports: [{name: http, protocol: TCP, port: 8080}], status: planned, target: IA-1}
+  - {id: ai-gw-route, kind: backend, parent: g-ai-gateway, icon: k8s-crd, title: "AIGatewayRoute", tech: "[Agent Router CRD · + MCPRoute]", desc: "Models and tools per project", status: planned, target: IA-1}
+  - {id: ai-gw-policy, kind: security, parent: g-ai-gateway, icon: k8s-crd, title: "SecurityPolicy", tech: "[Envoy Gateway CRD]", desc: "JWT + project claim, default deny", status: planned, target: IA-1}
+  - {id: ai-provider-secret, kind: database, parent: g-ai-gateway, icon: k8s-secret, title: "Secret", tech: "[Secret gemini-api-key]", desc: "Written by the secrets operator", status: planned, target: IA-1}
+  - {id: ai-ratelimit, kind: database, parent: g-ai-gateway, icon: redis, title: "Rate limit", tech: "[Envoy Rate Limit · Redis]", desc: "Token quotas per project", ports: [{name: grpc, protocol: TCP, port: 8081}], status: planned, target: IA-1}
+  - {id: toolhive, kind: backend, parent: g-mcp-tools, icon: mcp, title: "MCP servers", tech: "[ToolHive operator]", desc: "Third-party tools, one container each", ports: [{name: http, protocol: TCP, port: 8080}], status: planned, target: IA-2}
+  - {id: tempo, kind: database, parent: g-ops, icon: grafana, title: "Tempo", tech: "[Grafana Tempo · monolithic]", desc: "GenAI traces", ports: [{name: otlp, protocol: TCP, port: 4317}], status: planned, target: IA-1}
+  - {id: gemini, kind: cloud, parent: z-google-ai, icon: gemini, title: "Gemini API", tech: "[generativelanguage.googleapis.com]", desc: "Cloud models, free tier", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: IA-1}
+  - {id: ollama, kind: backend, parent: z-homelab-gpu, icon: ollama, title: "Ollama", tech: "[OpenAI-compatible API]", desc: "Local models and Llama Guard", ports: [{name: http, protocol: TCP, port: 11434}], status: planned, target: IA-1}
+  - {id: agent-sandbox, kind: tool, parent: g-agents, icon: k8s-crd, title: "agent-sandbox", tech: "[Sandbox CRD · gVisor RuntimeClass]", desc: "Isolates code written by agents", status: planned, target: IA-2}
+  - {id: opa, kind: security, parent: g-ai-gateway, icon: k8s-deploy, title: "OPA", tech: "[ext_authz · opa-envoy-plugin]", desc: "Per-tool authorization", status: planned, target: IA-3}
+  # Gaps of the current landing zone to close (proposal, 2026-10-22): P0 before hosting agents.
+  - {id: cilium-default-deny, kind: security, parent: g-ops, icon: cilium, title: "Default-deny policies", tech: "[CiliumClusterwideNetworkPolicy]", desc: "Tenant and egress isolation (G1)", status: planned, target: P0}
+  - {id: cnpg-backup, kind: tool, parent: g-data, icon: cnpg, title: "CNPG backups", tech: "[Barman Cloud → Garage]", desc: "Point-in-time recovery", status: planned, target: P0}
+  - {id: velero, kind: tool, parent: g-ops, icon: velero, title: "Velero", tech: "[cluster backup]", desc: "Restores namespaces and volumes", status: planned, target: P0}
+  - {id: cosign, kind: tool, parent: g-ops, icon: k8s-crd, title: "cosign", tech: "[keyless signing · Kyverno verifyImages]", desc: "Only signed images run", status: planned, target: P1}
+  - {id: trivy-operator, kind: tool, parent: g-ops, icon: trivy, title: "Trivy Operator", tech: "[in-cluster scanning]", desc: "Vulnerabilities and misconfigurations", status: planned, target: P1}
+  - {id: opencost, kind: tool, parent: g-ops, icon: opencost, title: "OpenCost", tech: "[cost per namespace]", desc: "Cost per app, with token cost", status: planned, target: P2}
+  - {id: tetragon, kind: security, parent: g-ops, icon: cilium, title: "Tetragon", tech: "[eBPF runtime security]", desc: "Detects abnormal process behaviour", status: planned, target: P2}
 connections:
   # Request path.
   - {id: e-1-browser-edge, from: user, to: cf-edge, port: https, protocol: HTTPS, verb: GET app, kind: flow}
@@ -367,6 +394,19 @@ connections:
   - {id: c-updater-app-repos, from: image-updater, to: gh-project-repos, port: https, protocol: HTTPS, verb: write back tag, kind: async}
   - {id: c-argocd-app-repos, from: argocd, to: gh-project-repos, port: https, protocol: HTTPS, verb: poll values, kind: async}
 
+  # AI landing zone (proposal, 2026-10-22).
+  - {id: c-agent-keycloak, from: hosted-agent, to: keycloak, port: http, protocol: HTTP, verb: token exchange, kind: auth}
+  - {id: c-agent-aigw, from: hosted-agent, to: ai-gw-proxy, port: http, protocol: HTTP, verb: chat/completions, kind: flow}
+  - {id: c-app-aigw, from: app-pods, to: ai-gw-proxy, port: http, protocol: HTTP, verb: call a model, kind: flow}
+  - {id: c-aigw-keycloak, from: ai-gw-proxy, to: keycloak, port: http, protocol: HTTP, verb: fetch JWKS, kind: auth}
+  - {id: c-aigw-ratelimit, from: ai-gw-proxy, to: ai-ratelimit, port: grpc, protocol: gRPC, verb: check quota, kind: flow}
+  - {id: c-aigw-gemini, from: ai-gw-proxy, to: gemini, port: https, protocol: HTTPS, verb: generateContent, kind: flow}
+  - {id: c-aigw-ollama, from: ai-gw-proxy, to: ollama, port: http, protocol: HTTP over WireGuard, verb: fallback, kind: flow}
+  - {id: c-aigw-cmp-mcp, from: ai-gw-proxy, to: cmp-mcp, port: http, protocol: HTTP, verb: tools/call, kind: flow}
+  - {id: c-aigw-toolhive, from: ai-gw-proxy, to: toolhive, port: http, protocol: HTTP, verb: tools/call, kind: flow}
+  - {id: c-aigw-alloy, from: ai-gw-proxy, to: observability, protocol: OTLP, verb: push GenAI spans, kind: async}
+  - {id: c-alloy-tempo, from: observability, to: tempo, port: otlp, protocol: OTLP, verb: write traces, kind: async}
+  - {id: c-vso-ai-secret, from: vso, to: ai-provider-secret, protocol: K8s API, verb: write Secret, kind: async}
 references:
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
@@ -380,6 +420,9 @@ references:
   - {id: r-mcp-policy, from: cmp-mcp, to: stake-policy, kind: evaluates}
   - {id: r-mcp-route-gateway, from: cmp-mcp-route, to: envoy-shared-gateway, kind: parentRef}
 
+  - {id: r-aigw-route-proxy, from: ai-gw-route, to: ai-gw-proxy, kind: parentRef}
+  - {id: r-aigw-policy-route, from: ai-gw-policy, to: ai-gw-route, kind: targetRef}
+  - {id: r-aigw-route-secret, from: ai-gw-route, to: ai-provider-secret, kind: secretKeyRef}
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}
   - {id: G2, severity: high, title: "Authorization", targets: [security-policy]}

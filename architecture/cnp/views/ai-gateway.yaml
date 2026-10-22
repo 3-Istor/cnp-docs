@@ -1,0 +1,84 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · AI landing zone · AI gateway"
+subtitle: "How does an agent's call reach a model or a tool, and what checks it on the way?"
+meta:
+  - "Scope: proposal for the on-prem K3s cluster, 2026-10-22 · every element added here is planned (IA-1, IA-2), nothing is deployed"
+  - "Out of scope: external assistants (agent-kit view) · the same gateway on EKS and GKE · admission policies · Ollama's own cluster"
+  - "Assumed: Agent Router (ex-Envoy AI Gateway) on the existing Envoy Gateway; Alloy receives OTLP"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-cluster
+  - g-agents
+  - hosted-agent
+  - g-tenant-a
+  - app-pods
+  - g-ai-gateway
+  - ai-gw-proxy
+  - ai-gw-route
+  - ai-gw-policy
+  - ai-provider-secret
+  - ai-ratelimit
+  - g-identity
+  - keycloak
+  - g-cmp
+  - cmp-mcp
+  - g-mcp-tools
+  - toolhive
+  - g-secrets
+  - vso
+  - vault
+  - g-ops
+  - observability
+  - tempo
+  - z-google-ai
+  - gemini
+  - z-homelab-gpu
+  - ollama
+
+steps: [c-agent-aigw, c-aigw-ratelimit, c-aigw-gemini]
+background: [c-aigw-keycloak, e-a-vso-vault, c-vso-ai-secret, c-aigw-alloy, c-alloy-tempo]
+
+labels:
+  c-agent-aigw: ""
+  c-app-aigw: ""
+  c-aigw-cmp-mcp: ""
+  c-aigw-toolhive: ""
+  e-a-vso-vault: ""
+  r-aigw-route-secret: ""
+
+notes:
+  - {id: n-authz, text: "The SecurityPolicy checks the JWT and the project claim before routing: no match, 403. AIGatewayRoute then picks the model the project may use."}
+  - {id: n-fallback, text: "Gemini answers 429 when the free quota is spent: the gateway retries on Ollama. Projects marked Local never reach Gemini."}
+
+cards:
+  - id: card-steps
+    title: "Request path · a hosted agent asks a model"
+    color: emerald
+    lines:
+      - "Before [1], the agent gets a short token from Keycloak by token exchange: see the ai-gateway-call sequence."
+      - "[1] The agent calls POST /v1/chat/completions on the internal listener with that token; the SecurityPolicy validates it and checks the project claim."
+      - "[2] The gateway checks the project's token quota in the rate limit service."
+      - "[3] It calls Gemini with the key from the Secret, through the FQDN egress allow-list; on 429 or for Local projects it calls Ollama instead."
+      - "Tool calls take the same chain, then MCPRoute sends them to the CMP's MCP server (stake policy) or to a ToolHive server."
+      - "Tenant apps call the gateway like the agent, with their project's token."
+  - id: card-background
+    title: "Background · control plane"
+    color: amber
+    lines:
+      - "[A] The proxy fetches Keycloak's JWKS and caches it."
+      - "[B] The secrets operator reads the Gemini key from Vault."
+      - "[C] It writes the Secret that the AIGatewayRoute's backend security policy references."
+      - "[D] The proxy pushes GenAI spans and token metrics to Alloy over OTLP."
+      - "[E] Alloy writes the traces to Tempo; Grafana shows tokens, cost and latency per project."
+  - id: card-plan
+    title: "What this proposal adds · targets"
+    color: sky
+    lines:
+      - "**IA-1** AI gateway (proxy, routes, SecurityPolicy, rate limit), Gemini and Ollama backends, Tempo."
+      - "**IA-2** Hosted agents in sandboxed namespaces (Sandbox CRD, gVisor), ToolHive MCP servers."
+      - "Prerequisites from the current platform: G1 default-deny between tenants, G8 pod security context, G17 protected GitOps branches."
+      - "Memory budget on this cluster: about 1 to 2.5 GB in total; to measure once deployed."
+  - {id: card-legend, title: Legend, color: slate, legend: true}
