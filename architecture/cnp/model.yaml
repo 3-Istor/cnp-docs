@@ -460,7 +460,7 @@ elements:
   - {id: ob-grafana, kind: frontend, parent: g-ob-read, icon: grafana, title: "Grafana", tech: "[dashboards]", desc: "Tokens, latency, 429s and share of<br>calls that fell back to Ollama."}
   - {id: ob-alerts, kind: security, parent: g-ob-read, icon: grafana, title: "Alert rules", tech: "[Grafana alerting]", desc: "Quota at 80 %, 429s or refusals up.<br>Why: act before the quota is gone.", status: planned, target: IA-1}
 
-  # Platform AI overview (view platform-ai-overview): one box per tool, zones are
+  # Platform AI stack (view platform-ai-stack): one box per tool, zones are
   # isolation boundaries. Coarse on purpose; the zoom views hold the details.
   - {id: ov-z-clients, kind: region, color: slate, icon: globe, title: "USERS & ASSISTANTS", sub: "Internet"}
   - {id: ov-user, kind: frontend, parent: ov-z-clients, shape: actor, icon: user, title: "User", desc: "developer or app user"}
