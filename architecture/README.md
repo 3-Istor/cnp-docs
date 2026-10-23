@@ -19,6 +19,7 @@ one diagram, and `layouts/` places the topology views.
 | `access-matrix` | Who may act on what, and what the segregation plan changes, phase by phase | Access segregation |
 | `ai-landing-zone` | What is the platform built with today, and what do the landing zone fixes and the AI landing zone add? (proposal, planned) | AI landing zone |
 | `platform-global` | What does the whole platform look like, current hub plus the proposed AI landing zone, on one canvas? (proposal, partly planned) | AI landing zone |
+| `ai-gateway-internals` | What is the AI gateway made of, and what happens inside it between a request and the answer? (proposal, planned) | AI landing zone |
 | `ai-gateway` | How does an agent's call reach a model or a tool, and what checks it on the way? (proposal, planned) | AI landing zone |
 | `ai-gateway-call` | What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent? (proposal, planned) | AI landing zone |
 
