@@ -14,7 +14,7 @@ consomme beaucoup est écarté quand la plateforme a déjà de quoi couvrir le b
 
 Source du schéma : `assets/ai-target-stack.html` (rendu en PNG avec Chromium).
 
-## Trois changements par rapport à l'architecture cible
+## Quatre changements par rapport à l'architecture cible
 
 - **AI gateway (D1) : agentgateway au lieu d'Agent Router.** Au 23 octobre 2026, Agent Router
   (v1.2.0) n'a ni A2A ni guardrails : les deux sont sur la roadmap de sa proposition à l'AAIF,
