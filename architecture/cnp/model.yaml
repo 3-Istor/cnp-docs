@@ -421,6 +421,20 @@ elements:
   - {id: id-user, kind: frontend, parent: z-internet, shape: actor, icon: user, title: "Project user", desc: "asks an agent through the CMP"}
   - {id: id-secret, kind: database, parent: g-agents, icon: k8s-secret, title: "Secret agent-oidc", tech: "[synced by VSO]", desc: "The agent client's secret, from<br>kvv2/projects/<p>/agents/<name>.<br>Why: never in Git or the image.", status: planned, target: IA-1}
 
+  # Models zoom (proposal, 2026-10-23): Gemini free tier first, Ollama on the homelab GPU over WireGuard.
+  # Sources: ai.google.dev (rate limits, Gemini API additional terms), Ollama docs (server settings).
+  - {id: g-md-egress, kind: group, parent: z-cluster, color: rose, icon: cilium, title: "EGRESS RULES", sub: "ns envoy-gateway-system", status: planned, target: IA-1}
+  - {id: md-egress, kind: security, parent: g-md-egress, icon: cilium, title: "CiliumNetworkPolicy ai-egress", tech: "[toFQDNs · toCIDR /32]", desc: "Envoy may reach Google's API host<br>and the GPU host, nothing else.<br>Why: a bug can't send data away.", status: planned, target: IA-1}
+  - {id: md-route-local, kind: backend, parent: g-ag-crd-ar, icon: k8s-crd, title: "AIGatewayRoute llm-local", tech: "[match x-cnp-data: local]", desc: "Same API, Ollama as the only<br>backend.<br>Why: Local data never leaves.", status: planned, target: IA-1}
+  - {id: md-wg, kind: cloud, parent: g-vpn, icon: k8s-pod, title: "wireguard (homelab)", tech: "[pod · UDP 51820]", desc: "Peer to the homelab; routes only<br>the GPU host's /32. Keys in Vault.<br>Why: no GPU on the CNP cluster.", status: planned, target: IA-1}
+  - {id: md-quota, kind: cloud, parent: z-google-ai, icon: gemini, title: "Quota counters", tech: "[RPM · TPM · RPD]", desc: "Any one exceeded → 429.<br>RPD resets at midnight Pacific.<br>Why: the free tier's real limit.", status: planned, target: IA-1}
+  - {id: md-project, kind: cloud, parent: z-google-ai, icon: gemini, title: "Google Cloud project", tech: "[AI Studio · free tier]", desc: "Owns the API key and the quota;<br>limits are per project, not per key.<br>Why: more keys add no quota.", status: planned, target: IA-1}
+  - {id: md-hl-wg, kind: cloud, parent: z-homelab-gpu, icon: k8s-pod, title: "WireGuard peer", tech: "[homelab · UDP 51820]", desc: "Accepts only the CNP peer and<br>forwards to the GPU host.<br>Why: one narrow door in.", status: planned, target: IA-1}
+  - {id: md-gpu, kind: backend, parent: z-homelab-gpu, icon: ollama, title: "RTX 5080", tech: "[16 GB VRAM · CUDA]", desc: "Holds the weights and KV cache<br>of the loaded models.<br>Why: the only GPU available.", status: planned, target: IA-1}
+  - {id: md-store, kind: database, parent: z-homelab-gpu, icon: ollama, title: "Model store", tech: "[OLLAMA_MODELS · local disk]", desc: "Pulled models, loaded on demand.<br>Why: no download per request.", status: planned, target: IA-1}
+  - {id: md-guard, kind: security, parent: z-homelab-gpu, icon: ollama, title: "Llama Guard 3", tech: "[8B · safety classifier]", desc: "Classifies prompts and answers<br>against safety categories.<br>For a later guardrail step (IA-3).", status: planned, target: IA-3}
+  - {id: md-ollama-cfg, kind: tool, parent: z-homelab-gpu, icon: ollama, title: "Ollama settings", tech: "[server environment]", desc: "NUM_PARALLEL 2, MAX_LOADED_MODELS 1,<br>KEEP_ALIVE 30m, KV cache q8_0.<br>Why: fit 16 GB, keep it warm.", status: planned, target: IA-1}
+
 connections:
   # Request path.
   - {id: e-1-browser-edge, from: user, to: cf-edge, port: https, protocol: HTTPS, verb: GET app, kind: flow}
@@ -621,6 +635,13 @@ connections:
   - {id: c-id-vso-read, from: vso, to: vault-a, protocol: HTTPS, verb: read agent secret, kind: flow, status: planned, target: IA-1}
   - {id: c-id-vso, from: vso, to: id-secret, protocol: HTTPS, verb: write Secret, kind: flow, status: planned, target: IA-1}
 
+  # Models zoom.
+  - {id: c-md-quota, from: gemini, to: md-quota, protocol: internal, verb: count request and tokens, kind: flow, status: planned, target: IA-1}
+  - {id: c-md-tunnel, from: md-wg, to: md-hl-wg, protocol: WireGuard UDP, verb: encrypted tunnel, kind: tunnel, status: planned, target: IA-1}
+  - {id: c-md-hl-fwd, from: md-hl-wg, to: ollama, protocol: HTTP, verb: forward :11434, kind: flow, status: planned, target: IA-1}
+  - {id: c-md-gpu, from: ollama, to: md-gpu, protocol: CUDA, verb: run the model, kind: flow, status: planned, target: IA-1}
+  - {id: c-md-store, from: ollama, to: md-store, protocol: file, verb: load weights, kind: flow, status: planned, target: IA-1}
+
 references:
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
@@ -669,6 +690,10 @@ references:
   - {id: r-id-svc, from: id-client-agent, to: id-svc, kind: service account}
   - {id: r-id-aud, from: id-scope-aud, to: id-client-gw, kind: audience}
   - {id: r-id-policy, from: id-policy, to: id-client-agent, kind: governs}
+
+  - {id: r-md-local, from: md-route-local, to: ag-be-ollama, kind: backendRef}
+  - {id: r-md-project, from: md-project, to: md-quota, kind: owns}
+  - {id: r-md-guard, from: md-store, to: md-guard, kind: contains}
 
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}

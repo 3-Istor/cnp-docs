@@ -72,6 +72,13 @@ Un client Keycloak par agent, client_credentials quand l'agent agit seul, token 
 ![Agent identity internals](../01-architecture/diagrams/agent-identity-internals.light.png#only-light)
 ![Agent identity internals](../01-architecture/diagrams/agent-identity-internals.dark.png#only-dark)
 
+### Modèles : vue détaillée
+
+Gemini en premier (quota gratuit, par projet), repli sur Ollama sur le GPU du homelab via WireGuard, et la route réservée aux projets Local.
+
+![Models internals](../01-architecture/diagrams/models-internals.light.png#only-light)
+![Models internals](../01-architecture/diagrams/models-internals.dark.png#only-dark)
+
 ### Tech stack : actuel et ajouts
 
 ![CNP AI landing zone tech stack](../01-architecture/diagrams/ai-landing-zone.light.png#only-light)
@@ -87,5 +94,5 @@ Un client Keycloak par agent, client_credentials quand l'agent agit seul, token 
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
