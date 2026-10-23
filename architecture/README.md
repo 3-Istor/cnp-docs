@@ -26,6 +26,7 @@ one diagram, and `layouts/` places the topology views.
 | `mcp-tools-internals` | How does an agent's tool call reach a tool server, and who checks it on the way? (proposal) | AI landing zone |
 | `agent-identity-internals` | Who is an agent for the platform, how does it get a token, and how does it act for a user? (proposal) | AI landing zone |
 | `models-internals` | Where does a model call end up, what limits it, and how does it fall back to the homelab GPU? (proposal) | AI landing zone |
+| `genai-observability-internals` | How does one agent call become a trace and token counts per project? (proposal) | AI landing zone |
 | `ai-gateway` | How does an agent's call reach a model or a tool, and what checks it on the way? (proposal, planned) | AI landing zone |
 | `ai-gateway-call` | What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent? (proposal, planned) | AI landing zone |
 

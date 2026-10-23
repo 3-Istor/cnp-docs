@@ -79,6 +79,13 @@ Gemini en premier (quota gratuit, par projet), repli sur Ollama sur le GPU du ho
 ![Models internals](../01-architecture/diagrams/models-internals.light.png#only-light)
 ![Models internals](../01-architecture/diagrams/models-internals.dark.png#only-dark)
 
+### Observabilité GenAI : vue détaillée
+
+De l'appel d'un agent à une trace et des compteurs de tokens par projet : les sources, le pipeline Alloy, Tempo, Prometheus et Grafana.
+
+![GenAI observability internals](../01-architecture/diagrams/genai-observability-internals.light.png#only-light)
+![GenAI observability internals](../01-architecture/diagrams/genai-observability-internals.dark.png#only-dark)
+
 ### Tech stack : actuel et ajouts
 
 ![CNP AI landing zone tech stack](../01-architecture/diagrams/ai-landing-zone.light.png#only-light)
@@ -94,5 +101,5 @@ Gemini en premier (quota gratuit, par projet), repli sur Ollama sur le GPU du ho
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `genai-observability-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
