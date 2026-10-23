@@ -382,6 +382,24 @@ elements:
   - {id: sb-seccomp, kind: security, parent: g-sb-pod-runc, icon: k8s-pod, title: "seccomp RuntimeDefault", tech: "[PSS restricted · non-root]", desc: "Blocks the riskiest syscalls; the<br>rest reaches the node kernel.<br>Why: enough without generated code.", status: planned, target: IA-1}
   - {id: sb-netpol-agent, kind: security, parent: g-sb-guard-ns, icon: cilium, title: "NetworkPolicy agent", tech: "[Cilium · default deny]", desc: "Egress: DNS and the two gateways.<br>Ingress: none.<br>Why: tools only via the gateways.", status: planned, target: IA-1}
 
+  # MCP tools zoom (proposal, 2026-10-23): ToolHive operator v1beta1 behind the Agent Router MCPRoute.
+  # Sources: docs.stacklok.com/toolhive (guides-k8s, CRD reference), stacklok.com blog (CRD graduation, 2026-04-29).
+  - {id: g-th-crd, kind: group, parent: g-mcp-tools, color: orange, icon: k8s-crd, title: "TOOLHIVE CRDs", sub: "toolhive.stacklok.dev/v1beta1", status: planned, target: IA-2}
+  - {id: g-th-gen, kind: group, parent: g-mcp-tools, color: slate, icon: k8s-deploy, title: "GENERATED", sub: "by the operator, per MCPServer", status: planned, target: IA-2}
+  - {id: g-th-run, kind: group, parent: g-mcp-tools, color: orange, icon: k8s-pod, title: "TOOL SERVER PODS", status: planned, target: IA-2}
+  - {id: g-th-op, kind: group, parent: z-cluster, color: orange, icon: k8s-deploy, title: "TOOLHIVE OPERATOR", sub: "ns toolhive-system", status: planned, target: IA-2}
+  - {id: th-op, kind: backend, parent: g-th-op, icon: mcp, title: "ToolHive operator", tech: "[thv-operator]", desc: "Turns each MCPServer into a proxy<br>Deployment, Service and RBAC.<br>Why: tools declared, not hand-run.", status: planned, target: IA-2}
+  - {id: th-mcpserver, kind: backend, parent: g-th-crd, icon: k8s-crd, title: "MCPServer github", tech: "[image · transport stdio]", desc: "Image, transport and secrets of<br>one tool server.<br>Why: one object per tool server.", status: planned, target: IA-2}
+  - {id: th-toolconfig, kind: security, parent: g-th-crd, icon: k8s-crd, title: "MCPToolConfig", tech: "[toolConfigRef]", desc: "Allow-list and renaming of tools.<br>Why: expose reads, hide writes.", status: planned, target: IA-2}
+  - {id: th-oidc, kind: security, parent: g-th-crd, icon: k8s-crd, title: "MCPOIDCConfig", tech: "[oidcConfigRef · Keycloak]", desc: "Issuer and audience the proxy<br>checks on every call.<br>Why: tools don't trust the network.", status: planned, target: IA-2}
+  - {id: th-telemetry, kind: backend, parent: g-th-crd, icon: k8s-crd, title: "MCPTelemetryConfig", tech: "[telemetryConfigRef · OTLP]", desc: "Where the proxy sends spans and<br>metrics: Alloy.<br>Why: one trace, agent to tool.", status: planned, target: IA-2}
+  - {id: th-secret, kind: database, parent: g-th-crd, icon: k8s-secret, title: "Secret github-token", tech: "[synced by VSO from Vault]", desc: "The tool's own API credential,<br>injected as an env var.<br>Why: agents never see it.", status: planned, target: IA-2}
+  - {id: th-deploy, kind: backend, parent: g-th-gen, icon: k8s-deploy, title: "Deployment github", tech: "[ToolHive proxy]", desc: "Runs the proxy for this server.<br>Why: auth, policy and telemetry<br>in one place per tool.", status: planned, target: IA-2}
+  - {id: th-svc, kind: backend, parent: g-th-gen, icon: k8s-svc, title: "Service mcp-github-proxy", tech: "[ClusterIP :8080]", desc: "Stable address of the proxy.<br>Why: the MCPRoute points here.", status: planned, target: IA-2}
+  - {id: th-rbac, kind: security, parent: g-th-gen, icon: k8s-sa, title: "ServiceAccount + Role", tech: "[one per MCPServer]", desc: "Lets the proxy create the server pod<br>and attach to stdio, in its ns only.<br>Why: least privilege.", status: planned, target: IA-2}
+  - {id: th-proxy, kind: security, parent: g-th-run, icon: mcp, title: "ToolHive proxy", tech: "[streamable HTTP :8080]", desc: "Checks the JWT, Cedar policy, tool<br>filter; bridges to the server.<br>Why: the tool's front door.", status: planned, target: IA-2}
+  - {id: th-server, kind: backend, parent: g-th-run, icon: github, title: "github-mcp-server", tech: "[container mcp · stdio]", desc: "Turns MCP calls into GitHub API<br>calls.<br>Why: third-party code, kept apart.", status: planned, target: IA-2}
+
 connections:
   # Request path.
   - {id: e-1-browser-edge, from: user, to: cf-edge, port: https, protocol: HTTPS, verb: GET app, kind: flow}
@@ -566,6 +584,14 @@ connections:
   - {id: c-sb-r-runc, from: sb-containerd, to: sb-runc, protocol: exec, verb: create container, kind: flow}
   - {id: c-sb-r-start, from: sb-runc, to: sb-agent-loop, protocol: process, verb: start, kind: flow, status: planned, target: IA-1}
 
+  # MCP tools zoom.
+  - {id: c-th-gw, from: ag-x-mcp, to: th-proxy, protocol: HTTP, verb: tools/call, kind: flow, status: planned, target: IA-2}
+  - {id: c-th-run, from: th-proxy, to: th-server, protocol: stdio via pod attach, verb: JSON-RPC, kind: flow, status: planned, target: IA-2}
+  - {id: c-th-github, from: th-server, to: github, protocol: HTTPS, verb: GitHub API, kind: flow, status: planned, target: IA-2}
+  - {id: c-th-op-kapi, from: th-op, to: ag-kapi, protocol: HTTPS, verb: watch and write, kind: flow, status: planned, target: IA-2}
+  - {id: c-th-proxy-kapi, from: th-proxy, to: ag-kapi, protocol: HTTPS, verb: "create pod, attach", kind: flow, status: planned, target: IA-2}
+  - {id: c-th-jwks, from: th-proxy, to: keycloak, protocol: HTTP, verb: fetch JWKS, kind: auth, status: planned, target: IA-2}
+
 references:
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
@@ -602,6 +628,12 @@ references:
 
   - {id: r-sb-template-rckata, from: sb-template, to: sb-rc-kata, kind: runtimeClassName}
   - {id: r-sb-nested-hv, from: sb-nested, to: sb-hv, kind: setting}
+
+  - {id: r-th-tools, from: th-mcpserver, to: th-toolconfig, kind: toolConfigRef}
+  - {id: r-th-oidc, from: th-mcpserver, to: th-oidc, kind: oidcConfigRef}
+  - {id: r-th-tel, from: th-mcpserver, to: th-telemetry, kind: telemetryConfigRef}
+  - {id: r-th-secret, from: th-mcpserver, to: th-secret, kind: secrets}
+  - {id: r-th-route, from: ag-mcproute, to: th-svc, kind: backendRef}
 
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}

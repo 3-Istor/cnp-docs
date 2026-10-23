@@ -58,6 +58,13 @@ Niveau standard (agents sans exécution de code, runc) :
 ![Agent runtime, standard tier](../01-architecture/diagrams/agent-sandbox-runc.light.png#only-light)
 ![Agent runtime, standard tier](../01-architecture/diagrams/agent-sandbox-runc.dark.png#only-dark)
 
+### Outils MCP : vue détaillée
+
+Comment un appel d'outil va de l'agent au serveur d'outils : le proxy MCP de la gateway, ToolHive pour les serveurs tiers, le serveur MCP du CMP et sa politique de stake.
+
+![MCP tools internals](../01-architecture/diagrams/mcp-tools-internals.light.png#only-light)
+![MCP tools internals](../01-architecture/diagrams/mcp-tools-internals.dark.png#only-dark)
+
 ### Tech stack : actuel et ajouts
 
 ![CNP AI landing zone tech stack](../01-architecture/diagrams/ai-landing-zone.light.png#only-light)
@@ -73,5 +80,5 @@ Niveau standard (agents sans exécution de code, runc) :
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
