@@ -60,7 +60,7 @@
         <h2>Portail CNP + GitOps</h2>
         <div class="l"><b>CMP</b> (Next.js · FastAPI) : catalogue, création des projets et des agents</div>
         <div class="l"><b>Argo CD</b> + ApplicationSets : tout l'état vient de Git</div>
-        <div class="l"><span class="o"><span class="n">1</span>Agent = chart Helm + SandboxTemplate, pas de CRD Agent</span></div>
+        <div class="l"><b>kagent</b> : CRD <b>Agent</b> (type BYO, ton image) · <b>ModelConfig</b> pointé sur la gateway</div>
       </div>
       <div class="arrow"><span>provisionne</span></div>
       <div class="ns" id="ns">
@@ -69,23 +69,24 @@
           <h3>Agent (framework libre : LangGraph, ADK…)</h3>
           <div class="l">Pod <b>runc + seccomp</b> ; le code généré part dans <b>agent-sandbox</b> : <b>gVisor</b> ou <b>Kata</b></div>
           <div class="l">Identité : token <b>ServiceAccount</b> → <b>Keycloak</b> (federated client auth)</div>
-          <div class="l">Aucun secret ni clé API dans le pod</div>
+          <div class="l">Déployé par <b>kagent</b> · aucun secret ni clé API dans le pod</div>
         </div>
       </div>
       <div class="arrow"><span>seul chemin sortant</span></div>
       <div class="box gw" id="gw">
-        <h2>Gateway agentique : Agent Router (ex-Envoy AI Gateway)</h2>
-        <div class="l">Proxy LLM (<b>AIGatewayRoute</b>) · Proxy MCP (<b>MCPRoute</b>) · <span class="r"><span class="n">2</span>Proxy A2A : non</span></div>
-        <div class="l">AuthN : <b>JWT Keycloak</b> · policy par outil : <b>OPA</b> (ext_authz) + <b>Cedar</b> (ToolHive)</div>
-        <div class="l"><span class="o"><span class="n">3</span>Guardrails : Llama Guard servi par Ollama, via ext_proc</span> · <span class="r"><span class="n">4</span>Masquage PII : aucun outil</span></div>
-        <div class="l">Quotas en tokens : <b>Envoy rate limit + Redis</b> · <span class="o"><span class="n">5</span>Audit : logs → Loki + archive Object Lock</span></div>
+        <h2>Gateway agentique : agentgateway (Linux Foundation · AAIF)</h2>
+        <div class="l">Proxy <b>LLM</b> · Proxy <b>MCP</b> · Proxy <b>A2A</b> : un seul data plane pour tout le trafic IA</div>
+        <div class="l">AuthN : <b>JWT Keycloak</b> · policy par outil : <b>CEL</b> (AgentgatewayPolicy) + <b>Cedar</b> (ToolHive)</div>
+        <div class="l">Guardrails : <b>regex intégrée</b> (masque PII et secrets) · <span class="o"><span class="n">1</span>Llama Guard sur Ollama, via un webhook maison</span></div>
+        <div class="l">Budgets en tokens par agent : <b>rate limit global</b> (envoy-ratelimit + Redis) · <span class="o"><span class="n">2</span>Audit : logs → Loki</span></div>
+        <div class="l" style="font-size:13.5px">Envoy Gateway reste l'entrée des apps ; agentgateway est une GatewayClass à part</div>
       </div>
       <div class="fan" id="fan"><i style="left:16.4%"></i><i style="left:50%"></i><i style="left:83.6%"></i></div>
       <div class="row3">
         <div class="box">
           <h3>Modèles</h3>
           <div class="l"><b>Gemini API</b> (free tier) : défaut</div>
-          <div class="l"><span class="o"><span class="n">6</span>Ollama sur le GPU, pas vLLM</span></div>
+          <div class="l"><span class="o"><span class="n">3</span>Ollama sur le GPU, pas vLLM</span></div>
           <div class="l">RTX 5080 du homelab, via <b>WireGuard</b></div>
         </div>
         <div class="box">
@@ -94,10 +95,11 @@
           <div class="l">Registre privé · provenance <b>Sigstore</b></div>
           <div class="l"><b>cosign</b> + Kyverno <b>verifyImages</b></div>
         </div>
-        <div class="box red">
+        <div class="box">
           <h3>Autres agents</h3>
-          <div class="l"><span class="r"><span class="n">2</span>A2A et Agent Cards : non retenus</span></div>
-          <div class="l" style="color:var(--red)">pas de cas d'usage multi-agents</div>
+          <div class="l"><b>A2A</b> via agentgateway</div>
+          <div class="l"><b>Agent Cards</b> publiées par kagent</div>
+          <div class="l">découverte et tâches longues</div>
         </div>
       </div>
     </div>
@@ -107,12 +109,12 @@
         <h3>Identité</h3>
         <div class="l"><b>Keycloak</b> : un client par agent, jetons ≤ 15 min</div>
         <div class="l">token exchange · federated client auth</div>
-        <div class="l"><span class="r"><span class="n">7</span>SPIRE / SPIFFE : non</span></div>
+        <div class="l"><span class="r"><span class="n">4</span>SPIRE / SPIFFE : non</span></div>
       </div>
       <div class="box" id="s-obs">
         <h3>Observabilité</h3>
         <div class="l">OTel GenAI → <b>Alloy</b> → <b>Tempo</b> + <b>VictoriaMetrics</b></div>
-        <div class="l"><span class="o"><span class="n">8</span>Vue LLM dans Grafana, pas Langfuse</span></div>
+        <div class="l"><span class="o"><span class="n">5</span>Vue LLM dans Grafana, pas Langfuse</span></div>
         <div class="l">Évals : <b>promptfoo</b> en CI GitHub</div>
       </div>
       <div class="box" id="s-net">
@@ -122,8 +124,8 @@
       </div>
       <div class="box" id="s-fin">
         <h3>FinOps</h3>
-        <div class="l"><span class="o"><span class="n">9</span>Budgets : quotas tokens + OpenCost</span></div>
-        <div class="l"><span class="o"><span class="n">10</span>Plafond d'étapes : limite du framework</span></div>
+        <div class="l"><span class="o"><span class="n">6</span>Budgets en tokens, pas en euros</span></div>
+        <div class="l"><span class="o"><span class="n">7</span>Plafond d'étapes : limite du framework</span></div>
       </div>
     </div>
   </div>
