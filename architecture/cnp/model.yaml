@@ -340,10 +340,10 @@ elements:
   - {id: g-sb-guard, kind: group, parent: z-cluster, color: rose, icon: kyverno, title: "CLUSTER GUARDRAILS", status: planned, target: IA-2}
   - {id: g-sb-ctrl, kind: group, parent: z-cluster, color: orange, icon: k8s-deploy, title: "AGENT SANDBOX CONTROLLERS", sub: "ns agent-sandbox-system", status: planned, target: IA-2}
   - {id: g-sb-router, kind: group, parent: z-cluster, color: orange, icon: k8s-deploy, title: "SANDBOX ROUTER", sub: "ns agent-sandbox-system", status: planned, target: IA-2}
-  - {id: g-sb-node, kind: group, parent: z-cluster, color: cyan, icon: openstack, title: "NODE", sub: "K3s agent · OpenStack VM"}
+  - {id: g-sb-node, kind: group, parent: z-cluster, color: cyan, icon: openstack, title: "NODE · K3s WORKER", sub: "an OpenStack VM"}
   - {id: g-sb-pod, kind: group, parent: g-sb-node, color: orange, icon: k8s-pod, title: "SANDBOX POD <id>", sub: "RuntimeClass gvisor", status: planned, target: IA-2}
 
-  - {id: sb-template, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxTemplate python", tech: "[podTemplate · networkPolicy]", desc: "Blueprint: image, runtimeClass gvisor,<br>resources, network rules.<br>Why: admins set the safe defaults.", status: planned, target: IA-2}
+  - {id: sb-template, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxTemplate python", tech: "[podTemplate · networkPolicy]", desc: "Blueprint: image, runtimeClassName,<br>resources, network rules.<br>Why: admins set the safe defaults.", status: planned, target: IA-2}
   - {id: sb-warmpool, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxWarmPool python", tech: "[replicas 1 · OnReplenish]", desc: "Keeps sandboxes started in advance<br>from the template.<br>Why: no cold start for the agent.", status: planned, target: IA-2}
   - {id: sb-claim, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxClaim <task>", tech: "[warmPoolRef · lifecycle]", desc: "One per task, created by the agent.<br>shutdownTime, ttlSecondsAfterFinished.<br>Why: sandboxes die with the task.", status: planned, target: IA-2}
   - {id: sb-svc, kind: backend, parent: g-sb-crd, icon: k8s-svc, title: "Service <id>", tech: "[headless · created by controller]", desc: "Stable DNS name for the sandbox:<br><id>.<ns>.svc.cluster.local.<br>Why: router and SDK find the pod.", status: planned, target: IA-2}
@@ -352,17 +352,35 @@ elements:
   - {id: sb-quota, kind: security, parent: g-sb-guard-ns, icon: k8s-ns, title: "ResourceQuota + LimitRange", tech: "[per agent namespace]", desc: "Caps CPU, memory and pod count.<br>Why: a runaway loop can't eat<br>the cluster's 4 GB.", status: planned, target: IA-2}
   - {id: sb-netpol, kind: security, parent: g-sb-guard-ns, icon: cilium, title: "NetworkPolicy", tech: "[from the template · Cilium]", desc: "Egress: DNS only, no Internet.<br>Ingress: sandbox router only.<br>Why: code can't reach the cluster.", status: planned, target: IA-2}
   - {id: sb-rc, kind: security, parent: g-sb-guard, icon: k8s-crd, title: "RuntimeClass gvisor", tech: "[handler runsc]", desc: "Tells containerd to start the pod<br>under gVisor instead of runc.<br>Why: one name selects the isolation.", status: planned, target: IA-2}
-  - {id: sb-kpol, kind: security, parent: g-sb-guard, icon: kyverno, title: "ClusterPolicy sandbox-guard", tech: "[Kyverno · Enforce]", desc: "Agent pods must use gvisor, PSS<br>restricted, no SA token mounted.<br>Why: no pod skips the isolation.", status: planned, target: IA-2}
+  - {id: sb-kpol, kind: security, parent: g-sb-guard, icon: kyverno, title: "ClusterPolicy sandbox-guard", tech: "[Kyverno · Enforce]", desc: "Agent pods: PSS restricted, no SA<br>token; code-running agents must use<br>gvisor or kata. Why: tier by risk.", status: planned, target: IA-2}
   - {id: sb-c-core, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Sandbox controller", tech: "[agent-sandbox-controller]", desc: "Creates Pod + Service per Sandbox;<br>pauses, resumes, deletes on time.<br>Why: one stateful pod per sandbox.", status: planned, target: IA-2}
   - {id: sb-c-ext, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Extensions controllers", tech: "[template · warm pool · claim]", desc: "Fills the pool from the template,<br>binds each claim to a warm Sandbox.<br>Why: claims stay simple for agents.", status: planned, target: IA-2}
-  - {id: sb-router, kind: backend, parent: g-sb-router, icon: k8s-svc, title: "sandbox-router", tech: "[sandbox-router-svc :8080]", desc: "Reverse proxy from the SDK to the<br>right sandbox pod.<br>Why: no port-forward under gVisor.", status: planned, target: IA-2}
+  - {id: sb-router, kind: backend, parent: g-sb-router, icon: k8s-svc, title: "sandbox-router", tech: "[sandbox-router-svc :8080]", desc: "Reverse proxy from the SDK to the<br>right sandbox pod.<br>Why: no port-forward with gVisor, Kata.", status: planned, target: IA-2}
   - {id: sb-kubelet, kind: backend, parent: g-sb-node, icon: kubernetes, title: "kubelet", tech: "[K3s agent]", desc: "Starts the pods scheduled on this<br>node and reports their status.<br>Already runs today."}
   - {id: sb-containerd, kind: backend, parent: g-sb-node, icon: docker, title: "containerd", tech: "[CRI · K3s embedded]", desc: "Pulls images, picks the runtime<br>handler from the RuntimeClass.<br>Already runs today."}
   - {id: sb-runsc, kind: tool, parent: g-sb-node, icon: k8s-pod, title: "runsc shim", tech: "[gVisor · containerd-shim-runsc-v1]", desc: "Starts the gVisor sandbox for the<br>pod in place of runc.<br>Why: installed once per node.", status: planned, target: IA-2}
   - {id: sb-runtime, kind: backend, parent: g-sb-pod, icon: python, title: "Runtime server", tech: "[python-runtime-sandbox :8888]", desc: "Runs commands, reads, writes files<br>for the agent.<br>Why: the agent's hands, isolated.", status: planned, target: IA-2}
-  - {id: sb-sentry, kind: security, parent: g-sb-pod, icon: k8s-pod, title: "gVisor Sentry", tech: "[user-space kernel · Go]", desc: "Answers every syscall of the code<br>itself, in user space.<br>Why: host kernel stays out of reach.", status: planned, target: IA-2}
+  - {id: sb-sentry, kind: security, parent: g-sb-pod, icon: k8s-pod, title: "gVisor Sentry", tech: "[user-space kernel · systrap]", desc: "Answers every syscall of the code<br>itself, in user space.<br>Why: host kernel stays out of reach.", status: planned, target: IA-2}
   - {id: sb-netstack, kind: security, parent: g-sb-pod, icon: k8s-pod, title: "gVisor Netstack", tech: "[user-space TCP/IP]", desc: "The sandbox's own network stack;<br>packets leave through the pod veth.<br>Why: no host TCP/IP for the code.", status: planned, target: IA-2}
-  - {id: sb-kernel, kind: backend, parent: g-sb-node, icon: rack, title: "Host Linux kernel", tech: "[seccomp-filtered]", desc: "Sees only a small, filtered set of<br>syscalls from the Sentry.<br>Already runs today."}
+  - {id: sb-kernel, kind: backend, parent: g-sb-node, icon: rack, title: "Node VM kernel", tech: "[Linux · seccomp]", desc: "The node VM's own Linux kernel.<br>Isolation decides how much of it<br>the agent's code can touch."}
+
+  # Isolation variants of the agent sandbox zoom (2026-10-23): host layer, Kata Containers, runc.
+  - {id: z-sb-compute, kind: region, color: slate, icon: openstack, title: "OPENSTACK COMPUTE HOST", sub: "bare metal · Nova"}
+  - {id: sb-hv, kind: backend, parent: z-sb-compute, icon: openstack, title: "KVM hypervisor", tech: "[QEMU/KVM · Nova compute]", desc: "Runs each K3s node as a VM on the<br>physical server.<br>Already runs today."}
+  - {id: sb-nested, kind: tool, parent: z-sb-compute, icon: openstack, title: "Nested virtualisation", tech: "[kvm nested=1 · host-passthrough]", desc: "Exposes /dev/kvm inside the node VM.<br>Needed by Kata only.<br>Why: Kata starts a VM in the VM.", status: planned, target: IA-2}
+  - {id: sb-rc-kata, kind: security, parent: g-sb-guard, icon: k8s-crd, title: "RuntimeClass kata", tech: "[handler kata-clh · overhead]", desc: "Starts the pod in its own micro-VM;<br>overhead counted in the quota.<br>Why: hardware isolation per pod.", status: planned, target: IA-2}
+  - {id: sb-kata-shim, kind: tool, parent: g-sb-node, icon: k8s-pod, title: "Kata shim", tech: "[containerd-shim-kata-v2]", desc: "Starts one micro-VM per pod and<br>drives it over vsock.<br>Why: replaces runc for this pod.", status: planned, target: IA-2}
+  - {id: sb-vmm, kind: backend, parent: g-sb-node, icon: k8s-pod, title: "Cloud Hypervisor", tech: "[VMM · Rust · KVM]", desc: "Creates the micro-VM: vCPUs, RAM,<br>virtio devices.<br>Why: one small VM per sandbox.", status: planned, target: IA-2}
+  - {id: sb-virtiofsd, kind: tool, parent: g-sb-node, icon: k8s-pod, title: "virtiofsd", tech: "[virtio-fs · vhost-user]", desc: "Shares the container's files with<br>the guest.<br>Why: no disk image per pod.", status: planned, target: IA-2}
+  - {id: g-sb-kvm, kind: group, parent: g-sb-node, color: orange, icon: k8s-pod, title: "KATA MICRO-VM <id>", sub: "RuntimeClass kata · own kernel", status: planned, target: IA-2}
+  - {id: sb-runtime-kata, kind: backend, parent: g-sb-kvm, icon: python, title: "Runtime server", tech: "[python-runtime-sandbox :8888]", desc: "Runs commands, reads, writes files<br>for the agent.<br>Why: the agent's hands, isolated.", status: planned, target: IA-2}
+  - {id: sb-guest, kind: security, parent: g-sb-kvm, icon: k8s-pod, title: "Guest kernel", tech: "[Linux · Kata guest image]", desc: "A whole kernel per pod: the code's<br>syscalls stay inside the VM.<br>Why: node kernel never sees them.", status: planned, target: IA-2}
+  - {id: sb-kata-agent, kind: backend, parent: g-sb-kvm, icon: k8s-pod, title: "kata-agent", tech: "[ttRPC over vsock]", desc: "Creates the containers inside the<br>VM on the shim's orders.<br>Why: the shim can't reach in.", status: planned, target: IA-2}
+  - {id: g-sb-pod-runc, kind: group, parent: g-sb-node, color: orange, icon: k8s-pod, title: "AGENT POD <agent>", sub: "default runtime · runc", status: planned, target: IA-1}
+  - {id: sb-runc, kind: tool, parent: g-sb-node, icon: k8s-pod, title: "runc", tech: "[OCI runtime · default]", desc: "Starts containers with namespaces,<br>cgroups and seccomp.<br>Already the default runtime."}
+  - {id: sb-agent-loop, kind: backend, parent: g-sb-pod-runc, icon: python, title: "Agent loop", tech: "[Python · agent framework]", desc: "Plans and calls models and tools<br>through the gateways only.<br>No shell, no code execution tool.", status: planned, target: IA-1}
+  - {id: sb-seccomp, kind: security, parent: g-sb-pod-runc, icon: k8s-pod, title: "seccomp RuntimeDefault", tech: "[PSS restricted · non-root]", desc: "Blocks the riskiest syscalls; the<br>rest reaches the node kernel.<br>Why: enough without generated code.", status: planned, target: IA-1}
+  - {id: sb-netpol-agent, kind: security, parent: g-sb-guard-ns, icon: cilium, title: "NetworkPolicy agent", tech: "[Cilium · default deny]", desc: "Egress: DNS and the two gateways.<br>Ingress: none.<br>Why: tools only via the gateways.", status: planned, target: IA-1}
 
 connections:
   # Request path.
@@ -532,6 +550,22 @@ connections:
   - {id: c-sb-shim, from: sb-containerd, to: sb-runsc, protocol: ttrpc, verb: start shim, kind: flow, status: planned, target: IA-2}
   - {id: c-sb-boot, from: sb-runsc, to: sb-sentry, protocol: process, verb: boot sandbox, kind: flow, status: planned, target: IA-2}
 
+  # Isolation variants: Kata and runc paths, and the node VM on its host.
+  - {id: c-sb-vm, from: sb-kernel, to: sb-hv, protocol: VM exits, verb: hardware virtualisation, kind: flow}
+  - {id: c-sb-router-kata, from: sb-router, to: sb-runtime-kata, protocol: HTTP, verb: forward, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-k-syscall, from: sb-runtime-kata, to: sb-guest, protocol: syscalls, verb: guest kernel, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-k-virtio, from: sb-guest, to: sb-vmm, protocol: virtio, verb: VM exits, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-k-kvm, from: sb-vmm, to: sb-kernel, protocol: ioctl, verb: KVM_RUN, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-k-shim, from: sb-containerd, to: sb-kata-shim, protocol: ttrpc, verb: start shim, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-k-vmm, from: sb-kata-shim, to: sb-vmm, protocol: API socket, verb: boot VM, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-k-agent, from: sb-kata-shim, to: sb-kata-agent, protocol: ttRPC over vsock, verb: create containers, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-k-fs, from: sb-vmm, to: sb-virtiofsd, protocol: vhost-user, verb: shared files, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-r-model, from: sb-agent-loop, to: ai-gw-proxy, protocol: HTTP, verb: models and tools, kind: flow, status: planned, target: IA-1}
+  - {id: c-sb-r-syscall, from: sb-agent-loop, to: sb-seccomp, protocol: syscalls, verb: filtered, kind: flow, status: planned, target: IA-1}
+  - {id: c-sb-r-kernel, from: sb-seccomp, to: sb-kernel, protocol: syscalls, verb: allowed, kind: flow, status: planned, target: IA-1}
+  - {id: c-sb-r-runc, from: sb-containerd, to: sb-runc, protocol: exec, verb: create container, kind: flow}
+  - {id: c-sb-r-start, from: sb-runc, to: sb-agent-loop, protocol: process, verb: start, kind: flow, status: planned, target: IA-1}
+
 references:
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
@@ -565,6 +599,9 @@ references:
   - {id: r-sb-sandbox-svc, from: sb-sandbox, to: sb-svc, kind: owns}
   - {id: r-sb-template-rc, from: sb-template, to: sb-rc, kind: runtimeClassName}
   - {id: r-sb-template-netpol, from: sb-template, to: sb-netpol, kind: networkPolicy}
+
+  - {id: r-sb-template-rckata, from: sb-template, to: sb-rc-kata, kind: runtimeClassName}
+  - {id: r-sb-nested-hv, from: sb-nested, to: sb-hv, kind: setting}
 
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}

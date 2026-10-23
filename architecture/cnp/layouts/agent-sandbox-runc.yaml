@@ -1,0 +1,54 @@
+# Generated from absolute coordinates; boxes are relative to their parent zone,
+# waypoints are canvas coordinates.
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 3700, height: 2860}
+elements:
+  g-sb-ns: {x: 40, y: 60, w: 1530, h: 330}
+  g-sb-crd: {x: 30, y: 70, w: 710, h: 230}
+  sb-sandbox: {x: 30, y: 70, w: 300, h: 100}
+  sb-svc: {x: 380, y: 70, w: 300, h: 100}
+  g-sb-guard-ns: {x: 820, y: 70, w: 680, h: 230}
+  sb-quota: {x: 30, y: 70, w: 300, h: 100}
+  sb-netpol-agent: {x: 370, y: 70, w: 300, h: 100}
+  g-sb-guard: {x: 1650, y: 60, w: 360, h: 200}
+  sb-kpol: {x: 30, y: 70, w: 300, h: 100}
+  g-sb-ctrl: {x: 40, y: 620, w: 360, h: 200}
+  sb-c-core: {x: 30, y: 70, w: 300, h: 100}
+  g-ag-kapi: {x: 960, y: 620, w: 360, h: 200}
+  ag-kapi: {x: 30, y: 70, w: 300, h: 100}
+  g-ops: {x: 1400, y: 620, w: 360, h: 200}
+  kyverno: {x: 30, y: 70, w: 300, h: 100}
+  sb-kubelet: {x: 30, y: 70, w: 300, h: 100}
+  sb-containerd: {x: 380, y: 70, w: 300, h: 100}
+  sb-runc: {x: 730, y: 70, w: 300, h: 100}
+  g-sb-pod-runc: {x: 30, y: 250, w: 1060, h: 200}
+  sb-agent-loop: {x: 380, y: 70, w: 300, h: 100}
+  sb-seccomp: {x: 730, y: 70, w: 300, h: 100}
+  g-ai-gateway: {x: 2170, y: 1150, w: 360, h: 200}
+  ai-gw-proxy: {x: 30, y: 70, w: 300, h: 100}
+  g-sb-node: {x: 920, y: 900, w: 1180, h: 760}
+  sb-kernel: {x: 760, y: 590, w: 300, h: 100}
+  z-cluster: {x: 40, y: 200, w: 2560, h: 1700}
+  z-sb-compute: {x: 1340, y: 1960, w: 710, h: 200}
+  sb-hv: {x: 380, y: 70, w: 300, h: 100}
+edges:
+  r-sb-sandbox-svc: {from: sb-sandbox.right@50px, to: sb-svc.left@50px}
+  c-sb-core-kapi: {from: sb-c-core.bottom@150px, to: ag-kapi.left@80px, waypoints: [[260, 1040], [960, 1040], [960, 970]]}
+  c-sb-kyverno: {from: ag-kapi.right@50px, to: kyverno.left@50px}
+  c-sb-kubelet: {from: sb-kubelet.top@280px, to: ag-kapi.bottom@240px, against_flow: true}
+  c-sb-cri: {from: sb-kubelet.right@50px, to: sb-containerd.left@50px}
+  c-sb-r-model: {from: sb-agent-loop.bottom@150px, to: ai-gw-proxy.left@80px, waypoints: [[1520, 1590], [2175, 1590], [2175, 1500]], label_at: [1600, 1590]}
+  c-sb-r-syscall: {from: sb-agent-loop.right@50px, to: sb-seccomp.left@50px}
+  c-sb-r-kernel: {from: sb-seccomp.bottom@150px, to: sb-kernel.top@150px}
+  c-sb-r-runc: {from: sb-containerd.right@50px, to: sb-runc.left@50px}
+  c-sb-r-start: {from: sb-runc.bottom@40px, to: sb-agent-loop.top@250px, waypoints: [[1730, 1310], [1620, 1310]]}
+  c-sb-vm: {from: sb-kernel.bottom@150px, to: sb-hv.top@150px, label_at: [1870, 1910.0]}
+notes:
+  n-sb-node: {x: 2620, y: 1100, w: 440, h: 200}
+  n-sb-tier: {x: 3100, y: 1100, w: 440, h: 200}
+cards:
+  card-steps: {x: 40, y: 2220, w: 1790, h: 220}
+  card-background: {x: 1870, y: 2220, w: 1790, h: 220}
+  card-objects: {x: 40, y: 2480, w: 1790, h: 170}
+  card-legend: {x: 1870, y: 2480, w: 1790, h: 360}

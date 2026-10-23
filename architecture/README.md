@@ -21,6 +21,8 @@ one diagram, and `layouts/` places the topology views.
 | `platform-global` | What does the whole platform look like, current hub plus the proposed AI landing zone, on one canvas? (proposal, partly planned) | AI landing zone |
 | `ai-gateway-internals` | What is the AI gateway made of, and what happens inside it between a request and the answer? (proposal, planned) | AI landing zone |
 | `agent-sandbox-internals` | How does an agent get an isolated place to run the code it writes? (proposal, planned) | AI landing zone |
+| `agent-sandbox-kata` | The same sandbox with one micro-VM and kernel per sandbox (Kata tier, proposal) | AI landing zone |
+| `agent-sandbox-runc` | Agents that never run generated code: standard runtime and what keeps them in check (proposal) | AI landing zone |
 | `ai-gateway` | How does an agent's call reach a model or a tool, and what checks it on the way? (proposal, planned) | AI landing zone |
 | `ai-gateway-call` | What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent? (proposal, planned) | AI landing zone |
 

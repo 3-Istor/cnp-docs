@@ -2,7 +2,7 @@ apiVersion: noodle/v1alpha1
 kind: View
 type: topology
 state: diff
-title: "CNP · AI landing zone · Agent sandbox internals"
+title: "CNP · AI landing zone · Agent sandbox internals · gVisor tier"
 subtitle: "How does an agent get an isolated place to run the code it writes, and what keeps that code away from the cluster?"
 meta:
   - "Scope: kubernetes-sigs/agent-sandbox v1beta1 with gVisor on the on-prem K3s, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-2) · faded: what already runs"
@@ -46,6 +46,8 @@ include:
   - sb-sentry
   - sb-netstack
   - sb-kernel
+  - z-sb-compute
+  - sb-hv
 
 steps: [c-sb-claim, c-sb-ext-kapi, c-sb-run, c-sb-router-pod, c-sb-syscall, c-sb-sentry-net, c-sb-host]
 background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet, c-sb-cri, c-sb-shim, c-sb-boot]
@@ -64,8 +66,10 @@ labels:
   c-sb-cri: ""
   c-sb-shim: ""
   c-sb-boot: ""
+  c-sb-vm: "runs as a VM · no nested virt needed"
 
 notes:
+  - {id: n-sb-node, text: "The node box is the K3s worker where the pod lands, itself a VM on an OpenStack server. gVisor is an ordinary process on that VM: it needs no special VM setting, which is why it suits CNP's OpenStack nodes."}
   - {id: n-sb-warm, text: "A claim takes a Sandbox that is already running in the pool; the pool then starts a new one from the template. Setting env or volumes on the claim forces a cold start instead."}
   - {id: n-sb-gvisor, text: "gVisor: the code's syscalls never reach the host kernel directly. The Sentry, a kernel written in Go, answers them in user space and only makes a small, seccomp-filtered set of host calls. The price: slower I/O and some syscalls missing."}
   - {id: n-sb-end, text: "End of life: the agent deletes its claim, or lifecycle.shutdownTime / ttlSecondsAfterFinished does it. shutdownPolicy Delete removes Sandbox, Pod and Service; Retain keeps them for debugging."}

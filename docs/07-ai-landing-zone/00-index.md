@@ -48,6 +48,16 @@ Comment un agent obtient un bac à sable isolé pour exécuter le code qu'il éc
 ![Agent sandbox internals](../01-architecture/diagrams/agent-sandbox-internals.light.png#only-light)
 ![Agent sandbox internals](../01-architecture/diagrams/agent-sandbox-internals.dark.png#only-dark)
 
+Variante Kata Containers (une micro-VM et un noyau par sandbox) :
+
+![Agent sandbox, Kata tier](../01-architecture/diagrams/agent-sandbox-kata.light.png#only-light)
+![Agent sandbox, Kata tier](../01-architecture/diagrams/agent-sandbox-kata.dark.png#only-dark)
+
+Niveau standard (agents sans exécution de code, runc) :
+
+![Agent runtime, standard tier](../01-architecture/diagrams/agent-sandbox-runc.light.png#only-light)
+![Agent runtime, standard tier](../01-architecture/diagrams/agent-sandbox-runc.dark.png#only-dark)
+
 ### Tech stack : actuel et ajouts
 
 ![CNP AI landing zone tech stack](../01-architecture/diagrams/ai-landing-zone.light.png#only-light)
@@ -63,5 +73,5 @@ Comment un agent obtient un bac à sable isolé pour exécuter le code qu'il éc
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
