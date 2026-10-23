@@ -1,10 +1,11 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: topology
+state: diff
 title: "CNP · Global map · current platform and AI landing zone"
 subtitle: "Every zoom on one canvas: how a user, an app, an agent and a release cross the platform, and what the AI landing zone adds"
 meta:
-  - "Scope: on-prem hub and its EKS and GKE targets, 2026-10-22 · dashed or hatched elements are planned (P0–P2, IA-1–IA-3), nothing AI is deployed"
+  - "Scope: on-prem hub and its EKS and GKE targets, 2026-10-22 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
   - "Out of scope: observability (ai-gateway view) · cnp.sh and Terraform state (multicloud view) · RBAC and grants (access-matrix view) · per-cluster policies (multicloud-policies view) · the homelab GPU cluster's own stack"
   - "Assumed: Agent Router (ex-Envoy AI Gateway) on the existing Envoy Gateway; Gemini free tier first, Ollama on 429 or for Local projects"
   - "v0.1 · source: cnp-docs/architecture/cnp"

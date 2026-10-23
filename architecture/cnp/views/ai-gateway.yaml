@@ -1,10 +1,11 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: topology
+state: diff
 title: "CNP · AI landing zone · AI gateway"
 subtitle: "How does an agent's call reach a model or a tool, and what checks it on the way?"
 meta:
-  - "Scope: proposal for the on-prem K3s cluster, 2026-10-22 · every element added here is planned (IA-1, IA-2), nothing is deployed"
+  - "Scope: proposal for the on-prem K3s cluster, 2026-10-22 · drawn in full: what the proposal adds (IA-1, IA-2) · faded: what already runs"
   - "Out of scope: external assistants (agent-kit view) · the same gateway on EKS and GKE · admission policies · Ollama's own cluster"
   - "Assumed: Agent Router (ex-Envoy AI Gateway) on the existing Envoy Gateway; Alloy receives OTLP"
   - "v0.1 · source: cnp-docs/architecture/cnp"

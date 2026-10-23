@@ -1,10 +1,11 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: landscape
+state: diff
 title: "CNP · AI landing zone · Tech stack"
 subtitle: "What is the platform built with today, and what do the landing zone fixes (P0–P2) and the AI landing zone (IA-1–IA-3) add?"
 meta:
-  - "Scope: the on-prem hub as of 2026-10-22 · hatched items are planned, with their target"
+  - "Scope: the on-prem hub as of 2026-10-22 · in full: what the fixes and the AI landing zone add, with their target · faded: what already runs"
   - "Out of scope: EKS and GKE (same stack per cluster) · the homelab GPU cluster's own stack"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 bands:
@@ -32,7 +33,7 @@ bands:
     color: sky
     sections:
       - {title: Hosted agents, items: [hosted-agent, agent-sandbox]}
-      - {title: MCP tools, items: [stake-policy, toolhive]}
+      - {title: MCP tools, items: [stake-policy, toolhive, th-op]}
       - {title: Models, items: [gemini, ollama]}
   - id: data
     title: Data and resilience
@@ -47,12 +48,12 @@ bands:
     color: cyan
     sections:
       - {title: Kubernetes, items: [kube-apiserver]}
-      - {title: Isolation, items: [cilium-default-deny, tetragon]}
+      - {title: Isolation, items: [cilium-default-deny, tetragon, sb-rc, sb-rc-kata]}
 side:
-  - {title: Identity, color: rose, items: [keycloak, cmp-oauth]}
+  - {title: Identity, color: rose, items: [keycloak, cmp-oauth, id-client-agent]}
   - {title: Secrets, color: violet, items: [vault, vso]}
   - {title: Policy, color: rose, items: [kyverno, ai-gw-policy]}
-  - {title: Observability, color: orange, items: [observability, gatus, tempo]}
+  - {title: Observability, color: orange, items: [observability, gatus, tempo, ob-prom]}
   - {title: FinOps, color: emerald, items: [offhours-guard, opencost]}
 labels:
   kube-apiserver: "K3s"

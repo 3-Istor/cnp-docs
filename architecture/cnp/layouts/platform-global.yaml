@@ -83,7 +83,7 @@ edges:
   c-envoy-cmp-mcp: {from: envoy-shared-gateway.left@90px, to: cmp-mcp.top@110px, waypoints: [[1274, 420], [1274, 945], [2150, 945]], against_flow: true}
   c-mcp-api: {from: cmp-mcp.left@50px, to: cmp-backend.right@50px, against_flow: true}
   r-mcp-policy: {from: cmp-mcp.right@50px, to: stake-policy.left@50px}
-  c-app-aigw: {from: app-pods.right@50px, to: ai-gw-proxy.left@80px, waypoints: [[1288, 540], [1288, 680]], label_at: [1288, 610]}
+  c-app-aigw: {from: app-pods.right@50px, to: ai-gw-proxy.left@80px, waypoints: [[1300, 540], [1300, 680]], label_at: [1300, 610]}
   c-agent-aigw: {from: hosted-agent.left@80px, to: ai-gw-proxy.right@50px, waypoints: [[2395, 680], [2395, 722], [1684, 722], [1684, 650]], against_flow: true}
   r-aigw-route-proxy: {from: ai-gw-route.top@90px, to: ai-gw-proxy.bottom@90px}
   r-aigw-route-secret: {from: ai-gw-route.right@50px, to: ai-provider-secret.left@50px}
