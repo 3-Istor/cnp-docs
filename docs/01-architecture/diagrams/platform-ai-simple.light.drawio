@@ -120,6 +120,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
+        <mxCell id="hl-c-entry-portal" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;cmp.3istor.com&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;opacity=30;textOpacity=30;" edge="1" parent="1" source="hl-entry" target="hl-portal">
+          <mxGeometry x="0.3128" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="990" y="980" />
+              <mxPoint x="990" y="350" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
         <mxCell id="hl-c-entry-agw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;2&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="hl-entry" target="hl-agw">
           <mxGeometry x="-0.0133" relative="1" as="geometry">
           </mxGeometry>
@@ -161,7 +169,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="hl-c-agw-peers" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;10&lt;/span&gt; + délègue une tâche · A2A&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0395;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="hl-agw" target="hl-peers">
-          <mxGeometry x="0.2245" relative="1" as="geometry">
+          <mxGeometry x="-0.5592" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1060" y="1040" />
               <mxPoint x="1000" y="1040" />

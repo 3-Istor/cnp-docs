@@ -27,6 +27,7 @@ one diagram, and `layouts/` places the topology views.
 | `agent-identity-internals` | Who is an agent for the platform, how does it get a token, and how does it act for a user? (proposal) | AI landing zone |
 | `models-internals` | Where does a model call end up, what limits it, and how does it fall back to the homelab GPU? (proposal) | AI landing zone |
 | `genai-observability-internals` | How does one agent call become a trace and token counts per project? (proposal) | AI landing zone |
+| `platform-ai-full` | The whole current platform at a glance, dimmed, with the AI landing zone in full (proposal, in French) | AI landing zone |
 | `platform-ai-simple` | The AI landing zone at a glance: one box per building block, the request path and the set-up only (proposal, in French) | AI landing zone |
 | `platform-ai-stack` | What runs today and what the AI landing zone adds (option B: agentgateway, kagent): which tool does what, where the isolation boundaries are, how an agent request flows (proposal) | AI landing zone |
 | `platform-detailed` | How do all the AI landing zone parts connect to each other and to the hub, at zoom level of detail? (proposal) | AI landing zone |

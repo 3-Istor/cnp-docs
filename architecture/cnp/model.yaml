@@ -559,6 +559,15 @@ elements:
   - {id: hl-obs, kind: backend, parent: hl-z-shared, icon: grafana, title: "Observabilité", tech: "[OTel → Alloy → Tempo · Grafana]", desc: "+ traces GenAI, tokens et coût<br>par projet, à côté des logs.", status: planned, target: IA-1}
   - {id: hl-net, kind: security, parent: hl-z-shared, icon: cilium, title: "Réseau et admission", tech: "[Cilium default-deny · Kyverno]", desc: "Tenants séparés ; pods restreints,<br>images signées seulement.", status: planned, target: P0}
   - {id: hl-finops, kind: tool, parent: hl-z-shared, icon: opencost, title: "FinOps", tech: "[budgets en tokens · OpenCost]", desc: "Budget par agent à la gateway ;<br>coût en euros dans Grafana.", status: planned, target: P2}
+  - {id: hl-ops, kind: backend, parent: hl-z-shared, icon: k8s-deploy, title: "Exploitation", tech: "[Gatus · offhours-guard]", desc: "Page de statut et sondes ; apps<br>éteintes hors des heures."}
+  - {id: hl-z-tenants, kind: region, color: indigo, icon: k8s-ns, title: "APPS DES TENANTS", sub: "un namespace par app"}
+  - {id: hl-apps, kind: backend, parent: hl-z-tenants, icon: k8s-pod, title: "Apps des tenants", tech: "[chart générique · CloudNativePG]", desc: "Workloads des projets, une base<br>PostgreSQL par app."}
+  - {id: hl-z-data, kind: region, color: slate, icon: ceph, title: "DONNÉES"}
+  - {id: hl-data, kind: database, parent: hl-z-data, icon: ceph, title: "Rook-Ceph + Garage", tech: "[volumes · S3]", desc: "Volumes, logs, archive d'audit<br>et sauvegardes."}
+  - {id: hl-z-github, kind: region, color: slate, icon: github, title: "GITHUB"}
+  - {id: hl-github, kind: external, parent: hl-z-github, icon: github, title: "Repos + GHCR", tech: "[GitHub · Actions]", desc: "Source de vérité ; la CI construit<br>les images (+ évals, signature)."}
+  - {id: hl-z-clouds, kind: region, color: orange, icon: kubernetes, title: "EKS · GKE", sub: "via WireGuard"}
+  - {id: hl-clouds, kind: backend, parent: hl-z-clouds, icon: kubernetes, title: "Clusters cloud", tech: "[EKS · GKE]", desc: "Même socle, synchronisés<br>par Argo CD."}
 
 connections:
   # Request path.
@@ -858,6 +867,11 @@ connections:
   - {id: hl-c-kagent-agents, from: hl-kagent, to: hl-agents, verb: "déploie", kind: flow, status: planned, target: IA-2}
   - {id: hl-c-agents-identity, from: hl-agents, to: hl-identity, verb: "jeton court", kind: flow, status: planned, target: IA-2}
   - {id: hl-c-agw-obs, from: hl-agw, to: hl-obs, protocol: OTLP, verb: "traces, tokens", kind: flow, status: planned, target: IA-1}
+  - {id: hl-c-entry-portal, from: hl-entry, to: hl-portal, verb: "cmp.3istor.com", kind: flow}
+  - {id: hl-c-entry-apps, from: hl-entry, to: hl-apps, verb: "<app>.3istor.com", kind: flow}
+  - {id: hl-c-portal-github, from: hl-portal, to: hl-github, verb: "écrit puis lit l'état", kind: flow}
+  - {id: hl-c-portal-clouds, from: hl-portal, to: hl-clouds, protocol: WireGuard, verb: "synchronise", kind: flow}
+  - {id: hl-c-apps-agw, from: hl-apps, to: hl-agw, verb: "les apps appellent les modèles", kind: flow, status: planned, target: IA-1}
 
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}

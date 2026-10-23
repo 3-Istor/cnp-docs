@@ -27,6 +27,13 @@ CloudNativePG.
 
 ## Schémas
 
+### La plateforme et sa landing zone IA en un coup d'œil
+
+Toute la plateforme actuelle, estompée (entrée, CMP et GitOps, apps des tenants, données, GitHub, EKS et GKE, services transverses), et la landing zone IA en clair. Vingt et un flux : le parcours d'une requête, la mise en place, et les flux d'aujourd'hui.
+
+![La plateforme et sa landing zone IA en un coup d'œil](../01-architecture/diagrams/platform-ai-full.light.png#only-light)
+![La plateforme et sa landing zone IA en un coup d'œil](../01-architecture/diagrams/platform-ai-full.dark.png#only-dark)
+
 ### La landing zone IA en un coup d'œil
 
 Une boîte par brique, quinze flux : le parcours d'une requête (numéros) et la mise en place (lettres). En clair ce que la landing zone IA ajoute, estompé ce qui tourne déjà.
@@ -122,5 +129,5 @@ De l'appel d'un agent à une trace et des compteurs de tokens par projet : les s
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-ai-simple.yaml`, `platform-ai-stack.yaml`, `platform-detailed.yaml`, `platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `genai-observability-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-ai-full.yaml`, `platform-ai-simple.yaml`, `platform-ai-stack.yaml`, `platform-detailed.yaml`, `platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `genai-observability-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.

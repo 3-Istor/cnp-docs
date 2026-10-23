@@ -37,13 +37,14 @@ edges:
   hl-c-agw-guard: {from: hl-agw.right@50px, to: hl-guard.left@50px, label_at: [1848, 960]}
   hl-c-agw-obs: {from: hl-agw.bottom@740px, to: hl-obs.left@80px, waypoints: [[1770, 1040], [2370, 1040], [2370, 510]], label_at: [2008, 1040]}
   hl-c-agw-ollama: {from: hl-agw.right@80px, to: hl-ollama.left@30px, waypoints: [[1880, 990], [1880, 1260]], label_at: [1880, 1124]}
-  hl-c-agw-peers: {from: hl-agw.bottom@30px, to: hl-peers.left@80px, waypoints: [[1060, 1040], [1000, 1040], [1000, 670]], label_at: [1000, 830]}
+  hl-c-agw-peers: {from: hl-agw.bottom@30px, to: hl-peers.left@80px, waypoints: [[1060, 1040], [1000, 1040], [1000, 670]], label_at: [1000, 1022]}
   hl-c-agw-tools: {from: hl-agw.bottom@620px, to: hl-tools.top@180px, label_at: [1650, 1120]}
   hl-c-entry-agw: {from: hl-entry.right@30px, to: hl-agw.left@50px, label_at: [954, 960]}
   hl-c-guard-ollama: {from: hl-guard.bottom@190px, to: hl-ollama.top@190px, label_at: [2100, 1120]}
   hl-c-kagent-agents: {from: hl-kagent.bottom@30px, to: hl-agents.top@30px, label_at: [1500, 480]}
   hl-c-portal-kagent: {from: hl-portal.right@30px, to: hl-kagent.left@30px, label_at: [1408, 300]}
   hl-c-user-entry: {from: hl-user.right@30px, to: hl-entry.left@30px, waypoints: [[530, 950], [530, 960]], label_at: [398, 950]}
+  hl-c-entry-portal: {from: hl-entry.right@50px, to: hl-portal.left@80px, waypoints: [[990, 980], [990, 350]], label_at: [990, 578]}
 cards:
   card-steps: {x: 40, y: 1460, w: 1380, h: 190}
   card-background: {x: 1460, y: 1460, w: 1320, h: 190}

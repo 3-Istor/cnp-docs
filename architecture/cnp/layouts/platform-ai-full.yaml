@@ -1,0 +1,65 @@
+# Generated: boxes relative to their parent zone, waypoints in canvas coordinates.
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 3300, height: 2060}
+elements:
+  hl-z-users: {x: 40, y: 860, w: 400, h: 220}
+  hl-user: {x: 172, y: 60, w: 56, h: 56}
+  hl-z-entry: {x: 520, y: 860, w: 400, h: 200}
+  hl-entry: {x: 40, y: 70, w: 320, h: 100}
+  hl-z-portal: {x: 1000, y: 200, w: 1260, h: 200}
+  hl-portal: {x: 30, y: 70, w: 320, h: 100}
+  hl-kagent: {x: 470, y: 70, w: 320, h: 100}
+  hl-z-agents: {x: 1000, y: 520, w: 1260, h: 200}
+  hl-peers: {x: 30, y: 70, w: 320, h: 100}
+  hl-agents: {x: 470, y: 70, w: 320, h: 100}
+  hl-sandbox: {x: 910, y: 70, w: 320, h: 100}
+  hl-z-agw: {x: 1000, y: 840, w: 1260, h: 200}
+  hl-agw: {x: 30, y: 70, w: 760, h: 100}
+  hl-guard: {x: 910, y: 70, w: 320, h: 100}
+  hl-z-google: {x: 1000, y: 1160, w: 380, h: 200}
+  hl-gemini: {x: 30, y: 70, w: 320, h: 100}
+  hl-z-tools: {x: 1440, y: 1160, w: 380, h: 200}
+  hl-tools: {x: 30, y: 70, w: 320, h: 100}
+  hl-z-homelab: {x: 1880, y: 1160, w: 380, h: 200}
+  hl-ollama: {x: 30, y: 70, w: 320, h: 100}
+  hl-z-github: {x: 2360, y: 200, w: 400, h: 200}
+  hl-github: {x: 40, y: 70, w: 320, h: 100}
+  hl-z-clouds: {x: 2840, y: 200, w: 400, h: 200}
+  hl-clouds: {x: 40, y: 70, w: 320, h: 100}
+  hl-z-shared: {x: 2360, y: 520, w: 400, h: 840}
+  hl-identity: {x: 40, y: 70, w: 320, h: 100}
+  hl-obs: {x: 40, y: 230, w: 320, h: 100}
+  hl-net: {x: 40, y: 390, w: 320, h: 100}
+  hl-finops: {x: 40, y: 550, w: 320, h: 100}
+  hl-ops: {x: 40, y: 710, w: 320, h: 100}
+  hl-z-tenants: {x: 520, y: 1160, w: 400, h: 200}
+  hl-apps: {x: 40, y: 70, w: 320, h: 100}
+  hl-z-data: {x: 40, y: 1160, w: 400, h: 200}
+  hl-data: {x: 40, y: 70, w: 320, h: 100}
+edges:
+  hl-c-agents-agw: {from: hl-agents.bottom@30px, to: hl-agw.top@470px, label_at: [1500, 800]}
+  hl-c-agents-identity: {from: hl-agents.bottom@300px, to: hl-identity.bottom@30px, waypoints: [[1770, 730], [2430, 730]], against_flow: true, label_at: [2100, 730]}
+  hl-c-agents-sandbox: {from: hl-agents.right@30px, to: hl-sandbox.left@30px, label_at: [1848, 620]}
+  hl-c-agw-agents: {from: hl-agw.right@30px, to: hl-agents.right@80px, waypoints: [[1830, 940], [1830, 670]], against_flow: true, label_at: [1830, 806]}
+  hl-c-agw-gemini: {from: hl-agw.bottom@130px, to: hl-gemini.top@130px, label_at: [1160, 1104]}
+  hl-c-agw-guard: {from: hl-agw.right@50px, to: hl-guard.left@50px, label_at: [1848, 960]}
+  hl-c-agw-obs: {from: hl-agw.bottom@740px, to: hl-obs.left@80px, waypoints: [[1770, 1040], [2370, 1040], [2370, 830]], label_at: [2008, 1040]}
+  hl-c-agw-ollama: {from: hl-agw.right@80px, to: hl-ollama.left@30px, waypoints: [[1880, 990], [1880, 1260]], label_at: [1880, 1124]}
+  hl-c-agw-peers: {from: hl-agw.bottom@30px, to: hl-peers.left@80px, waypoints: [[1060, 1040], [1000, 1040], [1000, 670]], label_at: [1030, 1040]}
+  hl-c-agw-tools: {from: hl-agw.bottom@620px, to: hl-tools.top@180px, label_at: [1650, 1120]}
+  hl-c-apps-agw: {from: hl-apps.right@30px, to: hl-agw.left@80px, waypoints: [[990, 1260], [990, 990]], label_at: [990, 1126]}
+  hl-c-entry-agw: {from: hl-entry.right@30px, to: hl-agw.left@50px, label_at: [954, 960]}
+  hl-c-entry-apps: {from: hl-entry.bottom@260px, to: hl-apps.top@260px, label_at: [820, 1128]}
+  hl-c-entry-portal: {from: hl-entry.right@70px, to: hl-portal.left@60px, waypoints: [[980, 1000], [980, 330]], label_at: [980, 578]}
+  hl-c-guard-ollama: {from: hl-guard.bottom@190px, to: hl-ollama.top@190px, label_at: [2100, 1120]}
+  hl-c-kagent-agents: {from: hl-kagent.bottom@30px, to: hl-agents.top@30px, label_at: [1500, 480]}
+  hl-c-portal-clouds: {from: hl-portal.bottom@300px, to: hl-clouds.bottom@30px, waypoints: [[1330, 410], [2910, 410]], against_flow: true, label_at: [2512, 410]}
+  hl-c-portal-github: {from: hl-portal.bottom@280px, to: hl-github.bottom@30px, waypoints: [[1310, 420], [2430, 420]], against_flow: true, label_at: [2430, 386]}
+  hl-c-portal-kagent: {from: hl-portal.right@30px, to: hl-kagent.left@30px, label_at: [1408, 300]}
+  hl-c-user-entry: {from: hl-user.right@30px, to: hl-entry.left@30px, waypoints: [[530, 950], [530, 960]], label_at: [398, 950]}
+cards:
+  card-steps: {x: 40, y: 1480, w: 1600, h: 190}
+  card-background: {x: 1680, y: 1480, w: 1560, h: 190}
+  card-isolation: {x: 40, y: 1700, w: 1600, h: 150}
+  card-legend: {x: 1680, y: 1700, w: 1560, h: 330}
