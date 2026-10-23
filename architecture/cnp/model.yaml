@@ -649,6 +649,7 @@ connections:
   - {id: c-sb-r-kernel, from: sb-seccomp, to: sb-kernel-runc, protocol: syscalls, verb: allowed, kind: flow, status: planned, target: IA-1}
   - {id: c-sb-r-runc, from: sb-containerd-runc, to: sb-runc, protocol: exec, verb: create container, kind: flow}
   - {id: c-sb-r-start, from: sb-runc, to: sb-agent-loop, protocol: process, verb: start, kind: flow, status: planned, target: IA-1}
+  - {id: c-sb-r-gw, from: sb-agent-loop, to: ag-f-listener, protocol: HTTP, verb: models and tools, kind: flow, status: planned, target: IA-1}
 
   # MCP tools zoom.
   - {id: c-th-gw, from: ag-x-mcp, to: th-proxy, protocol: HTTP, verb: tools/call, kind: flow, status: planned, target: IA-2}

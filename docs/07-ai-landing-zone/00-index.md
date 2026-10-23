@@ -27,6 +27,13 @@ CloudNativePG.
 
 ## Schémas
 
+### Vue d'ensemble détaillée : tous les zooms sur une seule carte
+
+Le hub on-prem tel qu'il tourne aujourd'hui (estompé) et toute la landing zone IA (en clair), au niveau de détail des zooms : filtres Envoy, contrôleurs, CRDs, clients Keycloak, pipeline Alloy. Les trois niveaux d'isolation du sandbox sont trois nœuds distincts côte à côte (gVisor, Kata, runc standard) : la plateforme peut en proposer un, deux ou les trois, selon que l'agent exécute du code ou non. EKS et GKE restent résumés à leur API server. Grande image : l'ouvrir dans draw.io (`platform-detailed.*.drawio`) pour zoomer.
+
+![Platform overview, detailed](../01-architecture/diagrams/platform-detailed.light.png#only-light)
+![Platform overview, detailed](../01-architecture/diagrams/platform-detailed.dark.png#only-dark)
+
 ### Carte globale : plateforme actuelle et landing zone IA
 
 Toute la plateforme sur une seule toile : le hub on-prem, la landing zone IA proposée, GitHub, les modèles et les clusters EKS et GKE. Les numéros suivent un utilisateur, une app, un agent et une release ; les lettres, les tâches de fond.
@@ -101,5 +108,5 @@ De l'appel d'un agent à une trace et des compteurs de tokens par projet : les s
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `genai-observability-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-detailed.yaml`, `platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `genai-observability-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
