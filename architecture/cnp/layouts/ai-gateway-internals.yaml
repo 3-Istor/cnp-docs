@@ -94,14 +94,14 @@ edges:
   c-ag-jwks: {from: ag-f-jwt.top@280px, to: keycloak.right@50px, waypoints: [[1240, 1070], [3620, 1070], [3620, 380]], against_flow: true}
   c-agent-keycloak: {from: hosted-agent.top@270px, to: keycloak.right@80px, waypoints: [[380, 1085], [3640, 1085], [3640, 410]], against_flow: true}
   r-ag-route-gemini: {from: ag-route.right@30px, to: ag-be-gemini.left@30px}
-  r-ag-route-ollama: {from: ag-route.bottom@280px, to: ag-be-ollama.bottom@150px, waypoints: [[420, 515], [990, 515]]}
+  r-ag-route-ollama: {from: ag-route.bottom@280px, to: ag-be-ollama.bottom@150px, waypoints: [[420, 515], [990, 515]], label_at: [900, 515]}
   r-ag-be-gemini: {from: ag-be-gemini.bottom@280px, to: ag-backend-gemini.left@50px, waypoints: [[770, 535], [1210, 535], [1210, 600]]}
   r-ag-be-ollama: {from: ag-be-ollama.bottom@280px, to: ag-backend-ollama.top@150px, waypoints: [[1120, 525], [1780, 525]]}
-  r-ag-bsp-target: {from: ag-bsp.top@150px, to: ag-be-gemini.bottom@150px}
+  r-ag-bsp-target: {from: ag-bsp.top@150px, to: ag-be-gemini.bottom@150px, label_at: [640, 541]}
   r-ag-bsp-secret: {from: ag-bsp.bottom@150px, to: ag-secret.bottom@150px, waypoints: [[640, 685], [2130, 685]]}
   r-ag-secpol: {from: ag-secpol.left@50px, to: ag-gateway.right@50px}
   r-ag-btp: {from: ag-btp.bottom@150px, to: ag-gateway.bottom@250px, waypoints: [[2130, 510], [1530, 510]]}
-  r-ag-gwconfig: {from: ag-gateway.left@80px, to: ag-gwconfig.right@20px, waypoints: [[1225, 480], [1225, 570]]}
+  r-ag-gwconfig: {from: ag-gateway.left@80px, to: ag-gwconfig.right@20px, waypoints: [[1225, 480], [1225, 570]], label_at: [1182, 570]}
   r-ag-mount: {from: ag-extproc-secret.bottom@75px, to: g-ag-xp.right@150px, waypoints: [[2875, 430], [2875, 1600]]}
 notes:
   n-ag-router: {x: 3740, y: 1760, w: 420, h: 170}

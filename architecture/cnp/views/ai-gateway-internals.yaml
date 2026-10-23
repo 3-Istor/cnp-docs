@@ -1,10 +1,11 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: topology
+state: diff
 title: "CNP · AI landing zone · AI gateway internals"
 subtitle: "What is the AI gateway made of, and what happens inside it between an agent's request and the model's answer?"
 meta:
-  - "Scope: Agent Router 1.x (ex-Envoy AI Gateway) on the existing Envoy Gateway, on-prem K3s, proposal of 2026-10-23 · everything orange is planned (IA-1, MCP in IA-2)"
+  - "Scope: Agent Router 1.x (ex-Envoy AI Gateway) on the existing Envoy Gateway, on-prem K3s, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1, MCP in IA-2) · faded: what already runs"
   - "Out of scope: Vault and the secrets operator (zoom 6) · OPA ext_authz (IA-3) · the Gateway API Inference Extension, not needed with one Ollama GPU"
   - "Assumed: Gemini through its OpenAI-compatible endpoint (free tier, one API key); Ollama reached over WireGuard; one Envoy replica"
   - "v0.1 · source: cnp-docs/architecture/cnp · theagentrouter.ai docs (architecture, API reference, MCP)"
