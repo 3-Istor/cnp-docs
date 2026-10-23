@@ -128,3 +128,4 @@ nav:
       - Procédures opérateur EKS/GKE: 06-multicloud/07-procedures-operateur.md
   - 7. Landing zone IA (proposition):
       - Vue d'ensemble: 07-ai-landing-zone/00-index.md
+      - Stack cible et compromis: 07-ai-landing-zone/01-stack-cible.md

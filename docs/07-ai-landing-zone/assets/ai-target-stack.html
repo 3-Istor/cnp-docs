@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>CNP · Landing zone IA · technos retenues</title>
+<style>
+  :root {
+    --ink: #1f1f1d; --muted: #55534d; --line: #cfccc2; --box: #ffffff; --ns: #ecebe7;
+    --blue: #2c6fd1; --blue-bg: #e7eff9;
+    --orange: #b8620b; --orange-bg: #fdf0e1; --orange-line: #e39a4c;
+    --red: #b42318; --red-bg: #fbeaea; --red-line: #e07a72;
+    --ok: #2f7d4f;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: #fff; color: var(--ink); font-family: Inter, system-ui, sans-serif; }
+  .page { width: 1560px; padding: 22px 24px 26px; position: relative; }
+  h1 { font-size: 25px; font-weight: 650; margin: 0 0 4px; letter-spacing: -0.2px; }
+  .sub { font-size: 14.5px; color: var(--muted); margin: 0 0 20px; }
+  .grid { display: grid; grid-template-columns: 1000px 480px; column-gap: 32px; }
+  .col { display: flex; flex-direction: column; }
+  .box { background: var(--box); border: 1.6px solid var(--line); border-radius: 10px; padding: 13px 18px 14px; text-align: center; }
+  .box h2 { font-size: 18px; font-weight: 650; margin: 0 0 7px; }
+  .box h3 { font-size: 17px; font-weight: 650; margin: 0 0 6px; }
+  .l { font-size: 15px; line-height: 1.5; color: var(--muted); }
+  .l b { color: var(--ink); font-weight: 600; }
+  .o, .r { display: inline-block; border-radius: 6px; padding: 0 8px 0 4px; margin: 2px 0; line-height: 1.45; }
+  .o { background: var(--orange-bg); color: var(--orange); }
+  .r { background: var(--red-bg); color: var(--red); }
+  .o b, .r b { color: inherit; }
+  .n { display: inline-flex; align-items: center; justify-content: center; width: 19px; height: 19px; border-radius: 50%;
+       font-size: 11.5px; font-weight: 700; color: #fff; margin-right: 6px; vertical-align: 1px; }
+  .o .n { background: var(--orange-line); } .r .n { background: var(--red-line); }
+  .ns { background: var(--ns); border: 1.6px solid var(--line); border-radius: 10px; padding: 12px 22px 16px; }
+  .ns > .t { font-size: 16.5px; font-weight: 650; margin: 0 0 9px 2px; text-align: left; }
+  .ns .box { background: #f6f5f2; }
+  .gw { background: var(--blue-bg); border: 2.2px solid var(--blue); }
+  .arrow { height: 54px; position: relative; display: flex; align-items: center; justify-content: center; }
+  .arrow::before { content: ""; position: absolute; left: 50%; top: 4px; bottom: 9px; border-left: 2px solid #b9b6ac; }
+  .arrow::after { content: ""; position: absolute; left: calc(50% - 6px); bottom: 2px; border: 6px solid transparent; border-top: 8px solid #b9b6ac; border-bottom: 0; }
+  .arrow span { position: relative; left: 82px; font-size: 14.5px; color: var(--muted); background: #fff; }
+  .row3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+  .fan { position: relative; height: 54px; }
+  .fan i { position: absolute; top: 4px; bottom: 9px; border-left: 2px solid #b9b6ac; }
+  .fan i::after { content: ""; position: absolute; left: -7px; bottom: -8px; border: 6px solid transparent; border-top: 8px solid #b9b6ac; border-bottom: 0; }
+  .box.red { border-color: var(--red-line); background: var(--red-bg); }
+  .side .t { font-size: 17px; font-weight: 650; margin: 2px 0 12px 2px; }
+  .side .box { margin-bottom: 18px; }
+  .legend { margin-top: 22px; display: flex; gap: 26px; align-items: center; font-size: 14px; color: var(--muted); flex-wrap: wrap; }
+  .sw { display: inline-block; width: 15px; height: 15px; border-radius: 4px; vertical-align: -2px; margin-right: 7px; }
+  svg.links { position: absolute; left: 0; top: 0; pointer-events: none; }
+</style>
+</head>
+<body>
+<div class="page" id="page">
+  <h1>Tout le trafic des agents passe par la gateway : identité, policy et trace</h1>
+  <p class="sub">La cible de la landing zone IA de CNP, avec la techno retenue à chaque étage. En orange : un outil existant réutilisé pour un usage pour lequel il n'est pas fait. En rouge : rien, par choix. Les numéros renvoient aux compromis.</p>
+  <div class="grid">
+    <div class="col">
+      <div class="box" id="portal">
+        <h2>Portail CNP + GitOps</h2>
+        <div class="l"><b>CMP</b> (Next.js · FastAPI) : catalogue, création des projets et des agents</div>
+        <div class="l"><b>Argo CD</b> + ApplicationSets : tout l'état vient de Git</div>
+        <div class="l"><span class="o"><span class="n">1</span>Agent = chart Helm + SandboxTemplate, pas de CRD Agent</span></div>
+      </div>
+      <div class="arrow"><span>provisionne</span></div>
+      <div class="ns" id="ns">
+        <div class="t">Namespace d'agent · Cilium default-deny egress · Kyverno restricted</div>
+        <div class="box">
+          <h3>Agent (framework libre : LangGraph, ADK…)</h3>
+          <div class="l">Pod <b>runc + seccomp</b> ; le code généré part dans <b>agent-sandbox</b> : <b>gVisor</b> ou <b>Kata</b></div>
+          <div class="l">Identité : token <b>ServiceAccount</b> → <b>Keycloak</b> (federated client auth)</div>
+          <div class="l">Aucun secret ni clé API dans le pod</div>
+        </div>
+      </div>
+      <div class="arrow"><span>seul chemin sortant</span></div>
+      <div class="box gw" id="gw">
+        <h2>Gateway agentique : Agent Router (ex-Envoy AI Gateway)</h2>
+        <div class="l">Proxy LLM (<b>AIGatewayRoute</b>) · Proxy MCP (<b>MCPRoute</b>) · <span class="r"><span class="n">2</span>Proxy A2A : non</span></div>
+        <div class="l">AuthN : <b>JWT Keycloak</b> · policy par outil : <b>OPA</b> (ext_authz) + <b>Cedar</b> (ToolHive)</div>
+        <div class="l"><span class="o"><span class="n">3</span>Guardrails : Llama Guard servi par Ollama, via ext_proc</span> · <span class="r"><span class="n">4</span>Masquage PII : aucun outil</span></div>
+        <div class="l">Quotas en tokens : <b>Envoy rate limit + Redis</b> · <span class="o"><span class="n">5</span>Audit : logs → Loki + archive Object Lock</span></div>
+      </div>
+      <div class="fan" id="fan"><i style="left:16.4%"></i><i style="left:50%"></i><i style="left:83.6%"></i></div>
+      <div class="row3">
+        <div class="box">
+          <h3>Modèles</h3>
+          <div class="l"><b>Gemini API</b> (free tier) : défaut</div>
+          <div class="l"><span class="o"><span class="n">6</span>Ollama sur le GPU, pas vLLM</span></div>
+          <div class="l">RTX 5080 du homelab, via <b>WireGuard</b></div>
+        </div>
+        <div class="box">
+          <h3>Serveurs MCP</h3>
+          <div class="l"><b>ToolHive</b> : un conteneur par outil</div>
+          <div class="l">Registre privé · provenance <b>Sigstore</b></div>
+          <div class="l"><b>cosign</b> + Kyverno <b>verifyImages</b></div>
+        </div>
+        <div class="box red">
+          <h3>Autres agents</h3>
+          <div class="l"><span class="r"><span class="n">2</span>A2A et Agent Cards : non retenus</span></div>
+          <div class="l" style="color:var(--red)">pas de cas d'usage multi-agents</div>
+        </div>
+      </div>
+    </div>
+    <div class="col side" id="side">
+      <div class="t">Services transverses</div>
+      <div class="box" id="s-id">
+        <h3>Identité</h3>
+        <div class="l"><b>Keycloak</b> : un client par agent, jetons ≤ 15 min</div>
+        <div class="l">token exchange · federated client auth</div>
+        <div class="l"><span class="r"><span class="n">7</span>SPIRE / SPIFFE : non</span></div>
+      </div>
+      <div class="box" id="s-obs">
+        <h3>Observabilité</h3>
+        <div class="l">OTel GenAI → <b>Alloy</b> → <b>Tempo</b> + <b>VictoriaMetrics</b></div>
+        <div class="l"><span class="o"><span class="n">8</span>Vue LLM dans Grafana, pas Langfuse</span></div>
+        <div class="l">Évals : <b>promptfoo</b> en CI GitHub</div>
+      </div>
+      <div class="box" id="s-net">
+        <h3>Réseau</h3>
+        <div class="l"><b>Cilium</b> default-deny · allowlist FQDN</div>
+        <div class="l"><b>Hubble</b> → Loki · edge <b>Cloudflare</b></div>
+      </div>
+      <div class="box" id="s-fin">
+        <h3>FinOps</h3>
+        <div class="l"><span class="o"><span class="n">9</span>Budgets : quotas tokens + OpenCost</span></div>
+        <div class="l"><span class="o"><span class="n">10</span>Plafond d'étapes : limite du framework</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="legend">
+    <span><span class="sw" style="background:#fff;border:1.6px solid var(--line)"></span>outil fait pour cet usage</span>
+    <span><span class="sw" style="background:var(--orange-bg);border:1.6px solid var(--orange-line)"></span>outil existant réutilisé, pas fait pour ça</span>
+    <span><span class="sw" style="background:var(--red-bg);border:1.6px solid var(--red-line)"></span>rien, par choix</span>
+    <span><span class="sw" style="background:var(--blue-bg);border:2px solid var(--blue)"></span>point de passage obligé</span>
+    <span>Source : cnp-docs, docs/07-ai-landing-zone · 2026-10-23</span>
+  </div>
+</div>
+<script>
+// Dashed links from the transverse services to the namespace and the gateway, like the original.
+const page = document.getElementById('page');
+const r = id => { const a = document.getElementById(id).getBoundingClientRect(), p = page.getBoundingClientRect(); return {x: a.left - p.left, y: a.top - p.top, w: a.width, h: a.height}; };
+const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+svg.setAttribute('class', 'links'); svg.setAttribute('width', page.scrollWidth); svg.setAttribute('height', page.scrollHeight);
+const side = ['s-id', 's-obs', 's-net', 's-fin'].map(r), ns = r('ns'), gw = r('gw');
+const bx = side[0].x - 16;
+const d = [];
+side.forEach(s => d.push(`M${bx} ${s.y + s.h / 2} H${s.x}`));
+const y0 = Math.min(ns.y + ns.h / 2, side[0].y + side[0].h / 2), bot = side[3].y + side[3].h / 2;
+d.push(`M${bx} ${y0} V${bot}`);
+d.push(`M${ns.x + ns.w} ${ns.y + ns.h / 2} H${bx}`);
+d.push(`M${gw.x + gw.w} ${gw.y + gw.h / 2} H${bx}`);
+const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+path.setAttribute('d', d.join(' ')); path.setAttribute('fill', 'none'); path.setAttribute('stroke', '#bdbab0');
+path.setAttribute('stroke-width', '1.6'); path.setAttribute('stroke-dasharray', '7 6');
+svg.appendChild(path); page.appendChild(svg);
+</script>
+</body>
+</html>
