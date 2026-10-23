@@ -400,6 +400,27 @@ elements:
   - {id: th-proxy, kind: security, parent: g-th-run, icon: mcp, title: "ToolHive proxy", tech: "[streamable HTTP :8080]", desc: "Checks the JWT, Cedar policy, tool<br>filter; bridges to the server.<br>Why: the tool's front door.", status: planned, target: IA-2}
   - {id: th-server, kind: backend, parent: g-th-run, icon: github, title: "github-mcp-server", tech: "[container mcp · stdio]", desc: "Turns MCP calls into GitHub API<br>calls.<br>Why: third-party code, kept apart.", status: planned, target: IA-2}
 
+  # Agent identity zoom (proposal, 2026-10-23): Keycloak 26.2+ standard token exchange, one client per agent.
+  # Source: keycloak.org (token exchange docs, 26.2 announcement).
+  - {id: g-id-clients, kind: group, parent: g-identity, color: rose, icon: keycloak, title: "CLIENTS", sub: "realm 3istor"}
+  - {id: g-id-scopes, kind: group, parent: g-identity, color: rose, icon: keycloak, title: "CLIENT SCOPES · POLICIES"}
+  - {id: g-id-token, kind: group, parent: z-cluster, color: slate, icon: k8s-secret, title: "IN THE AGENT'S TOKEN", sub: "JWT", status: planned, target: IA-1}
+  - {id: id-client-agent, kind: security, parent: g-id-clients, icon: keycloak, title: "Client agent-<p>-<name>", tech: "[confidential · service account]", desc: "One client per hosted agent: may use<br>client_credentials and token exchange.<br>Why: revoke one agent, not all.", status: planned, target: IA-1}
+  - {id: id-svc, kind: security, parent: g-id-clients, icon: keycloak, title: "Service account user", tech: "[service-account-agent-…]", desc: "The agent's own identity, member of<br>group project-<p>-agents.<br>Why: the group gives the project.", status: planned, target: IA-1}
+  - {id: id-client-gw, kind: security, parent: g-id-clients, icon: keycloak, title: "Client ai-gateway", tech: "[audience only]", desc: "The audience agent tokens target;<br>no login, no secret in use.<br>Why: a token works only there.", status: planned, target: IA-1}
+  - {id: id-client-cmp, kind: security, parent: g-id-clients, icon: keycloak, title: "Client cmp", tech: "[OIDC login · code + PKCE]", desc: "Users log in to the CMP with it;<br>its tokens are what agents exchange."}
+  - {id: id-scope-project, kind: security, parent: g-id-scopes, icon: keycloak, title: "Client scope project", tech: "[mapper: groups → project]", desc: "Adds the project claim from the<br>agent's or the user's groups.<br>Why: the gateway authorizes on it.", status: planned, target: IA-1}
+  - {id: id-scope-aud, kind: security, parent: g-id-scopes, icon: keycloak, title: "Audience mapper", tech: "[aud ai-gateway]", desc: "Puts ai-gateway in aud only for<br>clients allowed to call it.<br>Why: one token, one place.", status: planned, target: IA-1}
+  - {id: id-policy, kind: security, parent: g-id-scopes, icon: keycloak, title: "Client policy exchange-guard", tech: "[Client Policies]", desc: "Exchange only from agent clients<br>to ai-gateway, scopes never wider.<br>Why: no audience escalation.", status: planned, target: IA-1}
+  - {id: id-lifespan, kind: security, parent: g-id-scopes, icon: keycloak, title: "Token lifespan", tech: "[access 5 min · no refresh]", desc: "Short tokens, asked for again<br>rather than refreshed.<br>Why: a leaked token dies fast.", status: planned, target: IA-1}
+  - {id: id-c-iss, kind: tool, parent: g-id-token, icon: k8s-secret, title: "iss · aud", tech: "[realms/3istor · ai-gateway]", desc: "Who signed it, where it is valid.<br>The gateway rejects any other aud.", status: planned, target: IA-1}
+  - {id: id-c-sub, kind: tool, parent: g-id-token, icon: k8s-secret, title: "sub · azp", tech: "[user or agent · agent client]", desc: "Who acts, through which client.<br>After exchange: sub is the user,<br>azp the agent's client.", status: planned, target: IA-1}
+  - {id: id-c-project, kind: tool, parent: g-id-token, icon: k8s-secret, title: "project", tech: "[from group project-<p>-*]", desc: "The project the call is authorized<br>for and counted against.", status: planned, target: IA-1}
+  - {id: id-c-scope, kind: tool, parent: g-id-token, icon: k8s-secret, title: "scope", tech: "[exchange keeps or narrows]", desc: "What the token allows; an exchange<br>can only keep or reduce it.", status: planned, target: IA-1}
+  - {id: id-c-exp, kind: tool, parent: g-id-token, icon: k8s-secret, title: "exp", tech: "[issued + 5 min]", desc: "Expiry. The agent asks again<br>instead of refreshing.", status: planned, target: IA-1}
+  - {id: id-user, kind: frontend, parent: z-internet, shape: actor, icon: user, title: "Project user", desc: "asks an agent through the CMP"}
+  - {id: id-secret, kind: database, parent: g-agents, icon: k8s-secret, title: "Secret agent-oidc", tech: "[synced by VSO]", desc: "The agent client's secret, from<br>kvv2/projects/<p>/agents/<name>.<br>Why: never in Git or the image.", status: planned, target: IA-1}
+
 connections:
   # Request path.
   - {id: e-1-browser-edge, from: user, to: cf-edge, port: https, protocol: HTTPS, verb: GET app, kind: flow}
@@ -514,7 +535,7 @@ connections:
   - {id: c-argocd-app-repos, from: argocd, to: gh-project-repos, port: https, protocol: HTTPS, verb: poll values, kind: async}
 
   # AI landing zone (proposal, 2026-10-22).
-  - {id: c-agent-keycloak, from: hosted-agent, to: keycloak, port: http, protocol: HTTP, verb: token exchange, kind: auth}
+  - {id: c-agent-keycloak, from: hosted-agent, to: keycloak, port: http, protocol: HTTP, verb: get token (client_credentials or exchange), kind: auth}
   - {id: c-agent-aigw, from: hosted-agent, to: ai-gw-proxy, port: http, protocol: HTTP, verb: chat/completions, kind: flow}
   - {id: c-app-aigw, from: app-pods, to: ai-gw-proxy, port: http, protocol: HTTP, verb: call a model, kind: flow}
   - {id: c-aigw-keycloak, from: ai-gw-proxy, to: keycloak, port: http, protocol: HTTP, verb: fetch JWKS, kind: auth}
@@ -592,6 +613,14 @@ connections:
   - {id: c-th-proxy-kapi, from: th-proxy, to: ag-kapi, protocol: HTTPS, verb: "create pod, attach", kind: flow, status: planned, target: IA-2}
   - {id: c-th-jwks, from: th-proxy, to: keycloak, protocol: HTTP, verb: fetch JWKS, kind: auth, status: planned, target: IA-2}
 
+  # Agent identity zoom.
+  - {id: c-id-login, from: id-user, to: keycloak, protocol: HTTPS, verb: OIDC login, kind: auth}
+  - {id: c-id-ask, from: id-user, to: hosted-agent, protocol: HTTPS, verb: ask with user token, kind: flow, status: planned, target: IA-1}
+  - {id: c-id-provision, from: cmp-backend, to: kc-client-cmp, protocol: HTTPS, verb: Admin API create client, kind: flow, status: planned, target: IA-1}
+  - {id: c-id-vault, from: cmp-backend, to: vault-a, protocol: HTTPS, verb: write client secret, kind: flow, status: planned, target: IA-1}
+  - {id: c-id-vso-read, from: vso, to: vault-a, protocol: HTTPS, verb: read agent secret, kind: flow, status: planned, target: IA-1}
+  - {id: c-id-vso, from: vso, to: id-secret, protocol: HTTPS, verb: write Secret, kind: flow, status: planned, target: IA-1}
+
 references:
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
@@ -634,6 +663,12 @@ references:
   - {id: r-th-tel, from: th-mcpserver, to: th-telemetry, kind: telemetryConfigRef}
   - {id: r-th-secret, from: th-mcpserver, to: th-secret, kind: secrets}
   - {id: r-th-route, from: ag-mcproute, to: th-svc, kind: backendRef}
+
+  - {id: r-id-secret, from: id-secret, to: hosted-agent, kind: envFrom}
+  - {id: r-id-scope, from: id-client-agent, to: id-scope-project, kind: default scope}
+  - {id: r-id-svc, from: id-client-agent, to: id-svc, kind: service account}
+  - {id: r-id-aud, from: id-scope-aud, to: id-client-gw, kind: audience}
+  - {id: r-id-policy, from: id-policy, to: id-client-agent, kind: governs}
 
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}

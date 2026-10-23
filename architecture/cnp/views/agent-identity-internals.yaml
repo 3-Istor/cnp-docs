@@ -1,0 +1,94 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · AI landing zone · Agent identity internals"
+subtitle: "Who is an agent for the platform, how does it get a token, and how does it act on behalf of a user?"
+meta:
+  - "Scope: Keycloak realm 3istor with one client per hosted agent and standard token exchange (Keycloak 26.2+), proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
+  - "Out of scope: how the gateway uses the claims (AI gateway internals) · OPA rules on claims (IA-3) · SPIFFE workload identity, a later option"
+  - "Assumed: the CMP provisions agent clients through the Admin API; secrets go through Vault and VSO; no mTLS-bound tokens (CVE-2026-97846 affects exchange with them)"
+  - "v0.1 · source: cnp-docs/architecture/cnp · keycloak.org (token exchange, 26.2 announcement)"
+
+include:
+  - z-internet
+  - id-user
+  - z-cluster
+  - g-cmp
+  - cmp-backend
+  - g-secrets
+  - vault-a
+  - vso
+  - g-identity
+  - keycloak
+  - kc-client-cmp
+  - g-id-clients
+  - id-client-agent
+  - id-svc
+  - id-client-gw
+  - id-client-cmp
+  - g-id-scopes
+  - id-scope-project
+  - id-scope-aud
+  - id-policy
+  - id-lifespan
+  - g-id-token
+  - id-c-iss
+  - id-c-sub
+  - id-c-project
+  - id-c-scope
+  - id-c-exp
+  - g-agents
+  - hosted-agent
+  - id-secret
+  - g-ai-gateway
+  - ai-gw-proxy
+
+steps: [c-agent-keycloak, c-agent-aigw, c-aigw-keycloak, c-id-login, c-id-ask]
+background: [c-id-provision, c-id-vault, c-id-vso-read, c-id-vso]
+
+labels:
+  c-agent-keycloak: ""
+  c-agent-aigw: "Bearer JWT"
+  c-aigw-keycloak: "JWKS"
+  c-id-login: ""
+  c-id-ask: "ask, with user token"
+  c-id-provision: ""
+  c-id-vault: ""
+  c-id-vso-read: ""
+  c-id-vso: ""
+  r-id-secret: ""
+  r-id-scope: ""
+  r-id-svc: ""
+  r-id-aud: ""
+  r-id-policy: ""
+
+notes:
+  - {id: n-id-two, text: "Two ways to get a token. Alone: client_credentials with the agent's own secret, sub is its service account. For a user: token exchange of the user's token, sub stays the user and azp says which agent acts."}
+  - {id: n-id-aud, text: "Keycloak only exchanges a token whose audience lists the requesting client: the CMP client's scope must add the agent clients to aud, and exchange-guard limits what comes out."}
+  - {id: n-id-later, text: "Later: let agents authenticate with their Kubernetes service account token instead of a client secret, which removes the secret entirely."}
+
+cards:
+  - id: card-steps
+    title: "Request path · an agent gets and uses a token"
+    color: emerald
+    lines:
+      - "[1] Agent on its own: client_credentials with its client id and secret; Keycloak returns a 5-minute JWT, aud ai-gateway, project claim, no refresh token."
+      - "[2] The agent calls the AI gateway with that JWT. [3] The gateway checks the signature with Keycloak's cached JWKS, then the claims."
+      - "[4] For a user: the user logs in to the CMP (OIDC code + PKCE). [5] The user's request reaches the agent with the user's token."
+      - "Then [1] again, as a token exchange (grant_type token-exchange, subject_token = the user's token, audience ai-gateway): sub stays the user, azp is the agent, scope never wider. Then [2] and [3]."
+  - id: card-background
+    title: "Background · provisioning an agent"
+    color: amber
+    lines:
+      - "[A] When a project adds an agent, the CMP creates its Keycloak client through the Admin API, authenticated as the cmp-provisioner client (P2)."
+      - "[B] The CMP writes the client secret in Vault at kvv2/projects/<p>/agents/<name>."
+      - "[C] The secrets operator reads it [D] and writes the Secret agent-oidc in the agent's namespace."
+  - id: card-objects
+    title: "Objects · who points at whom"
+    color: sky
+    lines:
+      - "Client agent → its service account user (group project-<p>-agents) → client scope project → project claim."
+      - "Audience mapper → client ai-gateway; exchange-guard governs the agent clients; token lifespan sets exp."
+      - "Secret agent-oidc → the agent pod's environment."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

@@ -24,6 +24,7 @@ one diagram, and `layouts/` places the topology views.
 | `agent-sandbox-kata` | The same sandbox with one micro-VM and kernel per sandbox (Kata tier, proposal) | AI landing zone |
 | `agent-sandbox-runc` | Agents that never run generated code: standard runtime and what keeps them in check (proposal) | AI landing zone |
 | `mcp-tools-internals` | How does an agent's tool call reach a tool server, and who checks it on the way? (proposal) | AI landing zone |
+| `agent-identity-internals` | Who is an agent for the platform, how does it get a token, and how does it act for a user? (proposal) | AI landing zone |
 | `ai-gateway` | How does an agent's call reach a model or a tool, and what checks it on the way? (proposal, planned) | AI landing zone |
 | `ai-gateway-call` | What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent? (proposal, planned) | AI landing zone |
 

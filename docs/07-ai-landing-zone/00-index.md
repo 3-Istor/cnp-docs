@@ -65,6 +65,13 @@ Comment un appel d'outil va de l'agent au serveur d'outils : le proxy MCP de la 
 ![MCP tools internals](../01-architecture/diagrams/mcp-tools-internals.light.png#only-light)
 ![MCP tools internals](../01-architecture/diagrams/mcp-tools-internals.dark.png#only-dark)
 
+### Identité des agents : vue détaillée
+
+Un client Keycloak par agent, client_credentials quand l'agent agit seul, token exchange quand il agit pour un utilisateur, et ce que contient le jeton.
+
+![Agent identity internals](../01-architecture/diagrams/agent-identity-internals.light.png#only-light)
+![Agent identity internals](../01-architecture/diagrams/agent-identity-internals.dark.png#only-dark)
+
 ### Tech stack : actuel et ajouts
 
 ![CNP AI landing zone tech stack](../01-architecture/diagrams/ai-landing-zone.light.png#only-light)
@@ -80,5 +87,5 @@ Comment un appel d'outil va de l'agent au serveur d'outils : le proxy MCP de la 
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
