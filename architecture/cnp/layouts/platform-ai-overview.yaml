@@ -1,0 +1,100 @@
+# Generated: boxes relative to their parent zone, waypoints in canvas coordinates.
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 4000, height: 2820}
+elements:
+  ov-z-clients: {x: 40, y: 520, w: 400, h: 390}
+  ov-user: {x: 142, y: 70, w: 56, h: 56}
+  ov-assistant: {x: 40, y: 240, w: 320, h: 100}
+  ov-z-cf: {x: 520, y: 620, w: 400, h: 200}
+  ov-cf: {x: 40, y: 70, w: 320, h: 100}
+  ov-g-cmp: {x: 40, y: 80, w: 800, h: 200}
+  ov-cmp: {x: 30, y: 70, w: 320, h: 100}
+  ov-cmp-mcp: {x: 450, y: 70, w: 320, h: 100}
+  ov-g-identity: {x: 940, y: 80, w: 800, h: 200}
+  ov-keycloak: {x: 30, y: 70, w: 320, h: 100}
+  ov-vault: {x: 450, y: 70, w: 320, h: 100}
+  ov-g-entry: {x: 40, y: 420, w: 380, h: 200}
+  ov-envoy: {x: 30, y: 70, w: 320, h: 100}
+  ov-g-tenant: {x: 40, y: 760, w: 380, h: 350}
+  ov-app: {x: 30, y: 70, w: 320, h: 100}
+  ov-db: {x: 30, y: 220, w: 320, h: 100}
+  ov-g-agents: {x: 520, y: 360, w: 920, h: 740}
+  ov-g-tier-runc: {x: 30, y: 70, w: 380, h: 200}
+  ov-agent: {x: 30, y: 70, w: 320, h: 100}
+  ov-sb-ctrl: {x: 60, y: 360, w: 320, h: 100}
+  ov-g-tier-gvisor: {x: 30, y: 510, w: 380, h: 200}
+  ov-sb-gvisor: {x: 30, y: 70, w: 320, h: 100}
+  ov-g-tier-kata: {x: 510, y: 510, w: 380, h: 200}
+  ov-sb-kata: {x: 30, y: 70, w: 320, h: 100}
+  ov-g-aigw: {x: 1540, y: 420, w: 800, h: 350}
+  ov-aigw: {x: 30, y: 70, w: 320, h: 100}
+  ov-quota: {x: 450, y: 70, w: 320, h: 100}
+  ov-opa: {x: 450, y: 220, w: 320, h: 100}
+  ov-g-tools: {x: 1540, y: 870, w: 380, h: 200}
+  ov-toolhive: {x: 30, y: 70, w: 320, h: 100}
+  ov-g-control: {x: 40, y: 1200, w: 800, h: 200}
+  ov-argocd: {x: 30, y: 70, w: 320, h: 100}
+  ov-kapi: {x: 450, y: 70, w: 320, h: 100}
+  ov-g-guard: {x: 940, y: 1200, w: 380, h: 350}
+  ov-kyverno: {x: 30, y: 70, w: 320, h: 100}
+  ov-cilium: {x: 30, y: 220, w: 320, h: 100}
+  ov-g-obs: {x: 1540, y: 1170, w: 800, h: 350}
+  ov-alloy: {x: 30, y: 70, w: 320, h: 100}
+  ov-tempo: {x: 450, y: 70, w: 320, h: 100}
+  ov-grafana: {x: 30, y: 220, w: 320, h: 100}
+  ov-prom: {x: 450, y: 220, w: 320, h: 100}
+  ov-z-cluster: {x: 1000, y: 200, w: 2440, h: 1600}
+  ov-z-google: {x: 3540, y: 420, w: 400, h: 200}
+  ov-gemini: {x: 40, y: 70, w: 320, h: 100}
+  ov-z-homelab: {x: 3540, y: 760, w: 400, h: 200}
+  ov-ollama: {x: 40, y: 70, w: 320, h: 100}
+  ov-z-github: {x: 1040, y: 1900, w: 400, h: 200}
+  ov-repos: {x: 40, y: 70, w: 320, h: 100}
+  ov-z-clouds: {x: 1540, y: 1900, w: 400, h: 200}
+  ov-clouds: {x: 40, y: 70, w: 320, h: 100}
+edges:
+  ov-c-agent-aigw: {from: ov-agent.right@50px, to: ov-aigw.left@60px, label_at: [2234, 750]}
+  ov-c-agent-alloy: {from: ov-agent.bottom@280px, to: ov-alloy.left@50px, waypoints: [[1860, 900], [2530, 900], [2530, 1490]], label_at: [2194, 900]}
+  ov-c-agent-keycloak: {from: ov-agent.right@30px, to: ov-keycloak.bottom@50px, waypoints: [[2020, 730]], against_flow: true, label_at: [2020, 592]}
+  ov-c-agent-sb: {from: ov-agent.bottom@30px, to: ov-sb-ctrl.top@30px, label_at: [1610, 826]}
+  ov-c-aigw-alloy: {from: ov-aigw.bottom@30px, to: ov-alloy.left@30px, waypoints: [[2600, 1060], [2540, 1060], [2540, 1470]], label_at: [2600, 888]}
+  ov-c-aigw-cmp-mcp: {from: ov-aigw.bottom@70px, to: ov-cmp-mcp.right@70px, waypoints: [[2640, 820], [1950, 820], [1950, 420]], against_flow: true, label_at: [1950, 622]}
+  ov-c-aigw-gemini: {from: ov-aigw.right@50px, to: ov-gemini.left@80px, waypoints: [[2970, 740], [2970, 570]], label_at: [3276, 570]}
+  ov-c-aigw-ollama: {from: ov-aigw.bottom@300px, to: ov-ollama.left@30px, waypoints: [[2870, 820], [3550, 820], [3550, 860]], label_at: [3208, 820]}
+  ov-c-aigw-opa: {from: ov-aigw.bottom@280px, to: ov-opa.left@30px, waypoints: [[2850, 870]], label_at: [2920, 870]}
+  ov-c-aigw-quota: {from: ov-aigw.right@30px, to: ov-quota.left@30px, label_at: [2940, 720]}
+  ov-c-aigw-tools: {from: ov-aigw.bottom@180px, to: ov-toolhive.top@180px, label_at: [2750, 964]}
+  ov-c-alloy-prom: {from: ov-alloy.right@80px, to: ov-prom.left@30px, waypoints: [[2960, 1520], [2960, 1620]], label_at: [2924, 1520]}
+  ov-c-alloy-tempo: {from: ov-alloy.right@30px, to: ov-tempo.left@30px, label_at: [2940, 1470]}
+  ov-c-app-aigw: {from: ov-app.right@30px, to: ov-aigw.bottom@50px, waypoints: [[1540, 1060], [1540, 840], [2620, 840]], against_flow: true, label_at: [1468, 1060]}
+  ov-c-app-db: {from: ov-app.bottom@30px, to: ov-db.top@30px, label_at: [1100, 1156]}
+  ov-c-argocd-clouds: {from: ov-argocd.right@80px, to: ov-clouds.left@30px, waypoints: [[1470, 1550], [1470, 2000]], label_at: [1470, 1776]}
+  ov-c-argocd-kapi: {from: ov-argocd.right@30px, to: ov-kapi.left@30px, label_at: [1440, 1500]}
+  ov-c-argocd-repos: {from: ov-argocd.bottom@70px, to: ov-repos.top@60px, label_at: [1140, 1768]}
+  ov-c-assistant-cf: {from: ov-assistant.right@70px, to: ov-cf.bottom@30px, waypoints: [[590, 830]], against_flow: true, label_at: [494, 830]}
+  ov-c-cf-envoy: {from: ov-cf.right@30px, to: ov-envoy.left@30px, label_at: [974, 720]}
+  ov-c-cmp-keycloak: {from: ov-cmp.bottom@300px, to: ov-keycloak.left@80px, waypoints: [[1370, 480], [1940, 480], [1940, 430]], label_at: [1492, 480]}
+  ov-c-cmp-repos: {from: ov-cmp.bottom@30px, to: ov-repos.left@30px, waypoints: [[1100, 610], [1040, 610], [1040, 2000]], label_at: [1040, 1304]}
+  ov-c-cmp-vault: {from: ov-cmp.right@30px, to: ov-vault.top@30px, waypoints: [[1470, 380], [1470, 320], [2420, 320]], label_at: [1944, 320]}
+  ov-c-envoy-agent: {from: ov-envoy.right@50px, to: ov-agent.left@40px, label_at: [1488, 740]}
+  ov-c-envoy-app: {from: ov-envoy.bottom@300px, to: ov-app.top@300px, waypoints: [[1370, 950], [1380, 950], [1380, 1000], [1370, 1000]], label_at: [1370, 868]}
+  ov-c-envoy-cmp: {from: ov-envoy.bottom@30px, to: ov-cmp.left@80px, waypoints: [[1100, 820], [1030, 820], [1030, 430]], label_at: [1030, 598]}
+  ov-c-envoy-cmp-mcp: {from: ov-envoy.right@70px, to: ov-cmp-mcp.left@80px, waypoints: [[1460, 760], [1460, 430]], label_at: [1460, 582]}
+  ov-c-envoy-keycloak: {from: ov-envoy.right@30px, to: ov-keycloak.bottom@30px, waypoints: [[1520, 720], [1520, 490], [2000, 490]], against_flow: true, label_at: [1520, 606]}
+  ov-c-grafana-prom: {from: ov-grafana.right@50px, to: ov-prom.left@50px, label_at: [2952, 1640]}
+  ov-c-grafana-tempo: {from: ov-grafana.right@30px, to: ov-tempo.left@70px, waypoints: [[2950, 1620], [2950, 1510]], label_at: [2920, 1620]}
+  ov-c-kapi-kyverno: {from: ov-kapi.right@30px, to: ov-kyverno.left@30px, label_at: [1888, 1500]}
+  ov-c-sb-gvisor: {from: ov-sb-ctrl.bottom@250px, to: ov-sb-gvisor.top@250px, label_at: [1830, 1062]}
+  ov-c-sb-kapi: {from: ov-sb-ctrl.bottom@30px, to: ov-kapi.top@60px, waypoints: [[1610, 1060], [1550, 1060]], label_at: [1550, 1282]}
+  ov-c-sb-kata: {from: ov-sb-ctrl.right@80px, to: ov-sb-kata.left@30px, waypoints: [[2030, 1000], [2030, 1170]], label_at: [2030, 1062]}
+  ov-c-user-cf: {from: ov-user.right@30px, to: ov-cf.left@30px, waypoints: [[520, 620], [520, 720]], label_at: [380, 620]}
+  ov-c-vault-agent: {from: ov-vault.bottom@30px, to: ov-agent.right@70px, waypoints: [[2420, 770]], against_flow: true, label_at: [2420, 608]}
+  ov-c-vault-aigw: {from: ov-vault.bottom@150px, to: ov-aigw.left@30px, waypoints: [[2540, 720]], label_at: [2540, 536]}
+  ov-x-agent-gemini: {from: ov-agent.bottom@300px, to: ov-gemini.left@60px, waypoints: [[1880, 830], [2530, 830], [2530, 550]], label_at: [3056, 550]}
+  ov-x-sb-app: {from: ov-sb-gvisor.bottom@30px, to: ov-app.right@80px, waypoints: [[1610, 1270], [1430, 1270], [1430, 1110]], against_flow: true, label_at: [1430, 1168]}
+cards:
+  card-steps: {x: 40, y: 2180, w: 1940, h: 230}
+  card-background: {x: 2020, y: 2180, w: 1940, h: 230}
+  card-isolation: {x: 40, y: 2450, w: 1940, h: 200}
+  card-legend: {x: 2020, y: 2450, w: 1940, h: 330}

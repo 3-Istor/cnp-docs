@@ -27,6 +27,13 @@ CloudNativePG.
 
 ## Schémas
 
+### La plateforme avec sa landing zone IA (schéma de présentation)
+
+Un outil par boîte, avec son rôle en une ligne ; les zones sont les frontières d'isolation (namespace, niveau de runtime, réseau). En clair ce que la landing zone IA ajoute, estompé ce qui tourne déjà, en rouge ce qui est refusé par conception. Les numéros suivent une requête d'utilisateur vers un agent, les lettres ce qui est mis en place avant ; le cartouche « Isolation boundaries » résume les couches d'isolation.
+
+![The platform with its AI landing zone](../01-architecture/diagrams/platform-ai-overview.light.png#only-light)
+![The platform with its AI landing zone](../01-architecture/diagrams/platform-ai-overview.dark.png#only-dark)
+
 ### Vue d'ensemble détaillée : tous les zooms sur une seule carte
 
 Le hub on-prem tel qu'il tourne aujourd'hui (estompé) et toute la landing zone IA (en clair), au niveau de détail des zooms : filtres Envoy, contrôleurs, CRDs, clients Keycloak, pipeline Alloy. Les trois niveaux d'isolation du sandbox sont trois nœuds distincts côte à côte (gVisor, Kata, runc standard) : la plateforme peut en proposer un, deux ou les trois, selon que l'agent exécute du code ou non. EKS et GKE restent résumés à leur API server. Grande image : l'ouvrir dans draw.io (`platform-detailed.*.drawio`) pour zoomer.
@@ -108,5 +115,5 @@ De l'appel d'un agent à une trace et des compteurs de tokens par projet : les s
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-detailed.yaml`, `platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `genai-observability-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-ai-overview.yaml`, `platform-detailed.yaml`, `platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `agent-sandbox-kata.yaml`, `agent-sandbox-runc.yaml`, `mcp-tools-internals.yaml`, `agent-identity-internals.yaml`, `models-internals.yaml`, `genai-observability-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
