@@ -27,7 +27,7 @@ one diagram, and `layouts/` places the topology views.
 | `agent-identity-internals` | Who is an agent for the platform, how does it get a token, and how does it act for a user? (proposal) | AI landing zone |
 | `models-internals` | Where does a model call end up, what limits it, and how does it fall back to the homelab GPU? (proposal) | AI landing zone |
 | `genai-observability-internals` | How does one agent call become a trace and token counts per project? (proposal) | AI landing zone |
-| `platform-ai-overview` | What does the AI landing zone add, which tool does what, where are the isolation boundaries and how does a request flow? Presentation level (proposal) | AI landing zone |
+| `platform-ai-stack` | What runs today and what the AI landing zone adds (option B: agentgateway, kagent): which tool does what, where the isolation boundaries are, how an agent request flows (proposal) | AI landing zone |
 | `platform-detailed` | How do all the AI landing zone parts connect to each other and to the hub, at zoom level of detail? (proposal) | AI landing zone |
 | `ai-gateway` | How does an agent's call reach a model or a tool, and what checks it on the way? (proposal, planned) | AI landing zone |
 | `ai-gateway-call` | What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent? (proposal, planned) | AI landing zone |

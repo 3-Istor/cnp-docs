@@ -471,47 +471,68 @@ elements:
   - {id: ov-g-entry, kind: group, parent: ov-z-cluster, color: violet, icon: envoy-gateway, title: "ENTRY", sub: "ns envoy-gateway-system"}
   - {id: ov-envoy, kind: backend, parent: ov-g-entry, icon: envoy-gateway, title: "Envoy Gateway", tech: "[Gateway API · shared gateway]", desc: "Routes *.3istor.com, runs the<br>OIDC login for every app."}
   - {id: ov-g-cmp, kind: group, parent: ov-z-cluster, color: sky, icon: k8s-ns, title: "CMP PORTAL", sub: "self-service"}
-  - {id: ov-cmp, kind: backend, parent: ov-g-cmp, icon: fastapi, title: "CMP", tech: "[Next.js · FastAPI]", desc: "Creates projects, apps and, with<br>the AI zone, agents and their keys."}
+  - {id: ov-cmp, kind: backend, parent: ov-g-cmp, icon: fastapi, title: "CMP", tech: "[Next.js · FastAPI]", desc: "Creates projects and apps; + agents,<br>as an Agent resource in Git."}
   - {id: ov-cmp-mcp, kind: backend, parent: ov-g-cmp, icon: mcp, title: "CMP MCP server", tech: "[FastMCP · stake policy]", desc: "Platform tools for assistants<br>and agents: create, release, logs."}
   - {id: ov-g-identity, kind: group, parent: ov-z-cluster, color: rose, icon: keycloak, title: "IDENTITY & SECRETS"}
-  - {id: ov-keycloak, kind: security, parent: ov-g-identity, icon: keycloak, title: "Keycloak", tech: "[OIDC · token exchange]", desc: "Users today; + one client per agent,<br>tokens of 15 min at most."}
-  - {id: ov-vault, kind: database, parent: ov-g-identity, icon: vault, title: "Vault + Secrets Operator", tech: "[KV v2 → Kubernetes Secret]", desc: "Holds app secrets; + the Gemini key<br>and agent secrets, never in Git."}
-  - {id: ov-g-tenant, kind: group, parent: ov-z-cluster, color: emerald, icon: k8s-ns, title: "TENANT APP", sub: "ns <project>-<app> · default-deny"}
+  - {id: ov-keycloak, kind: security, parent: ov-g-identity, icon: keycloak, title: "Keycloak", tech: "[OIDC · token exchange]", desc: "Users today; + one client per agent,<br>its SA token as the credential."}
+  - {id: ov-vault, kind: database, parent: ov-g-identity, icon: vault, title: "Vault + Secrets Operator", tech: "[KV v2 → Kubernetes Secret]", desc: "App secrets today; + the Gemini key,<br>read by the gateway only."}
+  - {id: ov-g-tenant, kind: group, parent: ov-z-cluster, color: indigo, icon: k8s-ns, title: "TENANT APP", sub: "ns <project>-<app> · default-deny"}
   - {id: ov-app, kind: backend, parent: ov-g-tenant, icon: k8s-pod, title: "App pods", tech: "[generic Helm chart]", desc: "Tenant workload; with the AI zone<br>it can call models via the gateway."}
   - {id: ov-db, kind: database, parent: ov-g-tenant, icon: cnpg, title: "PostgreSQL", tech: "[CloudNativePG]", desc: "One database cluster per app."}
   - {id: ov-g-agents, kind: group, parent: ov-z-cluster, color: amber, icon: k8s-ns, title: "AGENT RUNTIME", sub: "ns <project>-agents · egress: AI gateway only", status: planned, target: IA-2}
   - {id: ov-sb-ctrl, kind: backend, parent: ov-g-agents, icon: kubernetes, title: "agent-sandbox", tech: "[Sandbox CRDs · warm pools · router]", desc: "Hands a warm sandbox per task and<br>picks its tier from the template."}
   - {id: ov-g-tier-runc, kind: group, parent: ov-g-agents, color: slate, icon: openstack, title: "TIER 1 · STANDARD", sub: "runc + seccomp"}
-  - {id: ov-agent, kind: backend, parent: ov-g-tier-runc, icon: python, title: "Agent pod", tech: "[agent framework · runc]", desc: "Plans, calls models and tools.<br>No provider key, no shell."}
+  - {id: ov-agent, kind: backend, parent: ov-g-tier-runc, icon: python, title: "Agent pod", tech: "[kagent BYO · LangGraph, ADK…]", desc: "Plans, calls models, tools and<br>other agents. No key, no shell."}
   - {id: ov-g-tier-gvisor, kind: group, parent: ov-g-agents, color: indigo, icon: openstack, title: "TIER 2 · GVISOR", sub: "user-space kernel"}
   - {id: ov-sb-gvisor, kind: backend, parent: ov-g-tier-gvisor, icon: k8s-pod, title: "Code sandbox", tech: "[RuntimeClass gvisor · runsc]", desc: "Runs code the agent writes; the<br>host kernel stays out of reach."}
   - {id: ov-g-tier-kata, kind: group, parent: ov-g-agents, color: violet, icon: openstack, title: "TIER 3 · KATA", sub: "micro-VM per pod"}
   - {id: ov-sb-kata, kind: backend, parent: ov-g-tier-kata, icon: k8s-pod, title: "Untrusted-code sandbox", tech: "[RuntimeClass kata · KVM]", desc: "Own guest kernel per pod: a<br>hardware boundary, nested virt."}
-  - {id: ov-g-aigw, kind: group, parent: ov-z-cluster, color: violet, icon: envoy, title: "AI GATEWAY", sub: "ns ai-gateway · Agent Router", status: planned, target: IA-1}
-  - {id: ov-aigw, kind: backend, parent: ov-g-aigw, icon: envoy, title: "Agent Router", tech: "[ex-Envoy AI Gateway · ext_proc]", desc: "One door for models and tools:<br>checks JWT and project, picks model."}
-  - {id: ov-quota, kind: database, parent: ov-g-aigw, icon: redis, title: "Token quotas", tech: "[Envoy rate limit · Redis]", desc: "Token budget per project and<br>model, counted on real usage."}
-  - {id: ov-opa, kind: security, parent: ov-g-aigw, icon: k8s-crd, title: "OPA", tech: "[ext_authz · Rego]", desc: "Allows or refuses each tool call<br>per project and agent.", target: IA-3}
+  - {id: ov-g-aigw, kind: group, parent: ov-z-cluster, color: violet, icon: k8s-ns, title: "AI GATEWAY", sub: "ns agentgateway-system · agentgateway", status: planned, target: IA-1}
+  - {id: ov-aigw, kind: backend, parent: ov-g-aigw, icon: k8s-deploy, title: "agentgateway proxy", tech: "[Rust · GatewayClass agentgateway]", desc: "One door for LLM, MCP and A2A:<br>checks the JWT, then CEL per tool."}
+  - {id: ov-quota, kind: database, parent: ov-g-aigw, icon: redis, title: "Rate limit server", tech: "[envoy-ratelimit · Redis]", desc: "Daily token budget per agent,<br>keyed on a JWT claim."}
   - {id: ov-g-tools, kind: group, parent: ov-z-cluster, color: sky, icon: mcp, title: "MCP TOOLS", sub: "ns mcp-tools", status: planned, target: IA-2}
   - {id: ov-toolhive, kind: backend, parent: ov-g-tools, icon: mcp, title: "MCP servers", tech: "[ToolHive operator]", desc: "Third-party tools, one container<br>each; secrets never reach agents."}
   - {id: ov-g-control, kind: group, parent: ov-z-cluster, color: orange, icon: argo, title: "GITOPS & CONTROL PLANE"}
   - {id: ov-argocd, kind: backend, parent: ov-g-control, icon: argo, title: "Argo CD", tech: "[ApplicationSets · Image Updater]", desc: "Applies everything from Git,<br>the AI zone included."}
   - {id: ov-kapi, kind: backend, parent: ov-g-control, icon: kubernetes, title: "Kubernetes API", tech: "[K3s control plane]", desc: "Stores every object; watched by<br>the operators and controllers."}
   - {id: ov-g-guard, kind: group, parent: ov-z-cluster, color: rose, icon: kyverno, title: "GUARDRAILS"}
-  - {id: ov-kyverno, kind: security, parent: ov-g-guard, icon: kyverno, title: "Kyverno policies", tech: "[ClusterPolicy · Enforce]", desc: "PSS restricted, right RuntimeClass<br>per tier. Today: audit only.", status: planned, target: IA-2}
+  - {id: ov-kyverno, kind: security, parent: ov-g-guard, icon: kyverno, title: "Kyverno", tech: "[admission · Audit → Enforce]", desc: "+ PSS restricted, RuntimeClass per<br>tier, signed images only.", status: planned, target: IA-2}
   - {id: ov-cilium, kind: security, parent: ov-g-guard, icon: cilium, title: "Default-deny network", tech: "[Cilium policies · FQDN egress]", desc: "Tenants apart; agents and sandboxes<br>reach only what is allowed.", status: planned, target: P0}
   - {id: ov-g-obs, kind: group, parent: ov-z-cluster, color: amber, icon: grafana, title: "OBSERVABILITY", sub: "OpenTelemetry GenAI"}
   - {id: ov-alloy, kind: backend, parent: ov-g-obs, icon: grafana-alloy, title: "Grafana Alloy", tech: "[OTel collector]", desc: "Logs today; + GenAI spans and<br>token metrics from the gateway."}
   - {id: ov-tempo, kind: database, parent: ov-g-obs, icon: grafana, title: "Tempo", tech: "[traces]", desc: "One trace per agent task: model<br>calls, tool calls, sandbox runs.", status: planned, target: IA-1}
-  - {id: ov-prom, kind: database, parent: ov-g-obs, icon: grafana, title: "Prometheus", tech: "[metrics]", desc: "Tokens, latency and 429s per<br>project and model.", status: planned, target: IA-1}
+  - {id: ov-prom, kind: database, parent: ov-g-obs, icon: grafana, title: "VictoriaMetrics", tech: "[metrics · vmalert]", desc: "Metrics and alerts today; + GenAI<br>token series per project."}
   - {id: ov-grafana, kind: frontend, parent: ov-g-obs, icon: grafana, title: "Grafana", tech: "[dashboards · alerts]", desc: "Cost and quota per project;<br>alert at 80 % of the budget."}
   - {id: ov-z-google, kind: region, color: sky, icon: gemini, title: "GOOGLE AI STUDIO", sub: "SaaS", status: planned, target: IA-1}
   - {id: ov-gemini, kind: cloud, parent: ov-z-google, icon: gemini, title: "Gemini API", tech: "[free tier · one API key]", desc: "Default model. Free-tier data may<br>be used by Google: no client data."}
-  - {id: ov-z-homelab, kind: region, color: emerald, icon: rack, title: "HOMELAB GPU", sub: "via WireGuard", status: planned, target: IA-1}
+  - {id: ov-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "via WireGuard", status: planned, target: IA-1}
   - {id: ov-ollama, kind: backend, parent: ov-z-homelab, icon: ollama, title: "Ollama", tech: "[RTX 5080 · OpenAI-compatible]", desc: "Fallback on 429 and models for<br>Local projects: data stays home."}
   - {id: ov-z-github, kind: region, color: slate, icon: github, title: "GITHUB"}
   - {id: ov-repos, kind: external, parent: ov-z-github, icon: github, title: "Repos + GHCR", tech: "[GitHub · Actions]", desc: "Source of truth for apps, agents<br>and the platform; CI builds images."}
   - {id: ov-z-clouds, kind: region, color: orange, icon: kubernetes, title: "EKS · GKE", sub: "via WireGuard"}
   - {id: ov-clouds, kind: backend, parent: ov-z-clouds, icon: kubernetes, title: "Cloud target clusters", tech: "[EKS · GKE]", desc: "Same landing zone, one AI<br>gateway per cluster (D1)."}
+
+  # Platform AI stack (view platform-ai-stack): option B, agentgateway and kagent.
+  - {id: ov-agw-ctrl, kind: backend, parent: ov-g-aigw, icon: kubernetes, title: "agentgateway controller", tech: "[Gateway API · xDS]", desc: "Turns routes and policies into the<br>proxy's configuration."}
+  - {id: ov-agw-policy, kind: security, parent: ov-g-aigw, icon: k8s-crd, title: "AgentgatewayPolicy", tech: "[CRD · per route or backend]", desc: "jwtAuth, CEL authz, promptGuard,<br>rateLimit and extProc hooks."}
+  - {id: ov-guard-hook, kind: security, parent: ov-g-aigw, icon: python, title: "Guardrail webhook", tech: "[in-house · promptGuard webhook]", desc: "Turns the gateway call into a<br>Llama Guard check on Ollama."}
+  - {id: ov-llamaguard, kind: security, parent: ov-z-homelab, icon: ollama, title: "Llama Guard 3", tech: "[model served by Ollama]", desc: "Classifies prompts and answers:<br>safe, or which hazard."}
+  - {id: ov-g-kagent, kind: group, parent: ov-z-cluster, color: slate, icon: k8s-ns, title: "KAGENT", sub: "ns kagent", status: planned, target: IA-2}
+  - {id: ov-kagent, kind: backend, parent: ov-g-kagent, icon: kubernetes, title: "kagent controller", tech: "[Agent · ModelConfig CRDs]", desc: "Deploys each Agent, publishes its<br>A2A endpoint and Agent Card."}
+  - {id: ov-agent-2, kind: backend, parent: ov-g-tier-runc, icon: python, title: "Peer agent", tech: "[kagent BYO · A2A server]", desc: "Takes tasks other agents hand<br>over through the gateway."}
+  - {id: ov-mcp-registry, kind: database, parent: ov-g-tools, icon: mcp, title: "MCP registry", tech: "[ToolHive · JSON in Git]", desc: "Approved servers with their<br>Sigstore provenance."}
+  - {id: ov-loki, kind: database, parent: ov-g-obs, icon: loki, title: "Loki", tech: "[logs · 14 to 30 days]", desc: "Logs, audit, denied flows;<br>+ gateway access logs."}
+  - {id: ov-audit, kind: database, parent: ov-g-obs, icon: k8s-deploy, title: "Audit archive", tech: "[CronJob → RGW Object Lock]", desc: "Hourly copy of the audit logs,<br>locked for 30 days."}
+  - {id: ov-opencost, kind: tool, parent: ov-g-obs, icon: opencost, title: "OpenCost", tech: "[cost per namespace]", desc: "Infra cost per project; token<br>cost computed in Grafana.", status: planned, target: P2}
+  - {id: ov-cilium-agent, kind: security, parent: ov-g-guard, icon: cilium, title: "Cilium + Hubble", tech: "[CNI · eBPF]", desc: "Pod network today; Hubble exports<br>the flows a policy denies."}
+  - {id: ov-g-data, kind: group, parent: ov-z-cluster, color: slate, icon: ceph, title: "DATA & STORAGE"}
+  - {id: ov-ceph, kind: database, parent: ov-g-data, icon: ceph, title: "Rook-Ceph", tech: "[block · file · RGW S3]", desc: "Volumes, Loki buckets and the<br>audit archive."}
+  - {id: ov-garage, kind: database, parent: ov-g-data, icon: rack, title: "Garage", tech: "[S3 · s3.3istor.com]", desc: "Object storage for apps<br>and backups."}
+  - {id: ov-g-ops, kind: group, parent: ov-z-cluster, color: slate, icon: k8s-ns, title: "OPERATIONS"}
+  - {id: ov-gatus, kind: backend, parent: ov-g-ops, icon: k8s-deploy, title: "Gatus", tech: "[status.3istor.com]", desc: "Status page and health probes."}
+  - {id: ov-offhours, kind: backend, parent: ov-g-ops, icon: k8s-deploy, title: "offhours-guard", tech: "[scale-to-zero]", desc: "Scales apps down off hours."}
+  - {id: ov-promptfoo, kind: tool, parent: ov-z-github, icon: github, title: "promptfoo", tech: "[GitHub Actions]", desc: "Agent evals on every release;<br>nothing runs on the cluster.", status: planned, target: IA-2}
+  - {id: ov-cosign, kind: tool, parent: ov-z-github, icon: github, title: "cosign + Syft", tech: "[GitHub Actions]", desc: "Signs images and writes the SBOM;<br>Kyverno checks at admission.", status: planned, target: P1}
 
 connections:
   # Request path.
@@ -747,35 +768,31 @@ connections:
   # Platform AI overview: one request path, the set-up around it, and what is refused.
   - {id: ov-c-user-cf, from: ov-user, to: ov-cf, protocol: HTTPS, verb: "open the app or the agent", kind: flow}
   - {id: ov-c-assistant-cf, from: ov-assistant, to: ov-cf, protocol: HTTPS, verb: "POST /mcp", kind: flow}
-  - {id: ov-c-cf-envoy, from: ov-cf, to: ov-envoy, verb: "through the cloudflared tunnel", kind: flow}
+  - {id: ov-c-cf-envoy, from: ov-cf, to: ov-envoy, verb: "cloudflared tunnel", kind: tunnel}
   - {id: ov-c-envoy-keycloak, from: ov-envoy, to: ov-keycloak, protocol: OIDC, verb: "login", kind: flow}
   - {id: ov-c-envoy-cmp, from: ov-envoy, to: ov-cmp, verb: "route cmp.3istor.com", kind: flow}
   - {id: ov-c-envoy-cmp-mcp, from: ov-envoy, to: ov-cmp-mcp, verb: "route /mcp", kind: flow}
   - {id: ov-c-envoy-app, from: ov-envoy, to: ov-app, verb: "route <app>.3istor.com", kind: flow}
   - {id: ov-c-app-db, from: ov-app, to: ov-db, protocol: SQL, verb: "query", kind: flow}
-  - {id: ov-c-envoy-agent, from: ov-envoy, to: ov-agent, verb: "ask the agent with the user token", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-agent-keycloak, from: ov-agent, to: ov-keycloak, verb: "token exchange", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-agent-keycloak, from: ov-agent, to: ov-keycloak, verb: "token exchange (SA token)", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-agent-sb, from: ov-agent, to: ov-sb-ctrl, verb: "claim a sandbox and run code", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-sb-gvisor, from: ov-sb-ctrl, to: ov-sb-gvisor, verb: "run", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-sb-kata, from: ov-sb-ctrl, to: ov-sb-kata, verb: "run untrusted code", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-agent-aigw, from: ov-agent, to: ov-aigw, protocol: HTTP, verb: "chat/completions + JWT", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-agent-aigw, from: ov-agent, to: ov-aigw, protocol: HTTP, verb: "models, tools, agents + JWT", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-app-aigw, from: ov-app, to: ov-aigw, protocol: HTTP, verb: "apps call models too", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-quota, from: ov-aigw, to: ov-quota, verb: "token budget left?", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-gemini, from: ov-aigw, to: ov-gemini, protocol: HTTPS, verb: "default model", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-ollama, from: ov-aigw, to: ov-ollama, protocol: WireGuard, verb: "on 429 or Local project", kind: flow, status: planned, target: IA-1}
-  - {id: ov-c-aigw-opa, from: ov-aigw, to: ov-opa, verb: "may this agent call this tool?", kind: flow, status: planned, target: IA-3}
   - {id: ov-c-aigw-tools, from: ov-aigw, to: ov-toolhive, protocol: MCP, verb: "tools/call", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-cmp-mcp, from: ov-aigw, to: ov-cmp-mcp, protocol: MCP, verb: "platform tools", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-alloy, from: ov-aigw, to: ov-alloy, protocol: OTLP, verb: "GenAI spans and token metrics", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-agent-alloy, from: ov-agent, to: ov-alloy, protocol: OTLP, verb: "agent spans", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-alloy-tempo, from: ov-alloy, to: ov-tempo, verb: "traces", kind: flow, status: planned, target: IA-1}
-  - {id: ov-c-alloy-prom, from: ov-alloy, to: ov-prom, verb: "metrics", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-alloy-prom, from: ov-alloy, to: ov-prom, verb: "GenAI metrics", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-grafana-tempo, from: ov-grafana, to: ov-tempo, verb: "TraceQL", kind: flow, status: planned, target: IA-1}
-  - {id: ov-c-grafana-prom, from: ov-grafana, to: ov-prom, verb: "PromQL", kind: flow, status: planned, target: IA-1}
-  - {id: ov-c-cmp-repos, from: ov-cmp, to: ov-repos, verb: "create repos from templates", kind: flow}
-  - {id: ov-c-cmp-keycloak, from: ov-cmp, to: ov-keycloak, verb: "create the agent's client", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-cmp-vault, from: ov-cmp, to: ov-vault, verb: "store the agent's secret", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-vault-agent, from: ov-vault, to: ov-agent, verb: "mount its client secret", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-grafana-prom, from: ov-grafana, to: ov-prom, verb: "MetricsQL", kind: flow}
+  - {id: ov-c-cmp-repos, from: ov-cmp, to: ov-repos, verb: "commit projects and Agents", kind: flow}
+  - {id: ov-c-cmp-keycloak, from: ov-cmp, to: ov-keycloak, verb: "create the agent client", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-vault-aigw, from: ov-vault, to: ov-aigw, verb: "mount the Gemini key", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-argocd-repos, from: ov-argocd, to: ov-repos, verb: "pull desired state", kind: flow}
   - {id: ov-c-argocd-kapi, from: ov-argocd, to: ov-kapi, verb: "apply", kind: flow}
@@ -785,7 +802,23 @@ connections:
   - {id: ov-x-agent-gemini, from: ov-agent, to: ov-gemini, verb: "direct call", kind: flow, denied: true, enforced_by: [ov-cilium]}
   - {id: ov-x-sb-app, from: ov-sb-gvisor, to: ov-app, verb: "reach other workloads", kind: flow, denied: true, enforced_by: [ov-cilium]}
 
+  # Platform AI stack: option B.
+  - {id: ov-c-envoy-aigw, from: ov-envoy, to: ov-aigw, protocol: HTTP, verb: "ask an agent (A2A), user token", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-aigw-agent, from: ov-aigw, to: ov-agent, protocol: A2A, verb: "message/send", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-aigw-agent2, from: ov-aigw, to: ov-agent-2, protocol: A2A, verb: "delegate a task", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-aigw-guard, from: ov-aigw, to: ov-guard-hook, protocol: HTTP, verb: "promptGuard webhook", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-guard-llama, from: ov-guard-hook, to: ov-llamaguard, protocol: WireGuard, verb: "classify the prompt", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-agwctrl-kapi, from: ov-agw-ctrl, to: ov-kapi, verb: "watch routes and policies", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-agwctrl-aigw, from: ov-agw-ctrl, to: ov-aigw, protocol: xDS, verb: "push config", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-kagent-kapi, from: ov-kagent, to: ov-kapi, verb: "create agent Deployments", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-toolhive-registry, from: ov-toolhive, to: ov-mcp-registry, verb: "check provenance", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-alloy-loki, from: ov-alloy, to: ov-loki, verb: "logs", kind: flow}
+  - {id: ov-c-grafana-loki, from: ov-grafana, to: ov-loki, verb: "LogQL", kind: flow}
+  - {id: ov-c-audit-loki, from: ov-audit, to: ov-loki, verb: "hourly export", kind: flow}
+  - {id: ov-c-hubble-alloy, from: ov-cilium-agent, to: ov-alloy, verb: "denied flows", kind: flow}
+
 references:
+  - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
   - {id: r-gke-allow-api, from: gke-allow, to: gke-apiserver, kind: allows}
