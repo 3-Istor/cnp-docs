@@ -235,10 +235,10 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-agent-keycloak" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #f8fafc;color:#f8fafc;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;G&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#34d399;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9643;exitY=0.0000;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#34d399;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="hosted-agent" target="keycloak__port_right_3530_410">
-          <mxGeometry x="-0.1654" relative="1" as="geometry">
+        <mxCell id="c-agent-keycloak" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #f8fafc;color:#f8fafc;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;G&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#34d399;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.0000;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#34d399;dashed=1;dashPattern=6 4;" edge="1" parent="1" source="hosted-agent" target="keycloak__port_right_3530_410">
+          <mxGeometry x="0.8147" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="380" y="1085" />
+              <mxPoint x="390" y="1085" />
               <mxPoint x="3640" y="1085" />
               <mxPoint x="3640" y="410" />
             </Array>
@@ -377,6 +377,15 @@
         </mxCell>
         <mxCell id="c-ag-webhook" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #f8fafc;color:#f8fafc;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;E&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#34d399;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.1500;exitPerimeter=0;entryX=1.0000;entryY=0.1500;entryPerimeter=0;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#34d399;" edge="1" parent="1" source="ag-kapi" target="ag-c-webhook">
           <mxGeometry x="0.0000" relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="c-sb-claim" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ &lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#34d399;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9357;exitY=0.0000;exitPerimeter=0;entryX=0.0000;entryY=0.8500;entryPerimeter=0;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#34d399;" edge="1" parent="1" source="hosted-agent" target="ag-kapi">
+          <mxGeometry x="0.9429" relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="372" y="1093" />
+              <mxPoint x="2930" y="1093" />
+              <mxPoint x="2930" y="975" />
+            </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="r-ag-route-gemini" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ &lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#34d399;strokeWidth=2.2;endArrow=open;endFill=0;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#34d399;dashed=1;dashPattern=2 3;" edge="1" parent="1" source="ag-route" target="ag-be-gemini">

@@ -332,6 +332,38 @@ elements:
   - {id: ag-rl, kind: backend, parent: g-ag-rl, icon: envoy, title: "envoy-ratelimit", tech: "[gRPC · descriptors]", desc: "Counts tokens per project and model<br>against configured budgets.<br>Why: keep within the free quota.", status: planned, target: IA-1}
   - {id: ag-redis, kind: database, parent: g-ag-rl, icon: redis, title: "Redis", tech: "[counters with TTL]", desc: "Stores the counters with a TTL<br>per time window.<br>Shared by all Envoy replicas.", status: planned, target: IA-1}
 
+  # Agent sandbox zoom (proposal, 2026-10-23): kubernetes-sigs/agent-sandbox v1beta1 with gVisor.
+  # Sources: github.com/kubernetes-sigs/agent-sandbox, agent-sandbox.sigs.k8s.io (API, Python client).
+  - {id: g-sb-ns, kind: group, parent: z-cluster, color: indigo, icon: k8s-ns, title: "AGENT NAMESPACE", sub: "ns <project>-agents · one per project", status: planned, target: IA-2}
+  - {id: g-sb-crd, kind: group, parent: g-sb-ns, color: orange, icon: k8s-crd, title: "AGENT SANDBOX CRDs", sub: "agents.x-k8s.io · extensions.agents.x-k8s.io", status: planned, target: IA-2}
+  - {id: g-sb-guard-ns, kind: group, parent: g-sb-ns, color: rose, icon: k8s-crd, title: "NAMESPACE GUARDRAILS", status: planned, target: IA-2}
+  - {id: g-sb-guard, kind: group, parent: z-cluster, color: rose, icon: kyverno, title: "CLUSTER GUARDRAILS", status: planned, target: IA-2}
+  - {id: g-sb-ctrl, kind: group, parent: z-cluster, color: orange, icon: k8s-deploy, title: "AGENT SANDBOX CONTROLLERS", sub: "ns agent-sandbox-system", status: planned, target: IA-2}
+  - {id: g-sb-router, kind: group, parent: z-cluster, color: orange, icon: k8s-deploy, title: "SANDBOX ROUTER", sub: "ns agent-sandbox-system", status: planned, target: IA-2}
+  - {id: g-sb-node, kind: group, parent: z-cluster, color: cyan, icon: openstack, title: "NODE", sub: "K3s agent · OpenStack VM"}
+  - {id: g-sb-pod, kind: group, parent: g-sb-node, color: orange, icon: k8s-pod, title: "SANDBOX POD <id>", sub: "RuntimeClass gvisor", status: planned, target: IA-2}
+
+  - {id: sb-template, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxTemplate python", tech: "[podTemplate · networkPolicy]", desc: "Blueprint: image, runtimeClass gvisor,<br>resources, network rules.<br>Why: admins set the safe defaults.", status: planned, target: IA-2}
+  - {id: sb-warmpool, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxWarmPool python", tech: "[replicas 1 · OnReplenish]", desc: "Keeps sandboxes started in advance<br>from the template.<br>Why: no cold start for the agent.", status: planned, target: IA-2}
+  - {id: sb-claim, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxClaim <task>", tech: "[warmPoolRef · lifecycle]", desc: "One per task, created by the agent.<br>shutdownTime, ttlSecondsAfterFinished.<br>Why: sandboxes die with the task.", status: planned, target: IA-2}
+  - {id: sb-svc, kind: backend, parent: g-sb-crd, icon: k8s-svc, title: "Service <id>", tech: "[headless · created by controller]", desc: "Stable DNS name for the sandbox:<br><id>.<ns>.svc.cluster.local.<br>Why: router and SDK find the pod.", status: planned, target: IA-2}
+  - {id: sb-sandbox, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "Sandbox <id>", tech: "[agents.x-k8s.io/v1beta1]", desc: "One stateful pod with a stable name.<br>status: serviceFQDN, podIPs, Ready.<br>Why: the unit the controller runs.", status: planned, target: IA-2}
+  - {id: sb-rbac, kind: security, parent: g-sb-guard-ns, icon: k8s-sa, title: "Role agent-sandbox-user", tech: "[RoleBinding · agent SA]", desc: "Agent may create and delete claims,<br>read their status, nothing else.<br>Why: least privilege for the agent.", status: planned, target: IA-2}
+  - {id: sb-quota, kind: security, parent: g-sb-guard-ns, icon: k8s-ns, title: "ResourceQuota + LimitRange", tech: "[per agent namespace]", desc: "Caps CPU, memory and pod count.<br>Why: a runaway loop can't eat<br>the cluster's 4 GB.", status: planned, target: IA-2}
+  - {id: sb-netpol, kind: security, parent: g-sb-guard-ns, icon: cilium, title: "NetworkPolicy", tech: "[from the template · Cilium]", desc: "Egress: DNS only, no Internet.<br>Ingress: sandbox router only.<br>Why: code can't reach the cluster.", status: planned, target: IA-2}
+  - {id: sb-rc, kind: security, parent: g-sb-guard, icon: k8s-crd, title: "RuntimeClass gvisor", tech: "[handler runsc]", desc: "Tells containerd to start the pod<br>under gVisor instead of runc.<br>Why: one name selects the isolation.", status: planned, target: IA-2}
+  - {id: sb-kpol, kind: security, parent: g-sb-guard, icon: kyverno, title: "ClusterPolicy sandbox-guard", tech: "[Kyverno · Enforce]", desc: "Agent pods must use gvisor, PSS<br>restricted, no SA token mounted.<br>Why: no pod skips the isolation.", status: planned, target: IA-2}
+  - {id: sb-c-core, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Sandbox controller", tech: "[agent-sandbox-controller]", desc: "Creates Pod + Service per Sandbox;<br>pauses, resumes, deletes on time.<br>Why: one stateful pod per sandbox.", status: planned, target: IA-2}
+  - {id: sb-c-ext, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Extensions controllers", tech: "[template · warm pool · claim]", desc: "Fills the pool from the template,<br>binds each claim to a warm Sandbox.<br>Why: claims stay simple for agents.", status: planned, target: IA-2}
+  - {id: sb-router, kind: backend, parent: g-sb-router, icon: k8s-svc, title: "sandbox-router", tech: "[sandbox-router-svc :8080]", desc: "Reverse proxy from the SDK to the<br>right sandbox pod.<br>Why: no port-forward under gVisor.", status: planned, target: IA-2}
+  - {id: sb-kubelet, kind: backend, parent: g-sb-node, icon: kubernetes, title: "kubelet", tech: "[K3s agent]", desc: "Starts the pods scheduled on this<br>node and reports their status.<br>Already runs today."}
+  - {id: sb-containerd, kind: backend, parent: g-sb-node, icon: docker, title: "containerd", tech: "[CRI · K3s embedded]", desc: "Pulls images, picks the runtime<br>handler from the RuntimeClass.<br>Already runs today."}
+  - {id: sb-runsc, kind: tool, parent: g-sb-node, icon: k8s-pod, title: "runsc shim", tech: "[gVisor · containerd-shim-runsc-v1]", desc: "Starts the gVisor sandbox for the<br>pod in place of runc.<br>Why: installed once per node.", status: planned, target: IA-2}
+  - {id: sb-runtime, kind: backend, parent: g-sb-pod, icon: python, title: "Runtime server", tech: "[python-runtime-sandbox :8888]", desc: "Runs commands, reads, writes files<br>for the agent.<br>Why: the agent's hands, isolated.", status: planned, target: IA-2}
+  - {id: sb-sentry, kind: security, parent: g-sb-pod, icon: k8s-pod, title: "gVisor Sentry", tech: "[user-space kernel · Go]", desc: "Answers every syscall of the code<br>itself, in user space.<br>Why: host kernel stays out of reach.", status: planned, target: IA-2}
+  - {id: sb-netstack, kind: security, parent: g-sb-pod, icon: k8s-pod, title: "gVisor Netstack", tech: "[user-space TCP/IP]", desc: "The sandbox's own network stack;<br>packets leave through the pod veth.<br>Why: no host TCP/IP for the code.", status: planned, target: IA-2}
+  - {id: sb-kernel, kind: backend, parent: g-sb-node, icon: rack, title: "Host Linux kernel", tech: "[seccomp-filtered]", desc: "Sees only a small, filtered set of<br>syscalls from the Sentry.<br>Already runs today."}
+
 connections:
   # Request path.
   - {id: e-1-browser-edge, from: user, to: cf-edge, port: https, protocol: HTTPS, verb: GET app, kind: flow}
@@ -485,6 +517,21 @@ connections:
   - {id: c-ag-eg-ext, from: ag-eg-translate, to: ag-c-ext, protocol: gRPC, verb: extension hooks, kind: flow, status: planned, target: IA-1}
   - {id: c-ag-webhook, from: ag-kapi, to: ag-c-webhook, protocol: HTTPS, verb: AdmissionReview, kind: flow, status: planned, target: IA-1}
 
+  # Agent sandbox zoom: claim, bind, run code, and how a warm sandbox comes up.
+  - {id: c-sb-claim, from: hosted-agent, to: ag-kapi, protocol: HTTPS, verb: create SandboxClaim, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-ext-kapi, from: sb-c-ext, to: ag-kapi, protocol: HTTPS, verb: watch and bind, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-run, from: hosted-agent, to: sb-router, protocol: HTTP, verb: run command, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-router-pod, from: sb-router, to: sb-runtime, protocol: HTTP, verb: forward, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-syscall, from: sb-runtime, to: sb-sentry, protocol: syscalls, verb: trapped, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-sentry-net, from: sb-sentry, to: sb-netstack, protocol: in-process, verb: sockets, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-host, from: sb-sentry, to: sb-kernel, protocol: syscalls, verb: filtered subset, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-core-kapi, from: sb-c-core, to: ag-kapi, protocol: HTTPS, verb: watch and create pods, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-kyverno, from: ag-kapi, to: kyverno, protocol: HTTPS, verb: AdmissionReview, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-kubelet, from: sb-kubelet, to: ag-kapi, protocol: HTTPS, verb: watch pods, kind: flow}
+  - {id: c-sb-cri, from: sb-kubelet, to: sb-containerd, protocol: gRPC CRI, verb: RunPodSandbox, kind: flow}
+  - {id: c-sb-shim, from: sb-containerd, to: sb-runsc, protocol: ttrpc, verb: start shim, kind: flow, status: planned, target: IA-2}
+  - {id: c-sb-boot, from: sb-runsc, to: sb-sentry, protocol: process, verb: boot sandbox, kind: flow, status: planned, target: IA-2}
+
 references:
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
@@ -511,6 +558,13 @@ references:
   - {id: r-ag-btp, from: ag-btp, to: ag-gateway, kind: targetRef}
   - {id: r-ag-gwconfig, from: ag-gateway, to: ag-gwconfig, kind: annotation}
   - {id: r-ag-mount, from: ag-extproc-secret, to: g-ag-xp, kind: volumeMount}
+
+  - {id: r-sb-pool-template, from: sb-warmpool, to: sb-template, kind: sandboxTemplateRef}
+  - {id: r-sb-claim-pool, from: sb-claim, to: sb-warmpool, kind: warmPoolRef}
+  - {id: r-sb-claim-sandbox, from: sb-claim, to: sb-sandbox, kind: status.sandbox}
+  - {id: r-sb-sandbox-svc, from: sb-sandbox, to: sb-svc, kind: owns}
+  - {id: r-sb-template-rc, from: sb-template, to: sb-rc, kind: runtimeClassName}
+  - {id: r-sb-template-netpol, from: sb-template, to: sb-netpol, kind: networkPolicy}
 
 annotations:
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}

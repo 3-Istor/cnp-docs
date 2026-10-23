@@ -92,7 +92,8 @@ edges:
   c-ag-ads: {from: g-ag-envoy.left@140px, to: ag-eg-xds.bottom@40px, waypoints: [[500, 1310], [500, 990]], against_flow: true}
   c-ag-webhook: {from: ag-kapi.left@15px, to: ag-c-webhook.right@15px, against_flow: true}
   c-ag-jwks: {from: ag-f-jwt.top@280px, to: keycloak.right@50px, waypoints: [[1240, 1070], [3620, 1070], [3620, 380]], against_flow: true}
-  c-agent-keycloak: {from: hosted-agent.top@270px, to: keycloak.right@80px, waypoints: [[380, 1085], [3640, 1085], [3640, 410]], against_flow: true}
+  c-agent-keycloak: {from: hosted-agent.top@280px, to: keycloak.right@80px, waypoints: [[390, 1085], [3640, 1085], [3640, 410]], label_at: [3640, 700], against_flow: true}
+  c-sb-claim: {from: hosted-agent.top@262px, to: ag-kapi.left@85px, waypoints: [[372, 1093], [2930, 1093], [2930, 975]], label_at: [2930, 1005], against_flow: true}
   r-ag-route-gemini: {from: ag-route.right@30px, to: ag-be-gemini.left@30px}
   r-ag-route-ollama: {from: ag-route.bottom@280px, to: ag-be-ollama.bottom@150px, waypoints: [[420, 515], [990, 515]], label_at: [900, 515]}
   r-ag-be-gemini: {from: ag-be-gemini.bottom@280px, to: ag-backend-gemini.left@50px, waypoints: [[770, 535], [1210, 535], [1210, 600]]}

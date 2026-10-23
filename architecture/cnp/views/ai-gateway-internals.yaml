@@ -104,6 +104,7 @@ labels:
   c-ag-eg-ext: ""
   c-ag-webhook: ""
   c-agent-keycloak: ""
+  c-sb-claim: ""
   r-ag-route-gemini: ""
   r-ag-secpol: ""
   r-ag-gwconfig: ""

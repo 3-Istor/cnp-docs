@@ -41,6 +41,13 @@ L'AI gateway ouverte jusqu'à ses CRDs, ses contrôleurs, les filtres d'Envoy et
 ![AI gateway internals](../01-architecture/diagrams/ai-gateway-internals.light.png#only-light)
 ![AI gateway internals](../01-architecture/diagrams/ai-gateway-internals.dark.png#only-dark)
 
+### Agent sandbox : vue détaillée
+
+Comment un agent obtient un bac à sable isolé pour exécuter le code qu'il écrit : CRDs agent-sandbox, contrôleurs, garde-fous, et la chaîne kubelet, containerd, runsc jusqu'au noyau gVisor.
+
+![Agent sandbox internals](../01-architecture/diagrams/agent-sandbox-internals.light.png#only-light)
+![Agent sandbox internals](../01-architecture/diagrams/agent-sandbox-internals.dark.png#only-dark)
+
 ### Tech stack : actuel et ajouts
 
 ![CNP AI landing zone tech stack](../01-architecture/diagrams/ai-landing-zone.light.png#only-light)
@@ -56,5 +63,5 @@ L'AI gateway ouverte jusqu'à ses CRDs, ses contrôleurs, les filtres d'Envoy et
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
 
-Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
+Sources : `architecture/cnp/views/platform-global.yaml`, `ai-gateway-internals.yaml`, `agent-sandbox-internals.yaml`, `ai-landing-zone.yaml`, `ai-gateway.yaml` et
 `ai-gateway-call.yaml`, construites avec `./architecture/build-diagrams.sh`.
