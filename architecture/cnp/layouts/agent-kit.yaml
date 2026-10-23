@@ -21,10 +21,11 @@ elements:
   cmp-backend: {x: 40, y: 740, w: 300, h: 100}
   g-identity: {x: 900, y: 70, w: 340, h: 200}
   keycloak: {x: 30, y: 70, w: 280, h: 100}
-  g-gitops: {x: 900, y: 330, w: 340, h: 520}
+  g-gitops: {x: 900, y: 330, w: 340, h: 360}
+  g-ag-kapi: {x: 900, y: 760, w: 340, h: 200}
   argocd: {x: 30, y: 70, w: 280, h: 100}
-  image-updater: {x: 30, y: 370, w: 280, h: 100}
-  kube-apiserver: {x: 30, y: 210, w: 280, h: 100}
+  image-updater: {x: 30, y: 220, w: 280, h: 100}
+  kube-apiserver: {x: 30, y: 70, w: 280, h: 100}
   z-github: {x: 2220, y: 210, w: 320, h: 760}
   agent-kit-repo: {x: 20, y: 80, w: 280, h: 100}
   gh-project-repos: {x: 20, y: 320, w: 280, h: 100}
@@ -47,9 +48,9 @@ edges:
   c-mcp-api: {from: cmp-mcp.right@80px, to: cmp-backend.top@260px, waypoints: [[1665, 750], [1665, 990], [1600, 990]]}
   c-repos-ghcr: {from: gh-project-repos.bottom@140px, to: ghcr.top@140px}
   c-argocd-app-repos: {from: argocd.right@50px, to: gh-project-repos.left@50px, waypoints: [[2205, 660], [2205, 580]]}
-  c-argocd-apiserver: {from: argocd.bottom, to: kube-apiserver.top}
-  c-updater-app-repos: {from: image-updater.right@60px, to: gh-project-repos.left@80px, waypoints: [[2175, 970], [2175, 610]]}
-  c-updater-ghcr: {from: image-updater.right@30px, to: ghcr.left@60px, waypoints: [[2160, 940], [2160, 870]]}
+  c-argocd-apiserver: {from: argocd.right@80px, to: kube-apiserver.right@50px, waypoints: [[2115, 690], [2115, 1090]], against_flow: true}
+  c-updater-app-repos: {from: image-updater.right@60px, to: gh-project-repos.left@80px, waypoints: [[2175, 820], [2175, 610]], label_at: [2175, 715]}
+  c-updater-ghcr: {from: image-updater.right@30px, to: ghcr.left@60px, waypoints: [[2160, 790], [2160, 870]]}
 notes:
   n-401: {x: 40, y: 730, w: 340, h: 90}
   n-policy: {x: 40, y: 850, w: 340, h: 110}

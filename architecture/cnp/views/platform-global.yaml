@@ -37,6 +37,7 @@ include:
   - g-gitops
   - argocd
   - image-updater
+  - g-ag-kapi
   - kube-apiserver
   - g-data
   - cnpg-operator
@@ -82,6 +83,8 @@ steps: [e-1-browser-edge, e-2-tunnel-app, e-3-connector-envoy, c-app-aigw, c-age
 background: [e-a-vso-vault, c-vso-ai-secret, c-aigw-keycloak, c-agent-keycloak, c-wg-eks, c-wg-gke, c-argocd-b, c-argocd-gke]
 
 labels:
+  c-sb-claim: ""
+  c-sb-kyverno: ""
   e-1-browser-edge: ""
   c-assistant-edge: ""
   e-2-tunnel-app: ""

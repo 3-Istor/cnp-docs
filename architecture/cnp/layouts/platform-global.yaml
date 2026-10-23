@@ -42,11 +42,12 @@ elements:
   cmp-backend: {x: 380, y: 70, w: 300, h: 100}
   cmp-mcp: {x: 730, y: 70, w: 300, h: 100}
   stake-policy: {x: 1080, y: 70, w: 300, h: 100}
-  g-gitops: {x: 40, y: 1090, w: 1080, h: 200}
-  argocd: {x: 30, y: 70, w: 300, h: 100}
-  kube-apiserver: {x: 410, y: 70, w: 280, h: 100}
-  image-updater: {x: 740, y: 70, w: 300, h: 100}
-  g-data: {x: 1190, y: 1090, w: 1410, h: 200}
+  g-gitops: {x: 40, y: 1090, w: 710, h: 200}
+  image-updater: {x: 30, y: 70, w: 300, h: 100}
+  argocd: {x: 380, y: 70, w: 300, h: 100}
+  g-ag-kapi: {x: 820, y: 1090, w: 360, h: 200}
+  kube-apiserver: {x: 30, y: 70, w: 280, h: 100}
+  g-data: {x: 1250, y: 1090, w: 1410, h: 200}
   cnpg-operator: {x: 30, y: 70, w: 300, h: 100}
   rook-ceph: {x: 380, y: 70, w: 300, h: 100}
   garage-s3: {x: 730, y: 70, w: 300, h: 100}
@@ -98,13 +99,15 @@ edges:
   e-a-vso-vault: {from: vso.right@50px, to: vault.left@50px, label_at: [2480, 380]}
   c-vso-ai-secret: {from: vso.bottom@250px, to: ai-provider-secret.top@140px, waypoints: [[2410, 770], [1850, 770]]}
   c-mcp-app-repos: {from: cmp-mcp.bottom@250px, to: gh-project-repos.left@50px, waypoints: [[2290, 1212], [3636, 1212], [3636, 860]]}
-  c-argocd-app-repos: {from: argocd.top@280px, to: gh-project-repos.left@60px, waypoints: [[1210, 1228], [3644, 1228], [3644, 870]], against_flow: true}
-  c-updater-app-repos: {from: image-updater.top@100px, to: gh-project-repos.left@70px, waypoints: [[1740, 1244], [3652, 1244], [3652, 880]], against_flow: true}
-  c-updater-ghcr: {from: image-updater.top@160px, to: ghcr.left@50px, waypoints: [[1800, 1260], [3660, 1260], [3660, 1010]], against_flow: true}
+  c-argocd-app-repos: {from: argocd.top@280px, to: gh-project-repos.left@60px, waypoints: [[1560, 1228], [3644, 1228], [3644, 870]], against_flow: true}
+  c-updater-app-repos: {from: image-updater.top@200px, to: gh-project-repos.left@70px, waypoints: [[1130, 1244], [3652, 1244], [3652, 880]], against_flow: true}
+  c-updater-ghcr: {from: image-updater.top@260px, to: ghcr.left@50px, waypoints: [[1190, 1260], [3660, 1260], [3660, 1010]], against_flow: true}
   c-repos-ghcr: {from: gh-project-repos.bottom, to: ghcr.top}
   c-argocd-apiserver: {from: argocd.right@50px, to: kube-apiserver.left@50px}
-  c-argocd-b: {from: argocd.bottom@250px, to: b-apiserver.left@50px, waypoints: [[1180, 1530], [3676, 1530], [3676, 1480]], label_at: [2400, 1530]}
-  c-argocd-gke: {from: argocd.bottom@200px, to: gke-apiserver.left@50px, waypoints: [[1130, 1565], [3668, 1565], [3668, 1910]], label_at: [2700, 1565]}
+  c-sb-claim: {from: hosted-agent.right@90px, to: kube-apiserver.top@260px, waypoints: [[2790, 690], [2790, 1275], [1970, 1275]], label_at: [2790, 900]}
+  c-sb-kyverno: {from: kube-apiserver.bottom@40px, to: kyverno.top@250px, waypoints: [[1750, 1585], [1180, 1585]]}
+  c-argocd-b: {from: argocd.bottom@250px, to: b-apiserver.left@50px, waypoints: [[1530, 1530], [3676, 1530], [3676, 1480]], label_at: [2400, 1530]}
+  c-argocd-gke: {from: argocd.bottom@200px, to: gke-apiserver.left@50px, waypoints: [[1480, 1565], [3668, 1565], [3668, 1910]], label_at: [2700, 1565]}
   c-wg-eks: {from: wireguard-onprem.top@230px, to: b-wireguard.right@50px, waypoints: [[3160, 175], [4310, 175], [4310, 1330]], against_flow: true}
   c-wg-gke: {from: wireguard-onprem-gcp.top@230px, to: gke-wireguard.right@50px, waypoints: [[3490, 185], [4330, 185], [4330, 1760]], against_flow: true}
 cards:

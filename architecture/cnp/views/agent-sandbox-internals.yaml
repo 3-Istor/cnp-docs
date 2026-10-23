@@ -30,7 +30,7 @@ include:
   - sb-c-core
   - sb-c-ext
   - g-ag-kapi
-  - ag-kapi
+  - kube-apiserver
   - g-ops
   - kyverno
   - g-agents

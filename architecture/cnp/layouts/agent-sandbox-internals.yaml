@@ -22,7 +22,7 @@ elements:
   sb-c-core: {x: 30, y: 70, w: 300, h: 100}
   sb-c-ext: {x: 380, y: 70, w: 300, h: 100}
   g-ag-kapi: {x: 960, y: 620, w: 360, h: 200}
-  ag-kapi: {x: 30, y: 70, w: 300, h: 100}
+  kube-apiserver: {x: 30, y: 70, w: 300, h: 100}
   g-ops: {x: 1400, y: 620, w: 360, h: 200}
   kyverno: {x: 30, y: 70, w: 300, h: 100}
   g-agents: {x: 40, y: 900, w: 360, h: 200}
@@ -48,12 +48,12 @@ edges:
   r-sb-sandbox-svc: {from: sb-sandbox.left@50px, to: sb-svc.right@50px}
   r-sb-template-rc: {from: sb-template.bottom@150px, to: sb-rc.bottom@150px, waypoints: [[290, 690], [2600, 690]], label_at: [2450, 690]}
   r-sb-template-netpol: {from: sb-template.bottom@50px, to: sb-netpol.bottom@150px, waypoints: [[190, 700], [2130, 700], [2130, 500]], label_at: [2130, 620]}
-  c-sb-core-kapi: {from: sb-c-core.bottom@150px, to: ag-kapi.left@80px, waypoints: [[260, 1040], [960, 1040], [960, 970]]}
-  c-sb-kyverno: {from: ag-kapi.right@50px, to: kyverno.left@50px}
-  c-sb-kubelet: {from: sb-kubelet.top@280px, to: ag-kapi.bottom@240px, against_flow: true}
+  c-sb-core-kapi: {from: sb-c-core.bottom@150px, to: kube-apiserver.left@80px, waypoints: [[260, 1040], [960, 1040], [960, 970]]}
+  c-sb-kyverno: {from: kube-apiserver.right@50px, to: kyverno.left@50px}
+  c-sb-kubelet: {from: sb-kubelet.top@290px, to: kube-apiserver.bottom@250px, against_flow: true}
   c-sb-cri: {from: sb-kubelet.right@50px, to: sb-containerd.left@50px}
-  c-sb-ext-kapi: {from: sb-c-ext.right@50px, to: ag-kapi.left@50px}
-  c-sb-claim: {from: hosted-agent.top@250px, to: ag-kapi.bottom@40px, waypoints: [[360, 1060], [1070, 1060]], label_at: [700, 1060], against_flow: true}
+  c-sb-ext-kapi: {from: sb-c-ext.right@50px, to: kube-apiserver.left@50px}
+  c-sb-claim: {from: hosted-agent.top@250px, to: kube-apiserver.bottom@40px, waypoints: [[360, 1060], [1070, 1060]], label_at: [700, 1060], against_flow: true}
   c-sb-run: {from: hosted-agent.right@50px, to: sb-router.left@50px}
   c-sb-router-pod: {from: sb-router.right@80px, to: sb-runtime.left@50px, waypoints: [[920, 1250], [920, 1470]], label_at: [920, 1360]}
   c-sb-syscall: {from: sb-runtime.right@50px, to: sb-sentry.left@50px}

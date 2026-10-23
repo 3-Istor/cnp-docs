@@ -12,7 +12,7 @@ elements:
   g-ag-ar-ctrl: {x: 480, y: 440, w: 360, h: 200}
   ag-c-reconcile: {x: 30, y: 70, w: 300, h: 100}
   g-ag-kapi: {x: 920, y: 440, w: 360, h: 200}
-  ag-kapi: {x: 30, y: 70, w: 300, h: 100}
+  kube-apiserver: {x: 30, y: 70, w: 300, h: 100}
   g-identity: {x: 1360, y: 440, w: 360, h: 200}
   keycloak: {x: 30, y: 70, w: 280, h: 100}
   g-agents: {x: 40, y: 760, w: 360, h: 200}
@@ -65,13 +65,13 @@ edges:
   c-cmp-github: {from: cmp-backend.bottom@150px, to: github.left@75px, waypoints: [[2610, 1835], [4120, 1835], [4120, 1215]]}
   c-mcp-app-repos: {from: cmp-mcp.bottom@50px, to: gh-project-repos.left@50px, waypoints: [[2070, 1850], [4130, 1850], [4130, 1500]], label_at: [3000, 1850]}
   r-mcp-policy: {from: cmp-mcp.bottom@250px, to: stake-policy.bottom@150px, waypoints: [[2270, 1805], [1820, 1805]]}
-  c-th-op-kapi: {from: th-op.bottom@150px, to: ag-kapi.left@70px, waypoints: [[260, 865], [950, 865], [950, 780]]}
-  c-ag-ar-kapi: {from: ag-c-reconcile.right@40px, to: ag-kapi.left@40px}
-  c-th-proxy-kapi: {from: th-proxy.top@260px, to: ag-kapi.bottom@150px, waypoints: [[3240, 1055], [2890, 1055], [2890, 878], [1140, 878]], label_at: [2000, 878], against_flow: true}
+  c-th-op-kapi: {from: th-op.bottom@150px, to: kube-apiserver.left@70px, waypoints: [[260, 865], [950, 865], [950, 780]]}
+  c-ag-ar-kapi: {from: ag-c-reconcile.right@40px, to: kube-apiserver.left@40px}
+  c-th-proxy-kapi: {from: th-proxy.top@260px, to: kube-apiserver.bottom@150px, waypoints: [[3240, 1055], [2890, 1055], [2890, 878], [1140, 878]], label_at: [2000, 878], against_flow: true}
   c-th-jwks: {from: th-proxy.top@200px, to: keycloak.bottom@150px, waypoints: [[3180, 1040], [2900, 1040], [2900, 891], [1580, 891]], label_at: [2300, 891], against_flow: true}
   c-ag-jwks: {from: ag-f-jwt.top@280px, to: keycloak.bottom@70px, waypoints: [[1240, 904], [1500, 904]], against_flow: true}
   c-agent-keycloak: {from: hosted-agent.top@280px, to: keycloak.bottom@110px, waypoints: [[390, 920], [1540, 920]], label_at: [700, 920], against_flow: true}
-  c-sb-claim: {from: hosted-agent.top@262px, to: ag-kapi.bottom@110px, waypoints: [[372, 936], [1100, 936]], label_at: [600, 936], against_flow: true}
+  c-sb-claim: {from: hosted-agent.top@262px, to: kube-apiserver.bottom@110px, waypoints: [[372, 936], [1100, 936]], label_at: [600, 936], against_flow: true}
   r-th-tools: {from: th-mcpserver.right@50px, to: th-toolconfig.left@50px}
   r-th-oidc: {from: th-mcpserver.bottom@280px, to: th-oidc.bottom@150px, waypoints: [[3260, 525], [3830, 525]], label_at: [3560, 525]}
   r-th-tel: {from: th-mcpserver.bottom@200px, to: th-telemetry.left@50px, waypoints: [[3180, 600]]}

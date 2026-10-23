@@ -24,34 +24,34 @@ include:
   - g-sb-ctrl
   - sb-c-core
   - g-ag-kapi
-  - ag-kapi
+  - kube-apiserver
   - g-ops
   - kyverno
-  - g-sb-node
-  - sb-kubelet
-  - sb-containerd
+  - g-sb-node-runc
+  - sb-kubelet-runc
+  - sb-containerd-runc
   - sb-runc
   - g-sb-pod-runc
   - sb-agent-loop
   - sb-seccomp
-  - sb-kernel
+  - sb-kernel-runc
   - g-ai-gateway
   - ai-gw-proxy
   - z-sb-compute
   - sb-hv
 
-steps: [c-sb-r-model, c-sb-r-syscall, c-sb-r-kernel, c-sb-vm]
-background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet, c-sb-cri, c-sb-r-runc, c-sb-r-start]
+steps: [c-sb-r-model, c-sb-r-syscall, c-sb-r-kernel, c-sb-vm-runc]
+background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet-runc, c-sb-cri-runc, c-sb-r-runc, c-sb-r-start]
 
 labels:
   c-sb-r-model: "models and tools · HTTP"
   c-sb-r-syscall: ""
   c-sb-r-kernel: ""
-  c-sb-vm: "runs as a VM"
+  c-sb-vm-runc: "runs as a VM"
   c-sb-core-kapi: ""
   c-sb-kyverno: ""
-  c-sb-kubelet: ""
-  c-sb-cri: ""
+  c-sb-kubelet-runc: ""
+  c-sb-cri-runc: ""
   c-sb-r-runc: ""
   c-sb-r-start: ""
   r-sb-sandbox-svc: ""

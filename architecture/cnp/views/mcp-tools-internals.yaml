@@ -34,7 +34,7 @@ include:
   - g-ag-ar-ctrl
   - ag-c-reconcile
   - g-ag-kapi
-  - ag-kapi
+  - kube-apiserver
   - g-identity
   - keycloak
   - g-agents

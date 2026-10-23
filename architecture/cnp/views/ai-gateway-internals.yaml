@@ -42,7 +42,7 @@ include:
   - ag-c-cfg
   - ag-c-webhook
   - g-ag-kapi
-  - ag-kapi
+  - kube-apiserver
   - g-agents
   - hosted-agent
   - g-ag-pod

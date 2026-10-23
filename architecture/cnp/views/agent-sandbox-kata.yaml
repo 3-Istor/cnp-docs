@@ -14,7 +14,7 @@ include:
   - z-cluster
   - g-sb-ns
   - g-sb-crd
-  - sb-template
+  - sb-template-kata
   - sb-warmpool
   - sb-claim
   - sb-svc
@@ -30,16 +30,16 @@ include:
   - sb-c-core
   - sb-c-ext
   - g-ag-kapi
-  - ag-kapi
+  - kube-apiserver
   - g-ops
   - kyverno
   - g-agents
   - hosted-agent
   - g-sb-router
   - sb-router
-  - g-sb-node
-  - sb-kubelet
-  - sb-containerd
+  - g-sb-node-kata
+  - sb-kubelet-kata
+  - sb-containerd-kata
   - sb-kata-shim
   - g-sb-kvm
   - sb-runtime-kata
@@ -47,13 +47,13 @@ include:
   - sb-kata-agent
   - sb-vmm
   - sb-virtiofsd
-  - sb-kernel
+  - sb-kernel-kata
   - z-sb-compute
   - sb-hv
   - sb-nested
 
-steps: [c-sb-claim, c-sb-ext-kapi, c-sb-run, c-sb-router-kata, c-sb-k-syscall, c-sb-k-virtio, c-sb-k-kvm, c-sb-vm]
-background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet, c-sb-cri, c-sb-k-shim, c-sb-k-vmm, c-sb-k-agent, c-sb-k-fs]
+steps: [c-sb-claim, c-sb-ext-kapi, c-sb-run, c-sb-router-kata, c-sb-k-syscall, c-sb-k-virtio, c-sb-k-kvm, c-sb-vm-kata]
+background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet-kata, c-sb-cri-kata, c-sb-k-shim, c-sb-k-vmm, c-sb-k-agent, c-sb-k-fs]
 
 labels:
   c-sb-claim: "create claim, watch Ready · HTTPS"
@@ -63,11 +63,11 @@ labels:
   c-sb-k-syscall: ""
   c-sb-k-virtio: "virtio"
   c-sb-k-kvm: "KVM_RUN"
-  c-sb-vm: "nested VMX"
+  c-sb-vm-kata: "nested VMX"
   c-sb-core-kapi: ""
   c-sb-kyverno: ""
-  c-sb-kubelet: ""
-  c-sb-cri: ""
+  c-sb-kubelet-kata: ""
+  c-sb-cri-kata: ""
   c-sb-k-shim: ""
   c-sb-k-vmm: ""
   c-sb-k-agent: "vsock"

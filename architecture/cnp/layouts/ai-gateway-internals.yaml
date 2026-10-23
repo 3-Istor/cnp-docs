@@ -35,7 +35,7 @@ elements:
   ag-c-cfg: {x: 730, y: 70, w: 300, h: 100}
   ag-c-webhook: {x: 1080, y: 70, w: 300, h: 100}
   g-ag-kapi: {x: 2910, y: 620, w: 360, h: 200}
-  ag-kapi: {x: 30, y: 70, w: 300, h: 100}
+  kube-apiserver: {x: 30, y: 70, w: 300, h: 100}
   g-agents: {x: 40, y: 900, w: 360, h: 200}
   hosted-agent: {x: 30, y: 70, w: 280, h: 100}
   g-ag-pod: {x: 480, y: 900, w: 2320, h: 760}
@@ -86,14 +86,14 @@ edges:
   c-ag-mcp: {from: ag-f-router.bottom@150px, to: ag-x-mcp.top@150px, label_at: [2250, 1470]}
   c-ag-mcp-cmp: {from: ag-x-mcp.bottom@250px, to: cmp-mcp.left@70px, waypoints: [[2350, 1636], [2895, 1636], [2895, 1590]], label_at: [2760, 1636]}
   c-ag-mcp-toolhive: {from: ag-x-mcp.bottom@280px, to: toolhive.left@50px, waypoints: [[2380, 1684], [2905, 1684], [2905, 1850]], label_at: [2760, 1684]}
-  c-ag-eg-kapi: {from: ag-eg-translate.bottom@150px, to: ag-kapi.left@35px, waypoints: [[960, 1055], [2915, 1055], [2915, 925]]}
-  c-ag-ar-kapi: {from: ag-c-reconcile.bottom@150px, to: ag-kapi.left@70px, waypoints: [[1750, 1040], [2900, 1040], [2900, 960]]}
+  c-ag-eg-kapi: {from: ag-eg-translate.bottom@150px, to: kube-apiserver.left@35px, waypoints: [[960, 1055], [2915, 1055], [2915, 925]]}
+  c-ag-ar-kapi: {from: ag-c-reconcile.bottom@150px, to: kube-apiserver.left@70px, waypoints: [[1750, 1040], [2900, 1040], [2900, 960]]}
   c-ag-eg-ext: {from: ag-eg-translate.right@50px, to: ag-c-ext.left@50px}
   c-ag-ads: {from: g-ag-envoy.left@140px, to: ag-eg-xds.bottom@40px, waypoints: [[500, 1310], [500, 990]], against_flow: true}
-  c-ag-webhook: {from: ag-kapi.left@15px, to: ag-c-webhook.right@15px, against_flow: true}
+  c-ag-webhook: {from: kube-apiserver.left@15px, to: ag-c-webhook.right@15px, against_flow: true}
   c-ag-jwks: {from: ag-f-jwt.top@280px, to: keycloak.right@50px, waypoints: [[1240, 1070], [3620, 1070], [3620, 380]], against_flow: true}
   c-agent-keycloak: {from: hosted-agent.top@280px, to: keycloak.right@80px, waypoints: [[390, 1085], [3640, 1085], [3640, 410]], label_at: [3640, 700], against_flow: true}
-  c-sb-claim: {from: hosted-agent.top@262px, to: ag-kapi.left@85px, waypoints: [[372, 1093], [2930, 1093], [2930, 975]], label_at: [2930, 1005], against_flow: true}
+  c-sb-claim: {from: hosted-agent.top@262px, to: kube-apiserver.left@85px, waypoints: [[372, 1093], [2930, 1093], [2930, 975]], label_at: [2930, 1005], against_flow: true}
   r-ag-route-gemini: {from: ag-route.right@30px, to: ag-be-gemini.left@30px}
   r-ag-route-ollama: {from: ag-route.bottom@280px, to: ag-be-ollama.bottom@150px, waypoints: [[420, 515], [990, 515]], label_at: [900, 515]}
   r-ag-be-gemini: {from: ag-be-gemini.bottom@280px, to: ag-backend-gemini.left@50px, waypoints: [[770, 535], [1210, 535], [1210, 600]]}
