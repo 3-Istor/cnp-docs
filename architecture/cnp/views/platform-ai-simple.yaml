@@ -1,0 +1,74 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · La landing zone IA en un coup d'œil"
+subtitle: "Tout le trafic des agents passe par la gateway : identité, policy et trace"
+meta:
+  - "Périmètre : hub K3s on-prem, option B du 2026-10-23 (agentgateway + kagent) · en clair : ce que la landing zone IA ajoute · estompé : ce qui tourne déjà"
+  - "Une boîte par brique ; le détail de chaque brique est dans platform-ai-stack et les vues zoom"
+  - "v1.0 · source : cnp-docs/architecture/cnp"
+
+include:
+  - hl-z-users
+  - hl-user
+  - hl-z-entry
+  - hl-entry
+  - hl-z-portal
+  - hl-portal
+  - hl-kagent
+  - hl-z-agents
+  - hl-peers
+  - hl-agents
+  - hl-sandbox
+  - hl-z-agw
+  - hl-agw
+  - hl-guard
+  - hl-z-google
+  - hl-gemini
+  - hl-z-tools
+  - hl-tools
+  - hl-z-homelab
+  - hl-ollama
+  - hl-z-shared
+  - hl-identity
+  - hl-obs
+  - hl-net
+  - hl-finops
+
+steps: [hl-c-user-entry, hl-c-entry-agw, hl-c-agw-agents, hl-c-agents-agw, hl-c-agw-guard, hl-c-guard-ollama, hl-c-agw-gemini, hl-c-agw-ollama, hl-c-agw-tools, hl-c-agw-peers, hl-c-agents-sandbox]
+background: [hl-c-portal-kagent, hl-c-kagent-agents, hl-c-agents-identity, hl-c-agw-obs]
+
+cards:
+  - id: card-steps
+    title: "Le parcours d'une requête"
+    color: emerald
+    lines:
+      - "[1] [2] L'utilisateur entre par Cloudflare et Envoy, qui confie sa question à la gateway agentique."
+      - "[3] [4] La gateway la transmet à l'agent ; tout ce que l'agent appelle ensuite repasse par elle."
+      - "[5] [6] Les guardrails masquent données personnelles et secrets, puis Llama Guard juge le prompt."
+      - "[7] [8] La gateway appelle Gemini, ou Ollama sur le GPU du homelab en secours et pour les projets Local."
+      - "[9] [10] Un appel d'outil va à ToolHive ; une tâche déléguée va à un autre agent, en A2A."
+      - "[11] Le code que l'agent écrit tourne dans un sandbox gVisor ou Kata, jamais dans son pod."
+  - id: card-background
+    title: "Mis en place avant"
+    color: amber
+    lines:
+      - "[A] [B] La CMP écrit l'agent dans Git, Argo CD l'applique, kagent le déploie."
+      - "[C] L'agent obtient un jeton court de Keycloak avec son ServiceAccount : aucun secret dans le pod."
+      - "[D] La gateway envoie traces et compteurs de tokens à l'observabilité."
+  - id: card-isolation
+    title: "Les frontières d'isolation"
+    color: rose
+    lines:
+      - "Réseau : default-deny Cilium, l'agent ne sort que vers la gateway."
+      - "Clés : la clé Gemini n'existe que dans Vault et la gateway."
+      - "Exécution : runc pour l'agent, gVisor ou Kata pour le code qu'il génère."
+      - "Admission : Kyverno n'accepte que des pods restreints et des images signées."
+  - {id: card-legend, title: Légende, color: slate, legend: true}
+
+labels:
+  hl-c-agents-sandbox: ""
+  hl-c-agw-guard: ""
+  hl-c-entry-agw: ""
+  hl-c-portal-kagent: ""

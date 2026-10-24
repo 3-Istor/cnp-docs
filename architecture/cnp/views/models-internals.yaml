@@ -1,0 +1,89 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · AI landing zone · Models internals"
+subtitle: "Where does a model call end up, what limits it, and how does it fall back to the homelab GPU?"
+meta:
+  - "Scope: Gemini API free tier through its OpenAI-compatible endpoint, Ollama on the homelab RTX 5080 over WireGuard, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
+  - "Out of scope: the gateway's filters (AI gateway internals) · the homelab cluster's own platform · the Gateway API Inference Extension, useful only with several GPU replicas"
+  - "Assumed: one Google Cloud project with one API key; the jwt filter copies the data_level claim into the header x-cnp-data (claimToHeaders)"
+  - "v0.1 · source: cnp-docs/architecture/cnp · ai.google.dev (rate limits, Gemini API additional terms)"
+
+include:
+  - z-cluster
+  - g-ai-gateway
+  - g-ag-crd-ar
+  - ag-route
+  - ag-be-gemini
+  - ag-be-ollama
+  - md-route-local
+  - g-ag-crd-eg
+  - ag-secpol
+  - ag-btp
+  - ag-backend-gemini
+  - ag-backend-ollama
+  - g-md-egress
+  - md-egress
+  - g-ag-pod
+  - g-ag-envoy
+  - ag-f-router
+  - ag-f-xp-up
+  - g-vpn
+  - md-wg
+  - z-google-ai
+  - gemini
+  - md-quota
+  - md-project
+  - z-homelab-gpu
+  - md-hl-wg
+  - ollama
+  - md-gpu
+  - md-ollama-cfg
+  - md-store
+  - md-guard
+
+steps: [c-ag-chain-5, c-ag-gemini, c-md-quota, c-ag-ollama, c-md-hl-fwd, c-md-gpu]
+background: [c-md-tunnel, c-md-store]
+
+labels:
+  c-ag-chain-5: ""
+  c-ag-gemini: "POST /v1beta/openai/chat/completions · HTTPS"
+  c-md-quota: ""
+  c-ag-ollama: "on 429 or Local · HTTP over WireGuard"
+  c-md-hl-fwd: ""
+  c-md-gpu: ""
+  c-md-tunnel: "WireGuard · UDP"
+  c-md-store: ""
+  r-ag-route-gemini: ""
+  r-md-project: ""
+  r-md-guard: ""
+
+notes:
+  - {id: n-md-terms, text: "Check before going live: Google's Gemini API terms allow only the paid service when an API client is made available to users in the EEA, the UK or Switzerland. Free-tier inputs may also be read by human reviewers and used to improve Google's products: no sensitive data."}
+  - {id: n-md-local, text: "Local projects: jwt_authn copies the data_level claim into x-cnp-data; the llm-local route matches it and only knows Ollama, so Gemini is never a candidate, even on retry."}
+  - {id: n-md-fit, text: "16 GB VRAM: one 8 to 14B chat model at 4-bit with its KV cache, or a smaller one beside Llama Guard 3. With MAX_LOADED_MODELS 1, switching model means a reload of several seconds."}
+
+cards:
+  - id: card-steps
+    title: "Request path · a model call leaves the gateway"
+    color: emerald
+    lines:
+      - "[1] The router picks the rule: llm for normal projects (Gemini priority 0, Ollama priority 1), llm-local for Local projects (Ollama only)."
+      - "[2] The upstream filters translate and sign the request, then Envoy calls Gemini's OpenAI-compatible endpoint over HTTPS; the Cilium egress rule allows that host only."
+      - "[3] Google counts the request against the project's RPM, TPM and RPD. If any one is spent, the answer is 429."
+      - "[4] On 429, or for Local projects, Envoy retries on Ollama through the WireGuard pod. [5] The homelab peer forwards to Ollama on port 11434. [6] Ollama runs the model on the RTX 5080."
+  - id: card-background
+    title: "Background"
+    color: amber
+    lines:
+      - "[A] The WireGuard pod keeps the tunnel to the homelab peer up; only the GPU host's /32 is routed through it."
+      - "[B] Ollama loads a model's weights from its store on first use and keeps them for KEEP_ALIVE (30 min here)."
+  - id: card-objects
+    title: "Objects · who points at whom"
+    color: sky
+    lines:
+      - "AIGatewayRoute llm → AIServiceBackend gemini and ollama; llm-local → ollama only."
+      - "AIServiceBackend gemini → Backend gemini (FQDN, TLS); ollama → Backend ollama (homelab IP)."
+      - "BackendTrafficPolicy: retry on 429 and token rate limit; SecurityPolicy: JWT and claimToHeaders."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

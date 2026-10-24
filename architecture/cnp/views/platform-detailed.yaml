@@ -1,0 +1,318 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · Platform overview · detailed, with the AI landing zone"
+subtitle: "Every zoom on one canvas: the hub as it runs today and the AI landing zone down to its filters, controllers and kernels"
+meta:
+  - "Scope: on-prem K3s hub and the AI landing zone proposal of 2026-10-23 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
+  - "Three sandbox tiers side by side: standard (runc), gVisor and Kata, each on its own worker node; a platform can offer one, two or all three"
+  - "Out of scope: EKS and GKE internals (multicloud views) · RBAC and grants (access matrix) · CI pipelines"
+  - "v0.1 · source: cnp-docs/architecture/cnp · each zoom view lists its own sources"
+
+include:
+  - z-internet
+  - user
+  - id-user
+  - z-cloudflare
+  - cf-edge
+  - g-connectivity
+  - cloudflared-platform
+  - g-gateway
+  - client-traffic-policy
+  - envoy-shared-gateway
+  - g-tenant-a
+  - cloudflared-app
+  - httproute
+  - app-service
+  - app-pods
+  - security-policy
+  - app-secret
+  - cnpg
+  - g-tenant-b
+  - tenant-b-pods
+  - g-cmp
+  - cmp-frontend
+  - cmp-backend
+  - cmp-mcp
+  - stake-policy
+  - g-secrets
+  - vso
+  - vault
+  - vault-a
+  - g-identity
+  - keycloak
+  - kc-client-cmp
+  - g-id-clients
+  - id-client-agent
+  - id-svc
+  - id-client-gw
+  - id-client-cmp
+  - g-id-scopes
+  - id-scope-project
+  - id-scope-aud
+  - id-policy
+  - id-lifespan
+  - g-id-token
+  - id-c-iss
+  - id-c-sub
+  - id-c-project
+  - id-c-scope
+  - id-c-exp
+  - g-gitops
+  - argocd
+  - image-updater
+  - g-ag-kapi
+  - kube-apiserver
+  - g-data
+  - cnpg-operator
+  - rook-ceph
+  - garage-s3
+  - cnpg-backup
+  - g-ai-gateway
+  - g-ag-crd-ar
+  - ag-route
+  - ag-be-gemini
+  - ag-be-ollama
+  - ag-mcproute
+  - ag-bsp
+  - ag-gwconfig
+  - md-route-local
+  - g-ag-crd-eg
+  - ag-gateway
+  - ag-secpol
+  - ag-btp
+  - ag-backend-gemini
+  - ag-backend-ollama
+  - ag-secret
+  - g-ag-gen
+  - ag-httproute
+  - ag-extproc-secret
+  - g-ag-eg-ctrl
+  - ag-eg-infra
+  - ag-eg-xds
+  - ag-eg-translate
+  - g-ag-ar-ctrl
+  - ag-c-ext
+  - ag-c-reconcile
+  - ag-c-cfg
+  - ag-c-webhook
+  - g-agents
+  - hosted-agent
+  - id-secret
+  - g-ag-pod
+  - g-ag-envoy
+  - ag-f-listener
+  - ag-f-jwt
+  - ag-f-xp-router
+  - ag-f-rl
+  - ag-f-router
+  - ag-f-xp-up
+  - g-ag-xp
+  - ag-x-parse
+  - ag-x-usage
+  - ag-x-mcp
+  - ag-x-translate
+  - ag-x-otel
+  - ag-x-auth
+  - g-ag-rl
+  - ag-rl
+  - ag-redis
+  - g-md-egress
+  - md-egress
+  - g-vpn
+  - md-wg
+  - g-mcp-tools
+  - g-th-crd
+  - th-mcpserver
+  - th-toolconfig
+  - th-oidc
+  - th-telemetry
+  - th-secret
+  - g-th-gen
+  - th-deploy
+  - th-svc
+  - th-rbac
+  - g-th-run
+  - th-proxy
+  - th-server
+  - g-th-op
+  - th-op
+  - g-sb-ns
+  - g-sb-crd
+  - sb-template
+  - sb-template-kata
+  - sb-warmpool
+  - sb-claim
+  - sb-svc
+  - sb-sandbox
+  - g-sb-guard-ns
+  - sb-rbac
+  - sb-quota
+  - sb-netpol
+  - sb-netpol-agent
+  - g-sb-guard
+  - sb-rc
+  - sb-rc-kata
+  - sb-kpol
+  - g-sb-ctrl
+  - sb-c-core
+  - sb-c-ext
+  - g-sb-router
+  - sb-router
+  - g-sb-node
+  - sb-kubelet
+  - sb-containerd
+  - sb-runsc
+  - g-sb-pod
+  - sb-runtime
+  - sb-sentry
+  - sb-netstack
+  - sb-kernel
+  - g-sb-node-kata
+  - sb-kubelet-kata
+  - sb-containerd-kata
+  - sb-kata-shim
+  - g-sb-kvm
+  - sb-runtime-kata
+  - sb-guest
+  - sb-kata-agent
+  - sb-vmm
+  - sb-virtiofsd
+  - sb-kernel-kata
+  - g-sb-node-runc
+  - sb-kubelet-runc
+  - sb-containerd-runc
+  - sb-runc
+  - g-sb-pod-runc
+  - sb-agent-loop
+  - sb-seccomp
+  - sb-kernel-runc
+  - g-ops
+  - kyverno
+  - gatus
+  - offhours-guard
+  - g-ob-alloy
+  - ob-recv
+  - ob-k8s
+  - ob-transform
+  - ob-batch
+  - ob-logsrc
+  - ob-lokiw
+  - ob-exp-otlp
+  - ob-exp-prom
+  - g-ob-store
+  - ob-loki
+  - tempo
+  - ob-prom
+  - g-ob-read
+  - ob-grafana
+  - ob-alerts
+  - z-cluster
+  - z-github
+  - github
+  - gh-project-repos
+  - ghcr
+  - z-google-ai
+  - gemini
+  - md-quota
+  - md-project
+  - z-homelab-gpu
+  - md-hl-wg
+  - ollama
+  - md-gpu
+  - md-ollama-cfg
+  - md-store
+  - md-guard
+  - z-cloud-a
+  - b-apiserver
+  - z-cloud-b
+  - gke-apiserver
+  - z-sb-compute
+  - sb-hv
+  - sb-nested
+
+steps: [c-id-login, c-id-ask, c-agent-keycloak, c-sb-claim, c-sb-run, c-sb-router-pod, c-ag-agent, c-ag-rl-check, c-ag-gemini, c-ag-ollama, c-ag-mcp, c-th-gw, c-th-run, c-ob-gw, c-ob-5]
+background: [c-id-provision, c-id-vault, c-id-vso-read, c-id-vso, c-ag-ar-kapi, c-sb-core-kapi, c-th-op-kapi, c-argocd-apiserver, c-md-tunnel]
+
+cards:
+  - id: card-steps
+    title: "Request path · a user asks an agent that runs code, calls a model and a tool"
+    color: emerald
+    lines:
+      - "[1] [2] The user signs in to Keycloak and asks the agent, sending a user token. [3] The agent exchanges it for its own short token (or uses client_credentials when it acts alone)."
+      - "[4] The agent creates a SandboxClaim; the controller hands it a warm sandbox from the pool of the chosen tier. [5] [6] It sends commands through the sandbox router, which forwards them to the sandbox pod (gVisor here; Kata the same way)."
+      - "[7] The agent asks a model at the AI gateway's internal listener; JWT and project checks run, then [8] the rate limit checks the project's token budget."
+      - "[9] The router sends the request to Gemini; [10] on 429 it retries on Ollama in the homelab, over WireGuard."
+      - "[11]–[13] A tool call on /mcp goes through the MCP proxy of the gateway to the ToolHive proxy, then to the MCP server over JSON-RPC."
+      - "[14] [15] The gateway exports GenAI metrics and spans to Alloy, which writes traces to Tempo and metrics to Prometheus."
+  - id: card-background
+    title: "Background · what is set up before the request"
+    color: amber
+    lines:
+      - "[A] [B] When a project gets an agent, the CMP creates its Keycloak client and writes the client secret to Vault."
+      - "[C] [D] The secrets operator reads it and writes the Kubernetes Secret mounted by the agent."
+      - "[E] [F] [G] The Agent Router controller, the sandbox controller and the ToolHive operator watch their CRDs and write what they generate (routes, pods, services)."
+      - "[H] Argo CD applies everything from Git, the AI landing zone included."
+      - "[I] The WireGuard tunnel to the homelab GPU stays up, so Ollama is one hop away."
+  - {id: card-legend, title: Legend, color: slate, legend: true}
+
+labels:
+  c-ag-ads: ""
+  c-ag-agent: ""
+  c-ag-chain-1: ""
+  c-ag-chain-2: ""
+  c-ag-chain-3: ""
+  c-ag-chain-4: ""
+  c-ag-chain-5: ""
+  c-ag-eg-ext: ""
+  c-ag-eg-kapi: "watch"
+  c-ag-mcp: "/mcp"
+  c-ag-rl-redis: ""
+  c-ag-xp-translate: "ext_proc"
+  c-argocd-b: ""
+  c-mcp-api: "call REST in-process"
+  c-md-gpu: ""
+  c-md-hl-fwd: ""
+  c-md-quota: ""
+  c-ob-1: ""
+  c-ob-10: ""
+  c-ob-12: "LogQL"
+  c-ob-2: ""
+  c-ob-3: ""
+  c-ob-6: ""
+  c-ob-8: "TraceQL"
+  c-sb-cri: ""
+  c-sb-cri-kata: ""
+  c-sb-cri-runc: ""
+  c-sb-k-agent: ""
+  c-sb-k-fs: ""
+  c-sb-k-shim: ""
+  c-sb-k-syscall: ""
+  c-sb-kyverno: ""
+  c-sb-r-runc: ""
+  c-sb-r-syscall: ""
+  c-sb-sentry-net: ""
+  c-sb-shim: ""
+  c-sb-syscall: ""
+  c-th-run: ""
+  c-updater-ghcr: "list tags"
+  e-6-pods-db: ""
+  e-a-vso-vault: ""
+  e-oidc-platform-envoy: ""
+  r-ag-be-gemini: ""
+  r-ag-gwconfig: ""
+  r-ag-route-gemini: ""
+  r-ag-secpol: ""
+  r-id-secret: ""
+  r-id-svc: ""
+  r-mcp-policy: ""
+  r-md-guard: ""
+  r-ob-alerts: ""
+  r-policy-secret: ""
+  r-sb-nested-hv: ""
+  r-sb-sandbox-svc: ""
+  r-sb-template-kata-netpol: ""
+  r-sb-template-netpol: ""
+  r-th-tools: ""
+  x-cross-tenant: ""

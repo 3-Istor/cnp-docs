@@ -42,6 +42,7 @@ include:
   - cmp-frontend
   - cmp-backend
   - argocd
+  - g-ag-kapi
   - kube-apiserver
   - cnpg-operator
   - rook-ceph

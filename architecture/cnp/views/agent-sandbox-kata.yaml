@@ -1,0 +1,107 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · AI landing zone · Agent sandbox internals · Kata tier"
+subtitle: "Same sandbox, stronger wall: what changes when each sandbox gets its own micro-VM and kernel?"
+meta:
+  - "Scope: agent-sandbox v1beta1 with Kata Containers 3 and Cloud Hypervisor, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-2) · faded: what already runs"
+  - "Out of scope: the agent's model and tool calls (AI gateway internals view) · the agent's identity (zoom 6)"
+  - "Assumed: nested virtualisation enabled on the OpenStack compute host, or a bare-metal node; for multi-tenant code or untrusted users"
+  - "v0.1 · source: cnp-docs/architecture/cnp · agent-sandbox.sigs.k8s.io · katacontainers.io"
+
+include:
+  - z-cluster
+  - g-sb-ns
+  - g-sb-crd
+  - sb-template-kata
+  - sb-warmpool
+  - sb-claim
+  - sb-svc
+  - sb-sandbox
+  - g-sb-guard-ns
+  - sb-rbac
+  - sb-quota
+  - sb-netpol
+  - g-sb-guard
+  - sb-rc-kata
+  - sb-kpol
+  - g-sb-ctrl
+  - sb-c-core
+  - sb-c-ext
+  - g-ag-kapi
+  - kube-apiserver
+  - g-ops
+  - kyverno
+  - g-agents
+  - hosted-agent
+  - g-sb-router
+  - sb-router
+  - g-sb-node-kata
+  - sb-kubelet-kata
+  - sb-containerd-kata
+  - sb-kata-shim
+  - g-sb-kvm
+  - sb-runtime-kata
+  - sb-guest
+  - sb-kata-agent
+  - sb-vmm
+  - sb-virtiofsd
+  - sb-kernel-kata
+  - z-sb-compute
+  - sb-hv
+  - sb-nested
+
+steps: [c-sb-claim, c-sb-ext-kapi, c-sb-run, c-sb-router-kata, c-sb-k-syscall, c-sb-k-virtio, c-sb-k-kvm, c-sb-vm-kata]
+background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet-kata, c-sb-cri-kata, c-sb-k-shim, c-sb-k-vmm, c-sb-k-agent, c-sb-k-fs]
+
+labels:
+  c-sb-claim: "create claim, watch Ready · HTTPS"
+  c-sb-ext-kapi: ""
+  c-sb-run: "POST · HTTP"
+  c-sb-router-kata: ":8888"
+  c-sb-k-syscall: ""
+  c-sb-k-virtio: "virtio"
+  c-sb-k-kvm: "KVM_RUN"
+  c-sb-vm-kata: "nested VMX"
+  c-sb-core-kapi: ""
+  c-sb-kyverno: ""
+  c-sb-kubelet-kata: ""
+  c-sb-cri-kata: ""
+  c-sb-k-shim: ""
+  c-sb-k-vmm: ""
+  c-sb-k-agent: "vsock"
+  c-sb-k-fs: ""
+  r-sb-nested-hv: ""
+
+notes:
+  - {id: n-sb-node, text: "The node box is the K3s worker, itself a VM on an OpenStack server. Kata starts one more VM per sandbox inside it, so the server must expose its virtualisation to the node VM (nested virt), or the node must be bare metal."}
+  - {id: n-sb-kata, text: "Each sandbox has its own guest kernel: a kernel exploit by the code stays inside a micro-VM. The price: about a hundred MB of RAM and a slower start per sandbox, plus nested virt, which OpenStack operators often leave off."}
+  - {id: n-sb-warm, text: "Warm pool matters more here: a micro-VM takes longer to boot than a gVisor sandbox, so a claim should take one already running."}
+
+cards:
+  - id: card-steps
+    title: "Request path · an agent runs code in a micro-VM"
+    color: emerald
+    lines:
+      - "[1] [2] As in the gVisor tier: the agent creates a SandboxClaim, the extensions controller binds it to a warm Sandbox."
+      - "[3] [4] The agent sends the command through sandbox-router to the runtime server, inside the micro-VM."
+      - "[5] The code's syscalls go to the guest kernel, inside the VM."
+      - "[6] Devices (disk, network) are virtio: the guest exits to Cloud Hypervisor, a user-space process on the node."
+      - "[7] Cloud Hypervisor runs the vCPUs through /dev/kvm on the node VM. [8] That node VM is itself a guest of the OpenStack server's KVM: nested virtualisation."
+  - id: card-background
+    title: "Background · how a micro-VM sandbox comes up"
+    color: amber
+    lines:
+      - "[A] The Sandbox controller creates the Pod; [B] Kyverno checks it uses RuntimeClass kata."
+      - "[C] [D] The kubelet asks containerd for a pod sandbox with handler kata-clh."
+      - "[E] containerd starts the Kata shim. [F] The shim boots a micro-VM with Cloud Hypervisor."
+      - "[G] The shim tells kata-agent, over vsock, to create the containers inside the VM. [H] virtiofsd shares the image files with the guest."
+  - id: card-objects
+    title: "What differs from the gVisor tier"
+    color: sky
+    lines:
+      - "Same CRDs, controllers, router and guardrails; only the RuntimeClass (kata) and what runs on the node change."
+      - "Two kernels between the code and the node: the guest kernel, then the VM boundary enforced by KVM."
+      - "Needs nested virtualisation on the compute host (or bare metal) and more RAM per sandbox."
+  - {id: card-legend, title: Legend, color: slate, legend: true}
