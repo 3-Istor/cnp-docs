@@ -1,6 +1,6 @@
 # Phases et vérifications
 
-> **Statut : brouillon v0.2 du 2026-10-25, à valider.** Les décisions (D1 à D16) et les
+> **Statut : v1.0 du 2026-10-25, validée par Brian.** Les décisions (D1 à D16) et les
 > conventions sont dans [02-spec.md](02-spec.md). Une phase se termine quand toutes ses
 > vérifications passent. Les phases 0 et 1 sont détaillées ; les phases 2 et 3 le seront à
 > leur entrée, avec les mêmes règles.
@@ -10,7 +10,7 @@
 - Une vérification répond **oui ou non**, se lance à la main ou en script, et laisse une trace
   (sortie de commande, capture ou lien de trace) jointe à la PR qui clôt la phase.
 - Les valeurs entre chevrons (`<projet>`, `<agent>`) sont à remplacer. Les valeurs marquées
-  *seuil proposé* sont des points de départ à valider.
+  *seuil proposé* ont été validées le 2026-10-25 ; on les ajuste après mesure.
 - Une brique nouvelle s'introduit après un essai de 1 à 2 jours avec un critère de passage
   écrit (spec §8). Sa mémoire est mesurée et consignée (spec §7).
 

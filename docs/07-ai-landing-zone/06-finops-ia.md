@@ -1,6 +1,6 @@
 # FinOps de l'IA
 
-> **Statut : brouillon v0.1 du 2026-10-25, à valider.** Cette page dit comment la
+> **Statut : v1.0 du 2026-10-25, validée par Brian.** Cette page dit comment la
 > consommation de tokens de la landing zone IA entre dans le module FinOps de la CMP. Elle
 > s'appuie sur le « Plan FinOps CNP » du 16 octobre 2026 (proposition, pas encore validée ni
 > implémentée) et en reprend les choix : format pivot FOCUS, table `cost_line_items` dans le

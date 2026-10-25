@@ -1,6 +1,6 @@
 # Les flux, pas à pas
 
-> **Statut : brouillon v0.1 du 2026-10-25.** Cette page décrit ce qui se passe, dans l'ordre,
+> **Statut : v1.0 du 2026-10-25, validée par Brian.** Cette page décrit ce qui se passe, dans l'ordre,
 > quand un agent travaille : qui parle à qui, quels contrôles s'appliquent, où ils tournent,
 > ce qui est compté pour le FinOps. Les décisions sont dans [02-spec.md](02-spec.md).
 

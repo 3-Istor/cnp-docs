@@ -1,6 +1,6 @@
 # Spec de référence de la landing zone IA
 
-> **Statut : brouillon v0.6 du 2026-10-25, à valider.** Rien n'est déployé. Cette page est la
+> **Statut : v1.0 du 2026-10-25, validée par Brian.** Rien n'est déployé. Cette page est la
 > source de vérité des décisions et des conventions : en cas de contradiction avec
 > `00-index.md`, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
 > sont dans [03-phases.md](03-phases.md).
@@ -47,14 +47,14 @@ Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume
 ## 3. Registre des décisions
 
 Statuts : **décidé** (par Brian), **hérité** (des pages et du modèle, non rediscuté),
-**proposé** (par Claude dans cette spec, à valider). D1 à D7 gardent la numérotation de
+**proposé** (par Claude, puis validé par Brian le 2026-10-25 : il n'en reste plus). D1 à D7 gardent la numérotation de
 `00-index.md`.
 
 | ID | Décision | Statut | Phase | Note |
 |---|---|---|---|---|
 | D1 | **agentgateway** pour tout le trafic des agents (LLM, MCP, A2A), en GatewayClass `agentgateway` à part. Envoy Gateway reste l'entrée des apps et des utilisateurs. | hérité | 1 | Remplace Agent Router. Plan B au §8. |
 | D2 | Tout appel LLM, outil ou agent passe par la gateway ; la clé Gemini n'est montée que dans la gateway. | hérité | 1 | |
-| D3 | Un client Keycloak par agent. Seul, l'agent utilise `client_credentials` ; pour un utilisateur, le token exchange (Keycloak 26.2 ou plus). Cible : le jeton du ServiceAccount remplace le secret client (federated client authentication, Keycloak 26.6). Jeton d'accès de **5 minutes, sans refresh**. | proposé | 1 puis 2 | Remplace « ≤ 15 min ». Phase 1 : secret client depuis Vault ; phase 2 : jeton du ServiceAccount. |
+| D3 | Un client Keycloak par agent. Seul, l'agent utilise `client_credentials` ; pour un utilisateur, le token exchange (Keycloak 26.2 ou plus). Cible : le jeton du ServiceAccount remplace le secret client (federated client authentication, Keycloak 26.6). Jeton d'accès de **5 minutes, sans refresh**. | décidé | 1 puis 2 | Remplace « ≤ 15 min ». Phase 1 : secret client depuis Vault ; phase 2 : jeton du ServiceAccount. |
 | D4 | Kyverno en Enforce à l'admission. Autorisation à la gateway par `AgentgatewayPolicy` : JWT obligatoire, règles CEL sur les claims et par outil, deny par défaut. OPA en `ext_authz` seulement si le CEL ne suffit plus. | hérité | 1 puis 3 | Cedar reste confiné au proxy ToolHive. |
 | D5 | Cilium default-deny entre tenants et en egress, egress par FQDN. RuntimeClass `gvisor` et `kata`. agent-sandbox en `v1beta1`. | hérité | 0 puis 2 | |
 | D6 | **Gemini par défaut** (niveau gratuit, plusieurs clés de comptes gratuits, équilibrées (D23)). Repli sur le serveur GPU quand Gemini répond 429. Les projets Local n'ont que le serveur GPU. Pas de données clients sur Gemini. | décidé | 1 | Le modèle prévoit une seule clé : à mettre à jour. Réserves au §9. |
@@ -68,8 +68,8 @@ Statuts : **décidé** (par Brian), **hérité** (des pages et du modèle, non r
 | D14 | Audit : logs d'accès de la gateway → Alloy → Loki, puis l'archive Object Lock existante (CronJob horaire, bucket RGW, 30 jours). Champs obligatoires : utilisateur, agent, projet, modèle, outil, tokens, décision. Rétention de 30 jours pour le namespace de la gateway. | hérité | 1 | |
 | D15 | Plafond d'étapes : limite d'itérations du framework (par exemple `recursion_limit` de LangGraph), posée par le kit d'agent. Le budget en tokens sert de plafond dur. | hérité | 2 | Rien ne l'impose côté plateforme pour un agent au code maison. |
 | D16 | Pas de SPIRE ni de SPIFFE. | hérité | — | À reconsidérer si le mTLS entre agents ou la fédération multicloud deviennent nécessaires. |
-| D17 | Emplacement du code : les briques de plateforme dans le dépôt **K3s**, sous `k8s/config/<brique>/` (`ai-gateway`, `kagent`, `toolhive`, `agent-sandbox`), Tempo dans `k8s/config/observability/`, les ClusterPolicies dans `k8s/config/kyverno/policies/`. Les ressources par projet et par agent dans le `ProjectRecord` de **cnp-projects**, rendues par **cnp-project-base**. Le code de chaque agent dans son propre dépôt, créé depuis **app-templates**. Les écrans et l'API dans **CMP**. | proposé | 1 | Suit l'organisation actuelle de chaque dépôt. |
-| D18 | La CMP déclare les agents, elle ne les construit pas : pas d'éditeur visuel de workflow, le code vit dans le dépôt de l'agent. | proposé | 2 | OpenAI arrête son Agent Builder visuel le 30 novembre 2026. Détails dans [04-cmp-agents.md](04-cmp-agents.md). |
+| D17 | Emplacement du code : les briques de plateforme dans le dépôt **K3s**, sous `k8s/config/<brique>/` (`ai-gateway`, `kagent`, `toolhive`, `agent-sandbox`), Tempo dans `k8s/config/observability/`, les ClusterPolicies dans `k8s/config/kyverno/policies/`. Les ressources par projet et par agent dans le `ProjectRecord` de **cnp-projects**, rendues par **cnp-project-base**. Le code de chaque agent dans son propre dépôt, créé depuis **app-templates**. Les écrans et l'API dans **CMP**. | décidé | 1 | Suit l'organisation actuelle de chaque dépôt. |
+| D18 | La CMP déclare les agents, elle ne les construit pas : pas d'éditeur visuel de workflow, le code vit dans le dépôt de l'agent. | décidé | 2 | OpenAI arrête son Agent Builder visuel le 30 novembre 2026. Détails dans [04-cmp-agents.md](04-cmp-agents.md). |
 
 ## 4. Conventions et interfaces
 
@@ -266,8 +266,7 @@ d'être acceptées.
 ## 9. Décisions par défaut (anciens points ouverts)
 
 Pour que la phase 1 puisse être implémentée sans décision en cours de route, chaque ancien
-point ouvert reçoit une valeur par défaut. Statut **proposé** : Brian les valide ou les change
-en une passe ; l'agent d'implémentation les applique telles quelles.
+point ouvert reçoit une valeur par défaut. Validées par Brian le 2026-10-25 ; l'agent d'implémentation les applique telles quelles.
 
 | ID | Sujet | Décision par défaut | Phase |
 |---|---|---|---|
@@ -313,8 +312,7 @@ en une passe ; l'agent d'implémentation les applique telles quelles.
    (clés équilibrées en P2C). **À confirmer à l'essai T1.1** : le format du corps du webhook de
    garde et les noms d'outils quand un backend MCP a plusieurs cibles (les autres points sont
    dans D23 et D32).
-3. **`00-index.md`.** Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
-   validée.
+3. **`00-index.md`.** Fait le 2026-10-25 : l'index renvoie au registre de cette page.
 4. **Côté CMP.** Les choix propres à la CMP sont dans [04-cmp-agents.md](04-cmp-agents.md).
 
 ## 10. Policies et conformité as code
