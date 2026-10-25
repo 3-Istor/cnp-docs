@@ -165,7 +165,7 @@ contexte : **ordres de grandeur, à mesurer avec `nvidia-smi`** (V1.15).
 
 | Rôle | Logiciel | Modèle proposé | VRAM environ | Chargé |
 |---|---|---|---|---|
-| Texte et appels d'outils | Ollama | `qwen3.5:9b` en **Q8_0** (meilleure qualité que Q4) | 11 Go + 1 à 2 Go de contexte | en permanence, sauf pendant une image |
+| Texte et appels d'outils | Ollama | `qwen3.5:9b` en **Q8_0** par défaut ; à départager avec `granite4.2:8b` et `gemma4:12b` (D37) | 11 Go + 1 à 2 Go de contexte | en permanence, sauf pendant une image |
 | Garde | Ollama | `llama-guard3:1b` | 1 Go | en permanence |
 | Embeddings | Ollama | `nomic-embed-text` | 0,3 Go | en permanence |
 | Image | ComfyUI | un modèle qui tient sous 13 Go (famille SDXL, ou plus récent) | jusqu'à 13 Go | à la demande |
@@ -287,6 +287,8 @@ en une passe ; l'agent d'implémentation les applique telles quelles.
 | D33 | Warm pool de sandbox | Un `SandboxWarmPool` de **1** sandbox gVisor (template `python`), limité à 512 Mi, pour éviter d'attendre le démarrage. Sa mémoire est mesurée (§7) ; s'il pèse trop, on le passe à 0 réplica sans changer l'architecture. Pas de warm pool pour Kata. | 2 |
 | D34 | Pile du serveur GPU | Profil du §5 : un modèle de texte le plus fort possible en permanence (`qwen3.5:9b` en Q8_0), la garde et les embeddings à côté ; l'image chargée à la demande, en déchargeant le texte. | 1 (texte), 2 (image) |
 | D35 | Limite d'images | Au plus 20 appels de `generate_image` par agent et par jour, compteur de la gateway ; valorisés au TCO du serveur GPU. | 2 |
+| D36 | Où vit la configuration de l'IA | Deux niveaux : les droits et plafonds dans le `ProjectRecord` (écrit par la CMP), les réglages dans les `deploy/values-*.yaml` de l'app (bloc `ai`, bloc `agent`). Le second ne dépasse jamais le premier ; les règles de la gateway viennent du premier. Tout est accessible depuis un assistant par les outils MCP de la CMP ([04-cmp-agents.md](04-cmp-agents.md) §8). | 1 |
+| D37 | Choix du modèle de texte | Le modèle est un réglage, pas une décision figée. Candidats (octobre 2026, tenant sur 16 Go avec la garde et les embeddings) : `qwen3.5:9b` en Q8_0, `granite4.2:8b` (septembre 2026, Apache 2.0, outils et JSON) en Q8_0, `gemma4:12b` en Q4 si son support des outils est confirmé. Les Qwen plus récents (3.6 et 3.8) n'existent qu'en 27B et plus, soit 17 Go et plus : trop gros. Choix par un comparatif sur nos propres cas (T1.14) : 20 appels d'outils d'UC7 et UC3, taux d'appels corrects, latence, VRAM. | 1 |
 | D31 | Application UC7 | Une app fullstack du catalogue existant (FastAPI, React, PostgreSQL avec pgvector), nommée `cnp-docs-assistant`, dans un projet `cnp-ai` de niveau demo. Elle indexe cnp-docs et cnp-agent-kit et cite ses sources. | 1 |
 
 **Restent hors du champ de l'agent d'implémentation :**

@@ -65,6 +65,8 @@ puis il attend :
 | T1.8 | CMP (frontend) | Onglet « IA » du projet, version phase 1 (04 §5) : niveau de données, budget, modèles et état des backends, apps avec accès IA, bouton « Donner l'accès IA ». | Écran conforme à la maquette ; tests du frontend |
 | T1.9 | CMP (backend) | Fermer G7 : `decode_platform_token` vérifie l'audience `cmp-api` ; les jetons d'assistant (opaques) ne changent pas. | Un jeton d'audience `ai-gateway` est refusé par l'API de la CMP |
 | T1.10 | nouveau dépôt `cnp-docs-assistant` | App UC7 (D31) créée par la CMP depuis le template fullstack : indexation de cnp-docs et cnp-agent-kit dans pgvector, réponses par la gateway avec sources citées, accès IA donné par T1.7. Vérifier que l'image PostgreSQL de CloudNativePG fournit pgvector, sinon le signaler. | V1.1, V1.12, V1.13 |
+| T1.13 | CMP, cnp-agent-kit, chart générique | Outils MCP `get_project_ai`, `set_project_ai`, `enable_app_ai`, `get_ai_usage` et action `ai.configure` dans la stake policy ; bloc `ai` des values dans le chart générique ; guide `cnp-ai` dans cnp-agent-kit (04 §8). | VC1.4, VC1.5 |
+| T1.14 | serveur GPU, cnp-docs | Comparatif des modèles de texte quand le serveur GPU répond au contrat (D37) : résultat consigné dans la spec. | Modèle retenu consigné |
 | T1.12 | K3s | Policies Kyverno `ai-no-provider-keys` et `ai-gateway-internal`, avec leurs tests `kyverno test` en CI (spec §10). | Les tests passent ; un pod avec `GEMINI_API_KEY` hors de `ai-gateway` est refusé |
 | T1.11 | cnp-docs | Rapport de phase : sorties de V1.1 à V1.14, mémoire mesurée, écarts. | Rapport fusionné |
 
@@ -84,5 +86,5 @@ T1.5, T1.7, T1.9. Puis T1.8 et T1.10. T1.11 en dernier.
 
 Elles seront découpées en tâches par une passe de spec à leur entrée. Ce qui est déjà connu :
 montée de Keycloak en 26.6 (D27), kagent, outils MCP et serveur MCP de la CMP avec les jetons
-d'audience `cmp-mcp` (04 §8), guardrails, A2A, sandbox, évals, écrans d'agents de la CMP,
+d'audience `cmp-mcp` (04 §9), guardrails, A2A, sandbox, évals, écrans d'agents de la CMP,
 templates d'agent (D26), UC3, UC11, UC21.

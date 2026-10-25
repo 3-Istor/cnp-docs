@@ -220,7 +220,80 @@ Les assistants (claude.ai, ChatGPT…) pourront créer et gérer des agents par 
 du serveur MCP de la CMP, soumis à la stake policy (nouvelles actions `agent.create`,
 `agent.publish`, `agent.suspend`).
 
-## 8. Le serveur MCP de la CMP face aux agents hébergés
+## 8. Depuis Claude Code et en YAML
+
+Tout ce que la CMP fait par ses écrans se fait aussi depuis un assistant (Claude Code avec le
+plugin cnp-agent-kit, claude.ai, ChatGPT…) et se lit dans des fichiers YAML versionnés. Un
+développeur peut donc tout mettre en place en parlant à son assistant, sans ouvrir la CMP.
+
+### Deux niveaux de configuration
+
+| Niveau | Fichier | Qui l'écrit | Ce qu'il contient |
+|---|---|---|---|
+| **Droits et plafonds du projet** | `ProjectRecord` dans cnp-projects (`spec.ai`, `spec.agents[]`) | La CMP, par sa GitHub App, depuis l'écran ou un outil MCP ; jamais le tenant directement | Niveau de données, modèles autorisés, budgets maximum, agents déclarés avec leurs outils, leur isolation et leurs risques |
+| **Réglages de l'app ou de l'agent** | `deploy/values-*.yaml` du dépôt de l'app, comme les blocs `secrets`, `db` et `migrations` actuels | Le développeur ou son assistant, par commit ou PR | Le modèle utilisé parmi ceux autorisés, son budget dans la limite du projet, les consignes et les outils d'un agent déclaratif |
+
+Le niveau du dessous ne peut jamais dépasser celui du dessus. Les règles de la gateway sont
+générées depuis le `ProjectRecord` (spec D22), pas depuis les values du tenant : un outil ou un
+budget demandé dans `values.yaml` sans droit dans le `ProjectRecord` est simplement refusé à la
+gateway (403 ou 429), et le validateur de la CI le signale avant.
+
+### Exemple : une app qui appelle un modèle
+
+```yaml
+# deploy/values-backend.yaml
+ai:
+  enabled: true
+  model: default            # un modèle parmi spec.ai.models du projet
+  dailyTokenBudget: 50000   # au plus le plafond de l'app dans le ProjectRecord
+```
+
+Le chart générique en déduit les variables `AI_GATEWAY_URL`, `AI_MODEL` et `AI_CLIENT_ID`,
+et le secret client par le même mécanisme Vault que le bloc `secrets`.
+
+### Exemple : un agent déclaratif
+
+```yaml
+# deploy/values-agent.yaml
+agent:
+  type: declarative
+  instructions: |
+    Tu diagnostiques les déploiements en échec du projet. Tu lis l'état, les événements
+    et les logs, tu expliques la cause, et tu proposes une PR de correction.
+  model: default
+  tools: [cmp__get_app, cmp__get_app_logs]   # parmi les outils accordés dans spec.agents[]
+  maxSteps: 10
+```
+
+Le chart générique rend le CR `Agent` de kagent (type `Declarative`) et son `ModelConfig`
+pointé sur la gateway. Un agent BYO ajoute `image:` et son code dans le dépôt.
+
+### Outils MCP de la CMP pour l'IA
+
+Ils s'ajoutent aux outils actuels (`whoami`, `create_app`, `push_files`, `cut_release`…) et
+passent par la même stake policy :
+
+| Outil | Ce qu'il fait | Action de la stake policy | Phase |
+|---|---|---|---|
+| `get_project_ai` | Lire niveau de données, modèles, budgets, apps avec accès IA, état des backends | `read` | 1 |
+| `set_project_ai` | Changer niveau de données, modèles autorisés, budgets du projet | `ai.configure` (nouvelle) | 1 |
+| `enable_app_ai` | Donner l'accès IA à une app : client Keycloak, plafond dans le `ProjectRecord`, bloc `ai` dans ses values | `ai.configure` | 1 |
+| `get_ai_usage` | Tokens, coût au prix public, refus, par app ou agent | `read` | 1 |
+| `create_agent` | Déclarer un agent : `spec.agents[]`, client, values de l'agent ; refuse trois risques cumulés | `agent.create` (nouvelle) | 2 |
+| `update_agent`, `list_agents`, `get_agent` | Modifier les consignes ou les outils, lister, lire la carte des capacités | `code.push_sensitive` pour les values, `agent.create` pour les droits ; `read` | 2 |
+| `test_agent` | Envoyer un message de test et récupérer les étapes | `read` (consomme le budget de l'agent) | 2 |
+| `suspend_agent` | Couper un agent | `agent.suspend` (nouvelle) | 2 |
+
+Modifier `deploy/` reste l'action `code.push_sensitive` d'aujourd'hui : refusée en sandbox,
+avec confirmation en demo, par PR en standard et critical. Un guide `cnp-ai` dans cnp-agent-kit
+(servi aussi par `get_guide`) explique à l'assistant comment enchaîner ces outils.
+
+**Exemple dans Claude Code :** « donne l'accès IA à mon app twitter-clone avec 50 000 tokens
+par jour ». L'assistant appelle `get_project_ai`, puis `enable_app_ai`. La CMP écrit le
+`ProjectRecord` et pousse le bloc `ai` dans les values de l'app. Argo CD déploie, et l'app
+reçoit ses variables.
+
+## 9. Le serveur MCP de la CMP face aux agents hébergés
 
 Deux changements sont nécessaires.
 
@@ -257,7 +330,7 @@ dans la conversation ». Un agent hébergé n'a souvent personne dans la convers
 devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'agent comme
 `via`.
 
-## 9. Vérifications
+## 10. Vérifications
 
 | ID | Phase | Vérification | Attendu |
 |---|---|---|---|
@@ -270,13 +343,15 @@ devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'ag
 | VC2.4 | 2 | Suspendre un agent | Ses appels échouent en 5 minutes au plus ; il est à zéro réplica |
 | VC2.5 | 2 | Un agent hébergé appelle un outil `ask` de la CMP | Une confirmation apparaît dans la CMP ; rien ne s'exécute avant l'approbation |
 | VC2.6 | 2 | Action d'un agent | Le journal d'activité l'enregistre avec `via: agent-<projet>-<nom>` |
+| VC1.4 | 1 | `enable_app_ai` depuis Claude Code | Même résultat que le bouton de la CMP : `ProjectRecord`, client Keycloak, bloc `ai` dans les values |
+| VC1.5 | 1 | `dailyTokenBudget` d'une app au-dessus du plafond du projet | Le validateur le refuse en CI ; la gateway applique le plafond du projet |
 
-## 10. Décisions et points restants
+## 11. Décisions et points restants
 
 | Sujet | Décision |
 |---|---|
 | Utilisateurs d'une app de tenant dans un autre realm (UC21) | Pas d'échange entre realms. L'app appelle la gateway avec sa propre identité (`app-<projet>-<app>`, realm `3istor`) et transmet l'identifiant de l'utilisateur pour le budget et l'audit, sans lui donner de droits. L'assistant agit comme le « bot » de l'app. |
-| Jetons des agents vers la CMP | Audiences séparées `cmp-api` et `cmp-mcp`, client scope `cmp-tools` (§8). `cmp-api` en phase 1 (T1.9), `cmp-mcp` en phase 2. |
+| Jetons des agents vers la CMP | Audiences séparées `cmp-api` et `cmp-mcp`, client scope `cmp-tools` (§9). `cmp-api` en phase 1 (T1.9), `cmp-mcp` en phase 2. |
 | Emplacement des politiques par agent | Namespace `ai-gateway`, chart `cnp-ai-policies` (spec D22) |
 | Budget du chat de test | Compté dans le budget de l'agent (spec D25) |
 | Premiers templates d'agent | Agent kagent déclaratif vide, puis agent de questions sur une documentation (spec D26, D29) |
