@@ -4,6 +4,11 @@
 > au modèle Noodle portent `status: planned` et une cible : `P0`–`P2` pour les écarts de la
 > landing zone actuelle, `IA-1`–`IA-3` pour la landing zone IA.
 
+> **Les décisions de cette page sont remplacées par [la spec de référence](02-spec.md)** (§3)
+> dès qu'elle est validée. D1 y devient agentgateway au lieu d'Agent Router, et D3 un jeton
+> de 5 minutes. Le découpage en phases et les vérifications sont dans
+> [03-phases.md](03-phases.md).
+
 La landing zone IA se greffe sur la plateforme existante. Les appels des agents vers un
 modèle ou un outil passent par une AI gateway (Agent Router, ex-Envoy AI Gateway) posée
 sur l'Envoy Gateway déjà en place. La gateway porte l'authentification Keycloak,
@@ -13,9 +18,9 @@ l'autorisation par projet, les quotas en tokens, le choix du modèle et les trac
 
 | # | Décision | Choix proposé |
 |---|---|---|
-| D1 | AI gateway | Agent Router sur l'Envoy Gateway existant, une gateway par cluster (on-prem, EKS, GKE) |
+| D1 | AI gateway | ~~Agent Router~~ agentgateway (voir [Stack cible](01-stack-cible.md)), GatewayClass à part ; Envoy Gateway reste l'entrée des apps |
 | D2 | Point de sortie | Tout appel LLM ou outil passe par la gateway ; aucune clé provider dans un pod |
-| D3 | Identité | Un client Keycloak par agent, jetons ≤ 15 min, standard token exchange pour agir au nom d'un utilisateur |
+| D3 | Identité | Un client Keycloak par agent, jetons de 5 min, standard token exchange pour agir au nom d'un utilisateur |
 | D4 | Policy | Kyverno en Enforce à l'admission ; autorisation native de la `SecurityPolicy` à la gateway, puis OPA pour l'autorisation par outil |
 | D5 | Isolation | Default-deny Cilium entre tenants et en egress ; CRD `Sandbox` + gVisor pour les agents qui exécutent du code |
 | D6 | Modèles | Gemini (free tier) et Ollama sur le GPU du homelab via WireGuard, avec bascule automatique sur Ollama |
