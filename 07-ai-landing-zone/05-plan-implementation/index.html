@@ -2591,7 +2591,7 @@ puis il attend :</p>
 <li>Aucun secret dans Git : Vault, puis le vault-secrets-operator déjà en place.</li>
 <li>Tout passe par Git et Argo CD ou kustomize, comme le reste de la plateforme ; pas de
   <code>kubectl apply</code> à la main sur le cluster principal, sauf pour les vérifications.</li>
-<li>D'abord le cluster de lab, puis le cluster principal (D28).</li>
+<li>D'abord un cluster k3d local, puis le cluster principal (D28).</li>
 <li>Chaque brique : mesurer sa mémoire et la consigner dans la spec §7.</li>
 </ul>
 <h2 id="2-phase-0-prerequis">2. Phase 0 : prérequis<a class="headerlink" href="#2-phase-0-prerequis" title="Permanent link">&para;</a></h2>
@@ -2650,9 +2650,9 @@ puis il attend :</p>
 <tbody>
 <tr>
 <td>T1.1</td>
-<td>K3s (lab)</td>
+<td>K3s (k3d local)</td>
 <td><strong>Essai d'agentgateway</strong>, 1 à 2 jours. Installer la dernière version stable, épinglée. Relever les noms exacts des ressources (GatewayClass, politique, backends LLM, rate limit, routes), la clé du rate limit par claim, le rejeu sur une autre clé Gemini puis le serveur GPU après un 429 (D23), le comportement si le service de rate limit est injoignable, la possibilité de plafonner <code>max_tokens</code> et le comptage d'une requête rejouée (une ou deux fois), et la mémoire (D32). Rapport : une PR sur cnp-docs qui complète la spec §4 avec ces noms et la §7 avec la mémoire. Décision de continuer ou de basculer sur le plan B (spec §8).</td>
-<td>Rapport fusionné ; V1.3 à V1.8 passent sur le lab</td>
+<td>Rapport fusionné ; V1.3 à V1.8 passent sur le k3d local</td>
 </tr>
 <tr>
 <td>T1.2</td>
@@ -2709,6 +2709,24 @@ puis il attend :</p>
 <td>V1.1, V1.12, V1.13</td>
 </tr>
 <tr>
+<td>T1.13</td>
+<td>CMP, cnp-agent-kit, chart générique</td>
+<td>Outils MCP <code>get_project_ai</code>, <code>set_project_ai</code>, <code>enable_app_ai</code>, <code>get_ai_usage</code> et action <code>ai.configure</code> dans la stake policy ; bloc <code>ai</code> des values dans le chart générique ; guide <code>cnp-ai</code> dans cnp-agent-kit (04 §8).</td>
+<td>VC1.4, VC1.5</td>
+</tr>
+<tr>
+<td>T1.14</td>
+<td>serveur GPU, cnp-docs</td>
+<td>Comparatif des modèles de texte quand le serveur GPU répond au contrat (D37) : résultat consigné dans la spec.</td>
+<td>Modèle retenu consigné</td>
+</tr>
+<tr>
+<td>T1.12</td>
+<td>K3s</td>
+<td>Policies Kyverno <code>ai-no-provider-keys</code> et <code>ai-gateway-internal</code>, avec leurs tests <code>kyverno test</code> en CI (spec §10).</td>
+<td>Les tests passent ; un pod avec <code>GEMINI_API_KEY</code> hors de <code>ai-gateway</code> est refusé</td>
+</tr>
+<tr>
 <td>T1.11</td>
 <td>cnp-docs</td>
 <td>Rapport de phase : sorties de V1.1 à V1.14, mémoire mesurée, écarts.</td>
@@ -2747,7 +2765,7 @@ T1.5, T1.7, T1.9. Puis T1.8 et T1.10. T1.11 en dernier.</p>
 <h2 id="5-phases-2-et-3">5. Phases 2 et 3<a class="headerlink" href="#5-phases-2-et-3" title="Permanent link">&para;</a></h2>
 <p>Elles seront découpées en tâches par une passe de spec à leur entrée. Ce qui est déjà connu :
 montée de Keycloak en 26.6 (D27), kagent, outils MCP et serveur MCP de la CMP avec les jetons
-d'audience <code>cmp-mcp</code> (04 §8), guardrails, A2A, sandbox, évals, écrans d'agents de la CMP,
+d'audience <code>cmp-mcp</code> (04 §9), guardrails, A2A, sandbox, évals, écrans d'agents de la CMP,
 templates d'agent (D26), UC3, UC11, UC21.</p>
 
 

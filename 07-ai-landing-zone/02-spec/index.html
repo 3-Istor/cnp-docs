@@ -2334,6 +2334,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#formats-et-standards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formats et standards
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2412,10 +2423,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#10-etat-constate-du-cluster-2026-10-25" class="md-nav__link">
+  <a href="#10-policies-et-conformite-as-code" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. État constaté du cluster (2026-10-25)
+        10. Policies et conformité as code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-etat-constate-du-cluster-2026-10-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. État constaté du cluster (2026-10-25)
       
     </span>
   </a>
@@ -2693,6 +2715,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#formats-et-standards" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Formats et standards
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -2771,10 +2804,21 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#10-etat-constate-du-cluster-2026-10-25" class="md-nav__link">
+  <a href="#10-policies-et-conformite-as-code" class="md-nav__link">
     <span class="md-ellipsis">
       
-        10. État constaté du cluster (2026-10-25)
+        10. Policies et conformité as code
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#11-etat-constate-du-cluster-2026-10-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        11. État constaté du cluster (2026-10-25)
       
     </span>
   </a>
@@ -2800,7 +2844,7 @@
 
 <h1 id="spec-de-reference-de-la-landing-zone-ia">Spec de référence de la landing zone IA<a class="headerlink" href="#spec-de-reference-de-la-landing-zone-ia" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Statut : brouillon v0.5 du 2026-10-25, à valider.</strong> Rien n'est déployé. Cette page est la
+<p><strong>Statut : brouillon v0.6 du 2026-10-25, à valider.</strong> Rien n'est déployé. Cette page est la
 source de vérité des décisions et des conventions : en cas de contradiction avec
 <code>00-index.md</code>, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
 sont dans <a href="../03-phases/">03-phases.md</a>.</p>
@@ -3095,7 +3139,7 @@ Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume
 </tr>
 <tr>
 <td>Sandbox</td>
-<td><code>SandboxTemplate</code> <code>python</code> (gVisor) et <code>python-kata</code> ; pas de <code>SandboxWarmPool</code> (D33) ; une <code>SandboxClaim</code> par tâche, avec durée de vie</td>
+<td><code>SandboxTemplate</code> <code>python</code> (gVisor) et <code>python-kata</code> ; <code>SandboxWarmPool</code> de 1 pour <code>python</code> (D33) ; une <code>SandboxClaim</code> par tâche, avec durée de vie</td>
 </tr>
 <tr>
 <td>Limites</td>
@@ -3131,6 +3175,69 @@ Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume
 <tr>
 <td>Budget mémoire</td>
 <td>Environ 4 Go pour toute la zone IA sur le cluster on-prem, à mesurer (§7)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="formats-et-standards">Formats et standards<a class="headerlink" href="#formats-et-standards" title="Permanent link">&para;</a></h3>
+<p>Toutes les briques parlent des formats publics. Les documents de référence :</p>
+<table>
+<thead>
+<tr>
+<th>Format</th>
+<th>À quoi il sert ici</th>
+<th>Référence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>API Chat Completions d'OpenAI</td>
+<td>Format des appels de modèle à la gateway (<code>/v1/chat/completions</code>)</td>
+<td><a href="https://platform.openai.com/docs/api-reference/chat">Référence de l'API</a></td>
+</tr>
+<tr>
+<td>Function calling d'OpenAI</td>
+<td>Le champ <code>tools</code> de la requête et <code>tool_calls</code> de la réponse</td>
+<td><a href="https://platform.openai.com/docs/guides/function-calling">Guide</a></td>
+</tr>
+<tr>
+<td>API Embeddings d'OpenAI</td>
+<td><code>/v1/embeddings</code> pour le RAG</td>
+<td><a href="https://platform.openai.com/docs/api-reference/embeddings">Référence</a></td>
+</tr>
+<tr>
+<td>Compatibilité OpenAI de Gemini</td>
+<td>Gemini servi au format OpenAI</td>
+<td><a href="https://ai.google.dev/gemini-api/docs/openai">Doc Google</a></td>
+</tr>
+<tr>
+<td>Compatibilité OpenAI d'Ollama</td>
+<td>Le serveur GPU servi au format OpenAI</td>
+<td><a href="https://docs.ollama.com/api/openai-compatibility">Doc Ollama</a></td>
+</tr>
+<tr>
+<td>MCP (Model Context Protocol), version 2026-07-28</td>
+<td>Outils : <code>tools/list</code>, <code>tools/call</code>, JSON-RPC 2.0</td>
+<td><a href="https://modelcontextprotocol.io/specification/latest">Spécification</a>, <a href="https://modelcontextprotocol.io/specification/2026-07-28/server/tools">outils</a></td>
+</tr>
+<tr>
+<td>A2A (Agent2Agent), version 1.0.0</td>
+<td>Agent vers agent ; Agent Card</td>
+<td><a href="https://a2a-protocol.org/latest/specification/">Spécification</a></td>
+</tr>
+<tr>
+<td>OpenTelemetry GenAI</td>
+<td>Noms des attributs des traces et métriques de tokens (statut Development)</td>
+<td><a href="https://github.com/open-telemetry/semantic-conventions-genai">Dépôt des conventions</a></td>
+</tr>
+<tr>
+<td>JWT, OAuth 2.0 Token Exchange</td>
+<td>Jetons des agents, agir pour un utilisateur</td>
+<td><a href="https://datatracker.ietf.org/doc/html/rfc7519">RFC 7519</a>, <a href="https://datatracker.ietf.org/doc/html/rfc8693">RFC 8693</a></td>
+</tr>
+<tr>
+<td>FOCUS</td>
+<td>Lignes de coût du FinOps</td>
+<td><a href="https://focus.finops.org/focus-specification/">Spécification</a></td>
 </tr>
 </tbody>
 </table>
@@ -3193,9 +3300,10 @@ ou autre chose peuvent y tourner. La plateforme ne dépend que de ce contrat.</p
   local.</li>
 </ul>
 <h3 id="pile-proposee-pour-le-serveur-gpu-d34">Pile proposée pour le serveur GPU (D34)<a class="headerlink" href="#pile-proposee-pour-le-serveur-gpu-d34" title="Permanent link">&para;</a></h3>
-<p>Une proposition, pas une obligation : le contrat ci-dessus reste la seule interface. Tailles
-publiées des modèles quantifiés en Q4_K_M, plus le cache de contexte : <strong>ordres de grandeur, à
-mesurer avec <code>nvidia-smi</code></strong> (V1.15).</p>
+<p>Une proposition, pas une obligation : le contrat ci-dessus reste la seule interface. Le choix
+privilégie la qualité du texte, utilisé presque tout le temps, et accepte d'attendre pour
+l'image, rare. Les tailles sont celles publiées pour les modèles quantifiés, plus le cache de
+contexte : <strong>ordres de grandeur, à mesurer avec <code>nvidia-smi</code></strong> (V1.15).</p>
 <table>
 <thead>
 <tr>
@@ -3203,46 +3311,59 @@ mesurer avec <code>nvidia-smi</code></strong> (V1.15).</p>
 <th>Logiciel</th>
 <th>Modèle proposé</th>
 <th>VRAM environ</th>
-<th>Pourquoi</th>
+<th>Chargé</th>
 </tr>
 </thead>
 <tbody>
 <tr>
 <td>Texte et appels d'outils</td>
 <td>Ollama</td>
-<td><code>qwen3.5:9b</code> (alternative plus légère : <code>granite4.2:8b</code>)</td>
-<td>6,6 Go + 1 à 2 Go de contexte (5,3 Go pour Granite)</td>
-<td>Les deux gèrent le function calling ; un modèle de 1B ne suffit pas pour choisir et remplir des outils de façon fiable</td>
+<td><code>qwen3.5:9b</code> en <strong>Q8_0</strong> par défaut ; à départager avec <code>granite4.2:8b</code> et <code>gemma4:12b</code> (D37)</td>
+<td>11 Go + 1 à 2 Go de contexte</td>
+<td>en permanence, sauf pendant une image</td>
 </tr>
 <tr>
 <td>Garde</td>
 <td>Ollama</td>
 <td><code>llama-guard3:1b</code></td>
 <td>1 Go</td>
-<td>Suffisant pour classer un prompt ; 4 fois moins que la version 8B</td>
+<td>en permanence</td>
 </tr>
 <tr>
 <td>Embeddings</td>
 <td>Ollama</td>
 <td><code>nomic-embed-text</code></td>
 <td>0,3 Go</td>
-<td>Petit et rapide, pour le RAG d'UC7</td>
+<td>en permanence</td>
 </tr>
 <tr>
-<td>Image (optionnel)</td>
+<td>Image</td>
 <td>ComfyUI</td>
-<td>un modèle de la famille SDXL, chargé à la demande</td>
-<td>7 à 8 Go en pointe</td>
-<td>Ne tient pas en même temps que le texte : à garder pour plus tard</td>
+<td>un modèle qui tient sous 13 Go (famille SDXL, ou plus récent)</td>
+<td>jusqu'à 13 Go</td>
+<td>à la demande</td>
 </tr>
 </tbody>
 </table>
-<p><strong>Profil A, recommandé pour démarrer : texte, garde et embeddings chargés en permanence</strong>,
-environ 9 à 10 Go sur 16, ce qui laisse de la marge au contexte et à deux requêtes en
-parallèle. Réglages Ollama : <code>OLLAMA_MAX_LOADED_MODELS=3</code> (les trois modèles restent chargés),
-<code>OLLAMA_NUM_PARALLEL=2</code>, <code>OLLAMA_KEEP_ALIVE=-1</code>, <code>OLLAMA_CONTEXT_LENGTH=8192</code>, cache KV en
-<code>q8_0</code>. <strong>Profil B, plus tard : ajouter l'image.</strong> Pendant une génération d'image, le modèle
-de texte est déchargé : les requêtes de texte attendent ou partent sur Gemini.</p>
+<p>En temps normal : environ 13 à 14 Go sur 16 (texte, garde, embeddings). Réglages Ollama :
+<code>OLLAMA_MAX_LOADED_MODELS=3</code>, <code>OLLAMA_NUM_PARALLEL=2</code>, <code>OLLAMA_KEEP_ALIVE=-1</code>,
+<code>OLLAMA_CONTEXT_LENGTH=8192</code>, cache KV en <code>q8_0</code>.</p>
+<p><strong>Changer de modèle pour une image.</strong> La garde et les embeddings restent chargés (1,3 Go) :
+les guardrails continuent de marcher pendant une image.</p>
+<ol>
+<li>Le serveur MCP <code>generate_image</code> prend un verrou GPU sur le serveur.</li>
+<li>Il demande à Ollama de décharger le modèle de texte (<code>keep_alive: 0</code>).</li>
+<li>ComfyUI charge le modèle d'image, génère l'image, puis libère la mémoire.</li>
+<li>Le serveur MCP rend le verrou. Le modèle de texte se recharge à la requête suivante.</li>
+</ol>
+<p>Compter 10 à 30 secondes de changement dans chaque sens, à mesurer. Pendant le verrou, le
+service de texte du serveur GPU se déclare indisponible à la gateway. Les projets Cloud passent
+sur Gemini, les projets Local reçoivent « service indisponible, génération d'image en cours ».
+Une seule image à la fois. <strong>Ce que ça apprend pour la suite</strong> : des latences réalistes de
+changement de modèle, et la mesure de ce qu'un vrai GPU ou un fournisseur payant
+éviterait.</p>
+<p><strong>À essayer plus tard.</strong> <code>gpt-oss:20b</code> (environ 14 Go) si la garde et les embeddings passent
+sur le CPU du serveur : meilleur modèle agentique, mais plus aucune marge de VRAM.</p>
 <p><strong>Raccordement au cluster.</strong> Ollama et ComfyUI n'écoutent que sur <code>127.0.0.1</code>. Caddy, seul
 exposé, sert HTTPS sur le réseau local (certificat de son autorité interne, distribuée au
 cluster) et route <code>/ollama/</code> vers Ollama et <code>/image/</code> vers ComfyUI. Il exige un jeton
@@ -3364,7 +3485,7 @@ pool de sandbox.</p>
 <td></td>
 </tr>
 <tr>
-<td>agent-sandbox (contrôleur, sans warm pool)</td>
+<td>agent-sandbox (contrôleur et warm pool de 1)</td>
 <td>2</td>
 <td>à mesurer</td>
 <td></td>
@@ -3413,7 +3534,7 @@ d'être acceptées.</p>
 <td>agent-sandbox</td>
 <td>API en <code>v1beta1</code></td>
 <td>RuntimeClass gVisor sur un Pod ou un Job</td>
-<td>Le contrôleur ne tient pas dans le budget mémoire</td>
+<td>Le contrôleur et son warm pool ne tiennent pas dans le budget mémoire</td>
 </tr>
 <tr>
 <td>Federated client authentication</td>
@@ -3500,13 +3621,13 @@ en une passe ; l'agent d'implémentation les applique telles quelles.</p>
 <tr>
 <td>D28</td>
 <td>Où tester</td>
-<td>Le dépôt K3s décrit deux clusters : le principal (API <code>192.168.1.212</code>) et un cluster de lab (API <code>192.168.1.217</code>). Chaque nouvelle brique est d'abord installée sur le lab ; elle ne passe sur le principal qu'une fois ses vérifications réussies. Si le lab n'est pas disponible, un cluster k3d sur la machine de l'agent d'implémentation.</td>
+<td>Il n'y a qu'un cluster (K3s on-prem). Chaque nouvelle brique est d'abord installée sur un cluster k3d local, sur la machine de l'agent d'implémentation, et ne passe sur le cluster principal qu'une fois ses vérifications réussies.</td>
 <td>1</td>
 </tr>
 <tr>
 <td>D29</td>
 <td>Comment s'écrit un agent</td>
-<td>Par défaut, un agent <strong>kagent déclaratif</strong> : un CR <code>Agent</code> de type <code>Declarative</code> (consignes, <code>ModelConfig</code>, outils MCP), sans code ; la boucle est fournie par kagent. Pour une logique que le déclaratif ne sait pas exprimer, un agent <strong>BYO</strong> : une image écrite avec LangGraph (Python), construite par la CI comme les apps. Dans les deux cas, le CR <code>Agent</code> sert à déployer l'agent.</td>
+<td>Par défaut, un agent <strong>kagent déclaratif</strong> : un CR <code>Agent</code> de type <code>Declarative</code> (consignes, <code>ModelConfig</code>, outils MCP), sans code ; la boucle est fournie par kagent. Pour une logique que le déclaratif ne sait pas exprimer, un agent <strong>BYO</strong> : une image écrite avec LangGraph (une bibliothèque Python qui tourne dans le conteneur de l'agent, quelques centaines de Mo), construite par la CI comme les apps. Dans les deux cas, le CR <code>Agent</code> sert à déployer l'agent. À ne pas confondre avec Langfuse, l'outil d'observabilité écarté en D7.</td>
 <td>2</td>
 </tr>
 <tr>
@@ -3518,26 +3639,38 @@ en une passe ; l'agent d'implémentation les applique telles quelles.</p>
 <tr>
 <td>D32</td>
 <td>Cas limites du budget</td>
-<td>Le budget est vérifié avant la requête (réservation d'une estimation) et compté après, avec l'usage réel. Une fois épuisé, toute requête reçoit 429 jusqu'au lendemain : pas de contournement. Cas limites acceptés : la dernière requête admise peut dépasser le reste (une réponse en streaming n'est pas coupée) ; des requêtes parallèles peuvent dépasser ensemble ; un prompt refusé par les guardrails a déjà passé le contrôle de budget (le rate limit s'exécute avant <code>promptGuard</code>). Bornes : <code>max_tokens</code> plafonné à 4 096 par requête et au plus 30 requêtes par minute par agent (limiteur local). Si le service de rate limit est injoignable, la gateway refuse (fail-closed). Jour compté en UTC. Ces trois comportements sont vérifiés à l'essai T1.1 ; si agentgateway ne sait pas en faire un, l'agent d'implémentation le signale.</td>
+<td>Le budget est vérifié avant la requête (réservation d'une estimation) et compté après, avec l'usage réel. Une fois épuisé, toute requête reçoit 429 jusqu'au lendemain : pas de contournement. Cas limites acceptés : la dernière requête admise peut dépasser le reste (une réponse en streaming n'est pas coupée) ; des requêtes parallèles peuvent dépasser ensemble ; un prompt refusé par les guardrails a déjà passé le contrôle de budget (le rate limit s'exécute avant <code>promptGuard</code>). C'est le mécanisme natif d'agentgateway, comme des autres gateways LLM : la taille d'une réponse n'est connue qu'à la fin, donc on réserve une estimation à l'entrée puis on corrige avec l'usage réel. Bornes : <code>max_tokens</code> plafonné à 4 096 par requête et au plus 30 requêtes par minute par agent (limiteur local). Si le service de rate limit est injoignable, la gateway refuse (fail-closed). Jour compté en UTC. Ces trois comportements sont vérifiés à l'essai T1.1 ; si agentgateway ne sait pas en faire un, l'agent d'implémentation le signale.</td>
 <td>1</td>
 </tr>
 <tr>
 <td>D33</td>
 <td>Warm pool de sandbox</td>
-<td>Aucun : un sandbox démarre à la demande, en quelques secondes, pour tenir dans le budget mémoire. À reconsidérer si le démarrage gêne.</td>
+<td>Un <code>SandboxWarmPool</code> de <strong>1</strong> sandbox gVisor (template <code>python</code>), limité à 512 Mi, pour éviter d'attendre le démarrage. Sa mémoire est mesurée (§7) ; s'il pèse trop, on le passe à 0 réplica sans changer l'architecture. Pas de warm pool pour Kata.</td>
 <td>2</td>
 </tr>
 <tr>
 <td>D34</td>
 <td>Pile du serveur GPU</td>
-<td>Profil A du §5 : Ollama avec <code>qwen3.5:9b</code>, <code>llama-guard3:1b</code>, <code>nomic-embed-text</code>, derrière Caddy ; l'image plus tard.</td>
-<td>1</td>
+<td>Profil du §5 : un modèle de texte le plus fort possible en permanence (<code>qwen3.5:9b</code> en Q8_0), la garde et les embeddings à côté ; l'image chargée à la demande, en déchargeant le texte.</td>
+<td>1 (texte), 2 (image)</td>
 </tr>
 <tr>
 <td>D35</td>
 <td>Limite d'images</td>
 <td>Au plus 20 appels de <code>generate_image</code> par agent et par jour, compteur de la gateway ; valorisés au TCO du serveur GPU.</td>
 <td>2</td>
+</tr>
+<tr>
+<td>D36</td>
+<td>Où vit la configuration de l'IA</td>
+<td>Deux niveaux : les droits et plafonds dans le <code>ProjectRecord</code> (écrit par la CMP), les réglages dans les <code>deploy/values-*.yaml</code> de l'app (bloc <code>ai</code>, bloc <code>agent</code>). Le second ne dépasse jamais le premier ; les règles de la gateway viennent du premier. Tout est accessible depuis un assistant par les outils MCP de la CMP (<a href="../04-cmp-agents/">04-cmp-agents.md</a> §8).</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D37</td>
+<td>Choix du modèle de texte</td>
+<td>Le modèle est un réglage, pas une décision figée. Candidats (octobre 2026, tenant sur 16 Go avec la garde et les embeddings) : <code>qwen3.5:9b</code> en Q8_0, <code>granite4.2:8b</code> (septembre 2026, Apache 2.0, outils et JSON) en Q8_0, <code>gemma4:12b</code> en Q4 si son support des outils est confirmé. Les Qwen plus récents (3.6 et 3.8) n'existent qu'en 27B et plus, soit 17 Go et plus : trop gros. Choix par un comparatif sur nos propres cas (T1.14) : 20 appels d'outils d'UC7 et UC3, taux d'appels corrects, latence, VRAM.</td>
+<td>1</td>
 </tr>
 <tr>
 <td>D31</td>
@@ -3573,7 +3706,117 @@ en une passe ; l'agent d'implémentation les applique telles quelles.</p>
    validée.</li>
 <li><strong>Côté CMP.</strong> Les choix propres à la CMP sont dans <a href="../04-cmp-agents/">04-cmp-agents.md</a>.</li>
 </ol>
-<h2 id="10-etat-constate-du-cluster-2026-10-25">10. État constaté du cluster (2026-10-25)<a class="headerlink" href="#10-etat-constate-du-cluster-2026-10-25" title="Permanent link">&para;</a></h2>
+<h2 id="10-policies-et-conformite-as-code">10. Policies et conformité as code<a class="headerlink" href="#10-policies-et-conformite-as-code" title="Permanent link">&para;</a></h2>
+<p>Chaque règle est un fichier dans Git, relu par PR, testé en CI, appliqué par Argo CD ou
+kustomize. Pas de règle cliquée dans une interface.</p>
+<table>
+<thead>
+<tr>
+<th>Règle</th>
+<th>Outil</th>
+<th>Où dans Git</th>
+<th>Test en CI</th>
+<th>Phase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Pods restreints (PSS restricted), images taguées, requests et limits</td>
+<td>Kyverno</td>
+<td>K3s <code>k8s/config/kyverno/policies/</code> (existe, en Audit)</td>
+<td><code>kyverno test</code> avec un manifeste conforme et un non conforme par règle</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Isolation réseau entre tenants et egress</td>
+<td>Cilium</td>
+<td><code>cnp-project-base/templates/network-policy.yaml</code> (existe, en entrée seulement)</td>
+<td>V0.1 et V0.2</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Protection des branches GitOps</td>
+<td>GitHub</td>
+<td>réglages des dépôts, vérifiés par script</td>
+<td>V0.5</td>
+<td>0</td>
+</tr>
+<tr>
+<td>Aucune clé de fournisseur hors de <code>ai-gateway</code> : pas de variable <code>*_API_KEY</code> connue (Gemini, OpenAI, Anthropic) ni de Secret de fournisseur dans un autre namespace</td>
+<td>Kyverno, nouvelle <code>ai-no-provider-keys</code></td>
+<td>K3s <code>k8s/config/kyverno/policies/</code></td>
+<td><code>kyverno test</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>La gateway n'est jamais exposée : Services <code>ClusterIP</code> seulement dans <code>ai-gateway</code>, aucune route publique sauf l'entrée A2A</td>
+<td>Kyverno, nouvelle <code>ai-gateway-internal</code></td>
+<td>idem</td>
+<td><code>kyverno test</code></td>
+<td>1</td>
+</tr>
+<tr>
+<td>Autorisation, budgets, route Local</td>
+<td>agentgateway (<code>AgentgatewayPolicy</code>, CEL)</td>
+<td>K3s <code>charts/cnp-ai-policies</code> (D22)</td>
+<td><code>helm template</code> puis validation du schéma ; V1.3 à V1.11</td>
+<td>1</td>
+</tr>
+<tr>
+<td><code>ProjectRecord</code> valide (<code>spec.ai</code>, <code>spec.agents</code>) ; un projet critical n'est jamais Cloud</td>
+<td>validateur de cnp-projects</td>
+<td><code>cnp-projects/schema.json</code>, <code>scripts/validate-registry.py</code></td>
+<td><code>make validate</code> (existe)</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Agents qui exécutent du code : RuntimeClass <code>gvisor</code> ou <code>kata</code> obligatoire ; pas de token de ServiceAccount monté sans besoin</td>
+<td>Kyverno <code>sandbox-guard</code></td>
+<td>K3s <code>k8s/config/kyverno/policies/</code></td>
+<td><code>kyverno test</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td><code>ModelConfig</code> d'un agent : uniquement l'URL de la gateway, jamais celle d'un fournisseur</td>
+<td>Kyverno, nouvelle <code>ai-modelconfig-gateway-only</code></td>
+<td>idem</td>
+<td><code>kyverno test</code></td>
+<td>2</td>
+</tr>
+<tr>
+<td>Ce qu'un agent ou un assistant peut faire sur la plateforme</td>
+<td>stake policy de la CMP</td>
+<td><code>CMP/backend/app/services/agents/policy.yaml</code> (existe)</td>
+<td>tests du backend de la CMP</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Rule of Two</td>
+<td>CMP, à la création de l'agent</td>
+<td>code de la CMP</td>
+<td>test : un agent à trois risques est refusé (VC2.2)</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Qualité et sécurité des réponses</td>
+<td>promptfoo</td>
+<td>dépôt de chaque agent</td>
+<td>bloque la release sous le seuil</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Autorisation par argument d'outil</td>
+<td>OPA</td>
+<td>à définir en phase 3</td>
+<td><code>opa test</code></td>
+<td>3</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Conformité.</strong> Les preuves sont les logs d'audit (D14), archivés en Object Lock pendant
+30 jours, et les traces. La CI vérifie que chaque règle ci-dessus a ses tests. Les preuves AI
+Act restent hors périmètre de la démo.</p>
+<h2 id="11-etat-constate-du-cluster-2026-10-25">11. État constaté du cluster (2026-10-25)<a class="headerlink" href="#11-etat-constate-du-cluster-2026-10-25" title="Permanent link">&para;</a></h2>
 <p>Relevé dans les dépôts K3s, cnp-project-base et CMP, sans accès au cluster. La tâche T0.1
 vérifie ces points sur le cluster avant toute modification.</p>
 <table>
