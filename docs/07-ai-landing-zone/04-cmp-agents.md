@@ -171,12 +171,33 @@ du serveur MCP de la CMP, soumis à la stake policy (nouvelles actions `agent.cr
 
 Deux changements sont nécessaires.
 
-**Accepter les jetons des agents.** Le serveur MCP de la CMP accepte aujourd'hui ses propres
-jetons opaques, émis par son OAuth aux assistants. Un agent hébergé arrive par la gateway avec
-un JWT Keycloak. Proposition : le serveur MCP accepte aussi un JWT du realm `3istor` dont
-l'audience est le serveur MCP de la CMP, obtenu par token exchange ; il lit `azp` pour
-l'agent et `sub` pour l'utilisateur, puis applique la stake policy du projet. L'audience à
-utiliser et qui fait l'échange (l'agent ou la gateway) sont à trancher (§9).
+**Accepter les jetons des agents.** Le serveur MCP de la CMP n'accepte aujourd'hui que ses
+propres jetons opaques, émis par son OAuth aux assistants (`provider.load_access_token`). Un
+agent hébergé arrive par la gateway avec un JWT Keycloak. Recommandation :
+
+1. **Prérequis : vérifier l'audience sur l'API de la CMP (écart G7).** `decode_platform_token`
+   accepte aujourd'hui tout JWT du realm `3istor` (`verify_aud: False`). Un jeton d'agent
+   prévu pour la gateway serait donc accepté par l'API de la CMP. On ajoute une audience
+   `cmp-api` aux jetons de la CMP et on la vérifie.
+2. **Un jeton par destinataire.** Le serveur MCP de la CMP a sa propre audience, `cmp-mcp`.
+   Un agent qui a des outils de la CMP reçoit une client scope optionnelle `cmp-tools`, avec
+   un mapper d'audience `cmp-mcp`. Il demande ce jeton à part (`scope=cmp-tools`), ou par token
+   exchange avec `audience=cmp-mcp` quand il agit pour un utilisateur. Les jetons destinés à la
+   gateway gardent l'audience `ai-gateway`. C'est la règle de la spécification MCP : un jeton
+   est lié au serveur qui le reçoit, et on ne fait pas suivre un jeton émis pour un autre.
+3. **La gateway vérifie sans transformer.** Sur la route `/mcp` de la CMP, agentgateway
+   vérifie le JWT (émetteur, `aud` = `cmp-mcp`, filtre d'outils), puis le transmet tel quel.
+   La CMP le vérifie à nouveau, comme elle le fait déjà pour les autres jetons.
+4. **Ce que la CMP en déduit.** `azp` désigne l'agent : il doit figurer dans `spec.agents[]`
+   de son projet avec le statut `active`. Si `sub` est un utilisateur (token exchange), les
+   droits sont l'intersection des droits de l'utilisateur sur le projet et des outils
+   autorisés de l'agent. Sinon, l'agent agit avec son seul rôle d'agent dans son projet. Le
+   journal enregistre `via: <azp>`.
+5. **Couper.** Suspendre l'agent désactive son client Keycloak et passe son statut à
+   `suspended` : la CMP refuse ses jetons immédiatement, sans attendre les 5 minutes.
+
+Ce choix n'ajoute aucun composant, réutilise la vérification JWT déjà présente dans la CMP et
+ferme G7 au passage.
 
 **Adapter la stake policy.** Pour un assistant, `ask` veut dire « demander à l'utilisateur
 dans la conversation ». Un agent hébergé n'a souvent personne dans la conversation : `ask`
@@ -202,10 +223,13 @@ devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'ag
 1. **Utilisateurs d'une app de tenant.** Un projet qui active la fonctionnalité `keycloak` a
    son propre realm pour les utilisateurs de ses apps, alors que les clients d'agent sont dans
    le realm `3istor`. Pour
-   UC21, un agent qui agit au nom d'un utilisateur du clone de Twitter devra échanger un jeton
-   d'un autre realm. À trancher : échange entre realms, ou l'app appelle la gateway avec sa
-   propre identité et transmet l'utilisateur en claim.
-2. **Audience du serveur MCP de la CMP** et acteur du token exchange (§7).
+   UC21, un agent qui agit au nom d'un utilisateur du clone de Twitter devrait échanger un
+   jeton d'un autre realm. **Recommandation pour la démo :** pas d'échange entre realms. L'app
+   appelle la gateway avec sa propre identité (un client dans `3istor`) et transmet
+   l'identifiant de l'utilisateur pour le budget et l'audit, sans lui donner de droits.
+   L'assistant agit comme un compte de l'app (le « bot »), pas comme l'utilisateur.
+2. **Client scope `cmp-tools`** : à créer dans Keycloak, avec la vérification d'audience côté
+   CMP (§7).
 3. **Emplacement des politiques par agent** de la gateway (§5), à fixer à l'essai.
 4. **Chat de test** : faut-il un budget de test séparé du budget de production ?
 5. **Templates d'agent** : lesquels livrer en premier (proposition : RAG sur une doc, puis
