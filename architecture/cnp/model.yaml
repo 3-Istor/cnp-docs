@@ -482,7 +482,7 @@ elements:
   - {id: ov-cmp-mcp, kind: backend, parent: ov-g-cmp, icon: mcp, title: "CMP MCP server", tech: "[FastMCP · stake policy]", desc: "Platform tools for assistants<br>and agents: create, release, logs."}
   - {id: ov-g-identity, kind: group, parent: ov-z-cluster, color: rose, icon: keycloak, title: "IDENTITY & SECRETS"}
   - {id: ov-keycloak, kind: security, parent: ov-g-identity, icon: keycloak, title: "Keycloak", tech: "[OIDC · token exchange]", desc: "Users today; + one client per agent,<br>its SA token as the credential."}
-  - {id: ov-vault, kind: database, parent: ov-g-identity, icon: vault, title: "Vault + Secrets Operator", tech: "[KV v2 → Kubernetes Secret]", desc: "App secrets today; + the Gemini key,<br>read by the gateway only."}
+  - {id: ov-vault, kind: database, parent: ov-g-identity, icon: vault, title: "Vault + Secrets Operator", tech: "[KV v2 → Kubernetes Secret]", desc: "App secrets today; + the Gemini keys,<br>read by the gateway only."}
   - {id: ov-g-tenant, kind: group, parent: ov-z-cluster, color: indigo, icon: k8s-ns, title: "TENANT APP", sub: "ns <project>-<app> · default-deny"}
   - {id: ov-app, kind: backend, parent: ov-g-tenant, icon: k8s-pod, title: "App pods", tech: "[generic Helm chart]", desc: "Tenant workload; with the AI zone<br>it can call models via the gateway."}
   - {id: ov-db, kind: database, parent: ov-g-tenant, icon: cnpg, title: "PostgreSQL", tech: "[CloudNativePG]", desc: "One database cluster per app."}
@@ -511,8 +511,8 @@ elements:
   - {id: ov-prom, kind: database, parent: ov-g-obs, icon: grafana, title: "VictoriaMetrics", tech: "[metrics · vmalert]", desc: "Metrics and alerts today; + GenAI<br>token series per project."}
   - {id: ov-grafana, kind: frontend, parent: ov-g-obs, icon: grafana, title: "Grafana", tech: "[dashboards · alerts]", desc: "Cost and quota per project;<br>alert at 80 % of the budget."}
   - {id: ov-z-google, kind: region, color: sky, icon: gemini, title: "GOOGLE AI STUDIO", sub: "SaaS", status: planned, target: IA-1}
-  - {id: ov-gemini, kind: cloud, parent: ov-z-google, icon: gemini, title: "Gemini API", tech: "[free tier · one API key]", desc: "Default model. Free-tier data may<br>be used by Google: no client data."}
-  - {id: ov-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "via WireGuard", status: planned, target: IA-1}
+  - {id: ov-gemini, kind: cloud, parent: ov-z-google, icon: gemini, title: "Gemini API", tech: "[free tier · several keys]", desc: "Default model: keys balanced (P2C), then<br>the GPU server on 429. Free-tier data<br>may be used by Google: no client data."}
+  - {id: ov-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "HTTPS, local network, behind Caddy", status: planned, target: IA-1}
   - {id: ov-ollama, kind: backend, parent: ov-z-homelab, icon: ollama, title: "Ollama", tech: "[RTX 5080 · OpenAI-compatible]", desc: "Fallback on 429 and models for<br>Local projects: data stays home."}
   - {id: ov-z-github, kind: region, color: slate, icon: github, title: "GITHUB"}
   - {id: ov-repos, kind: external, parent: ov-z-github, icon: github, title: "Repos + GHCR", tech: "[GitHub · Actions]", desc: "Source of truth for apps, agents<br>and the platform; CI builds images."}
@@ -556,10 +556,10 @@ elements:
   - {id: hl-agw, kind: backend, parent: hl-z-agw, icon: k8s-deploy, title: "agentgateway", tech: "[proxy LLM · MCP · A2A]", desc: "Vérifie le JWT de l'agent, la policy CEL par outil<br>et son budget de tokens, puis route l'appel."}
   - {id: hl-guard, kind: security, parent: hl-z-agw, icon: python, title: "Guardrails", tech: "[promptGuard · webhook]", desc: "Masque PII et secrets, puis<br>demande l'avis de Llama Guard."}
   - {id: hl-z-google, kind: region, color: sky, icon: gemini, title: "GOOGLE AI", sub: "SaaS", status: planned, target: IA-1}
-  - {id: hl-gemini, kind: cloud, parent: hl-z-google, icon: gemini, title: "Gemini API", tech: "[free tier]", desc: "Modèle par défaut ; pas de<br>données clients dessus."}
+  - {id: hl-gemini, kind: cloud, parent: hl-z-google, icon: gemini, title: "Gemini API", tech: "[free tier]", desc: "Plusieurs clés équilibrées (P2C),<br>puis le serveur GPU sur 429 ;<br>pas de données clients dessus."}
   - {id: hl-z-tools, kind: region, color: sky, icon: mcp, title: "OUTILS MCP", sub: "ns mcp-tools", status: planned, target: IA-2}
   - {id: hl-tools, kind: backend, parent: hl-z-tools, icon: mcp, title: "ToolHive", tech: "[serveurs MCP · registre signé]", desc: "Un conteneur par outil ; les<br>secrets ne vont pas à l'agent."}
-  - {id: hl-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "via WireGuard", status: planned, target: IA-1}
+  - {id: hl-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "HTTPS, réseau local, derrière Caddy", status: planned, target: IA-1}
   - {id: hl-ollama, kind: backend, parent: hl-z-homelab, icon: ollama, title: "Ollama + Llama Guard", tech: "[RTX 5080]", desc: "Modèles locaux, secours sur 429,<br>classifieur des guardrails."}
   - {id: hl-z-shared, kind: region, color: slate, icon: k8s-ns, title: "SERVICES TRANSVERSES"}
   - {id: hl-identity, kind: security, parent: hl-z-shared, icon: keycloak, title: "Keycloak + Vault", tech: "[OIDC · KV v2]", desc: "+ un client par agent, authentifié<br>par son ServiceAccount."}
@@ -829,7 +829,7 @@ connections:
   - {id: ov-c-app-aigw, from: ov-app, to: ov-aigw, protocol: HTTP, verb: "apps call models too", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-quota, from: ov-aigw, to: ov-quota, verb: "token budget left?", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-gemini, from: ov-aigw, to: ov-gemini, protocol: HTTPS, verb: "default model", kind: flow, status: planned, target: IA-1}
-  - {id: ov-c-aigw-ollama, from: ov-aigw, to: ov-ollama, protocol: WireGuard, verb: "on 429 or Local project", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-aigw-ollama, from: ov-aigw, to: ov-ollama, protocol: HTTPS, verb: "on 429 or Local project", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-tools, from: ov-aigw, to: ov-toolhive, protocol: MCP, verb: "tools/call", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-cmp-mcp, from: ov-aigw, to: ov-cmp-mcp, protocol: MCP, verb: "platform tools", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-alloy, from: ov-aigw, to: ov-alloy, protocol: OTLP, verb: "GenAI spans and token metrics", kind: flow, status: planned, target: IA-1}
@@ -840,7 +840,7 @@ connections:
   - {id: ov-c-grafana-prom, from: ov-grafana, to: ov-prom, verb: "MetricsQL", kind: flow}
   - {id: ov-c-cmp-repos, from: ov-cmp, to: ov-repos, verb: "commit projects and Agents", kind: flow}
   - {id: ov-c-cmp-keycloak, from: ov-cmp, to: ov-keycloak, verb: "create the agent client", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-vault-aigw, from: ov-vault, to: ov-aigw, verb: "mount the Gemini key", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-vault-aigw, from: ov-vault, to: ov-aigw, verb: "mount the Gemini keys", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-argocd-repos, from: ov-argocd, to: ov-repos, verb: "pull desired state", kind: flow}
   - {id: ov-c-argocd-kapi, from: ov-argocd, to: ov-kapi, verb: "apply", kind: flow}
   - {id: ov-c-argocd-clouds, from: ov-argocd, to: ov-clouds, protocol: WireGuard, verb: "sync", kind: flow}
@@ -854,7 +854,7 @@ connections:
   - {id: ov-c-aigw-agent, from: ov-aigw, to: ov-agent, protocol: A2A, verb: "message/send", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-agent2, from: ov-aigw, to: ov-agent-2, protocol: A2A, verb: "delegate a task", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-guard, from: ov-aigw, to: ov-guard-hook, protocol: HTTP, verb: "promptGuard webhook", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-guard-llama, from: ov-guard-hook, to: ov-llamaguard, protocol: WireGuard, verb: "classify the prompt", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-guard-llama, from: ov-guard-hook, to: ov-llamaguard, protocol: HTTPS, verb: "classify the prompt", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-agwctrl-kapi, from: ov-agw-ctrl, to: ov-kapi, verb: "watch routes and policies", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-agwctrl-aigw, from: ov-agw-ctrl, to: ov-aigw, protocol: xDS, verb: "push config", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-kagent-kapi, from: ov-kagent, to: ov-kapi, verb: "create agent Deployments", kind: flow, status: planned, target: IA-2}

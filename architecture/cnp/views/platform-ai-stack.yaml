@@ -106,7 +106,7 @@ cards:
       - "[E] [F] The agentgateway controller turns routes and AgentgatewayPolicy into the proxy's configuration."
       - "[G] Kyverno checks every pod at admission: restricted security context, the right RuntimeClass per tier, signed images only."
       - "[H] agent-sandbox keeps warm sandboxes ready per tier. [I] The CMP creates the agent's Keycloak client."
-      - "[J] The Secrets Operator mounts the Gemini key in the gateway only. [K] ToolHive checks each MCP server against the registry. [L] Argo CD syncs EKS and GKE the same way."
+      - "[J] The Secrets Operator mounts the Gemini keys in the gateway only. [K] ToolHive checks each MCP server against the registry. [L] Argo CD syncs EKS and GKE the same way."
   - id: card-isolation
     title: "Isolation boundaries · what keeps what apart"
     color: rose
@@ -114,7 +114,7 @@ cards:
       - "Network: Cilium default-deny per namespace (P0); agents and sandboxes reach only the AI gateway. The two red arrows are refused: a direct call to Gemini, a sandbox reaching an app."
       - "Runtime, three tiers per agent: runc + seccomp for agents that don't run code, gVisor (user-space kernel) for generated code, Kata (micro-VM) for untrusted code."
       - "Identity: one Keycloak client per agent, federated with its ServiceAccount token; short tokens; CEL decides per tool and per agent at the gateway."
-      - "Keys and data: the Gemini key lives in Vault and the gateway only; promptGuard masks PII before any call; Local projects stay on Ollama."
+      - "Keys and data: the Gemini keys live in Vault and the gateway only; promptGuard masks PII before any call; Local projects stay on Ollama."
   - {id: card-legend, title: Legend, color: slate, legend: true}
 
 labels:
