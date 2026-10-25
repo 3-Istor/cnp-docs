@@ -1,20 +1,20 @@
 <mxfile host="archgen">
   <diagram id="ai-gateway-call-light" name="CNP · AI landing zone · A model call (light)">
-    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1845" pageHeight="1020" background="#f8fafc" math="0" shadow="0">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1775" pageHeight="1020" background="#f8fafc" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODQ1IiBoZWlnaHQ9IjEwMjAiPjxkZWZzPjxwYXR0ZXJuIGlkPSJnIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlMmU4ZjAiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmYWZjIi8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
-          <mxGeometry x="0" y="0" width="1845" height="1020" as="geometry" />
+        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNzc1IiBoZWlnaHQ9IjEwMjAiPjxkZWZzPjxwYXR0ZXJuIGlkPSJnIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlMmU4ZjAiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmYWZjIi8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1775" height="1020" as="geometry" />
         </mxCell>
         <mxCell id="header-dot" value="" style="ellipse;fillColor=#059669;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="40" y="44" width="12" height="12" as="geometry" />
         </mxCell>
         <mxCell id="header-title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;CNP · AI landing zone · A model call&lt;/b&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=24;fontColor=#0f172a;" vertex="1" parent="1">
-          <mxGeometry x="64" y="30" width="1445" height="40" as="geometry" />
+          <mxGeometry x="64" y="30" width="1375" height="40" as="geometry" />
         </mxCell>
         <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:13px&quot;&gt;What happens, in order, when a hosted agent asks a model and Gemini&amp;#39;s free quota is spent?&lt;/font&gt;&lt;br&gt;Scope: proposal, 2026-10-25 · the connections of the ai-gateway view, nothing deployed&lt;br&gt;Out of scope: tool calls over MCP (same chain, then the mcp route) · traces and metrics (background of the ai-gateway view)&lt;br&gt;v0.2 · source: cnp-docs/architecture/cnp&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#475569;" vertex="1" parent="1">
-          <mxGeometry x="64" y="74" width="1445" height="80" as="geometry" />
+          <mxGeometry x="64" y="74" width="1375" height="80" as="geometry" />
         </mxCell>
         <mxCell id="life-hosted-agent" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
@@ -48,8 +48,8 @@
         </mxCell>
         <mxCell id="life-gpu-server" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1680" y="256" as="sourcePoint" />
-            <mxPoint x="1680" y="980" as="targetPoint" />
+            <mxPoint x="1645" y="256" as="sourcePoint" />
+            <mxPoint x="1645" y="980" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="msg-tx" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;1&lt;/span&gt; POST /token · token exchange, audience ai-gateway&lt;/span&gt;" style="html=1;strokeColor=#e11d48;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#be123c;" edge="1" parent="1">
@@ -90,13 +90,13 @@
         <mxCell id="msg-guard" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;6&lt;/span&gt; classify the prompt (Llama Guard, through the guardrail adapter)&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="785" y="604" as="sourcePoint" />
-            <mxPoint x="1680" y="604" as="targetPoint" />
+            <mxPoint x="1645" y="604" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="msg-reply-guard-7" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;7&lt;/span&gt; safe&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1680" y="652" as="sourcePoint" />
+            <mxPoint x="1645" y="652" as="sourcePoint" />
             <mxPoint x="785" y="652" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
@@ -118,13 +118,13 @@
         <mxCell id="msg-fb" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;10&lt;/span&gt; same prompt on the GPU server&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="785" y="796" as="sourcePoint" />
-            <mxPoint x="1680" y="796" as="targetPoint" />
+            <mxPoint x="1645" y="796" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="msg-reply-fb-11" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;11&lt;/span&gt; token stream&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1680" y="844" as="sourcePoint" />
+            <mxPoint x="1645" y="844" as="sourcePoint" />
             <mxPoint x="785" y="844" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
@@ -166,8 +166,8 @@
         <mxCell id="gemini__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjOEU3NUIyIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R29vZ2xlIEdlbWluaTwvdGl0bGU+PHBhdGggZD0iTTExLjA0IDE5LjMyUTEyIDIxLjUxIDEyIDI0cTAtMi40OS45My00LjY4Ljk2LTIuMTkgMi41OC0zLjgxdDMuODEtMi41NVEyMS41MSAxMiAyNCAxMnEtMi40OSAwLTQuNjgtLjkzYTEyLjMgMTIuMyAwIDAgMS0zLjgxLTIuNTggMTIuMyAxMi4zIDAgMCAxLTIuNTgtMy44MVExMiAyLjQ5IDEyIDBxMCAyLjQ5LS45NiA0LjY4LS45MyAyLjE5LTIuNTUgMy44MWExMi4zIDEyLjMgMCAwIDEtMy44MSAyLjU4UTIuNDkgMTIgMCAxMnEyLjQ5IDAgNC42OC45NiAyLjE5LjkzIDMuODEgMi41NXQyLjU1IDMuODEiLz48L3N2Zz4=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="gemini">
           <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="gpu-server" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;GPU server&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[reverse proxy · token or mTLS]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#f1f5f9;html=1;whiteSpace=wrap;strokeColor=#64748b;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1555" y="200" width="250" height="56" as="geometry" />
+        <mxCell id="gpu-server" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;GPU server&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[Caddy · HTTPS 443]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#f1f5f9;html=1;whiteSpace=wrap;strokeColor=#64748b;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1555" y="200" width="180" height="56" as="geometry" />
         </mxCell>
         <mxCell id="gpu-server__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjMDg5MWIyIiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48cmVjdCB4PSIzIiB5PSIyIiB3aWR0aD0iMTgiIGhlaWdodD0iNiIgcng9IjEuNSIvPjxyZWN0IHg9IjMiIHk9IjkiIHdpZHRoPSIxOCIgaGVpZ2h0PSI2IiByeD0iMS41Ii8+PHJlY3QgeD0iMyIgeT0iMTYiIHdpZHRoPSIxOCIgaGVpZ2h0PSI2IiByeD0iMS41Ii8+PHBhdGggZD0iTTcgNWguMDFNNyAxMmguMDFNNyAxOWguMDFNMTEgNWg2TTExIDEyaDZNMTEgMTloNiIvPjwvc3ZnPgo=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="gpu-server">
           <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />

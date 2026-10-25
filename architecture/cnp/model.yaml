@@ -270,10 +270,10 @@ elements:
   - {id: toolhive, kind: backend, parent: g-mcp-tools, icon: mcp, title: "MCP servers", tech: "[ToolHive operator]", desc: "Third-party tools, one container each", ports: [{name: http, protocol: TCP, port: 8080}], status: planned, target: IA-2}
   - {id: tempo, kind: database, parent: g-ops, icon: grafana, title: "Tempo", tech: "[Grafana Tempo · monolithic]", desc: "GenAI traces", ports: [{name: otlp, protocol: TCP, port: 4317}], status: planned, target: IA-1}
   - {id: gemini, kind: cloud, parent: z-google-ai, icon: gemini, title: "Gemini API", tech: "[generativelanguage.googleapis.com]", desc: "Default model; several keys, one per<br>free account, balanced by the proxy", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: IA-1}
-  - {id: gpu-server, kind: external, parent: z-homelab-gpu, icon: rack, title: "GPU server", tech: "[reverse proxy · token or mTLS]", desc: "Defined by its contract, not its content:<br>text, embeddings, guard, image.<br>Ollama is one possible implementation.", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: IA-1}
-  - {id: md-svc-text, kind: backend, parent: z-homelab-gpu, icon: rack, title: "Text · chat completions", tech: "[OpenAI-compatible · streaming]", desc: "Fallback when Gemini answers 429; the<br>only model of Local projects.<br>Down: Local projects get 503.", status: planned, target: IA-1}
-  - {id: md-svc-embed, kind: backend, parent: z-homelab-gpu, icon: rack, title: "Embeddings", tech: "[OpenAI-compatible · /v1/embeddings]", desc: "Feeds the RAG of UC7.<br>Down: the RAG is unavailable.", status: planned, target: IA-1}
-  - {id: md-svc-image, kind: backend, parent: z-homelab-gpu, icon: rack, title: "Image · MCP tool", tech: "[generate_image · calls the server API]", desc: "For agents that draw.<br>Down: the tool returns a clear error.", status: planned, target: IA-2}
+  - {id: gpu-server, kind: external, parent: z-homelab-gpu, icon: rack, title: "GPU server", tech: "[Caddy · HTTPS 443]", desc: "Defined by its contract, not its content.<br>Caddy: one token per consumer (gateway,<br>guard webhook, image MCP server),<br>cluster node IPs only.", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: IA-1}
+  - {id: md-svc-text, kind: backend, parent: z-homelab-gpu, icon: rack, title: "Text · chat completions", tech: "[Ollama · OpenAI-compatible]", desc: "Text model (a setting, D37), default<br>qwen3.5:9b Q8_0, always loaded.<br>Down: Local projects get 503.", status: planned, target: IA-1}
+  - {id: md-svc-embed, kind: backend, parent: z-homelab-gpu, icon: rack, title: "Embeddings", tech: "[Ollama · nomic-embed-text]", desc: "Always loaded. Feeds the RAG of UC7.<br>Down: the RAG is unavailable.", status: planned, target: IA-1}
+  - {id: md-svc-image, kind: backend, parent: z-homelab-gpu, icon: rack, title: "Image · ComfyUI", tech: "[on demand · MCP generate_image]", desc: "A GPU lock unloads the text model<br>while an image is generated.<br>Down: the tool returns a clear error.", status: planned, target: IA-2}
   - {id: agent-sandbox, kind: tool, parent: g-agents, icon: k8s-crd, title: "agent-sandbox", tech: "[Sandbox CRD · gVisor RuntimeClass]", desc: "Isolates code written by agents", status: planned, target: IA-2}
   - {id: opa, kind: security, parent: g-ai-gateway, icon: k8s-deploy, title: "OPA", tech: "[extAuth · opa-envoy-plugin]", desc: "Per-tool authorization", status: planned, target: IA-3}
   # Gaps of the current landing zone to close (proposal, 2026-10-22): P0 before hosting agents.
@@ -317,6 +317,7 @@ elements:
   - {id: ag-secret-gpu, kind: database, parent: g-ag-crd-agw, icon: k8s-secret, title: "Secret gpu-server-token", tech: "[key Authorization]", desc: "The token the GPU server's proxy<br>expects, written by VSO from Vault.", status: planned, target: IA-1}
   - {id: ag-pol-auth, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy auth", tech: "[traffic.jwtAuthentication + authorization]", desc: "Keycloak JWT (iss, aud, JWKS), then CEL<br>rules on its claims; no match: 403.<br>Why: no anonymous model access.", status: planned, target: IA-1}
   - {id: ag-pol-rate, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy budget", tech: "[traffic.rateLimit.global · Tokens]", desc: "Daily token budget per agent, keyed by a JWT<br>claim (azp) in the rate limit service.<br>Over the budget: 429. Why: cap one agent.", status: planned, target: IA-1}
+  - {id: ag-pol-limits, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy limits", tech: "[traffic.rateLimit.local · max_tokens]", desc: "30 requests a minute per agent (local<br>limiter); max_tokens capped at 4,096.<br>Why: bound one call and one burst.", status: planned, target: IA-1}
   - {id: ag-pol-guard, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy guard", tech: "[backend.ai.promptGuard]", desc: "Regex masks PII and secrets, then the<br>webhook; no answer: refused.<br>Why: check the prompt before the model.", status: planned, target: IA-2}
   - {id: ag-pol-failover, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy failover", tech: "[backend.health · traffic.retry]", desc: "Evicts a provider on 429 so the next<br>group takes over; retry resends.<br>Why: free quota spent, GPU answers.", status: planned, target: IA-1}
   - {id: ag-pol-tools, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy tools", tech: "[backend.mcp.authorization]", desc: "CEL on the claims and mcp.tool.name:<br>which agent may call which tool.<br>Why: per-tool rights, no extra service.", status: planned, target: IA-2}
@@ -328,7 +329,7 @@ elements:
   - {id: ag-f-listener, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Listener :8080", tech: "[frontend · HTTP]", desc: "Where requests enter.<br>Internal Service, no public route.", status: planned, target: IA-1}
   - {id: ag-f-jwt, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "jwtAuthentication", tech: "[traffic · Strict]", desc: "Checks signature (cached JWKS), iss<br>and aud before anything else.<br>Why: reject early, before any cost.", status: planned, target: IA-1}
   - {id: ag-f-authz, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "authorization", tech: "[traffic · CEL · Allow]", desc: "Allow rules on the claims; no rule<br>matches: 403.<br>Why: deny by default.", status: planned, target: IA-1}
-  - {id: ag-f-rl, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "rateLimit", tech: "[traffic · global · Tokens]", desc: "Asks the rate limit service whether the<br>agent's daily budget is spent.<br>Why: a 429 before any model cost.", status: planned, target: IA-1}
+  - {id: ag-f-rl, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "rateLimit", tech: "[traffic · global · Tokens]", desc: "Asks the rate limit service if the budget<br>is spent; service down: refused (fail-closed).<br>Why: a 429 before any model cost.", status: planned, target: IA-1}
   - {id: ag-f-route, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Route match", tech: "[HTTPRoute · backendRef]", desc: "Picks the route by path and header,<br>then its AgentgatewayBackend.<br>Why: Local calls get llm-local.", status: planned, target: IA-1}
   - {id: ag-f-guard, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "promptGuard", tech: "[backend.ai · regex, webhook]", desc: "Masks PII and secrets, then asks the<br>guardrail adapter. Down: refused.<br>Why: check the prompt before the model.", status: planned, target: IA-2}
   - {id: ag-f-pick, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Provider choice", tech: "[groups · P2C · health]", desc: "Best healthy provider of group 1;<br>on 429 it is evicted, group 2 follows.<br>Why: the free quota lasts.", status: planned, target: IA-1}
@@ -354,8 +355,8 @@ elements:
 
   - {id: sb-template, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxTemplate python", tech: "[podTemplate · networkPolicy]", desc: "Blueprint: image, runtimeClassName,<br>resources, network rules.<br>Why: admins set the safe defaults.", status: planned, target: IA-2}
   - {id: sb-template-kata, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxTemplate python-kata", tech: "[podTemplate · networkPolicy]", desc: "Same blueprint with runtimeClassName<br>kata, for untrusted code.<br>Why: pick the wall per agent.", status: planned, target: IA-2}
-  - {id: sb-warmpool, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxWarmPool python", tech: "[replicas 1 · OnReplenish]", desc: "Keeps sandboxes started in advance<br>from the template.<br>Why: no cold start for the agent.", status: planned, target: IA-2}
-  - {id: sb-claim, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxClaim <task>", tech: "[warmPoolRef · lifecycle]", desc: "One per task, created by the agent.<br>shutdownTime, ttlSecondsAfterFinished.<br>Why: sandboxes die with the task.", status: planned, target: IA-2}
+  - {id: sb-warmpool, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxWarmPool python", tech: "[1 replica · 512 Mi · OnReplenish]", desc: "Keeps one gVisor sandbox started from<br>the python template; none for Kata.<br>Why: no cold start for the agent.", status: planned, target: IA-2}
+  - {id: sb-claim, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxClaim <task>", tech: "[warmPoolRef or template · lifecycle]", desc: "One per task, created by the agent.<br>shutdownTime, ttlSecondsAfterFinished.<br>Why: sandboxes die with the task.", status: planned, target: IA-2}
   - {id: sb-svc, kind: backend, parent: g-sb-crd, icon: k8s-svc, title: "Service <id>", tech: "[headless · created by controller]", desc: "Stable DNS name for the sandbox:<br><id>.<ns>.svc.cluster.local.<br>Why: router and SDK find the pod.", status: planned, target: IA-2}
   - {id: sb-sandbox, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "Sandbox <id>", tech: "[agents.x-k8s.io/v1beta1]", desc: "One stateful pod with a stable name.<br>status: serviceFQDN, podIPs, Ready.<br>Why: the unit the controller runs.", status: planned, target: IA-2}
   - {id: sb-rbac, kind: security, parent: g-sb-guard-ns, icon: k8s-sa, title: "Role agent-sandbox-user", tech: "[RoleBinding · agent SA]", desc: "Agent may create and delete claims,<br>read their status, nothing else.<br>Why: least privilege for the agent.", status: planned, target: IA-2}
@@ -364,7 +365,7 @@ elements:
   - {id: sb-rc, kind: security, parent: g-sb-guard, icon: k8s-crd, title: "RuntimeClass gvisor", tech: "[handler runsc]", desc: "Tells containerd to start the pod<br>under gVisor instead of runc.<br>Why: one name selects the isolation.", status: planned, target: IA-2}
   - {id: sb-kpol, kind: security, parent: g-sb-guard, icon: kyverno, title: "ClusterPolicy sandbox-guard", tech: "[Kyverno · Enforce]", desc: "Agent pods: PSS restricted, no SA<br>token; code-running agents must use<br>gvisor or kata. Why: tier by risk.", status: planned, target: IA-2}
   - {id: sb-c-core, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Sandbox controller", tech: "[agent-sandbox-controller]", desc: "Creates Pod + Service per Sandbox;<br>pauses, resumes, deletes on time.<br>Why: one stateful pod per sandbox.", status: planned, target: IA-2}
-  - {id: sb-c-ext, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Extensions controllers", tech: "[template · warm pool · claim]", desc: "Fills the pool from the template,<br>binds each claim to a warm Sandbox.<br>Why: claims stay simple for agents.", status: planned, target: IA-2}
+  - {id: sb-c-ext, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Extensions controllers", tech: "[template · warm pool · claim]", desc: "Fills the warm pool, binds each claim<br>to a Sandbox (warm, or new for Kata).<br>Why: claims stay simple for agents.", status: planned, target: IA-2}
   - {id: sb-router, kind: backend, parent: g-sb-router, icon: k8s-svc, title: "sandbox-router", tech: "[sandbox-router-svc :8080]", desc: "Reverse proxy from the SDK to the<br>right sandbox pod.<br>Why: no port-forward with gVisor, Kata.", status: planned, target: IA-2}
   - {id: sb-kubelet, kind: backend, parent: g-sb-node, icon: kubernetes, title: "kubelet", tech: "[K3s agent]", desc: "Starts the pods scheduled on this<br>node and reports their status.<br>Already runs today."}
   - {id: sb-containerd, kind: backend, parent: g-sb-node, icon: docker, title: "containerd", tech: "[CRI · K3s embedded]", desc: "Pulls images, picks the runtime<br>handler from the RuntimeClass.<br>Already runs today."}
@@ -446,9 +447,9 @@ elements:
   - {id: md-quota, kind: cloud, parent: z-google-ai, icon: gemini, title: "Quota counters", tech: "[RPM · TPM · RPD]", desc: "Per project; any one exceeded → 429.<br>RPD resets at midnight Pacific.<br>Why: the free tier's real limit.", status: planned, target: IA-1}
   - {id: md-project, kind: cloud, parent: z-google-ai, icon: gemini, title: "Google Cloud projects", tech: "[free tier · one per account]", desc: "Each owns its key and its quota; limits<br>are per project, not per key.<br>Why: other projects' keys add quota.", status: planned, target: IA-1}
   - {id: md-gpu, kind: backend, parent: z-homelab-gpu, icon: rack, title: "RTX 5080", tech: "[16 GB VRAM · CUDA]", desc: "Example hardware, shared by the services.<br>Why: the first calls after a model<br>switch are slow.", status: planned, target: IA-1}
-  - {id: md-store, kind: database, parent: z-homelab-gpu, icon: ollama, title: "Model store", tech: "[Ollama · OLLAMA_MODELS]", desc: "Example: pulled models, loaded on demand.<br>Why: no download per request.", status: planned, target: IA-1}
-  - {id: md-guard, kind: security, parent: z-homelab-gpu, icon: rack, title: "Guard · Llama Guard 3", tech: "[or equivalent · classifier]", desc: "Classifies prompts and answers, called<br>by the guardrail adapter.<br>Down: the request is refused.", status: planned, target: IA-2}
-  - {id: md-ollama-cfg, kind: tool, parent: z-homelab-gpu, icon: ollama, title: "Example: Ollama settings", tech: "[server environment]", desc: "NUM_PARALLEL 2, MAX_LOADED_MODELS 1,<br>KEEP_ALIVE 30m, KV cache q8_0.<br>Why: fit 16 GB, keep it warm.", status: planned, target: IA-1}
+  - {id: md-store, kind: database, parent: z-homelab-gpu, icon: ollama, title: "Model store", tech: "[Ollama · OLLAMA_MODELS]", desc: "Pulled models, loaded on first use.<br>Why: no download per request.", status: planned, target: IA-1}
+  - {id: md-guard, kind: security, parent: z-homelab-gpu, icon: rack, title: "Guard · llama-guard3:1b", tech: "[Ollama · classifier]", desc: "Always loaded; classifies prompts and<br>answers for the guardrail adapter.<br>Down: the request is refused.", status: planned, target: IA-2}
+  - {id: md-ollama-cfg, kind: tool, parent: z-homelab-gpu, icon: ollama, title: "Ollama settings", tech: "[server environment]", desc: "MAX_LOADED_MODELS 3, NUM_PARALLEL 2,<br>KEEP_ALIVE -1, CONTEXT_LENGTH 8192,<br>KV cache q8_0.", status: planned, target: IA-1}
 
   # GenAI observability zoom (proposal, 2026-10-23): OTel GenAI conventions through Alloy to Tempo and VictoriaMetrics.
   - {id: g-ob-alloy, kind: group, parent: g-ops, color: orange, icon: grafana-alloy, title: "ALLOY PIPELINE", sub: "otelcol components"}
@@ -482,12 +483,12 @@ elements:
   - {id: ov-cmp-mcp, kind: backend, parent: ov-g-cmp, icon: mcp, title: "CMP MCP server", tech: "[FastMCP · stake policy]", desc: "Platform tools for assistants<br>and agents: create, release, logs."}
   - {id: ov-g-identity, kind: group, parent: ov-z-cluster, color: rose, icon: keycloak, title: "IDENTITY & SECRETS"}
   - {id: ov-keycloak, kind: security, parent: ov-g-identity, icon: keycloak, title: "Keycloak", tech: "[OIDC · token exchange]", desc: "Users today; + one client per agent,<br>its SA token as the credential."}
-  - {id: ov-vault, kind: database, parent: ov-g-identity, icon: vault, title: "Vault + Secrets Operator", tech: "[KV v2 → Kubernetes Secret]", desc: "App secrets today; + the Gemini key,<br>read by the gateway only."}
+  - {id: ov-vault, kind: database, parent: ov-g-identity, icon: vault, title: "Vault + Secrets Operator", tech: "[KV v2 → Kubernetes Secret]", desc: "App secrets today; + the Gemini keys,<br>read by the gateway only."}
   - {id: ov-g-tenant, kind: group, parent: ov-z-cluster, color: indigo, icon: k8s-ns, title: "TENANT APP", sub: "ns <project>-<app> · default-deny"}
   - {id: ov-app, kind: backend, parent: ov-g-tenant, icon: k8s-pod, title: "App pods", tech: "[generic Helm chart]", desc: "Tenant workload; with the AI zone<br>it can call models via the gateway."}
   - {id: ov-db, kind: database, parent: ov-g-tenant, icon: cnpg, title: "PostgreSQL", tech: "[CloudNativePG]", desc: "One database cluster per app."}
   - {id: ov-g-agents, kind: group, parent: ov-z-cluster, color: amber, icon: k8s-ns, title: "AGENT RUNTIME", sub: "ns <project>-agents · egress: AI gateway only", status: planned, target: IA-2}
-  - {id: ov-sb-ctrl, kind: backend, parent: ov-g-agents, icon: kubernetes, title: "agent-sandbox", tech: "[Sandbox CRDs · warm pools · router]", desc: "Hands a warm sandbox per task and<br>picks its tier from the template."}
+  - {id: ov-sb-ctrl, kind: backend, parent: ov-g-agents, icon: kubernetes, title: "agent-sandbox", tech: "[Sandbox CRDs · warm pools · router]", desc: "Hands a warm gVisor sandbox (pool of 1)<br>or starts a Kata one, per task."}
   - {id: ov-g-tier-runc, kind: group, parent: ov-g-agents, color: slate, icon: openstack, title: "TIER 1 · STANDARD", sub: "runc + seccomp"}
   - {id: ov-agent, kind: backend, parent: ov-g-tier-runc, icon: python, title: "Agent pod", tech: "[kagent BYO · LangGraph, ADK…]", desc: "Plans, calls models, tools and<br>other agents. No key, no shell."}
   - {id: ov-g-tier-gvisor, kind: group, parent: ov-g-agents, color: indigo, icon: openstack, title: "TIER 2 · GVISOR", sub: "user-space kernel"}
@@ -511,8 +512,8 @@ elements:
   - {id: ov-prom, kind: database, parent: ov-g-obs, icon: grafana, title: "VictoriaMetrics", tech: "[metrics · vmalert]", desc: "Metrics and alerts today; + GenAI<br>token series per project."}
   - {id: ov-grafana, kind: frontend, parent: ov-g-obs, icon: grafana, title: "Grafana", tech: "[dashboards · alerts]", desc: "Cost and quota per project;<br>alert at 80 % of the budget."}
   - {id: ov-z-google, kind: region, color: sky, icon: gemini, title: "GOOGLE AI STUDIO", sub: "SaaS", status: planned, target: IA-1}
-  - {id: ov-gemini, kind: cloud, parent: ov-z-google, icon: gemini, title: "Gemini API", tech: "[free tier · one API key]", desc: "Default model. Free-tier data may<br>be used by Google: no client data."}
-  - {id: ov-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "via WireGuard", status: planned, target: IA-1}
+  - {id: ov-gemini, kind: cloud, parent: ov-z-google, icon: gemini, title: "Gemini API", tech: "[free tier · several keys]", desc: "Default model: keys balanced (P2C), then<br>the GPU server on 429. Free-tier data<br>may be used by Google: no client data."}
+  - {id: ov-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "HTTPS, local network, behind Caddy", status: planned, target: IA-1}
   - {id: ov-ollama, kind: backend, parent: ov-z-homelab, icon: ollama, title: "Ollama", tech: "[RTX 5080 · OpenAI-compatible]", desc: "Fallback on 429 and models for<br>Local projects: data stays home."}
   - {id: ov-z-github, kind: region, color: slate, icon: github, title: "GITHUB"}
   - {id: ov-repos, kind: external, parent: ov-z-github, icon: github, title: "Repos + GHCR", tech: "[GitHub · Actions]", desc: "Source of truth for apps, agents<br>and the platform; CI builds images."}
@@ -523,7 +524,7 @@ elements:
   - {id: ov-agw-ctrl, kind: backend, parent: ov-g-aigw, icon: kubernetes, title: "agentgateway controller", tech: "[Gateway API · xDS]", desc: "Turns routes and policies into the<br>proxy's configuration."}
   - {id: ov-agw-policy, kind: security, parent: ov-g-aigw, icon: k8s-crd, title: "AgentgatewayPolicy", tech: "[CRD · per route or backend]", desc: "jwtAuth, CEL authz, promptGuard,<br>rateLimit and extProc hooks."}
   - {id: ov-guard-hook, kind: security, parent: ov-g-aigw, icon: python, title: "Guardrail webhook", tech: "[in-house · promptGuard webhook]", desc: "Turns the gateway call into a<br>Llama Guard check on Ollama."}
-  - {id: ov-llamaguard, kind: security, parent: ov-z-homelab, icon: ollama, title: "Llama Guard 3", tech: "[model served by Ollama]", desc: "Classifies prompts and answers:<br>safe, or which hazard."}
+  - {id: ov-llamaguard, kind: security, parent: ov-z-homelab, icon: ollama, title: "Llama Guard 3", tech: "[llama-guard3:1b · served by Ollama]", desc: "Classifies prompts and answers:<br>safe, or which hazard."}
   - {id: ov-g-kagent, kind: group, parent: ov-z-cluster, color: slate, icon: k8s-ns, title: "KAGENT", sub: "ns kagent", status: planned, target: IA-2}
   - {id: ov-kagent, kind: backend, parent: ov-g-kagent, icon: kubernetes, title: "kagent controller", tech: "[Agent · ModelConfig CRDs]", desc: "Deploys each Agent, publishes its<br>A2A endpoint and Agent Card."}
   - {id: ov-agent-2, kind: backend, parent: ov-g-tier-runc, icon: python, title: "Peer agent", tech: "[kagent BYO · A2A server]", desc: "Takes tasks other agents hand<br>over through the gateway."}
@@ -556,10 +557,10 @@ elements:
   - {id: hl-agw, kind: backend, parent: hl-z-agw, icon: k8s-deploy, title: "agentgateway", tech: "[proxy LLM · MCP · A2A]", desc: "Vérifie le JWT de l'agent, la policy CEL par outil<br>et son budget de tokens, puis route l'appel."}
   - {id: hl-guard, kind: security, parent: hl-z-agw, icon: python, title: "Guardrails", tech: "[promptGuard · webhook]", desc: "Masque PII et secrets, puis<br>demande l'avis de Llama Guard."}
   - {id: hl-z-google, kind: region, color: sky, icon: gemini, title: "GOOGLE AI", sub: "SaaS", status: planned, target: IA-1}
-  - {id: hl-gemini, kind: cloud, parent: hl-z-google, icon: gemini, title: "Gemini API", tech: "[free tier]", desc: "Modèle par défaut ; pas de<br>données clients dessus."}
+  - {id: hl-gemini, kind: cloud, parent: hl-z-google, icon: gemini, title: "Gemini API", tech: "[free tier]", desc: "Plusieurs clés équilibrées (P2C),<br>puis le serveur GPU sur 429 ;<br>pas de données clients dessus."}
   - {id: hl-z-tools, kind: region, color: sky, icon: mcp, title: "OUTILS MCP", sub: "ns mcp-tools", status: planned, target: IA-2}
   - {id: hl-tools, kind: backend, parent: hl-z-tools, icon: mcp, title: "ToolHive", tech: "[serveurs MCP · registre signé]", desc: "Un conteneur par outil ; les<br>secrets ne vont pas à l'agent."}
-  - {id: hl-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "via WireGuard", status: planned, target: IA-1}
+  - {id: hl-z-homelab, kind: region, color: indigo, icon: rack, title: "HOMELAB GPU", sub: "HTTPS, réseau local, derrière Caddy", status: planned, target: IA-1}
   - {id: hl-ollama, kind: backend, parent: hl-z-homelab, icon: ollama, title: "Ollama + Llama Guard", tech: "[RTX 5080]", desc: "Modèles locaux, secours sur 429,<br>classifieur des guardrails."}
   - {id: hl-z-shared, kind: region, color: slate, icon: k8s-ns, title: "SERVICES TRANSVERSES"}
   - {id: hl-identity, kind: security, parent: hl-z-shared, icon: keycloak, title: "Keycloak + Vault", tech: "[OIDC · KV v2]", desc: "+ un client par agent, authentifié<br>par son ServiceAccount."}
@@ -829,7 +830,7 @@ connections:
   - {id: ov-c-app-aigw, from: ov-app, to: ov-aigw, protocol: HTTP, verb: "apps call models too", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-quota, from: ov-aigw, to: ov-quota, verb: "token budget left?", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-gemini, from: ov-aigw, to: ov-gemini, protocol: HTTPS, verb: "default model", kind: flow, status: planned, target: IA-1}
-  - {id: ov-c-aigw-ollama, from: ov-aigw, to: ov-ollama, protocol: WireGuard, verb: "on 429 or Local project", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-aigw-ollama, from: ov-aigw, to: ov-ollama, protocol: HTTPS, verb: "on 429 or Local project", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-aigw-tools, from: ov-aigw, to: ov-toolhive, protocol: MCP, verb: "tools/call", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-cmp-mcp, from: ov-aigw, to: ov-cmp-mcp, protocol: MCP, verb: "platform tools", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-alloy, from: ov-aigw, to: ov-alloy, protocol: OTLP, verb: "GenAI spans and token metrics", kind: flow, status: planned, target: IA-1}
@@ -840,7 +841,7 @@ connections:
   - {id: ov-c-grafana-prom, from: ov-grafana, to: ov-prom, verb: "MetricsQL", kind: flow}
   - {id: ov-c-cmp-repos, from: ov-cmp, to: ov-repos, verb: "commit projects and Agents", kind: flow}
   - {id: ov-c-cmp-keycloak, from: ov-cmp, to: ov-keycloak, verb: "create the agent client", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-vault-aigw, from: ov-vault, to: ov-aigw, verb: "mount the Gemini key", kind: flow, status: planned, target: IA-1}
+  - {id: ov-c-vault-aigw, from: ov-vault, to: ov-aigw, verb: "mount the Gemini keys", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-argocd-repos, from: ov-argocd, to: ov-repos, verb: "pull desired state", kind: flow}
   - {id: ov-c-argocd-kapi, from: ov-argocd, to: ov-kapi, verb: "apply", kind: flow}
   - {id: ov-c-argocd-clouds, from: ov-argocd, to: ov-clouds, protocol: WireGuard, verb: "sync", kind: flow}
@@ -854,7 +855,7 @@ connections:
   - {id: ov-c-aigw-agent, from: ov-aigw, to: ov-agent, protocol: A2A, verb: "message/send", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-agent2, from: ov-aigw, to: ov-agent-2, protocol: A2A, verb: "delegate a task", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-aigw-guard, from: ov-aigw, to: ov-guard-hook, protocol: HTTP, verb: "promptGuard webhook", kind: flow, status: planned, target: IA-2}
-  - {id: ov-c-guard-llama, from: ov-guard-hook, to: ov-llamaguard, protocol: WireGuard, verb: "classify the prompt", kind: flow, status: planned, target: IA-2}
+  - {id: ov-c-guard-llama, from: ov-guard-hook, to: ov-llamaguard, protocol: HTTPS, verb: "classify the prompt", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-agwctrl-kapi, from: ov-agw-ctrl, to: ov-kapi, verb: "watch routes and policies", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-agwctrl-aigw, from: ov-agw-ctrl, to: ov-aigw, protocol: xDS, verb: "push config", kind: flow, status: planned, target: IA-1}
   - {id: ov-c-kagent-kapi, from: ov-kagent, to: ov-kapi, verb: "create agent Deployments", kind: flow, status: planned, target: IA-2}
@@ -915,6 +916,7 @@ references:
   - {id: r-ag-be-gpu-secret, from: ag-be-llm, to: ag-secret-gpu, kind: secretRef}
   - {id: r-ag-pol-auth, from: ag-pol-auth, to: ag-gateway, kind: targetRef}
   - {id: r-ag-pol-rate, from: ag-pol-rate, to: ag-route, kind: targetRef}
+  - {id: r-ag-pol-limits, from: ag-pol-limits, to: ag-gateway, kind: targetRef}
   - {id: r-ag-pol-guard, from: ag-pol-guard, to: ag-be-llm, kind: targetRef}
   - {id: r-ag-pol-failover, from: ag-pol-failover, to: ag-be-llm, kind: targetRef}
   - {id: r-ag-pol-tools, from: ag-pol-tools, to: ag-be-mcp, kind: targetRef}
@@ -923,6 +925,7 @@ references:
 
   - {id: r-sb-pool-template, from: sb-warmpool, to: sb-template, kind: sandboxTemplateRef}
   - {id: r-sb-claim-pool, from: sb-claim, to: sb-warmpool, kind: warmPoolRef}
+  - {id: r-sb-claim-template-kata, from: sb-claim, to: sb-template-kata, kind: sandboxTemplateRef}
   - {id: r-sb-claim-sandbox, from: sb-claim, to: sb-sandbox, kind: status.sandbox}
   - {id: r-sb-sandbox-svc, from: sb-sandbox, to: sb-svc, kind: owns}
   - {id: r-sb-template-rc, from: sb-template, to: sb-rc, kind: runtimeClassName}

@@ -72,7 +72,7 @@ cards:
     color: rose
     lines:
       - "Réseau : default-deny Cilium, l'agent ne sort que vers la gateway."
-      - "Clés : la clé Gemini n'existe que dans Vault et la gateway."
+      - "Clés : les clés Gemini n'existent que dans Vault et la gateway."
       - "Exécution : runc pour l'agent, gVisor ou Kata pour le code qu'il génère."
       - "Admission : Kyverno n'accepte que des pods restreints et des images signées."
   - {id: card-legend, title: Légende, color: slate, legend: true}

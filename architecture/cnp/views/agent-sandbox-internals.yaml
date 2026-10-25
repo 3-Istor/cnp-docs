@@ -7,7 +7,7 @@ subtitle: "How does an agent get an isolated place to run the code it writes, an
 meta:
   - "Scope: kubernetes-sigs/agent-sandbox v1beta1 with gVisor on the on-prem K3s, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-2) · faded: what already runs"
   - "Out of scope: the agent's model and tool calls (AI gateway internals view) · the agent's identity (zoom 6) · Kata Containers, not available on OpenStack VMs without nested virtualisation"
-  - "Assumed: one namespace of agents per project; the agent itself runs in a long-lived Sandbox and asks short-lived ones for code; warm pool of 1 on the 4 GB budget"
+  - "Assumed: one namespace of agents per project; the agent itself runs in a long-lived Sandbox and asks short-lived ones for code; warm pool of 1 gVisor sandbox limited to 512 Mi on the 4 GB budget, none for Kata"
   - "v0.1 · source: cnp-docs/architecture/cnp · agent-sandbox.sigs.k8s.io (API reference, Python client), github.com/kubernetes-sigs/agent-sandbox"
 
 include:
@@ -98,5 +98,5 @@ cards:
     lines:
       - "SandboxClaim → SandboxWarmPool → SandboxTemplate → RuntimeClass gvisor and the NetworkPolicy it manages."
       - "SandboxClaim status → Sandbox → headless Service; the Sandbox owns the Pod."
-      - "Memory: one warm python sandbox costs a pod's RAM all the time; keep replicas at 1 on this cluster, raise it on a cloud cluster."
+      - "Memory: one warm python sandbox costs a pod's RAM all the time; the pool is 1 replica limited to 512 Mi (D33), and 0 if it weighs too much, with no other change. There is no pool for Kata."
   - {id: card-legend, title: Legend, color: slate, legend: true}

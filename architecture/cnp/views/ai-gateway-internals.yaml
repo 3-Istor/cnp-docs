@@ -15,6 +15,7 @@ include:
   - g-ai-gateway
   - g-ag-pol
   - ag-pol-rate
+  - ag-pol-limits
   - ag-pol-auth
   - ag-pol-trace
   - g-ag-crd-gw
@@ -116,7 +117,7 @@ labels:
 notes:
   - {id: n-ag-order, text: "The docs run the traffic policies in a fixed order: JWT, authorization, rate limit, then the route and the backend policies, promptGuard among them. A prompt the guard refuses has therefore already passed the budget check."}
   - {id: n-ag-failover, text: "On a 429 the health policy evicts the Gemini key that answered it; the load balancer then picks another key of group 1, and when all are evicted, group 2: the GPU server. Keys of one Google project share one quota, so only keys from different projects add capacity."}
-  - {id: n-ag-budget, text: "The budget is per agent and per day, keyed by a JWT claim (azp, to confirm in the phase 1 trial); cost per project is computed in Grafana. The check runs before the call; the real token count is known after the answer, and how the rate limit service receives it is for the trial to confirm."}
+  - {id: n-ag-budget, text: "The budget is per agent and per day, keyed by a JWT claim (azp, to confirm in the phase 1 trial); cost per project is computed in Grafana. The check runs before the call; the real token count is known after the answer, and how the rate limit service receives it is for the trial to confirm. The 4,096 max_tokens cap, the 30 requests a minute and the refusal when the service is down (D32) are also verified in the trial (T1.1)."}
 
 cards:
   - id: card-steps
@@ -125,7 +126,7 @@ cards:
     lines:
       - "[1] The agent sends POST /v1/chat/completions with its Keycloak JWT to the listener of the Gateway ai-gateway."
       - "[2] [3] jwtAuthentication checks the signature against the cached JWKS, iss and aud; authorization applies the CEL rules on the claims, deny by default."
-      - "[4]–[6] rateLimit asks the rate limit service whether the agent's daily token budget is spent; the service counts in Redis. Over the budget: 429."
+      - "[4]–[6] rateLimit asks the rate limit service whether the agent's daily token budget is spent; the service counts in Redis. Over the budget: 429. rateLimit also applies the local limiter, 30 requests a minute per agent, and the max_tokens cap of 4,096 comes from the limits policy. If the rate limit service is down, the request is refused (fail-closed)."
       - "[7] [8] The route match picks the HTTPRoute and its AgentgatewayBackend; promptGuard masks PII and secrets, then asks the guardrail adapter (IA-2)."
       - "[9] [10] The provider choice takes a healthy Gemini key of group 1; the LLM proxy speaks the provider's API with the key from the Secret."
       - "[11] [12] The call goes to Gemini over HTTPS through the Cilium FQDN egress rule. After a 429 the health policy evicts the key and the GPU server answers."
@@ -147,8 +148,9 @@ cards:
     lines:
       - "Gateway ai-gateway → GatewayClass agentgateway. HTTPRoutes llm, llm-local, mcp and a2a → the Gateway (parentRef) and their AgentgatewayBackend (backendRef)."
       - "AgentgatewayBackend llm: group 1 = Gemini providers, one Secret each; group 2 = the GPU server (openai provider with host and port, token Secret). llm-local: the GPU server only."
-      - "Budget: the global rateLimit of the policy (unit Tokens) points at the rate limit service, whose ConfigMap sets the limit per day; the local limiter has no day unit."
-      - "AgentgatewayPolicy: auth and trace → Gateway; budget → HTTPRoute llm; guard and failover → backend llm; tools → backend mcp (targetRefs)."
+      - "Budget: the global rateLimit of the policy (unit Tokens) points at the rate limit service, whose ConfigMap sets the limit per day; the local limiter has no day unit, so it only holds the 30 requests a minute per agent."
+      - "AgentgatewayPolicy: auth, limits and trace → Gateway; budget → HTTPRoute llm; guard and failover → backend llm; tools → backend mcp (targetRefs)."
+      - "Where the rules come from (D36): the gateway's rules (budget limits, tool allow-lists, CEL on the claims) are generated from the project's ProjectRecord in cnp-projects, written by the CMP; an app's own settings (blocks ai and agent of its deploy/values-*.yaml) never exceed it."
       - "Not drawn: extProc and extAuth hooks of the same policy kind. OPA would use extAuth (IA-3)."
       - "Memory on the cluster: controller, proxy, rate limit service, Redis and the adapter should fit in a few hundred MB; to measure once deployed."
   - {id: card-legend, title: Legend, color: slate, legend: true}

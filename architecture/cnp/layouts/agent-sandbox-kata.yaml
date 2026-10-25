@@ -7,7 +7,6 @@ elements:
   g-sb-ns: {x: 40, y: 60, w: 2260, h: 480}
   g-sb-crd: {x: 30, y: 70, w: 1060, h: 380}
   sb-template-kata: {x: 30, y: 70, w: 300, h: 100}
-  sb-warmpool: {x: 380, y: 70, w: 300, h: 100}
   sb-claim: {x: 730, y: 70, w: 300, h: 100}
   sb-svc: {x: 380, y: 220, w: 300, h: 100}
   sb-sandbox: {x: 730, y: 220, w: 300, h: 100}
@@ -45,7 +44,7 @@ elements:
   sb-hv: {x: 410, y: 70, w: 300, h: 100}
   sb-nested: {x: 760, y: 70, w: 300, h: 100}
 edges:
-  r-sb-claim-pool: {from: sb-claim.bottom@30px, to: sb-warmpool.bottom@250px, waypoints: [[870, 525], [740, 525]], label_at: [805, 525]}
+  r-sb-claim-template-kata: {from: sb-claim.left@50px, to: sb-template-kata.right@50px}
   r-sb-claim-sandbox: {from: sb-claim.bottom@150px, to: sb-sandbox.top@150px}
   r-sb-sandbox-svc: {from: sb-sandbox.left@50px, to: sb-svc.right@50px}
   r-sb-template-rckata: {from: sb-template-kata.bottom@150px, to: sb-rc-kata.bottom@150px, waypoints: [[290, 690], [2600, 690]], label_at: [2450, 690]}

@@ -69,7 +69,7 @@ labels:
 notes:
   - {id: n-md-terms, text: "Check before going live: Google's Gemini API terms allow only the paid service when an API client is made available to users in the EEA, the UK or Switzerland. Free-tier inputs may also be read by human reviewers and used to improve Google's products: no sensitive data. Rotating free accounts is not covered by the terms read so far."}
   - {id: n-md-local, text: "Local projects: the data_level claim is copied into x-cnp-data; the llm-local route matches it and its backend only knows the GPU server, so Gemini is never a candidate, even after a failure."}
-  - {id: n-md-contract, text: "The GPU server is only a contract: text and embeddings in IA-1, the guard and the image tool in IA-2. Each service sits behind one reverse proxy with a token or mTLS, reachable from the cluster's egress IP only, with no web UI for tenants."}
+  - {id: n-md-contract, text: "The GPU server is only a contract: text and embeddings in IA-1, the guard and the image tool in IA-2. Each service sits behind Caddy: HTTPS, one token per consumer (the gateway, the guard webhook, the image MCP server), cluster node IPs only, no web UI for tenants. The text model is a setting (D37); the guard and the embeddings stay loaded."}
 
 cards:
   - id: card-steps
@@ -79,12 +79,12 @@ cards:
       - "[1] The provider choice picks the backend: llm for normal projects (group 1 Gemini keys, group 2 the GPU server), llm-local for Local projects (the GPU server only)."
       - "[2] The LLM proxy calls Gemini with one of the keys, over HTTPS; the Cilium egress rule allows that host and the GPU server's /32 only."
       - "[3] Google counts the request against the Google Cloud project's RPM, TPM and RPD. If any one is spent, the answer is 429; the key is evicted for a while."
-      - "[4] After a 429, or for Local projects, the LLM proxy calls the GPU server over HTTPS with its token. [5] The reverse proxy sends chat calls to the text service. [6] The text service runs the model on the GPU."
+      - "[4] After a 429, or for Local projects, the LLM proxy calls the GPU server over HTTPS with its token. [5] Caddy sends chat calls to the text service. [6] The text service runs the model on the GPU."
   - id: card-background
     title: "Background"
     color: amber
     lines:
-      - "[A] The text service loads a model's weights from its store on first use and keeps them for a while (the Ollama example: KEEP_ALIVE 30 min)."
+      - "[A] The text service loads a model's weights from its store on first use and keeps them (KEEP_ALIVE -1). The image tool is the one exception: its GPU lock unloads the text model while ComfyUI generates, then the text model reloads on the next request; the guard and the embeddings stay loaded."
   - id: card-objects
     title: "Objects · who points at whom"
     color: sky

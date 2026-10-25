@@ -316,6 +316,7 @@ edges:
   r-route-gateway: {from: httproute.left@80px, to: envoy-shared-gateway.top@280px, waypoints: [[1290, 410], [1290, 600], [850, 600], [850, 730], [810, 730]], label_at: [1180, 600]}
   r-sb-claim-pool: {from: sb-claim.bottom@280px, to: sb-warmpool.right@80px, waypoints: [[840, 4140], [1600, 4140], [1600, 3940]], label_at: [1398, 4140]}
   r-sb-claim-sandbox: {from: sb-claim.bottom@260px, to: sb-sandbox.bottom@30px, waypoints: [[820, 4150], [1290, 4150]], label_at: [1290, 4128]}
+  r-sb-claim-template-kata: {from: sb-claim.top@50px, to: sb-template-kata.left@50px, waypoints: [[610, 3985], [885, 3985], [885, 3910]], label_at: [750, 3985]}
   r-sb-nested-hv: {from: sb-nested.left@50px, to: sb-hv.right@50px, label_at: [2210, 5680]}
   r-sb-pool-template: {from: sb-warmpool.top@30px, to: sb-template.left@30px, waypoints: [[1290, 3760], [530, 3760], [530, 3890]], label_at: [1050, 3760]}
   r-sb-sandbox-svc: {from: sb-sandbox.left@30px, to: sb-svc.right@30px, label_at: [1234, 4040]}
