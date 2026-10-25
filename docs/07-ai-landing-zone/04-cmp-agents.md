@@ -107,7 +107,7 @@ Sur le modèle du `DeploymentStepper` des apps, en six étapes :
    l'extérieur ? La CMP affiche le niveau d'isolation qui en découle et le verdict de la
    Rule of Two. Trois risques cumulés bloquent la création, avec la proposition de couper en
    deux agents.
-6. **Résumé.** Ce qui va être créé (dépôt, client, namespace, budget), puis « Créer ». Dans un
+6. **Résumé.** La carte des capacités de l'agent (ci-dessous), ce qui va être créé (dépôt, client, namespace, budget), puis « Créer ». Dans un
    projet critical, la création passe par une pull request ou une approbation, selon la stake
    policy.
 
@@ -123,6 +123,14 @@ Sur le modèle du `DeploymentStepper` des apps, en six étapes :
   l'utilisateur ; à côté, le détail de chaque étape : appels de modèle, appels d'outils,
   décisions des guardrails, tokens. Les tokens consommés comptent dans le budget de l'agent.
 - **Onglet Traces.** Les dernières tâches, avec un lien vers la trace dans Grafana.
+- **Onglet Capacités.** Une carte en lecture seule, pas un éditeur de workflow : ce que
+  l'agent lit, ce qu'il peut faire, où il peut envoyer, avec les outils correspondants. En
+  haut, les trois risques de la Rule of Two (données privées, contenu non fiable, sortie vers
+  l'extérieur), allumés ou éteints, et le verdict « 2 sur 3 au plus ». Quand une tâche est
+  coupée en deux agents, la carte montre la chaîne : l'agent lecteur, le résumé structuré
+  qu'il transmet en A2A, puis l'agent qui agit, chacun avec ses risques allumés. La même carte
+  apparaît au résumé de la création. Elle se calcule depuis la déclaration de l'agent (ses
+  outils et leurs badges), donc elle reste juste sans effort de l'utilisateur.
 - **Onglet Outils et accès.** Outils autorisés ; qui peut appeler l'agent (membres, groupes,
   autres agents en A2A) ; son Agent Card.
 - **Onglet Évals.** Résultat du dernier passage de promptfoo, par version.
