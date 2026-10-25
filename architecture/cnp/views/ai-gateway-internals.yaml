@@ -150,6 +150,7 @@ cards:
       - "AgentgatewayBackend llm: group 1 = Gemini providers, one Secret each; group 2 = the GPU server (openai provider with host and port, token Secret). llm-local: the GPU server only."
       - "Budget: the global rateLimit of the policy (unit Tokens) points at the rate limit service, whose ConfigMap sets the limit per day; the local limiter has no day unit, so it only holds the 30 requests a minute per agent."
       - "AgentgatewayPolicy: auth, limits and trace → Gateway; budget → HTTPRoute llm; guard and failover → backend llm; tools → backend mcp (targetRefs)."
+      - "Where the rules come from (D36): the gateway's rules (budget limits, tool allow-lists, CEL on the claims) are generated from the project's ProjectRecord in cnp-projects, written by the CMP; an app's own settings (blocks ai and agent of its deploy/values-*.yaml) never exceed it."
       - "Not drawn: extProc and extAuth hooks of the same policy kind. OPA would use extAuth (IA-3)."
       - "Memory on the cluster: controller, proxy, rate limit service, Redis and the adapter should fit in a few hundred MB; to measure once deployed."
   - {id: card-legend, title: Legend, color: slate, legend: true}
