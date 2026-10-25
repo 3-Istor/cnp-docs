@@ -146,6 +146,6 @@ cards:
     lines:
       - "**P0** default-deny between tenants (G1), pods not root (G8), protected main (G17), CNPG backups (G2)."
       - "**IA-1** AI gateway, Gemini and GPU server backends, Tempo."
-      - "**IA-2** sandboxed hosted agents, ToolHive MCP servers."
-      - "**IA-3** OPA ext_authz once JWT claims are not enough."
+      - "**IA-2** sandboxed hosted agents, ToolHive MCP servers, guardrails (promptGuard, webhook, Llama Guard), A2A."
+      - "**IA-3** OPA through extAuth once the CEL rules are not enough."
   - {id: card-legend, title: Legend, color: slate, legend: true}

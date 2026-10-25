@@ -445,7 +445,7 @@ elements:
   - {id: md-project, kind: cloud, parent: z-google-ai, icon: gemini, title: "Google Cloud projects", tech: "[free tier · one per account]", desc: "Each owns its key and its quota; limits<br>are per project, not per key.<br>Why: other projects' keys add quota.", status: planned, target: IA-1}
   - {id: md-gpu, kind: backend, parent: z-homelab-gpu, icon: rack, title: "RTX 5080", tech: "[16 GB VRAM · CUDA]", desc: "Example hardware, shared by the services.<br>Why: the first calls after a model<br>switch are slow.", status: planned, target: IA-1}
   - {id: md-store, kind: database, parent: z-homelab-gpu, icon: ollama, title: "Model store", tech: "[Ollama · OLLAMA_MODELS]", desc: "Example: pulled models, loaded on demand.<br>Why: no download per request.", status: planned, target: IA-1}
-  - {id: md-guard, kind: security, parent: z-homelab-gpu, icon: rack, title: "Guard · Llama Guard 3", tech: "[or equivalent · classifier]", desc: "Classifies prompts and answers, called<br>by the guardrail adapter.<br>Down: the request is refused.", status: planned, target: IA-3}
+  - {id: md-guard, kind: security, parent: z-homelab-gpu, icon: rack, title: "Guard · Llama Guard 3", tech: "[or equivalent · classifier]", desc: "Classifies prompts and answers, called<br>by the guardrail adapter.<br>Down: the request is refused.", status: planned, target: IA-2}
   - {id: md-ollama-cfg, kind: tool, parent: z-homelab-gpu, icon: ollama, title: "Example: Ollama settings", tech: "[server environment]", desc: "NUM_PARALLEL 2, MAX_LOADED_MODELS 1,<br>KEEP_ALIVE 30m, KV cache q8_0.<br>Why: fit 16 GB, keep it warm.", status: planned, target: IA-1}
 
   # GenAI observability zoom (proposal, 2026-10-23): OTel GenAI conventions through Alloy to Tempo and VictoriaMetrics.
@@ -790,7 +790,7 @@ connections:
   - {id: c-md-store, from: md-svc-text, to: md-store, protocol: file, verb: load weights, kind: flow, status: planned, target: IA-1}
   - {id: c-md-text, from: gpu-server, to: md-svc-text, protocol: HTTP, verb: /v1/chat/completions, kind: flow, status: planned, target: IA-1}
   - {id: c-md-embed, from: gpu-server, to: md-svc-embed, protocol: HTTP, verb: /v1/embeddings, kind: flow, status: planned, target: IA-1}
-  - {id: c-md-guard, from: gpu-server, to: md-guard, protocol: HTTP, verb: classify, kind: flow, status: planned, target: IA-3}
+  - {id: c-md-guard, from: gpu-server, to: md-guard, protocol: HTTP, verb: classify, kind: flow, status: planned, target: IA-2}
   - {id: c-md-image, from: gpu-server, to: md-svc-image, protocol: HTTP, verb: generate_image, kind: flow, status: planned, target: IA-2}
 
   # GenAI observability zoom.
