@@ -1,6 +1,6 @@
 # La CMP et les agents
 
-> **Statut : brouillon v0.2 du 2026-10-25, à valider.** Cette page dit comment un
+> **Statut : v1.0 du 2026-10-25, validée par Brian.** Cette page dit comment un
 > développeur ou un tenant active l'IA et déclare un agent dans la CMP, et ce que la CMP
 > écrit en conséquence. Les décisions de plateforme sont dans [02-spec.md](02-spec.md), les
 > phases dans [03-phases.md](03-phases.md). Les noms d'API et d'écrans sont des propositions.
@@ -355,6 +355,6 @@ devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'ag
 | Emplacement des politiques par agent | Namespace `ai-gateway`, chart `cnp-ai-policies` (spec D22) |
 | Budget du chat de test | Compté dans le budget de l'agent (spec D25) |
 | Premiers templates d'agent | Agent kagent déclaratif vide, puis agent de questions sur une documentation (spec D26, D29) |
-| Onglet « Assistants » | Fusionné dans l'onglet « IA » (§4) : proposé, à valider |
+| Onglet « Assistants » | Fusionné dans l'onglet « IA » (§4), validé par Brian le 2026-10-25 |
 
-Maquettes validées par Brian le 2026-10-25. Reste à valider : la fusion de l'onglet « Assistants ».
+Maquettes et fusion de l'onglet « Assistants » validées par Brian le 2026-10-25.

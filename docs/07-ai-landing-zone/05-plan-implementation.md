@@ -1,6 +1,6 @@
 # Plan d'implémentation
 
-> **Statut : brouillon v0.1 du 2026-10-25, à valider.** Cette page sert de consignes à
+> **Statut : v1.0 du 2026-10-25, validée par Brian.** Cette page sert de consignes à
 > l'agent qui implémente (par exemple Claude Sonnet). Elle découpe les phases 0 et 1 en
 > tâches ; les phases 2 et 3 seront découpées par une passe de spec à leur entrée, pas par
 > l'agent d'implémentation.
@@ -88,3 +88,34 @@ Elles seront découpées en tâches par une passe de spec à leur entrée. Ce qu
 montée de Keycloak en 26.6 (D27), kagent, outils MCP et serveur MCP de la CMP avec les jetons
 d'audience `cmp-mcp` (04 §9), guardrails, A2A, sandbox, évals, écrans d'agents de la CMP,
 templates d'agent (D26), UC3, UC11, UC21.
+
+## 6. Prompt de lancement
+
+À donner tel quel à l'agent d'implémentation, une fois ses accès prêts.
+
+```text
+Tu implémentes la landing zone IA de CNP. La spec est dans le dépôt 3-Istor/cnp-docs, dossier
+docs/07-ai-landing-zone/ : lis dans l'ordre 02-spec.md, 05-plan-implementation.md,
+03-phases.md, 07-flux.md, puis 04-cmp-agents.md et 06-finops-ia.md pour les tâches qui les
+citent. La spec est validée : tu appliques ses décisions telles quelles.
+
+Commence par la phase 0, tâche T0.1 (état des lieux sur le cluster), puis T0.2 à T0.5, puis
+la phase 1 dans l'ordre du §3 de 05-plan-implementation.md.
+
+Règles (05-plan-implementation.md §1) : une tâche = une branche et une PR par dépôt, au format
+Conventional Commits, avec les sorties des vérifications V dans la description ; versions
+exactes, consignées au §4 ; aucun secret dans Git ; d'abord un cluster k3d local, puis le
+cluster principal ; tu ne fusionnes jamais toi-même, c'est Brian qui fusionne.
+
+Arrête-toi et remonte le problème dans une PR en brouillon (section « Écart » : problème,
+options, recommandation) dans les six cas du §1 : décision inapplicable, vérification qui
+échoue deux fois, composant non prévu, protection affaiblie, budget mémoire dépassé, action
+sur des données de tenant ou sur main.
+
+Les clés Gemini sont déjà dans Vault sous kvv2/platform/ai/gemini/<n> : ne les lis jamais en
+clair. Les vérifications qui dépendent du serveur GPU (V1.10 à V1.12, V1.15, T1.14)
+attendent qu'il réponde au contrat du §5 de la spec.
+
+À la fin de chaque phase, écris le rapport de phase (T1.11 pour la phase 1) et attends la
+validation de Brian avant la phase suivante.
+```

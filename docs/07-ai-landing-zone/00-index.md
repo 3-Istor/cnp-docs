@@ -1,15 +1,14 @@
-# Landing zone IA (proposition)
+# Landing zone IA
 
-> **Statut : proposition du 2026-10-22, rien n'est déployé.** Tous les éléments ajoutés
+> **Statut : spec validée le 2026-10-25, rien n'est encore déployé.** Tous les éléments ajoutés
 > au modèle Noodle portent `status: planned` et une cible : `P0`–`P2` pour les écarts de la
 > landing zone actuelle, `IA-1`–`IA-3` pour la landing zone IA.
 
-> **Les décisions de cette page sont remplacées par [la spec de référence](02-spec.md)** (§3)
-> dès qu'elle est validée. D1 y devient agentgateway au lieu d'Agent Router, et D3 un jeton
-> de 5 minutes. Le découpage en phases et les vérifications sont dans
-> [03-phases.md](03-phases.md), la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md), le plan d'implémentation dans
-> [05-plan-implementation.md](05-plan-implementation.md) et le FinOps de l'IA dans
-> [06-finops-ia.md](06-finops-ia.md), les flux pas à pas dans [07-flux.md](07-flux.md).
+> **La spec de référence est validée (v1.0, 2026-10-25).** Les décisions D1 à D37 sont dans
+> [02-spec.md](02-spec.md) (§3 et §9), les phases et vérifications dans [03-phases.md](03-phases.md),
+> la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md), le plan d'implémentation dans
+> [05-plan-implementation.md](05-plan-implementation.md), le FinOps de l'IA dans
+> [06-finops-ia.md](06-finops-ia.md) et les flux pas à pas dans [07-flux.md](07-flux.md).
 
 La landing zone IA se greffe sur la plateforme existante. Les appels des agents vers un
 modèle ou un outil passent par une AI gateway (agentgateway) posée à côté de l'Envoy Gateway
@@ -18,15 +17,7 @@ l'autorisation par claims, le budget en tokens par agent et par jour, le choix d
 
 ## Décisions
 
-| # | Décision | Choix proposé |
-|---|---|---|
-| D1 | AI gateway | ~~Agent Router~~ agentgateway (voir [Stack cible](01-stack-cible.md)), GatewayClass à part ; Envoy Gateway reste l'entrée des apps |
-| D2 | Point de sortie | Tout appel LLM ou outil passe par la gateway ; aucune clé provider dans un pod |
-| D3 | Identité | Un client Keycloak par agent, jetons de 5 min, standard token exchange pour agir au nom d'un utilisateur |
-| D4 | Policy | Kyverno en Enforce à l'admission ; règles CEL de l'`AgentgatewayPolicy` à la gateway, puis OPA par `extAuth` pour l'autorisation par outil |
-| D5 | Isolation | Default-deny Cilium entre tenants et en egress ; CRD `Sandbox` + gVisor pour les agents qui exécutent du code |
-| D6 | Modèles | Gemini (free tier, plusieurs clés) puis le serveur GPU en HTTPS sur le réseau local, avec bascule automatique sur 429 |
-| D7 | Observabilité | OpenTelemetry GenAI vers Alloy puis Tempo, métriques dans VictoriaMetrics ; tokens, coût et latence dans Grafana |
+Voir [le registre des décisions de la spec](02-spec.md) : D1 à D7 y gardent leur numéro.
 
 Prérequis issus de la landing zone actuelle (P0) : isolation inter-tenant (G1), contexte
 de sécurité des pods (G8), branches GitOps protégées (G17), sauvegarde des bases
