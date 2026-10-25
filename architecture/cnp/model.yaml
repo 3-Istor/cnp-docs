@@ -254,25 +254,25 @@ elements:
   - {id: cmp-mcp-route, kind: backend, parent: g-gateway, icon: k8s-crd, title: "HTTPRoute cmp-mcp", tech: "[no Keycloak JWT policy]", desc: "/mcp and the OAuth endpoints"}
   - {id: agent-kit-repo, kind: external, parent: z-github, icon: github, title: "cnp-agent-kit", tech: "[public repo]", desc: "Skills, plugin, doctrine", ports: [{name: https, protocol: TCP, port: 443}]}
 
-  # AI landing zone (proposal, 2026-10-22): an AI gateway on the existing Envoy Gateway,
+  # AI landing zone (proposal, 2026-10-22): agentgateway (own GatewayClass) beside Envoy Gateway,
   # hosted agents, Gemini and the homelab GPU as model backends. Nothing here is deployed yet.
-  - {id: g-ai-gateway, kind: group, parent: z-cluster, color: orange, icon: envoy-gateway, title: "AI GATEWAY", sub: "ns ai-gateway · Agent Router", status: planned, target: IA-1}
+  - {id: g-ai-gateway, kind: group, parent: z-cluster, color: orange, icon: envoy-gateway, title: "AI GATEWAY", sub: "ns ai-gateway · agentgateway", status: planned, target: IA-1}
   - {id: g-agents, kind: group, parent: z-cluster, color: amber, icon: k8s-ns, title: "AGENTS", sub: "1 namespace / agent · gVisor", status: planned, target: IA-2}
   - {id: g-mcp-tools, kind: group, parent: z-cluster, color: slate, icon: mcp, title: "MCP TOOLS", sub: "ns mcp-tools · ToolHive", status: planned, target: IA-2}
   - {id: z-google-ai, kind: region, color: amber, icon: gemini, title: "GOOGLE AI", sub: "SaaS · Gemini API", status: planned, target: IA-1}
   - {id: z-homelab-gpu, kind: region, color: emerald, icon: rack, title: "HOMELAB GPU", sub: "RTX 5080 · 16 GB VRAM", status: planned, target: IA-1}
   - {id: hosted-agent, kind: backend, parent: g-agents, icon: k8s-pod, title: "<agent> pod", tech: "[Sandbox CRD · gVisor]", desc: "Hosted agent, no provider key", status: planned, target: IA-2}
-  - {id: ai-gw-proxy, kind: backend, parent: g-ai-gateway, icon: envoy, title: "AI gateway proxy", tech: "[Envoy · Agent Router ext_proc]", desc: "Routes LLM and MCP calls, counts tokens", ports: [{name: http, protocol: TCP, port: 8080}], status: planned, target: IA-1}
-  - {id: ai-gw-route, kind: backend, parent: g-ai-gateway, icon: k8s-crd, title: "AIGatewayRoute", tech: "[Agent Router CRD · + MCPRoute]", desc: "Models and tools per project", status: planned, target: IA-1}
-  - {id: ai-gw-policy, kind: security, parent: g-ai-gateway, icon: k8s-crd, title: "SecurityPolicy", tech: "[Envoy Gateway CRD]", desc: "JWT + project claim, default deny", status: planned, target: IA-1}
-  - {id: ai-provider-secret, kind: database, parent: g-ai-gateway, icon: k8s-secret, title: "Secret", tech: "[Secret gemini-api-key]", desc: "Written by the secrets operator", status: planned, target: IA-1}
+  - {id: ai-gw-proxy, kind: backend, parent: g-ai-gateway, icon: k8s-pod, title: "agentgateway proxy", tech: "[Rust · LLM, MCP, A2A]", desc: "Routes LLM, MCP, A2A; counts tokens", ports: [{name: http, protocol: TCP, port: 8080}], status: planned, target: IA-1}
+  - {id: ai-gw-route, kind: backend, parent: g-ai-gateway, icon: k8s-crd, title: "Routes and backends", tech: "[HTTPRoute · AgentgatewayBackend]", desc: "Models, tools and agents", status: planned, target: IA-1}
+  - {id: ai-gw-policy, kind: security, parent: g-ai-gateway, icon: k8s-crd, title: "AgentgatewayPolicy", tech: "[CRD · JWT, CEL, guard, budget]", desc: "JWT, CEL rules, default deny", status: planned, target: IA-1}
+  - {id: ai-provider-secret, kind: database, parent: g-ai-gateway, icon: k8s-secret, title: "Secrets", tech: "[gemini-api-key-*]", desc: "Written by the secrets operator", status: planned, target: IA-1}
   - {id: ai-ratelimit, kind: database, parent: g-ai-gateway, icon: redis, title: "Rate limit", tech: "[Envoy Rate Limit · Redis]", desc: "Token quotas per project", ports: [{name: grpc, protocol: TCP, port: 8081}], status: planned, target: IA-1}
   - {id: toolhive, kind: backend, parent: g-mcp-tools, icon: mcp, title: "MCP servers", tech: "[ToolHive operator]", desc: "Third-party tools, one container each", ports: [{name: http, protocol: TCP, port: 8080}], status: planned, target: IA-2}
   - {id: tempo, kind: database, parent: g-ops, icon: grafana, title: "Tempo", tech: "[Grafana Tempo · monolithic]", desc: "GenAI traces", ports: [{name: otlp, protocol: TCP, port: 4317}], status: planned, target: IA-1}
   - {id: gemini, kind: cloud, parent: z-google-ai, icon: gemini, title: "Gemini API", tech: "[generativelanguage.googleapis.com]", desc: "Cloud models, free tier", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: IA-1}
   - {id: ollama, kind: backend, parent: z-homelab-gpu, icon: ollama, title: "Ollama", tech: "[OpenAI-compatible API]", desc: "Local models and Llama Guard", ports: [{name: http, protocol: TCP, port: 11434}], status: planned, target: IA-1}
   - {id: agent-sandbox, kind: tool, parent: g-agents, icon: k8s-crd, title: "agent-sandbox", tech: "[Sandbox CRD · gVisor RuntimeClass]", desc: "Isolates code written by agents", status: planned, target: IA-2}
-  - {id: opa, kind: security, parent: g-ai-gateway, icon: k8s-deploy, title: "OPA", tech: "[ext_authz · opa-envoy-plugin]", desc: "Per-tool authorization", status: planned, target: IA-3}
+  - {id: opa, kind: security, parent: g-ai-gateway, icon: k8s-deploy, title: "OPA", tech: "[extAuth · opa-envoy-plugin]", desc: "Per-tool authorization", status: planned, target: IA-3}
   # Gaps of the current landing zone to close (proposal, 2026-10-22): P0 before hosting agents.
   - {id: cilium-default-deny, kind: security, parent: g-ops, icon: cilium, title: "Default-deny policies", tech: "[CiliumClusterwideNetworkPolicy]", desc: "Tenant and egress isolation (G1)", status: planned, target: P0}
   - {id: cnpg-backup, kind: tool, parent: g-data, icon: cnpg, title: "CNPG backups", tech: "[Barman Cloud → Garage]", desc: "Point-in-time recovery", status: planned, target: P0}
@@ -281,56 +281,61 @@ elements:
   - {id: trivy-operator, kind: tool, parent: g-ops, icon: trivy, title: "Trivy Operator", tech: "[in-cluster scanning]", desc: "Vulnerabilities and misconfigurations", status: planned, target: P1}
   - {id: opencost, kind: tool, parent: g-ops, icon: opencost, title: "OpenCost", tech: "[cost per namespace]", desc: "Cost per app, with token cost", status: planned, target: P2}
   - {id: tetragon, kind: security, parent: g-ops, icon: cilium, title: "Tetragon", tech: "[eBPF runtime security]", desc: "Detects abnormal process behaviour", status: planned, target: P2}
-  # AI gateway zoom (proposal, 2026-10-23): Agent Router (ex-Envoy AI Gateway) v1.x opened up to
-  # its CRDs, controllers, Envoy filters and ExtProc sub-modules. Sources: theagentrouter.ai docs
-  # (architecture/control-plane, architecture/data-plane, api, capabilities/mcp).
-  - {id: g-ag-crd-ar, kind: group, parent: g-ai-gateway, color: orange, icon: k8s-crd, title: "AGENT ROUTER CRDs", sub: "aigateway.envoyproxy.io", status: planned, target: IA-1}
-  - {id: g-ag-crd-eg, kind: group, parent: g-ai-gateway, color: emerald, icon: k8s-crd, title: "GATEWAY API · ENVOY GATEWAY CRDs", sub: "used by the AI gateway", status: planned, target: IA-1}
-  - {id: g-ag-gen, kind: group, parent: z-cluster, color: slate, icon: k8s-crd, title: "GENERATED", sub: "by the AI Gateway controller", status: planned, target: IA-1}
-  - {id: g-ag-eg-ctrl, kind: group, parent: z-cluster, color: emerald, icon: envoy-gateway, title: "ENVOY GATEWAY", sub: "ns envoy-gateway-system"}
-  - {id: g-ag-ar-ctrl, kind: group, parent: z-cluster, color: orange, icon: k8s-deploy, title: "AI GATEWAY CONTROLLER", sub: "ns envoy-ai-gateway-system", status: planned, target: IA-1}
+
+
+  # AI gateway zoom (proposal, 2026-10-25): agentgateway on its own GatewayClass, next to Envoy Gateway.
+  # Sources: agentgateway.dev/docs/kubernetes/latest (about/architecture, about/policies/filter-order,
+  # llm/failover, llm/load-balancing, llm/guardrails, security/jwt, security/authorization,
+  # security/rate-limit-global, mcp/static-mcp, mcp/tool-access, agent/a2a, observability).
+  - {id: g-ag-crd-agw, kind: group, parent: g-ai-gateway, color: orange, icon: k8s-crd, title: "AGENTGATEWAY CRDs", sub: "agentgateway.dev", status: planned, target: IA-1}
+  - {id: g-ag-crd-gw, kind: group, parent: g-ai-gateway, color: emerald, icon: k8s-crd, title: "GATEWAY API", sub: "gateway.networking.k8s.io", status: planned, target: IA-1}
+  - {id: g-ag-pol, kind: group, parent: g-ai-gateway, color: rose, icon: k8s-crd, title: "POLICIES · TRAFFIC", sub: "Gateway, HTTPRoute", status: planned, target: IA-1}
+  - {id: g-ag-polb, kind: group, parent: g-ai-gateway, color: rose, icon: k8s-crd, title: "POLICIES · BACKEND", sub: "AgentgatewayBackend", status: planned, target: IA-1}
+  - {id: g-ag-ctrl, kind: group, parent: z-cluster, color: orange, icon: k8s-deploy, title: "AGENTGATEWAY CONTROLLER", sub: "ns ai-gateway", status: planned, target: IA-1}
   - {id: g-ag-kapi, kind: group, parent: z-cluster, color: cyan, icon: kubernetes, title: "KUBERNETES API", sub: "K3s control plane"}
-  - {id: g-ag-pod, kind: group, parent: z-cluster, color: orange, icon: k8s-pod, title: "ENVOY PROXY POD", sub: "ns envoy-gateway-system", status: planned, target: IA-1}
-  - {id: g-ag-envoy, kind: group, parent: g-ag-pod, color: emerald, icon: envoy, title: "CONTAINER envoy", sub: "HTTP filters, in order", status: planned, target: IA-1}
-  - {id: g-ag-xp, kind: group, parent: g-ag-pod, color: orange, icon: k8s-pod, title: "CONTAINER ai-gateway-extproc", sub: "sidecar · Unix socket", status: planned, target: IA-1}
-  - {id: g-ag-rl, kind: group, parent: z-cluster, color: violet, icon: redis, title: "RATE LIMIT", sub: "ns envoy-gateway-system", status: planned, target: IA-1}
+  - {id: g-ag-pod, kind: group, parent: z-cluster, color: orange, icon: k8s-pod, title: "AGENTGATEWAY PROXY POD", sub: "ns ai-gateway · Rust · 1 replica", status: planned, target: IA-1}
+  - {id: g-ag-chain, kind: group, parent: g-ag-pod, color: emerald, icon: k8s-pod, title: "REQUEST PIPELINE", sub: "policy order of the docs", status: planned, target: IA-1}
+  - {id: g-ag-proto, kind: group, parent: g-ag-pod, color: orange, icon: k8s-pod, title: "PROTOCOL HANDLERS", sub: "MCP · A2A", status: planned, target: IA-1}
+  - {id: g-ag-rl, kind: group, parent: z-cluster, color: violet, icon: redis, title: "RATE LIMIT", sub: "ns ai-gateway", status: planned, target: IA-1}
+  - {id: g-ag-hook, kind: group, parent: z-cluster, color: rose, icon: k8s-deploy, title: "GUARDRAIL ADAPTER", sub: "ns ai-gateway", status: planned, target: IA-2}
 
-  - {id: ag-route, kind: backend, parent: g-ag-crd-ar, icon: k8s-crd, title: "AIGatewayRoute llm", tech: "[match x-ai-eg-model]", desc: "The AI route: which model goes where.<br>Picks Gemini first, Ollama as fallback;<br>sets which tokens count as cost.", status: planned, target: IA-1}
-  - {id: ag-be-gemini, kind: backend, parent: g-ag-crd-ar, icon: k8s-crd, title: "AIServiceBackend gemini", tech: "[schema OpenAI · v1beta/openai]", desc: "Describes the Gemini provider:<br>its API format and where to send it.<br>Why: one entry per model provider.", status: planned, target: IA-1}
-  - {id: ag-be-ollama, kind: backend, parent: g-ag-crd-ar, icon: k8s-crd, title: "AIServiceBackend ollama", tech: "[schema OpenAI · v1]", desc: "Describes the local Ollama provider.<br>Same OpenAI format, no API key.<br>Why: free fallback, data stays home.", status: planned, target: IA-1}
-  - {id: ag-mcproute, kind: backend, parent: g-ag-crd-ar, icon: k8s-crd, title: "MCPRoute tools", tech: "[path /mcp · toolSelector]", desc: "One /mcp endpoint for all tool servers.<br>Filters tools, checks JWT claims.<br>Why: agents never reach tools directly.", status: planned, target: IA-2}
-  - {id: ag-bsp, kind: security, parent: g-ag-crd-ar, icon: k8s-crd, title: "BackendSecurityPolicy", tech: "[type APIKey]", desc: "How to authenticate to Gemini.<br>Points at the API key Secret.<br>Why: agents never hold the key.", status: planned, target: IA-1}
-  - {id: ag-gwconfig, kind: backend, parent: g-ag-crd-ar, icon: k8s-crd, title: "GatewayConfig", tech: "[extProc · globalLLMRequestCosts]", desc: "Settings of the ExtProc sidecar:<br>CPU/RAM, default token costs.<br>Why: one place for gateway defaults.", status: planned, target: IA-1}
-  - {id: ag-gateway, kind: backend, parent: g-ag-crd-eg, icon: k8s-crd, title: "Gateway ai-gateway", tech: "[listener HTTP 8080]", desc: "The entry point: an Envoy listener<br>reachable inside the cluster only.<br>Why: every AI call goes through it.", status: planned, target: IA-1}
-  - {id: ag-secpol, kind: security, parent: g-ag-crd-eg, icon: k8s-crd, title: "SecurityPolicy ai-jwt", tech: "[jwt + authorization]", desc: "Who may call: Keycloak JWT required,<br>project claim checked, else 403.<br>Why: no anonymous model access.", status: planned, target: IA-1}
-  - {id: ag-btp, kind: backend, parent: g-ag-crd-eg, icon: k8s-crd, title: "BackendTrafficPolicy", tech: "[rateLimit Global · retry]", desc: "Traffic rules to the backends:<br>token budget per project, retries.<br>Why: free quota lasts, 429 → Ollama.", status: planned, target: IA-1}
-  - {id: ag-backend-gemini, kind: cloud, parent: g-ag-crd-eg, icon: k8s-crd, title: "Backend gemini", tech: "[FQDN :443 · TLS]", desc: "Network target for Gemini: the FQDN,<br>port 443, TLS check of Google's cert.<br>Why: egress allowed to this host only.", status: planned, target: IA-1}
-  - {id: ag-backend-ollama, kind: backend, parent: g-ag-crd-eg, icon: k8s-crd, title: "Backend ollama", tech: "[IP :11434 · WireGuard]", desc: "Network target for Ollama: homelab IP<br>on port 11434, through WireGuard.<br>Why: GPU lives outside the cluster.", status: planned, target: IA-1}
-  - {id: ag-secret, kind: database, parent: g-ag-crd-eg, icon: k8s-secret, title: "Secret gemini-api-key", tech: "[key apiKey]", desc: "Holds the Gemini API key.<br>Written by VSO from Vault.<br>Why: the key never lives in Git.", status: planned, target: IA-1}
-  - {id: ag-httproute, kind: backend, parent: g-ag-gen, icon: k8s-crd, title: "HTTPRoute + filter", tech: "[one per AIGatewayRoute]", desc: "Plain Gateway API route the controller<br>derives from the AIGatewayRoute.<br>Why: Envoy Gateway only reads these.", status: planned, target: IA-1}
-  - {id: ag-extproc-secret, kind: database, parent: g-ag-gen, icon: k8s-secret, title: "ExtProc config", tech: "[Secret · filterconfig.yaml]", desc: "Config file for the sidecar: routes,<br>schemas, costs and the API key.<br>Why: sidecar reads it, no API calls.", status: planned, target: IA-1}
-  - {id: ag-eg-infra, kind: tool, parent: g-ag-eg-ctrl, icon: k8s-deploy, title: "Infra manager", tech: "[Envoy Gateway controller]", desc: "Creates the Envoy Deployment and<br>Service for each Gateway.<br>Already runs for shared-gateway."}
-  - {id: ag-eg-xds, kind: backend, parent: g-ag-eg-ctrl, icon: envoy-gateway, title: "xDS server", tech: "[gRPC ADS]", desc: "Streams config to Envoy (xDS).<br>Envoy reloads without restart.<br>Already runs today."}
-  - {id: ag-eg-translate, kind: backend, parent: g-ag-eg-ctrl, icon: envoy-gateway, title: "Gateway API translator", tech: "[Envoy Gateway controller]", desc: "Turns Gateway API objects and<br>policies into Envoy config.<br>Already runs today."}
-  - {id: ag-c-ext, kind: backend, parent: g-ag-ar-ctrl, icon: k8s-deploy, title: "Extension server", tech: "[EG extension API · gRPC]", desc: "Hooks into Envoy Gateway's translation<br>to add what Gateway API can't express:<br>upstream filters, backend priorities.", status: planned, target: IA-1}
-  - {id: ag-c-reconcile, kind: backend, parent: g-ag-ar-ctrl, icon: k8s-deploy, title: "Reconcilers", tech: "[controller-runtime]", desc: "Watches the Agent Router CRDs and<br>writes the generated objects.<br>Why: you edit intent, not plumbing.", status: planned, target: IA-1}
-  - {id: ag-c-cfg, kind: tool, parent: g-ag-ar-ctrl, icon: k8s-deploy, title: "ExtProc config builder", tech: "[one per Gateway]", desc: "Assembles the sidecar config file<br>from all routes, backends and keys.<br>Why: sidecar needs one complete view.", status: planned, target: IA-1}
-  - {id: ag-c-webhook, kind: security, parent: g-ag-ar-ctrl, icon: k8s-deploy, title: "Sidecar injector", tech: "[mutating webhook]", desc: "Adds the ExtProc container to every<br>Envoy pod when it is created.<br>Why: no manual Envoy patching.", status: planned, target: IA-1}
-  - {id: ag-f-listener, kind: backend, parent: g-ag-envoy, icon: envoy, title: "Listener :8080", tech: "[HTTP connection manager]", desc: "Port where requests enter Envoy.<br>HTTP parsing, timeouts, streaming.<br>Internal Service, no public route.", status: planned, target: IA-1}
-  - {id: ag-f-jwt, kind: security, parent: g-ag-envoy, icon: envoy, title: "jwt_authn · rbac", tech: "[from SecurityPolicy]", desc: "Checks the caller's Keycloak JWT and<br>its project claim before anything else.<br>Why: reject early, before any cost.", status: planned, target: IA-1}
-  - {id: ag-f-xp-router, kind: backend, parent: g-ag-envoy, icon: envoy, title: "ext_proc · router", tech: "[gRPC over Unix socket]", desc: "Sends headers and body to the sidecar,<br>gets back x-ai-eg-model to route on.<br>Why: Envoy routes on headers, not body.", status: planned, target: IA-1}
-  - {id: ag-f-rl, kind: backend, parent: g-ag-envoy, icon: envoy, title: "ratelimit", tech: "[global · BackendTrafficPolicy]", desc: "Asks the rate limit service if the<br>project has tokens left; adds the<br>real cost once the answer is known.", status: planned, target: IA-1}
-  - {id: ag-f-router, kind: backend, parent: g-ag-envoy, icon: envoy, title: "router", tech: "[route on x-ai-eg-model]", desc: "Chooses the backend: Gemini first,<br>Ollama on 429 (retry, priority 1).<br>Standard Envoy router, AI-unaware.", status: planned, target: IA-1}
-  - {id: ag-f-xp-up, kind: backend, parent: g-ag-envoy, icon: envoy, title: "Upstream filters", tech: "[ext_proc upstream · cluster]", desc: "Runs per backend, again on each retry:<br>translates and signs the request,<br>then reads the response.", status: planned, target: IA-1}
-  - {id: ag-x-parse, kind: backend, parent: g-ag-xp, icon: envoy, title: "Request parser", tech: "[router phase]", desc: "Reads model, stream flag and messages<br>from the JSON body.<br>Why: routing depends on the model.", status: planned, target: IA-1}
-  - {id: ag-x-usage, kind: backend, parent: g-ag-xp, icon: envoy, title: "Response processor", tech: "[JSON + SSE parser]", desc: "Reads token usage from the answer<br>(JSON or the last SSE chunk).<br>Why: cost-based limits and FinOps.", status: planned, target: IA-1}
-  - {id: ag-x-mcp, kind: backend, parent: g-ag-xp, icon: mcp, title: "MCP proxy", tech: "[MCPRoute · sessions]", desc: "Merges tools of several MCP servers,<br>prefixes names (cmp__tool), keeps<br>sessions. One endpoint for agents.", status: planned, target: IA-2}
-  - {id: ag-x-translate, kind: backend, parent: g-ag-xp, icon: envoy, title: "Translator", tech: "[OpenAI → backend schema]", desc: "Rewrites path and body to the format<br>the chosen provider expects.<br>Why: agents speak one API (OpenAI).", status: planned, target: IA-1}
-  - {id: ag-x-otel, kind: tool, parent: g-ag-xp, icon: opentelemetry, title: "Telemetry", tech: "[OTel GenAI conventions]", desc: "Exports GenAI metrics and spans:<br>tokens, latency, time to 1st token.<br>Why: cost and speed per project.", status: planned, target: IA-1}
-  - {id: ag-x-auth, kind: security, parent: g-ag-xp, icon: k8s-secret, title: "Backend auth", tech: "[BackendSecurityPolicy]", desc: "Adds the provider credential<br>(Authorization: Bearer key).<br>Why: agents never see the key.", status: planned, target: IA-1}
-  - {id: ag-rl, kind: backend, parent: g-ag-rl, icon: envoy, title: "envoy-ratelimit", tech: "[gRPC · descriptors]", desc: "Counts tokens per project and model<br>against configured budgets.<br>Why: keep within the free quota.", status: planned, target: IA-1}
-  - {id: ag-redis, kind: database, parent: g-ag-rl, icon: redis, title: "Redis", tech: "[counters with TTL]", desc: "Stores the counters with a TTL<br>per time window.<br>Shared by all Envoy replicas.", status: planned, target: IA-1}
-
+  - {id: ag-be-llm, kind: backend, parent: g-ag-crd-agw, icon: k8s-crd, title: "AgentgatewayBackend llm", tech: "[spec.ai · priority groups]", desc: "Group 1: the Gemini keys, balanced.<br>Group 2: the GPU server.<br>Why: a 429 on Gemini falls to the GPU.", status: planned, target: IA-1}
+  - {id: ag-be-local, kind: backend, parent: g-ag-crd-agw, icon: k8s-crd, title: "AgentgatewayBackend llm-local", tech: "[spec.ai · one group]", desc: "The GPU server only.<br>Why: Local projects never reach Gemini.", status: planned, target: IA-1}
+  - {id: ag-be-mcp, kind: backend, parent: g-ag-crd-agw, icon: k8s-crd, title: "AgentgatewayBackend mcp", tech: "[spec.mcp.targets · static]", desc: "Targets: the CMP's MCP server and<br>the ToolHive proxies, behind /mcp.<br>Why: agents never reach tools directly.", status: planned, target: IA-2}
+  - {id: ag-be-a2a, kind: backend, parent: g-ag-crd-agw, icon: k8s-crd, title: "AgentgatewayBackend a2a", tech: "[spec.a2a · host, port]", desc: "The A2A endpoint of one hosted agent.<br>Why: agents talk through the gateway.", status: planned, target: IA-2}
+  - {id: ag-params, kind: tool, parent: g-ag-crd-agw, icon: k8s-crd, title: "AgentgatewayParameters", tech: "[customises the proxy Deployment]", desc: "Tunes the proxy pod the Deployer<br>creates for the Gateway.", status: planned, target: IA-1}
+  - {id: ag-gatewayclass, kind: backend, parent: g-ag-crd-gw, icon: k8s-crd, title: "GatewayClass agentgateway", tech: "[Gateway API · cluster scoped]", desc: "Hands the Gateways of this class to<br>the agentgateway controller.<br>Why: apart from Envoy Gateway's class.", status: planned, target: IA-1}
+  - {id: ag-gateway, kind: backend, parent: g-ag-crd-gw, icon: k8s-crd, title: "Gateway ai-gateway", tech: "[gatewayClassName agentgateway]", desc: "The entry point: one listener, reachable<br>inside the cluster only.<br>Why: every agent call goes through it.", status: planned, target: IA-1}
+  - {id: ag-route, kind: backend, parent: g-ag-crd-gw, icon: k8s-crd, title: "HTTPRoute llm", tech: "[PathPrefix /v1]", desc: "Sends model calls to the llm backend.<br>Why: one OpenAI-compatible entry.", status: planned, target: IA-1}
+  - {id: md-route-local, kind: backend, parent: g-ag-crd-gw, icon: k8s-crd, title: "HTTPRoute llm-local", tech: "[header x-cnp-data: local]", desc: "Same path, llm-local backend only.<br>Why: Local data never leaves.", status: planned, target: IA-1}
+  - {id: ag-mcproute, kind: backend, parent: g-ag-crd-gw, icon: k8s-crd, title: "HTTPRoute mcp", tech: "[PathPrefix /mcp]", desc: "Sends tool calls to the mcp backend.<br>Why: one endpoint for all tools.", status: planned, target: IA-2}
+  - {id: ag-a2aroute, kind: backend, parent: g-ag-crd-gw, icon: k8s-crd, title: "HTTPRoute a2a", tech: "[PathPrefix /a2a/<agent>]", desc: "Rewrites the prefix to / and sends the<br>call to the agent's a2a backend.", status: planned, target: IA-2}
+  - {id: ag-secret, kind: database, parent: g-ag-crd-agw, icon: k8s-secret, title: "Secrets gemini-api-key-*", tech: "[key Authorization · one per key]", desc: "The Gemini keys, written by VSO.<br>Why: the keys never live in Git.", status: planned, target: IA-1}
+  - {id: ag-secret-gpu, kind: database, parent: g-ag-crd-agw, icon: k8s-secret, title: "Secret gpu-server-token", tech: "[key Authorization]", desc: "The token the GPU server's proxy<br>expects, written by VSO from Vault.", status: planned, target: IA-1}
+  - {id: ag-pol-auth, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy auth", tech: "[traffic.jwtAuthentication + authorization]", desc: "Keycloak JWT (iss, aud, JWKS), then CEL<br>rules on its claims; no match: 403.<br>Why: no anonymous model access.", status: planned, target: IA-1}
+  - {id: ag-pol-rate, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy budget", tech: "[traffic.rateLimit.global · Tokens]", desc: "Token budget checked by the rate limit<br>service; over the budget: 429.<br>Why: cap what an agent can spend.", status: planned, target: IA-1}
+  - {id: ag-pol-guard, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy guard", tech: "[backend.ai.promptGuard]", desc: "Regex masks PII and secrets, then the<br>webhook; no answer: refused.<br>Why: check the prompt before the model.", status: planned, target: IA-2}
+  - {id: ag-pol-failover, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy failover", tech: "[backend.health · traffic.retry]", desc: "Evicts a provider on 429 so the next<br>group takes over; retry resends.<br>Why: free quota spent, GPU answers.", status: planned, target: IA-1}
+  - {id: ag-pol-tools, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy tools", tech: "[backend.mcp.authorization]", desc: "CEL on the claims and mcp.tool.name:<br>which agent may call which tool.<br>Why: per-tool rights, no extra service.", status: planned, target: IA-2}
+  - {id: ag-pol-trace, kind: backend, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy trace", tech: "[frontend.tracing · OTLP gRPC]", desc: "Sends the spans to Alloy.<br>Why: one trace from agent to tool.", status: planned, target: IA-1}
+  - {id: ag-c-krt, kind: backend, parent: g-ag-ctrl, icon: k8s-deploy, title: "Translator", tech: "[krt collections]", desc: "Turns Gateway API and agentgateway<br>objects into proxy configuration.<br>Why: you edit intent, not plumbing.", status: planned, target: IA-1}
+  - {id: ag-c-xds, kind: backend, parent: g-ag-ctrl, icon: k8s-deploy, title: "xDS server", tech: "[gRPC ADS · delta updates]", desc: "Streams the configuration to the proxy,<br>applied without a restart.", status: planned, target: IA-1}
+  - {id: ag-c-deploy, kind: backend, parent: g-ag-ctrl, icon: k8s-deploy, title: "Deployer", tech: "[one proxy per Gateway]", desc: "Creates the proxy Deployment for each<br>Gateway of the agentgateway class.<br>Why: no proxy to run by hand.", status: planned, target: IA-1}
+  - {id: ag-c-status, kind: backend, parent: g-ag-ctrl, icon: k8s-deploy, title: "Status writer", tech: "[Gateway · listener · route]", desc: "Reports accepted or rejected on the<br>Gateway API objects.<br>Why: a rejected route is visible.", status: planned, target: IA-1}
+  - {id: ag-f-listener, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Listener :8080", tech: "[frontend · HTTP]", desc: "Where requests enter.<br>Internal Service, no public route.", status: planned, target: IA-1}
+  - {id: ag-f-jwt, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "jwtAuthentication", tech: "[traffic · Strict]", desc: "Checks signature (cached JWKS), iss<br>and aud before anything else.<br>Why: reject early, before any cost.", status: planned, target: IA-1}
+  - {id: ag-f-authz, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "authorization", tech: "[traffic · CEL · Allow]", desc: "Allow rules on the claims; no rule<br>matches: 403.<br>Why: deny by default.", status: planned, target: IA-1}
+  - {id: ag-f-rl, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "rateLimit", tech: "[traffic · global · Tokens]", desc: "Asks the rate limit service whether<br>the budget is spent.<br>Why: a 429 before any model cost.", status: planned, target: IA-1}
+  - {id: ag-f-route, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Route match", tech: "[HTTPRoute · backendRef]", desc: "Picks the route by path and header,<br>then its AgentgatewayBackend.<br>Why: Local calls get llm-local.", status: planned, target: IA-1}
+  - {id: ag-f-guard, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "promptGuard", tech: "[backend.ai · regex, webhook]", desc: "Masks PII and secrets, then asks the<br>guardrail adapter. Down: refused.<br>Why: check the prompt before the model.", status: planned, target: IA-2}
+  - {id: ag-f-pick, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Provider choice", tech: "[groups · P2C · health]", desc: "Best healthy provider of group 1;<br>on 429 it is evicted, group 2 follows.<br>Why: the free quota lasts.", status: planned, target: IA-1}
+  - {id: ag-x-llm, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "LLM proxy", tech: "[OpenAI-compatible · policies.auth]", desc: "Reads model and token usage, speaks the<br>provider's API with its key from the Secret.<br>Why: agents speak one API, hold no key.", status: planned, target: IA-1}
+  - {id: ag-x-mcp, kind: backend, parent: g-ag-proto, icon: mcp, title: "MCP proxy", tech: "[backend.mcp · streamable HTTP]", desc: "Serves the tools of its targets behind<br>one /mcp endpoint.<br>Why: agents see one tool server.", status: planned, target: IA-2}
+  - {id: ag-x-a2a, kind: backend, parent: g-ag-proto, icon: k8s-pod, title: "A2A proxy", tech: "[backend a2a · JSON-RPC]", desc: "Relays tasks between agents.<br>Why: agents talk through the gateway.", status: planned, target: IA-2}
+  - {id: ag-x-otel, kind: tool, parent: g-ag-pod, icon: opentelemetry, title: "Telemetry", tech: "[OTel GenAI · spans, metrics]", desc: "Spans over OTLP; token and cost<br>metrics on :15020 for scraping.<br>Why: cost and speed per agent.", ports: [{name: metrics, protocol: TCP, port: 15020}], status: planned, target: IA-1}
+  - {id: ag-rl, kind: backend, parent: g-ag-rl, icon: envoy, title: "Rate limit service", tech: "[envoyproxy/ratelimit · gRPC]", desc: "Counts tokens per descriptor against the<br>limits of the ConfigMap ratelimit-config.<br>Why: one shared budget.", ports: [{name: grpc, protocol: TCP, port: 8081}], status: planned, target: IA-1}
+  - {id: ag-redis, kind: database, parent: g-ag-rl, icon: redis, title: "Redis", tech: "[counters with TTL]", desc: "Stores the counters per window.<br>Why: shared by the service replicas.", status: planned, target: IA-1}
+  - {id: ag-hook, kind: security, parent: g-ag-hook, icon: python, title: "Guardrail adapter", tech: "[in-house · POST /request]", desc: "Turns the gateway's webhook call into<br>a Llama Guard check on the GPU server.<br>Why: the two formats do not match.", status: planned, target: IA-2}
   # Agent sandbox zoom (proposal, 2026-10-23): kubernetes-sigs/agent-sandbox v1beta1 with gVisor.
   # Sources: github.com/kubernetes-sigs/agent-sandbox, agent-sandbox.sigs.k8s.io (API, Python client).
   - {id: g-sb-ns, kind: group, parent: z-cluster, color: indigo, icon: k8s-ns, title: "AGENT NAMESPACE", sub: "ns <project>-agents · one per project", status: planned, target: IA-2}
@@ -390,7 +395,7 @@ elements:
   - {id: sb-seccomp, kind: security, parent: g-sb-pod-runc, icon: k8s-pod, title: "seccomp RuntimeDefault", tech: "[PSS restricted · non-root]", desc: "Blocks the riskiest syscalls; the<br>rest reaches the node kernel.<br>Why: enough without generated code.", status: planned, target: IA-1}
   - {id: sb-netpol-agent, kind: security, parent: g-sb-guard-ns, icon: cilium, title: "NetworkPolicy agent", tech: "[Cilium · default deny]", desc: "Egress: DNS and the two gateways.<br>Ingress: none.<br>Why: tools only via the gateways.", status: planned, target: IA-1}
 
-  # MCP tools zoom (proposal, 2026-10-23): ToolHive operator v1beta1 behind the Agent Router MCPRoute.
+  # MCP tools zoom (proposal, 2026-10-23): ToolHive operator v1beta1 behind the agentgateway MCP backend.
   # Sources: docs.stacklok.com/toolhive (guides-k8s, CRD reference), stacklok.com blog (CRD graduation, 2026-04-29).
   - {id: g-th-crd, kind: group, parent: g-mcp-tools, color: orange, icon: k8s-crd, title: "TOOLHIVE CRDs", sub: "toolhive.stacklok.dev/v1beta1", status: planned, target: IA-2}
   - {id: g-th-gen, kind: group, parent: g-mcp-tools, color: slate, icon: k8s-deploy, title: "GENERATED", sub: "by the operator, per MCPServer", status: planned, target: IA-2}
@@ -431,9 +436,8 @@ elements:
 
   # Models zoom (proposal, 2026-10-23): Gemini free tier first, Ollama on the homelab GPU over WireGuard.
   # Sources: ai.google.dev (rate limits, Gemini API additional terms), Ollama docs (server settings).
-  - {id: g-md-egress, kind: group, parent: z-cluster, color: rose, icon: cilium, title: "EGRESS RULES", sub: "ns envoy-gateway-system", status: planned, target: IA-1}
-  - {id: md-egress, kind: security, parent: g-md-egress, icon: cilium, title: "CiliumNetworkPolicy ai-egress", tech: "[toFQDNs · toCIDR /32]", desc: "Envoy may reach Google's API host<br>and the GPU host, nothing else.<br>Why: a bug can't send data away.", status: planned, target: IA-1}
-  - {id: md-route-local, kind: backend, parent: g-ag-crd-ar, icon: k8s-crd, title: "AIGatewayRoute llm-local", tech: "[match x-cnp-data: local]", desc: "Same API, Ollama as the only<br>backend.<br>Why: Local data never leaves.", status: planned, target: IA-1}
+  - {id: g-md-egress, kind: group, parent: z-cluster, color: rose, icon: cilium, title: "EGRESS RULES", sub: "ns ai-gateway", status: planned, target: IA-1}
+  - {id: md-egress, kind: security, parent: g-md-egress, icon: cilium, title: "CiliumNetworkPolicy ai-egress", tech: "[toFQDNs · toCIDR /32]", desc: "The proxy may reach Google's API host<br>and the GPU host, nothing else.<br>Why: a bug can't send data away.", status: planned, target: IA-1}
   - {id: md-wg, kind: cloud, parent: g-vpn, icon: k8s-pod, title: "wireguard (homelab)", tech: "[pod · UDP 51820]", desc: "Peer to the homelab; routes only<br>the GPU host's /32. Keys in Vault.<br>Why: no GPU on the CNP cluster.", status: planned, target: IA-1}
   - {id: md-quota, kind: cloud, parent: z-google-ai, icon: gemini, title: "Quota counters", tech: "[RPM · TPM · RPD]", desc: "Any one exceeded → 429.<br>RPD resets at midnight Pacific.<br>Why: the free tier's real limit.", status: planned, target: IA-1}
   - {id: md-project, kind: cloud, parent: z-google-ai, icon: gemini, title: "Google Cloud project", tech: "[AI Studio · free tier]", desc: "Owns the API key and the quota;<br>limits are per project, not per key.<br>Why: more keys add no quota.", status: planned, target: IA-1}
@@ -689,38 +693,41 @@ connections:
   - {id: c-aigw-keycloak, from: ai-gw-proxy, to: keycloak, port: http, protocol: HTTP, verb: fetch JWKS, kind: auth}
   - {id: c-aigw-ratelimit, from: ai-gw-proxy, to: ai-ratelimit, port: grpc, protocol: gRPC, verb: check quota, kind: flow}
   - {id: c-aigw-gemini, from: ai-gw-proxy, to: gemini, port: https, protocol: HTTPS, verb: chat/completions (OpenAI-compatible), kind: flow}
-  - {id: c-aigw-ollama, from: ai-gw-proxy, to: ollama, port: http, protocol: HTTP over WireGuard, verb: fallback, kind: flow}
+  - {id: c-aigw-ollama, from: ai-gw-proxy, to: ollama, port: http, protocol: HTTPS, verb: fallback on 429, kind: flow}
   - {id: c-aigw-cmp-mcp, from: ai-gw-proxy, to: cmp-mcp, port: http, protocol: HTTP, verb: tools/call, kind: flow}
   - {id: c-aigw-toolhive, from: ai-gw-proxy, to: toolhive, port: http, protocol: HTTP, verb: tools/call, kind: flow}
   - {id: c-aigw-alloy, from: ai-gw-proxy, to: observability, protocol: OTLP, verb: push GenAI spans, kind: async}
   - {id: c-alloy-tempo, from: observability, to: tempo, port: otlp, protocol: OTLP, verb: write traces, kind: async}
   - {id: c-vso-ai-secret, from: vso, to: ai-provider-secret, protocol: K8s API, verb: write Secret, kind: async}
-  # AI gateway zoom: request path through the Envoy filters and the ExtProc sidecar.
+  # AI gateway zoom: request path through the agentgateway policy order, then the control plane.
   - {id: c-ag-agent, from: hosted-agent, to: ag-f-listener, protocol: HTTP, verb: POST /v1/chat/completions, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-chain-1, from: ag-f-listener, to: ag-f-jwt, protocol: in-process, verb: next filter, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-chain-2, from: ag-f-jwt, to: ag-f-xp-router, protocol: in-process, verb: next filter, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-xp-parse, from: ag-f-xp-router, to: ag-x-parse, protocol: gRPC over UDS, verb: ext_proc, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-chain-3, from: ag-f-xp-router, to: ag-f-rl, protocol: in-process, verb: next filter, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-rl-check, from: ag-f-rl, to: ag-rl, protocol: gRPC, verb: ShouldRateLimit, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-chain-1, from: ag-f-listener, to: ag-f-jwt, protocol: in-process, verb: next policy, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-chain-2, from: ag-f-jwt, to: ag-f-authz, protocol: in-process, verb: next policy, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-chain-3, from: ag-f-authz, to: ag-f-rl, protocol: in-process, verb: next policy, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-rl-check, from: ag-f-rl, to: ag-rl, port: grpc, protocol: gRPC, verb: ShouldRateLimit, kind: flow, status: planned, target: IA-1}
   - {id: c-ag-rl-redis, from: ag-rl, to: ag-redis, protocol: RESP, verb: INCRBY, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-chain-4, from: ag-f-rl, to: ag-f-router, protocol: in-process, verb: next filter, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-chain-5, from: ag-f-router, to: ag-f-xp-up, protocol: in-process, verb: pick backend, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-xp-translate, from: ag-f-xp-up, to: ag-x-translate, protocol: gRPC over UDS, verb: ext_proc, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-translate-auth, from: ag-x-translate, to: ag-x-auth, protocol: in-process, verb: add credentials, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-gemini, from: ag-f-xp-up, to: gemini, protocol: HTTPS, verb: chat/completions, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-ollama, from: ag-f-xp-up, to: ollama, protocol: HTTP over WireGuard, verb: retry after 429, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-usage, from: ag-f-xp-up, to: ag-x-usage, protocol: gRPC over UDS, verb: ext_proc response, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-usage-otel, from: ag-x-usage, to: ag-x-otel, protocol: in-process, verb: record usage, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-otel, from: ag-x-otel, to: observability, protocol: OTLP, verb: metrics and spans, kind: async, status: planned, target: IA-1}
-  - {id: c-ag-mcp, from: ag-f-router, to: ag-x-mcp, protocol: HTTP, verb: /mcp, kind: flow, status: planned, target: IA-2}
+  - {id: c-ag-chain-4, from: ag-f-rl, to: ag-f-route, protocol: in-process, verb: match route, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-chain-5, from: ag-f-route, to: ag-f-guard, protocol: in-process, verb: backend policy, kind: flow, status: planned, target: IA-2}
+  - {id: c-ag-chain-6, from: ag-f-guard, to: ag-f-pick, protocol: in-process, verb: pick provider, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-guard-hook, from: ag-f-guard, to: ag-hook, protocol: HTTP, verb: POST /request, kind: flow, status: planned, target: IA-2}
+  - {id: c-ag-hook-guard, from: ag-hook, to: md-guard, protocol: HTTPS, verb: classify the prompt, kind: flow, status: planned, target: IA-2}
+  - {id: c-ag-chain-7, from: ag-f-pick, to: ag-x-llm, protocol: in-process, verb: LLM call, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-gemini, from: ag-x-llm, to: gemini, port: https, protocol: HTTPS, verb: generateContent, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-gpu, from: ag-x-llm, to: ollama, port: http, protocol: HTTPS, verb: after a 429 on Gemini, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-usage-otel, from: ag-x-llm, to: ag-x-otel, protocol: in-process, verb: record usage, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-otel, from: ag-x-otel, to: observability, protocol: OTLP, verb: spans, kind: async, status: planned, target: IA-1}
+  - {id: c-ag-mcp, from: ag-f-route, to: ag-x-mcp, protocol: in-process, verb: /mcp, kind: flow, status: planned, target: IA-2}
   - {id: c-ag-mcp-cmp, from: ag-x-mcp, to: cmp-mcp, protocol: HTTP, verb: tools/call, kind: flow, status: planned, target: IA-2}
   - {id: c-ag-mcp-toolhive, from: ag-x-mcp, to: toolhive, protocol: HTTP, verb: tools/call, kind: flow, status: planned, target: IA-2}
+  - {id: c-ag-a2a, from: ag-f-route, to: ag-x-a2a, protocol: in-process, verb: /a2a, kind: flow, status: planned, target: IA-2}
+  - {id: c-ag-a2a-agent, from: ag-x-a2a, to: hosted-agent, protocol: A2A, verb: message/send, kind: flow, status: planned, target: IA-2}
+  - {id: c-ag-krt-kapi, from: ag-c-krt, to: kube-apiserver, protocol: HTTPS, verb: watch, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-status-kapi, from: ag-c-status, to: kube-apiserver, protocol: HTTPS, verb: write status, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-deploy-kapi, from: ag-c-deploy, to: kube-apiserver, protocol: HTTPS, verb: create the Deployment, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-krt-xds, from: ag-c-krt, to: ag-c-xds, protocol: in-process, verb: translated config, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-ads, from: g-ag-pod, to: ag-c-xds, protocol: gRPC, verb: ADS stream, kind: flow, status: planned, target: IA-1}
   - {id: c-ag-jwks, from: ag-f-jwt, to: keycloak, protocol: HTTP, verb: fetch JWKS, kind: auth, status: planned, target: IA-1}
-  - {id: c-ag-ads, from: g-ag-envoy, to: ag-eg-xds, protocol: gRPC, verb: ADS stream, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-eg-kapi, from: ag-eg-translate, to: kube-apiserver, protocol: HTTPS, verb: watch, kind: flow}
-  - {id: c-ag-ar-kapi, from: ag-c-reconcile, to: kube-apiserver, protocol: HTTPS, verb: watch and write, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-eg-ext, from: ag-eg-translate, to: ag-c-ext, protocol: gRPC, verb: extension hooks, kind: flow, status: planned, target: IA-1}
-  - {id: c-ag-webhook, from: kube-apiserver, to: ag-c-webhook, protocol: HTTPS, verb: AdmissionReview, kind: flow, status: planned, target: IA-1}
+  - {id: c-ag-scrape, from: observability, to: ag-x-otel, port: metrics, protocol: HTTP, verb: scrape metrics, kind: async, status: planned, target: IA-1}
 
   # Agent sandbox zoom: claim, bind, run code, and how a warm sandbox comes up.
   - {id: c-sb-claim, from: hosted-agent, to: kube-apiserver, protocol: HTTPS, verb: create SandboxClaim, kind: flow, status: planned, target: IA-2}
@@ -890,16 +897,24 @@ references:
   - {id: r-aigw-route-proxy, from: ai-gw-route, to: ai-gw-proxy, kind: parentRef}
   - {id: r-aigw-policy-route, from: ai-gw-policy, to: ai-gw-route, kind: targetRef}
   - {id: r-aigw-route-secret, from: ai-gw-route, to: ai-provider-secret, kind: secretKeyRef}
-  - {id: r-ag-route-gemini, from: ag-route, to: ag-be-gemini, kind: backendRef}
-  - {id: r-ag-route-ollama, from: ag-route, to: ag-be-ollama, kind: backendRef}
-  - {id: r-ag-be-gemini, from: ag-be-gemini, to: ag-backend-gemini, kind: backendRef}
-  - {id: r-ag-be-ollama, from: ag-be-ollama, to: ag-backend-ollama, kind: backendRef}
-  - {id: r-ag-bsp-target, from: ag-bsp, to: ag-be-gemini, kind: targetRef}
-  - {id: r-ag-bsp-secret, from: ag-bsp, to: ag-secret, kind: secretRef}
-  - {id: r-ag-secpol, from: ag-secpol, to: ag-gateway, kind: targetRef}
-  - {id: r-ag-btp, from: ag-btp, to: ag-gateway, kind: targetRef}
-  - {id: r-ag-gwconfig, from: ag-gateway, to: ag-gwconfig, kind: annotation}
-  - {id: r-ag-mount, from: ag-extproc-secret, to: g-ag-xp, kind: volumeMount}
+  - {id: r-ag-gw-class, from: ag-gateway, to: ag-gatewayclass, kind: gatewayClassName}
+  - {id: r-ag-route-gw, from: ag-route, to: ag-gateway, kind: parentRef}
+  - {id: r-ag-local-gw, from: md-route-local, to: ag-gateway, kind: parentRef}
+  - {id: r-ag-mcproute-gw, from: ag-mcproute, to: ag-gateway, kind: parentRef}
+  - {id: r-ag-a2aroute-gw, from: ag-a2aroute, to: ag-gateway, kind: parentRef}
+  - {id: r-ag-route-llm, from: ag-route, to: ag-be-llm, kind: backendRef}
+  - {id: r-ag-local-be, from: md-route-local, to: ag-be-local, kind: backendRef}
+  - {id: r-ag-mcproute-be, from: ag-mcproute, to: ag-be-mcp, kind: backendRef}
+  - {id: r-ag-a2aroute-be, from: ag-a2aroute, to: ag-be-a2a, kind: backendRef}
+  - {id: r-ag-be-secret, from: ag-be-llm, to: ag-secret, kind: secretRef}
+  - {id: r-ag-be-gpu-secret, from: ag-be-llm, to: ag-secret-gpu, kind: secretRef}
+  - {id: r-ag-pol-auth, from: ag-pol-auth, to: ag-gateway, kind: targetRef}
+  - {id: r-ag-pol-rate, from: ag-pol-rate, to: ag-route, kind: targetRef}
+  - {id: r-ag-pol-guard, from: ag-pol-guard, to: ag-be-llm, kind: targetRef}
+  - {id: r-ag-pol-failover, from: ag-pol-failover, to: ag-be-llm, kind: targetRef}
+  - {id: r-ag-pol-tools, from: ag-pol-tools, to: ag-be-mcp, kind: targetRef}
+  - {id: r-ag-pol-trace, from: ag-pol-trace, to: ag-gateway, kind: targetRef}
+  - {id: r-ag-local-secret, from: ag-be-local, to: ag-secret-gpu, kind: secretRef}
 
   - {id: r-sb-pool-template, from: sb-warmpool, to: sb-template, kind: sandboxTemplateRef}
   - {id: r-sb-claim-pool, from: sb-claim, to: sb-warmpool, kind: warmPoolRef}
@@ -916,7 +931,7 @@ references:
   - {id: r-th-oidc, from: th-mcpserver, to: th-oidc, kind: oidcConfigRef}
   - {id: r-th-tel, from: th-mcpserver, to: th-telemetry, kind: telemetryConfigRef}
   - {id: r-th-secret, from: th-mcpserver, to: th-secret, kind: secrets}
-  - {id: r-th-route, from: ag-mcproute, to: th-svc, kind: backendRef}
+  - {id: r-th-route, from: ag-be-mcp, to: th-svc, kind: targets.static.backendRef}
 
   - {id: r-id-secret, from: id-secret, to: hosted-agent, kind: envFrom}
   - {id: r-id-scope, from: id-client-agent, to: id-scope-project, kind: default scope}
@@ -924,7 +939,6 @@ references:
   - {id: r-id-aud, from: id-scope-aud, to: id-client-gw, kind: audience}
   - {id: r-id-policy, from: id-policy, to: id-client-agent, kind: governs}
 
-  - {id: r-md-local, from: md-route-local, to: ag-be-ollama, kind: backendRef}
   - {id: r-md-project, from: md-project, to: md-quota, kind: owns}
   - {id: r-md-guard, from: md-store, to: md-guard, kind: contains}
 

@@ -7,7 +7,7 @@ subtitle: "Every zoom on one canvas: how a user, an app, an agent and a release 
 meta:
   - "Scope: on-prem hub and its EKS and GKE targets, 2026-10-22 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
   - "Out of scope: observability (ai-gateway view) · cnp.sh and Terraform state (multicloud view) · RBAC and grants (access-matrix view) · per-cluster policies (multicloud-policies view) · the homelab GPU cluster's own stack"
-  - "Assumed: Agent Router (ex-Envoy AI Gateway) on the existing Envoy Gateway; Gemini free tier first, Ollama on 429 or for Local projects"
+  - "Assumed: agentgateway on its own GatewayClass, beside Envoy Gateway; Gemini free tier first, the GPU server on 429 or for Local projects"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
 include:

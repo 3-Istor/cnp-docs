@@ -5,10 +5,10 @@ state: diff
 title: "CNP · AI landing zone · AI gateway"
 subtitle: "How does an agent's call reach a model or a tool, and what checks it on the way?"
 meta:
-  - "Scope: proposal for the on-prem K3s cluster, 2026-10-22 · drawn in full: what the proposal adds (IA-1, IA-2) · faded: what already runs"
-  - "Out of scope: external assistants (agent-kit view) · the same gateway on EKS and GKE · admission policies · Ollama's own cluster"
-  - "Assumed: Agent Router (ex-Envoy AI Gateway) on the existing Envoy Gateway; Alloy receives OTLP"
-  - "v0.1 · source: cnp-docs/architecture/cnp"
+  - "Scope: proposal for the on-prem K3s cluster, 2026-10-25 · drawn in full: what the proposal adds (IA-1, IA-2) · faded: what already runs"
+  - "Out of scope: external assistants (agent-kit view) · the same gateway on EKS and GKE · admission policies · what runs on the GPU server"
+  - "Assumed: agentgateway on its own GatewayClass, beside Envoy Gateway; Alloy receives OTLP"
+  - "v0.2 · source: cnp-docs/architecture/cnp"
 
 include:
   - z-cluster
@@ -51,8 +51,8 @@ labels:
   r-aigw-route-secret: ""
 
 notes:
-  - {id: n-authz, text: "The SecurityPolicy checks the JWT and the project claim before routing: no match, 403. AIGatewayRoute then picks the model the project may use."}
-  - {id: n-fallback, text: "Gemini answers 429 when the free quota is spent: the gateway retries on Ollama. Projects marked Local never reach Gemini."}
+  - {id: n-authz, text: "The AgentgatewayPolicy checks the JWT and applies CEL rules on its claims before routing: no match, 403. The route then picks the backend the project may use."}
+  - {id: n-fallback, text: "Gemini answers 429 when the free quota is spent: the gateway falls back to the GPU server. Projects marked Local never reach Gemini."}
 
 cards:
   - id: card-steps
@@ -60,10 +60,10 @@ cards:
     color: emerald
     lines:
       - "Before [1], the agent gets a short token from Keycloak by token exchange: see the ai-gateway-call sequence."
-      - "[1] The agent calls POST /v1/chat/completions on the internal listener with that token; the SecurityPolicy validates it and checks the project claim."
-      - "[2] The gateway checks the project's token quota in the rate limit service."
-      - "[3] It calls Gemini with the key from the Secret, through the FQDN egress allow-list; on 429 or for Local projects it calls Ollama instead."
-      - "Tool calls take the same chain, then MCPRoute sends them to the CMP's MCP server (stake policy) or to a ToolHive server."
+      - "[1] The agent calls POST /v1/chat/completions on the internal listener with that token; the AgentgatewayPolicy validates it and checks its claims."
+      - "[2] The gateway checks the agent's token budget in the rate limit service."
+      - "[3] It calls Gemini with a key from the Secrets, through the FQDN egress allow-list; on 429 or for Local projects it calls the GPU server instead."
+      - "Tool calls take the same chain, then the mcp route sends them to the CMP's MCP server (stake policy) or to a ToolHive server."
       - "Tenant apps call the gateway like the agent, with their project's token."
   - id: card-background
     title: "Background · control plane"
@@ -71,15 +71,15 @@ cards:
     lines:
       - "[A] The proxy fetches Keycloak's JWKS and caches it."
       - "[B] The secrets operator reads the Gemini key from Vault."
-      - "[C] It writes the Secret that the AIGatewayRoute's backend security policy references."
+      - "[C] It writes the Secrets that the AgentgatewayBackend references."
       - "[D] The proxy pushes GenAI spans and token metrics to Alloy over OTLP."
       - "[E] Alloy writes the traces to Tempo; Grafana shows tokens, cost and latency per project."
   - id: card-plan
     title: "What this proposal adds · targets"
     color: sky
     lines:
-      - "**IA-1** AI gateway (proxy, routes, SecurityPolicy, rate limit), Gemini and Ollama backends, Tempo."
-      - "**IA-2** Hosted agents in sandboxed namespaces (Sandbox CRD, gVisor), ToolHive MCP servers."
+      - "**IA-1** AI gateway (proxy, routes, AgentgatewayPolicy, rate limit), Gemini and GPU server backends, Tempo."
+      - "**IA-2** Hosted agents in sandboxed namespaces (Sandbox CRD, gVisor), ToolHive MCP servers, guardrails, A2A."
       - "Prerequisites from the current platform: G1 default-deny between tenants, G8 pod security context, G17 protected GitOps branches."
-      - "Memory budget on this cluster: about 1 to 2.5 GB in total; to measure once deployed."
+      - "Memory budget on this cluster: about 4 GB for the whole AI zone; to measure once deployed (spec section 7)."
   - {id: card-legend, title: Legend, color: slate, legend: true}

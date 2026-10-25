@@ -3,7 +3,7 @@ kind: View
 type: topology
 state: diff
 title: "CNP · Platform overview · detailed, with the AI landing zone"
-subtitle: "Every zoom on one canvas: the hub as it runs today and the AI landing zone down to its filters, controllers and kernels"
+subtitle: "Every zoom on one canvas: the hub as it runs today and the AI landing zone down to its policies, controllers and kernels"
 meta:
   - "Scope: on-prem K3s hub and the AI landing zone proposal of 2026-10-23 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
   - "Three sandbox tiers side by side: standard (runc), gVisor and Kata, each on its own worker node; a platform can offer one, two or all three"
@@ -70,51 +70,50 @@ include:
   - garage-s3
   - cnpg-backup
   - g-ai-gateway
-  - g-ag-crd-ar
-  - ag-route
-  - ag-be-gemini
-  - ag-be-ollama
-  - ag-mcproute
-  - ag-bsp
-  - ag-gwconfig
+  - g-ag-pol
+  - ag-pol-rate
+  - ag-pol-auth
+  - ag-pol-trace
+  - g-ag-crd-gw
+  - ag-gatewayclass
   - md-route-local
-  - g-ag-crd-eg
+  - ag-a2aroute
+  - g-ag-crd-agw
+  - ag-be-llm
+  - ag-be-local
+  - ag-be-mcp
+  - ag-be-a2a
+  - ag-secret-gpu
+  - ag-params
+  - g-ag-polb
+  - ag-pol-guard
+  - ag-pol-failover
+  - ag-pol-tools
+  - g-ag-ctrl
+  - ag-c-xds
+  - g-ag-chain
+  - ag-f-authz
+  - ag-f-route
+  - ag-f-guard
+  - ag-f-pick
+  - ag-x-llm
+  - g-ag-proto
+  - ag-x-a2a
+  - g-ag-hook
+  - ag-hook
+  - ag-route
+  - ag-mcproute
   - ag-gateway
-  - ag-secpol
-  - ag-btp
-  - ag-backend-gemini
-  - ag-backend-ollama
   - ag-secret
-  - g-ag-gen
-  - ag-httproute
-  - ag-extproc-secret
-  - g-ag-eg-ctrl
-  - ag-eg-infra
-  - ag-eg-xds
-  - ag-eg-translate
-  - g-ag-ar-ctrl
-  - ag-c-ext
-  - ag-c-reconcile
-  - ag-c-cfg
-  - ag-c-webhook
   - g-agents
   - hosted-agent
   - id-secret
   - g-ag-pod
-  - g-ag-envoy
   - ag-f-listener
   - ag-f-jwt
-  - ag-f-xp-router
   - ag-f-rl
-  - ag-f-router
-  - ag-f-xp-up
-  - g-ag-xp
-  - ag-x-parse
-  - ag-x-usage
   - ag-x-mcp
-  - ag-x-translate
   - ag-x-otel
-  - ag-x-auth
   - g-ag-rl
   - ag-rl
   - ag-redis
@@ -232,8 +231,8 @@ include:
   - sb-hv
   - sb-nested
 
-steps: [c-id-login, c-id-ask, c-agent-keycloak, c-sb-claim, c-sb-run, c-sb-router-pod, c-ag-agent, c-ag-rl-check, c-ag-gemini, c-ag-ollama, c-ag-mcp, c-th-gw, c-th-run, c-ob-gw, c-ob-5]
-background: [c-id-provision, c-id-vault, c-id-vso-read, c-id-vso, c-ag-ar-kapi, c-sb-core-kapi, c-th-op-kapi, c-argocd-apiserver, c-md-tunnel]
+steps: [c-id-login, c-id-ask, c-agent-keycloak, c-sb-claim, c-sb-run, c-sb-router-pod, c-ag-agent, c-ag-rl-check, c-ag-gemini, c-ag-gpu, c-ag-mcp, c-th-gw, c-th-run, c-ob-gw, c-ob-5]
+background: [c-id-provision, c-id-vault, c-id-vso-read, c-id-vso, c-ag-ads, c-sb-core-kapi, c-th-op-kapi, c-argocd-apiserver, c-md-tunnel]
 
 cards:
   - id: card-steps
@@ -242,8 +241,8 @@ cards:
     lines:
       - "[1] [2] The user signs in to Keycloak and asks the agent, sending a user token. [3] The agent exchanges it for its own short token (or uses client_credentials when it acts alone)."
       - "[4] The agent creates a SandboxClaim; the controller hands it a warm sandbox from the pool of the chosen tier. [5] [6] It sends commands through the sandbox router, which forwards them to the sandbox pod (gVisor here; Kata the same way)."
-      - "[7] The agent asks a model at the AI gateway's internal listener; JWT and project checks run, then [8] the rate limit checks the project's token budget."
-      - "[9] The router sends the request to Gemini; [10] on 429 it retries on Ollama in the homelab, over WireGuard."
+      - "[7] The agent asks a model at the AI gateway's internal listener; JWT and CEL checks run, then [8] the rate limit service checks the token budget."
+      - "[9] The LLM proxy sends the request to Gemini; [10] after a 429 the failover policy sends it to the GPU server."
       - "[11]–[13] A tool call on /mcp goes through the MCP proxy of the gateway to the ToolHive proxy, then to the MCP server over JSON-RPC."
       - "[14] [15] The gateway exports GenAI metrics and spans to Alloy, which writes traces to Tempo and metrics to Prometheus."
   - id: card-background
@@ -252,24 +251,56 @@ cards:
     lines:
       - "[A] [B] When a project gets an agent, the CMP creates its Keycloak client and writes the client secret to Vault."
       - "[C] [D] The secrets operator reads it and writes the Kubernetes Secret mounted by the agent."
-      - "[E] [F] [G] The Agent Router controller, the sandbox controller and the ToolHive operator watch their CRDs and write what they generate (routes, pods, services)."
+      - "[E] [F] [G] The agentgateway controller, the sandbox controller and the ToolHive operator watch their CRDs and configure the proxy or write what they generate (pods, services)."
       - "[H] Argo CD applies everything from Git, the AI landing zone included."
       - "[I] The WireGuard tunnel to the homelab GPU stays up, so Ollama is one hop away."
   - {id: card-legend, title: Legend, color: slate, legend: true}
 
 labels:
+  c-ob-agent: ""
+  c-th-proxy-kapi: ""
+  c-th-jwks: ""
+  c-id-vso: ""
+  c-id-ask: ""
+  c-sb-claim: ""
+  c-agent-keycloak: ""
+  r-ag-gw-class: ""
+  r-ag-route-gw: ""
+  r-ag-local-gw: ""
+  r-ag-mcproute-gw: ""
+  r-ag-a2aroute-gw: ""
+  r-ag-route-llm: ""
+  r-ag-local-be: ""
+  r-ag-mcproute-be: ""
+  r-ag-a2aroute-be: ""
+  r-ag-be-secret: ""
+  r-ag-be-gpu-secret: ""
+  r-ag-local-secret: ""
+  r-ag-pol-auth: ""
+  r-ag-pol-trace: ""
+  r-ag-pol-rate: ""
+  r-ag-pol-guard: ""
+  r-ag-pol-failover: ""
+  r-ag-pol-tools: ""
+  c-ag-chain-5: ""
+  c-ag-chain-6: ""
+  c-ag-chain-7: ""
+  c-ag-usage-otel: ""
+  c-ag-a2a: ""
+  c-ag-a2a-agent: ""
+  c-ag-guard-hook: ""
+  c-ag-hook-guard: ""
+  c-ag-jwks: ""
+  c-ag-mcp-cmp: ""
+  r-th-route: ""
   c-ag-ads: ""
   c-ag-agent: ""
   c-ag-chain-1: ""
   c-ag-chain-2: ""
   c-ag-chain-3: ""
   c-ag-chain-4: ""
-  c-ag-chain-5: ""
-  c-ag-eg-ext: ""
-  c-ag-eg-kapi: "watch"
-  c-ag-mcp: "/mcp"
+  c-ag-mcp: ""
   c-ag-rl-redis: ""
-  c-ag-xp-translate: "ext_proc"
   c-argocd-b: ""
   c-mcp-api: "call REST in-process"
   c-md-gpu: ""
@@ -300,10 +331,6 @@ labels:
   e-6-pods-db: ""
   e-a-vso-vault: ""
   e-oidc-platform-envoy: ""
-  r-ag-be-gemini: ""
-  r-ag-gwconfig: ""
-  r-ag-route-gemini: ""
-  r-ag-secpol: ""
   r-id-secret: ""
   r-id-svc: ""
   r-mcp-policy: ""

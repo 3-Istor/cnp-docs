@@ -5,16 +5,20 @@ state: diff
 title: "CNP · AI landing zone · MCP tools internals"
 subtitle: "How does an agent's tool call reach a tool server, and who checks it on the way?"
 meta:
-  - "Scope: Agent Router MCPRoute in front, ToolHive operator v1beta1 for third-party tool servers, the CMP's own MCP server, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-2) · faded: what already runs"
-  - "Out of scope: model calls (AI gateway internals) · OPA ext_authz per tool (IA-3) · ToolHive vMCP, not needed while the MCPRoute aggregates"
-  - "Assumed: example tool server github-mcp-server over stdio; one MCPRoute per gateway; tool tokens synced from Vault"
-  - "v0.1 · source: cnp-docs/architecture/cnp · docs.stacklok.com/toolhive · theagentrouter.ai (MCP)"
+  - "Scope: the agentgateway MCP backend in front, ToolHive operator v1beta1 for third-party tool servers, the CMP's own MCP server, proposal of 2026-10-25 · drawn in full: what the proposal adds (IA-2) · faded: what already runs"
+  - "Out of scope: model calls (AI gateway internals) · OPA through extAuth per tool (IA-3) · ToolHive vMCP, not needed while the MCP backend serves all targets"
+  - "Assumed: example tool server github-mcp-server over stdio; one mcp route and one AgentgatewayBackend mcp per gateway; tool tokens synced from Vault"
+  - "v0.2 · source: cnp-docs/architecture/cnp · docs.stacklok.com/toolhive · agentgateway docs (MCP connectivity, tool access)"
 
 include:
   - z-cluster
   - g-ai-gateway
-  - g-ag-crd-ar
+  - g-ag-crd-gw
   - ag-mcproute
+  - g-ag-crd-agw
+  - ag-be-mcp
+  - g-ag-polb
+  - ag-pol-tools
   - g-mcp-tools
   - g-th-crd
   - th-mcpserver
@@ -31,8 +35,8 @@ include:
   - th-server
   - g-th-op
   - th-op
-  - g-ag-ar-ctrl
-  - ag-c-reconcile
+  - g-ag-ctrl
+  - ag-c-krt
   - g-ag-kapi
   - kube-apiserver
   - g-identity
@@ -40,14 +44,13 @@ include:
   - g-agents
   - hosted-agent
   - g-ag-pod
-  - g-ag-envoy
+  - g-ag-chain
   - ag-f-listener
   - ag-f-jwt
-  - ag-f-xp-router
+  - ag-f-authz
   - ag-f-rl
-  - ag-f-router
-  - ag-f-xp-up
-  - g-ag-xp
+  - ag-f-route
+  - g-ag-proto
   - ag-x-mcp
   - g-cmp
   - cmp-mcp
@@ -58,7 +61,7 @@ include:
   - gh-project-repos
 
 steps: [c-ag-agent, c-ag-mcp, c-th-gw, c-th-run, c-th-github, c-ag-mcp-cmp, c-mcp-api, c-mcp-app-repos]
-background: [c-th-op-kapi, c-ag-ar-kapi, c-th-proxy-kapi, c-th-jwks, c-ag-jwks, c-agent-keycloak, c-sb-claim]
+background: [c-th-op-kapi, c-ag-krt-kapi, c-th-proxy-kapi, c-th-jwks, c-ag-jwks, c-agent-keycloak, c-sb-claim]
 
 labels:
   c-ag-agent: ""
@@ -74,9 +77,12 @@ labels:
   c-ag-chain-2: ""
   c-ag-chain-3: ""
   c-ag-chain-4: ""
-  c-ag-chain-5: ""
   c-th-op-kapi: ""
-  c-ag-ar-kapi: ""
+  c-ag-krt-kapi: ""
+  r-ag-mcproute-be: ""
+  r-ag-pol-tools: ""
+  r-th-route: ""
+  r-ag-mcproute-gw: ""
   c-th-proxy-kapi: ""
   c-th-jwks: ""
   c-ag-jwks: ""
@@ -90,7 +96,7 @@ labels:
 
 notes:
   - {id: n-th-two, text: "Two kinds of tool servers behind one /mcp: the CMP's own MCP server, which already applies the stake policy per project, and third-party servers run by ToolHive, each in its own pod with its own token."}
-  - {id: n-th-names, text: "The MCP proxy prefixes every tool with its backend name (github__issue_read, cmp__create_app): the prefix picks the backend, and the agent sees one flat list."}
+  - {id: n-th-names, text: "The MCP backend lists the tools of all its targets behind one /mcp endpoint, so the agent sees one tool server. How names are kept apart across targets is for the phase 2 trial to confirm."}
   - {id: n-th-stake, text: "Stake policy: allow runs at once, ask needs the user's yes, PR opens a pull request, approve waits for an approver in the CMP, deny refuses. The agent never decides its own stake."}
 
 cards:
@@ -98,25 +104,25 @@ cards:
     title: "Request path · an agent calls a tool"
     color: emerald
     lines:
-      - "[1] The agent sends tools/call to /mcp on the AI gateway with its JWT; jwt_authn and rbac check it as for a model call."
-      - "[2] The router sends /mcp to the MCP proxy in the sidecar, which checks the MCPRoute's tool filter and CEL rules on the JWT claims."
-      - "[3] For github__issue_read, the proxy strips the prefix and calls the ToolHive proxy of that server."
+      - "[1] The agent sends tools/call to /mcp on the AI gateway with its JWT; jwtAuthentication and authorization check it as for a model call."
+      - "[2] The route match sends /mcp to the MCP proxy, which applies the AgentgatewayPolicy tools: CEL on the JWT claims and mcp.tool.name, allow only what matches."
+      - "[3] For a GitHub tool such as issue_read, the MCP proxy calls the ToolHive proxy of that server."
       - "[4] The ToolHive proxy checks the JWT again (Keycloak issuer, audience), its Cedar policy and tool filter, then writes the JSON-RPC to the server's stdin."
       - "[5] github-mcp-server calls the GitHub API with its own token, never the agent's."
-      - "[6] For cmp__* tools, the MCP proxy calls the CMP's MCP server, [7] which evaluates the stake policy and calls the CMP API, [8] which commits or tags in the app repo."
+      - "[6] For CMP tools, the MCP proxy calls the CMP's MCP server, [7] which evaluates the stake policy and calls the CMP API, [8] which commits or tags in the app repo."
   - id: card-background
     title: "Background · control plane and identity"
     color: amber
     lines:
       - "[A] The ToolHive operator watches MCPServer and writes the proxy Deployment, Service, ServiceAccount and Role."
-      - "[B] The AI Gateway controller watches the MCPRoute and configures the MCP proxy."
+      - "[B] The agentgateway controller watches the mcp route, the mcp backend and the tools policy, and configures the MCP proxy."
       - "[C] The ToolHive proxy creates the server pod and attaches to its stdio through the API."
-      - "[D] [E] The ToolHive proxy and jwt_authn fetch Keycloak's JWKS. [F] The agent gets its JWT from Keycloak. [G] Code runs go to sandboxes (sandbox zoom)."
+      - "[D] [E] The ToolHive proxy and jwtAuthentication fetch Keycloak's JWKS. [F] The agent gets its JWT from Keycloak. [G] Code runs go to sandboxes (sandbox zoom)."
   - id: card-objects
     title: "Objects · who points at whom"
     color: sky
     lines:
-      - "MCPRoute tools → Service mcp-github-proxy (and the CMP's MCP service)."
+      - "HTTPRoute mcp → AgentgatewayBackend mcp → Service mcp-github-proxy (and the CMP's MCP service); AgentgatewayPolicy tools → the backend."
       - "MCPServer github → MCPToolConfig, MCPOIDCConfig, MCPTelemetryConfig, Secret github-token."
       - "Per MCPServer the operator generates a Deployment for the proxy, a Service and a ServiceAccount with its Role; the proxy creates the server pod."
       - "stdio servers run as one replica with one client: here the MCP proxy. Scale with streamable HTTP servers."

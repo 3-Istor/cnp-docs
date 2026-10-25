@@ -15,7 +15,6 @@ include:
   - g-agents
   - hosted-agent
   - g-ag-pod
-  - g-ag-xp
   - ag-x-otel
   - g-mcp-tools
   - g-th-run
@@ -69,7 +68,7 @@ cards:
     title: "Request path · one agent call, three sources"
     color: emerald
     lines:
-      - "[1] The agent's SDK sends its spans (invoke_agent, chat, execute_tool) to Alloy over OTLP. [2] The gateway's sidecar sends gen_ai.client.token.usage, gen_ai.client.operation.duration and its spans. [3] The ToolHive proxy sends mcp.* spans and metrics."
+      - "[1] The agent's SDK sends its spans (invoke_agent, chat, execute_tool) to Alloy over OTLP. [2] The gateway sends its spans over OTLP; Alloy scrapes its token and cost metrics on :15020. [3] The ToolHive proxy sends mcp.* spans and metrics."
       - "[4]–[6] Alloy adds namespace and project from the pod, drops message content unless opted in, then batches."
       - "[7] [8] Traces go to Tempo. [9] [10] Metrics become Prometheus series by remote write."
       - "[11] [12] Grafana reads traces with TraceQL and metrics with PromQL: tokens per project and model, latency, 429s, share of calls that fell back to Ollama. Alert rules run on the same series."
