@@ -1,0 +1,84 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · AI landing zone · Agent runtime · standard tier"
+subtitle: "For agents that never run generated code: what keeps them in check without a sandbox runtime?"
+meta:
+  - "Scope: a hosted agent with no code execution tool, default runc runtime, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
+  - "Out of scope: the AI gateway's insides (AI gateway internals view) · agents that run code (gVisor and Kata tiers)"
+  - "Assumed: the agent's tools are only those the gateway exposes to it; a Kyverno rule moves any agent that gets a code tool to a sandbox RuntimeClass"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-cluster
+  - g-sb-ns
+  - g-sb-crd
+  - sb-sandbox
+  - sb-svc
+  - g-sb-guard-ns
+  - sb-quota
+  - sb-netpol-agent
+  - g-sb-guard
+  - sb-kpol
+  - g-sb-ctrl
+  - sb-c-core
+  - g-ag-kapi
+  - kube-apiserver
+  - g-ops
+  - kyverno
+  - g-sb-node-runc
+  - sb-kubelet-runc
+  - sb-containerd-runc
+  - sb-runc
+  - g-sb-pod-runc
+  - sb-agent-loop
+  - sb-seccomp
+  - sb-kernel-runc
+  - g-ai-gateway
+  - ai-gw-proxy
+  - z-sb-compute
+  - sb-hv
+
+steps: [c-sb-r-model, c-sb-r-syscall, c-sb-r-kernel, c-sb-vm-runc]
+background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet-runc, c-sb-cri-runc, c-sb-r-runc, c-sb-r-start]
+
+labels:
+  c-sb-r-model: "models and tools · HTTP"
+  c-sb-r-syscall: ""
+  c-sb-r-kernel: ""
+  c-sb-vm-runc: "runs as a VM"
+  c-sb-core-kapi: ""
+  c-sb-kyverno: ""
+  c-sb-kubelet-runc: ""
+  c-sb-cri-runc: ""
+  c-sb-r-runc: ""
+  c-sb-r-start: ""
+  r-sb-sandbox-svc: ""
+
+notes:
+  - {id: n-sb-node, text: "The node box is the K3s worker, itself a VM on an OpenStack server. With runc, the agent's process talks to the node VM's kernel directly, filtered by seccomp: fine for code we wrote, not for code a model wrote."}
+  - {id: n-sb-tier, text: "The safety here comes from what the agent can do, not from the runtime: no shell, no code tool, egress only to the AI gateway and the MCP gateway."}
+
+cards:
+  - id: card-steps
+    title: "Request path · an agent without code execution"
+    color: emerald
+    lines:
+      - "[1] The agent loop calls models and tools only through the AI gateway, with its JWT; the NetworkPolicy allows nothing else."
+      - "[2] [3] Its syscalls pass the seccomp RuntimeDefault filter, then reach the node VM's kernel directly."
+      - "[4] The node VM runs on the OpenStack server's KVM, as for every pod."
+  - id: card-background
+    title: "Background · how the agent pod starts"
+    color: amber
+    lines:
+      - "[A] The Sandbox controller creates the agent's Pod (a Deployment works too). [B] Kyverno checks PSS restricted and that no code tool is declared."
+      - "[C] [D] The kubelet asks containerd for the pod; [E] containerd uses runc, the default; [F] runc starts the agent process."
+  - id: card-objects
+    title: "When to use which tier"
+    color: sky
+    lines:
+      - "Standard (runc): agents that only reason and call tools through the gateways. Cheapest, the same as any app."
+      - "gVisor: agents that run code they write, on CNP's OpenStack VMs. Default sandbox tier."
+      - "Kata: untrusted users or multi-tenant code; needs nested virt or bare metal."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

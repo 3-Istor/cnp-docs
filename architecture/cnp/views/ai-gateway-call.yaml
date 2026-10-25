@@ -1,0 +1,25 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · AI landing zone · A model call"
+subtitle: "What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent?"
+meta:
+  - "Scope: proposal, 2026-10-22 · the connections of the ai-gateway view, nothing deployed"
+  - "Out of scope: tool calls over MCP (same chain, then MCPRoute) · traces and metrics (background of the ai-gateway view)"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+participants: [hosted-agent, keycloak, ai-gw-proxy, ai-ratelimit, gemini, ollama]
+steps:
+  - {id: tx, from: hosted-agent, to: keycloak, over: c-agent-keycloak, text: "POST /token · token exchange, audience ai-gateway"}
+  - {reply: tx, text: "JWT ≤ 15 min · sub = agent, project claim"}
+  - {id: call, from: hosted-agent, to: ai-gw-proxy, over: c-agent-aigw, text: "POST /v1/chat/completions + JWT"}
+  - {note: ai-gw-proxy, text: "SecurityPolicy: signature (cached JWKS), project claim, default deny"}
+  - {id: guard, from: ai-gw-proxy, to: ollama, over: c-aigw-ollama, text: "classify the prompt (Llama Guard)"}
+  - {reply: guard, text: "safe"}
+  - {id: quota, from: ai-gw-proxy, to: ai-ratelimit, over: c-aigw-ratelimit, text: "tokens left for the project?"}
+  - {reply: quota, text: "OK"}
+  - {id: gem, from: ai-gw-proxy, to: gemini, over: c-aigw-gemini, text: "generateContent · key from the Secret"}
+  - {reply: gem, text: "429 RESOURCE_EXHAUSTED"}
+  - {id: fb, from: ai-gw-proxy, to: ollama, over: c-aigw-ollama, text: "same prompt on the local model"}
+  - {reply: fb, text: "token stream"}
+  - {note: ai-gw-proxy, text: "count tokens for the project · emit the GenAI span"}
+  - {reply: call, text: "SSE stream"}

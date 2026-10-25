@@ -32,6 +32,7 @@ include:
   - g-gitops
   - argocd
   - image-updater
+  - g-ag-kapi
   - kube-apiserver
   - z-github
   - agent-kit-repo
@@ -42,6 +43,7 @@ steps: [c-assistant-edge, e-oidc-platform-tunnel, e-oidc-platform-envoy, c-envoy
 background: [c-mcp-agent-kit, c-repos-ghcr, c-updater-app-repos, c-argocd-app-repos, c-argocd-apiserver]
 
 labels:
+  c-updater-app-repos: ""
   c-assistant-edge: ""
   c-local-assistant-edge: ""
   c-envoy-cmp-mcp: ""

@@ -1,0 +1,151 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · AI landing zone · AI gateway internals"
+subtitle: "What is the AI gateway made of, and what happens inside it between an agent's request and the model's answer?"
+meta:
+  - "Scope: Agent Router 1.x (ex-Envoy AI Gateway) on the existing Envoy Gateway, on-prem K3s, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1, MCP in IA-2) · faded: what already runs"
+  - "Out of scope: Vault and the secrets operator (zoom 6) · OPA ext_authz (IA-3) · the Gateway API Inference Extension, not needed with one Ollama GPU"
+  - "Assumed: Gemini through its OpenAI-compatible endpoint (free tier, one API key); Ollama reached over WireGuard; one Envoy replica"
+  - "v0.1 · source: cnp-docs/architecture/cnp · theagentrouter.ai docs (architecture, API reference, MCP)"
+
+include:
+  - z-cluster
+  - g-ai-gateway
+  - g-ag-crd-ar
+  - ag-route
+  - ag-be-gemini
+  - ag-be-ollama
+  - ag-mcproute
+  - ag-bsp
+  - ag-gwconfig
+  - g-ag-crd-eg
+  - ag-gateway
+  - ag-secpol
+  - ag-btp
+  - ag-backend-gemini
+  - ag-backend-ollama
+  - ag-secret
+  - g-ag-gen
+  - ag-httproute
+  - ag-extproc-secret
+  - g-identity
+  - keycloak
+  - g-ag-eg-ctrl
+  - ag-eg-infra
+  - ag-eg-xds
+  - ag-eg-translate
+  - g-ag-ar-ctrl
+  - ag-c-ext
+  - ag-c-reconcile
+  - ag-c-cfg
+  - ag-c-webhook
+  - g-ag-kapi
+  - kube-apiserver
+  - g-agents
+  - hosted-agent
+  - g-ag-pod
+  - g-ag-envoy
+  - ag-f-listener
+  - ag-f-jwt
+  - ag-f-xp-router
+  - ag-f-rl
+  - ag-f-router
+  - ag-f-xp-up
+  - g-ag-xp
+  - ag-x-parse
+  - ag-x-usage
+  - ag-x-mcp
+  - ag-x-translate
+  - ag-x-otel
+  - ag-x-auth
+  - g-ag-rl
+  - ag-rl
+  - ag-redis
+  - g-ops
+  - observability
+  - g-cmp
+  - cmp-mcp
+  - g-mcp-tools
+  - toolhive
+  - z-google-ai
+  - gemini
+  - z-homelab-gpu
+  - ollama
+
+steps: [c-ag-agent, c-ag-chain-1, c-ag-chain-2, c-ag-xp-parse, c-ag-chain-3, c-ag-rl-check, c-ag-rl-redis, c-ag-chain-4, c-ag-chain-5, c-ag-xp-translate, c-ag-translate-auth, c-ag-gemini, c-ag-ollama, c-ag-usage, c-ag-usage-otel, c-ag-otel]
+background: [c-ag-eg-kapi, c-ag-ar-kapi, c-ag-eg-ext, c-ag-ads, c-ag-webhook, c-ag-jwks, c-agent-keycloak]
+
+labels:
+  c-ag-agent: ""
+  c-ag-chain-1: ""
+  c-ag-chain-2: ""
+  c-ag-xp-parse: "ext_proc · gRPC/UDS"
+  c-ag-chain-3: ""
+  c-ag-rl-check: "ShouldRateLimit · gRPC"
+  c-ag-rl-redis: ""
+  c-ag-chain-4: ""
+  c-ag-chain-5: ""
+  c-ag-xp-translate: "ext_proc · gRPC/UDS"
+  c-ag-translate-auth: ""
+  c-ag-gemini: "POST /v1beta/openai/chat/completions · HTTPS"
+  c-ag-ollama: "retry after 429 · HTTP over WireGuard"
+  c-ag-usage: "response body · ext_proc"
+  c-ag-usage-otel: ""
+  c-ag-otel: "OTLP"
+  c-ag-mcp: "/mcp"
+  c-ag-mcp-cmp: "tools/call"
+  c-ag-mcp-toolhive: "tools/call"
+  c-ag-jwks: ""
+  c-ag-ads: ""
+  c-ag-eg-kapi: ""
+  c-ag-ar-kapi: ""
+  c-ag-eg-ext: ""
+  c-ag-webhook: ""
+  c-agent-keycloak: ""
+  c-sb-claim: ""
+  r-ag-route-gemini: ""
+  r-ag-secpol: ""
+  r-ag-gwconfig: ""
+  r-ag-mount: ""
+
+notes:
+  - {id: n-ag-router, text: "The router picks the HTTPRoute rule from x-ai-eg-model. Priority 0 is Gemini; on 429 Envoy retries on priority 1, Ollama, and runs only the upstream filters again, so the request is re-translated and re-signed for the new backend."}
+  - {id: n-ag-sidecar, text: "The ExtProc runs in the Envoy pod, injected by the webhook, and Envoy reaches it over a Unix socket: no extra hop on the network, no Service. Its config, API key included, comes from the generated Secret."}
+  - {id: n-ag-cost, text: "Rate limit runs twice: before routing, Envoy asks whether the project still has budget; after the answer, it adds the real token count, read by the response processor and stored in dynamic metadata."}
+
+cards:
+  - id: card-steps
+    title: "Request path · an agent asks a model"
+    color: emerald
+    lines:
+      - "[1] The agent sends POST /v1/chat/completions with its Keycloak JWT and {\"model\": \"gemini-2.5-flash\", \"messages\": [...]} to the internal listener."
+      - "[2] [3] jwt_authn checks the signature against the cached JWKS; rbac checks the project claim (SecurityPolicy, default deny)."
+      - "[4] ext_proc (router level) streams headers and body to the sidecar; the request parser reads model and stream, and answers with the header x-ai-eg-model."
+      - "[5]–[7] ratelimit asks envoy-ratelimit whether the project and model still have tokens; envoy-ratelimit reads the counters in Redis."
+      - "[8] The router matches x-ai-eg-model in the generated HTTPRoute and picks the backend with the lowest priority: Gemini."
+      - "[9] [10] ext_proc (upstream level) lets the translator rewrite path and body for the backend schema and the auth module add the API key."
+      - "[11] Envoy calls Gemini over HTTPS through the Cilium FQDN egress rule. [12] On 429 it retries on Ollama over WireGuard; steps 9–10 run again."
+      - "[13]–[16] The response processor reads token usage (JSON or the last SSE chunk), writes it as dynamic metadata for the rate limit, and Telemetry exports GenAI metrics and spans to Alloy."
+  - id: card-background
+    title: "Background · control plane"
+    color: amber
+    lines:
+      - "[A] Envoy Gateway watches Gateway API and Envoy Gateway resources, including the generated HTTPRoute."
+      - "[B] The AI Gateway controller watches the Agent Router CRDs and writes the HTTPRoute, its filter and the ExtProc config Secret."
+      - "[C] Envoy Gateway calls the controller's extension server to add what Gateway API cannot express: upstream filters and backend priorities."
+      - "[D] Envoy keeps an ADS stream open to the xDS server and receives listeners, routes and clusters."
+      - "[E] When the Envoy pod is created, the API server calls the sidecar injector, which adds the ai-gateway-extproc container."
+      - "[F] jwt_authn fetches Keycloak's JWKS and caches it."
+      - "[G] Before [1], the agent gets a short JWT from Keycloak with its own client (client_credentials, or token exchange on behalf of a user)."
+  - id: card-objects
+    title: "Objects · who points at whom"
+    color: sky
+    lines:
+      - "AIGatewayRoute llm → two AIServiceBackends (Gemini, Ollama) → Envoy Gateway Backends (FQDN with TLS, homelab IP)."
+      - "BackendSecurityPolicy (APIKey) → AIServiceBackend gemini and → Secret gemini-api-key, synced from Vault."
+      - "SecurityPolicy and BackendTrafficPolicy → Gateway ai-gateway; the Gateway's annotation points at the GatewayConfig."
+      - "MCPRoute tools (IA-2) attaches to the same Gateway and exposes the CMP's MCP server and ToolHive behind one /mcp endpoint."
+      - "Memory on the cluster: Envoy, sidecar, controller, envoy-ratelimit and Redis should fit in a few hundred MB; to measure once deployed."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

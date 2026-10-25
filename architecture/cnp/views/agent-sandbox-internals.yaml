@@ -1,0 +1,102 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · AI landing zone · Agent sandbox internals · gVisor tier"
+subtitle: "How does an agent get an isolated place to run the code it writes, and what keeps that code away from the cluster?"
+meta:
+  - "Scope: kubernetes-sigs/agent-sandbox v1beta1 with gVisor on the on-prem K3s, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-2) · faded: what already runs"
+  - "Out of scope: the agent's model and tool calls (AI gateway internals view) · the agent's identity (zoom 6) · Kata Containers, not available on OpenStack VMs without nested virtualisation"
+  - "Assumed: one namespace of agents per project; the agent itself runs in a long-lived Sandbox and asks short-lived ones for code; warm pool of 1 on the 4 GB budget"
+  - "v0.1 · source: cnp-docs/architecture/cnp · agent-sandbox.sigs.k8s.io (API reference, Python client), github.com/kubernetes-sigs/agent-sandbox"
+
+include:
+  - z-cluster
+  - g-sb-ns
+  - g-sb-crd
+  - sb-template
+  - sb-warmpool
+  - sb-claim
+  - sb-svc
+  - sb-sandbox
+  - g-sb-guard-ns
+  - sb-rbac
+  - sb-quota
+  - sb-netpol
+  - g-sb-guard
+  - sb-rc
+  - sb-kpol
+  - g-sb-ctrl
+  - sb-c-core
+  - sb-c-ext
+  - g-ag-kapi
+  - kube-apiserver
+  - g-ops
+  - kyverno
+  - g-agents
+  - hosted-agent
+  - g-sb-router
+  - sb-router
+  - g-sb-node
+  - sb-kubelet
+  - sb-containerd
+  - sb-runsc
+  - g-sb-pod
+  - sb-runtime
+  - sb-sentry
+  - sb-netstack
+  - sb-kernel
+  - z-sb-compute
+  - sb-hv
+
+steps: [c-sb-claim, c-sb-ext-kapi, c-sb-run, c-sb-router-pod, c-sb-syscall, c-sb-sentry-net, c-sb-host]
+background: [c-sb-core-kapi, c-sb-kyverno, c-sb-kubelet, c-sb-cri, c-sb-shim, c-sb-boot]
+
+labels:
+  c-sb-claim: "create claim, watch Ready · HTTPS"
+  c-sb-ext-kapi: ""
+  c-sb-run: "POST · HTTP"
+  c-sb-router-pod: ":8888"
+  c-sb-syscall: ""
+  c-sb-sentry-net: ""
+  c-sb-host: "filtered syscalls"
+  c-sb-core-kapi: ""
+  c-sb-kyverno: ""
+  c-sb-kubelet: ""
+  c-sb-cri: ""
+  c-sb-shim: ""
+  c-sb-boot: ""
+  c-sb-vm: "runs as a VM · no nested virt needed"
+
+notes:
+  - {id: n-sb-node, text: "The node box is the K3s worker where the pod lands, itself a VM on an OpenStack server. gVisor is an ordinary process on that VM: it needs no special VM setting, which is why it suits CNP's OpenStack nodes."}
+  - {id: n-sb-warm, text: "A claim takes a Sandbox that is already running in the pool; the pool then starts a new one from the template. Setting env or volumes on the claim forces a cold start instead."}
+  - {id: n-sb-gvisor, text: "gVisor: the code's syscalls never reach the host kernel directly. The Sentry, a kernel written in Go, answers them in user space and only makes a small, seccomp-filtered set of host calls. The price: slower I/O and some syscalls missing."}
+  - {id: n-sb-end, text: "End of life: the agent deletes its claim, or lifecycle.shutdownTime / ttlSecondsAfterFinished does it. shutdownPolicy Delete removes Sandbox, Pod and Service; Retain keeps them for debugging."}
+
+cards:
+  - id: card-steps
+    title: "Request path · an agent runs code it wrote"
+    color: emerald
+    lines:
+      - "[1] The agent creates a SandboxClaim with warmPoolRef python through the Kubernetes API (its Role allows claims only), then watches it until Ready."
+      - "[2] The extensions controller binds the claim to a warm Sandbox and writes its name and serviceFQDN in the claim's status."
+      - "[3] The agent sends the command to sandbox-router with the Python SDK (k8s-agent-sandbox)."
+      - "[4] The router forwards it to the runtime server of that sandbox on port 8888; the NetworkPolicy admits only the router."
+      - "[5]–[7] Every syscall of the code is trapped by the gVisor Sentry; network goes through Netstack; the host kernel only sees the Sentry's filtered calls."
+  - id: card-background
+    title: "Background · how a warm sandbox comes up"
+    color: amber
+    lines:
+      - "[A] The Sandbox controller sees each Sandbox the pool asked for and creates its Pod and headless Service."
+      - "[B] The API server sends the Pod to Kyverno: gvisor RuntimeClass, PSS restricted and no service account token, or refused."
+      - "[C] The kubelet of the chosen node sees the Pod. [D] It asks containerd for a pod sandbox with handler runsc."
+      - "[E] containerd starts the runsc shim. [F] runsc boots the Sentry, which then starts the runtime server."
+  - id: card-objects
+    title: "Objects · who points at whom"
+    color: sky
+    lines:
+      - "SandboxClaim → SandboxWarmPool → SandboxTemplate → RuntimeClass gvisor and the NetworkPolicy it manages."
+      - "SandboxClaim status → Sandbox → headless Service; the Sandbox owns the Pod."
+      - "Memory: one warm python sandbox costs a pod's RAM all the time; keep replicas at 1 on this cluster, raise it on a cloud cluster."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

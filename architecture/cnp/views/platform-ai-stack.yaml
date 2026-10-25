@@ -1,0 +1,129 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · The deployed platform and its AI landing zone"
+subtitle: "What runs today, dimmed, and the AI landing zone drawn in full: which tool does what, where the boundaries are and how an agent request flows"
+meta:
+  - "Scope: on-prem K3s hub, AI landing zone option B of 2026-10-23 (agentgateway + kagent) · in full: what the proposals add (P0–P2, IA-1–IA-2) · dimmed: what already runs · red: refused by design"
+  - "Zones are isolation boundaries (namespace, runtime tier, network). Every box says what the tool does; zoom views hold the internals"
+  - "Out of scope: EKS and GKE internals (multicloud views) · RBAC and grants (access matrix) · CI pipelines beyond evals and signing"
+  - "v1.0 · source: cnp-docs/architecture/cnp"
+
+include:
+  - ov-z-clients
+  - ov-user
+  - ov-assistant
+  - ov-z-cf
+  - ov-cf
+  - ov-g-cmp
+  - ov-cmp
+  - ov-cmp-mcp
+  - ov-g-identity
+  - ov-keycloak
+  - ov-vault
+  - ov-g-kagent
+  - ov-kagent
+  - ov-g-entry
+  - ov-envoy
+  - ov-g-tenant
+  - ov-app
+  - ov-db
+  - ov-g-agents
+  - ov-g-tier-runc
+  - ov-agent
+  - ov-agent-2
+  - ov-sb-ctrl
+  - ov-g-tier-gvisor
+  - ov-sb-gvisor
+  - ov-g-tier-kata
+  - ov-sb-kata
+  - ov-g-aigw
+  - ov-aigw
+  - ov-quota
+  - ov-guard-hook
+  - ov-agw-policy
+  - ov-agw-ctrl
+  - ov-g-tools
+  - ov-toolhive
+  - ov-mcp-registry
+  - ov-g-control
+  - ov-argocd
+  - ov-kapi
+  - ov-g-guard
+  - ov-kyverno
+  - ov-cilium
+  - ov-cilium-agent
+  - ov-g-obs
+  - ov-alloy
+  - ov-tempo
+  - ov-prom
+  - ov-loki
+  - ov-grafana
+  - ov-opencost
+  - ov-audit
+  - ov-g-data
+  - ov-ceph
+  - ov-garage
+  - ov-g-ops
+  - ov-gatus
+  - ov-offhours
+  - ov-z-cluster
+  - ov-z-google
+  - ov-gemini
+  - ov-z-homelab
+  - ov-ollama
+  - ov-llamaguard
+  - ov-z-github
+  - ov-repos
+  - ov-promptfoo
+  - ov-cosign
+  - ov-z-clouds
+  - ov-clouds
+
+steps: [ov-c-user-cf, ov-c-cf-envoy, ov-c-envoy-keycloak, ov-c-envoy-aigw, ov-c-aigw-agent, ov-c-agent-keycloak, ov-c-agent-aigw, ov-c-aigw-guard, ov-c-guard-llama, ov-c-aigw-quota, ov-c-aigw-gemini, ov-c-aigw-ollama, ov-c-aigw-tools, ov-c-aigw-agent2, ov-c-agent-sb, ov-c-sb-gvisor, ov-c-aigw-alloy, ov-c-alloy-tempo]
+background: [ov-c-cmp-repos, ov-c-argocd-repos, ov-c-argocd-kapi, ov-c-kagent-kapi, ov-c-agwctrl-kapi, ov-c-agwctrl-aigw, ov-c-kapi-kyverno, ov-c-sb-kapi, ov-c-cmp-keycloak, ov-c-vault-aigw, ov-c-toolhive-registry, ov-c-argocd-clouds]
+
+cards:
+  - id: card-steps
+    title: "How it works · a user asks an agent, which calls a model, a tool and another agent"
+    color: emerald
+    lines:
+      - "[1]–[3] The request enters through Cloudflare's tunnel and the shared Envoy Gateway, which logs the user in with Keycloak."
+      - "[4] [5] Envoy hands it to agentgateway, which forwards it to the agent over A2A with the user's token."
+      - "[6] The agent exchanges that token at Keycloak for its own, proving who it is with its ServiceAccount token: no secret in the pod."
+      - "[7] Every call the agent makes goes back through agentgateway, which checks the JWT and the CEL policy for this agent."
+      - "[8] [9] promptGuard first masks PII and secrets with regexes, then the webhook asks Llama Guard on the homelab GPU whether the prompt is safe."
+      - "[10]–[12] The rate limit server checks the agent's daily token budget; the call goes to Gemini, or to Ollama on 429 or for a Local project."
+      - "[13] [14] A tool call goes to the MCP server ToolHive runs; a task for another agent goes over A2A to the peer agent."
+      - "[15] [16] To run code, the agent claims a sandbox: gVisor by default, Kata for untrusted code. [17] [18] GenAI spans and token counts go to Alloy, then Tempo."
+  - id: card-background
+    title: "Set up before the request"
+    color: amber
+    lines:
+      - "[A] The CMP commits the project and its Agent resource to Git; [B] [C] Argo CD pulls it and applies it, the AI landing zone included."
+      - "[D] kagent turns each Agent into a Deployment and publishes its A2A endpoint and Agent Card."
+      - "[E] [F] The agentgateway controller turns routes and AgentgatewayPolicy into the proxy's configuration."
+      - "[G] Kyverno checks every pod at admission: restricted security context, the right RuntimeClass per tier, signed images only."
+      - "[H] agent-sandbox keeps warm sandboxes ready per tier. [I] The CMP creates the agent's Keycloak client."
+      - "[J] The Secrets Operator mounts the Gemini key in the gateway only. [K] ToolHive checks each MCP server against the registry. [L] Argo CD syncs EKS and GKE the same way."
+  - id: card-isolation
+    title: "Isolation boundaries · what keeps what apart"
+    color: rose
+    lines:
+      - "Network: Cilium default-deny per namespace (P0); agents and sandboxes reach only the AI gateway. The two red arrows are refused: a direct call to Gemini, a sandbox reaching an app."
+      - "Runtime, three tiers per agent: runc + seccomp for agents that don't run code, gVisor (user-space kernel) for generated code, Kata (micro-VM) for untrusted code."
+      - "Identity: one Keycloak client per agent, federated with its ServiceAccount token; short tokens; CEL decides per tool and per agent at the gateway."
+      - "Keys and data: the Gemini key lives in Vault and the gateway only; promptGuard masks PII before any call; Local projects stay on Ollama."
+  - {id: card-legend, title: Legend, color: slate, legend: true}
+
+labels:
+  ov-c-agent-sb: ""
+  ov-c-aigw-agent: ""
+  ov-c-aigw-alloy: ""
+  ov-c-aigw-quota: ""
+  ov-c-aigw-tools: ""
+  ov-c-audit-loki: ""
+  ov-c-toolhive-registry: ""
+  ov-r-policy: ""
+  ov-x-sb-app: ""

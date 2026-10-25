@@ -1,0 +1,87 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · AI landing zone · GenAI observability internals"
+subtitle: "How does one agent call become a trace and token counts per project, and what keeps prompts out of the storage?"
+meta:
+  - "Scope: OpenTelemetry GenAI and MCP conventions (status Development) through the existing Alloy, to Tempo and Prometheus, read in Grafana, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
+  - "Out of scope: Langfuse (about 21.5 GB of memory minimum, not for this cluster) · OpenCost for cluster cost · Ollama's own metrics"
+  - "Assumed: no metrics store today, so Prometheus with remote write is added; Tempo in monolithic mode"
+  - "v0.1 · source: cnp-docs/architecture/cnp · OpenTelemetry GenAI semantic conventions, Grafana Alloy components"
+
+include:
+  - z-cluster
+  - g-agents
+  - hosted-agent
+  - g-ag-pod
+  - g-ag-xp
+  - ag-x-otel
+  - g-mcp-tools
+  - g-th-run
+  - th-proxy
+  - g-ops
+  - g-ob-alloy
+  - ob-recv
+  - ob-k8s
+  - ob-transform
+  - ob-batch
+  - ob-logsrc
+  - ob-lokiw
+  - ob-exp-otlp
+  - ob-exp-prom
+  - g-ob-store
+  - ob-loki
+  - tempo
+  - ob-prom
+  - g-ob-read
+  - ob-grafana
+  - ob-alerts
+
+steps: [c-ob-agent, c-ob-gw, c-ob-th, c-ob-1, c-ob-2, c-ob-3, c-ob-4, c-ob-5, c-ob-6, c-ob-7, c-ob-8, c-ob-9]
+background: [c-ob-10, c-ob-11, c-ob-12]
+
+labels:
+  c-ob-agent: "OTLP"
+  c-ob-gw: "OTLP"
+  c-ob-th: "OTLP"
+  c-ob-1: ""
+  c-ob-2: ""
+  c-ob-3: ""
+  c-ob-4: ""
+  c-ob-5: ""
+  c-ob-6: ""
+  c-ob-7: ""
+  c-ob-8: ""
+  c-ob-9: ""
+  c-ob-10: ""
+  c-ob-11: ""
+  c-ob-12: ""
+  r-ob-alerts: ""
+
+notes:
+  - {id: n-ob-trace, text: "One trace per request: the agent's invoke_agent span is the parent; the gateway's chat span and the tool proxy's MCP span join it through the traceparent header."}
+  - {id: n-ob-attrs, text: "Attributes kept: gen_ai.operation.name, gen_ai.provider.name, gen_ai.request.model and response.model, gen_ai.usage.input_tokens and output_tokens, gen_ai.tool.name, plus namespace and project from k8sattributes."}
+  - {id: n-ob-content, text: "Message content (gen_ai.input.messages, output.messages) is off by default in the instrumentations, and the transform step drops it again unless the project opted in."}
+
+cards:
+  - id: card-steps
+    title: "Request path · one agent call, three sources"
+    color: emerald
+    lines:
+      - "[1] The agent's SDK sends its spans (invoke_agent, chat, execute_tool) to Alloy over OTLP. [2] The gateway's sidecar sends gen_ai.client.token.usage, gen_ai.client.operation.duration and its spans. [3] The ToolHive proxy sends mcp.* spans and metrics."
+      - "[4]–[6] Alloy adds namespace and project from the pod, drops message content unless opted in, then batches."
+      - "[7] [8] Traces go to Tempo. [9] [10] Metrics become Prometheus series by remote write."
+      - "[11] [12] Grafana reads traces with TraceQL and metrics with PromQL: tokens per project and model, latency, 429s, share of calls that fell back to Ollama. Alert rules run on the same series."
+  - id: card-background
+    title: "Background · logs, already in place"
+    color: amber
+    lines:
+      - "[A] Alloy tails pod logs, including the gateway's access logs, [B] pushes them to Loki, [C] where Grafana reads them next to the traces."
+  - id: card-objects
+    title: "FinOps with a free tier"
+    color: sky
+    lines:
+      - "With Gemini's free tier, the money question becomes a quota question: tokens and requests per project against RPM, TPM and RPD."
+      - "For Ollama, the cost is the GPU's time: latency and tokens per second per model."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

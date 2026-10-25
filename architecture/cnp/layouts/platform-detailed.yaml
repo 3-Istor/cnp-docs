@@ -1,0 +1,386 @@
+# Generated: boxes relative to their parent zone, waypoints in canvas coordinates.
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 7340, height: 6240}
+elements:
+  z-internet: {x: 40, y: 260, w: 340, h: 360}
+  user: {x: 142, y: 70, w: 56, h: 56}
+  id-user: {x: 142, y: 220, w: 56, h: 56}
+  z-cloudflare: {x: 40, y: 700, w: 340, h: 200}
+  cf-edge: {x: 30, y: 70, w: 280, h: 100}
+  g-connectivity: {x: 40, y: 60, w: 360, h: 200}
+  cloudflared-platform: {x: 30, y: 70, w: 300, h: 100}
+  g-gateway: {x: 40, y: 340, w: 360, h: 350}
+  client-traffic-policy: {x: 30, y: 70, w: 300, h: 100}
+  envoy-shared-gateway: {x: 30, y: 220, w: 300, h: 100}
+  g-tenant-a: {x: 480, y: 60, w: 1410, h: 350}
+  cloudflared-app: {x: 30, y: 70, w: 300, h: 100}
+  httproute: {x: 380, y: 70, w: 300, h: 100}
+  app-service: {x: 730, y: 70, w: 300, h: 100}
+  app-pods: {x: 1080, y: 70, w: 300, h: 100}
+  security-policy: {x: 380, y: 220, w: 300, h: 100}
+  app-secret: {x: 730, y: 220, w: 300, h: 100}
+  cnpg: {x: 1080, y: 220, w: 300, h: 100}
+  g-tenant-b: {x: 480, y: 490, w: 360, h: 200}
+  tenant-b-pods: {x: 30, y: 70, w: 300, h: 100}
+  g-cmp: {x: 1970, y: 60, w: 710, h: 350}
+  cmp-frontend: {x: 30, y: 70, w: 300, h: 100}
+  cmp-backend: {x: 380, y: 70, w: 300, h: 100}
+  cmp-mcp: {x: 30, y: 220, w: 300, h: 100}
+  stake-policy: {x: 380, y: 220, w: 300, h: 100}
+  g-secrets: {x: 2760, y: 60, w: 710, h: 350}
+  vso: {x: 30, y: 70, w: 300, h: 100}
+  vault: {x: 380, y: 70, w: 300, h: 100}
+  vault-a: {x: 380, y: 220, w: 300, h: 100}
+  g-identity: {x: 3550, y: 60, w: 1820, h: 570}
+  keycloak: {x: 30, y: 70, w: 300, h: 100}
+  kc-client-cmp: {x: 30, y: 380, w: 300, h: 100}
+  g-id-clients: {x: 380, y: 70, w: 1410, h: 200}
+  id-client-agent: {x: 30, y: 70, w: 300, h: 100}
+  id-svc: {x: 380, y: 70, w: 300, h: 100}
+  id-client-gw: {x: 730, y: 70, w: 300, h: 100}
+  id-client-cmp: {x: 1080, y: 70, w: 300, h: 100}
+  g-id-scopes: {x: 380, y: 340, w: 1410, h: 200}
+  id-scope-project: {x: 30, y: 70, w: 300, h: 100}
+  id-scope-aud: {x: 380, y: 70, w: 300, h: 100}
+  id-policy: {x: 730, y: 70, w: 300, h: 100}
+  id-lifespan: {x: 1080, y: 70, w: 300, h: 100}
+  g-id-token: {x: 5450, y: 60, w: 360, h: 750}
+  id-c-iss: {x: 30, y: 70, w: 300, h: 100}
+  id-c-sub: {x: 30, y: 200, w: 300, h: 100}
+  id-c-project: {x: 30, y: 330, w: 300, h: 100}
+  id-c-scope: {x: 30, y: 460, w: 300, h: 100}
+  id-c-exp: {x: 30, y: 590, w: 300, h: 100}
+  g-gitops: {x: 1970, y: 490, w: 710, h: 200}
+  argocd: {x: 30, y: 70, w: 300, h: 100}
+  image-updater: {x: 380, y: 70, w: 300, h: 100}
+  g-ag-kapi: {x: 2760, y: 490, w: 360, h: 200}
+  kube-apiserver: {x: 30, y: 70, w: 300, h: 100}
+  g-data: {x: 480, y: 760, w: 1410, h: 200}
+  cnpg-operator: {x: 30, y: 70, w: 300, h: 100}
+  rook-ceph: {x: 380, y: 70, w: 300, h: 100}
+  garage-s3: {x: 730, y: 70, w: 300, h: 100}
+  cnpg-backup: {x: 1080, y: 70, w: 300, h: 100}
+  g-ai-gateway: {x: 40, y: 1100, w: 2260, h: 630}
+  g-ag-crd-ar: {x: 30, y: 70, w: 1060, h: 530}
+  ag-route: {x: 30, y: 70, w: 300, h: 100}
+  ag-be-gemini: {x: 380, y: 70, w: 300, h: 100}
+  ag-be-ollama: {x: 730, y: 70, w: 300, h: 100}
+  ag-mcproute: {x: 30, y: 220, w: 300, h: 100}
+  ag-bsp: {x: 380, y: 220, w: 300, h: 100}
+  ag-gwconfig: {x: 730, y: 220, w: 300, h: 100}
+  md-route-local: {x: 30, y: 370, w: 300, h: 100}
+  g-ag-crd-eg: {x: 1170, y: 70, w: 1060, h: 530}
+  ag-gateway: {x: 30, y: 70, w: 300, h: 100}
+  ag-secpol: {x: 380, y: 70, w: 300, h: 100}
+  ag-btp: {x: 730, y: 70, w: 300, h: 100}
+  ag-backend-gemini: {x: 30, y: 220, w: 300, h: 100}
+  ag-backend-ollama: {x: 380, y: 220, w: 300, h: 100}
+  ag-secret: {x: 730, y: 220, w: 300, h: 100}
+  g-ag-gen: {x: 2380, y: 1100, w: 710, h: 200}
+  ag-httproute: {x: 30, y: 70, w: 300, h: 100}
+  ag-extproc-secret: {x: 380, y: 70, w: 300, h: 100}
+  g-ag-eg-ctrl: {x: 40, y: 1810, w: 1060, h: 200}
+  ag-eg-infra: {x: 30, y: 70, w: 300, h: 100}
+  ag-eg-xds: {x: 380, y: 70, w: 300, h: 100}
+  ag-eg-translate: {x: 730, y: 70, w: 300, h: 100}
+  g-ag-ar-ctrl: {x: 1180, y: 1810, w: 1410, h: 200}
+  ag-c-ext: {x: 30, y: 70, w: 300, h: 100}
+  ag-c-reconcile: {x: 380, y: 70, w: 300, h: 100}
+  ag-c-cfg: {x: 730, y: 70, w: 300, h: 100}
+  ag-c-webhook: {x: 1080, y: 70, w: 300, h: 100}
+  g-agents: {x: 40, y: 2090, w: 360, h: 350}
+  hosted-agent: {x: 30, y: 70, w: 280, h: 100}
+  id-secret: {x: 30, y: 220, w: 280, h: 100}
+  g-ag-pod: {x: 480, y: 2090, w: 2320, h: 760}
+  g-ag-envoy: {x: 30, y: 70, w: 2260, h: 200}
+  ag-f-listener: {x: 30, y: 70, w: 300, h: 100}
+  ag-f-jwt: {x: 410, y: 70, w: 300, h: 100}
+  ag-f-xp-router: {x: 790, y: 70, w: 300, h: 100}
+  ag-f-rl: {x: 1170, y: 70, w: 300, h: 100}
+  ag-f-router: {x: 1550, y: 70, w: 300, h: 100}
+  ag-f-xp-up: {x: 1930, y: 70, w: 300, h: 100}
+  g-ag-xp: {x: 30, y: 350, w: 2260, h: 380}
+  ag-x-parse: {x: 790, y: 70, w: 300, h: 100}
+  ag-x-usage: {x: 1170, y: 70, w: 300, h: 100}
+  ag-x-mcp: {x: 1550, y: 70, w: 300, h: 100}
+  ag-x-translate: {x: 1930, y: 70, w: 300, h: 100}
+  ag-x-otel: {x: 1170, y: 250, w: 300, h: 100}
+  ag-x-auth: {x: 1930, y: 250, w: 300, h: 100}
+  g-ag-rl: {x: 2060, y: 2930, w: 710, h: 200}
+  ag-rl: {x: 30, y: 70, w: 300, h: 100}
+  ag-redis: {x: 380, y: 70, w: 300, h: 100}
+  g-md-egress: {x: 3180, y: 1100, w: 360, h: 200}
+  md-egress: {x: 30, y: 70, w: 300, h: 100}
+  g-vpn: {x: 3180, y: 2500, w: 360, h: 200}
+  md-wg: {x: 30, y: 70, w: 300, h: 100}
+  g-mcp-tools: {x: 3640, y: 1100, w: 1120, h: 1040}
+  g-th-crd: {x: 30, y: 70, w: 1060, h: 380}
+  th-mcpserver: {x: 30, y: 70, w: 300, h: 100}
+  th-toolconfig: {x: 380, y: 70, w: 300, h: 100}
+  th-oidc: {x: 730, y: 70, w: 300, h: 100}
+  th-telemetry: {x: 380, y: 220, w: 300, h: 100}
+  th-secret: {x: 730, y: 220, w: 300, h: 100}
+  g-th-gen: {x: 30, y: 530, w: 1060, h: 200}
+  th-deploy: {x: 30, y: 70, w: 300, h: 100}
+  th-svc: {x: 380, y: 70, w: 300, h: 100}
+  th-rbac: {x: 730, y: 70, w: 300, h: 100}
+  g-th-run: {x: 30, y: 810, w: 710, h: 200}
+  th-proxy: {x: 30, y: 70, w: 300, h: 100}
+  th-server: {x: 380, y: 70, w: 300, h: 100}
+  g-th-op: {x: 4840, y: 1100, w: 360, h: 200}
+  th-op: {x: 30, y: 70, w: 300, h: 100}
+  g-sb-ns: {x: 40, y: 3220, w: 2610, h: 480}
+  g-sb-crd: {x: 30, y: 70, w: 1060, h: 380}
+  sb-template: {x: 30, y: 70, w: 300, h: 100}
+  sb-template-kata: {x: 380, y: 70, w: 300, h: 100}
+  sb-warmpool: {x: 730, y: 70, w: 300, h: 100}
+  sb-claim: {x: 30, y: 220, w: 300, h: 100}
+  sb-svc: {x: 380, y: 220, w: 300, h: 100}
+  sb-sandbox: {x: 730, y: 220, w: 300, h: 100}
+  g-sb-guard-ns: {x: 1170, y: 70, w: 1410, h: 230}
+  sb-rbac: {x: 30, y: 70, w: 300, h: 100}
+  sb-quota: {x: 380, y: 70, w: 300, h: 100}
+  sb-netpol: {x: 730, y: 70, w: 300, h: 100}
+  sb-netpol-agent: {x: 1080, y: 70, w: 300, h: 100}
+  g-sb-guard: {x: 2730, y: 3220, w: 1060, h: 200}
+  sb-rc: {x: 30, y: 70, w: 300, h: 100}
+  sb-rc-kata: {x: 380, y: 70, w: 300, h: 100}
+  sb-kpol: {x: 730, y: 70, w: 300, h: 100}
+  g-sb-ctrl: {x: 40, y: 3780, w: 710, h: 200}
+  sb-c-core: {x: 30, y: 70, w: 300, h: 100}
+  sb-c-ext: {x: 380, y: 70, w: 300, h: 100}
+  g-sb-router: {x: 830, y: 3780, w: 360, h: 200}
+  sb-router: {x: 30, y: 70, w: 300, h: 100}
+  g-sb-node: {x: 40, y: 4060, w: 1180, h: 760}
+  sb-kubelet: {x: 30, y: 70, w: 300, h: 100}
+  sb-containerd: {x: 380, y: 70, w: 300, h: 100}
+  sb-runsc: {x: 730, y: 70, w: 300, h: 100}
+  g-sb-pod: {x: 30, y: 250, w: 1060, h: 200}
+  sb-runtime: {x: 30, y: 70, w: 300, h: 100}
+  sb-sentry: {x: 380, y: 70, w: 300, h: 100}
+  sb-netstack: {x: 730, y: 70, w: 300, h: 100}
+  sb-kernel: {x: 410, y: 590, w: 300, h: 100}
+  g-sb-node-kata: {x: 1300, y: 4060, w: 1180, h: 860}
+  sb-kubelet-kata: {x: 30, y: 70, w: 300, h: 100}
+  sb-containerd-kata: {x: 380, y: 70, w: 300, h: 100}
+  sb-kata-shim: {x: 730, y: 70, w: 300, h: 100}
+  g-sb-kvm: {x: 30, y: 250, w: 1060, h: 200}
+  sb-runtime-kata: {x: 30, y: 70, w: 300, h: 100}
+  sb-guest: {x: 380, y: 70, w: 300, h: 100}
+  sb-kata-agent: {x: 730, y: 70, w: 300, h: 100}
+  sb-vmm: {x: 410, y: 520, w: 300, h: 100}
+  sb-virtiofsd: {x: 760, y: 520, w: 300, h: 100}
+  sb-kernel-kata: {x: 410, y: 690, w: 300, h: 100}
+  g-sb-node-runc: {x: 2560, y: 4060, w: 1180, h: 760}
+  sb-kubelet-runc: {x: 30, y: 70, w: 300, h: 100}
+  sb-containerd-runc: {x: 380, y: 70, w: 300, h: 100}
+  sb-runc: {x: 730, y: 70, w: 300, h: 100}
+  g-sb-pod-runc: {x: 30, y: 250, w: 1060, h: 200}
+  sb-agent-loop: {x: 380, y: 70, w: 300, h: 100}
+  sb-seccomp: {x: 730, y: 70, w: 300, h: 100}
+  sb-kernel-runc: {x: 760, y: 590, w: 300, h: 100}
+  g-ops: {x: 3870, y: 3220, w: 1470, h: 1270}
+  kyverno: {x: 30, y: 70, w: 300, h: 100}
+  gatus: {x: 380, y: 70, w: 300, h: 100}
+  offhours-guard: {x: 730, y: 70, w: 300, h: 100}
+  g-ob-alloy: {x: 30, y: 240, w: 1410, h: 380}
+  ob-recv: {x: 30, y: 70, w: 300, h: 100}
+  ob-k8s: {x: 380, y: 70, w: 300, h: 100}
+  ob-transform: {x: 730, y: 70, w: 300, h: 100}
+  ob-batch: {x: 1080, y: 70, w: 300, h: 100}
+  ob-logsrc: {x: 30, y: 220, w: 300, h: 100}
+  ob-lokiw: {x: 380, y: 220, w: 300, h: 100}
+  ob-exp-otlp: {x: 730, y: 220, w: 300, h: 100}
+  ob-exp-prom: {x: 1080, y: 220, w: 300, h: 100}
+  g-ob-store: {x: 30, y: 700, w: 1410, h: 200}
+  ob-loki: {x: 380, y: 70, w: 300, h: 100}
+  tempo: {x: 760, y: 770, w: 300, h: 100}
+  ob-prom: {x: 1080, y: 70, w: 300, h: 100}
+  g-ob-read: {x: 30, y: 980, w: 1410, h: 200}
+  ob-grafana: {x: 730, y: 70, w: 300, h: 100}
+  ob-alerts: {x: 1080, y: 70, w: 300, h: 100}
+  z-cluster: {x: 460, y: 200, w: 5880, h: 4980}
+  z-github: {x: 6440, y: 260, w: 420, h: 550}
+  github: {x: 40, y: 70, w: 340, h: 100}
+  gh-project-repos: {x: 40, y: 220, w: 340, h: 100}
+  ghcr: {x: 40, y: 370, w: 340, h: 100}
+  z-google-ai: {x: 6440, y: 2400, w: 420, h: 500}
+  gemini: {x: 40, y: 70, w: 340, h: 100}
+  md-quota: {x: 40, y: 220, w: 340, h: 100}
+  md-project: {x: 40, y: 370, w: 340, h: 100}
+  z-homelab-gpu: {x: 6440, y: 2980, w: 780, h: 500}
+  md-hl-wg: {x: 40, y: 70, w: 300, h: 100}
+  ollama: {x: 390, y: 70, w: 300, h: 100}
+  md-gpu: {x: 40, y: 220, w: 300, h: 100}
+  md-ollama-cfg: {x: 390, y: 220, w: 300, h: 100}
+  md-store: {x: 40, y: 370, w: 300, h: 100}
+  md-guard: {x: 390, y: 370, w: 300, h: 100}
+  z-cloud-a: {x: 6440, y: 3560, w: 420, h: 200}
+  b-apiserver: {x: 40, y: 70, w: 340, h: 100}
+  z-cloud-b: {x: 6440, y: 3840, w: 420, h: 200}
+  gke-apiserver: {x: 40, y: 70, w: 340, h: 100}
+  z-sb-compute: {x: 500, y: 5260, w: 3700, h: 200}
+  sb-hv: {x: 1380, y: 70, w: 300, h: 100}
+  sb-nested: {x: 1740, y: 70, w: 300, h: 100}
+edges:
+  c-ag-ads: {from: g-ag-envoy.bottom@30px, to: ag-eg-xds.bottom@50px, waypoints: [[1000, 2580], [980, 2580], [980, 2410], [930, 2410]], against_flow: true, label_at: [980, 2426]}
+  c-ag-agent: {from: hosted-agent.bottom@240px, to: ag-f-listener.left@50px, waypoints: [[770, 2490], [780, 2490], [780, 2480]], label_at: [890, 2480]}
+  c-ag-ar-kapi: {from: ag-c-reconcile.right@30px, to: kube-apiserver.bottom@70px, waypoints: [[2350, 2110], [2350, 1710], [2840, 1710], [2840, 1170], [3320, 1170]], against_flow: true, label_at: [2840, 1292]}
+  c-ag-chain-1: {from: ag-f-listener.right@30px, to: ag-f-jwt.left@30px, label_at: [1338, 2460]}
+  c-ag-chain-2: {from: ag-f-jwt.right@50px, to: ag-f-xp-router.left@50px, label_at: [1718, 2480]}
+  c-ag-chain-3: {from: ag-f-xp-router.right@30px, to: ag-f-rl.left@30px, label_at: [2098, 2460]}
+  c-ag-chain-4: {from: ag-f-rl.right@30px, to: ag-f-router.left@30px, label_at: [2478, 2460]}
+  c-ag-chain-5: {from: ag-f-router.right@30px, to: ag-f-xp-up.left@30px, label_at: [2854, 2460]}
+  c-ag-eg-ext: {from: ag-eg-translate.right@50px, to: ag-c-ext.left@50px, label_at: [1600, 2130]}
+  c-ag-eg-kapi: {from: ag-eg-translate.right@30px, to: kube-apiserver.bottom@50px, waypoints: [[1620, 2110], [1620, 1160], [3300, 1160]], against_flow: true, label_at: [1560, 2110]}
+  c-ag-gemini: {from: ag-f-xp-up.right@70px, to: gemini.left@30px, label_at: [4838, 2500]}
+  c-ag-jwks: {from: ag-f-jwt.right@30px, to: keycloak.left@80px, waypoints: [[1740, 2460], [1740, 2220], [4010, 2220], [4010, 410]], label_at: [3330, 2220]}
+  c-ag-mcp: {from: ag-f-router.bottom@30px, to: ag-x-mcp.top@30px, label_at: [2550, 2620]}
+  c-ag-mcp-cmp: {from: ag-x-mcp.bottom@30px, to: cmp-mcp.left@80px, waypoints: [[2550, 2840], [2460, 2840], [2460, 2200], [2340, 2200], [2340, 1730], [2380, 1730], [2380, 560]], label_at: [2460, 2418]}
+  c-ag-ollama: {from: ag-f-xp-up.bottom@280px, to: ollama.top@30px, waypoints: [[3180, 2600], [6860, 2600]], label_at: [5018, 2600]}
+  c-ag-rl-check: {from: ag-f-rl.right@80px, to: ag-rl.left@30px, waypoints: [[2500, 2510], [2500, 3230]], label_at: [2500, 2868]}
+  c-ag-rl-redis: {from: ag-rl.right@30px, to: ag-redis.left@30px, label_at: [2876, 3230]}
+  c-ag-translate-auth: {from: ag-x-translate.bottom@30px, to: ag-x-auth.top@30px, label_at: [2930, 2848]}
+  c-ag-usage: {from: ag-f-xp-up.bottom@30px, to: ag-x-usage.top@280px, waypoints: [[2930, 2680], [2420, 2680]], label_at: [2676, 2680]}
+  c-ag-usage-otel: {from: ag-x-usage.bottom@30px, to: ag-x-otel.top@30px, label_at: [2170, 2848]}
+  c-ag-webhook: {from: kube-apiserver.bottom@90px, to: ag-c-webhook.top@130px, waypoints: [[3340, 1350], [2850, 1350]], label_at: [2850, 1732]}
+  c-ag-xp-parse: {from: ag-f-xp-router.bottom@30px, to: ag-x-parse.top@30px, label_at: [1790, 2620]}
+  c-ag-xp-translate: {from: ag-f-xp-up.bottom@50px, to: ag-x-translate.top@50px, label_at: [2950, 2692]}
+  c-agent-keycloak: {from: hosted-agent.right@40px, to: keycloak.bottom@30px, waypoints: [[1640, 2400], [1640, 600], [4070, 600]], against_flow: true, label_at: [3478, 600]}
+  c-argocd-apiserver: {from: argocd.bottom@240px, to: kube-apiserver.bottom@140px, waypoints: [[2700, 900], [3390, 900]], against_flow: true, label_at: [3006, 900]}
+  c-argocd-app-repos: {from: argocd.right@80px, to: gh-project-repos.left@80px, waypoints: [[2790, 840], [2790, 970], [6450, 970], [6450, 560]], label_at: [3000, 970]}
+  c-argocd-b: {from: argocd.bottom@260px, to: b-apiserver.left@60px, waypoints: [[2720, 2050], [6430, 2050], [6430, 3690]], label_at: [4574, 2050]}
+  c-argocd-github: {from: argocd.right@30px, to: github.top@70px, waypoints: [[2790, 790], [2790, 300], [6550, 300]], label_at: [3032, 300]}
+  c-argocd-gke: {from: argocd.bottom@280px, to: gke-apiserver.left@60px, waypoints: [[2740, 1340], [6440, 1340], [6440, 3970]], label_at: [4590, 1340]}
+  c-cmp-github: {from: cmp-backend.right@30px, to: github.top@180px, waypoints: [[3210, 360], [3210, 240], [6660, 240]], label_at: [6536, 240]}
+  c-envoy-cmp-backend: {from: envoy-shared-gateway.right@50px, to: cmp-backend.top@80px, waypoints: [[860, 810], [860, 240], [2890, 240]], label_at: [1874, 240]}
+  c-envoy-cmp-frontend: {from: envoy-shared-gateway.right@70px, to: cmp-frontend.left@80px, waypoints: [[940, 830], [940, 680], [2360, 680], [2360, 410]], label_at: [1742, 680]}
+  c-envoy-cmp-mcp: {from: envoy-shared-gateway.bottom@280px, to: cmp-mcp.bottom@30px, waypoints: [[810, 890], [2430, 890], [2430, 630], [2490, 630]], against_flow: true, label_at: [1712, 890]}
+  c-id-ask: {from: id-user.top@28px, to: hosted-agent.left@30px, waypoints: [[210, 460], [500, 460], [500, 2390]], against_flow: true, label_at: [500, 1426]}
+  c-id-login: {from: id-user.right@30px, to: keycloak.left@60px, waypoints: [[870, 510], [870, 450], [4000, 450], [4000, 390]], label_at: [2436, 450]}
+  c-id-provision: {from: cmp-backend.right@80px, to: kc-client-cmp.left@30px, waypoints: [[3230, 410], [3230, 670]], label_at: [3636, 670]}
+  c-id-vault: {from: cmp-backend.right@60px, to: vault-a.left@30px, waypoints: [[3210, 390], [3210, 510]], label_at: [3412, 510]}
+  c-id-vso: {from: vso.bottom@30px, to: id-secret.right@30px, waypoints: [[3280, 680], [2370, 680], [2370, 2060], [850, 2060], [850, 2540]], against_flow: true, label_at: [1532, 2060]}
+  c-id-vso-read: {from: vso.bottom@280px, to: vault-a.left@50px, waypoints: [[3530, 530]], label_at: [3530, 468]}
+  c-mcp-api: {from: cmp-mcp.bottom@240px, to: cmp-backend.top@280px, waypoints: [[2700, 650], [3130, 650], [3130, 290], [3090, 290]], label_at: [3130, 468]}
+  c-mcp-app-repos: {from: cmp-mcp.bottom@280px, to: gh-project-repos.top@70px, waypoints: [[2740, 610], [2780, 610], [2780, 250], [6440, 250], [6440, 450], [6550, 450]], label_at: [3118, 250]}
+  c-md-gpu: {from: ollama.bottom@50px, to: md-gpu.top@280px, waypoints: [[6880, 3180], [6870, 3180], [6870, 3170], [6760, 3170]], label_at: [6784, 3170]}
+  c-md-hl-fwd: {from: md-hl-wg.right@30px, to: ollama.left@30px, label_at: [6806, 3080]}
+  c-md-quota: {from: gemini.bottom@30px, to: md-quota.top@30px, label_at: [6510, 2588]}
+  c-md-store: {from: ollama.bottom@30px, to: md-store.top@280px, waypoints: [[6860, 3180], [6800, 3180], [6800, 3320], [6760, 3320]], label_at: [6800, 3314]}
+  c-md-tunnel: {from: md-wg.bottom@280px, to: md-hl-wg.left@30px, waypoints: [[3950, 3080]], label_at: [5216, 3080]}
+  c-ob-1: {from: ob-recv.right@30px, to: ob-k8s.left@30px, label_at: [4716, 3760]}
+  c-ob-10: {from: ob-logsrc.right@30px, to: ob-lokiw.left@30px}
+  c-ob-11: {from: ob-lokiw.bottom@30px, to: ob-loki.top@30px, label_at: [4770, 4086]}
+  c-ob-12: {from: ob-grafana.bottom@30px, to: ob-loki.bottom@280px, waypoints: [[5120, 4600], [5020, 4600]], against_flow: true, label_at: [5020, 4462]}
+  c-ob-2: {from: ob-k8s.right@30px, to: ob-transform.left@30px, label_at: [5066, 3760]}
+  c-ob-3: {from: ob-transform.right@30px, to: ob-batch.left@30px, label_at: [5416, 3760]}
+  c-ob-4: {from: ob-batch.bottom@30px, to: ob-exp-otlp.top@280px, waypoints: [[5470, 3860], [5380, 3860], [5380, 3850], [5370, 3850]], label_at: [5400, 3860]}
+  c-ob-5: {from: ob-exp-otlp.bottom@30px, to: tempo.top@30px, label_at: [5120, 4086]}
+  c-ob-6: {from: ob-batch.bottom@50px, to: ob-exp-prom.top@50px, label_at: [5490, 3856]}
+  c-ob-7: {from: ob-exp-prom.bottom@30px, to: ob-prom.top@30px, label_at: [5470, 4086]}
+  c-ob-8: {from: ob-grafana.bottom@50px, to: tempo.left@80px, waypoints: [[5140, 4610], [5060, 4610], [5060, 4270]], label_at: [5060, 4440]}
+  c-ob-9: {from: ob-grafana.right@30px, to: ob-prom.bottom@30px, waypoints: [[5420, 4500], [5420, 4330], [5470, 4330]], against_flow: true, label_at: [5420, 4414]}
+  c-ob-agent: {from: hosted-agent.right@80px, to: ob-recv.left@30px, waypoints: [[970, 2440], [970, 3470], [4340, 3470], [4340, 3760]], label_at: [2656, 3470]}
+  c-ob-gw: {from: ag-x-otel.bottom@240px, to: ob-recv.left@50px, waypoints: [[2380, 3780]], label_at: [3254, 3780]}
+  c-ob-th: {from: th-proxy.bottom@170px, to: ob-recv.left@70px, waypoints: [[4330, 3800]], label_at: [4330, 3038]}
+  c-repos-ghcr: {from: gh-project-repos.bottom@70px, to: ghcr.top@70px, label_at: [6550, 602]}
+  c-sb-boot: {from: sb-runsc.bottom@30px, to: sb-sentry.top@280px, waypoints: [[1260, 4540], [1190, 4540]], label_at: [1260, 4484]}
+  c-sb-claim: {from: hosted-agent.right@60px, to: kube-apiserver.bottom@30px, waypoints: [[940, 2420], [940, 2200], [1630, 2200], [1630, 1150], [3280, 1150]], against_flow: true, label_at: [1286, 2200]}
+  c-sb-core-kapi: {from: sb-c-core.bottom@280px, to: kube-apiserver.bottom@280px, waypoints: [[810, 4180], [3540, 4180], [3540, 900], [3530, 900]], against_flow: true, label_at: [2004, 4180]}
+  c-sb-cri: {from: sb-kubelet.right@50px, to: sb-containerd.left@50px}
+  c-sb-cri-kata: {from: sb-kubelet-kata.right@50px, to: sb-containerd-kata.left@50px, label_at: [2116, 4380]}
+  c-sb-cri-runc: {from: sb-kubelet-runc.right@50px, to: sb-containerd-runc.left@50px}
+  c-sb-ext-kapi: {from: sb-c-ext.right@30px, to: kube-apiserver.left@60px, waypoints: [[1300, 4080], [1300, 4030], [2030, 4030], [2030, 2830], [2120, 2830], [2120, 2210], [3190, 2210], [3190, 820]], label_at: [2030, 3432]}
+  c-sb-host: {from: sb-sentry.bottom@30px, to: sb-kernel.top@30px, label_at: [940, 4766]}
+  c-sb-k-agent: {from: sb-kata-shim.bottom@60px, to: sb-kata-agent.top@30px, label_at: [2550, 4504]}
+  c-sb-k-fs: {from: sb-vmm.right@30px, to: sb-virtiofsd.left@30px, label_at: [2496, 4810]}
+  c-sb-k-kvm: {from: sb-vmm.bottom@30px, to: sb-kernel-kata.top@30px, label_at: [2200, 4914]}
+  c-sb-k-shim: {from: sb-containerd-kata.right@30px, to: sb-kata-shim.left@30px, label_at: [2466, 4360]}
+  c-sb-k-syscall: {from: sb-runtime-kata.right@30px, to: sb-guest.left@30px, label_at: [2146, 4610]}
+  c-sb-k-virtio: {from: sb-guest.bottom@30px, to: sb-vmm.top@30px, label_at: [2200, 4730]}
+  c-sb-k-vmm: {from: sb-kata-shim.bottom@30px, to: sb-vmm.top@280px, waypoints: [[2520, 4560], [2490, 4560], [2490, 4750], [2450, 4750]], label_at: [2490, 4694]}
+  c-sb-kubelet: {from: sb-kubelet.right@30px, to: kube-apiserver.left@80px, waypoints: [[860, 4360], [860, 4020], [1670, 4020], [1670, 2550], [2880, 2550], [2880, 2200], [3200, 2200], [3200, 840]], label_at: [1670, 2558]}
+  c-sb-kubelet-kata: {from: sb-kubelet-kata.right@30px, to: kube-apiserver.bottom@260px, waypoints: [[2120, 4360], [2120, 4190], [3550, 4190], [3550, 910], [3510, 910]], against_flow: true, label_at: [2120, 4274]}
+  c-sb-kubelet-runc: {from: sb-kubelet-runc.right@30px, to: kube-apiserver.right@60px, waypoints: [[3380, 4360], [3380, 3610], [3200, 3610], [3200, 3460], [3590, 3460], [3590, 820]], against_flow: true, label_at: [3380, 3986]}
+  c-sb-kyverno: {from: kube-apiserver.right@80px, to: kyverno.top@30px, waypoints: [[3640, 840], [3640, 3460], [4390, 3460]]}
+  c-sb-r-gw: {from: sb-agent-loop.bottom@30px, to: ag-f-listener.bottom@280px, waypoints: [[3460, 4710], [1640, 4710], [1640, 2570], [1280, 2570]], against_flow: true, label_at: [1640, 4692]}
+  c-sb-r-kernel: {from: sb-seccomp.bottom@30px, to: sb-kernel-runc.top@30px, label_at: [3810, 4766]}
+  c-sb-r-runc: {from: sb-containerd-runc.right@30px, to: sb-runc.left@30px}
+  c-sb-r-start: {from: sb-runc.bottom@30px, to: sb-agent-loop.top@280px, waypoints: [[3780, 4550], [3710, 4550]], label_at: [3780, 4488]}
+  c-sb-r-syscall: {from: sb-agent-loop.right@30px, to: sb-seccomp.left@30px, label_at: [3756, 4610]}
+  c-sb-router-kata: {from: sb-router.bottom@280px, to: sb-runtime-kata.left@30px, waypoints: [[1600, 4610]], label_at: [1710, 4610]}
+  c-sb-router-pod: {from: sb-router.bottom@30px, to: sb-runtime.top@280px, waypoints: [[1350, 4310], [850, 4310], [850, 4550], [840, 4550]], label_at: [1100, 4310]}
+  c-sb-run: {from: hosted-agent.bottom@50px, to: sb-router.left@40px, waypoints: [[580, 2490], [500, 2490], [500, 4030], [1290, 4030], [1290, 4090]], label_at: [500, 3260]}
+  c-sb-sentry-net: {from: sb-sentry.right@30px, to: sb-netstack.left@30px, label_at: [1236, 4610]}
+  c-sb-shim: {from: sb-containerd.right@30px, to: sb-runsc.left@30px, label_at: [1206, 4360]}
+  c-sb-syscall: {from: sb-runtime.right@30px, to: sb-sentry.left@30px, label_at: [886, 4610]}
+  c-sb-vm: {from: sb-kernel.bottom@280px, to: sb-hv.left@30px, waypoints: [[1190, 5360]], label_at: [1536, 5360]}
+  c-sb-vm-kata: {from: sb-kernel-kata.bottom@50px, to: sb-hv.right@30px, waypoints: [[2220, 5360]], against_flow: true, label_at: [2220, 5204]}
+  c-sb-vm-runc: {from: sb-kernel-runc.bottom@30px, to: sb-hv.top@280px, waypoints: [[3810, 5300], [2160, 5300]], label_at: [2984, 5300]}
+  c-th-github: {from: th-server.right@30px, to: github.right@80px, waypoints: [[6870, 2210], [6870, 410]], against_flow: true, label_at: [5840, 2210]}
+  c-th-gw: {from: ag-x-mcp.right@50px, to: th-proxy.left@80px, waypoints: [[2870, 2760], [2870, 2260]], label_at: [3456, 2260]}
+  c-th-jwks: {from: th-proxy.bottom@50px, to: keycloak.left@40px, waypoints: [[4210, 2320], [3990, 2320], [3990, 370]], label_at: [3990, 2234]}
+  c-th-op-kapi: {from: th-op.bottom@30px, to: kube-apiserver.right@40px, waypoints: [[5360, 1500], [5180, 1500], [5180, 800]], against_flow: true, label_at: [4366, 800]}
+  c-th-proxy-kapi: {from: th-proxy.bottom@30px, to: kube-apiserver.bottom@240px, waypoints: [[4190, 2310], [3560, 2310], [3560, 920], [3490, 920]], against_flow: true, label_at: [3876, 2310]}
+  c-th-run: {from: th-proxy.right@50px, to: th-server.left@50px}
+  c-updater-app-repos: {from: image-updater.bottom@280px, to: gh-project-repos.right@80px, waypoints: [[3090, 980], [6860, 980], [6860, 560]], against_flow: true, label_at: [6588, 980]}
+  c-updater-ghcr: {from: image-updater.bottom@260px, to: ghcr.bottom@30px, waypoints: [[3070, 990], [6510, 990]], against_flow: true, label_at: [6510, 864]}
+  c-updater-github: {from: image-updater.right@30px, to: github.left@60px, waypoints: [[3220, 790], [3220, 310], [6450, 310], [6450, 390]], label_at: [3220, 744]}
+  e-1-browser-edge: {from: user.right@30px, to: cf-edge.top@180px, waypoints: [[340, 360], [340, 740], [250, 740]], label_at: [340, 498]}
+  e-2-tunnel-app: {from: cloudflared-app.bottom@30px, to: cf-edge.top@260px, waypoints: [[1000, 590], [330, 590]], label_at: [666, 590]}
+  e-3-connector-envoy: {from: cloudflared-app.bottom@120px, to: envoy-shared-gateway.top@230px, waypoints: [[1090, 740], [770, 740], [770, 730], [760, 730]], label_at: [1090, 584]}
+  e-4-envoy-service: {from: envoy-shared-gateway.bottom@260px, to: app-service.left@80px, waypoints: [[790, 900], [1650, 900], [1650, 420], [1640, 420], [1640, 410]], label_at: [1650, 466]}
+  e-5-service-pods: {from: app-service.right@30px, to: app-pods.top@80px, waypoints: [[2000, 360], [2000, 300], [2100, 300]], label_at: [2050, 300]}
+  e-6-pods-db: {from: app-pods.bottom@80px, to: cnpg.top@80px}
+  e-a-vso-vault: {from: vso.right@60px, to: vault.left@60px}
+  e-b-vso-secret: {from: vso.bottom@50px, to: app-secret.bottom@280px, waypoints: [[3300, 640], [1950, 640]], against_flow: true, label_at: [2622, 640]}
+  e-oidc-envoy-keycloak: {from: envoy-shared-gateway.right@30px, to: keycloak.bottom@100px, waypoints: [[950, 790], [950, 730], [4020, 730], [4020, 610], [4140, 610]], against_flow: true, label_at: [2484, 730]}
+  e-oidc-platform-envoy: {from: cloudflared-platform.bottom@50px, to: envoy-shared-gateway.left@60px, waypoints: [[580, 520], [490, 520], [490, 820]]}
+  e-oidc-platform-tunnel: {from: cloudflared-platform.bottom@30px, to: cf-edge.right@30px, waypoints: [[560, 530], [390, 530], [390, 800]], against_flow: true, label_at: [426, 530]}
+  e-oidc-token-hairpin: {from: envoy-shared-gateway.bottom@30px, to: cf-edge.bottom@260px, waypoints: [[560, 910], [330, 910]], against_flow: true, label_at: [386, 910]}
+  r-ag-be-gemini: {from: ag-be-gemini.bottom@270px, to: ag-backend-gemini.left@30px, waypoints: [[1180, 1570], [1670, 1570], [1670, 1620]], label_at: [1670, 1596]}
+  r-ag-be-ollama: {from: ag-be-ollama.right@80px, to: ag-backend-ollama.left@30px, waypoints: [[1680, 1520], [1680, 1570], [2020, 1570], [2020, 1620]], label_at: [2020, 1576]}
+  r-ag-bsp-secret: {from: ag-bsp.top@280px, to: ag-secret.top@30px, waypoints: [[1190, 1560], [2430, 1560]], label_at: [2108, 1560]}
+  r-ag-bsp-target: {from: ag-bsp.top@30px, to: ag-be-gemini.bottom@30px, label_at: [940, 1564]}
+  r-ag-btp: {from: ag-btp.top@30px, to: ag-gateway.top@280px, waypoints: [[2430, 1410], [1980, 1410]], label_at: [2204, 1410]}
+  r-ag-gwconfig: {from: ag-gateway.left@70px, to: ag-gwconfig.right@30px, waypoints: [[1600, 1510], [1600, 1620]], label_at: [1600, 1548]}
+  r-ag-mount: {from: ag-extproc-secret.bottom@40px, to: g-ag-xp.right@30px, waypoints: [[3260, 2670]], label_at: [3260, 2068]}
+  r-ag-route-gemini: {from: ag-route.right@30px, to: ag-be-gemini.left@30px, label_at: [886, 1470]}
+  r-ag-route-ollama: {from: ag-route.top@280px, to: ag-be-ollama.top@30px, waypoints: [[840, 1410], [1290, 1410]], label_at: [1066, 1410]}
+  r-ag-secpol: {from: ag-secpol.left@30px, to: ag-gateway.right@30px, label_at: [2024, 1470]}
+  r-ctp-gateway: {from: client-traffic-policy.bottom@30px, to: envoy-shared-gateway.top@30px, label_at: [560, 736]}
+  r-id-aud: {from: id-scope-aud.top@280px, to: id-client-gw.bottom@40px, waypoints: [[5050, 550], [5160, 550]], label_at: [5050, 612]}
+  r-id-policy: {from: id-policy.top@30px, to: id-client-agent.bottom@280px, waypoints: [[5150, 540], [4700, 540]], label_at: [4924, 540]}
+  r-id-scope: {from: id-client-agent.bottom@190px, to: id-scope-project.top@190px, label_at: [4610, 586]}
+  r-id-secret: {from: id-secret.top@30px, to: hosted-agent.bottom@30px, label_at: [560, 2476]}
+  r-id-svc: {from: id-client-agent.right@30px, to: id-svc.left@30px, label_at: [4746, 430]}
+  r-mcp-policy: {from: cmp-mcp.right@30px, to: stake-policy.left@30px}
+  r-md-guard: {from: md-store.right@30px, to: md-guard.left@30px, label_at: [6806, 3380]}
+  r-md-local: {from: md-route-local.right@30px, to: ag-be-ollama.left@80px, waypoints: [[1230, 1770], [1230, 1520]], label_at: [1046, 1770]}
+  r-md-project: {from: md-project.top@30px, to: md-quota.bottom@30px, label_at: [6510, 2744]}
+  r-ob-alerts: {from: ob-alerts.left@50px, to: ob-grafana.right@50px, label_at: [5414, 4520]}
+  r-pods-secret: {from: app-pods.left@80px, to: app-secret.bottom@260px, waypoints: [[1990, 410], [1990, 630], [1930, 630]], label_at: [1990, 468]}
+  r-policy-route: {from: security-policy.top@30px, to: httproute.bottom@30px, label_at: [1350, 462]}
+  r-policy-secret: {from: security-policy.right@30px, to: app-secret.left@30px}
+  r-route-gateway: {from: httproute.left@80px, to: envoy-shared-gateway.top@280px, waypoints: [[1290, 410], [1290, 600], [850, 600], [850, 730], [810, 730]], label_at: [1180, 600]}
+  r-sb-claim-pool: {from: sb-claim.bottom@280px, to: sb-warmpool.right@80px, waypoints: [[840, 3840], [1600, 3840], [1600, 3640]], label_at: [1398, 3840]}
+  r-sb-claim-sandbox: {from: sb-claim.bottom@260px, to: sb-sandbox.bottom@30px, waypoints: [[820, 3850], [1290, 3850]], label_at: [1290, 3828]}
+  r-sb-nested-hv: {from: sb-nested.left@50px, to: sb-hv.right@50px, label_at: [2210, 5380]}
+  r-sb-pool-template: {from: sb-warmpool.top@30px, to: sb-template.left@30px, waypoints: [[1290, 3460], [530, 3460], [530, 3590]], label_at: [900, 3460]}
+  r-sb-sandbox-svc: {from: sb-sandbox.left@30px, to: sb-svc.right@30px, label_at: [1234, 3740]}
+  r-sb-template-kata-netpol: {from: sb-template-kata.bottom@260px, to: sb-netpol.left@80px, waypoints: [[1170, 3690], [1180, 3690], [1180, 3680], [2370, 3680], [2370, 3640]], label_at: [1170, 3674]}
+  r-sb-template-netpol: {from: sb-template.top@260px, to: sb-netpol.top@30px, waypoints: [[820, 3530], [2430, 3530]], label_at: [820, 3546]}
+  r-sb-template-rc: {from: sb-template.top@280px, to: sb-rc.left@50px, waypoints: [[840, 3540]], label_at: [2494, 3540]}
+  r-sb-template-rckata: {from: sb-template-kata.bottom@280px, to: sb-rc-kata.bottom@30px, waypoints: [[1190, 3690], [3600, 3690]], label_at: [2444, 3690]}
+  r-th-oidc: {from: th-mcpserver.top@280px, to: th-oidc.top@30px, waypoints: [[4440, 1410], [4890, 1410]], label_at: [4666, 1410]}
+  r-th-route: {from: ag-mcproute.bottom@280px, to: th-svc.top@30px, waypoints: [[840, 1720], [4540, 1720]], label_at: [2982, 1720]}
+  r-th-secret: {from: th-mcpserver.bottom@280px, to: th-secret.left@30px, waypoints: [[4440, 1570], [4830, 1570], [4830, 1620]], label_at: [4634, 1570]}
+  r-th-tel: {from: th-mcpserver.bottom@260px, to: th-telemetry.left@30px, waypoints: [[4420, 1620]], label_at: [4438, 1620]}
+  r-th-tools: {from: th-mcpserver.right@30px, to: th-toolconfig.left@30px, label_at: [4486, 1470]}
+  x-cross-tenant: {from: g-tenant-a.bottom@30px, to: g-tenant-b.top@30px, label_at: [970, 648]}
+cards:
+  card-steps: {x: 40, y: 5540, w: 3600, h: 320}
+  card-background: {x: 3700, y: 5540, w: 3600, h: 320}
+  card-legend: {x: 3700, y: 5900, w: 3600, h: 340}

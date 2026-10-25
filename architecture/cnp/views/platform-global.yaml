@@ -1,0 +1,151 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · Global map · current platform and AI landing zone"
+subtitle: "Every zoom on one canvas: how a user, an app, an agent and a release cross the platform, and what the AI landing zone adds"
+meta:
+  - "Scope: on-prem hub and its EKS and GKE targets, 2026-10-22 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
+  - "Out of scope: observability (ai-gateway view) · cnp.sh and Terraform state (multicloud view) · RBAC and grants (access-matrix view) · per-cluster policies (multicloud-policies view) · the homelab GPU cluster's own stack"
+  - "Assumed: Agent Router (ex-Envoy AI Gateway) on the existing Envoy Gateway; Gemini free tier first, Ollama on 429 or for Local projects"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-internet
+  - user
+  - z-assistants
+  - assistant-remote
+  - z-cloudflare
+  - cf-edge
+  - z-cluster
+  - g-gateway
+  - envoy-shared-gateway
+  - g-identity
+  - keycloak
+  - g-secrets
+  - vso
+  - vault
+  - g-cmp
+  - cmp-frontend
+  - cmp-backend
+  - cmp-mcp
+  - stake-policy
+  - g-tenant-a
+  - cloudflared-app
+  - app-pods
+  - cnpg
+  - g-gitops
+  - argocd
+  - image-updater
+  - g-ag-kapi
+  - kube-apiserver
+  - g-data
+  - cnpg-operator
+  - rook-ceph
+  - garage-s3
+  - cnpg-backup
+  - g-ops
+  - kyverno
+  - gatus
+  - offhours-guard
+  - velero
+  - cilium-default-deny
+  - g-vpn
+  - wireguard-onprem
+  - wireguard-onprem-gcp
+  - g-ai-gateway
+  - ai-gw-proxy
+  - ai-gw-route
+  - ai-gw-policy
+  - ai-provider-secret
+  - ai-ratelimit
+  - opa
+  - g-agents
+  - hosted-agent
+  - agent-sandbox
+  - g-mcp-tools
+  - toolhive
+  - z-github
+  - gh-project-repos
+  - ghcr
+  - z-cloud-a
+  - b-wireguard
+  - b-apiserver
+  - z-cloud-b
+  - gke-wireguard
+  - gke-apiserver
+  - z-google-ai
+  - gemini
+  - z-homelab-gpu
+  - ollama
+
+steps: [e-1-browser-edge, e-2-tunnel-app, e-3-connector-envoy, c-app-aigw, c-agent-aigw, c-aigw-gemini, c-aigw-ollama, c-aigw-cmp-mcp, c-mcp-app-repos, c-repos-ghcr, c-updater-ghcr, c-argocd-app-repos, c-argocd-apiserver]
+background: [e-a-vso-vault, c-vso-ai-secret, c-aigw-keycloak, c-agent-keycloak, c-wg-eks, c-wg-gke, c-argocd-b, c-argocd-gke]
+
+labels:
+  c-sb-claim: ""
+  c-sb-kyverno: ""
+  e-1-browser-edge: ""
+  c-assistant-edge: ""
+  e-2-tunnel-app: ""
+  e-3-connector-envoy: ""
+  e-6-pods-db: ""
+  e-oidc-token-hairpin: ""
+  e-oidc-envoy-keycloak: ""
+  c-envoy-cmp-frontend: ""
+  c-envoy-cmp-backend: ""
+  c-envoy-cmp-mcp: ""
+  c-mcp-api: ""
+  r-mcp-policy: ""
+  c-app-aigw: ""
+  c-agent-aigw: ""
+  r-aigw-route-proxy: ""
+  r-aigw-route-secret: ""
+  r-aigw-policy-route: ""
+  c-aigw-ratelimit: ""
+  c-aigw-gemini: ""
+  c-aigw-ollama: ""
+  c-aigw-toolhive: ""
+  c-aigw-cmp-mcp: ""
+  c-aigw-keycloak: ""
+  c-agent-keycloak: ""
+  e-a-vso-vault: ""
+  c-vso-ai-secret: ""
+  c-mcp-app-repos: ""
+  c-argocd-app-repos: ""
+  c-updater-app-repos: ""
+  c-updater-ghcr: ""
+  c-repos-ghcr: ""
+  c-argocd-apiserver: ""
+  c-argocd-b: ""
+  c-argocd-gke: ""
+  c-wg-eks: ""
+  c-wg-gke: ""
+
+cards:
+  - id: card-steps
+    title: "Paths across the platform"
+    color: emerald
+    lines:
+      - "[1]–[3] A user reaches an app: Cloudflare edge, the app's tunnel, then the shared Envoy gateway (zoom 1)."
+      - "[4] [5] Apps and hosted agents call models only through the AI gateway, with a short Keycloak token (zooms 2, 4, 6)."
+      - "[6] [7] The gateway calls Gemini's free tier; on 429, or for projects marked Local, it calls Ollama on the homelab GPU over WireGuard (zoom 3)."
+      - "[8] Tool calls go to the CMP's MCP server, which applies the stake policy (zoom 5)."
+      - "[9]–[13] A release is a tag: GitHub, GHCR, Image Updater, then Argo CD applies it to the cluster (zoom 7)."
+  - id: card-background
+    title: "Background · control plane"
+    color: amber
+    lines:
+      - "[A] [B] Vault and its operator deliver the Gemini key to the gateway only (zoom 6)."
+      - "[C] [D] Keycloak issues one client per agent; the gateway caches its JWKS."
+      - "[E]–[H] WireGuard links the hub to EKS and GKE; Argo CD deploys to both (zoom 10)."
+      - "Observability (Alloy, Loki, Tempo, Grafana) is left out of this map to keep it readable: see the ai-gateway view and zoom 9."
+  - id: card-plan
+    title: "Order of work"
+    color: sky
+    lines:
+      - "**P0** default-deny between tenants (G1), pods not root (G8), protected main (G17), CNPG backups (G2)."
+      - "**IA-1** AI gateway, Gemini and Ollama backends, Tempo."
+      - "**IA-2** sandboxed hosted agents, ToolHive MCP servers."
+      - "**IA-3** OPA ext_authz once JWT claims are not enough."
+  - {id: card-legend, title: Legend, color: slate, legend: true}

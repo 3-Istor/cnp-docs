@@ -1,0 +1,63 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: landscape
+state: diff
+title: "CNP · AI landing zone · Tech stack"
+subtitle: "What is the platform built with today, and what do the landing zone fixes (P0–P2) and the AI landing zone (IA-1–IA-3) add?"
+meta:
+  - "Scope: the on-prem hub as of 2026-10-22 · in full: what the fixes and the AI landing zone add, with their target · faded: what already runs"
+  - "Out of scope: EKS and GKE (same stack per cluster) · the homelab GPU cluster's own stack"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+bands:
+  - id: delivery
+    title: Portal and delivery
+    sub: from a request in the portal to a running app
+    color: emerald
+    flow: true
+    sections:
+      - {title: IDP portal, items: [cmp-frontend, cmp-backend, cmp-mcp]}
+      - {title: Source and images, items: [github, gh-project-repos, ghcr]}
+      - {title: Supply chain, items: [cosign, trivy-operator]}
+      - {title: GitOps, items: [argocd, appsets, image-updater]}
+  - id: traffic
+    title: Access and traffic
+    sub: how requests and model calls enter and leave
+    color: amber
+    sections:
+      - {title: Edge, items: [cf-edge, cloudflared-platform]}
+      - {title: Gateway API, items: [envoy-shared-gateway]}
+      - {title: AI gateway, items: [ai-gw-proxy, ai-gw-route, ai-ratelimit, opa]}
+  - id: agents
+    title: Agents, tools and models
+    sub: what the AI landing zone hosts or reaches
+    color: sky
+    sections:
+      - {title: Hosted agents, items: [hosted-agent, agent-sandbox]}
+      - {title: MCP tools, items: [stake-policy, toolhive, th-op]}
+      - {title: Models, items: [gemini, ollama]}
+  - id: data
+    title: Data and resilience
+    sub: what apps store and how it comes back
+    color: violet
+    sections:
+      - {title: Databases and storage, items: [cnpg-operator, rook-ceph, garage-s3]}
+      - {title: Backup, items: [cnpg-backup, velero]}
+  - id: runtime
+    title: Runtime
+    sub: the foundation
+    color: cyan
+    sections:
+      - {title: Kubernetes, items: [kube-apiserver]}
+      - {title: Isolation, items: [cilium-default-deny, tetragon, sb-rc, sb-rc-kata]}
+side:
+  - {title: Identity, color: rose, items: [keycloak, cmp-oauth, id-client-agent]}
+  - {title: Secrets, color: violet, items: [vault, vso]}
+  - {title: Policy, color: rose, items: [kyverno, ai-gw-policy]}
+  - {title: Observability, color: orange, items: [observability, gatus, tempo, ob-prom]}
+  - {title: FinOps, color: emerald, items: [offhours-guard, opencost]}
+labels:
+  kube-apiserver: "K3s"
+  kyverno: "Kyverno (Audit → Enforce)"
+  stake-policy: "CMP stake policy"
+  hosted-agent: "Hosted agents"
+  envoy-shared-gateway: "Envoy Gateway"
