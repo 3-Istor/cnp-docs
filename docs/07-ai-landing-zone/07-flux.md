@@ -73,6 +73,9 @@ phase 1, elle est dans le code de l'app.
 3. Le serveur MCP `generate_image` (lancé par ToolHive dans `mcp-tools`) envoie le workflow
    versionné au service d'image du serveur GPU, par HTTPS avec son propre jeton.
 4. Le serveur GPU génère l'image ; le serveur MCP la renvoie à l'agent (lien ou contenu).
+   Avant, il décharge le modèle de texte du GPU et prend un verrou ; après, il le rend (spec §5,
+   « Changer de modèle pour une image »). Pendant ce temps, le texte des projets Cloud part sur
+   Gemini, celui des projets Local attend.
 5. Comptage : un appel d'image n'est pas compté en tokens. La gateway limite le nombre
    d'appels par agent et par jour (D35) et le FinOps le valorise au TCO du serveur GPU.
 
@@ -83,7 +86,8 @@ Ce flux ne passe **pas** par la gateway : le code ne sort jamais du sandbox.
 1. L'agent crée une `SandboxClaim` dans son namespace (il n'a que ce droit sur l'API
    Kubernetes).
 2. Le contrôleur agent-sandbox démarre un pod depuis le `SandboxTemplate` : gVisor, ou Kata
-   pour du code non fiable. Pas de warm pool (D33) : le démarrage prend quelques secondes.
+   pour du code non fiable. Un sandbox gVisor attend déjà dans le warm pool (D33) : la tâche
+   démarre tout de suite ; un sandbox Kata démarre en quelques secondes.
 3. L'agent envoie le code au routeur de sandbox ; le code tourne ; la sortie revient.
 4. Le sandbox n'a aucun réseau sauf le DNS, ni secret, ni jeton. Il est détruit à la fin de
    la tâche ou à l'expiration de sa durée de vie.
