@@ -7,7 +7,9 @@
 > **Les décisions de cette page sont remplacées par [la spec de référence](02-spec.md)** (§3)
 > dès qu'elle est validée. D1 y devient agentgateway au lieu d'Agent Router, et D3 un jeton
 > de 5 minutes. Le découpage en phases et les vérifications sont dans
-> [03-phases.md](03-phases.md), la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md).
+> [03-phases.md](03-phases.md), la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md), le plan d'implémentation dans
+> [05-plan-implementation.md](05-plan-implementation.md) et le FinOps de l'IA dans
+> [06-finops-ia.md](06-finops-ia.md), les flux pas à pas dans [07-flux.md](07-flux.md).
 
 La landing zone IA se greffe sur la plateforme existante. Les appels des agents vers un
 modèle ou un outil passent par une AI gateway (agentgateway) posée à côté de l'Envoy Gateway

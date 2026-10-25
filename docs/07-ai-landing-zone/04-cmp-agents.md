@@ -1,6 +1,6 @@
 # La CMP et les agents
 
-> **Statut : brouillon v0.1 du 2026-10-25, à valider.** Cette page dit comment un
+> **Statut : brouillon v0.2 du 2026-10-25, à valider.** Cette page dit comment un
 > développeur ou un tenant active l'IA et déclare un agent dans la CMP, et ce que la CMP
 > écrit en conséquence. Les décisions de plateforme sont dans [02-spec.md](02-spec.md), les
 > phases dans [03-phases.md](03-phases.md). Les noms d'API et d'écrans sont des propositions.
@@ -58,14 +58,31 @@ Chaque parcours indique sa phase (spec §6).
 | C11 | Inventaire global des agents, registre des serveurs MCP, état des modèles | admin plateforme | 2 |
 | C12 | Revue périodique : le propriétaire confirme qu'un agent sert encore et que ses droits sont justes | propriétaire | 3 |
 
-## 4. Écrans
+## 4. Où l'IA apparaît dans la CMP
 
-### Projet, nouvel onglet « IA »
+La barre latérale de la CMP contient aujourd'hui Home, FinOps, Sécurité, Activité, Alertes,
+Assistants IA et Docs, puis la liste des projets. Une page de projet a les onglets Apps,
+Membres, Sécurité, FinOps, Activité, Alertes et Assistants.
+
+| Emplacement | Changement | Phase |
+|---|---|---|
+| Onglet « Assistants » d'un projet | Devient l'onglet **« IA »**, en trois sections : Accès aux modèles, Agents hébergés, Assistants connectés (le panneau actuel, inchangé). Tout ce qui touche à l'IA d'un projet est au même endroit. | 1 (sans la section Agents), 2 |
+| Barre latérale | Nouvelle entrée **« Agents »** (`/agents`) : les agents de mes projets ; pour un admin plateforme, trois onglets en plus : Tous les agents, Outils MCP, Modèles. L'entrée « Assistants IA » (`/connect-ai`) reste la page pour connecter un assistant externe. | 2 |
+| FinOps | Catégorie « IA » et dimension « agent » ([06-finops-ia.md](06-finops-ia.md)) | selon le plan FinOps |
+| Page d'une app | Badge « Accès IA » et lien vers la section Accès aux modèles du projet | 1 |
+| Activité | Filtre « via un agent » | 2 |
+
+Les maquettes de ces écrans sont sur le canevas [CMP · Landing zone IA · Maquettes](https://claude.ai/artifact/1e4ETb6QvU5vnsCv866xHB) (privé, à partager depuis claude.ai) : onglet IA d'un projet, accès IA d'une app, création d'un agent à l'étape Risque, page d'un agent avec chat de test, inventaire des agents, FinOps filtré sur l'IA. Elles sont la
+référence visuelle ; ce document reste la référence fonctionnelle.
+
+## 5. Écrans
+
+### Projet, onglet « IA »
 
 - **Carte « Niveau de données ».** Cloud ou Local, avec une phrase sur ce que ça implique
   (« Local : vos données ne quittent pas le homelab ; les réponses sont plus lentes »). Un
   projet critical est forcé en Local.
-- **Carte « Budget ».** Jauge des tokens consommés aujourd'hui, coût estimé en euros, seuil
+- **Carte « Budget ».** Jauge des tokens consommés aujourd'hui, coût au prix public de Gemini, seuil
   d'alerte. Reprend `BudgetGauge` et `BudgetForm`.
 - **Carte « Modèles ».** Modèles autorisés pour le projet, et l'état de chaque backend
   (Gemini : quota restant ; serveur GPU : en ligne ou « service indisponible »).
@@ -77,9 +94,9 @@ Chaque parcours indique sa phase (spec §6).
 
 Sur le modèle du `DeploymentStepper` des apps, en six étapes :
 
-1. **Template.** Agent vide (LangGraph), agent de questions sur une doc (RAG), agent de
-   diagnostic de déploiement (UC3), agent de revue de PR (UC11). Le template crée le dépôt avec
-   le code, le Dockerfile et `deploy/`.
+1. **Template.** Agent déclaratif vide (consignes, modèle, outils, sans code), agent de questions sur une doc (RAG), agent de
+   diagnostic de déploiement (UC3), agent de revue de PR (UC11). Un agent déclaratif n'a pas de dépôt de code : la CMP écrit son CR `Agent`. Un agent BYO
+   (LangGraph) a un dépôt avec le code, le Dockerfile et `deploy/`.
 2. **Identité.** Nom, description, propriétaire (par défaut le créateur).
 3. **Modèle.** Choix parmi les modèles autorisés du projet, et plafond d'étapes par tâche.
 4. **Outils.** Liste du registre, chaque outil avec ses badges de risque (« lit du contenu non
@@ -126,7 +143,7 @@ Sur le modèle du `DeploymentStepper` des apps, en six étapes :
 - **Confirmations.** Les demandes des agents hébergés, au même endroit que celles des
   assistants.
 
-## 5. Ce que la CMP écrit
+## 6. Ce que la CMP écrit
 
 La CMP n'applique rien directement sur le cluster : elle écrit dans Git et dans Keycloak, et
 Argo CD fait le reste, comme pour les apps.
@@ -139,21 +156,21 @@ Argo CD fait le reste, comme pour les apps.
 | Secret client (phase 1 seulement) | Vault `kvv2/projects/<projet>/agents/<nom>` | 1 |
 | Namespace, ServiceAccount, NetworkPolicy, `ResourceQuota`, `LimitRange` de l'agent | Rendus par `cnp-project-base` à partir de `spec.agents[]` | 2 |
 | CR `Agent` de kagent et son `ModelConfig` | Rendus par `cnp-project-base` | 2 |
-| Politique de la gateway pour l'agent : budget, outils autorisés, appelants A2A | À confirmer à l'essai d'agentgateway (namespace `ai-gateway` ou namespace de l'agent) | 1 (budget), 2 (outils, A2A) |
+| Politique de la gateway pour l'agent : budget, outils autorisés, appelants A2A | Namespace `ai-gateway`, rendue par le chart `cnp-ai-policies` du dépôt K3s à partir du `ProjectRecord` (spec D22) | 1 (budget), 2 (outils, A2A) |
 | Dépôt du code de l'agent, à partir d'un template | GitHub, template dans `app-templates` | 2 |
 
 **Suspendre** (C9) : retirer le client Keycloak du groupe et passer `status: suspended`
 dans le `ProjectRecord`, ce qui ramène l'agent à zéro réplica. Les jetons déjà émis expirent
 en 5 minutes au plus.
 
-## 6. API de la CMP
+## 7. API de la CMP
 
 Routes proposées, sur le modèle des API existantes (`/api/projects/...`) :
 
 | Méthode et route | Rôle | Phase |
 |---|---|---|
 | `GET`, `PUT /api/projects/{projet}/ai` | Lire ou changer le niveau de données, le budget et les modèles du projet | 1 |
-| `POST /api/projects/{projet}/ai/apps/{app}` | Donner l'accès IA à une app (client Keycloak, URL de la gateway dans son `values.yaml`) | 1 |
+| `POST /api/projects/{projet}/ai/apps/{app}` | Donner l'accès IA à une app (client Keycloak `app-<projet>-<app>`, secret dans Vault, URL de la gateway dans son `values.yaml`) | 1 |
 | `GET`, `POST /api/projects/{projet}/agents` | Lister, créer un agent | 2 |
 | `GET`, `PATCH`, `DELETE /api/projects/{projet}/agents/{agent}` | Lire, modifier, supprimer | 2 |
 | `POST /api/projects/{projet}/agents/{agent}/suspend` et `/resume` | Couper, réactiver | 2 |
@@ -163,11 +180,39 @@ Routes proposées, sur le modèle des API existantes (`/api/projects/...`) :
 | `GET`, `POST /api/admin/mcp-servers` | Registre des serveurs MCP | 2 |
 | `GET /api/ai/backends` | État des backends de modèles | 1 |
 
+**Contrats des routes de la phase 1.** Toutes exigent un jeton d'utilisateur ; `PUT` et
+`POST` exigent le rôle admin du projet.
+
+```json
+// GET /api/projects/{projet}/ai → 200
+{
+  "data_level": "cloud",            // "cloud" | "local"
+  "daily_token_budget": 200000,     // projet : alerte seulement (D21)
+  "models": ["gemini-2.5-flash"],   // modèles autorisés ; noms exacts fixés en T1.1
+  "apps": [{"app": "twitter-clone", "enabled": true, "daily_token_budget": 50000}]
+}
+
+// PUT /api/projects/{projet}/ai  (même corps, sans "apps") → 200, ou 409 si le projet est critical et data_level = "cloud"
+
+// POST /api/projects/{projet}/ai/apps/{app}  {"enabled": true, "daily_token_budget": 50000} → 201
+{"client_id": "app-<projet>-<app>", "gateway_url": "http://<service de la gateway>:8080", "secret_ref": "kvv2/projects/<projet>/apps/<app>/ai-oidc"}
+
+// GET /api/projects/{projet}/ai/usage?period=1d|7d|30d → 200
+{"items": [{"azp": "app-<projet>-<app>", "tokens_in": 12034, "tokens_out": 3400, "requests": 41, "refused": 2, "budget": 50000, "cost_eur": 0.02}]}
+
+// GET /api/ai/backends → 200
+{"items": [{"name": "gemini-1", "kind": "gemini", "status": "ok", "quota_left_pct": 62}, {"name": "gpu-server", "kind": "gpu", "status": "unavailable"}]}
+```
+
+**Données.** En phase 1, la CMP n'ajoute aucune table : le `ProjectRecord` est la source,
+l'usage vient de VictoriaMetrics. En phase 2, une table miroir `agents` (comme le miroir du
+placement des projets) accélère les listes ; Git reste la source.
+
 Les assistants (claude.ai, ChatGPT…) pourront créer et gérer des agents par de nouveaux outils
 du serveur MCP de la CMP, soumis à la stake policy (nouvelles actions `agent.create`,
 `agent.publish`, `agent.suspend`).
 
-## 7. Le serveur MCP de la CMP face aux agents hébergés
+## 8. Le serveur MCP de la CMP face aux agents hébergés
 
 Deux changements sont nécessaires.
 
@@ -204,7 +249,7 @@ dans la conversation ». Un agent hébergé n'a souvent personne dans la convers
 devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'agent comme
 `via`.
 
-## 8. Vérifications
+## 9. Vérifications
 
 | ID | Phase | Vérification | Attendu |
 |---|---|---|---|
@@ -218,19 +263,15 @@ devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'ag
 | VC2.5 | 2 | Un agent hébergé appelle un outil `ask` de la CMP | Une confirmation apparaît dans la CMP ; rien ne s'exécute avant l'approbation |
 | VC2.6 | 2 | Action d'un agent | Le journal d'activité l'enregistre avec `via: agent-<projet>-<nom>` |
 
-## 9. Points ouverts
+## 10. Décisions et points restants
 
-1. **Utilisateurs d'une app de tenant.** Un projet qui active la fonctionnalité `keycloak` a
-   son propre realm pour les utilisateurs de ses apps, alors que les clients d'agent sont dans
-   le realm `3istor`. Pour
-   UC21, un agent qui agit au nom d'un utilisateur du clone de Twitter devrait échanger un
-   jeton d'un autre realm. **Recommandation pour la démo :** pas d'échange entre realms. L'app
-   appelle la gateway avec sa propre identité (un client dans `3istor`) et transmet
-   l'identifiant de l'utilisateur pour le budget et l'audit, sans lui donner de droits.
-   L'assistant agit comme un compte de l'app (le « bot »), pas comme l'utilisateur.
-2. **Client scope `cmp-tools`** : à créer dans Keycloak, avec la vérification d'audience côté
-   CMP (§7).
-3. **Emplacement des politiques par agent** de la gateway (§5), à fixer à l'essai.
-4. **Chat de test** : faut-il un budget de test séparé du budget de production ?
-5. **Templates d'agent** : lesquels livrer en premier (proposition : RAG sur une doc, puis
-   diagnostic de déploiement).
+| Sujet | Décision |
+|---|---|
+| Utilisateurs d'une app de tenant dans un autre realm (UC21) | Pas d'échange entre realms. L'app appelle la gateway avec sa propre identité (`app-<projet>-<app>`, realm `3istor`) et transmet l'identifiant de l'utilisateur pour le budget et l'audit, sans lui donner de droits. L'assistant agit comme le « bot » de l'app. |
+| Jetons des agents vers la CMP | Audiences séparées `cmp-api` et `cmp-mcp`, client scope `cmp-tools` (§8). `cmp-api` en phase 1 (T1.9), `cmp-mcp` en phase 2. |
+| Emplacement des politiques par agent | Namespace `ai-gateway`, chart `cnp-ai-policies` (spec D22) |
+| Budget du chat de test | Compté dans le budget de l'agent (spec D25) |
+| Premiers templates d'agent | Agent kagent déclaratif vide, puis agent de questions sur une documentation (spec D26, D29) |
+| Onglet « Assistants » | Fusionné dans l'onglet « IA » (§4) : proposé, à valider |
+
+Maquettes validées par Brian le 2026-10-25. Reste à valider : la fusion de l'onglet « Assistants ».
