@@ -426,8 +426,10 @@ elements:
   - {id: id-client-gw, kind: security, parent: g-id-clients, icon: keycloak, title: "Client ai-gateway", tech: "[audience only]", desc: "The audience agent tokens target;<br>no login, no secret in use.<br>Why: a token works only there.", status: planned, target: IA-1}
   - {id: id-client-cmp, kind: security, parent: g-id-clients, icon: keycloak, title: "Client cmp", tech: "[OIDC login · code + PKCE]", desc: "Users log in to the CMP with it;<br>its tokens are what agents exchange."}
   - {id: id-scope-project, kind: security, parent: g-id-scopes, icon: keycloak, title: "Client scope project", tech: "[mapper: groups → project]", desc: "Adds the project claim from the<br>agent's or the user's groups.<br>Why: the gateway authorizes on it.", status: planned, target: IA-1}
+  - {id: id-client-cmpmcp, kind: security, parent: g-id-clients, icon: keycloak, title: "Client cmp-mcp", tech: "[audience only]", desc: "The audience of tokens meant for the<br>CMP's MCP server; no login, no secret.<br>Why: a token works only there.", status: planned, target: IA-2}
+  - {id: id-scope-cmptools, kind: security, parent: g-id-scopes, icon: keycloak, title: "Client scope cmp-tools", tech: "[optional · mapper aud cmp-mcp]", desc: "Given to agents that use CMP tools;<br>asked with scope=cmp-tools or exchange.<br>Why: one token per recipient.", status: planned, target: IA-2}
   - {id: id-scope-aud, kind: security, parent: g-id-scopes, icon: keycloak, title: "Audience mapper", tech: "[aud ai-gateway]", desc: "Puts ai-gateway in aud only for<br>clients allowed to call it.<br>Why: one token, one place.", status: planned, target: IA-1}
-  - {id: id-policy, kind: security, parent: g-id-scopes, icon: keycloak, title: "Client policy exchange-guard", tech: "[Client Policies]", desc: "Exchange only from agent clients<br>to ai-gateway, scopes never wider.<br>Why: no audience escalation.", status: planned, target: IA-1}
+  - {id: id-policy, kind: security, parent: g-id-scopes, icon: keycloak, title: "Client policy exchange-guard", tech: "[Client Policies]", desc: "Exchange only from agent clients to<br>ai-gateway or cmp-mcp, never wider.<br>Why: no audience escalation.", status: planned, target: IA-1}
   - {id: id-lifespan, kind: security, parent: g-id-scopes, icon: keycloak, title: "Token lifespan", tech: "[access 5 min · no refresh]", desc: "Short tokens, asked for again<br>rather than refreshed.<br>Why: a leaked token dies fast.", status: planned, target: IA-1}
   - {id: id-c-iss, kind: tool, parent: g-id-token, icon: k8s-secret, title: "iss · aud", tech: "[realms/3istor · ai-gateway]", desc: "Who signed it, where it is valid.<br>The gateway rejects any other aud.", status: planned, target: IA-1}
   - {id: id-c-sub, kind: tool, parent: g-id-token, icon: k8s-secret, title: "sub · azp", tech: "[user or agent · agent client]", desc: "Who acts, through which client.<br>After exchange: sub is the user,<br>azp the agent's client.", status: planned, target: IA-1}
@@ -435,7 +437,7 @@ elements:
   - {id: id-c-scope, kind: tool, parent: g-id-token, icon: k8s-secret, title: "scope", tech: "[exchange keeps or narrows]", desc: "What the token allows; an exchange<br>can only keep or reduce it.", status: planned, target: IA-1}
   - {id: id-c-exp, kind: tool, parent: g-id-token, icon: k8s-secret, title: "exp", tech: "[issued + 5 min]", desc: "Expiry. The agent asks again<br>instead of refreshing.", status: planned, target: IA-1}
   - {id: id-user, kind: frontend, parent: z-internet, shape: actor, icon: user, title: "Project user", desc: "asks an agent through the CMP"}
-  - {id: id-secret, kind: database, parent: g-agents, icon: k8s-secret, title: "Secret agent-oidc", tech: "[synced by VSO]", desc: "The agent client's secret, from<br>kvv2/projects/<p>/agents/<name>.<br>Why: never in Git or the image.", status: planned, target: IA-1}
+  - {id: id-secret, kind: database, parent: g-agents, icon: k8s-secret, title: "Secret agent-oidc", tech: "[synced by VSO]", desc: "Phase 1 only: the client secret from<br>kvv2/projects/<p>/agents/<name>.<br>Why: the SA token replaces it.", status: planned, target: IA-1}
 
   # Models zoom (proposal, 2026-10-25): Gemini free tier first (several keys), then the GPU server, an external element known by its contract (spec section 5), over HTTPS on the same LAN.
   # Sources: ai.google.dev (rate limits, Gemini API additional terms), spec section 5 (GPU server contract), Ollama docs (example settings).
@@ -939,6 +941,8 @@ references:
   - {id: r-id-secret, from: id-secret, to: hosted-agent, kind: envFrom}
   - {id: r-id-scope, from: id-client-agent, to: id-scope-project, kind: default scope}
   - {id: r-id-svc, from: id-client-agent, to: id-svc, kind: service account}
+  - {id: r-id-cmpaud, from: id-scope-cmptools, to: id-client-cmpmcp, kind: audience}
+  - {id: r-id-optional, from: id-client-agent, to: id-scope-cmptools, kind: optional scope}
   - {id: r-id-aud, from: id-scope-aud, to: id-client-gw, kind: audience}
   - {id: r-id-policy, from: id-policy, to: id-client-agent, kind: governs}
 
