@@ -1,0 +1,3707 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation technique et d'architecture de la Cloud Native Platform">
+      
+      
+        <meta name="author" content="3-Istor Team">
+      
+      
+      
+        <link rel="prev" href="../01-stack-cible/">
+      
+      
+        <link rel="next" href="../03-phases/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+    
+    
+      
+        <title>Spec de référence - Cloud Native Platform (CNP) Docs ⚡</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#spec-de-reference-de-la-landing-zone-ia" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-header__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cloud Native Platform (CNP) Docs ⚡
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Spec de référence
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passer au mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passer au mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../developer-onboarding-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Guide Développeur
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../README_ROADMAP/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../01-architecture/01-system-overview/" class="md-tabs__link">
+          
+  
+  
+  1. Architecture & Topologies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../02-core-components/01-cmp-dashboard/" class="md-tabs__link">
+          
+  
+  
+  2. Composants Clés
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-tabs__link">
+          
+  
+  
+  3. Pipelines & Workflows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../04-templates/00-github-repositories-landscape.md" class="md-tabs__link">
+          
+  
+  
+  4. Modèles & Templates
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../05-cmp-backend-api/00-global-api-standards/" class="md-tabs__link">
+          
+  
+  
+  5. Spécifications API CMP
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../06-multicloud/00-index/" class="md-tabs__link">
+          
+  
+  
+  6. Chantier Multicloud
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../00-index/" class="md-tabs__link">
+          
+  
+  
+  7. Landing zone IA (proposition)
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-nav__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    Cloud Native Platform (CNP) Docs ⚡
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../developer-onboarding-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide Développeur
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../README_ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Architecture & Topologies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1. Architecture & Topologies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/01-system-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble du système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/02-tenancy-and-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-tenancerie & Isolation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/03-network-topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topologie Réseau & Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/04-disaster-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan de Reprise d'Activité (PRA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/06-audit-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Journaux d'audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Composants Clés
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2. Composants Clés
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/01-cmp-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Portail & Dashboard CMP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/02-identity-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identités & Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/03-secrets-vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets & HashiCorp Vault
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/04-gitops-argocd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synchronisation GitOps ArgoCD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/05-github-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intégration GitHub App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/06-database-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schéma Base de Données
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-core-components/07-frontend-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Frontend (Next.js)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Pipelines & Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3. Pipelines & Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisioning Day-0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/02-ci-cd-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines de CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/03-developer-configuration-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Développeur (cnp.yaml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/04-system-flows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrammes de Flux Système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/05-testing-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stratégie de Test & Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Modèles & Templates
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    4. Modèles & Templates
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/00-github-repositories-landscape.md" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dépôts GitHub & Cartographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/01-git-app-templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modèles d'Applications (Git)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/02-helm-generic-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart Helm Umbrella Générique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-templates/03-terraform-provisioner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisionneur Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Spécifications API CMP
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    5. Spécifications API CMP
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/00-global-api-standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standards Globaux & Sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/01-cmp-deployment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Déploiement (Contracts)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/02-cmp-phase3-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Évolutions de Phase 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/03-cmp-frontend-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide d'Intégration Frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/04-cmp-projects-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Projets & RBAC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/05-cmp-catalog-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/06-cmp-infra-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Infrastructure & Santé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/07-cmp-account-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Compte & Liaison GitHub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/08-cmp-local-development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spécification Dev Local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/09-cmp-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conteneurisation & Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/10-cmp-onboarding-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbook d'Onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/11-environment-variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tableau des Variables d'Env
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-cmp-backend-api/11-cmp-mcp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistants IA (MCP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Chantier Multicloud
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    6. Chantier Multicloud
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/01-invariants-et-perimetre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Invariants & Périmètre
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/02-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décisions D-01 à D-13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/03-contrat-equipe-cluster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contrat Équipe Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/04-chantiers-et-sequencement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chantiers & Séquencement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/05-nettoyage-et-decommissionnement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nettoyage & Décommissionnement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/06-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schémas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-multicloud/07-procedures-operateur/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Procédures opérateur EKS/GKE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Landing zone IA (proposition)
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    7. Landing zone IA (proposition)
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../01-stack-cible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stack cible et compromis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec de référence
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec de référence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-objet-et-perimetre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Objet et périmètre
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-principes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Principes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-registre-des-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Registre des décisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-conventions-et-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Conventions et interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Conventions et interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reseau-et-namespaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réseau et namespaces
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exécution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#donnees-et-observabilite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données et observabilité
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-contrat-du-serveur-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Contrat du serveur GPU
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Contrat du serveur GPU">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pile-proposee-pour-le-serveur-gpu-d34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pile proposée pour le serveur GPU (D34)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-table-de-correspondance-des-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Table de correspondance des codes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-budget-de-ressources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Budget de ressources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-plans-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Plans B
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-decisions-par-defaut-anciens-points-ouverts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Décisions par défaut (anciens points ouverts)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-etat-constate-du-cluster-2026-10-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. État constaté du cluster (2026-10-25)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../03-phases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phases et vérifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../04-cmp-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    La CMP et les agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../05-plan-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan d'implémentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../06-finops-ia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FinOps de l'IA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-flux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Les flux pas à pas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#1-objet-et-perimetre" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Objet et périmètre
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-principes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Principes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-registre-des-decisions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Registre des décisions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-conventions-et-interfaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Conventions et interfaces
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Conventions et interfaces">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identité
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#reseau-et-namespaces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Réseau et namespaces
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#execution" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Exécution
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#donnees-et-observabilite" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Données et observabilité
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-contrat-du-serveur-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Contrat du serveur GPU
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="5. Contrat du serveur GPU">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#pile-proposee-pour-le-serveur-gpu-d34" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pile proposée pour le serveur GPU (D34)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-table-de-correspondance-des-codes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Table de correspondance des codes
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-budget-de-ressources" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. Budget de ressources
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-plans-b" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. Plans B
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-decisions-par-defaut-anciens-points-ouverts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Décisions par défaut (anciens points ouverts)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-etat-constate-du-cluster-2026-10-25" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. État constaté du cluster (2026-10-25)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="spec-de-reference-de-la-landing-zone-ia">Spec de référence de la landing zone IA<a class="headerlink" href="#spec-de-reference-de-la-landing-zone-ia" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Statut : brouillon v0.5 du 2026-10-25, à valider.</strong> Rien n'est déployé. Cette page est la
+source de vérité des décisions et des conventions : en cas de contradiction avec
+<code>00-index.md</code>, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
+sont dans <a href="../03-phases/">03-phases.md</a>.</p>
+</blockquote>
+<p><strong>Sources.</strong> La page <a href="../01-stack-cible/">Stack cible et compromis</a> ; le modèle Noodle
+(<code>architecture/cnp/model.yaml</code>), en particulier les éléments <code>ov-*</code> et <code>hl-*</code> de l'option B
+(agentgateway et kagent), qui sont la version la plus récente ; le doc de synthèse « Landing
+zone IA de CNP » ; les décisions de Brian du 2026-10-25. Branche lue :
+<code>feat/ai-landing-zone-diagrams</code>, commit <code>eb2bfa5</code>.</p>
+<h2 id="1-objet-et-perimetre">1. Objet et périmètre<a class="headerlink" href="#1-objet-et-perimetre" title="Permanent link">&para;</a></h2>
+<p>CNP veut laisser des agents IA travailler sur la plateforme sans qu'ils puissent faire de
+dégâts. La landing zone IA est la plateforme actuelle plus une couche de contrôle qui traite
+chaque agent comme un workload non fiable.</p>
+<p><strong>Cadre : démonstration ou MVP.</strong> La taille de l'équipe et la haute disponibilité ne sont pas
+des contraintes. Les premiers utilisateurs sont les développeurs de CNP et les tenants.
+Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume.</p>
+<table>
+<thead>
+<tr>
+<th>Dans le périmètre</th>
+<th>Hors périmètre</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gateway IA, identité des agents, isolation, outils MCP, A2A, guardrails, observabilité GenAI, budgets, audit</td>
+<td>Le contenu du serveur GPU : seul son contrat est défini (§5)</td>
+</tr>
+<tr>
+<td>Le cluster on-prem (K3s)</td>
+<td>Les clusters EKS et GKE : le modèle prévoit une gateway par cluster, la démo n'en utilise qu'une</td>
+</tr>
+<tr>
+<td>Les quatre prérequis P0 de la plateforme actuelle (phase 0)</td>
+<td>Conformité AI Act, haute disponibilité, exploitation en production</td>
+</tr>
+</tbody>
+</table>
+<h2 id="2-principes">2. Principes<a class="headerlink" href="#2-principes" title="Permanent link">&para;</a></h2>
+<ol>
+<li><strong>Une seule porte.</strong> Tout appel d'un agent ou d'une app vers un modèle, un outil ou un
+   autre agent passe par agentgateway. Aucune clé de provider dans un pod d'agent ou d'app.</li>
+<li><strong>Une identité par agent.</strong> Un client Keycloak par agent, des jetons courts, sans refresh.</li>
+<li><strong>Refus par défaut.</strong> Réseau en default-deny, autorisation en deny par défaut.</li>
+<li><strong>Isolation selon le risque.</strong> runc et seccomp si l'agent n'exécute pas de code, gVisor
+   pour le code généré, Kata pour le code non fiable.</li>
+<li><strong>Rule of Two.</strong> Un agent cumule au plus deux éléments parmi : données privées, contenu non
+   fiable, sortie vers l'extérieur. Au-delà, on coupe en deux agents.</li>
+<li><strong>Une panne donne un refus net.</strong> Si une dépendance manque, la réponse est « service
+   indisponible », sans mode dégradé.</li>
+<li><strong>Standards d'abord.</strong> API compatible OpenAI, MCP, A2A, OpenTelemetry GenAI : les briques
+   peuvent changer, les protocoles restent.</li>
+<li><strong>Tout vient de Git.</strong> Agents, routes, policies et serveurs MCP sont déclarés dans Git et
+   appliqués par Argo CD, comme le reste de la plateforme.</li>
+</ol>
+<h2 id="3-registre-des-decisions">3. Registre des décisions<a class="headerlink" href="#3-registre-des-decisions" title="Permanent link">&para;</a></h2>
+<p>Statuts : <strong>décidé</strong> (par Brian), <strong>hérité</strong> (des pages et du modèle, non rediscuté),
+<strong>proposé</strong> (par Claude dans cette spec, à valider). D1 à D7 gardent la numérotation de
+<code>00-index.md</code>.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Décision</th>
+<th>Statut</th>
+<th>Phase</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D1</td>
+<td><strong>agentgateway</strong> pour tout le trafic des agents (LLM, MCP, A2A), en GatewayClass <code>agentgateway</code> à part. Envoy Gateway reste l'entrée des apps et des utilisateurs.</td>
+<td>hérité</td>
+<td>1</td>
+<td>Remplace Agent Router. Plan B au §8.</td>
+</tr>
+<tr>
+<td>D2</td>
+<td>Tout appel LLM, outil ou agent passe par la gateway ; la clé Gemini n'est montée que dans la gateway.</td>
+<td>hérité</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>D3</td>
+<td>Un client Keycloak par agent. Seul, l'agent utilise <code>client_credentials</code> ; pour un utilisateur, le token exchange (Keycloak 26.2 ou plus). Cible : le jeton du ServiceAccount remplace le secret client (federated client authentication, Keycloak 26.6). Jeton d'accès de <strong>5 minutes, sans refresh</strong>.</td>
+<td>proposé</td>
+<td>1 puis 2</td>
+<td>Remplace « ≤ 15 min ». Phase 1 : secret client depuis Vault ; phase 2 : jeton du ServiceAccount.</td>
+</tr>
+<tr>
+<td>D4</td>
+<td>Kyverno en Enforce à l'admission. Autorisation à la gateway par <code>AgentgatewayPolicy</code> : JWT obligatoire, règles CEL sur les claims et par outil, deny par défaut. OPA en <code>ext_authz</code> seulement si le CEL ne suffit plus.</td>
+<td>hérité</td>
+<td>1 puis 3</td>
+<td>Cedar reste confiné au proxy ToolHive.</td>
+</tr>
+<tr>
+<td>D5</td>
+<td>Cilium default-deny entre tenants et en egress, egress par FQDN. RuntimeClass <code>gvisor</code> et <code>kata</code>. agent-sandbox en <code>v1beta1</code>.</td>
+<td>hérité</td>
+<td>0 puis 2</td>
+<td></td>
+</tr>
+<tr>
+<td>D6</td>
+<td><strong>Gemini par défaut</strong> (niveau gratuit, plusieurs clés de comptes gratuits, équilibrées (D23)). Repli sur le serveur GPU quand Gemini répond 429. Les projets Local n'ont que le serveur GPU. Pas de données clients sur Gemini.</td>
+<td>décidé</td>
+<td>1</td>
+<td>Le modèle prévoit une seule clé : à mettre à jour. Réserves au §9.</td>
+</tr>
+<tr>
+<td>D7</td>
+<td>OpenTelemetry GenAI → Alloy → Tempo pour les traces ; métriques dans <strong>VictoriaMetrics</strong> ; Grafana ; pas de Langfuse (environ 21,5 Gio de RAM au minimum).</td>
+<td>hérité</td>
+<td>1</td>
+<td>Arize Phoenix si une interface pensée pour les LLM devient nécessaire.</td>
+</tr>
+<tr>
+<td>D8</td>
+<td><strong>kagent</strong> : CRD <code>Agent</code> (<code>kagent.dev/v1alpha2</code>, type BYO pour une image LangGraph, ADK ou autre) et <code>ModelConfig</code> pointé sur la gateway. Chaque agent est publié en A2A avec son Agent Card.</td>
+<td>hérité</td>
+<td>2</td>
+<td>À vérifier : <code>ModelConfig</code> sans clé dans le pod, RuntimeClass imposable, mémoire.</td>
+</tr>
+<tr>
+<td>D9</td>
+<td>Outils : un endpoint <code>/mcp</code> sur la gateway, devant le serveur MCP de la CMP (stake policy) et des serveurs tiers lancés par <strong>ToolHive</strong>, un conteneur par outil. Registre des serveurs approuvés en JSON dans Git, avec leur provenance Sigstore.</td>
+<td>hérité</td>
+<td>2</td>
+<td></td>
+</tr>
+<tr>
+<td>D10</td>
+<td>Guardrails : <code>promptGuard</code> d'agentgateway (regex qui masque PII et secrets), puis un webhook maison qui demande à Llama Guard 3, sur le serveur GPU, de classer le prompt. Si le classifieur est injoignable, la requête est refusée.</td>
+<td>hérité ; refus en cas de panne décidé</td>
+<td>2</td>
+<td>Le webhook de la gateway ne parle pas le format d'Ollama : l'adaptateur est à écrire.</td>
+</tr>
+<tr>
+<td>D11</td>
+<td>Budget en tokens <strong>par agent et par jour</strong>, appliqué par le rate limit de la gateway (clé : un claim du JWT). Dépassement → 429. Coût en euros = tokens × tarif payant publié de Gemini, même au niveau gratuit (décidé, voir <a href="../06-finops-ia/">06-finops-ia.md</a>) ; alerte à 80 %. OpenCost pour le coût de l'infra.</td>
+<td>hérité</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>D12</td>
+<td>Évals : promptfoo dans GitHub Actions à chaque release d'agent ; rien sur le cluster.</td>
+<td>hérité</td>
+<td>2</td>
+<td>Licence MIT ; rachat par OpenAI annoncé en mars 2026, à surveiller.</td>
+</tr>
+<tr>
+<td>D13</td>
+<td>Panne du serveur GPU : réponse « service indisponible ». Gemini continue pour les projets Cloud.</td>
+<td>décidé</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>D14</td>
+<td>Audit : logs d'accès de la gateway → Alloy → Loki, puis l'archive Object Lock existante (CronJob horaire, bucket RGW, 30 jours). Champs obligatoires : utilisateur, agent, projet, modèle, outil, tokens, décision. Rétention de 30 jours pour le namespace de la gateway.</td>
+<td>hérité</td>
+<td>1</td>
+<td></td>
+</tr>
+<tr>
+<td>D15</td>
+<td>Plafond d'étapes : limite d'itérations du framework (par exemple <code>recursion_limit</code> de LangGraph), posée par le kit d'agent. Le budget en tokens sert de plafond dur.</td>
+<td>hérité</td>
+<td>2</td>
+<td>Rien ne l'impose côté plateforme pour un agent au code maison.</td>
+</tr>
+<tr>
+<td>D16</td>
+<td>Pas de SPIRE ni de SPIFFE.</td>
+<td>hérité</td>
+<td>—</td>
+<td>À reconsidérer si le mTLS entre agents ou la fédération multicloud deviennent nécessaires.</td>
+</tr>
+<tr>
+<td>D17</td>
+<td>Emplacement du code : les briques de plateforme dans le dépôt <strong>K3s</strong>, sous <code>k8s/config/&lt;brique&gt;/</code> (<code>ai-gateway</code>, <code>kagent</code>, <code>toolhive</code>, <code>agent-sandbox</code>), Tempo dans <code>k8s/config/observability/</code>, les ClusterPolicies dans <code>k8s/config/kyverno/policies/</code>. Les ressources par projet et par agent dans le <code>ProjectRecord</code> de <strong>cnp-projects</strong>, rendues par <strong>cnp-project-base</strong>. Le code de chaque agent dans son propre dépôt, créé depuis <strong>app-templates</strong>. Les écrans et l'API dans <strong>CMP</strong>.</td>
+<td>proposé</td>
+<td>1</td>
+<td>Suit l'organisation actuelle de chaque dépôt.</td>
+</tr>
+<tr>
+<td>D18</td>
+<td>La CMP déclare les agents, elle ne les construit pas : pas d'éditeur visuel de workflow, le code vit dans le dépôt de l'agent.</td>
+<td>proposé</td>
+<td>2</td>
+<td>OpenAI arrête son Agent Builder visuel le 30 novembre 2026. Détails dans <a href="../04-cmp-agents/">04-cmp-agents.md</a>.</td>
+</tr>
+</tbody>
+</table>
+<h2 id="4-conventions-et-interfaces">4. Conventions et interfaces<a class="headerlink" href="#4-conventions-et-interfaces" title="Permanent link">&para;</a></h2>
+<p>Ces noms viennent du modèle Noodle. Les noms de CRD et de champs propres à agentgateway sont
+à confirmer pendant l'essai de la phase 1.</p>
+<h3 id="identite">Identité<a class="headerlink" href="#identite" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Sujet</th>
+<th>Convention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Realm Keycloak</td>
+<td><code>3istor</code></td>
+</tr>
+<tr>
+<td>Client d'un agent</td>
+<td><code>agent-&lt;projet&gt;-&lt;nom&gt;</code>, confidentiel, avec service account ; membre du groupe <code>project-&lt;projet&gt;-agents</code>. Créé par la CMP quand un agent est déclaré.</td>
+</tr>
+<tr>
+<td>Client de la gateway</td>
+<td><code>ai-gateway</code>, sert uniquement d'audience</td>
+</tr>
+<tr>
+<td>Claims du jeton</td>
+<td><code>iss</code> = <code>realms/3istor</code> ; <code>aud</code> = <code>ai-gateway</code> ; <code>sub</code> ; <code>azp</code> ; <code>project</code> (issu du groupe) ; <code>scope</code> ; <code>exp</code> = émission + 5 min</td>
+</tr>
+<tr>
+<td>Après un token exchange</td>
+<td><code>sub</code> = l'utilisateur, <code>azp</code> = le client de l'agent ; les scopes ne s'élargissent jamais. Exchange autorisé seulement d'un client agent vers <code>ai-gateway</code> (Client Policy <code>exchange-guard</code>).</td>
+</tr>
+<tr>
+<td>Secret client (phase 1)</td>
+<td>Vault <code>kvv2/projects/&lt;projet&gt;/agents/&lt;nom&gt;</code>, synchronisé en Secret <code>agent-oidc</code></td>
+</tr>
+<tr>
+<td>Client d'une app avec accès IA</td>
+<td><code>app-&lt;projet&gt;-&lt;app&gt;</code>, confidentiel ; secret dans Vault <code>kvv2/projects/&lt;projet&gt;/apps/&lt;app&gt;/ai-oidc</code> ; même jeton de 5 minutes et même audience <code>ai-gateway</code></td>
+</tr>
+<tr>
+<td>Audiences</td>
+<td><code>ai-gateway</code> (gateway), <code>cmp-api</code> (API de la CMP), <code>cmp-mcp</code> (serveur MCP de la CMP) ; un jeton ne vaut que pour son destinataire</td>
+</tr>
+</tbody>
+</table>
+<h3 id="reseau-et-namespaces">Réseau et namespaces<a class="headerlink" href="#reseau-et-namespaces" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Sujet</th>
+<th>Convention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Namespaces</td>
+<td><code>ai-gateway</code>, <code>kagent</code>, <code>mcp-tools</code>, un namespace par agent (§9, point 1)</td>
+</tr>
+<tr>
+<td>Entrée vers un agent</td>
+<td>Utilisateur → Cloudflare → Envoy Gateway (login OIDC) → agentgateway (A2A, jeton de l'utilisateur) → agent. Le listener d'agentgateway n'est jamais exposé directement.</td>
+</tr>
+<tr>
+<td>Egress de la gateway</td>
+<td><code>generativelanguage.googleapis.com:443</code> et l'IP du serveur GPU en <code>/32</code>, rien d'autre</td>
+</tr>
+<tr>
+<td>Egress d'un agent</td>
+<td>DNS et agentgateway ; aucun ingress, sauf depuis la gateway pour l'A2A</td>
+</tr>
+<tr>
+<td>Egress d'un sandbox</td>
+<td>DNS seulement ; ingress depuis le routeur de sandbox seulement</td>
+</tr>
+<tr>
+<td>Clé Gemini</td>
+<td>Dans Vault, synchronisée en Secret <code>gemini-api-key</code> dans le seul namespace <code>ai-gateway</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="execution">Exécution<a class="headerlink" href="#execution" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Sujet</th>
+<th>Convention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Agents</td>
+<td>Image libre (LangGraph, ADK…), runc et seccomp <code>RuntimeDefault</code>, PSS <code>restricted</code>, non-root, sans shell ni outil d'exécution de code</td>
+</tr>
+<tr>
+<td>Sandbox</td>
+<td><code>SandboxTemplate</code> <code>python</code> (gVisor) et <code>python-kata</code> ; pas de <code>SandboxWarmPool</code> (D33) ; une <code>SandboxClaim</code> par tâche, avec durée de vie</td>
+</tr>
+<tr>
+<td>Limites</td>
+<td><code>ResourceQuota</code> et <code>LimitRange</code> par namespace d'agent</td>
+</tr>
+<tr>
+<td>Admission</td>
+<td>ClusterPolicy Kyverno <code>sandbox-guard</code> : PSS restricted, pas de token de ServiceAccount monté inutilement, RuntimeClass imposée selon le niveau de l'agent, images signées seulement</td>
+</tr>
+</tbody>
+</table>
+<h3 id="donnees-et-observabilite">Données et observabilité<a class="headerlink" href="#donnees-et-observabilite" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Sujet</th>
+<th>Convention</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Niveau de données</td>
+<td>Chaque projet est <code>cloud</code> ou <code>local</code>. Cloud : Gemini puis serveur GPU en repli. Local : serveur GPU seulement. Les projets <code>critical</code> (classement du doc d'origine) sont toujours Local.</td>
+</tr>
+<tr>
+<td>Télémétrie</td>
+<td>OTLP (gRPC 4317, HTTP 4318) vers Alloy ; <code>k8sattributes</code> ajoute <code>namespace</code> et <code>project</code> ; <code>gen_ai.input.messages</code> et <code>gen_ai.output.messages</code> sont supprimés sauf opt-in du projet</td>
+</tr>
+<tr>
+<td>Tableaux</td>
+<td>Coût et budget par projet et par agent dans Grafana ; alerte à 80 % du budget, sur les 429 et sur les refus</td>
+</tr>
+<tr>
+<td>Budget mémoire</td>
+<td>Environ 4 Go pour toute la zone IA sur le cluster on-prem, à mesurer (§7)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-contrat-du-serveur-gpu">5. Contrat du serveur GPU<a class="headerlink" href="#5-contrat-du-serveur-gpu" title="Permanent link">&para;</a></h2>
+<p>Le serveur GPU est un <strong>élément externe</strong>, sans configuration figée : Ollama, vLLM, ComfyUI
+ou autre chose peuvent y tourner. La plateforme ne dépend que de ce contrat.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Service</th>
+<th>Interface attendue</th>
+<th>Utilisé pour</th>
+<th>Phase</th>
+<th>Si le service est injoignable</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>Texte</td>
+<td>API compatible OpenAI (<code>/v1/chat/completions</code>, streaming)</td>
+<td>Repli quand Gemini répond 429 ; projets Local</td>
+<td>1</td>
+<td>« service indisponible » pour les projets Local ; les projets Cloud continuent sur Gemini</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Embeddings</td>
+<td>API compatible OpenAI (<code>/v1/embeddings</code>)</td>
+<td>RAG d'UC7</td>
+<td>1</td>
+<td>Le RAG est indisponible</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Garde</td>
+<td>Llama Guard 3 ou équivalent, appelé par le webhook de D10</td>
+<td>Guardrails</td>
+<td>2</td>
+<td>La requête est refusée</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Image</td>
+<td>Outil MCP <code>generate_image</code> qui appelle l'API du serveur</td>
+<td>Agents qui génèrent des images</td>
+<td>2</td>
+<td>L'outil renvoie une erreur claire</td>
+</tr>
+</tbody>
+</table>
+<p>Exigences pour chaque service exposé :</p>
+<ul>
+<li>un reverse proxy avec authentification devant (jeton ou mTLS), car ComfyUI n'a pas
+  d'authentification par défaut ;</li>
+<li>accès limité à l'IP de sortie du cluster ;</li>
+<li>aucune interface web accessible aux tenants ;</li>
+<li>HTTPS. WireGuard n'est pas nécessaire si le cluster et le serveur sont sur le même réseau
+  local.</li>
+</ul>
+<h3 id="pile-proposee-pour-le-serveur-gpu-d34">Pile proposée pour le serveur GPU (D34)<a class="headerlink" href="#pile-proposee-pour-le-serveur-gpu-d34" title="Permanent link">&para;</a></h3>
+<p>Une proposition, pas une obligation : le contrat ci-dessus reste la seule interface. Tailles
+publiées des modèles quantifiés en Q4_K_M, plus le cache de contexte : <strong>ordres de grandeur, à
+mesurer avec <code>nvidia-smi</code></strong> (V1.15).</p>
+<table>
+<thead>
+<tr>
+<th>Rôle</th>
+<th>Logiciel</th>
+<th>Modèle proposé</th>
+<th>VRAM environ</th>
+<th>Pourquoi</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Texte et appels d'outils</td>
+<td>Ollama</td>
+<td><code>qwen3.5:9b</code> (alternative plus légère : <code>granite4.2:8b</code>)</td>
+<td>6,6 Go + 1 à 2 Go de contexte (5,3 Go pour Granite)</td>
+<td>Les deux gèrent le function calling ; un modèle de 1B ne suffit pas pour choisir et remplir des outils de façon fiable</td>
+</tr>
+<tr>
+<td>Garde</td>
+<td>Ollama</td>
+<td><code>llama-guard3:1b</code></td>
+<td>1 Go</td>
+<td>Suffisant pour classer un prompt ; 4 fois moins que la version 8B</td>
+</tr>
+<tr>
+<td>Embeddings</td>
+<td>Ollama</td>
+<td><code>nomic-embed-text</code></td>
+<td>0,3 Go</td>
+<td>Petit et rapide, pour le RAG d'UC7</td>
+</tr>
+<tr>
+<td>Image (optionnel)</td>
+<td>ComfyUI</td>
+<td>un modèle de la famille SDXL, chargé à la demande</td>
+<td>7 à 8 Go en pointe</td>
+<td>Ne tient pas en même temps que le texte : à garder pour plus tard</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Profil A, recommandé pour démarrer : texte, garde et embeddings chargés en permanence</strong>,
+environ 9 à 10 Go sur 16, ce qui laisse de la marge au contexte et à deux requêtes en
+parallèle. Réglages Ollama : <code>OLLAMA_MAX_LOADED_MODELS=3</code> (les trois modèles restent chargés),
+<code>OLLAMA_NUM_PARALLEL=2</code>, <code>OLLAMA_KEEP_ALIVE=-1</code>, <code>OLLAMA_CONTEXT_LENGTH=8192</code>, cache KV en
+<code>q8_0</code>. <strong>Profil B, plus tard : ajouter l'image.</strong> Pendant une génération d'image, le modèle
+de texte est déchargé : les requêtes de texte attendent ou partent sur Gemini.</p>
+<p><strong>Raccordement au cluster.</strong> Ollama et ComfyUI n'écoutent que sur <code>127.0.0.1</code>. Caddy, seul
+exposé, sert HTTPS sur le réseau local (certificat de son autorité interne, distribuée au
+cluster) et route <code>/ollama/</code> vers Ollama et <code>/image/</code> vers ComfyUI. Il exige un jeton
+<code>Authorization: Bearer</code> (un par consommateur : gateway, webhook de garde, serveur MCP
+d'image), stocké dans Vault, et n'accepte que les IP des nœuds du cluster. Le pare-feu de
+l'hôte n'ouvre que le port 443 au sous-réseau du cluster. Côté cluster, la règle Cilium
+<code>ai-egress</code> n'autorise que cette IP en <code>/32</code> et le port 443. Pas de WireGuard en réseau local.</p>
+<h2 id="6-table-de-correspondance-des-codes">6. Table de correspondance des codes<a class="headerlink" href="#6-table-de-correspondance-des-codes" title="Permanent link">&para;</a></h2>
+<p>Le dossier emploie sept familles de codes. <strong>Cette spec n'emploie qu'une échelle : les phases
+0 à 3.</strong> Les autres codes sont des alias.</p>
+<table>
+<thead>
+<tr>
+<th>Phase de la spec</th>
+<th>Cible du modèle</th>
+<th>Phases du Panorama</th>
+<th>Écarts</th>
+<th>Cas d'usage</th>
+<th>Zooms du doc d'origine</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>0. Prérequis</strong></td>
+<td>P0</td>
+<td>absente</td>
+<td>G1, G8, G17, sauvegarde CloudNativePG</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td><strong>1. Squelette</strong></td>
+<td>IA-1</td>
+<td>phase 0, Fondations</td>
+<td>—</td>
+<td>UC7</td>
+<td>gateway, modèles, identité, observabilité</td>
+</tr>
+<tr>
+<td><strong>2. Agents et outils</strong></td>
+<td>IA-2</td>
+<td>phases 1 et 2, plus l'A2A de la phase 3</td>
+<td>—</td>
+<td>UC3, UC11, UC21</td>
+<td>MCP, runtime, policy</td>
+</tr>
+<tr>
+<td><strong>3. Maturité</strong></td>
+<td>IA-3</td>
+<td>phase 3</td>
+<td>—</td>
+<td>UC20, UC15, UC17, UC19</td>
+<td>policy (OPA)</td>
+</tr>
+</tbody>
+</table>
+<p>Notes :</p>
+<ul>
+<li>L'option B du modèle place l'A2A et les guardrails en IA-2, plus tôt que le Panorama.
+  La spec suit le modèle.</li>
+<li>Les écarts P1 et P2 (signature d'images, scan, Tetragon, OpenCost…) se traitent en
+  parallèle et ne bloquent aucune phase. Les cibles P3 et P4 concernent la ségrégation des
+  accès et le multicloud.</li>
+<li>Les écarts G1 à G20 gardent leur numéro ; le modèle ne contient pas G11, G12 ni G14.</li>
+<li>UC1 à UC20 sont décrits dans le doc de synthèse, pas dans ce dépôt. <strong>UC21</strong> est proposé
+  ici : un assistant façon Grok dans une app de tenant (le clone de Twitter de Brian). Une app
+  peut appeler la gateway dès la phase 1 ; la version avec agents est en phase 2, avec un
+  agent « lecteur » public sans droits et un agent qui agit.</li>
+</ul>
+<h2 id="7-budget-de-ressources">7. Budget de ressources<a class="headerlink" href="#7-budget-de-ressources" title="Permanent link">&para;</a></h2>
+<p>La cible est d'environ 4 Go pour toute la zone IA. L'estimation d'origine (1,1 à 2,3 Go)
+valait pour Agent Router : elle ne compte ni agentgateway, ni kagent, ni ToolHive, ni le warm
+pool de sandbox.</p>
+<p>Protocole, en phase 1 puis à chaque nouvelle brique :</p>
+<ol>
+<li>Déployer la brique avec des <code>requests</code> et <code>limits</code> explicites.</li>
+<li>La laisser tourner une semaine avec le trafic de démo.</li>
+<li>Relever la mémoire réellement utilisée par pod (pic et médiane) dans VictoriaMetrics.</li>
+<li>Consigner le résultat dans le tableau ci-dessous.</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>Brique</th>
+<th>Phase</th>
+<th>Mémoire mesurée</th>
+<th>Date</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agentgateway (proxy et contrôleur)</td>
+<td>1</td>
+<td>à mesurer</td>
+<td></td>
+</tr>
+<tr>
+<td>Rate limit (serveur et Redis)</td>
+<td>1</td>
+<td>à mesurer</td>
+<td></td>
+</tr>
+<tr>
+<td>Tempo</td>
+<td>1</td>
+<td>à mesurer</td>
+<td></td>
+</tr>
+<tr>
+<td>kagent</td>
+<td>2</td>
+<td>à mesurer</td>
+<td></td>
+</tr>
+<tr>
+<td>ToolHive (opérateur et un serveur)</td>
+<td>2</td>
+<td>à mesurer</td>
+<td></td>
+</tr>
+<tr>
+<td>agent-sandbox (contrôleur, sans warm pool)</td>
+<td>2</td>
+<td>à mesurer</td>
+<td></td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="8-plans-b">8. Plans B<a class="headerlink" href="#8-plans-b" title="Permanent link">&para;</a></h2>
+<p>Chaque brique s'introduit après un essai de 1 à 2 jours avec un critère de passage écrit. Les
+versions sont figées ; Dependabot ou Renovate propose les mises à jour, qui sont lues avant
+d'être acceptées.</p>
+<table>
+<thead>
+<tr>
+<th>Brique</th>
+<th>Risque</th>
+<th>Plan B</th>
+<th>Basculer si</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agentgateway</td>
+<td>Projet jeune, porté surtout par Solo.io</td>
+<td>Agent Router (suffisant tant qu'il n'y a pas d'A2A ni de guardrails) ou LiteLLM</td>
+<td>L'essai ne passe pas V1.3 à V1.8</td>
+</tr>
+<tr>
+<td>kagent</td>
+<td>Projet CNCF Sandbox, consommation mémoire inconnue</td>
+<td>Un Deployment simple avec un SDK A2A</td>
+<td><code>ModelConfig</code> ne peut pas pointer vers la gateway, ou la RuntimeClass n'est pas imposable</td>
+</tr>
+<tr>
+<td>ToolHive</td>
+<td>API récente</td>
+<td>Un Deployment du serveur MCP derrière la gateway</td>
+<td>Un serveur tiers ne démarre pas sous les contraintes de sécurité</td>
+</tr>
+<tr>
+<td>agent-sandbox</td>
+<td>API en <code>v1beta1</code></td>
+<td>RuntimeClass gVisor sur un Pod ou un Job</td>
+<td>Le contrôleur ne tient pas dans le budget mémoire</td>
+</tr>
+<tr>
+<td>Federated client authentication</td>
+<td>Fonction récente de Keycloak 26.6</td>
+<td>Secret client synchronisé depuis Vault</td>
+<td>Le jeton du ServiceAccount n'est pas accepté</td>
+</tr>
+<tr>
+<td>Webhook Llama Guard</td>
+<td>Service maison</td>
+<td><code>promptGuard</code> seul (regex), en signalant la limite</td>
+<td>L'adaptateur ajoute une latence inacceptable</td>
+</tr>
+</tbody>
+</table>
+<h2 id="9-decisions-par-defaut-anciens-points-ouverts">9. Décisions par défaut (anciens points ouverts)<a class="headerlink" href="#9-decisions-par-defaut-anciens-points-ouverts" title="Permanent link">&para;</a></h2>
+<p>Pour que la phase 1 puisse être implémentée sans décision en cours de route, chaque ancien
+point ouvert reçoit une valeur par défaut. Statut <strong>proposé</strong> : Brian les valide ou les change
+en une passe ; l'agent d'implémentation les applique telles quelles.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Sujet</th>
+<th>Décision par défaut</th>
+<th>Phase</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>D19</td>
+<td>Namespaces d'agents</td>
+<td>Un namespace par agent, nommé <code>agent-&lt;projet&gt;-&lt;nom&gt;</code>, avec le label <code>cnp.3istor.com/project: &lt;projet&gt;</code>. Il hérite ainsi du default-deny en entrée par projet que <code>cnp-project-base</code> pose déjà.</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D20</td>
+<td>Route Local</td>
+<td>Pas de claim <code>data_level</code>. La gateway choisit la route Local quand le claim <code>project</code> appartient à la liste des projets <code>local</code>, générée depuis les <code>ProjectRecord</code> (<code>spec.ai.dataLevel</code>).</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D21</td>
+<td>Clé du budget</td>
+<td>Le claim <code>azp</code> (le client de l'agent ou de l'app). Plafond dur par <code>azp</code> et par jour à la gateway ; pour le projet, une alerte Grafana sur la somme, sans plafond dur.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D22</td>
+<td>Emplacement des politiques de la gateway</td>
+<td>Dans le namespace <code>ai-gateway</code>, rendues par un chart <code>charts/cnp-ai-policies</code> du dépôt K3s et un ApplicationSet plateforme <code>cnp-ai-policies</code> (une Application par <code>ProjectRecord</code> qui a un bloc <code>spec.ai</code>, AppProject plateforme). Un tenant ne peut pas les modifier.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D23</td>
+<td>Plusieurs clés Gemini</td>
+<td>Toutes les clés dans le même groupe de backends, équilibrées par agentgateway (P2C, ce que décrit sa doc) ; sur 429, la requête est rejouée sur une autre clé, puis sur le serveur GPU quand toutes saturent. Clés dans Vault sous <code>kvv2/platform/ai/gemini/&lt;n&gt;</code>, synchronisées dans <code>ai-gateway</code>.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D24</td>
+<td>Rétention</td>
+<td>Traces Tempo : 7 jours. Logs d'accès de la gateway : 30 jours (D14). Prompts et réponses : jamais stockés, sauf opt-in du projet.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D25</td>
+<td>Chat de test de la CMP</td>
+<td>Ses tokens comptent dans le budget de l'agent ; pas de budget séparé.</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D26</td>
+<td>Premiers templates d'agent</td>
+<td>(1) agent kagent déclaratif vide (consignes, modèle, outils), (2) agent de questions sur une documentation (UC7 sous forme d'agent). L'app UC7 de la phase 1 n'est pas un template d'agent (D31).</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D27</td>
+<td>Version de Keycloak</td>
+<td>Le cluster est en 26.5.5. La phase 1 utilise un secret client depuis Vault ; la montée en 26.6 ou plus est la première tâche de la phase 2, avant la federated client authentication (D3).</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D28</td>
+<td>Où tester</td>
+<td>Le dépôt K3s décrit deux clusters : le principal (API <code>192.168.1.212</code>) et un cluster de lab (API <code>192.168.1.217</code>). Chaque nouvelle brique est d'abord installée sur le lab ; elle ne passe sur le principal qu'une fois ses vérifications réussies. Si le lab n'est pas disponible, un cluster k3d sur la machine de l'agent d'implémentation.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D29</td>
+<td>Comment s'écrit un agent</td>
+<td>Par défaut, un agent <strong>kagent déclaratif</strong> : un CR <code>Agent</code> de type <code>Declarative</code> (consignes, <code>ModelConfig</code>, outils MCP), sans code ; la boucle est fournie par kagent. Pour une logique que le déclaratif ne sait pas exprimer, un agent <strong>BYO</strong> : une image écrite avec LangGraph (Python), construite par la CI comme les apps. Dans les deux cas, le CR <code>Agent</code> sert à déployer l'agent.</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D30</td>
+<td>Tempo</td>
+<td>Chart Grafana <code>tempo</code> en mode monolithique dans le namespace <code>observability</code>, stockage sur volume, 7 jours.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D32</td>
+<td>Cas limites du budget</td>
+<td>Le budget est vérifié avant la requête (réservation d'une estimation) et compté après, avec l'usage réel. Une fois épuisé, toute requête reçoit 429 jusqu'au lendemain : pas de contournement. Cas limites acceptés : la dernière requête admise peut dépasser le reste (une réponse en streaming n'est pas coupée) ; des requêtes parallèles peuvent dépasser ensemble ; un prompt refusé par les guardrails a déjà passé le contrôle de budget (le rate limit s'exécute avant <code>promptGuard</code>). Bornes : <code>max_tokens</code> plafonné à 4 096 par requête et au plus 30 requêtes par minute par agent (limiteur local). Si le service de rate limit est injoignable, la gateway refuse (fail-closed). Jour compté en UTC. Ces trois comportements sont vérifiés à l'essai T1.1 ; si agentgateway ne sait pas en faire un, l'agent d'implémentation le signale.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D33</td>
+<td>Warm pool de sandbox</td>
+<td>Aucun : un sandbox démarre à la demande, en quelques secondes, pour tenir dans le budget mémoire. À reconsidérer si le démarrage gêne.</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D34</td>
+<td>Pile du serveur GPU</td>
+<td>Profil A du §5 : Ollama avec <code>qwen3.5:9b</code>, <code>llama-guard3:1b</code>, <code>nomic-embed-text</code>, derrière Caddy ; l'image plus tard.</td>
+<td>1</td>
+</tr>
+<tr>
+<td>D35</td>
+<td>Limite d'images</td>
+<td>Au plus 20 appels de <code>generate_image</code> par agent et par jour, compteur de la gateway ; valorisés au TCO du serveur GPU.</td>
+<td>2</td>
+</tr>
+<tr>
+<td>D31</td>
+<td>Application UC7</td>
+<td>Une app fullstack du catalogue existant (FastAPI, React, PostgreSQL avec pgvector), nommée <code>cnp-docs-assistant</code>, dans un projet <code>cnp-ai</code> de niveau demo. Elle indexe cnp-docs et cnp-agent-kit et cite ses sources.</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Restent hors du champ de l'agent d'implémentation :</strong></p>
+<ol>
+<li><strong>Conditions de Gemini : risque accepté par Brian le 2026-10-25.</strong> La démo est en France,
+   avec le niveau gratuit et plusieurs comptes. À savoir : la France fait partie de l'EEE, et
+   les conditions de l'API réservent le niveau payant aux API mises à disposition
+   d'utilisateurs de l'EEE ; le contenu du niveau gratuit peut être relu par des humains. Le
+   bandeau « n'envoyez pas de données personnelles » reste affiché sur la démo.</li>
+<li><strong>Vues refaites pour agentgateway (PR <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/22" title="GitHub Issue: squidfunk/mkdocs-material #22">#22</a>, 2026-10-25).</strong> <code>ai-gateway-internals</code>,
+   <code>mcp-tools-internals</code>, <code>platform-detailed</code>, <code>ai-gateway</code>, <code>ai-gateway-call</code>,
+   <code>platform-global</code>, <code>models-internals</code> et <code>genai-observability-internals</code> décrivent
+   agentgateway d'après sa doc officielle : GatewayClass <code>agentgateway</code>, contrôleur (traducteur,
+   serveur xDS, Deployer), proxy Rust, <code>AgentgatewayBackend</code> (<code>ai</code>, <code>mcp</code>, <code>a2a</code>),
+   <code>AgentgatewayPolicy</code> (<code>traffic</code>, <code>backend</code>, <code>frontend</code>), <code>AgentgatewayParameters</code>,
+   <code>HTTPRoute</code> ; ce que la doc ne nomme pas est écrit comme un concept. Le budget passe par le
+   service de rate limit global (le limiteur local n'a pas d'unité au jour), <code>ob-prom</code> est
+   VictoriaMetrics, le serveur GPU est l'élément externe du §5, joint en HTTPS sans WireGuard.
+   <strong>Reste à corriger dans les schémas</strong> : les vues <code>platform-ai-*</code> (éléments <code>ov-*</code> et <code>hl-*</code>)
+   disent encore « via WireGuard » et « une seule clé » pour Gemini ; le modèle doit aussi
+   suivre D33 (pas de warm pool), D34 (Llama Guard 1B, réglages Ollama du profil A) et D23
+   (clés équilibrées en P2C). <strong>À confirmer à l'essai T1.1</strong> : le format du corps du webhook de
+   garde et les noms d'outils quand un backend MCP a plusieurs cibles (les autres points sont
+   dans D23 et D32).</li>
+<li><strong><code>00-index.md</code>.</strong> Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
+   validée.</li>
+<li><strong>Côté CMP.</strong> Les choix propres à la CMP sont dans <a href="../04-cmp-agents/">04-cmp-agents.md</a>.</li>
+</ol>
+<h2 id="10-etat-constate-du-cluster-2026-10-25">10. État constaté du cluster (2026-10-25)<a class="headerlink" href="#10-etat-constate-du-cluster-2026-10-25" title="Permanent link">&para;</a></h2>
+<p>Relevé dans les dépôts K3s, cnp-project-base et CMP, sans accès au cluster. La tâche T0.1
+vérifie ces points sur le cluster avant toute modification.</p>
+<table>
+<thead>
+<tr>
+<th>Composant</th>
+<th>Version ou état dans Git</th>
+<th>Conséquence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Keycloak</td>
+<td>26.5.5 (chart codecentric <code>keycloakx</code> 7.2.2)</td>
+<td>Token exchange standard disponible ; federated client authentication non (D27)</td>
+</tr>
+<tr>
+<td>Cilium</td>
+<td>1.20.0</td>
+<td></td>
+</tr>
+<tr>
+<td>Envoy Gateway</td>
+<td>1.9.0</td>
+<td>Reste l'entrée des apps (D1)</td>
+</tr>
+<tr>
+<td>Kyverno</td>
+<td>chart 3.8.2 ; PSS restricted en <strong>Audit</strong></td>
+<td>G8 : passer en Enforce (T0.3)</td>
+</tr>
+<tr>
+<td>Default-deny entre tenants</td>
+<td>Politique en entrée par projet dans <code>cnp-project-base</code>, derrière l'option <code>networkIsolation</code> ; egress ouvert</td>
+<td>G1 partiellement traité : activer partout et fermer l'egress (T0.2)</td>
+</tr>
+<tr>
+<td>CloudNativePG</td>
+<td>chart 0.29.0, plugin Barman Cloud 0.8.1 installé</td>
+<td>Sauvegarde à configurer et tester par base d'app (T0.5)</td>
+</tr>
+<tr>
+<td>VictoriaMetrics</td>
+<td>chart single 0.48.0, vmalert 0.46.0</td>
+<td>Base des métriques GenAI (D7)</td>
+</tr>
+<tr>
+<td>Alloy</td>
+<td>chart 1.11.1</td>
+<td>Récepteur OTLP à ajouter (T1.3)</td>
+</tr>
+<tr>
+<td>Grafana, Loki</td>
+<td>charts 10.5.15 et 7.3.0</td>
+<td></td>
+</tr>
+<tr>
+<td>Tempo</td>
+<td>absent</td>
+<td>À installer (D30)</td>
+</tr>
+<tr>
+<td>CMP</td>
+<td>décode les JWT du realm sans vérifier l'audience</td>
+<td>G7 : à fermer en phase 1 (T1.9)</td>
+</tr>
+</tbody>
+</table>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      
+    
+  </body>
+</html>
