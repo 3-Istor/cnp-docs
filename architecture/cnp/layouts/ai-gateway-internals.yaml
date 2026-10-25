@@ -68,7 +68,7 @@ elements:
   z-google-ai: {x: 3760, y: 1480, w: 420, h: 200}
   gemini: {x: 30, y: 70, w: 340, h: 104}
   z-homelab-gpu: {x: 3760, y: 1850, w: 420, h: 332}
-  ollama: {x: 30, y: 70, w: 340, h: 104}
+  gpu-server: {x: 30, y: 70, w: 340, h: 104}
   md-guard: {x: 30, y: 212, w: 340, h: 104}
 edges:
   c-ag-agent: {from: hosted-agent.right@52px, to: ag-f-listener.left@52px, waypoints: [[520, 1638], [520, 1488]]}
@@ -82,11 +82,12 @@ edges:
   c-ag-chain-6: {from: ag-f-guard.right@52px, to: ag-f-pick.left@52px}
   c-ag-chain-7: {from: ag-f-pick.right@52px, to: ag-x-llm.left@52px}
   c-ag-gemini: {from: ag-x-llm.right@25px, to: gemini.left@85px, label_at: [3100, 1635]}
-  c-ag-gpu: {from: ag-x-llm.right@75px, to: ollama.left@52px, waypoints: [[3720, 1685], [3720, 1972]], label_at: [3100, 1685]}
+  c-ag-gpu: {from: ag-x-llm.right@75px, to: gpu-server.left@52px, waypoints: [[3720, 1685], [3720, 1972]], label_at: [3100, 1685]}
   c-ag-usage-otel: {from: ag-x-llm.bottom@170px, to: ag-x-otel.top@170px, label_at: [2020, 1837]}
   c-ag-otel: {from: ag-x-otel.bottom@170px, to: observability.top@170px, label_at: [2020, 2050]}
   c-ag-guard-hook: {from: ag-f-guard.bottom@130px, to: ag-hook.top@330px, label_at: [1160, 2000]}
-  c-ag-hook-guard: {from: ag-hook.bottom@250px, to: md-guard.left@52px, waypoints: [[1080, 2480], [3730, 2480], [3730, 2114]], label_at: [2900, 2480]}
+  c-ag-hook-guard: {from: ag-hook.bottom@250px, to: gpu-server.left@80px, waypoints: [[1080, 2480], [3745, 2480], [3745, 2000]], label_at: [2900, 2480]}
+  c-md-guard: {from: gpu-server.bottom@170px, to: md-guard.top@170px}
   c-ag-mcp: {from: ag-f-route.bottom@290px, to: ag-x-mcp.left@52px, waypoints: [[910, 1770], [2280, 1770], [2280, 1936]], label_at: [1000, 1770]}
   c-ag-a2a: {from: ag-f-route.bottom@240px, to: ag-x-a2a.left@52px, waypoints: [[860, 1800], [2295, 1800], [2295, 2064]], label_at: [1700, 1800]}
   c-ag-mcp-cmp: {from: ag-x-mcp.right@90px, to: cmp-mcp.left@34px}

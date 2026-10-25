@@ -37,7 +37,7 @@ include:
   - z-google-ai
   - gemini
   - z-homelab-gpu
-  - ollama
+  - gpu-server
 
 steps: [c-agent-aigw, c-aigw-ratelimit, c-aigw-gemini]
 background: [c-aigw-keycloak, e-a-vso-vault, c-vso-ai-secret, c-aigw-alloy, c-alloy-tempo]

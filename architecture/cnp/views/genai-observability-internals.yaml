@@ -6,7 +6,7 @@ title: "CNP · AI landing zone · GenAI observability internals"
 subtitle: "How does one agent call become a trace and token counts per project, and what keeps prompts out of the storage?"
 meta:
   - "Scope: OpenTelemetry GenAI and MCP conventions (status Development) through the existing Alloy, to Tempo and VictoriaMetrics, read in Grafana, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
-  - "Out of scope: Langfuse (about 21.5 GB of memory minimum, not for this cluster) · OpenCost for cluster cost · Ollama's own metrics"
+  - "Out of scope: Langfuse (about 21.5 GB of memory minimum, not for this cluster) · OpenCost for cluster cost · the GPU server's own metrics"
   - "Assumed: VictoriaMetrics already runs and takes Alloy's remote write; Tempo in monolithic mode"
   - "v0.1 · source: cnp-docs/architecture/cnp · OpenTelemetry GenAI semantic conventions, Grafana Alloy components"
 
@@ -82,5 +82,5 @@ cards:
     color: sky
     lines:
       - "With Gemini's free tier, the money question becomes a quota question: tokens and requests per project against RPM, TPM and RPD."
-      - "For Ollama, the cost is the GPU's time: latency and tokens per second per model."
+      - "For the GPU server, the cost is the GPU's time: latency and tokens per second per model."
   - {id: card-legend, title: Legend, color: slate, legend: true}

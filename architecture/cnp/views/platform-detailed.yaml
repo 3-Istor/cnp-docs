@@ -119,8 +119,6 @@ include:
   - ag-redis
   - g-md-egress
   - md-egress
-  - g-vpn
-  - md-wg
   - g-mcp-tools
   - g-th-crd
   - th-mcpserver
@@ -217,12 +215,14 @@ include:
   - md-quota
   - md-project
   - z-homelab-gpu
-  - md-hl-wg
-  - ollama
+  - gpu-server
   - md-gpu
   - md-ollama-cfg
   - md-store
   - md-guard
+  - md-svc-text
+  - md-svc-embed
+  - md-svc-image
   - z-cloud-a
   - b-apiserver
   - z-cloud-b
@@ -232,7 +232,7 @@ include:
   - sb-nested
 
 steps: [c-id-login, c-id-ask, c-agent-keycloak, c-sb-claim, c-sb-run, c-sb-router-pod, c-ag-agent, c-ag-rl-check, c-ag-gemini, c-ag-gpu, c-ag-mcp, c-th-gw, c-th-run, c-ob-gw, c-ob-5]
-background: [c-id-provision, c-id-vault, c-id-vso-read, c-id-vso, c-ag-ads, c-sb-core-kapi, c-th-op-kapi, c-argocd-apiserver, c-md-tunnel]
+background: [c-id-provision, c-id-vault, c-id-vso-read, c-id-vso, c-ag-ads, c-sb-core-kapi, c-th-op-kapi, c-argocd-apiserver]
 
 cards:
   - id: card-steps
@@ -253,7 +253,7 @@ cards:
       - "[C] [D] The secrets operator reads it and writes the Kubernetes Secret mounted by the agent."
       - "[E] [F] [G] The agentgateway controller, the sandbox controller and the ToolHive operator watch their CRDs and configure the proxy or write what they generate (pods, services)."
       - "[H] Argo CD applies everything from Git, the AI landing zone included."
-      - "[I] The WireGuard tunnel to the homelab GPU stays up, so Ollama is one hop away."
+      - "[I] The GPU server sits on the same local network as the cluster; Cilium lets the gateway reach its /32 over HTTPS and nothing else."
   - {id: card-legend, title: Legend, color: slate, legend: true}
 
 labels:
@@ -304,7 +304,10 @@ labels:
   c-argocd-b: ""
   c-mcp-api: "call REST in-process"
   c-md-gpu: ""
-  c-md-hl-fwd: ""
+  c-md-text: ""
+  c-md-embed: ""
+  c-md-guard: ""
+  c-md-image: ""
   c-md-quota: ""
   c-ob-1: ""
   c-ob-10: ""

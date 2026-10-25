@@ -75,7 +75,7 @@ include:
   - z-google-ai
   - gemini
   - z-homelab-gpu
-  - ollama
+  - gpu-server
   - md-guard
 
 steps: [c-ag-agent, c-ag-chain-1, c-ag-chain-2, c-ag-chain-3, c-ag-rl-check, c-ag-rl-redis, c-ag-chain-4, c-ag-chain-5, c-ag-chain-6, c-ag-chain-7, c-ag-gemini, c-ag-gpu, c-ag-usage-otel, c-ag-otel]

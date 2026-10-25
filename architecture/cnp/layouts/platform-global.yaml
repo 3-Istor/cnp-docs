@@ -61,7 +61,7 @@ elements:
   z-google-ai: {x: 3700, y: 200, w: 460, h: 200}
   gemini: {x: 40, y: 70, w: 380, h: 100}
   z-homelab-gpu: {x: 3700, y: 470, w: 460, h: 200}
-  ollama: {x: 40, y: 70, w: 380, h: 100}
+  gpu-server: {x: 40, y: 70, w: 380, h: 100}
   z-github: {x: 3700, y: 740, w: 460, h: 400}
   gh-project-repos: {x: 40, y: 70, w: 380, h: 100}
   ghcr: {x: 40, y: 220, w: 380, h: 100}
@@ -91,7 +91,7 @@ edges:
   r-aigw-policy-route: {from: ai-gw-policy.bottom@40px, to: ai-gw-route.top@220px, waypoints: [[1750, 738], [1560, 738]]}
   c-aigw-ratelimit: {from: ai-gw-proxy.bottom@270px, to: ai-ratelimit.top@140px, waypoints: [[1610, 754], [2180, 754]]}
   c-aigw-gemini: {from: ai-gw-proxy.right@10px, to: gemini.left@50px, waypoints: [[1650, 610], [1650, 482], [3660, 482], [3660, 320]], label_at: [3660, 400]}
-  c-aigw-ollama: {from: ai-gw-proxy.right@20px, to: ollama.left@50px, waypoints: [[1658, 620], [1658, 492], [3650, 492], [3650, 590]], label_at: [3650, 545]}
+  c-aigw-gpu: {from: ai-gw-proxy.right@20px, to: gpu-server.left@50px, waypoints: [[1658, 620], [1658, 492], [3650, 492], [3650, 590]], label_at: [3650, 545]}
   c-aigw-toolhive: {from: ai-gw-proxy.right@30px, to: toolhive.left@80px, waypoints: [[1666, 630], [1666, 502], [2805, 502], [2805, 680]]}
   c-aigw-keycloak: {from: ai-gw-proxy.right@40px, to: keycloak.bottom@110px, waypoints: [[1674, 640], [1674, 512], [1860, 512]], against_flow: true}
   c-agent-keycloak: {from: hosted-agent.top@250px, to: keycloak.bottom@220px, waypoints: [[2710, 472], [1970, 472]], against_flow: true}

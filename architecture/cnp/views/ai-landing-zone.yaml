@@ -5,7 +5,7 @@ title: "CNP · AI landing zone · Tech stack"
 subtitle: "What is the platform built with today, and what do the landing zone fixes (P0–P2) and the AI landing zone (IA-1–IA-3) add?"
 meta:
   - "Scope: the on-prem hub as of 2026-10-22 · in full: what the fixes and the AI landing zone add, with their target · faded: what already runs"
-  - "Out of scope: EKS and GKE (same stack per cluster) · the homelab GPU cluster's own stack"
+  - "Out of scope: EKS and GKE (same stack per cluster) · what runs on the GPU server"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 bands:
   - id: delivery
@@ -33,7 +33,7 @@ bands:
     sections:
       - {title: Hosted agents, items: [hosted-agent, agent-sandbox]}
       - {title: MCP tools, items: [stake-policy, toolhive, th-op]}
-      - {title: Models, items: [gemini, ollama]}
+      - {title: Models, items: [gemini, gpu-server]}
   - id: data
     title: Data and resilience
     sub: what apps store and how it comes back
