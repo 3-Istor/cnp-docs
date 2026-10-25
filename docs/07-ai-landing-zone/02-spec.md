@@ -306,12 +306,20 @@ point ouvert reçoit une valeur par défaut. Validées par Brian le 2026-10-25 ;
    `HTTPRoute` ; ce que la doc ne nomme pas est écrit comme un concept. Le budget passe par le
    service de rate limit global (le limiteur local n'a pas d'unité au jour), `ob-prom` est
    VictoriaMetrics, le serveur GPU est l'élément externe du §5, joint en HTTPS sans WireGuard.
-   **Reste à corriger dans les schémas** : les vues `platform-ai-*` (éléments `ov-*` et `hl-*`)
-   disent encore « via WireGuard » et « une seule clé » pour Gemini ; le modèle doit aussi
-   suivre D33 (pas de warm pool), D34 (Llama Guard 1B, réglages Ollama du profil A) et D23
-   (clés équilibrées en P2C). **À confirmer à l'essai T1.1** : le format du corps du webhook de
-   garde et les noms d'outils quand un backend MCP a plusieurs cibles (les autres points sont
-   dans D23 et D32).
+   **Corrigé le 2026-10-26 (branche `diagrams/v1.0`).** Les vues `platform-ai-*` disent
+   « HTTPS, réseau local, derrière Caddy » pour le serveur GPU et « plusieurs clés équilibrées
+   (P2C), puis le serveur GPU sur 429 » pour Gemini (D23). Le zoom `models-internals` montre la
+   pile de D34 et D37 (texte en réglage, `qwen3.5:9b` Q8_0 par défaut ; `llama-guard3:1b` et
+   `nomic-embed-text` toujours chargés ; ComfyUI à la demande derrière un verrou GPU ; réglages
+   Ollama ; Caddy avec un jeton par consommateur). Les vues de sandbox montrent le warm pool
+   de 1 réplica gVisor à 512 Mi, sans pool pour Kata (D33). `ai-gateway-internals` montre les
+   bornes de D32 (`max_tokens` à 4 096, 30 requêtes par minute et par agent, refus si le
+   service de rate limit est injoignable) et l'origine des règles et réglages (D36). Les
+   PNG trop grands (`platform-detailed`) sont exportés à l'échelle 1 et le script de build
+   vérifie qu'ils sont complets. **À confirmer à l'essai T1.1** : le format du corps du webhook
+   de garde et les noms d'outils quand un backend MCP a plusieurs cibles, et les trois bornes
+   de D32 (elles sont dessinées d'après la spec, pas d'après un essai). Non dessiné : le verrou
+   GPU n'est qu'un texte dans l'élément image, sans flèche.
 3. **`00-index.md`.** Fait le 2026-10-25 : l'index renvoie au registre de cette page.
 4. **Côté CMP.** Les choix propres à la CMP sont dans [04-cmp-agents.md](04-cmp-agents.md).
 

@@ -42,8 +42,11 @@ To change a diagram, edit the model (facts), the view (what is shown) or the lay
 ```
 
 It needs the `noodle` CLI (Claude Code noodle plugin, or `nix run github:TheGostsniperfr/Noodle`),
-`drawio` for the PNG export and `pngquant` to compress it (`PNG_QUALITY`, default `80-95`;
-`off` keeps draw.io's export). noodle refuses to build a view while boxes, labels or arrows
+`drawio` for the PNG export, `pngquant` to compress it (`PNG_QUALITY`, default `80-95`;
+`off` keeps draw.io's export) and `magick` (ImageMagick) to check the result. `VIEWS="a b"`
+builds only those views. draw.io cuts off a PNG above about 100 megapixels, so a view whose
+scale-2 export is larger is exported at scale 1 (`MAX_PIXELS`), and the script fails if the
+bottom of a PNG is empty where the drawio has content. noodle refuses to build a view while boxes, labels or arrows
 collide. Look at the PNG before opening the PR: the lint catches geometry, not readability.
 
 Every fact comes from the code (K3s, infra-templates, cnp-project-base, CMP,
