@@ -72,7 +72,7 @@ Membres, Sécurité, FinOps, Activité, Alertes et Assistants.
 | Page d'une app | Badge « Accès IA » et lien vers la section Accès aux modèles du projet | 1 |
 | Activité | Filtre « via un agent » | 2 |
 
-Les maquettes de ces écrans sont publiées à part (lien dans la PR de la spec). Elles sont la
+Les maquettes de ces écrans sont sur le canevas [CMP · Landing zone IA · Maquettes](https://claude.ai/artifact/1e4ETb6QvU5vnsCv866xHB) (privé, à partager depuis claude.ai) : onglet IA d'un projet, accès IA d'une app, création d'un agent à l'étape Risque, page d'un agent avec chat de test, inventaire des agents, FinOps filtré sur l'IA. Elles sont la
 référence visuelle ; ce document reste la référence fonctionnelle.
 
 ## 5. Écrans
