@@ -3,87 +3,93 @@ kind: View
 type: topology
 state: diff
 title: "CNP · AI landing zone · Models internals"
-subtitle: "Where does a model call end up, what limits it, and how does it fall back to the homelab GPU?"
+subtitle: "Where does a model call end up, what limits it, and how does it fall back to the GPU server?"
 meta:
-  - "Scope: Gemini API free tier through its OpenAI-compatible endpoint, Ollama on the homelab RTX 5080 over WireGuard, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
-  - "Out of scope: the gateway's filters (AI gateway internals) · the homelab cluster's own platform · the Gateway API Inference Extension, useful only with several GPU replicas"
-  - "Assumed: one Google Cloud project with one API key; the jwt filter copies the data_level claim into the header x-cnp-data (claimToHeaders)"
-  - "v0.1 · source: cnp-docs/architecture/cnp · ai.google.dev (rate limits, Gemini API additional terms)"
+  - "Scope: Gemini API free tier with several keys in the first priority group, the GPU server in the second (an external element defined by its contract, spec section 5), proposal of 2026-10-25 · drawn in full: what the proposal adds (IA-1, IA-2) · faded: what already runs"
+  - "Out of scope: the gateway's policy order (AI gateway internals) · what runs on the GPU server and its own platform · the Gateway API Inference Extension, useful only with several GPU replicas"
+  - "Assumed: the GPU server sits on the same local network as the cluster and is reached over HTTPS, with Cilium egress limited to its /32 (no WireGuard); a transformation copies the data_level claim into the header x-cnp-data (open point 2 of the spec)"
+  - "v0.2 · source: cnp-docs/architecture/cnp · ai.google.dev (rate limits, Gemini API additional terms) · agentgateway docs (LLM failover and load balancing)"
 
 include:
   - z-cluster
   - g-ai-gateway
-  - g-ag-crd-ar
+  - g-ag-crd-gw
   - ag-route
-  - ag-be-gemini
-  - ag-be-ollama
   - md-route-local
-  - g-ag-crd-eg
-  - ag-secpol
-  - ag-btp
-  - ag-backend-gemini
-  - ag-backend-ollama
+  - g-ag-crd-agw
+  - ag-be-llm
+  - ag-be-local
+  - ag-secret
+  - ag-secret-gpu
+  - g-ag-polb
+  - ag-pol-failover
   - g-md-egress
   - md-egress
   - g-ag-pod
-  - g-ag-envoy
-  - ag-f-router
-  - ag-f-xp-up
-  - g-vpn
-  - md-wg
+  - g-ag-chain
+  - ag-f-pick
+  - ag-x-llm
   - z-google-ai
   - gemini
   - md-quota
   - md-project
   - z-homelab-gpu
-  - md-hl-wg
-  - ollama
-  - md-gpu
-  - md-ollama-cfg
-  - md-store
+  - gpu-server
+  - md-svc-text
+  - md-svc-embed
   - md-guard
+  - md-svc-image
+  - md-gpu
+  - md-store
+  - md-ollama-cfg
 
-steps: [c-ag-chain-5, c-ag-gemini, c-md-quota, c-ag-ollama, c-md-hl-fwd, c-md-gpu]
-background: [c-md-tunnel, c-md-store]
+steps: [c-ag-chain-7, c-ag-gemini, c-md-quota, c-ag-gpu, c-md-text, c-md-gpu]
+background: [c-md-store]
 
 labels:
-  c-ag-chain-5: ""
-  c-ag-gemini: "POST /v1beta/openai/chat/completions · HTTPS"
+  c-ag-chain-7: ""
+  c-ag-gemini: "generateContent · HTTPS"
   c-md-quota: ""
-  c-ag-ollama: "on 429 or Local · HTTP over WireGuard"
-  c-md-hl-fwd: ""
+  c-ag-gpu: "after a 429 or for Local · HTTPS"
+  c-md-text: ""
+  c-md-embed: ""
+  c-md-guard: ""
+  c-md-image: ""
   c-md-gpu: ""
-  c-md-tunnel: "WireGuard · UDP"
   c-md-store: ""
-  r-ag-route-gemini: ""
+  r-ag-route-llm: ""
+  r-ag-local-be: ""
+  r-ag-be-secret: ""
+  r-ag-be-gpu-secret: ""
+  r-ag-local-secret: ""
+  r-ag-pol-failover: ""
   r-md-project: ""
   r-md-guard: ""
 
 notes:
-  - {id: n-md-terms, text: "Check before going live: Google's Gemini API terms allow only the paid service when an API client is made available to users in the EEA, the UK or Switzerland. Free-tier inputs may also be read by human reviewers and used to improve Google's products: no sensitive data."}
-  - {id: n-md-local, text: "Local projects: jwt_authn copies the data_level claim into x-cnp-data; the llm-local route matches it and only knows Ollama, so Gemini is never a candidate, even on retry."}
-  - {id: n-md-fit, text: "16 GB VRAM: one 8 to 14B chat model at 4-bit with its KV cache, or a smaller one beside Llama Guard 3. With MAX_LOADED_MODELS 1, switching model means a reload of several seconds."}
+  - {id: n-md-terms, text: "Check before going live: Google's Gemini API terms allow only the paid service when an API client is made available to users in the EEA, the UK or Switzerland. Free-tier inputs may also be read by human reviewers and used to improve Google's products: no sensitive data. Rotating free accounts is not covered by the terms read so far."}
+  - {id: n-md-local, text: "Local projects: the data_level claim is copied into x-cnp-data; the llm-local route matches it and its backend only knows the GPU server, so Gemini is never a candidate, even after a failure."}
+  - {id: n-md-contract, text: "The GPU server is only a contract: text and embeddings in IA-1, the guard and the image tool in IA-2. Each service sits behind one reverse proxy with a token or mTLS, reachable from the cluster's egress IP only, with no web UI for tenants."}
 
 cards:
   - id: card-steps
     title: "Request path · a model call leaves the gateway"
     color: emerald
     lines:
-      - "[1] The router picks the rule: llm for normal projects (Gemini priority 0, Ollama priority 1), llm-local for Local projects (Ollama only)."
-      - "[2] The upstream filters translate and sign the request, then Envoy calls Gemini's OpenAI-compatible endpoint over HTTPS; the Cilium egress rule allows that host only."
-      - "[3] Google counts the request against the project's RPM, TPM and RPD. If any one is spent, the answer is 429."
-      - "[4] On 429, or for Local projects, Envoy retries on Ollama through the WireGuard pod. [5] The homelab peer forwards to Ollama on port 11434. [6] Ollama runs the model on the RTX 5080."
+      - "[1] The provider choice picks the backend: llm for normal projects (group 1 Gemini keys, group 2 the GPU server), llm-local for Local projects (the GPU server only)."
+      - "[2] The LLM proxy calls Gemini with one of the keys, over HTTPS; the Cilium egress rule allows that host and the GPU server's /32 only."
+      - "[3] Google counts the request against the Google Cloud project's RPM, TPM and RPD. If any one is spent, the answer is 429; the key is evicted for a while."
+      - "[4] After a 429, or for Local projects, the LLM proxy calls the GPU server over HTTPS with its token. [5] The reverse proxy sends chat calls to the text service. [6] The text service runs the model on the GPU."
   - id: card-background
     title: "Background"
     color: amber
     lines:
-      - "[A] The WireGuard pod keeps the tunnel to the homelab peer up; only the GPU host's /32 is routed through it."
-      - "[B] Ollama loads a model's weights from its store on first use and keeps them for KEEP_ALIVE (30 min here)."
+      - "[A] The text service loads a model's weights from its store on first use and keeps them for a while (the Ollama example: KEEP_ALIVE 30 min)."
   - id: card-objects
     title: "Objects · who points at whom"
     color: sky
     lines:
-      - "AIGatewayRoute llm → AIServiceBackend gemini and ollama; llm-local → ollama only."
-      - "AIServiceBackend gemini → Backend gemini (FQDN, TLS); ollama → Backend ollama (homelab IP)."
-      - "BackendTrafficPolicy: retry on 429 and token rate limit; SecurityPolicy: JWT and claimToHeaders."
+      - "HTTPRoute llm → AgentgatewayBackend llm (group 1: Gemini providers, one Secret each; group 2: the GPU server, token Secret); HTTPRoute llm-local → llm-local (the GPU server only)."
+      - "AgentgatewayPolicy failover → backend llm: evicts a provider on 429 so that the next group takes over."
+      - "Only keys from different Google Cloud projects add quota: the limits are per project, not per key."
   - {id: card-legend, title: Legend, color: slate, legend: true}

@@ -7,8 +7,7 @@ elements:
   g-agents: {x: 40, y: 60, w: 360, h: 200}
   hosted-agent: {x: 30, y: 70, w: 280, h: 100}
   g-ag-pod: {x: 40, y: 340, w: 420, h: 300}
-  g-ag-xp: {x: 30, y: 70, w: 360, h: 200}
-  ag-x-otel: {x: 30, y: 70, w: 300, h: 100}
+  ag-x-otel: {x: 60, y: 140, w: 300, h: 100}
   g-mcp-tools: {x: 40, y: 720, w: 420, h: 300}
   g-th-run: {x: 30, y: 70, w: 360, h: 200}
   th-proxy: {x: 30, y: 70, w: 300, h: 100}

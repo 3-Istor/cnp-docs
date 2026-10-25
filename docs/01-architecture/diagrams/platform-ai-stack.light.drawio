@@ -375,14 +375,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-agent-keycloak" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;6&lt;/span&gt; + token exchange (SA token)&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.1562;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-agent" target="ov-keycloak">
+        <mxCell id="ov-c-agent-keycloak" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;6&lt;/span&gt; + token exchange (SA token)&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.1562;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-agent" target="ov-keycloak">
           <mxGeometry x="0.3826" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2040" y="770" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-agent-sb" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;15&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-agent" target="ov-sb-ctrl">
+        <mxCell id="ov-c-agent-sb" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;15&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-agent" target="ov-sb-ctrl">
           <mxGeometry x="0.5892" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1610" y="880" />
@@ -391,11 +391,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-sb-gvisor" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;16&lt;/span&gt; + run&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.7812;exitY=1.0000;exitPerimeter=0;entryX=0.7812;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-sb-ctrl" target="ov-sb-gvisor">
+        <mxCell id="ov-c-sb-gvisor" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;16&lt;/span&gt; + run&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.7812;exitY=1.0000;exitPerimeter=0;entryX=0.7812;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-sb-ctrl" target="ov-sb-gvisor">
           <mxGeometry x="-0.2308" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-sb-kata" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ run untrusted code&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-sb-ctrl" target="ov-sb-kata">
+        <mxCell id="ov-c-sb-kata" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ run untrusted code&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-sb-ctrl" target="ov-sb-kata">
           <mxGeometry x="0.1765" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2030" y="1170" />
@@ -403,7 +403,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-agent-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;7&lt;/span&gt; + models, tools, agents + JWT · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8000;exitPerimeter=0;entryX=0.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-agent" target="ov-aigw">
+        <mxCell id="ov-c-agent-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;7&lt;/span&gt; + models, tools, agents + JWT · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8000;exitPerimeter=0;entryX=0.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-agent" target="ov-aigw">
           <mxGeometry x="-0.1405" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2540" y="820" />
@@ -411,7 +411,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-app-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ apps call models too · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-app" target="ov-aigw">
+        <mxCell id="ov-c-app-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ apps call models too · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-app" target="ov-aigw">
           <mxGeometry x="0.4072" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1540" y="1060" />
@@ -420,11 +420,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-quota" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;10&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-quota">
+        <mxCell id="ov-c-aigw-quota" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;10&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-quota">
           <mxGeometry x="-0.5000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-gemini" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;11&lt;/span&gt; + default model · HTTPS&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-gemini">
+        <mxCell id="ov-c-aigw-gemini" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;11&lt;/span&gt; + default model · HTTPS&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-gemini">
           <mxGeometry x="0.1487" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2990" y="720" />
@@ -432,7 +432,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-ollama" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;12&lt;/span&gt; + on 429 or Local project · WireGuard&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.8750;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-ollama">
+        <mxCell id="ov-c-aigw-ollama" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;12&lt;/span&gt; + on 429 or Local project · WireGuard&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.8750;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-ollama">
           <mxGeometry x="0.3692" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2850" y="800" />
@@ -440,7 +440,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-tools" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;13&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8000;exitPerimeter=0;entryX=1.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-toolhive">
+        <mxCell id="ov-c-aigw-tools" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;13&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8000;exitPerimeter=0;entryX=1.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-toolhive">
           <mxGeometry x="-0.8776" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2930" y="750" />
@@ -448,7 +448,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-cmp-mcp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ platform tools · MCP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.2188;exitY=1.0000;exitPerimeter=0;entryX=0.9375;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-cmp-mcp">
+        <mxCell id="ov-c-aigw-cmp-mcp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ platform tools · MCP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.2188;exitY=1.0000;exitPerimeter=0;entryX=0.9375;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-cmp-mcp">
           <mxGeometry x="0.4083" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2640" y="800" />
@@ -460,7 +460,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-alloy" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;17&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.8125;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-alloy">
+        <mxCell id="ov-c-aigw-alloy" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;17&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.8125;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-alloy">
           <mxGeometry x="0.0729" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2830" y="800" />
@@ -473,7 +473,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-agent-alloy" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ agent spans · OTLP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.8750;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-agent" target="ov-alloy">
+        <mxCell id="ov-c-agent-alloy" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ agent spans · OTLP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.8750;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-agent" target="ov-alloy">
           <mxGeometry x="0.1534" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1860" y="880" />
@@ -483,11 +483,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-alloy-tempo" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;18&lt;/span&gt; + traces&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-alloy" target="ov-tempo">
+        <mxCell id="ov-c-alloy-tempo" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;18&lt;/span&gt; + traces&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-alloy" target="ov-tempo">
           <mxGeometry x="-0.0333" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-alloy-prom" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ GenAI metrics&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-alloy" target="ov-prom">
+        <mxCell id="ov-c-alloy-prom" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ GenAI metrics&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-alloy" target="ov-prom">
           <mxGeometry x="0.0029" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="3210" y="1790" />
@@ -495,7 +495,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-grafana-tempo" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ TraceQL&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=1.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-grafana" target="ov-tempo">
+        <mxCell id="ov-c-grafana-tempo" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ TraceQL&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=1.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-grafana" target="ov-tempo">
           <mxGeometry x="-0.0667" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="3710" y="1860" />
@@ -503,7 +503,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-cmp-keycloak" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;I&lt;/span&gt; + create the agent client&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-cmp" target="ov-keycloak">
+        <mxCell id="ov-c-cmp-keycloak" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;I&lt;/span&gt; + create the agent client&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3000;exitPerimeter=0;entryX=0.0938;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-cmp" target="ov-keycloak">
           <mxGeometry x="0.1833" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1490" y="380" />
@@ -512,14 +512,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-vault-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;J&lt;/span&gt; + mount the Gemini key&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.3438;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-vault" target="ov-aigw">
+        <mxCell id="ov-c-vault-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;J&lt;/span&gt; + mount the Gemini key&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.3438;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-vault" target="ov-aigw">
           <mxGeometry x="-0.2429" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2540" y="700" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-sb-kapi" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;H&lt;/span&gt; + watch claims, create pods&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=0.1250;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-sb-ctrl" target="ov-kapi">
+        <mxCell id="ov-c-sb-kapi" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;H&lt;/span&gt; + watch claims, create pods&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=0.1250;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-sb-ctrl" target="ov-kapi">
           <mxGeometry x="0.2769" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1610" y="1240" />
@@ -527,11 +527,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-kapi-kyverno" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;G&lt;/span&gt; + admission check&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-kapi" target="ov-kyverno">
+        <mxCell id="ov-c-kapi-kyverno" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;G&lt;/span&gt; + admission check&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-kapi" target="ov-kyverno">
           <mxGeometry x="-0.0250" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-x-agent-gemini" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ direct call&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#dc2626;strokeWidth=2.8;endArrow=cross;endFill=0;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.6000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#b91c1c;dashed=1;dashPattern=6 4;endSize=10;" edge="1" parent="1" source="ov-agent" target="ov-gemini">
+        <mxCell id="ov-x-agent-gemini" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ direct call&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.8;endArrow=cross;endFill=0;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.6000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;dashed=1;dashPattern=6 4;endSize=10;" edge="1" parent="1" source="ov-agent" target="ov-gemini">
           <mxGeometry x="0.3531" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1880" y="870" />
@@ -540,7 +540,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-x-sb-app" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ &lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#dc2626;strokeWidth=2.8;endArrow=cross;endFill=0;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#b91c1c;dashed=1;dashPattern=6 4;endSize=10;" edge="1" parent="1" source="ov-sb-gvisor" target="ov-app">
+        <mxCell id="ov-x-sb-app" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ &lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.8;endArrow=cross;endFill=0;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.8000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;dashed=1;dashPattern=6 4;endSize=10;" edge="1" parent="1" source="ov-sb-gvisor" target="ov-app">
           <mxGeometry x="0.2881" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1610" y="1450" />
@@ -549,7 +549,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-envoy-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;4&lt;/span&gt; + ask an agent (A2A), user token · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-envoy" target="ov-aigw">
+        <mxCell id="ov-c-envoy-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;4&lt;/span&gt; + ask an agent (A2A), user token · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-envoy" target="ov-aigw">
           <mxGeometry x="0.3742" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1560" y="780" />
@@ -557,14 +557,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-agent" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;5&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.6000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-agent">
+        <mxCell id="ov-c-aigw-agent" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;5&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.6000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-agent">
           <mxGeometry x="-0.2986" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2600" y="800" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-agent2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;14&lt;/span&gt; + delegate a task · A2A&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.1562;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-agent-2">
+        <mxCell id="ov-c-aigw-agent2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;14&lt;/span&gt; + delegate a task · A2A&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.1562;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-agent-2">
           <mxGeometry x="0.2636" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2620" y="810" />
@@ -573,7 +573,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-aigw-guard" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;8&lt;/span&gt; + promptGuard webhook · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-aigw" target="ov-guard-hook">
+        <mxCell id="ov-c-aigw-guard" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;8&lt;/span&gt; + promptGuard webhook · HTTP&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0938;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-aigw" target="ov-guard-hook">
           <mxGeometry x="0.9478" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2870" y="810" />
@@ -581,14 +581,14 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-guard-llama" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;9&lt;/span&gt; + classify the prompt · WireGuard&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-guard-hook" target="ov-llamaguard">
+        <mxCell id="ov-c-guard-llama" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;9&lt;/span&gt; + classify the prompt · WireGuard&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.9375;exitY=1.0000;exitPerimeter=0;entryX=0.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-guard-hook" target="ov-llamaguard">
           <mxGeometry x="0.3073" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="3750" y="1020" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-agwctrl-kapi" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;E&lt;/span&gt; + watch routes and policies&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-agw-ctrl" target="ov-kapi">
+        <mxCell id="ov-c-agwctrl-kapi" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;E&lt;/span&gt; + watch routes and policies&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0938;exitY=1.0000;exitPerimeter=0;entryX=1.0000;entryY=0.3000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-agw-ctrl" target="ov-kapi">
           <mxGeometry x="-0.1980" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="3040" y="1110" />
@@ -597,7 +597,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-agwctrl-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;F&lt;/span&gt; + push config · xDS&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.1562;exitY=1.0000;exitPerimeter=0;entryX=0.9375;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-agw-ctrl" target="ov-aigw">
+        <mxCell id="ov-c-agwctrl-aigw" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;F&lt;/span&gt; + push config · xDS&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.1562;exitY=1.0000;exitPerimeter=0;entryX=0.9375;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-agw-ctrl" target="ov-aigw">
           <mxGeometry x="0.8316" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="3060" y="960" />
@@ -607,7 +607,7 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-kagent-kapi" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;D&lt;/span&gt; + create agent Deployments&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.1875;exitY=1.0000;exitPerimeter=0;entryX=0.9375;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-kagent" target="ov-kapi">
+        <mxCell id="ov-c-kagent-kapi" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;D&lt;/span&gt; + create agent Deployments&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.1875;exitY=1.0000;exitPerimeter=0;entryX=0.9375;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-kagent" target="ov-kapi">
           <mxGeometry x="0.4305" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="2970" y="1560" />
@@ -615,11 +615,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-c-toolhive-registry" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;K&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="ov-toolhive" target="ov-mcp-registry">
+        <mxCell id="ov-c-toolhive-registry" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;K&lt;/span&gt; +&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;" edge="1" parent="1" source="ov-toolhive" target="ov-mcp-registry">
           <mxGeometry x="-0.1000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="ov-r-policy" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ &lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#94a3b8;strokeWidth=2.2;endArrow=open;endFill=0;endSize=7;exitX=0.2812;exitY=0.0000;exitPerimeter=0;entryX=0.2812;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#475569;dashed=1;dashPattern=2 3;" edge="1" parent="1" source="ov-agw-policy" target="ov-aigw">
+        <mxCell id="ov-r-policy" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;+ &lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#059669;strokeWidth=2.2;endArrow=open;endFill=0;endSize=7;exitX=0.2812;exitY=0.0000;exitPerimeter=0;entryX=0.2812;entryY=1.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#059669;dashed=1;dashPattern=2 3;" edge="1" parent="1" source="ov-agw-policy" target="ov-aigw">
           <mxGeometry x="0.0000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
