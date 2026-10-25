@@ -19,14 +19,14 @@ one diagram, and `layouts/` places the topology views.
 | `access-matrix` | Who may act on what, and what the segregation plan changes, phase by phase | Access segregation |
 | `ai-landing-zone` | What is the platform built with today, and what do the landing zone fixes and the AI landing zone add? (proposal, planned) | AI landing zone |
 | `platform-global` | What does the whole platform look like, current hub plus the proposed AI landing zone, on one canvas? (proposal, partly planned) | AI landing zone |
-| `ai-gateway-internals` | What is the AI gateway made of, and what happens inside it between a request and the answer? (proposal, planned) | AI landing zone |
+| `ai-gateway-internals` | What is the AI gateway (agentgateway) made of, and what happens inside it between a request and the answer, in the docs' policy order? (proposal, planned) | AI landing zone |
 | `agent-sandbox-internals` | How does an agent get an isolated place to run the code it writes? (proposal, planned) | AI landing zone |
 | `agent-sandbox-kata` | The same sandbox with one micro-VM and kernel per sandbox (Kata tier, proposal) | AI landing zone |
 | `agent-sandbox-runc` | Agents that never run generated code: standard runtime and what keeps them in check (proposal) | AI landing zone |
-| `mcp-tools-internals` | How does an agent's tool call reach a tool server, and who checks it on the way? (proposal) | AI landing zone |
-| `agent-identity-internals` | Who is an agent for the platform, how does it get a token, and how does it act for a user? (proposal) | AI landing zone |
-| `models-internals` | Where does a model call end up, what limits it, and how does it fall back to the homelab GPU? (proposal) | AI landing zone |
-| `genai-observability-internals` | How does one agent call become a trace and token counts per project? (proposal) | AI landing zone |
+| `mcp-tools-internals` | How does an agent's tool call reach a tool server through the agentgateway MCP backend, and who checks it on the way? (proposal) | AI landing zone |
+| `agent-identity-internals` | Who is an agent for the platform, how does it get a token (5 minutes, no refresh), how does it act for a user, and which audience do CMP tools use? (proposal) | AI landing zone |
+| `models-internals` | Where does a model call end up, what limits it, and how does it fall back to the GPU server, an external element defined by its contract? (proposal) | AI landing zone |
+| `genai-observability-internals` | How does one agent call become a trace and token counts per project, with metrics in VictoriaMetrics? (proposal) | AI landing zone |
 | `platform-ai-full` | The whole current platform at a glance, dimmed, with the AI landing zone in full (proposal, in French) | AI landing zone |
 | `platform-ai-simple` | The AI landing zone at a glance: one box per building block, the request path and the set-up only (proposal, in French) | AI landing zone |
 | `platform-ai-stack` | What runs today and what the AI landing zone adds (option B: agentgateway, kagent): which tool does what, where the isolation boundaries are, how an agent request flows (proposal) | AI landing zone |

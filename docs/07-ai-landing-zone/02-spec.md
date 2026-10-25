@@ -263,12 +263,21 @@ en une passe ; l'agent d'implémentation les applique telles quelles.
    les conditions de l'API réservent le niveau payant aux API mises à disposition
    d'utilisateurs de l'EEE ; le contenu du niveau gratuit peut être relu par des humains. Le
    bandeau « n'envoyez pas de données personnelles » reste affiché sur la démo.
-2. **Vues à refaire.** `ai-gateway`, `ai-gateway-call`, `ai-gateway-internals`,
-   `mcp-tools-internals`, `platform-detailed` et `platform-global` décrivent l'intérieur
-   d'Agent Router : il faut les redessiner pour agentgateway avec les ressources confirmées par
-   la tâche T1.1. `genai-observability-internals` et `platform-detailed` dessinent Prometheus.
-   Les vues de l'option B (`platform-ai-stack`, `platform-ai-full`, `platform-ai-simple`) sont
-   à jour.
+2. **Vues refaites pour agentgateway (PR #22, 2026-10-25).** `ai-gateway-internals`,
+   `mcp-tools-internals`, `platform-detailed`, `ai-gateway`, `ai-gateway-call`,
+   `platform-global`, `models-internals` et `genai-observability-internals` décrivent
+   agentgateway d'après sa doc officielle : GatewayClass `agentgateway`, contrôleur (traducteur,
+   serveur xDS, Deployer), proxy Rust, `AgentgatewayBackend` (`ai`, `mcp`, `a2a`),
+   `AgentgatewayPolicy` (`traffic`, `backend`, `frontend`), `AgentgatewayParameters`,
+   `HTTPRoute` ; ce que la doc ne nomme pas est écrit comme un concept. Le budget passe par le
+   service de rate limit global (le limiteur local n'a pas d'unité au jour), `ob-prom` est
+   VictoriaMetrics, le serveur GPU est l'élément externe du §5, joint en HTTPS sans WireGuard.
+   **Reste à corriger dans les schémas** : les vues `platform-ai-*` (éléments `ov-*` et `hl-*`)
+   disent encore « via WireGuard » et « une seule clé » pour Gemini ; le modèle doit aussi
+   suivre D33 (pas de warm pool), D34 (Llama Guard 1B, réglages Ollama du profil A) et D23
+   (clés équilibrées en P2C). **À confirmer à l'essai T1.1** : le format du corps du webhook de
+   garde et les noms d'outils quand un backend MCP a plusieurs cibles (les autres points sont
+   dans D23 et D32).
 3. **`00-index.md`.** Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
    validée.
 4. **Côté CMP.** Les choix propres à la CMP sont dans [04-cmp-agents.md](04-cmp-agents.md).

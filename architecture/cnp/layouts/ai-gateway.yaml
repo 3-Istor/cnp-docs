@@ -27,8 +27,8 @@ elements:
   tempo: {x: 30, y: 230, w: 280, h: 100}
   z-google-ai: {x: 1760, y: 260, w: 340, h: 200}
   gemini: {x: 30, y: 70, w: 280, h: 100}
-  z-homelab-gpu: {x: 1760, y: 560, w: 340, h: 220}
-  ollama: {x: 30, y: 80, w: 280, h: 100}
+  z-homelab-gpu: {x: 1760, y: 560, w: 380, h: 220}
+  gpu-server: {x: 30, y: 80, w: 320, h: 110}
 edges:
   c-agent-aigw: {from: hosted-agent.right@75px, to: ai-gw-proxy.left@75px}
   c-agent-keycloak: {from: hosted-agent.right@15px, to: keycloak.top@250px, waypoints: [[450, 355], [450, 235], [1560, 235]]}
@@ -38,7 +38,7 @@ edges:
   c-aigw-toolhive: {from: ai-gw-proxy.right@75px, to: toolhive.left@65px, waypoints: [[1230, 415], [1230, 925]]}
   c-aigw-ratelimit: {from: ai-gw-proxy.right@100px, to: ai-ratelimit.top@140px, waypoints: [[1180, 440], [1180, 655], [1020, 655]], label_at: [1100, 655]}
   c-aigw-gemini: {from: ai-gw-proxy.bottom@230px, to: gemini.left@50px, waypoints: [[770, 480], [1720, 480], [1720, 380]], label_at: [1000, 480]}
-  c-aigw-ollama: {from: ai-gw-proxy.bottom@260px, to: ollama.left@60px, waypoints: [[800, 495], [1735, 495], [1735, 700]], label_at: [1460, 495]}
+  c-aigw-gpu: {from: ai-gw-proxy.bottom@260px, to: gpu-server.left@60px, waypoints: [[800, 495], [1735, 495], [1735, 700]], label_at: [1460, 495]}
   c-aigw-alloy: {from: ai-gw-proxy.bottom@15px, to: observability.top@140px, waypoints: [[555, 850], [250, 850]]}
   c-alloy-tempo: {from: observability.bottom, to: tempo.top}
   e-a-vso-vault: {from: vso.right@60px, to: vault.left@60px}
