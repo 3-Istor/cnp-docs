@@ -5,9 +5,9 @@ state: diff
 title: "CNP · AI landing zone · GenAI observability internals"
 subtitle: "How does one agent call become a trace and token counts per project, and what keeps prompts out of the storage?"
 meta:
-  - "Scope: OpenTelemetry GenAI and MCP conventions (status Development) through the existing Alloy, to Tempo and Prometheus, read in Grafana, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
+  - "Scope: OpenTelemetry GenAI and MCP conventions (status Development) through the existing Alloy, to Tempo and VictoriaMetrics, read in Grafana, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
   - "Out of scope: Langfuse (about 21.5 GB of memory minimum, not for this cluster) · OpenCost for cluster cost · Ollama's own metrics"
-  - "Assumed: no metrics store today, so Prometheus with remote write is added; Tempo in monolithic mode"
+  - "Assumed: VictoriaMetrics already runs and takes Alloy's remote write; Tempo in monolithic mode"
   - "v0.1 · source: cnp-docs/architecture/cnp · OpenTelemetry GenAI semantic conventions, Grafana Alloy components"
 
 include:
@@ -70,8 +70,8 @@ cards:
     lines:
       - "[1] The agent's SDK sends its spans (invoke_agent, chat, execute_tool) to Alloy over OTLP. [2] The gateway sends its spans over OTLP; Alloy scrapes its token and cost metrics on :15020. [3] The ToolHive proxy sends mcp.* spans and metrics."
       - "[4]–[6] Alloy adds namespace and project from the pod, drops message content unless opted in, then batches."
-      - "[7] [8] Traces go to Tempo. [9] [10] Metrics become Prometheus series by remote write."
-      - "[11] [12] Grafana reads traces with TraceQL and metrics with PromQL: tokens per project and model, latency, 429s, share of calls that fell back to Ollama. Alert rules run on the same series."
+      - "[7] [8] Traces go to Tempo. [9] [10] Metrics become Prometheus series and reach VictoriaMetrics by remote write."
+      - "[11] [12] Grafana reads traces with TraceQL and metrics with MetricsQL: tokens per project and model, latency, 429s, share of calls that fell back to the GPU server. Alert rules run on the same series."
   - id: card-background
     title: "Background · logs, already in place"
     color: amber

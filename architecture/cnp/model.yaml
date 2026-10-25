@@ -447,7 +447,7 @@ elements:
   - {id: md-guard, kind: security, parent: z-homelab-gpu, icon: ollama, title: "Llama Guard 3", tech: "[8B · safety classifier]", desc: "Classifies prompts and answers<br>against safety categories.<br>For a later guardrail step (IA-3).", status: planned, target: IA-3}
   - {id: md-ollama-cfg, kind: tool, parent: z-homelab-gpu, icon: ollama, title: "Ollama settings", tech: "[server environment]", desc: "NUM_PARALLEL 2, MAX_LOADED_MODELS 1,<br>KEEP_ALIVE 30m, KV cache q8_0.<br>Why: fit 16 GB, keep it warm.", status: planned, target: IA-1}
 
-  # GenAI observability zoom (proposal, 2026-10-23): OTel GenAI conventions through Alloy to Tempo and Prometheus.
+  # GenAI observability zoom (proposal, 2026-10-23): OTel GenAI conventions through Alloy to Tempo and VictoriaMetrics.
   - {id: g-ob-alloy, kind: group, parent: g-ops, color: orange, icon: grafana-alloy, title: "ALLOY PIPELINE", sub: "otelcol components"}
   - {id: g-ob-store, kind: group, parent: g-ops, color: violet, icon: grafana, title: "STORAGE"}
   - {id: g-ob-read, kind: group, parent: g-ops, color: emerald, icon: grafana, title: "READ · ALERT"}
@@ -456,11 +456,11 @@ elements:
   - {id: ob-transform, kind: security, parent: g-ob-alloy, icon: opentelemetry, title: "processor.transform", tech: "[OTTL]", desc: "Drops gen_ai.input/output.messages<br>unless the project opted in.<br>Why: prompts are user data.", status: planned, target: IA-1}
   - {id: ob-batch, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "processor.batch", tech: "[after memory_limiter]", desc: "Groups data before export.<br>Why: fewer, larger writes on a<br>small cluster.", status: planned, target: IA-1}
   - {id: ob-exp-otlp, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "exporter.otlp", tech: "[→ Tempo :4317]", desc: "Sends the traces to Tempo.", status: planned, target: IA-1}
-  - {id: ob-exp-prom, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "exporter.prometheus", tech: "[→ prometheus.remote_write]", desc: "Turns OTel metrics into Prometheus<br>series and pushes them.", status: planned, target: IA-1}
+  - {id: ob-exp-prom, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "exporter.prometheus", tech: "[→ prometheus.remote_write]", desc: "Turns OTel metrics into Prometheus<br>series, adds the scraped gateway ones<br>and pushes them to VictoriaMetrics.", status: planned, target: IA-1}
   - {id: ob-logsrc, kind: backend, parent: g-ob-alloy, icon: grafana-alloy, title: "loki.source.kubernetes", tech: "[pod logs]", desc: "Tails pod logs, gateway access<br>logs included."}
   - {id: ob-lokiw, kind: backend, parent: g-ob-alloy, icon: grafana-alloy, title: "loki.write", tech: "[push API]", desc: "Pushes log lines to Loki."}
   - {id: ob-loki, kind: database, parent: g-ob-store, icon: loki, title: "Loki", tech: "[logs]", desc: "Logs, Vault audit, policy<br>refusals."}
-  - {id: ob-prom, kind: database, parent: g-ob-store, icon: grafana, title: "Prometheus", tech: "[remote write receiver]", desc: "Token, latency and 429 series per<br>project and model.<br>Why: dashboards and alerts.", status: planned, target: IA-1}
+  - {id: ob-prom, kind: database, parent: g-ob-store, icon: grafana, title: "VictoriaMetrics", tech: "[remote write receiver]", desc: "Token, latency and 429 series per<br>project and model.<br>Why: dashboards and alerts.", status: planned, target: IA-1}
   - {id: ob-grafana, kind: frontend, parent: g-ob-read, icon: grafana, title: "Grafana", tech: "[dashboards]", desc: "Tokens, latency, 429s and share of<br>calls that fell back to Ollama."}
   - {id: ob-alerts, kind: security, parent: g-ob-read, icon: grafana, title: "Alert rules", tech: "[Grafana alerting]", desc: "Budget at 80 %, 429s or refusals up.<br>Why: act before the budget is gone.", status: planned, target: IA-1}
 
@@ -792,7 +792,7 @@ connections:
 
   # GenAI observability zoom.
   - {id: c-ob-agent, from: hosted-agent, to: ob-recv, protocol: OTLP, verb: "spans: invoke_agent, chat, execute_tool", kind: async, status: planned, target: IA-1}
-  - {id: c-ob-gw, from: ag-x-otel, to: ob-recv, protocol: OTLP, verb: gen_ai metrics and spans, kind: async, status: planned, target: IA-1}
+  - {id: c-ob-gw, from: ag-x-otel, to: ob-recv, protocol: OTLP, verb: gen_ai spans, kind: async, status: planned, target: IA-1}
   - {id: c-ob-th, from: th-proxy, to: ob-recv, protocol: OTLP, verb: mcp spans and metrics, kind: async, status: planned, target: IA-2}
   - {id: c-ob-1, from: ob-recv, to: ob-k8s, protocol: in-process, verb: next, kind: flow, status: planned, target: IA-1}
   - {id: c-ob-2, from: ob-k8s, to: ob-transform, protocol: in-process, verb: next, kind: flow, status: planned, target: IA-1}
@@ -802,7 +802,7 @@ connections:
   - {id: c-ob-6, from: ob-batch, to: ob-exp-prom, protocol: in-process, verb: metrics, kind: flow, status: planned, target: IA-1}
   - {id: c-ob-7, from: ob-exp-prom, to: ob-prom, protocol: HTTP, verb: remote write, kind: flow, status: planned, target: IA-1}
   - {id: c-ob-8, from: ob-grafana, to: tempo, protocol: HTTP, verb: TraceQL, kind: flow, status: planned, target: IA-1}
-  - {id: c-ob-9, from: ob-grafana, to: ob-prom, protocol: HTTP, verb: PromQL, kind: flow, status: planned, target: IA-1}
+  - {id: c-ob-9, from: ob-grafana, to: ob-prom, protocol: HTTP, verb: MetricsQL, kind: flow, status: planned, target: IA-1}
   - {id: c-ob-10, from: ob-logsrc, to: ob-lokiw, protocol: in-process, verb: log lines, kind: flow}
   - {id: c-ob-11, from: ob-lokiw, to: ob-loki, protocol: HTTP, verb: push, kind: flow}
   - {id: c-ob-12, from: ob-grafana, to: ob-loki, protocol: HTTP, verb: LogQL, kind: flow}

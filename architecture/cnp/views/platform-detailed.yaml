@@ -244,7 +244,7 @@ cards:
       - "[7] The agent asks a model at the AI gateway's internal listener; JWT and CEL checks run, then [8] the rate limit service checks the agent's daily token budget."
       - "[9] The LLM proxy sends the request to Gemini; [10] after a 429 the failover policy sends it to the GPU server."
       - "[11]–[13] A tool call on /mcp goes through the MCP proxy of the gateway to the ToolHive proxy, then to the MCP server over JSON-RPC."
-      - "[14] [15] The gateway exports GenAI metrics and spans to Alloy, which writes traces to Tempo and metrics to Prometheus."
+      - "[14] [15] The gateway exports GenAI spans to Alloy, which scrapes its metrics and writes traces to Tempo and metrics to VictoriaMetrics."
   - id: card-background
     title: "Background · what is set up before the request"
     color: amber
