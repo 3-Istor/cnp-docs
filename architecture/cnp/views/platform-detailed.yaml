@@ -240,7 +240,7 @@ cards:
     color: emerald
     lines:
       - "[1] [2] The user signs in to Keycloak and asks the agent, sending a user token. [3] The agent exchanges it for its own short token (or uses client_credentials when it acts alone)."
-      - "[4] The agent creates a SandboxClaim; the controller hands it a warm sandbox from the pool of the chosen tier. [5] [6] It sends commands through the sandbox router, which forwards them to the sandbox pod (gVisor here; Kata the same way)."
+      - "[4] The agent creates a SandboxClaim; the controller hands it the warm gVisor sandbox of the python pool (Kata has no pool and starts one). [5] [6] It sends commands through the sandbox router, which forwards them to the sandbox pod (gVisor here; Kata the same way)."
       - "[7] The agent asks a model at the AI gateway's internal listener; JWT and CEL checks run, then [8] the rate limit service checks the agent's daily token budget."
       - "[9] The LLM proxy sends the request to Gemini; [10] after a 429 the failover policy sends it to the GPU server."
       - "[11]–[13] A tool call on /mcp goes through the MCP proxy of the gateway to the ToolHive proxy, then to the MCP server over JSON-RPC."

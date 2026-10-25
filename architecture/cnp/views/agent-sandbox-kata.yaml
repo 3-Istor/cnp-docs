@@ -15,7 +15,6 @@ include:
   - g-sb-ns
   - g-sb-crd
   - sb-template-kata
-  - sb-warmpool
   - sb-claim
   - sb-svc
   - sb-sandbox
@@ -77,14 +76,14 @@ labels:
 notes:
   - {id: n-sb-node, text: "The node box is the K3s worker, itself a VM on an OpenStack server. Kata starts one more VM per sandbox inside it, so the server must expose its virtualisation to the node VM (nested virt), or the node must be bare metal."}
   - {id: n-sb-kata, text: "Each sandbox has its own guest kernel: a kernel exploit by the code stays inside a micro-VM. The price: about a hundred MB of RAM and a slower start per sandbox, plus nested virt, which OpenStack operators often leave off."}
-  - {id: n-sb-warm, text: "Warm pool matters more here: a micro-VM takes longer to boot than a gVisor sandbox, so a claim should take one already running."}
+  - {id: n-sb-warm, text: "No warm pool for Kata (D33): it would keep a micro-VM's RAM taken all the time. A claim cold-starts one, which takes longer than a gVisor sandbox."}
 
 cards:
   - id: card-steps
     title: "Request path · an agent runs code in a micro-VM"
     color: emerald
     lines:
-      - "[1] [2] As in the gVisor tier: the agent creates a SandboxClaim, the extensions controller binds it to a warm Sandbox."
+      - "[1] [2] The agent creates a SandboxClaim for the python-kata template. There is no warm pool for Kata (D33): the extensions controller creates the Sandbox from the template, a cold start."
       - "[3] [4] The agent sends the command through sandbox-router to the runtime server, inside the micro-VM."
       - "[5] The code's syscalls go to the guest kernel, inside the VM."
       - "[6] Devices (disk, network) are virtio: the guest exits to Cloud Hypervisor, a user-space process on the node."

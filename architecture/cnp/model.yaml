@@ -354,8 +354,8 @@ elements:
 
   - {id: sb-template, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxTemplate python", tech: "[podTemplate · networkPolicy]", desc: "Blueprint: image, runtimeClassName,<br>resources, network rules.<br>Why: admins set the safe defaults.", status: planned, target: IA-2}
   - {id: sb-template-kata, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxTemplate python-kata", tech: "[podTemplate · networkPolicy]", desc: "Same blueprint with runtimeClassName<br>kata, for untrusted code.<br>Why: pick the wall per agent.", status: planned, target: IA-2}
-  - {id: sb-warmpool, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxWarmPool python", tech: "[replicas 1 · OnReplenish]", desc: "Keeps sandboxes started in advance<br>from the template.<br>Why: no cold start for the agent.", status: planned, target: IA-2}
-  - {id: sb-claim, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxClaim <task>", tech: "[warmPoolRef · lifecycle]", desc: "One per task, created by the agent.<br>shutdownTime, ttlSecondsAfterFinished.<br>Why: sandboxes die with the task.", status: planned, target: IA-2}
+  - {id: sb-warmpool, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxWarmPool python", tech: "[1 replica · 512 Mi · OnReplenish]", desc: "Keeps one gVisor sandbox started from<br>the python template; none for Kata.<br>Why: no cold start for the agent.", status: planned, target: IA-2}
+  - {id: sb-claim, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "SandboxClaim <task>", tech: "[warmPoolRef or template · lifecycle]", desc: "One per task, created by the agent.<br>shutdownTime, ttlSecondsAfterFinished.<br>Why: sandboxes die with the task.", status: planned, target: IA-2}
   - {id: sb-svc, kind: backend, parent: g-sb-crd, icon: k8s-svc, title: "Service <id>", tech: "[headless · created by controller]", desc: "Stable DNS name for the sandbox:<br><id>.<ns>.svc.cluster.local.<br>Why: router and SDK find the pod.", status: planned, target: IA-2}
   - {id: sb-sandbox, kind: backend, parent: g-sb-crd, icon: k8s-crd, title: "Sandbox <id>", tech: "[agents.x-k8s.io/v1beta1]", desc: "One stateful pod with a stable name.<br>status: serviceFQDN, podIPs, Ready.<br>Why: the unit the controller runs.", status: planned, target: IA-2}
   - {id: sb-rbac, kind: security, parent: g-sb-guard-ns, icon: k8s-sa, title: "Role agent-sandbox-user", tech: "[RoleBinding · agent SA]", desc: "Agent may create and delete claims,<br>read their status, nothing else.<br>Why: least privilege for the agent.", status: planned, target: IA-2}
@@ -364,7 +364,7 @@ elements:
   - {id: sb-rc, kind: security, parent: g-sb-guard, icon: k8s-crd, title: "RuntimeClass gvisor", tech: "[handler runsc]", desc: "Tells containerd to start the pod<br>under gVisor instead of runc.<br>Why: one name selects the isolation.", status: planned, target: IA-2}
   - {id: sb-kpol, kind: security, parent: g-sb-guard, icon: kyverno, title: "ClusterPolicy sandbox-guard", tech: "[Kyverno · Enforce]", desc: "Agent pods: PSS restricted, no SA<br>token; code-running agents must use<br>gvisor or kata. Why: tier by risk.", status: planned, target: IA-2}
   - {id: sb-c-core, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Sandbox controller", tech: "[agent-sandbox-controller]", desc: "Creates Pod + Service per Sandbox;<br>pauses, resumes, deletes on time.<br>Why: one stateful pod per sandbox.", status: planned, target: IA-2}
-  - {id: sb-c-ext, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Extensions controllers", tech: "[template · warm pool · claim]", desc: "Fills the pool from the template,<br>binds each claim to a warm Sandbox.<br>Why: claims stay simple for agents.", status: planned, target: IA-2}
+  - {id: sb-c-ext, kind: backend, parent: g-sb-ctrl, icon: k8s-deploy, title: "Extensions controllers", tech: "[template · warm pool · claim]", desc: "Fills the warm pool, binds each claim<br>to a Sandbox (warm, or new for Kata).<br>Why: claims stay simple for agents.", status: planned, target: IA-2}
   - {id: sb-router, kind: backend, parent: g-sb-router, icon: k8s-svc, title: "sandbox-router", tech: "[sandbox-router-svc :8080]", desc: "Reverse proxy from the SDK to the<br>right sandbox pod.<br>Why: no port-forward with gVisor, Kata.", status: planned, target: IA-2}
   - {id: sb-kubelet, kind: backend, parent: g-sb-node, icon: kubernetes, title: "kubelet", tech: "[K3s agent]", desc: "Starts the pods scheduled on this<br>node and reports their status.<br>Already runs today."}
   - {id: sb-containerd, kind: backend, parent: g-sb-node, icon: docker, title: "containerd", tech: "[CRI · K3s embedded]", desc: "Pulls images, picks the runtime<br>handler from the RuntimeClass.<br>Already runs today."}
@@ -487,7 +487,7 @@ elements:
   - {id: ov-app, kind: backend, parent: ov-g-tenant, icon: k8s-pod, title: "App pods", tech: "[generic Helm chart]", desc: "Tenant workload; with the AI zone<br>it can call models via the gateway."}
   - {id: ov-db, kind: database, parent: ov-g-tenant, icon: cnpg, title: "PostgreSQL", tech: "[CloudNativePG]", desc: "One database cluster per app."}
   - {id: ov-g-agents, kind: group, parent: ov-z-cluster, color: amber, icon: k8s-ns, title: "AGENT RUNTIME", sub: "ns <project>-agents · egress: AI gateway only", status: planned, target: IA-2}
-  - {id: ov-sb-ctrl, kind: backend, parent: ov-g-agents, icon: kubernetes, title: "agent-sandbox", tech: "[Sandbox CRDs · warm pools · router]", desc: "Hands a warm sandbox per task and<br>picks its tier from the template."}
+  - {id: ov-sb-ctrl, kind: backend, parent: ov-g-agents, icon: kubernetes, title: "agent-sandbox", tech: "[Sandbox CRDs · warm pools · router]", desc: "Hands a warm gVisor sandbox (pool of 1)<br>or starts a Kata one, per task."}
   - {id: ov-g-tier-runc, kind: group, parent: ov-g-agents, color: slate, icon: openstack, title: "TIER 1 · STANDARD", sub: "runc + seccomp"}
   - {id: ov-agent, kind: backend, parent: ov-g-tier-runc, icon: python, title: "Agent pod", tech: "[kagent BYO · LangGraph, ADK…]", desc: "Plans, calls models, tools and<br>other agents. No key, no shell."}
   - {id: ov-g-tier-gvisor, kind: group, parent: ov-g-agents, color: indigo, icon: openstack, title: "TIER 2 · GVISOR", sub: "user-space kernel"}
@@ -923,6 +923,7 @@ references:
 
   - {id: r-sb-pool-template, from: sb-warmpool, to: sb-template, kind: sandboxTemplateRef}
   - {id: r-sb-claim-pool, from: sb-claim, to: sb-warmpool, kind: warmPoolRef}
+  - {id: r-sb-claim-template-kata, from: sb-claim, to: sb-template-kata, kind: sandboxTemplateRef}
   - {id: r-sb-claim-sandbox, from: sb-claim, to: sb-sandbox, kind: status.sandbox}
   - {id: r-sb-sandbox-svc, from: sb-sandbox, to: sb-svc, kind: owns}
   - {id: r-sb-template-rc, from: sb-template, to: sb-rc, kind: runtimeClassName}

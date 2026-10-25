@@ -105,7 +105,7 @@ cards:
       - "[D] kagent turns each Agent into a Deployment and publishes its A2A endpoint and Agent Card."
       - "[E] [F] The agentgateway controller turns routes and AgentgatewayPolicy into the proxy's configuration."
       - "[G] Kyverno checks every pod at admission: restricted security context, the right RuntimeClass per tier, signed images only."
-      - "[H] agent-sandbox keeps warm sandboxes ready per tier. [I] The CMP creates the agent's Keycloak client."
+      - "[H] agent-sandbox keeps one warm gVisor sandbox ready (none for Kata). [I] The CMP creates the agent's Keycloak client."
       - "[J] The Secrets Operator mounts the Gemini keys in the gateway only. [K] ToolHive checks each MCP server against the registry. [L] Argo CD syncs EKS and GKE the same way."
   - id: card-isolation
     title: "Isolation boundaries · what keeps what apart"
