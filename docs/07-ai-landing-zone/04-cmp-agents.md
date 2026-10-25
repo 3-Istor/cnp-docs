@@ -82,7 +82,7 @@ référence visuelle ; ce document reste la référence fonctionnelle.
 - **Carte « Niveau de données ».** Cloud ou Local, avec une phrase sur ce que ça implique
   (« Local : vos données ne quittent pas le homelab ; les réponses sont plus lentes »). Un
   projet critical est forcé en Local.
-- **Carte « Budget ».** Jauge des tokens consommés aujourd'hui, coût estimé en euros, seuil
+- **Carte « Budget ».** Jauge des tokens consommés aujourd'hui, coût au prix public de Gemini, seuil
   d'alerte. Reprend `BudgetGauge` et `BudgetForm`.
 - **Carte « Modèles ».** Modèles autorisés pour le projet, et l'état de chaque backend
   (Gemini : quota restant ; serveur GPU : en ligne ou « service indisponible »).
@@ -198,7 +198,7 @@ Routes proposées, sur le modèle des API existantes (`/api/projects/...`) :
 {"client_id": "app-<projet>-<app>", "gateway_url": "http://<service de la gateway>:8080", "secret_ref": "kvv2/projects/<projet>/apps/<app>/ai-oidc"}
 
 // GET /api/projects/{projet}/ai/usage?period=1d|7d|30d → 200
-{"items": [{"azp": "app-<projet>-<app>", "tokens_in": 12034, "tokens_out": 3400, "requests": 41, "refused": 2, "budget": 50000, "list_value_eur": 0.02}]}
+{"items": [{"azp": "app-<projet>-<app>", "tokens_in": 12034, "tokens_out": 3400, "requests": 41, "refused": 2, "budget": 50000, "cost_eur": 0.02}]}
 
 // GET /api/ai/backends → 200
 {"items": [{"name": "gemini-1", "kind": "gemini", "status": "ok", "quota_left_pct": 62}, {"name": "gpu-server", "kind": "gpu", "status": "unavailable"}]}
@@ -274,4 +274,4 @@ devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'ag
 | Premiers templates d'agent | RAG sur une documentation, puis agent LangGraph vide (spec D26) |
 | Onglet « Assistants » | Fusionné dans l'onglet « IA » (§4) : proposé, à valider |
 
-Reste à valider par Brian : les maquettes et la fusion de l'onglet « Assistants ».
+Maquettes validées par Brian le 2026-10-25. Reste à valider : la fusion de l'onglet « Assistants ».

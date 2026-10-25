@@ -30,7 +30,25 @@ projet.
 | Prix public par million de tokens | Fichier versionné `finops/ai-prices.yaml` (dans le dépôt du TCO du plan FinOps) | modèle, date d'effet |
 | Coût du serveur GPU | TCO on-prem du plan FinOps (énergie et amortissement), quand il existe | — |
 
-## 3. Lignes FOCUS
+## 3. Le coût de l'IA est compté au prix public
+
+**Décision (Brian, 2026-10-25) : la consommation d'IA est valorisée au tarif payant publié
+par Google pour Gemini, même quand le niveau gratuit est utilisé.** C'est ce chiffre que
+montrent les budgets, les dashboards et les exports : il dit ce que coûte vraiment l'usage.
+La facture réelle (0 € au niveau gratuit) ne sert qu'à la réconciliation. Le plan FinOps porte
+la même règle (D-F8).
+
+| Backend | Coût affiché (`x_cost_eur`) | Base (`x_pricing_basis`) |
+|---|---|---|
+| Gemini | tokens en entrée × prix d'entrée + tokens en sortie × prix de sortie, au tarif payant du modèle, converti en euros au taux BCE du jour | `public_price` |
+| Serveur GPU | part du TCO on-prem du plan FinOps, au prorata des tokens ; 0 tant que le TCO n'existe pas | `tco` |
+
+Les prix vivent dans `finops/ai-prices.yaml`, à côté du TCO : par modèle, prix par million de
+tokens en entrée et en sortie, devise, date d'effet et lien vers la
+[page des tarifs de l'API Gemini](https://ai.google.dev/gemini-api/docs/pricing). Un
+changement de prix est une PR, avec sa date d'effet.
+
+## 4. Lignes FOCUS
 
 L'ingesteur du plan FinOps reçoit une source de plus, `ai_gateway`, qui écrit chaque jour une
 ligne par `azp`, modèle et backend :
@@ -40,39 +58,36 @@ ligne par `azp`, modèle et backend :
 | `ServiceCategory` | `AI and Machine Learning` |
 | `ProviderName`, `ServiceName` | `Google`, `Gemini API` ; ou `CNP`, `Serveur GPU` |
 | `ConsumedQuantity`, `ConsumedUnit` | nombre de tokens, `Tokens` |
-| `ListCost` | tokens × prix public du jour (`ai-prices.yaml`) : ce que l'usage coûterait au niveau payant |
-| `BilledCost`, `EffectiveCost` | 0 pour le niveau gratuit de Gemini ; part du TCO pour le serveur GPU, au prorata des tokens, quand le TCO existe |
+| `ListCost` | tokens × tarif payant du jour (`ai-prices.yaml`) |
+| `BilledCost` | ce que Google facture réellement : 0 au niveau gratuit |
+| `x_cost_eur`, `x_pricing_basis` | le coût affiché par CNP (§3) et sa base |
 | `Tags` | `cnp_project`, `cnp_app` ou `cnp_agent` (nouvelle dimension), `cnp_env` |
 | `x_allocation_method` | `direct` |
 | `x_source`, `x_is_final` | `ai_gateway` ; définitif à J+1 |
 
-Afficher `ListCost` à côté d'un `BilledCost` nul répond à la question « combien coûterait
-cette démo si on passait au payant ». Le dashboard le présente comme une **valeur au prix
-public**, jamais comme une dépense.
-
-## 4. Écrans
+## 5. Écrans
 
 | Où | Quoi | Phase |
 |---|---|---|
-| Onglet « IA » du projet | Jauge des tokens du jour par agent ou app, face à son budget ; valeur au prix public du mois | 1 (lu dans VictoriaMetrics) |
-| FinOps, vue d'ensemble | Catégorie « IA » dans le filtre et la ventilation par catégorie de service ; KPI « tokens du mois » et « valeur au prix public » | quand `cost_line_items` existe (I2 du plan FinOps) |
+| Onglet « IA » du projet | Jauge des tokens du jour par agent ou app, face à son budget ; coût IA du mois au prix public | 1 (lu dans VictoriaMetrics) |
+| FinOps, vue d'ensemble | Catégorie « IA » dans le filtre et la ventilation par catégorie de service ; KPI « tokens du mois » et « coût IA (prix public) », avec « facturé : 0 € » en petit tant que le niveau gratuit est utilisé | quand `cost_line_items` existe (I2 du plan FinOps) |
 | FinOps, explorateur | Regroupement par agent (`cnp_agent`) et par modèle | idem |
-| FinOps, budgets | Le budget mensuel du projet inclut la part d'IA facturée (aujourd'hui 0 pour Gemini gratuit) | idem |
-| Page d'un agent (CMP) | Tokens du jour, budget, coût et valeur au prix public, tendance sur 30 jours | 2 |
+| FinOps, budgets | Le budget mensuel du projet compte le coût IA au prix public | idem |
+| FinOps, réconciliation | Coût au prix public face à la facture réelle de Google, écart visible | idem |
+| Page d'un agent (CMP) | Tokens du jour, budget, coût au prix public, tendance sur 30 jours | 2 |
 | Grafana | Tableau « IA » : tokens par projet, agent, modèle ; 429 ; refus ; latence | 1 |
 
-## 5. Avant que le plan FinOps soit implémenté
+## 6. Avant que le plan FinOps soit implémenté
 
 En phase 1, la CMP lit directement VictoriaMetrics pour l'onglet « IA » du projet
 (`GET /api/projects/{projet}/ai/usage`). Les lignes FOCUS n'arrivent qu'avec l'itération I2
-du plan FinOps. Le format ci-dessus est à ajouter à ce plan comme source `ai_gateway`, et la
-ligne « fournisseurs LLM » de ses sources SaaS devient inutile pour les appels qui passent par
-la gateway.
+du plan FinOps. Le plan FinOps a reçu la source `ai_gateway` et la décision D-F8 le 2026-10-25 ; sa ligne
+« fournisseurs LLM » ne couvre plus que les appels qui ne passent pas par la gateway.
 
-## 6. Vérifications
+## 7. Vérifications
 
 | ID | Phase | Vérification | Attendu |
 |---|---|---|---|
 | VF1.1 | 1 | 100 appels d'un agent de test, puis l'onglet « IA » du projet | Les tokens affichés égalent ceux des métriques de la gateway, à 1 % près |
-| VF1.2 | 1 | Valeur au prix public | Tokens × prix de `ai-prices.yaml`, recalculable à la main |
+| VF1.2 | 1 | Coût au prix public | Tokens en entrée et en sortie × prix de `ai-prices.yaml`, recalculable à la main |
 | VF2.1 | I2 du plan FinOps | Lignes `ai_gateway` dans `cost_line_items` | Une ligne par `azp`, modèle, backend et jour ; ingestion idempotente (rejouer J-1 ne duplique rien) |
