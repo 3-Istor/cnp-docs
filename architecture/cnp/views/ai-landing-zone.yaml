@@ -1,7 +1,6 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: landscape
-state: diff
 title: "CNP · AI landing zone · Tech stack"
 subtitle: "What is the platform built with today, and what do the landing zone fixes (P0–P2) and the AI landing zone (IA-1–IA-3) add?"
 meta:
