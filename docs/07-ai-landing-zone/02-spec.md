@@ -1,6 +1,6 @@
 # Spec de référence de la landing zone IA
 
-> **Statut : brouillon v0.3 du 2026-10-25, à valider.** Rien n'est déployé. Cette page est la
+> **Statut : brouillon v0.4 du 2026-10-25, à valider.** Rien n'est déployé. Cette page est la
 > source de vérité des décisions et des conventions : en cas de contradiction avec
 > `00-index.md`, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
 > sont dans [03-phases.md](03-phases.md).
@@ -86,6 +86,8 @@ Ces noms viennent du modèle Noodle. Les noms de CRD et de champs propres à age
 | Claims du jeton | `iss` = `realms/3istor` ; `aud` = `ai-gateway` ; `sub` ; `azp` ; `project` (issu du groupe) ; `scope` ; `exp` = émission + 5 min |
 | Après un token exchange | `sub` = l'utilisateur, `azp` = le client de l'agent ; les scopes ne s'élargissent jamais. Exchange autorisé seulement d'un client agent vers `ai-gateway` (Client Policy `exchange-guard`). |
 | Secret client (phase 1) | Vault `kvv2/projects/<projet>/agents/<nom>`, synchronisé en Secret `agent-oidc` |
+| Client d'une app avec accès IA | `app-<projet>-<app>`, confidentiel ; secret dans Vault `kvv2/projects/<projet>/apps/<app>/ai-oidc` ; même jeton de 5 minutes et même audience `ai-gateway` |
+| Audiences | `ai-gateway` (gateway), `cmp-api` (API de la CMP), `cmp-mcp` (serveur MCP de la CMP) ; un jeton ne vaut que pour son destinataire |
 
 ### Réseau et namespaces
 
@@ -204,36 +206,61 @@ d'être acceptées.
 | Federated client authentication | Fonction récente de Keycloak 26.6 | Secret client synchronisé depuis Vault | Le jeton du ServiceAccount n'est pas accepté |
 | Webhook Llama Guard | Service maison | `promptGuard` seul (regex), en signalant la limite | L'adaptateur ajoute une latence inacceptable |
 
-## 9. Points ouverts
+## 9. Décisions par défaut (anciens points ouverts)
 
-1. **Granularité des namespaces d'agents.** Le modèle dit « 1 namespace par agent » ; la vue
-   sandbox suppose un namespace d'agents par projet. Proposition : un par agent (quotas et
-   NetworkPolicy plus fins).
-2. **Claim `data_level`.** La vue Modèles copie ce claim dans l'en-tête `x-cnp-data` pour
-   choisir la route Local, mais il n'est pas dans la liste des claims du jeton (§4). À ajouter
-   au jeton, ou à remplacer par l'appartenance à un groupe.
-3. **Clé du budget.** Quel claim sert de clé au budget par agent : `azp` (le client de l'agent)
-   est le candidat naturel. À confirmer avec le rate limit d'agentgateway.
-4. **Conditions de Gemini.** Les conditions de l'API imposent le niveau payant quand l'API est
-   mise à disposition d'utilisateurs de l'EEE, du Royaume-Uni ou de la Suisse, et le contenu
-   du niveau gratuit peut être relu par des humains. Les limites sont par projet Google Cloud,
-   pas par clé : plusieurs clés d'un même projet n'ajoutent rien. La rotation entre comptes
-   n'est pas traitée dans ces conditions ; les conditions générales des API Google n'ont pas
-   été lues. À relire avant d'ouvrir la démo.
-5. **Secret `agent-oidc`.** Le modèle le dessine encore, alors que la cible de D3 le supprime.
-   Il ne doit rester qu'en phase 1.
-6. **Vues à refaire.** `ai-gateway`, `ai-gateway-call`, `ai-gateway-internals`,
+Pour que la phase 1 puisse être implémentée sans décision en cours de route, chaque ancien
+point ouvert reçoit une valeur par défaut. Statut **proposé** : Brian les valide ou les change
+en une passe ; l'agent d'implémentation les applique telles quelles.
+
+| ID | Sujet | Décision par défaut | Phase |
+|---|---|---|---|
+| D19 | Namespaces d'agents | Un namespace par agent, nommé `agent-<projet>-<nom>`, avec le label `cnp.3istor.com/project: <projet>`. Il hérite ainsi du default-deny en entrée par projet que `cnp-project-base` pose déjà. | 2 |
+| D20 | Route Local | Pas de claim `data_level`. La gateway choisit la route Local quand le claim `project` appartient à la liste des projets `local`, générée depuis les `ProjectRecord` (`spec.ai.dataLevel`). | 1 |
+| D21 | Clé du budget | Le claim `azp` (le client de l'agent ou de l'app). Plafond dur par `azp` et par jour à la gateway ; pour le projet, une alerte Grafana sur la somme, sans plafond dur. | 1 |
+| D22 | Emplacement des politiques de la gateway | Dans le namespace `ai-gateway`, rendues par un chart `charts/cnp-ai-policies` du dépôt K3s et un ApplicationSet plateforme `cnp-ai-policies` (une Application par `ProjectRecord` qui a un bloc `spec.ai`, AppProject plateforme). Un tenant ne peut pas les modifier. | 1 |
+| D23 | Plusieurs clés Gemini | Un backend Gemini par clé, essayés dans l'ordre sur 429, puis le serveur GPU. Clés dans Vault sous `kvv2/platform/ai/gemini/<n>`, synchronisées dans `ai-gateway`. | 1 |
+| D24 | Rétention | Traces Tempo : 7 jours. Logs d'accès de la gateway : 30 jours (D14). Prompts et réponses : jamais stockés, sauf opt-in du projet. | 1 |
+| D25 | Chat de test de la CMP | Ses tokens comptent dans le budget de l'agent ; pas de budget séparé. | 2 |
+| D26 | Premiers templates d'agent | (1) agent de questions sur une documentation avec RAG (UC7), (2) agent LangGraph vide. | 1 puis 2 |
+| D27 | Version de Keycloak | Le cluster est en 26.5.5. La phase 1 utilise un secret client depuis Vault ; la montée en 26.6 ou plus est la première tâche de la phase 2, avant la federated client authentication (D3). | 2 |
+| D28 | Où tester | Chaque brique est d'abord installée sur le cluster de lab K3s, puis sur le cluster principal après V-checks. Sans cluster de lab, un cluster k3d local. | 1 |
+| D29 | Framework des templates | LangGraph (Python), image construite par la CI GitHub Actions comme les apps. | 1 |
+| D30 | Tempo | Chart Grafana `tempo` en mode monolithique dans le namespace `observability`, stockage sur volume, 7 jours. | 1 |
+| D31 | Application UC7 | Une app fullstack du catalogue existant (FastAPI, React, PostgreSQL avec pgvector), nommée `cnp-docs-assistant`, dans un projet `cnp-ai` de niveau demo. Elle indexe cnp-docs et cnp-agent-kit et cite ses sources. | 1 |
+
+**Restent hors du champ de l'agent d'implémentation :**
+
+1. **Conditions de Gemini (Brian).** Les conditions de l'API imposent le niveau payant quand
+   l'API est mise à disposition d'utilisateurs de l'EEE, du Royaume-Uni ou de la Suisse, et le
+   contenu du niveau gratuit peut être relu par des humains. Les limites sont par projet
+   Google Cloud, pas par clé. La rotation entre comptes n'est pas traitée dans les conditions
+   de l'API ; les conditions générales des API Google n'ont pas été lues. À relire avant
+   d'ouvrir la démo à d'autres personnes.
+2. **Vues à refaire.** `ai-gateway`, `ai-gateway-call`, `ai-gateway-internals`,
    `mcp-tools-internals`, `platform-detailed` et `platform-global` décrivent l'intérieur
-   d'Agent Router (sidecar ExtProc, `AIGatewayRoute`, `MCPRoute`…) : changer le nom ne suffit
-   pas, il faut les redessiner pour agentgateway avec les CRD confirmés par l'essai de la
-   phase 1. D'ici là, elles sont marquées « option A, remplacée » dans `00-index.md`.
-   `genai-observability-internals` et `platform-detailed` dessinent Prometheus : renommer
-   l'élément `ob-prom` en VictoriaMetrics, qui accepte le remote write d'Alloy. Ensuite,
-   régénérer avec `architecture/build-diagrams.sh` (il faut `noodle`, `drawio` et `pngquant`).
+   d'Agent Router : il faut les redessiner pour agentgateway avec les ressources confirmées par
+   la tâche T1.1. `genai-observability-internals` et `platform-detailed` dessinent Prometheus.
    Les vues de l'option B (`platform-ai-stack`, `platform-ai-full`, `platform-ai-simple`) sont
    à jour.
-7. **`00-index.md`.** Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
+3. **`00-index.md`.** Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
    validée.
-8. **Rétention et RGPD des traces.** Non traité au-delà de la suppression des prompts.
-9. **Côté CMP.** Les points ouverts propres à la CMP (realm des utilisateurs d'une app,
-   audience du serveur MCP, chat de test) sont dans [04-cmp-agents.md](04-cmp-agents.md).
+4. **Côté CMP.** Les choix propres à la CMP sont dans [04-cmp-agents.md](04-cmp-agents.md).
+
+## 10. État constaté du cluster (2026-10-25)
+
+Relevé dans les dépôts K3s, cnp-project-base et CMP, sans accès au cluster. La tâche T0.1
+vérifie ces points sur le cluster avant toute modification.
+
+| Composant | Version ou état dans Git | Conséquence |
+|---|---|---|
+| Keycloak | 26.5.5 (chart codecentric `keycloakx` 7.2.2) | Token exchange standard disponible ; federated client authentication non (D27) |
+| Cilium | 1.20.0 | |
+| Envoy Gateway | 1.9.0 | Reste l'entrée des apps (D1) |
+| Kyverno | chart 3.8.2 ; PSS restricted en **Audit** | G8 : passer en Enforce (T0.3) |
+| Default-deny entre tenants | Politique en entrée par projet dans `cnp-project-base`, derrière l'option `networkIsolation` ; egress ouvert | G1 partiellement traité : activer partout et fermer l'egress (T0.2) |
+| CloudNativePG | chart 0.29.0, plugin Barman Cloud 0.8.1 installé | Sauvegarde à configurer et tester par base d'app (T0.5) |
+| VictoriaMetrics | chart single 0.48.0, vmalert 0.46.0 | Base des métriques GenAI (D7) |
+| Alloy | chart 1.11.1 | Récepteur OTLP à ajouter (T1.3) |
+| Grafana, Loki | charts 10.5.15 et 7.3.0 | |
+| Tempo | absent | À installer (D30) |
+| CMP | décode les JWT du realm sans vérifier l'audience | G7 : à fermer en phase 1 (T1.9) |
