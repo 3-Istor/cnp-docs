@@ -94,9 +94,9 @@ référence visuelle ; ce document reste la référence fonctionnelle.
 
 Sur le modèle du `DeploymentStepper` des apps, en six étapes :
 
-1. **Template.** Agent vide (LangGraph), agent de questions sur une doc (RAG), agent de
-   diagnostic de déploiement (UC3), agent de revue de PR (UC11). Le template crée le dépôt avec
-   le code, le Dockerfile et `deploy/`.
+1. **Template.** Agent déclaratif vide (consignes, modèle, outils, sans code), agent de questions sur une doc (RAG), agent de
+   diagnostic de déploiement (UC3), agent de revue de PR (UC11). Un agent déclaratif n'a pas de dépôt de code : la CMP écrit son CR `Agent`. Un agent BYO
+   (LangGraph) a un dépôt avec le code, le Dockerfile et `deploy/`.
 2. **Identité.** Nom, description, propriétaire (par défaut le créateur).
 3. **Modèle.** Choix parmi les modèles autorisés du projet, et plafond d'étapes par tâche.
 4. **Outils.** Liste du registre, chaque outil avec ses badges de risque (« lit du contenu non
@@ -271,7 +271,7 @@ devient alors `confirm`, une approbation dans la CMP. Le journal enregistre l'ag
 | Jetons des agents vers la CMP | Audiences séparées `cmp-api` et `cmp-mcp`, client scope `cmp-tools` (§8). `cmp-api` en phase 1 (T1.9), `cmp-mcp` en phase 2. |
 | Emplacement des politiques par agent | Namespace `ai-gateway`, chart `cnp-ai-policies` (spec D22) |
 | Budget du chat de test | Compté dans le budget de l'agent (spec D25) |
-| Premiers templates d'agent | RAG sur une documentation, puis agent LangGraph vide (spec D26) |
+| Premiers templates d'agent | Agent kagent déclaratif vide, puis agent de questions sur une documentation (spec D26, D29) |
 | Onglet « Assistants » | Fusionné dans l'onglet « IA » (§4) : proposé, à valider |
 
 Maquettes validées par Brian le 2026-10-25. Reste à valider : la fusion de l'onglet « Assistants ».

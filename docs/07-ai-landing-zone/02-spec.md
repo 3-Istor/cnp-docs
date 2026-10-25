@@ -1,6 +1,6 @@
 # Spec de référence de la landing zone IA
 
-> **Statut : brouillon v0.4 du 2026-10-25, à valider.** Rien n'est déployé. Cette page est la
+> **Statut : brouillon v0.5 du 2026-10-25, à valider.** Rien n'est déployé. Cette page est la
 > source de vérité des décisions et des conventions : en cas de contradiction avec
 > `00-index.md`, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
 > sont dans [03-phases.md](03-phases.md).
@@ -105,7 +105,7 @@ Ces noms viennent du modèle Noodle. Les noms de CRD et de champs propres à age
 | Sujet | Convention |
 |---|---|
 | Agents | Image libre (LangGraph, ADK…), runc et seccomp `RuntimeDefault`, PSS `restricted`, non-root, sans shell ni outil d'exécution de code |
-| Sandbox | `SandboxTemplate` `python` (gVisor) et `python-kata` ; `SandboxWarmPool` de 1 ; une `SandboxClaim` par tâche, avec durée de vie |
+| Sandbox | `SandboxTemplate` `python` (gVisor) et `python-kata` ; pas de `SandboxWarmPool` (D33) ; une `SandboxClaim` par tâche, avec durée de vie |
 | Limites | `ResourceQuota` et `LimitRange` par namespace d'agent |
 | Admission | ClusterPolicy Kyverno `sandbox-guard` : PSS restricted, pas de token de ServiceAccount monté inutilement, RuntimeClass imposée selon le niveau de l'agent, images signées seulement |
 
@@ -139,9 +139,33 @@ Exigences pour chaque service exposé :
 - HTTPS. WireGuard n'est pas nécessaire si le cluster et le serveur sont sur le même réseau
   local.
 
-Si Ollama est retenu, le modèle prévoit `NUM_PARALLEL=2`, `MAX_LOADED_MODELS=1`,
-`KEEP_ALIVE=30m` et un cache KV en `q8_0` pour tenir dans 16 Go de VRAM. Avec plusieurs
-services sur le même GPU, les premières requêtes après un changement de modèle seront lentes.
+### Pile proposée pour le serveur GPU (D34)
+
+Une proposition, pas une obligation : le contrat ci-dessus reste la seule interface. Tailles
+publiées des modèles quantifiés en Q4_K_M, plus le cache de contexte : **ordres de grandeur, à
+mesurer avec `nvidia-smi`** (V1.15).
+
+| Rôle | Logiciel | Modèle proposé | VRAM environ | Pourquoi |
+|---|---|---|---|---|
+| Texte et appels d'outils | Ollama | `qwen3.5:9b` (alternative plus légère : `granite4.2:8b`) | 6,6 Go + 1 à 2 Go de contexte (5,3 Go pour Granite) | Les deux gèrent le function calling ; un modèle de 1B ne suffit pas pour choisir et remplir des outils de façon fiable |
+| Garde | Ollama | `llama-guard3:1b` | 1 Go | Suffisant pour classer un prompt ; 4 fois moins que la version 8B |
+| Embeddings | Ollama | `nomic-embed-text` | 0,3 Go | Petit et rapide, pour le RAG d'UC7 |
+| Image (optionnel) | ComfyUI | un modèle de la famille SDXL, chargé à la demande | 7 à 8 Go en pointe | Ne tient pas en même temps que le texte : à garder pour plus tard |
+
+**Profil A, recommandé pour démarrer : texte, garde et embeddings chargés en permanence**,
+environ 9 à 10 Go sur 16, ce qui laisse de la marge au contexte et à deux requêtes en
+parallèle. Réglages Ollama : `OLLAMA_MAX_LOADED_MODELS=3` (les trois modèles restent chargés),
+`OLLAMA_NUM_PARALLEL=2`, `OLLAMA_KEEP_ALIVE=-1`, `OLLAMA_CONTEXT_LENGTH=8192`, cache KV en
+`q8_0`. **Profil B, plus tard : ajouter l'image.** Pendant une génération d'image, le modèle
+de texte est déchargé : les requêtes de texte attendent ou partent sur Gemini.
+
+**Raccordement au cluster.** Ollama et ComfyUI n'écoutent que sur `127.0.0.1`. Caddy, seul
+exposé, sert HTTPS sur le réseau local (certificat de son autorité interne, distribuée au
+cluster) et route `/ollama/` vers Ollama et `/image/` vers ComfyUI. Il exige un jeton
+`Authorization: Bearer` (un par consommateur : gateway, webhook de garde, serveur MCP
+d'image), stocké dans Vault, et n'accepte que les IP des nœuds du cluster. Le pare-feu de
+l'hôte n'ouvre que le port 443 au sous-réseau du cluster. Côté cluster, la règle Cilium
+`ai-egress` n'autorise que cette IP en `/32` et le port 443. Pas de WireGuard en réseau local.
 
 ## 6. Table de correspondance des codes
 
@@ -188,7 +212,7 @@ Protocole, en phase 1 puis à chaque nouvelle brique :
 | Tempo | 1 | à mesurer | |
 | kagent | 2 | à mesurer | |
 | ToolHive (opérateur et un serveur) | 2 | à mesurer | |
-| agent-sandbox (contrôleur et warm pool de 1) | 2 | à mesurer | |
+| agent-sandbox (contrôleur, sans warm pool) | 2 | à mesurer | |
 | **Total** | | | |
 
 ## 8. Plans B
@@ -202,7 +226,7 @@ d'être acceptées.
 | agentgateway | Projet jeune, porté surtout par Solo.io | Agent Router (suffisant tant qu'il n'y a pas d'A2A ni de guardrails) ou LiteLLM | L'essai ne passe pas V1.3 à V1.8 |
 | kagent | Projet CNCF Sandbox, consommation mémoire inconnue | Un Deployment simple avec un SDK A2A | `ModelConfig` ne peut pas pointer vers la gateway, ou la RuntimeClass n'est pas imposable |
 | ToolHive | API récente | Un Deployment du serveur MCP derrière la gateway | Un serveur tiers ne démarre pas sous les contraintes de sécurité |
-| agent-sandbox | API en `v1beta1` | RuntimeClass gVisor sur un Pod ou un Job | Le warm pool ne tient pas dans le budget mémoire |
+| agent-sandbox | API en `v1beta1` | RuntimeClass gVisor sur un Pod ou un Job | Le contrôleur ne tient pas dans le budget mémoire |
 | Federated client authentication | Fonction récente de Keycloak 26.6 | Secret client synchronisé depuis Vault | Le jeton du ServiceAccount n'est pas accepté |
 | Webhook Llama Guard | Service maison | `promptGuard` seul (regex), en signalant la limite | L'adaptateur ajoute une latence inacceptable |
 
@@ -218,24 +242,27 @@ en une passe ; l'agent d'implémentation les applique telles quelles.
 | D20 | Route Local | Pas de claim `data_level`. La gateway choisit la route Local quand le claim `project` appartient à la liste des projets `local`, générée depuis les `ProjectRecord` (`spec.ai.dataLevel`). | 1 |
 | D21 | Clé du budget | Le claim `azp` (le client de l'agent ou de l'app). Plafond dur par `azp` et par jour à la gateway ; pour le projet, une alerte Grafana sur la somme, sans plafond dur. | 1 |
 | D22 | Emplacement des politiques de la gateway | Dans le namespace `ai-gateway`, rendues par un chart `charts/cnp-ai-policies` du dépôt K3s et un ApplicationSet plateforme `cnp-ai-policies` (une Application par `ProjectRecord` qui a un bloc `spec.ai`, AppProject plateforme). Un tenant ne peut pas les modifier. | 1 |
-| D23 | Plusieurs clés Gemini | Un backend Gemini par clé, essayés dans l'ordre sur 429, puis le serveur GPU. Clés dans Vault sous `kvv2/platform/ai/gemini/<n>`, synchronisées dans `ai-gateway`. | 1 |
+| D23 | Plusieurs clés Gemini | Toutes les clés dans le même groupe de backends, équilibrées par agentgateway (P2C, ce que décrit sa doc) ; sur 429, la requête est rejouée sur une autre clé, puis sur le serveur GPU quand toutes saturent. Clés dans Vault sous `kvv2/platform/ai/gemini/<n>`, synchronisées dans `ai-gateway`. | 1 |
 | D24 | Rétention | Traces Tempo : 7 jours. Logs d'accès de la gateway : 30 jours (D14). Prompts et réponses : jamais stockés, sauf opt-in du projet. | 1 |
 | D25 | Chat de test de la CMP | Ses tokens comptent dans le budget de l'agent ; pas de budget séparé. | 2 |
-| D26 | Premiers templates d'agent | (1) agent de questions sur une documentation avec RAG (UC7), (2) agent LangGraph vide. | 1 puis 2 |
+| D26 | Premiers templates d'agent | (1) agent kagent déclaratif vide (consignes, modèle, outils), (2) agent de questions sur une documentation (UC7 sous forme d'agent). L'app UC7 de la phase 1 n'est pas un template d'agent (D31). | 2 |
 | D27 | Version de Keycloak | Le cluster est en 26.5.5. La phase 1 utilise un secret client depuis Vault ; la montée en 26.6 ou plus est la première tâche de la phase 2, avant la federated client authentication (D3). | 2 |
-| D28 | Où tester | Chaque brique est d'abord installée sur le cluster de lab K3s, puis sur le cluster principal après V-checks. Sans cluster de lab, un cluster k3d local. | 1 |
-| D29 | Framework des templates | LangGraph (Python), image construite par la CI GitHub Actions comme les apps. | 1 |
+| D28 | Où tester | Le dépôt K3s décrit deux clusters : le principal (API `192.168.1.212`) et un cluster de lab (API `192.168.1.217`). Chaque nouvelle brique est d'abord installée sur le lab ; elle ne passe sur le principal qu'une fois ses vérifications réussies. Si le lab n'est pas disponible, un cluster k3d sur la machine de l'agent d'implémentation. | 1 |
+| D29 | Comment s'écrit un agent | Par défaut, un agent **kagent déclaratif** : un CR `Agent` de type `Declarative` (consignes, `ModelConfig`, outils MCP), sans code ; la boucle est fournie par kagent. Pour une logique que le déclaratif ne sait pas exprimer, un agent **BYO** : une image écrite avec LangGraph (Python), construite par la CI comme les apps. Dans les deux cas, le CR `Agent` sert à déployer l'agent. | 2 |
 | D30 | Tempo | Chart Grafana `tempo` en mode monolithique dans le namespace `observability`, stockage sur volume, 7 jours. | 1 |
+| D32 | Cas limites du budget | Le budget est vérifié avant la requête (réservation d'une estimation) et compté après, avec l'usage réel. Une fois épuisé, toute requête reçoit 429 jusqu'au lendemain : pas de contournement. Cas limites acceptés : la dernière requête admise peut dépasser le reste (une réponse en streaming n'est pas coupée) ; des requêtes parallèles peuvent dépasser ensemble ; un prompt refusé par les guardrails a déjà passé le contrôle de budget (le rate limit s'exécute avant `promptGuard`). Bornes : `max_tokens` plafonné à 4 096 par requête et au plus 30 requêtes par minute par agent (limiteur local). Si le service de rate limit est injoignable, la gateway refuse (fail-closed). Jour compté en UTC. Ces trois comportements sont vérifiés à l'essai T1.1 ; si agentgateway ne sait pas en faire un, l'agent d'implémentation le signale. | 1 |
+| D33 | Warm pool de sandbox | Aucun : un sandbox démarre à la demande, en quelques secondes, pour tenir dans le budget mémoire. À reconsidérer si le démarrage gêne. | 2 |
+| D34 | Pile du serveur GPU | Profil A du §5 : Ollama avec `qwen3.5:9b`, `llama-guard3:1b`, `nomic-embed-text`, derrière Caddy ; l'image plus tard. | 1 |
+| D35 | Limite d'images | Au plus 20 appels de `generate_image` par agent et par jour, compteur de la gateway ; valorisés au TCO du serveur GPU. | 2 |
 | D31 | Application UC7 | Une app fullstack du catalogue existant (FastAPI, React, PostgreSQL avec pgvector), nommée `cnp-docs-assistant`, dans un projet `cnp-ai` de niveau demo. Elle indexe cnp-docs et cnp-agent-kit et cite ses sources. | 1 |
 
 **Restent hors du champ de l'agent d'implémentation :**
 
-1. **Conditions de Gemini (Brian).** Les conditions de l'API imposent le niveau payant quand
-   l'API est mise à disposition d'utilisateurs de l'EEE, du Royaume-Uni ou de la Suisse, et le
-   contenu du niveau gratuit peut être relu par des humains. Les limites sont par projet
-   Google Cloud, pas par clé. La rotation entre comptes n'est pas traitée dans les conditions
-   de l'API ; les conditions générales des API Google n'ont pas été lues. À relire avant
-   d'ouvrir la démo à d'autres personnes.
+1. **Conditions de Gemini : risque accepté par Brian le 2026-10-25.** La démo est en France,
+   avec le niveau gratuit et plusieurs comptes. À savoir : la France fait partie de l'EEE, et
+   les conditions de l'API réservent le niveau payant aux API mises à disposition
+   d'utilisateurs de l'EEE ; le contenu du niveau gratuit peut être relu par des humains. Le
+   bandeau « n'envoyez pas de données personnelles » reste affiché sur la démo.
 2. **Vues à refaire.** `ai-gateway`, `ai-gateway-call`, `ai-gateway-internals`,
    `mcp-tools-internals`, `platform-detailed` et `platform-global` décrivent l'intérieur
    d'Agent Router : il faut les redessiner pour agentgateway avec les ressources confirmées par

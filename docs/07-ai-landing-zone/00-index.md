@@ -9,7 +9,7 @@
 > de 5 minutes. Le découpage en phases et les vérifications sont dans
 > [03-phases.md](03-phases.md), la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md), le plan d'implémentation dans
 > [05-plan-implementation.md](05-plan-implementation.md) et le FinOps de l'IA dans
-> [06-finops-ia.md](06-finops-ia.md).
+> [06-finops-ia.md](06-finops-ia.md), les flux pas à pas dans [07-flux.md](07-flux.md).
 
 La landing zone IA se greffe sur la plateforme existante. Les appels des agents vers un
 modèle ou un outil passent par une AI gateway (Agent Router, ex-Envoy AI Gateway) posée
