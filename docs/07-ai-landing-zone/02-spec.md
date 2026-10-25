@@ -1,6 +1,6 @@
 # Spec de référence de la landing zone IA
 
-> **Statut : brouillon v0.2 du 2026-10-25, à valider.** Rien n'est déployé. Cette page est la
+> **Statut : brouillon v0.3 du 2026-10-25, à valider.** Rien n'est déployé. Cette page est la
 > source de vérité des décisions et des conventions : en cas de contradiction avec
 > `00-index.md`, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
 > sont dans [03-phases.md](03-phases.md).
@@ -68,6 +68,8 @@ Statuts : **décidé** (par Brian), **hérité** (des pages et du modèle, non r
 | D14 | Audit : logs d'accès de la gateway → Alloy → Loki, puis l'archive Object Lock existante (CronJob horaire, bucket RGW, 30 jours). Champs obligatoires : utilisateur, agent, projet, modèle, outil, tokens, décision. Rétention de 30 jours pour le namespace de la gateway. | hérité | 1 | |
 | D15 | Plafond d'étapes : limite d'itérations du framework (par exemple `recursion_limit` de LangGraph), posée par le kit d'agent. Le budget en tokens sert de plafond dur. | hérité | 2 | Rien ne l'impose côté plateforme pour un agent au code maison. |
 | D16 | Pas de SPIRE ni de SPIFFE. | hérité | — | À reconsidérer si le mTLS entre agents ou la fédération multicloud deviennent nécessaires. |
+| D17 | Emplacement du code : les briques de plateforme dans le dépôt **K3s**, sous `k8s/config/<brique>/` (`ai-gateway`, `kagent`, `toolhive`, `agent-sandbox`), Tempo dans `k8s/config/observability/`, les ClusterPolicies dans `k8s/config/kyverno/policies/`. Les ressources par projet et par agent dans le `ProjectRecord` de **cnp-projects**, rendues par **cnp-project-base**. Le code de chaque agent dans son propre dépôt, créé depuis **app-templates**. Les écrans et l'API dans **CMP**. | proposé | 1 | Suit l'organisation actuelle de chaque dépôt. |
+| D18 | La CMP déclare les agents, elle ne les construit pas : pas d'éditeur visuel de workflow, le code vit dans le dépôt de l'agent. | proposé | 2 | OpenAI arrête son Agent Builder visuel le 30 novembre 2026. Détails dans [04-cmp-agents.md](04-cmp-agents.md). |
 
 ## 4. Conventions et interfaces
 
@@ -220,12 +222,18 @@ d'être acceptées.
    été lues. À relire avant d'ouvrir la démo.
 5. **Secret `agent-oidc`.** Le modèle le dessine encore, alors que la cible de D3 le supprime.
    Il ne doit rester qu'en phase 1.
-6. **Vues à régénérer.** `ai-gateway`, `ai-gateway-internals`, `mcp-tools-internals`,
-   `platform-detailed` et `platform-global` décrivent Agent Router ;
-   `genai-observability-internals` et `platform-detailed` dessinent Prometheus. Corriger le
-   modèle, puis régénérer avec `architecture/build-diagrams.sh`.
+6. **Vues à refaire.** `ai-gateway`, `ai-gateway-call`, `ai-gateway-internals`,
+   `mcp-tools-internals`, `platform-detailed` et `platform-global` décrivent l'intérieur
+   d'Agent Router (sidecar ExtProc, `AIGatewayRoute`, `MCPRoute`…) : changer le nom ne suffit
+   pas, il faut les redessiner pour agentgateway avec les CRD confirmés par l'essai de la
+   phase 1. D'ici là, elles sont marquées « option A, remplacée » dans `00-index.md`.
+   `genai-observability-internals` et `platform-detailed` dessinent Prometheus : renommer
+   l'élément `ob-prom` en VictoriaMetrics, qui accepte le remote write d'Alloy. Ensuite,
+   régénérer avec `architecture/build-diagrams.sh` (il faut `noodle`, `drawio` et `pngquant`).
+   Les vues de l'option B (`platform-ai-stack`, `platform-ai-full`, `platform-ai-simple`) sont
+   à jour.
 7. **`00-index.md`.** Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
    validée.
 8. **Rétention et RGPD des traces.** Non traité au-delà de la suppression des prompts.
-9. **Dépôt cible du code.** Où vivent les manifests de la zone IA (dépôt K3s ou autre) : à
-   préciser avant la phase 1.
+9. **Côté CMP.** Les points ouverts propres à la CMP (realm des utilisateurs d'une app,
+   audience du serveur MCP, chat de test) sont dans [04-cmp-agents.md](04-cmp-agents.md).

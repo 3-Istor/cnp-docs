@@ -7,7 +7,7 @@
 > **Les décisions de cette page sont remplacées par [la spec de référence](02-spec.md)** (§3)
 > dès qu'elle est validée. D1 y devient agentgateway au lieu d'Agent Router, et D3 un jeton
 > de 5 minutes. Le découpage en phases et les vérifications sont dans
-> [03-phases.md](03-phases.md).
+> [03-phases.md](03-phases.md), la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md).
 
 La landing zone IA se greffe sur la plateforme existante. Les appels des agents vers un
 modèle ou un outil passent par une AI gateway (Agent Router, ex-Envoy AI Gateway) posée
@@ -55,6 +55,8 @@ Ce qui tourne aujourd'hui, estompé, et toute la landing zone IA en clair, dans 
 
 ### Vue d'ensemble détaillée : tous les zooms sur une seule carte
 
+> **Option A (Agent Router), remplacée par agentgateway.** Ce schéma reste utile pour la logique du flux ; il sera redessiné après l'essai de la phase 1 (voir [la spec](02-spec.md), point ouvert 6).
+
 Le hub on-prem tel qu'il tourne aujourd'hui (estompé) et toute la landing zone IA (en clair), au niveau de détail des zooms : filtres Envoy, contrôleurs, CRDs, clients Keycloak, pipeline Alloy. Les trois niveaux d'isolation du sandbox sont trois nœuds distincts côte à côte (gVisor, Kata, runc standard) : la plateforme peut en proposer un, deux ou les trois, selon que l'agent exécute du code ou non. EKS et GKE restent résumés à leur API server. Grande image : l'ouvrir dans draw.io (`platform-detailed.*.drawio`) pour zoomer.
 
 ![Platform overview, detailed](../01-architecture/diagrams/platform-detailed.light.png#only-light)
@@ -62,12 +64,16 @@ Le hub on-prem tel qu'il tourne aujourd'hui (estompé) et toute la landing zone 
 
 ### Carte globale : plateforme actuelle et landing zone IA
 
+> **Option A (Agent Router), remplacée par agentgateway.** Ce schéma reste utile pour la logique du flux ; il sera redessiné après l'essai de la phase 1 (voir [la spec](02-spec.md), point ouvert 6).
+
 Toute la plateforme sur une seule toile : le hub on-prem, la landing zone IA proposée, GitHub, les modèles et les clusters EKS et GKE. Les numéros suivent un utilisateur, une app, un agent et une release ; les lettres, les tâches de fond.
 
 ![CNP global map](../01-architecture/diagrams/platform-global.light.png#only-light)
 ![CNP global map](../01-architecture/diagrams/platform-global.dark.png#only-dark)
 
 ### AI gateway : vue détaillée
+
+> **Option A (Agent Router), remplacée par agentgateway.** Ce schéma reste utile pour la logique du flux ; il sera redessiné après l'essai de la phase 1 (voir [la spec](02-spec.md), point ouvert 6).
 
 L'AI gateway ouverte jusqu'à ses CRDs, ses contrôleurs, les filtres d'Envoy et les sous-modules du sidecar ExtProc, avec le chemin d'une requête en 16 étapes.
 
@@ -93,6 +99,8 @@ Niveau standard (agents sans exécution de code, runc) :
 
 ### Outils MCP : vue détaillée
 
+> **Option A (Agent Router), remplacée par agentgateway.** Ce schéma reste utile pour la logique du flux ; il sera redessiné après l'essai de la phase 1 (voir [la spec](02-spec.md), point ouvert 6).
+
 Comment un appel d'outil va de l'agent au serveur d'outils : le proxy MCP de la gateway, ToolHive pour les serveurs tiers, le serveur MCP du CMP et sa politique de stake.
 
 ![MCP tools internals](../01-architecture/diagrams/mcp-tools-internals.light.png#only-light)
@@ -114,6 +122,8 @@ Gemini en premier (quota gratuit, par projet), repli sur Ollama sur le GPU du ho
 
 ### Observabilité GenAI : vue détaillée
 
+> Les métriques vont dans VictoriaMetrics, pas dans Prometheus comme le dessine ce schéma (voir [la spec](02-spec.md), D7).
+
 De l'appel d'un agent à une trace et des compteurs de tokens par projet : les sources, le pipeline Alloy, Tempo, Prometheus et Grafana.
 
 ![GenAI observability internals](../01-architecture/diagrams/genai-observability-internals.light.png#only-light)
@@ -126,10 +136,14 @@ De l'appel d'un agent à une trace et des compteurs de tokens par projet : les s
 
 ### AI gateway
 
+> **Option A (Agent Router), remplacée par agentgateway.** Ce schéma reste utile pour la logique du flux ; il sera redessiné après l'essai de la phase 1 (voir [la spec](02-spec.md), point ouvert 6).
+
 ![CNP AI gateway](../01-architecture/diagrams/ai-gateway.light.png#only-light)
 ![CNP AI gateway](../01-architecture/diagrams/ai-gateway.dark.png#only-dark)
 
 ### Un appel de modèle
+
+> **Option A (Agent Router), remplacée par agentgateway.** Ce schéma reste utile pour la logique du flux ; il sera redessiné après l'essai de la phase 1 (voir [la spec](02-spec.md), point ouvert 6).
 
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.light.png#only-light)
 ![A model call through the AI gateway](../01-architecture/diagrams/ai-gateway-call.dark.png#only-dark)
