@@ -222,16 +222,27 @@ d'être acceptées.
    été lues. À relire avant d'ouvrir la démo.
 5. **Secret `agent-oidc`.** Le modèle le dessine encore, alors que la cible de D3 le supprime.
    Il ne doit rester qu'en phase 1.
-6. **Vues à refaire.** `ai-gateway`, `ai-gateway-call`, `ai-gateway-internals`,
-   `mcp-tools-internals`, `platform-detailed` et `platform-global` décrivent l'intérieur
-   d'Agent Router (sidecar ExtProc, `AIGatewayRoute`, `MCPRoute`…) : changer le nom ne suffit
-   pas, il faut les redessiner pour agentgateway avec les CRD confirmés par l'essai de la
-   phase 1. D'ici là, elles sont marquées « option A, remplacée » dans `00-index.md`.
-   `genai-observability-internals` et `platform-detailed` dessinent Prometheus : renommer
-   l'élément `ob-prom` en VictoriaMetrics, qui accepte le remote write d'Alloy. Ensuite,
-   régénérer avec `architecture/build-diagrams.sh` (il faut `noodle`, `drawio` et `pngquant`).
-   Les vues de l'option B (`platform-ai-stack`, `platform-ai-full`, `platform-ai-simple`) sont
-   à jour.
+6. **Vues refaites pour agentgateway (fait le 2026-10-25).** `ai-gateway-internals`,
+   `mcp-tools-internals`, `platform-detailed`, `ai-gateway`, `ai-gateway-call`, `platform-global`,
+   `models-internals` et `genai-observability-internals` décrivent agentgateway : GatewayClass
+   `agentgateway`, contrôleur (traducteur, serveur xDS, Deployer), proxy Rust et ordre des
+   politiques de la doc officielle. Les ressources viennent de cette doc (`AgentgatewayBackend` en
+   `ai`, `mcp` et `a2a`, `AgentgatewayPolicy` en `traffic`, `backend` et `frontend`,
+   `AgentgatewayParameters`, `HTTPRoute`) ; ce qu'elle ne nomme pas est écrit comme un concept.
+   Autres changements : budget par agent et par jour (service de rate limit global, unité `day` de
+   sa configuration, car le limiteur local n'a pas d'unité au jour), `ob-prom` devient
+   VictoriaMetrics, le serveur GPU est un élément externe défini par son contrat (§5) joint en
+   HTTPS sans WireGuard, Llama Guard et le webhook passent en IA-2, le Secret `agent-oidc` est
+   marqué phase 1, et l'identité ajoute l'audience `cmp-mcp` et la client scope `cmp-tools`.
+   Les schémas sont régénérés avec `architecture/build-diagrams.sh`. À confirmer à l'essai de la
+   phase 1 : le claim qui sert de clé au budget (point 3) et la façon dont le service de rate
+   limit reçoit le nombre réel de tokens ; le comportement de plusieurs clés Gemini dans un même
+   groupe (la doc décrit un équilibrage P2C, pas une rotation) ; le rejeu d'une requête sur le
+   groupe suivant après un 429 (politique `retry`) ; les noms d'outils quand un backend MCP a
+   plusieurs cibles ; le format du corps du webhook de garde ; l'ordre réel, car la doc exécute
+   le rate limit avant `promptGuard`. Les vues `platform-ai-*` n'ont pas été touchées : elles
+   disent encore « via WireGuard » et « une seule clé » pour Gemini. La note de D6 sur la clé
+   unique du modèle est caduque.
 7. **`00-index.md`.** Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
    validée.
 8. **Rétention et RGPD des traces.** Non traité au-delà de la suppression des prompts.
