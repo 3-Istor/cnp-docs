@@ -317,6 +317,7 @@ elements:
   - {id: ag-secret-gpu, kind: database, parent: g-ag-crd-agw, icon: k8s-secret, title: "Secret gpu-server-token", tech: "[key Authorization]", desc: "The token the GPU server's proxy<br>expects, written by VSO from Vault.", status: planned, target: IA-1}
   - {id: ag-pol-auth, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy auth", tech: "[traffic.jwtAuthentication + authorization]", desc: "Keycloak JWT (iss, aud, JWKS), then CEL<br>rules on its claims; no match: 403.<br>Why: no anonymous model access.", status: planned, target: IA-1}
   - {id: ag-pol-rate, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy budget", tech: "[traffic.rateLimit.global · Tokens]", desc: "Daily token budget per agent, keyed by a JWT<br>claim (azp) in the rate limit service.<br>Over the budget: 429. Why: cap one agent.", status: planned, target: IA-1}
+  - {id: ag-pol-limits, kind: security, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy limits", tech: "[traffic.rateLimit.local · max_tokens]", desc: "30 requests a minute per agent (local<br>limiter); max_tokens capped at 4,096.<br>Why: bound one call and one burst.", status: planned, target: IA-1}
   - {id: ag-pol-guard, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy guard", tech: "[backend.ai.promptGuard]", desc: "Regex masks PII and secrets, then the<br>webhook; no answer: refused.<br>Why: check the prompt before the model.", status: planned, target: IA-2}
   - {id: ag-pol-failover, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy failover", tech: "[backend.health · traffic.retry]", desc: "Evicts a provider on 429 so the next<br>group takes over; retry resends.<br>Why: free quota spent, GPU answers.", status: planned, target: IA-1}
   - {id: ag-pol-tools, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy tools", tech: "[backend.mcp.authorization]", desc: "CEL on the claims and mcp.tool.name:<br>which agent may call which tool.<br>Why: per-tool rights, no extra service.", status: planned, target: IA-2}
@@ -328,7 +329,7 @@ elements:
   - {id: ag-f-listener, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Listener :8080", tech: "[frontend · HTTP]", desc: "Where requests enter.<br>Internal Service, no public route.", status: planned, target: IA-1}
   - {id: ag-f-jwt, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "jwtAuthentication", tech: "[traffic · Strict]", desc: "Checks signature (cached JWKS), iss<br>and aud before anything else.<br>Why: reject early, before any cost.", status: planned, target: IA-1}
   - {id: ag-f-authz, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "authorization", tech: "[traffic · CEL · Allow]", desc: "Allow rules on the claims; no rule<br>matches: 403.<br>Why: deny by default.", status: planned, target: IA-1}
-  - {id: ag-f-rl, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "rateLimit", tech: "[traffic · global · Tokens]", desc: "Asks the rate limit service whether the<br>agent's daily budget is spent.<br>Why: a 429 before any model cost.", status: planned, target: IA-1}
+  - {id: ag-f-rl, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "rateLimit", tech: "[traffic · global · Tokens]", desc: "Asks the rate limit service if the budget<br>is spent; service down: refused (fail-closed).<br>Why: a 429 before any model cost.", status: planned, target: IA-1}
   - {id: ag-f-route, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Route match", tech: "[HTTPRoute · backendRef]", desc: "Picks the route by path and header,<br>then its AgentgatewayBackend.<br>Why: Local calls get llm-local.", status: planned, target: IA-1}
   - {id: ag-f-guard, kind: security, parent: g-ag-chain, icon: k8s-pod, title: "promptGuard", tech: "[backend.ai · regex, webhook]", desc: "Masks PII and secrets, then asks the<br>guardrail adapter. Down: refused.<br>Why: check the prompt before the model.", status: planned, target: IA-2}
   - {id: ag-f-pick, kind: backend, parent: g-ag-chain, icon: k8s-pod, title: "Provider choice", tech: "[groups · P2C · health]", desc: "Best healthy provider of group 1;<br>on 429 it is evicted, group 2 follows.<br>Why: the free quota lasts.", status: planned, target: IA-1}
@@ -915,6 +916,7 @@ references:
   - {id: r-ag-be-gpu-secret, from: ag-be-llm, to: ag-secret-gpu, kind: secretRef}
   - {id: r-ag-pol-auth, from: ag-pol-auth, to: ag-gateway, kind: targetRef}
   - {id: r-ag-pol-rate, from: ag-pol-rate, to: ag-route, kind: targetRef}
+  - {id: r-ag-pol-limits, from: ag-pol-limits, to: ag-gateway, kind: targetRef}
   - {id: r-ag-pol-guard, from: ag-pol-guard, to: ag-be-llm, kind: targetRef}
   - {id: r-ag-pol-failover, from: ag-pol-failover, to: ag-be-llm, kind: targetRef}
   - {id: r-ag-pol-tools, from: ag-pol-tools, to: ag-be-mcp, kind: targetRef}
