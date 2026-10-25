@@ -394,7 +394,7 @@
           
   
   
-  7. Landing zone IA (proposition)
+  7. Landing zone IA
 
         </a>
       </li>
@@ -2101,7 +2101,7 @@
   <span class="md-ellipsis">
     
   
-    7. Landing zone IA (proposition)
+    7. Landing zone IA
   
 
     
@@ -2117,7 +2117,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    7. Landing zone IA (proposition)
+    7. Landing zone IA
   
 
           </label>
@@ -2384,6 +2384,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-prompt-de-lancement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Prompt de lancement
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2537,6 +2548,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#6-prompt-de-lancement" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Prompt de lancement
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2556,7 +2578,7 @@
 
 <h1 id="plan-dimplementation">Plan d'implémentation<a class="headerlink" href="#plan-dimplementation" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Statut : brouillon v0.1 du 2026-10-25, à valider.</strong> Cette page sert de consignes à
+<p><strong>Statut : v1.0 du 2026-10-25, validée par Brian.</strong> Cette page sert de consignes à
 l'agent qui implémente (par exemple Claude Sonnet). Elle découpe les phases 0 et 1 en
 tâches ; les phases 2 et 3 seront découpées par une passe de spec à leur entrée, pas par
 l'agent d'implémentation.</p>
@@ -2767,6 +2789,33 @@ T1.5, T1.7, T1.9. Puis T1.8 et T1.10. T1.11 en dernier.</p>
 montée de Keycloak en 26.6 (D27), kagent, outils MCP et serveur MCP de la CMP avec les jetons
 d'audience <code>cmp-mcp</code> (04 §9), guardrails, A2A, sandbox, évals, écrans d'agents de la CMP,
 templates d'agent (D26), UC3, UC11, UC21.</p>
+<h2 id="6-prompt-de-lancement">6. Prompt de lancement<a class="headerlink" href="#6-prompt-de-lancement" title="Permanent link">&para;</a></h2>
+<p>À donner tel quel à l'agent d'implémentation, une fois ses accès prêts.</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1"><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a>Tu implémentes la landing zone IA de CNP. La spec est dans le dépôt 3-Istor/cnp-docs, dossier
+</span><span id="__span-0-2"><a id="__codelineno-0-2" name="__codelineno-0-2" href="#__codelineno-0-2"></a>docs/07-ai-landing-zone/ : lis dans l'ordre 02-spec.md, 05-plan-implementation.md,
+</span><span id="__span-0-3"><a id="__codelineno-0-3" name="__codelineno-0-3" href="#__codelineno-0-3"></a>03-phases.md, 07-flux.md, puis 04-cmp-agents.md et 06-finops-ia.md pour les tâches qui les
+</span><span id="__span-0-4"><a id="__codelineno-0-4" name="__codelineno-0-4" href="#__codelineno-0-4"></a>citent. La spec est validée : tu appliques ses décisions telles quelles.
+</span><span id="__span-0-5"><a id="__codelineno-0-5" name="__codelineno-0-5" href="#__codelineno-0-5"></a>
+</span><span id="__span-0-6"><a id="__codelineno-0-6" name="__codelineno-0-6" href="#__codelineno-0-6"></a>Commence par la phase 0, tâche T0.1 (état des lieux sur le cluster), puis T0.2 à T0.5, puis
+</span><span id="__span-0-7"><a id="__codelineno-0-7" name="__codelineno-0-7" href="#__codelineno-0-7"></a>la phase 1 dans l'ordre du §3 de 05-plan-implementation.md.
+</span><span id="__span-0-8"><a id="__codelineno-0-8" name="__codelineno-0-8" href="#__codelineno-0-8"></a>
+</span><span id="__span-0-9"><a id="__codelineno-0-9" name="__codelineno-0-9" href="#__codelineno-0-9"></a>Règles (05-plan-implementation.md §1) : une tâche = une branche et une PR par dépôt, au format
+</span><span id="__span-0-10"><a id="__codelineno-0-10" name="__codelineno-0-10" href="#__codelineno-0-10"></a>Conventional Commits, avec les sorties des vérifications V dans la description ; versions
+</span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a>exactes, consignées au §4 ; aucun secret dans Git ; d'abord un cluster k3d local, puis le
+</span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a>cluster principal ; tu ne fusionnes jamais toi-même, c'est Brian qui fusionne.
+</span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a>Arrête-toi et remonte le problème dans une PR en brouillon (section « Écart » : problème,
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a>options, recommandation) dans les six cas du §1 : décision inapplicable, vérification qui
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a>échoue deux fois, composant non prévu, protection affaiblie, budget mémoire dépassé, action
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a>sur des données de tenant ou sur main.
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a>Les clés Gemini sont déjà dans Vault sous kvv2/platform/ai/gemini/&lt;n&gt; : ne les lis jamais en
+</span><span id="__span-0-20"><a id="__codelineno-0-20" name="__codelineno-0-20" href="#__codelineno-0-20"></a>clair. Les vérifications qui dépendent du serveur GPU (V1.10 à V1.12, V1.15, T1.14)
+</span><span id="__span-0-21"><a id="__codelineno-0-21" name="__codelineno-0-21" href="#__codelineno-0-21"></a>attendent qu'il réponde au contrat du §5 de la spec.
+</span><span id="__span-0-22"><a id="__codelineno-0-22" name="__codelineno-0-22" href="#__codelineno-0-22"></a>
+</span><span id="__span-0-23"><a id="__codelineno-0-23" name="__codelineno-0-23" href="#__codelineno-0-23"></a>À la fin de chaque phase, écris le rapport de phase (T1.11 pour la phase 1) et attends la
+</span><span id="__span-0-24"><a id="__codelineno-0-24" name="__codelineno-0-24" href="#__codelineno-0-24"></a>validation de Brian avant la phase suivante.
+</span></code></pre></div>
 
 
 

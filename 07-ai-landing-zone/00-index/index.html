@@ -78,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#landing-zone-ia-proposition" class="md-skip">
+        <a href="#landing-zone-ia" class="md-skip">
           Aller au contenu
         </a>
       
@@ -394,7 +394,7 @@
           
   
   
-  7. Landing zone IA (proposition)
+  7. Landing zone IA
 
         </a>
       </li>
@@ -2101,7 +2101,7 @@
   <span class="md-ellipsis">
     
   
-    7. Landing zone IA (proposition)
+    7. Landing zone IA
   
 
     
@@ -2117,7 +2117,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    7. Landing zone IA (proposition)
+    7. Landing zone IA
   
 
           </label>
@@ -2808,69 +2808,23 @@
 
 
 
-<h1 id="landing-zone-ia-proposition">Landing zone IA (proposition)<a class="headerlink" href="#landing-zone-ia-proposition" title="Permanent link">&para;</a></h1>
+<h1 id="landing-zone-ia">Landing zone IA<a class="headerlink" href="#landing-zone-ia" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Statut : proposition du 2026-10-22, rien n'est déployé.</strong> Tous les éléments ajoutés
+<p><strong>Statut : spec validée le 2026-10-25, rien n'est encore déployé.</strong> Tous les éléments ajoutés
 au modèle Noodle portent <code>status: planned</code> et une cible : <code>P0</code>–<code>P2</code> pour les écarts de la
 landing zone actuelle, <code>IA-1</code>–<code>IA-3</code> pour la landing zone IA.</p>
-<p><strong>Les décisions de cette page sont remplacées par <a href="../02-spec/">la spec de référence</a></strong> (§3)
-dès qu'elle est validée. D1 y devient agentgateway au lieu d'Agent Router, et D3 un jeton
-de 5 minutes. Le découpage en phases et les vérifications sont dans
-<a href="../03-phases/">03-phases.md</a>, la partie CMP dans <a href="../04-cmp-agents/">04-cmp-agents.md</a>, le plan d'implémentation dans
-<a href="../05-plan-implementation/">05-plan-implementation.md</a> et le FinOps de l'IA dans
-<a href="../06-finops-ia/">06-finops-ia.md</a>, les flux pas à pas dans <a href="../07-flux/">07-flux.md</a>.</p>
+<p><strong>La spec de référence est validée (v1.0, 2026-10-25).</strong> Les décisions D1 à D37 sont dans
+<a href="../02-spec/">02-spec.md</a> (§3 et §9), les phases et vérifications dans <a href="../03-phases/">03-phases.md</a>,
+la partie CMP dans <a href="../04-cmp-agents/">04-cmp-agents.md</a>, le plan d'implémentation dans
+<a href="../05-plan-implementation/">05-plan-implementation.md</a>, le FinOps de l'IA dans
+<a href="../06-finops-ia/">06-finops-ia.md</a> et les flux pas à pas dans <a href="../07-flux/">07-flux.md</a>.</p>
 </blockquote>
 <p>La landing zone IA se greffe sur la plateforme existante. Les appels des agents vers un
 modèle ou un outil passent par une AI gateway (agentgateway) posée à côté de l'Envoy Gateway
 déjà en place, avec sa propre GatewayClass. La gateway porte l'authentification Keycloak,
 l'autorisation par claims, le budget en tokens par agent et par jour, le choix du modèle et les traces.</p>
 <h2 id="decisions">Décisions<a class="headerlink" href="#decisions" title="Permanent link">&para;</a></h2>
-<table>
-<thead>
-<tr>
-<th>#</th>
-<th>Décision</th>
-<th>Choix proposé</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>D1</td>
-<td>AI gateway</td>
-<td><del>Agent Router</del> agentgateway (voir <a href="../01-stack-cible/">Stack cible</a>), GatewayClass à part ; Envoy Gateway reste l'entrée des apps</td>
-</tr>
-<tr>
-<td>D2</td>
-<td>Point de sortie</td>
-<td>Tout appel LLM ou outil passe par la gateway ; aucune clé provider dans un pod</td>
-</tr>
-<tr>
-<td>D3</td>
-<td>Identité</td>
-<td>Un client Keycloak par agent, jetons de 5 min, standard token exchange pour agir au nom d'un utilisateur</td>
-</tr>
-<tr>
-<td>D4</td>
-<td>Policy</td>
-<td>Kyverno en Enforce à l'admission ; règles CEL de l'<code>AgentgatewayPolicy</code> à la gateway, puis OPA par <code>extAuth</code> pour l'autorisation par outil</td>
-</tr>
-<tr>
-<td>D5</td>
-<td>Isolation</td>
-<td>Default-deny Cilium entre tenants et en egress ; CRD <code>Sandbox</code> + gVisor pour les agents qui exécutent du code</td>
-</tr>
-<tr>
-<td>D6</td>
-<td>Modèles</td>
-<td>Gemini (free tier, plusieurs clés) puis le serveur GPU en HTTPS sur le réseau local, avec bascule automatique sur 429</td>
-</tr>
-<tr>
-<td>D7</td>
-<td>Observabilité</td>
-<td>OpenTelemetry GenAI vers Alloy puis Tempo, métriques dans VictoriaMetrics ; tokens, coût et latence dans Grafana</td>
-</tr>
-</tbody>
-</table>
+<p>Voir <a href="../02-spec/">le registre des décisions de la spec</a> : D1 à D7 y gardent leur numéro.</p>
 <p>Prérequis issus de la landing zone actuelle (P0) : isolation inter-tenant (G1), contexte
 de sécurité des pods (G8), branches GitOps protégées (G17), sauvegarde des bases
 CloudNativePG.</p>

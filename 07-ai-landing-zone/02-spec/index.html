@@ -394,7 +394,7 @@
           
   
   
-  7. Landing zone IA (proposition)
+  7. Landing zone IA
 
         </a>
       </li>
@@ -2101,7 +2101,7 @@
   <span class="md-ellipsis">
     
   
-    7. Landing zone IA (proposition)
+    7. Landing zone IA
   
 
     
@@ -2117,7 +2117,7 @@
             <span class="md-nav__icon md-icon"></span>
             
   
-    7. Landing zone IA (proposition)
+    7. Landing zone IA
   
 
           </label>
@@ -2844,7 +2844,7 @@
 
 <h1 id="spec-de-reference-de-la-landing-zone-ia">Spec de référence de la landing zone IA<a class="headerlink" href="#spec-de-reference-de-la-landing-zone-ia" title="Permanent link">&para;</a></h1>
 <blockquote>
-<p><strong>Statut : brouillon v0.6 du 2026-10-25, à valider.</strong> Rien n'est déployé. Cette page est la
+<p><strong>Statut : v1.0 du 2026-10-25, validée par Brian.</strong> Rien n'est déployé. Cette page est la
 source de vérité des décisions et des conventions : en cas de contradiction avec
 <code>00-index.md</code>, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
 sont dans <a href="../03-phases/">03-phases.md</a>.</p>
@@ -2902,7 +2902,7 @@ Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume
 </ol>
 <h2 id="3-registre-des-decisions">3. Registre des décisions<a class="headerlink" href="#3-registre-des-decisions" title="Permanent link">&para;</a></h2>
 <p>Statuts : <strong>décidé</strong> (par Brian), <strong>hérité</strong> (des pages et du modèle, non rediscuté),
-<strong>proposé</strong> (par Claude dans cette spec, à valider). D1 à D7 gardent la numérotation de
+<strong>proposé</strong> (par Claude, puis validé par Brian le 2026-10-25 : il n'en reste plus). D1 à D7 gardent la numérotation de
 <code>00-index.md</code>.</p>
 <table>
 <thead>
@@ -2932,7 +2932,7 @@ Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume
 <tr>
 <td>D3</td>
 <td>Un client Keycloak par agent. Seul, l'agent utilise <code>client_credentials</code> ; pour un utilisateur, le token exchange (Keycloak 26.2 ou plus). Cible : le jeton du ServiceAccount remplace le secret client (federated client authentication, Keycloak 26.6). Jeton d'accès de <strong>5 minutes, sans refresh</strong>.</td>
-<td>proposé</td>
+<td>décidé</td>
 <td>1 puis 2</td>
 <td>Remplace « ≤ 15 min ». Phase 1 : secret client depuis Vault ; phase 2 : jeton du ServiceAccount.</td>
 </tr>
@@ -3030,14 +3030,14 @@ Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume
 <tr>
 <td>D17</td>
 <td>Emplacement du code : les briques de plateforme dans le dépôt <strong>K3s</strong>, sous <code>k8s/config/&lt;brique&gt;/</code> (<code>ai-gateway</code>, <code>kagent</code>, <code>toolhive</code>, <code>agent-sandbox</code>), Tempo dans <code>k8s/config/observability/</code>, les ClusterPolicies dans <code>k8s/config/kyverno/policies/</code>. Les ressources par projet et par agent dans le <code>ProjectRecord</code> de <strong>cnp-projects</strong>, rendues par <strong>cnp-project-base</strong>. Le code de chaque agent dans son propre dépôt, créé depuis <strong>app-templates</strong>. Les écrans et l'API dans <strong>CMP</strong>.</td>
-<td>proposé</td>
+<td>décidé</td>
 <td>1</td>
 <td>Suit l'organisation actuelle de chaque dépôt.</td>
 </tr>
 <tr>
 <td>D18</td>
 <td>La CMP déclare les agents, elle ne les construit pas : pas d'éditeur visuel de workflow, le code vit dans le dépôt de l'agent.</td>
-<td>proposé</td>
+<td>décidé</td>
 <td>2</td>
 <td>OpenAI arrête son Agent Builder visuel le 30 novembre 2026. Détails dans <a href="../04-cmp-agents/">04-cmp-agents.md</a>.</td>
 </tr>
@@ -3552,8 +3552,7 @@ d'être acceptées.</p>
 </table>
 <h2 id="9-decisions-par-defaut-anciens-points-ouverts">9. Décisions par défaut (anciens points ouverts)<a class="headerlink" href="#9-decisions-par-defaut-anciens-points-ouverts" title="Permanent link">&para;</a></h2>
 <p>Pour que la phase 1 puisse être implémentée sans décision en cours de route, chaque ancien
-point ouvert reçoit une valeur par défaut. Statut <strong>proposé</strong> : Brian les valide ou les change
-en une passe ; l'agent d'implémentation les applique telles quelles.</p>
+point ouvert reçoit une valeur par défaut. Validées par Brian le 2026-10-25 ; l'agent d'implémentation les applique telles quelles.</p>
 <table>
 <thead>
 <tr>
@@ -3702,8 +3701,7 @@ en une passe ; l'agent d'implémentation les applique telles quelles.</p>
    (clés équilibrées en P2C). <strong>À confirmer à l'essai T1.1</strong> : le format du corps du webhook de
    garde et les noms d'outils quand un backend MCP a plusieurs cibles (les autres points sont
    dans D23 et D32).</li>
-<li><strong><code>00-index.md</code>.</strong> Sa table D1 à D7 est remplacée par le §3 de cette page une fois la spec
-   validée.</li>
+<li><strong><code>00-index.md</code>.</strong> Fait le 2026-10-25 : l'index renvoie au registre de cette page.</li>
 <li><strong>Côté CMP.</strong> Les choix propres à la CMP sont dans <a href="../04-cmp-agents/">04-cmp-agents.md</a>.</li>
 </ol>
 <h2 id="10-policies-et-conformite-as-code">10. Policies et conformité as code<a class="headerlink" href="#10-policies-et-conformite-as-code" title="Permanent link">&para;</a></h2>
