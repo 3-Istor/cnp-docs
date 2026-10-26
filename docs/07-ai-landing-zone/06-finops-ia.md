@@ -2,8 +2,8 @@
 
 > **Statut : v1.0 du 2026-10-25, validée par Brian.** Cette page dit comment la
 > consommation de tokens de la landing zone IA entre dans le module FinOps de la CMP. Elle
-> s'appuie sur le « Plan FinOps CNP » du 16 octobre 2026 (proposition, pas encore validée ni
-> implémentée) et en reprend les choix : format pivot FOCUS, table `cost_line_items` dans le
+> s'appuie sur le « Plan FinOps CNP » du 16 octobre 2026 (validé le 2026-10-26 et implémenté
+> côté CMP, voir [la section FinOps](../08-finops/00-index.md)) et en reprend les choix : format pivot FOCUS, table `cost_line_items` dans le
 > PostgreSQL de la CMP, ingesteur `finops-ingester`, onglets du dashboard.
 
 ## 1. Deux budgets, deux rôles
@@ -77,12 +77,15 @@ ligne par `azp`, modèle et backend :
 | Page d'un agent (CMP) | Tokens du jour, budget, coût au prix public, tendance sur 30 jours | 2 |
 | Grafana | Tableau « IA » : tokens par projet, agent, modèle ; 429 ; refus ; latence | 1 |
 
-## 6. Avant que le plan FinOps soit implémenté
+## 6. Avant que la gateway soit déployée
 
-En phase 1, la CMP lit directement VictoriaMetrics pour l'onglet « IA » du projet
-(`GET /api/projects/{projet}/ai/usage`). Les lignes FOCUS n'arrivent qu'avec l'itération I2
-du plan FinOps. Le plan FinOps a reçu la source `ai_gateway` et la décision D-F8 le 2026-10-25 ; sa ligne
-« fournisseurs LLM » ne couvre plus que les appels qui ne passent pas par la gateway.
+Le plan FinOps est validé depuis le 2026-10-26 et la source `ai_gateway` est implémentée
+dans la CMP, testée sur fixtures. Elle n'écrit aucune ligne tant qu'agentgateway n'est pas
+déployée, parce que les métriques de tokens n'existent pas encore. En phase 1, la CMP lit
+directement VictoriaMetrics pour l'onglet « IA » du projet
+(`GET /api/projects/{projet}/ai/usage`). La décision D-F8 est consignée dans
+[D-14](../08-finops/01-decisions.md), et sa ligne « fournisseurs LLM » ne couvre que les
+appels qui ne passent pas par la gateway.
 
 ## 7. Vérifications
 
@@ -90,4 +93,4 @@ du plan FinOps. Le plan FinOps a reçu la source `ai_gateway` et la décision D-
 |---|---|---|---|
 | VF1.1 | 1 | 100 appels d'un agent de test, puis l'onglet « IA » du projet | Les tokens affichés égalent ceux des métriques de la gateway, à 1 % près |
 | VF1.2 | 1 | Coût au prix public | Tokens en entrée et en sortie × prix de `ai-prices.yaml`, recalculable à la main |
-| VF2.1 | I2 du plan FinOps | Lignes `ai_gateway` dans `cost_line_items` | Une ligne par `azp`, modèle, backend et jour ; ingestion idempotente (rejouer J-1 ne duplique rien) |
+| VF2.1 | Gateway déployée, source `ai_gateway` active | Lignes `ai_gateway` dans `cost_line_items` | Une ligne par `azp`, modèle, backend et jour ; ingestion idempotente (rejouer J-1 ne duplique rien) |
