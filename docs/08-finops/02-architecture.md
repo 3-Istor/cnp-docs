@@ -104,7 +104,7 @@ cloud sont d'abord rangés sous `__cluster__`, puis remplacés par le partage (v
 | `fx_rates` | Taux de référence BCE par jour et par devise |
 | `carbon_intensity` | Intensité moyenne du réseau français par jour, en gCO2e/kWh |
 | `month_close` | Mois figés. Une ligne d'un mois clos n'est plus modifiée |
-| `cost_centers` | Projet vers centre de coût. Créée, pas encore alimentée |
+| `cost_centers` | Projet vers centre de coût et responsable budgétaire, saisi dans l'onglet Finance |
 | `project_budgets`, `cost_alerts`, `budget_alert_states`, `recommendation_states` | Budgets, alertes et recommandations, antérieurs au plan |
 
 Colonnes ajoutées à FOCUS :
@@ -137,4 +137,9 @@ projets, un administrateur CNP voit tout.
 | `GET /reconciliation` | Facture contre réparti pour un fournisseur et un mois. Administrateur CNP seulement |
 | `/recommendations`, `/budgets/{projet}`, `/alerts` | Parcours antérieurs au plan, branchés sur les données réelles |
 
-Les routes `/forecast` et `/anomalies` du plan n'existent pas encore.
+| `GET /forecast` | Prévision de fin de mois avec intervalle à 80 % et date de dépassement prévue |
+| `GET /anomalies` | Jours anormaux par application et leur cause probable |
+| `GET /export.xlsx`, `/export.parquet` | Pack finance du mois (finance et administrateurs) |
+| `GET /statement.pdf` | Relevé mensuel d'un projet |
+| `POST /close/{AAAA-MM}`, `GET /closes` | Clôture mensuelle |
+| `GET`, `PUT /cost-centers` | Centres de coût et responsables budgétaires |

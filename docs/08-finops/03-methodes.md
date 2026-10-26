@@ -199,7 +199,8 @@ Une ligne `x_is_final = false` est révisée à chaque passe. L'interface marque
 | Facture AWS et GCP | Quand le mois suivant celui qui suit la période a commencé. Les clouds ferment une facture dans les premiers jours du mois suivant, et des crédits ou ajustements peuvent encore arriver pendant ce mois |
 
 La table `month_close` fige un mois : l'ingestion ne réécrit plus ses lignes et le partage de
-facture ne le touche plus. Deux éléments du plan ne sont pas encore codés : la route qui
-clôture un mois, et la ligne d'ajustement sur le mois suivant quand une révision arrive après
-la clôture. Aujourd'hui, une révision tardive sur un mois clos est ignorée et journalisée.
-Ces deux éléments arrivent avec le pack finance.
+facture ne le touche plus. La finance clôture un mois avec `POST /api/finops/close/{AAAA-MM}` :
+le mois courant est refusé, et un mois qui a encore des lignes de facture non définitives aussi,
+sauf `force=true`. Une révision qui arrive après la clôture devient une ligne d'ajustement
+(`ChargeCategory = Adjustment`) sur le premier mois ouvert, égale à l'écart ; rejouer la même
+révision n'ajoute rien. Une ligne entièrement nouvelle sur un mois clos est ignorée.

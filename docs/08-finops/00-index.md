@@ -33,7 +33,8 @@ et chaque chiffre affiché dit d'où il vient.
 | Ingestion AWS et GCP, partage de facture, réconciliation | Mergé, inactif tant que les clouds ne sont pas activés |
 | Source `ai_gateway` | Codée et testée sur fixtures, en attente d'agentgateway |
 | Exporter de puissance des hyperviseurs | Reporté, le TCO prend la moyenne mesurée des CSV |
-| Clôture mensuelle, exports XLSX et PDF, rôle `cnp-finance`, prévision | À faire |
+| Pack finance : rôle `cnp-finance`, exports XLSX, Parquet et PDF, clôture mensuelle, centres de coût, rapport mensuel | Mergé ; groupe Keycloak `cnp-finance` à appliquer |
+| Prévision de fin de mois et anomalies liées aux déploiements | Mergé |
 | Agent de recommandation | Après un mois de données réelles |
 
 ## Liens avec le reste de la documentation
