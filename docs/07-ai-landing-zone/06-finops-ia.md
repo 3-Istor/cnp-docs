@@ -32,20 +32,23 @@ projet.
 
 ## 3. Le coût de l'IA est compté au prix public
 
-**Décision (Brian, 2026-10-25) : la consommation d'IA est valorisée au tarif payant publié
-par Google pour Gemini, même quand le niveau gratuit est utilisé.** C'est ce chiffre que
-montrent les budgets, les dashboards et les exports : il dit ce que coûte vraiment l'usage.
-La facture réelle (0 € au niveau gratuit) ne sert qu'à la réconciliation. Le plan FinOps porte
+**Décision (Brian, 2026-10-25, étendue à Claude le 2026-10-26) : la consommation d'IA est
+valorisée au tarif publié de chaque fournisseur, même quand elle est gratuite ou payée par des
+crédits.** C'est ce chiffre que montrent les budgets, les dashboards et les exports : il dit ce
+que coûte vraiment l'usage. Ce qui est réellement payé (0 € au niveau gratuit de Gemini ;
+crédits inclus du Max pour Claude) ne sert qu'à la réconciliation. Le plan FinOps porte
 la même règle (D-F8).
 
 | Backend | Coût affiché (`x_cost_eur`) | Base (`x_pricing_basis`) |
 |---|---|---|
+| Claude | tokens en entrée × prix d'entrée + tokens en sortie × prix de sortie, au tarif publié d'Anthropic pour le modèle (par exemple `claude-haiku-5-5` : 0,10 $ et 0,50 $ par million de tokens pour un prompt de 100 000 tokens au plus), converti en euros au taux BCE du jour | `public_price` |
 | Gemini | tokens en entrée × prix d'entrée + tokens en sortie × prix de sortie, au tarif payant du modèle, converti en euros au taux BCE du jour | `public_price` |
 | Serveur GPU | part du TCO on-prem du plan FinOps, au prorata des tokens ; 0 tant que le TCO n'existe pas | `tco` |
 
 Les prix vivent dans `finops/ai-prices.yaml`, à côté du TCO : par modèle, prix par million de
-tokens en entrée et en sortie, devise, date d'effet et lien vers la
-[page des tarifs de l'API Gemini](https://ai.google.dev/gemini-api/docs/pricing). Un
+tokens en entrée et en sortie, devise, date d'effet et lien vers la page de tarifs du
+fournisseur ([Claude](https://platform.claude.com/docs/en/about-claude/pricing),
+[Gemini](https://ai.google.dev/gemini-api/docs/pricing)). Un
 changement de prix est une PR, avec sa date d'effet.
 
 ## 4. Lignes FOCUS
@@ -56,10 +59,11 @@ ligne par `azp`, modèle et backend :
 | Colonne FOCUS | Valeur |
 |---|---|
 | `ServiceCategory` | `AI and Machine Learning` |
-| `ProviderName`, `ServiceName` | `Google`, `Gemini API` ; ou `CNP`, `Serveur GPU` |
+| `ProviderName`, `ServiceName` | `Anthropic`, `Claude API` ; `Google`, `Gemini API` ; ou `CNP`, `Serveur GPU` |
 | `ConsumedQuantity`, `ConsumedUnit` | nombre de tokens, `Tokens` |
 | `ListCost` | tokens × tarif payant du jour (`ai-prices.yaml`) |
-| `BilledCost` | ce que Google facture réellement : 0 au niveau gratuit |
+| `BilledCost` | ce que le fournisseur facture réellement : le prix des tokens pour Claude, 0 au niveau gratuit de Gemini |
+| Crédits inclus du Max | une ligne mensuelle `ChargeCategory` = `Credit`, du montant des crédits consommés, pour que la réconciliation retombe sur ce qui a été payé |
 | `x_cost_eur`, `x_pricing_basis` | le coût affiché par CNP (§3) et sa base |
 | `Tags` | `cnp_project`, `cnp_app` ou `cnp_agent` (nouvelle dimension), `cnp_env` |
 | `x_allocation_method` | `direct` |
@@ -91,3 +95,11 @@ du plan FinOps. Le plan FinOps a reçu la source `ai_gateway` et la décision D-
 | VF1.1 | 1 | 100 appels d'un agent de test, puis l'onglet « IA » du projet | Les tokens affichés égalent ceux des métriques de la gateway, à 1 % près |
 | VF1.2 | 1 | Coût au prix public | Tokens en entrée et en sortie × prix de `ai-prices.yaml`, recalculable à la main |
 | VF2.1 | I2 du plan FinOps | Lignes `ai_gateway` dans `cost_line_items` | Une ligne par `azp`, modèle, backend et jour ; ingestion idempotente (rejouer J-1 ne duplique rien) |
+
+## 8. Suivre la dépense réelle sur Claude
+
+La dépense réelle se lit dans la Claude Console (usage de l'espace de travail `cnp-demo`, face
+à son plafond de 20 $ par mois, D38). La CMP l'affiche sur l'écran Modèles et sur la carte des
+backends de l'onglet IA, à partir des métriques de la gateway ; la Console fait foi en cas
+d'écart. Les crédits du Max (100 $ par mois pour Max 5x) expirent à chaque cycle sans report :
+la dépense du mois ne déborde jamais sur le mois suivant.

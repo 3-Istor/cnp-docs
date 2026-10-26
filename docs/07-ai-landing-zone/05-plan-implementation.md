@@ -41,6 +41,18 @@ puis il attend :
 - D'abord un cluster k3d local, puis le cluster principal (D28).
 - Chaque brique : mesurer sa mémoire et la consigner dans la spec §7.
 
+## 1 bis. À faire par Brian avant de lancer l'agent
+
+1. Lier les crédits API du Max à une organisation de la Claude Console : sur claude.ai,
+   Settings > Billing, section API credits, « Link organization » (possible après 7 jours
+   d'abonnement).
+2. Dans la Console, créer l'espace de travail `cnp-demo`, lui mettre un plafond de dépense de
+   20 $ par mois avec des alertes à 50 % et 80 %, et ne pas activer l'auto-reload (D38).
+3. Créer une clé API dans cet espace, puis la mettre dans Vault sous
+   `kvv2/platform/ai/anthropic`. Faire de même avec les clés Gemini sous
+   `kvv2/platform/ai/gemini/<n>`.
+4. Donner à l'agent ses accès : dépôts, kubeconfig, k3d, administration de Keycloak et Vault.
+
 ## 2. Phase 0 : prérequis
 
 | ID | Dépôt | Quoi | Fait quand |
@@ -55,7 +67,7 @@ puis il attend :
 
 | ID | Dépôt | Quoi | Fait quand |
 |---|---|---|---|
-| T1.1 | K3s (k3d local) | **Essai d'agentgateway**, 1 à 2 jours. Installer la dernière version stable, épinglée. Relever les noms exacts des ressources (GatewayClass, politique, backends LLM, rate limit, routes), la clé du rate limit par claim, le rejeu sur une autre clé Gemini puis le serveur GPU après un 429 (D23), le comportement si le service de rate limit est injoignable, la possibilité de plafonner `max_tokens` et le comptage d'une requête rejouée (une ou deux fois), et la mémoire (D32). Rapport : une PR sur cnp-docs qui complète la spec §4 avec ces noms et la §7 avec la mémoire. Décision de continuer ou de basculer sur le plan B (spec §8). | Rapport fusionné ; V1.3 à V1.8 passent sur le k3d local |
+| T1.1 | K3s (k3d local) | **Essai d'agentgateway**, 1 à 2 jours. Installer la dernière version stable, épinglée. Relever les noms exacts des ressources (GatewayClass, politique, backends LLM, rate limit, routes), la clé du rate limit par claim, le rejeu sur une autre clé Gemini puis le serveur GPU après un 429 (D23), le comportement si le service de rate limit est injoignable, la possibilité de plafonner `max_tokens` et le comptage d'une requête rejouée (une ou deux fois), et la mémoire (D32), le backend Anthropic avec la traduction du format OpenAI, et le repli sur Gemini quand Claude refuse pour plafond ou crédits épuisés (le code d'erreur n'est pas forcément 429 ; D6, D38). Rapport : une PR sur cnp-docs qui complète la spec §4 avec ces noms et la §7 avec la mémoire. Décision de continuer ou de basculer sur le plan B (spec §8). | Rapport fusionné ; V1.3 à V1.8 passent sur le k3d local |
 | T1.2 | K3s | `k8s/config/ai-gateway/` : namespace, chart épinglé, GatewayClass et Gateway avec un listener interne (8080, jamais exposé), CiliumNetworkPolicy `ai-egress` (D23 : Gemini, serveur GPU), VaultSecret des clés Gemini, backends Gemini dans l'ordre puis serveur GPU, rate limit. Ajout à `k8s/kustomization.yaml`. | V1.2, V1.5, V1.10 |
 | T1.3 | K3s | Observabilité : Tempo (D30) dans `k8s/config/observability/` ; récepteur OTLP et pipeline GenAI dans `values-alloy.yaml` (`k8s.attributes`, suppression des `gen_ai.*.messages`) ; datasource Tempo et tableau « IA » dans Grafana ; règles vmalert : budget à 80 %, 429, refus. Logs d'accès de la gateway avec les champs de D14, rétention 30 jours, ajout à `audit-archive.yaml`. | V1.8, V1.9 |
 | T1.4 | K3s | Keycloak, par le même mécanisme que la configuration actuelle du realm `3istor` : client `ai-gateway` (audience seule), client scope `project` (mapper groupes → `project`), mapper d'audience `ai-gateway`, Client Policy `exchange-guard`, durée de jeton de 5 minutes pour les clients d'agent et d'app IA. Audience `cmp-api` pour la CMP (préparation de T1.9). | V1.3, V1.4, V1.6 |
@@ -112,7 +124,8 @@ options, recommandation) dans les six cas du §1 : décision inapplicable, véri
 échoue deux fois, composant non prévu, protection affaiblie, budget mémoire dépassé, action
 sur des données de tenant ou sur main.
 
-Les clés Gemini sont déjà dans Vault sous kvv2/platform/ai/gemini/<n> : ne les lis jamais en
+Les clés de Claude et de Gemini sont déjà dans Vault sous kvv2/platform/ai/anthropic et
+kvv2/platform/ai/gemini/<n> : ne les lis jamais en
 clair. Les vérifications qui dépendent du serveur GPU (V1.10 à V1.12, V1.15, T1.14)
 attendent qu'il réponde au contrat du §5 de la spec.
 

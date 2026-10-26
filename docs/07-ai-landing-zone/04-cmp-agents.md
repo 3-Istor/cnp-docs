@@ -82,10 +82,11 @@ référence visuelle ; ce document reste la référence fonctionnelle.
 - **Carte « Niveau de données ».** Cloud ou Local, avec une phrase sur ce que ça implique
   (« Local : vos données ne quittent pas le homelab ; les réponses sont plus lentes »). Un
   projet critical est forcé en Local.
-- **Carte « Budget ».** Jauge des tokens consommés aujourd'hui, coût au prix public de Gemini, seuil
+- **Carte « Budget ».** Jauge des tokens consommés aujourd'hui, coût au prix public (Claude, Gemini), seuil
   d'alerte. Reprend `BudgetGauge` et `BudgetForm`.
 - **Carte « Modèles ».** Modèles autorisés pour le projet, et l'état de chaque backend
-  (Gemini : quota restant ; serveur GPU : en ligne ou « service indisponible »).
+  (Claude : dépense du mois face au plafond de 20 $ ; Gemini : quota restant ; serveur GPU :
+  en ligne ou « service indisponible »).
 - **Liste « Agents et apps avec accès IA ».** Nom, type (agent ou app), version, statut,
   isolation, tokens du jour, dernière activité.
 - **Boutons.** « Créer un agent » ; « Donner l'accès IA à une app ».
@@ -142,7 +143,7 @@ Sur le modèle du `DeploymentStepper` des apps, en six étapes :
   dernière activité ; filtre et bouton de coupure.
 - **Outils MCP.** Registre des serveurs : provenance, outils exposés, risque ; approuver ou
   retirer un serveur. L'approbation est une PR sur le registre dans Git.
-- **Modèles.** Backends, quota Gemini restant, état du serveur GPU, table des prix.
+- **Modèles.** Backends, dépense Claude face au plafond, quota Gemini restant, état du serveur GPU, table des prix.
 
 ### Écrans existants à étendre
 

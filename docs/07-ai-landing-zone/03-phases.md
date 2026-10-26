@@ -50,10 +50,10 @@ audit. Pas de kagent, de sandbox, d'outils MCP ni de guardrails.
 **Livrables.**
 
 1. agentgateway (proxy et contrôleur) dans le namespace `ai-gateway`, listener interne, egress
-   limité à Gemini et au serveur GPU.
+   limité à Claude, Gemini et au serveur GPU.
 2. Keycloak : client de l'agent UC7, client `ai-gateway`, mappers `project` et audience, Client
    Policy `exchange-guard`, jetons de 5 minutes ; secret client dans Vault.
-3. Clé Gemini dans Vault, montée dans la seule gateway ; backend Gemini par défaut.
+3. Clés de Claude et de Gemini dans Vault, montées dans la seule gateway ; backend Claude (`claude-haiku-5-5`) par défaut, Gemini en repli (D6).
 4. Backend du serveur GPU dès qu'il répond au contrat (spec §5, services 1 et 2) : repli sur
    429 et route Local.
 5. Politique de la gateway : JWT obligatoire, règle CEL sur `project`, deny par défaut ;
@@ -80,8 +80,8 @@ audit. Pas de kagent, de sandbox, d'outils MCP ni de guardrails.
 | V1.7e | `max_tokens` trop grand | Requête avec `max_tokens` = 100 000 | Plafonnée à 4 096 ou refusée |
 | V1.8 | Trace | Une requête, puis la trace dans Grafana | Attributs `project`, agent, modèle, tokens en entrée et en sortie, latence ; aucun prompt |
 | V1.9 | Audit | Une requête refusée et une acceptée, puis LogQL sur Loki | Les deux lignes ont utilisateur, agent, projet, modèle, tokens et décision |
-| V1.10 | Repli | Forcer un 429 de Gemini (quota simulé ou clé invalide) | L'appel bascule sur le serveur GPU et aboutit |
-| V1.11 | Projet Local | Projet `local`, egress vers Gemini coupé | La requête aboutit par le serveur GPU ; aucune connexion vers Gemini |
+| V1.10 | Repli | Forcer un refus de Claude (clé invalide ou plafond de l'espace de travail atteint), puis un 429 de Gemini | Le premier appel bascule sur Gemini, le second sur le serveur GPU ; les deux aboutissent |
+| V1.11 | Projet Local | Projet `local`, egress vers Claude et Gemini coupé | La requête aboutit par le serveur GPU ; aucune connexion vers Gemini |
 | V1.12 | Panne du serveur GPU | Arrêter le service texte, puis requête d'un projet Local, puis d'un projet Cloud | Local : « service indisponible » en moins de 10 s *(seuil proposé)* ; Cloud : réponse normale |
 | V1.13 | Qualité d'UC7 | 10 questions de référence sur cnp-docs | Au moins 8 réponses correctes, avec la bonne source citée *(seuil proposé)* |
 | V1.15 | VRAM du serveur GPU | Les trois modèles du profil A chargés, deux requêtes de texte en parallèle avec 8 000 tokens de contexte, `nvidia-smi` | Moins de 15 Go utilisés ; aucun modèle déchargé |
