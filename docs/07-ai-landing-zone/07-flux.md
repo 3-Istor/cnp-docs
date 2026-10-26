@@ -12,7 +12,7 @@
 | **agentgateway** | Namespace `ai-gateway` | La seule porte : vérifie le jeton, les droits et le budget, applique les guardrails, choisit le backend, compte les tokens, émet traces et logs. Elle route trois sortes de trafic : modèles, outils (MCP) et autres agents (A2A). |
 | **Service de rate limit et Redis** | Namespace `ai-gateway` | Tient les compteurs de budget par agent et par jour. |
 | **Webhook de guardrail** | Namespace `ai-gateway` (petit service maison, phase 2) | Reçoit le prompt de la gateway et demande à Llama Guard, sur le serveur GPU, s'il est dangereux. |
-| **Modèles** | Gemini (Internet) ; serveur GPU (homelab, §5 de la spec) | Produisent du texte, des embeddings, des classifications. Ils ne voient jamais l'agent directement. |
+| **Modèles** | Claude et Gemini (Internet) ; serveur GPU (homelab, §5 de la spec) | Produisent du texte, des embeddings, des classifications. Ils ne voient jamais l'agent directement. |
 | **Serveurs d'outils (MCP)** | Serveur MCP de la CMP ; serveurs tiers lancés par ToolHive dans `mcp-tools` | Exécutent les outils : lire des logs, ouvrir une PR, chercher sur le web, générer une image. |
 | **Sandbox** | Pod gVisor (ou Kata) créé à la demande dans le namespace de l'agent (phase 2) | Exécute le code que l'agent a écrit, sans réseau. |
 | **Keycloak** | Déjà en place sur le cluster | Donne à l'agent un jeton de 5 minutes. |
@@ -30,8 +30,8 @@ C'est le flux de base, déjà en phase 1. Chaque étape dit ce qui se passe quan
 | 4 | Autorisation : le projet du jeton a-t-il droit à ce modèle ? Est-il Local ? | agentgateway (`authorization`, règles CEL) | 403 |
 | 5 | Budget : reste-t-il des tokens à cet agent aujourd'hui ? La gateway réserve une estimation. | agentgateway + service de rate limit | 429 « budget épuisé » |
 | 6 | Guardrails d'entrée (phase 2) : la regex masque les secrets et les données personnelles ; en phase 2, le webhook demande l'avis de Llama Guard | agentgateway (`promptGuard`) + webhook + serveur GPU | Prompt refusé ; si le webhook est injoignable, refus aussi |
-| 7 | Choix du backend : projet Local → serveur GPU seulement. Sinon, une des clés Gemini (équilibrage P2C) ; sur 429 de Google, une autre clé ; si toutes saturent, le serveur GPU | agentgateway | Serveur GPU injoignable → 503 « service indisponible » |
-| 8 | La gateway ajoute la clé du fournisseur (l'agent ne l'a jamais), puis envoie la requête | agentgateway → Gemini ou serveur GPU | — |
+| 7 | Choix du backend : projet Local → serveur GPU seulement. Sinon, Claude (`claude-haiku-5-5` par défaut) ; si Claude refuse (plafond de dépense, crédits épuisés, 429), une des clés Gemini (équilibrage P2C) ; si elles saturent aussi, le serveur GPU | agentgateway | Serveur GPU injoignable → 503 « service indisponible » |
+| 8 | La gateway ajoute la clé du fournisseur (l'agent ne l'a jamais), traduit au besoin le format OpenAI vers celui de Claude, puis envoie la requête | agentgateway → Claude, Gemini ou serveur GPU | — |
 | 9 | La réponse revient, en streaming si demandé | — | — |
 | 10 | Guardrails de sortie (phase 2) : masquage des secrets et données personnelles dans la réponse | agentgateway (`promptGuard`, côté réponse) | Passage masqué |
 | 11 | Comptage : la gateway lit l'usage réel (tokens en entrée et en sortie) et remplace l'estimation de l'étape 5 | agentgateway + service de rate limit | — |
@@ -75,7 +75,7 @@ phase 1, elle est dans le code de l'app.
 4. Le serveur GPU génère l'image ; le serveur MCP la renvoie à l'agent (lien ou contenu).
    Avant, il décharge le modèle de texte du GPU et prend un verrou ; après, il le rend (spec §5,
    « Changer de modèle pour une image »). Pendant ce temps, le texte des projets Cloud part sur
-   Gemini, celui des projets Local attend.
+   Claude ou Gemini, celui des projets Local attend.
 5. Comptage : un appel d'image n'est pas compté en tokens. La gateway limite le nombre
    d'appels par agent et par jour (D35) et le FinOps le valorise au TCO du serveur GPU.
 
@@ -133,6 +133,7 @@ Ce flux ne passe **pas** par la gateway : le code ne sort jamais du sandbox.
 
 | Quoi | Compté par | Unité | Valorisé à |
 |---|---|---|---|
+| Appels de modèle Claude | gateway | tokens en entrée et en sortie, par agent, projet, modèle | Tarif publié d'Anthropic ([06-finops-ia.md](06-finops-ia.md)) ; payés par les crédits inclus |
 | Appels de modèle Gemini | gateway | tokens en entrée et en sortie, par agent, projet, modèle | Tarif payant publié de Gemini ([06-finops-ia.md](06-finops-ia.md)) |
 | Appels de modèle au serveur GPU | gateway | tokens | TCO on-prem, au prorata |
 | Images générées | gateway (nombre d'appels de l'outil) | appels | TCO on-prem |

@@ -19,7 +19,7 @@ chaque agent comme un workload non fiable.
 
 **Cadre : démonstration ou MVP.** La taille de l'équipe et la haute disponibilité ne sont pas
 des contraintes. Les premiers utilisateurs sont les développeurs de CNP et les tenants.
-Gemini est ouvert à tous ceux qui ont accès à la démo, pour un faible volume.
+Claude et Gemini sont ouverts à tous ceux qui ont accès à la démo, pour un faible volume ; la dépense sur Claude est plafonnée (D38).
 
 | Dans le périmètre | Hors périmètre |
 |---|---|
@@ -53,18 +53,18 @@ Statuts : **décidé** (par Brian), **hérité** (des pages et du modèle, non r
 | ID | Décision | Statut | Phase | Note |
 |---|---|---|---|---|
 | D1 | **agentgateway** pour tout le trafic des agents (LLM, MCP, A2A), en GatewayClass `agentgateway` à part. Envoy Gateway reste l'entrée des apps et des utilisateurs. | hérité | 1 | Remplace Agent Router. Plan B au §8. |
-| D2 | Tout appel LLM, outil ou agent passe par la gateway ; la clé Gemini n'est montée que dans la gateway. | hérité | 1 | |
+| D2 | Tout appel LLM, outil ou agent passe par la gateway ; les clés des fournisseurs (Claude, Gemini) ne sont montées que dans la gateway. | hérité | 1 | |
 | D3 | Un client Keycloak par agent. Seul, l'agent utilise `client_credentials` ; pour un utilisateur, le token exchange (Keycloak 26.2 ou plus). Cible : le jeton du ServiceAccount remplace le secret client (federated client authentication, Keycloak 26.6). Jeton d'accès de **5 minutes, sans refresh**. | décidé | 1 puis 2 | Remplace « ≤ 15 min ». Phase 1 : secret client depuis Vault ; phase 2 : jeton du ServiceAccount. |
 | D4 | Kyverno en Enforce à l'admission. Autorisation à la gateway par `AgentgatewayPolicy` : JWT obligatoire, règles CEL sur les claims et par outil, deny par défaut. OPA en `ext_authz` seulement si le CEL ne suffit plus. | hérité | 1 puis 3 | Cedar reste confiné au proxy ToolHive. |
 | D5 | Cilium default-deny entre tenants et en egress, egress par FQDN. RuntimeClass `gvisor` et `kata`. agent-sandbox en `v1beta1`. | hérité | 0 puis 2 | |
-| D6 | **Gemini par défaut** (niveau gratuit, plusieurs clés de comptes gratuits, équilibrées (D23)). Repli sur le serveur GPU quand Gemini répond 429. Les projets Local n'ont que le serveur GPU. Pas de données clients sur Gemini. | décidé | 1 | Le modèle prévoit une seule clé : à mettre à jour. Réserves au §9. |
+| D6 | **Deux fournisseurs cloud, puis le serveur GPU.** Par défaut **Claude**, par l'API d'Anthropic, payé par les crédits API inclus dans l'abonnement Max de Brian : modèle `claude-haiku-5-5` par défaut, `claude-sonnet-5-5` quand un projet l'autorise. Si Claude refuse (plafond de dépense atteint, crédits épuisés, 429), repli sur **Gemini** (niveau gratuit, plusieurs clés équilibrées, D23), puis sur le serveur GPU. Les projets Local n'ont que le serveur GPU. Pas de données clients sur le niveau gratuit de Gemini. | décidé (Claude ajouté le 2026-10-26) | 1 | Plafonds de dépense : D38. Réserves sur Gemini au §9. |
 | D7 | OpenTelemetry GenAI → Alloy → Tempo pour les traces ; métriques dans **VictoriaMetrics** ; Grafana ; pas de Langfuse (environ 21,5 Gio de RAM au minimum). | hérité | 1 | Arize Phoenix si une interface pensée pour les LLM devient nécessaire. |
 | D8 | **kagent** : CRD `Agent` (`kagent.dev/v1alpha2`, type BYO pour une image LangGraph, ADK ou autre) et `ModelConfig` pointé sur la gateway. Chaque agent est publié en A2A avec son Agent Card. | hérité | 2 | À vérifier : `ModelConfig` sans clé dans le pod, RuntimeClass imposable, mémoire. |
 | D9 | Outils : un endpoint `/mcp` sur la gateway, devant le serveur MCP de la CMP (stake policy) et des serveurs tiers lancés par **ToolHive**, un conteneur par outil. Registre des serveurs approuvés en JSON dans Git, avec leur provenance Sigstore. | hérité | 2 | |
 | D10 | Guardrails : `promptGuard` d'agentgateway (regex qui masque PII et secrets), puis un webhook maison qui demande à Llama Guard 3, sur le serveur GPU, de classer le prompt. Si le classifieur est injoignable, la requête est refusée. | hérité ; refus en cas de panne décidé | 2 | Le webhook de la gateway ne parle pas le format d'Ollama : l'adaptateur est à écrire. |
 | D11 | Budget en tokens **par agent et par jour**, appliqué par le rate limit de la gateway (clé : un claim du JWT). Dépassement → 429. Coût en euros = tokens × tarif payant publié de Gemini, même au niveau gratuit (décidé, voir [06-finops-ia.md](06-finops-ia.md)) ; alerte à 80 %. OpenCost pour le coût de l'infra. | hérité | 1 | |
 | D12 | Évals : promptfoo dans GitHub Actions à chaque release d'agent ; rien sur le cluster. | hérité | 2 | Licence MIT ; rachat par OpenAI annoncé en mars 2026, à surveiller. |
-| D13 | Panne du serveur GPU : réponse « service indisponible ». Gemini continue pour les projets Cloud. | décidé | 1 | |
+| D13 | Panne du serveur GPU : réponse « service indisponible ». Claude et Gemini continuent pour les projets Cloud. | décidé | 1 | |
 | D14 | Audit : logs d'accès de la gateway → Alloy → Loki, puis l'archive Object Lock existante (CronJob horaire, bucket RGW, 30 jours). Champs obligatoires : utilisateur, agent, projet, modèle, outil, tokens, décision. Rétention de 30 jours pour le namespace de la gateway. | hérité | 1 | |
 | D15 | Plafond d'étapes : limite d'itérations du framework (par exemple `recursion_limit` de LangGraph), posée par le kit d'agent. Le budget en tokens sert de plafond dur. | hérité | 2 | Rien ne l'impose côté plateforme pour un agent au code maison. |
 | D16 | Pas de SPIRE ni de SPIFFE. | hérité | — | À reconsidérer si le mTLS entre agents ou la fédération multicloud deviennent nécessaires. |
@@ -95,10 +95,10 @@ Ces noms viennent du modèle Noodle. Les noms de CRD et de champs propres à age
 |---|---|
 | Namespaces | `ai-gateway`, `kagent`, `mcp-tools`, un namespace par agent (§9, point 1) |
 | Entrée vers un agent | Utilisateur → Cloudflare → Envoy Gateway (login OIDC) → agentgateway (A2A, jeton de l'utilisateur) → agent. Le listener d'agentgateway n'est jamais exposé directement. |
-| Egress de la gateway | `generativelanguage.googleapis.com:443` et l'IP du serveur GPU en `/32`, rien d'autre |
+| Egress de la gateway | `api.anthropic.com:443`, `generativelanguage.googleapis.com:443` et l'IP du serveur GPU en `/32`, rien d'autre |
 | Egress d'un agent | DNS et agentgateway ; aucun ingress, sauf depuis la gateway pour l'A2A |
 | Egress d'un sandbox | DNS seulement ; ingress depuis le routeur de sandbox seulement |
-| Clé Gemini | Dans Vault, synchronisée en Secret `gemini-api-key` dans le seul namespace `ai-gateway` |
+| Clés des fournisseurs | Dans Vault (`kvv2/platform/ai/anthropic`, `kvv2/platform/ai/gemini/<n>`), synchronisées en Secrets `anthropic-api-key` et `gemini-api-key-<n>` dans le seul namespace `ai-gateway` |
 
 ### Exécution
 
@@ -113,7 +113,7 @@ Ces noms viennent du modèle Noodle. Les noms de CRD et de champs propres à age
 
 | Sujet | Convention |
 |---|---|
-| Niveau de données | Chaque projet est `cloud` ou `local`. Cloud : Gemini puis serveur GPU en repli. Local : serveur GPU seulement. Les projets `critical` (classement du doc d'origine) sont toujours Local. |
+| Niveau de données | Chaque projet est `cloud` ou `local`. Cloud : Claude, puis Gemini, puis serveur GPU en repli. Local : serveur GPU seulement. Les projets `critical` (classement du doc d'origine) sont toujours Local. |
 | Télémétrie | OTLP (gRPC 4317, HTTP 4318) vers Alloy ; `k8sattributes` ajoute `namespace` et `project` ; `gen_ai.input.messages` et `gen_ai.output.messages` sont supprimés sauf opt-in du projet |
 | Tableaux | Coût et budget par projet et par agent dans Grafana ; alerte à 80 % du budget, sur les 429 et sur les refus |
 | Budget mémoire | Environ 4 Go pour toute la zone IA sur le cluster on-prem, à mesurer (§7) |
@@ -127,6 +127,7 @@ Toutes les briques parlent des formats publics. Les documents de référence :
 | API Chat Completions d'OpenAI | Format des appels de modèle à la gateway (`/v1/chat/completions`) | [Référence de l'API](https://platform.openai.com/docs/api-reference/chat) |
 | Function calling d'OpenAI | Le champ `tools` de la requête et `tool_calls` de la réponse | [Guide](https://platform.openai.com/docs/guides/function-calling) |
 | API Embeddings d'OpenAI | `/v1/embeddings` pour le RAG | [Référence](https://platform.openai.com/docs/api-reference/embeddings) |
+| API Claude (Messages) | Claude ; agentgateway traduit le format OpenAI des agents vers `/v1/messages` | [API Claude](https://platform.claude.com/docs/en/api/overview), [fournisseur Anthropic d'agentgateway](https://agentgateway.dev/docs/kubernetes/latest/integrations/llm/providers/anthropic.md), [compatibilité OpenAI d'Anthropic](https://platform.claude.com/docs/en/api/openai-sdk) |
 | Compatibilité OpenAI de Gemini | Gemini servi au format OpenAI | [Doc Google](https://ai.google.dev/gemini-api/docs/openai) |
 | Compatibilité OpenAI d'Ollama | Le serveur GPU servi au format OpenAI | [Doc Ollama](https://docs.ollama.com/api/openai-compatibility) |
 | MCP (Model Context Protocol), version 2026-07-28 | Outils : `tools/list`, `tools/call`, JSON-RPC 2.0 | [Spécification](https://modelcontextprotocol.io/specification/latest), [outils](https://modelcontextprotocol.io/specification/2026-07-28/server/tools) |
@@ -142,7 +143,7 @@ ou autre chose peuvent y tourner. La plateforme ne dépend que de ce contrat.
 
 | # | Service | Interface attendue | Utilisé pour | Phase | Si le service est injoignable |
 |---|---|---|---|---|---|
-| 1 | Texte | API compatible OpenAI (`/v1/chat/completions`, streaming) | Repli quand Gemini répond 429 ; projets Local | 1 | « service indisponible » pour les projets Local ; les projets Cloud continuent sur Gemini |
+| 1 | Texte | API compatible OpenAI (`/v1/chat/completions`, streaming) | Repli quand Claude et Gemini refusent ; projets Local | 1 | « service indisponible » pour les projets Local ; les projets Cloud continuent sur Gemini |
 | 2 | Embeddings | API compatible OpenAI (`/v1/embeddings`) | RAG d'UC7 | 1 | Le RAG est indisponible |
 | 3 | Garde | Llama Guard 3 ou équivalent, appelé par le webhook de D10 | Guardrails | 2 | La requête est refusée |
 | 4 | Image | Outil MCP `generate_image` qui appelle l'API du serveur | Agents qui génèrent des images | 2 | L'outil renvoie une erreur claire |
@@ -184,7 +185,7 @@ les guardrails continuent de marcher pendant une image.
 
 Compter 10 à 30 secondes de changement dans chaque sens, à mesurer. Pendant le verrou, le
 service de texte du serveur GPU se déclare indisponible à la gateway. Les projets Cloud passent
-sur Gemini, les projets Local reçoivent « service indisponible, génération d'image en cours ».
+sur Claude ou Gemini, les projets Local reçoivent « service indisponible, génération d'image en cours ».
 Une seule image à la fois. **Ce que ça apprend pour la suite** : des latences réalistes de
 changement de modèle, et la mesure de ce qu'un vrai GPU ou un fournisseur payant
 éviterait.
@@ -288,6 +289,7 @@ point ouvert reçoit une valeur par défaut. Validées par Brian le 2026-10-25 ;
 | D35 | Limite d'images | Au plus 20 appels de `generate_image` par agent et par jour, compteur de la gateway ; valorisés au TCO du serveur GPU. | 2 |
 | D36 | Où vit la configuration de l'IA | Deux niveaux : les droits et plafonds dans le `ProjectRecord` (écrit par la CMP), les réglages dans les `deploy/values-*.yaml` de l'app (bloc `ai`, bloc `agent`). Le second ne dépasse jamais le premier ; les règles de la gateway viennent du premier. Tout est accessible depuis un assistant par les outils MCP de la CMP ([04-cmp-agents.md](04-cmp-agents.md) §8). | 1 |
 | D37 | Choix du modèle de texte | Le modèle est un réglage, pas une décision figée. Candidats (octobre 2026, tenant sur 16 Go avec la garde et les embeddings) : `qwen3.5:9b` en Q8_0, `granite4.2:8b` (septembre 2026, Apache 2.0, outils et JSON) en Q8_0, `gemma4:12b` en Q4 si son support des outils est confirmé. Les Qwen plus récents (3.6 et 3.8) n'existent qu'en 27B et plus, soit 17 Go et plus : trop gros. Choix par un comparatif sur nos propres cas (T1.14) : 20 appels d'outils d'UC7 et UC3, taux d'appels corrects, latence, VRAM. | 1 |
+| D38 | Plafonds de dépense sur Claude | Trois niveaux. (1) **Chez Anthropic** : les crédits du Max (100 $ par mois pour Max 5x, sans report) sont liés à une organisation de la Claude Console ; un espace de travail dédié `cnp-demo` porte un plafond de dépense de **20 $ par mois**, avec alertes à 50 % et 80 % ; la clé API de la gateway est créée dans cet espace. Pas d'auto-reload ni de crédits achetés : quand le plafond ou les crédits sont atteints, l'API refuse, et la gateway passe sur Gemini. (2) **Gateway** : budget en tokens par agent et par jour (D11). (3) **FinOps** : budget en euros par projet (06-finops-ia.md). Les crédits ne couvrent pas Claude Code ni l'usage des apps Claude. | 1 |
 | D31 | Application UC7 | Une app fullstack du catalogue existant (FastAPI, React, PostgreSQL avec pgvector), nommée `cnp-docs-assistant`, dans un projet `cnp-ai` de niveau demo. Elle indexe cnp-docs et cnp-agent-kit et cite ses sources. | 1 |
 
 **Restent hors du champ de l'agent d'implémentation :**
