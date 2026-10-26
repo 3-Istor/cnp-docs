@@ -24,7 +24,7 @@ démontrable avant que la phase suivante commence.
 | **WS-6** | Secrets entre clusters | D-07 | Un pod qui redémarre sur un cluster distant pendant une panne Vault simulée monte quand même ses secrets, et une lecture de chemin inter-projets est refusée par la politique. |
 | **WS-7** | Couche de données portable | D-08 | Une base pilote est restaurée depuis un backup dans un namespace neuf, et le même chart rend correctement sur les trois profils de classe de stockage. |
 | **WS-8** | Observabilité et signal de disponibilité | D-10 | Arrêter un cluster produit une alerte issue des deux autres dans la fenêtre convenue, et les métriques du cluster arrêté se rattrapent à la reconnexion sans trou. |
-| **WS-9** | Cycle de vie, FinOps et décommissionnement | D-13 | Supprimer un projet pilote laisse le réconciliateur à zéro orphelin chez tous les fournisseurs, et la vue FinOps ventile le coût par cloud. |
+| **WS-9** | Cycle de vie, FinOps et décommissionnement | D-13 | Supprimer un projet pilote laisse le réconciliateur à zéro orphelin chez tous les fournisseurs, et la vue FinOps ventile le coût par cloud, avec une réconciliation par fournisseur et un non-alloué < 5 %. |
 
 ## Phases et portes
 

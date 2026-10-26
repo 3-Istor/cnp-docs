@@ -135,3 +135,9 @@ nav:
       - Plan d'implémentation: 07-ai-landing-zone/05-plan-implementation.md
       - FinOps de l'IA: 07-ai-landing-zone/06-finops-ia.md
       - Les flux pas à pas: 07-ai-landing-zone/07-flux.md
+  - 8. FinOps:
+      - Vue d'ensemble: 08-finops/00-index.md
+      - Décision D-14: 08-finops/01-decisions.md
+      - Architecture: 08-finops/02-architecture.md
+      - Méthodes de calcul: 08-finops/03-methodes.md
+      - Exploitation: 08-finops/04-exploitation.md
