@@ -402,6 +402,26 @@
   
 
       
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../08-finops/00-index/" class="md-tabs__link">
+          
+  
+  
+  8. FinOps
+
+        </a>
+      </li>
+    
+  
+
+      
     </ul>
   </div>
 </nav>
@@ -2413,10 +2433,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-avant-que-le-plan-finops-soit-implemente" class="md-nav__link">
+  <a href="#6-avant-que-la-gateway-soit-deployee" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Avant que le plan FinOps soit implémenté
+        6. Avant que la gateway soit déployée
       
     </span>
   </a>
@@ -2458,6 +2478,203 @@
     
   
     Les flux pas à pas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. FinOps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    8. FinOps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-finops/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-finops/01-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décision D-14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-finops/02-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-finops/03-methodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Méthodes de calcul
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-finops/04-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
   
 
     
@@ -2560,10 +2777,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#6-avant-que-le-plan-finops-soit-implemente" class="md-nav__link">
+  <a href="#6-avant-que-la-gateway-soit-deployee" class="md-nav__link">
     <span class="md-ellipsis">
       
-        6. Avant que le plan FinOps soit implémenté
+        6. Avant que la gateway soit déployée
       
     </span>
   </a>
@@ -2602,8 +2819,8 @@
 <blockquote>
 <p><strong>Statut : v1.0 du 2026-10-25, validée par Brian.</strong> Cette page dit comment la
 consommation de tokens de la landing zone IA entre dans le module FinOps de la CMP. Elle
-s'appuie sur le « Plan FinOps CNP » du 16 octobre 2026 (proposition, pas encore validée ni
-implémentée) et en reprend les choix : format pivot FOCUS, table <code>cost_line_items</code> dans le
+s'appuie sur le « Plan FinOps CNP » du 16 octobre 2026 (validé le 2026-10-26 et implémenté
+côté CMP, voir <a href="../../08-finops/00-index/">la section FinOps</a>) et en reprend les choix : format pivot FOCUS, table <code>cost_line_items</code> dans le
 PostgreSQL de la CMP, ingesteur <code>finops-ingester</code>, onglets du dashboard.</p>
 </blockquote>
 <h2 id="1-deux-budgets-deux-roles">1. Deux budgets, deux rôles<a class="headerlink" href="#1-deux-budgets-deux-roles" title="Permanent link">&para;</a></h2>
@@ -2799,11 +3016,14 @@ ligne par <code>azp</code>, modèle et backend :</p>
 </tr>
 </tbody>
 </table>
-<h2 id="6-avant-que-le-plan-finops-soit-implemente">6. Avant que le plan FinOps soit implémenté<a class="headerlink" href="#6-avant-que-le-plan-finops-soit-implemente" title="Permanent link">&para;</a></h2>
-<p>En phase 1, la CMP lit directement VictoriaMetrics pour l'onglet « IA » du projet
-(<code>GET /api/projects/{projet}/ai/usage</code>). Les lignes FOCUS n'arrivent qu'avec l'itération I2
-du plan FinOps. Le plan FinOps a reçu la source <code>ai_gateway</code> et la décision D-F8 le 2026-10-25 ; sa ligne
-« fournisseurs LLM » ne couvre plus que les appels qui ne passent pas par la gateway.</p>
+<h2 id="6-avant-que-la-gateway-soit-deployee">6. Avant que la gateway soit déployée<a class="headerlink" href="#6-avant-que-la-gateway-soit-deployee" title="Permanent link">&para;</a></h2>
+<p>Le plan FinOps est validé depuis le 2026-10-26 et la source <code>ai_gateway</code> est implémentée
+dans la CMP, testée sur fixtures. Elle n'écrit aucune ligne tant qu'agentgateway n'est pas
+déployée, parce que les métriques de tokens n'existent pas encore. En phase 1, la CMP lit
+directement VictoriaMetrics pour l'onglet « IA » du projet
+(<code>GET /api/projects/{projet}/ai/usage</code>). La décision D-F8 est consignée dans
+<a href="../../08-finops/01-decisions/">D-14</a>, et sa ligne « fournisseurs LLM » ne couvre que les
+appels qui ne passent pas par la gateway.</p>
 <h2 id="7-verifications">7. Vérifications<a class="headerlink" href="#7-verifications" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2829,7 +3049,7 @@ du plan FinOps. Le plan FinOps a reçu la source <code>ai_gateway</code> et la d
 </tr>
 <tr>
 <td>VF2.1</td>
-<td>I2 du plan FinOps</td>
+<td>Gateway déployée, source <code>ai_gateway</code> active</td>
 <td>Lignes <code>ai_gateway</code> dans <code>cost_line_items</code></td>
 <td>Une ligne par <code>azp</code>, modèle, backend et jour ; ingestion idempotente (rejouer J-1 ne duplique rien)</td>
 </tr>
