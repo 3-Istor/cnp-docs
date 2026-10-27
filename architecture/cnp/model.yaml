@@ -587,7 +587,7 @@ elements:
   - {id: fo-onprem-wg, kind: cloud, parent: fo-g-vpn, icon: k8s-pod, title: "wireguard", tech: "[one pod per cloud]", desc: "Opens the tunnel; relays 18080,<br>18082, 18083 to their Services", multiplicity: "one per cloud", ports: [{name: to-cloud, protocol: TCP, port: 18081}]}
   - {id: fo-g-obs, kind: group, parent: fo-z-onprem, color: orange, icon: grafana-alloy, title: "OBSERVABILITY", sub: "ns observability"}
   - {id: fo-onprem-alloy, kind: backend, parent: fo-g-obs, icon: grafana-alloy, title: "Alloy", tech: "[DaemonSet]", desc: "Scrapes the hub, OpenCost<br>and offhours-guard"}
-  - {id: fo-vm, kind: database, parent: fo-g-obs, shape: cylinder, icon: grafana, title: "VictoriaMetrics", tech: "[cluster · 14 d]", desc: "Series of the three clusters,<br>told apart by the cluster label", ports: [{name: insert, protocol: TCP, port: 8480}, {name: select, protocol: TCP, port: 8481}]}
+  - {id: fo-vm, kind: database, parent: fo-g-obs, shape: cylinder, icon: victoriametrics, title: "VictoriaMetrics", tech: "[cluster · 14 d]", desc: "Series of the three clusters,<br>told apart by the cluster label", ports: [{name: insert, protocol: TCP, port: 8480}, {name: select, protocol: TCP, port: 8481}]}
   - {id: fo-g-opencost, kind: group, parent: fo-z-onprem, color: emerald, icon: opencost, title: "ALLOCATION", sub: "ns opencost"}
   - {id: fo-opencost, kind: backend, parent: fo-g-opencost, icon: opencost, title: "OpenCost", tech: "[TCO custom pricing]", desc: "Cost per namespace and day,<br>queries cluster=onprem only", ports: [{name: api, protocol: TCP, port: 9003}]}
   - {id: fo-g-cmp, kind: group, parent: fo-z-onprem, color: violet, icon: fastapi, title: "CMP", sub: "ns arcl-cmp"}
