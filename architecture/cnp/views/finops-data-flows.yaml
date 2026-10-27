@@ -1,0 +1,81 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · FinOps · Where cost data comes from"
+subtitle: "How do the usage and cost data of the three clusters reach the CMP today?"
+meta:
+  - "Scope: FinOps collection and ingestion across the K3s hub, EKS and GKE · main as of 2026-10-27 (CNP-110, K3s#148, CMP v0.3.64) plus Cloud#36 as planned · checked live on the hub on 27/10"
+  - "Out of scope: logs over 18082, Argo Rollouts reads over 18083, the CMP UI and its API, AI gateway usage (agentgateway is not deployed)"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - fo-z-cloud
+  - fo-cloud-alloy
+  - fo-cloud-opencost
+  - fo-cloud-wg
+  - fo-z-onprem
+  - fo-g-vpn
+  - fo-onprem-wg
+  - fo-g-obs
+  - fo-onprem-alloy
+  - fo-vm
+  - fo-g-opencost
+  - fo-opencost
+  - fo-g-cmp
+  - fo-ingester
+  - fo-db
+  - fo-z-ext
+  - fo-rte
+  - fo-aws-bill
+  - fo-gcp-bill
+
+steps: [e-fo-1-cloud-alloy-wg, e-fo-2-wg-vm, e-fo-3-alloy-vm, e-fo-4-opencost-vm, e-fo-5-ingester-opencost, e-fo-6-ingester-vm, e-fo-7-ingester-db]
+background: [c-fo-tunnel, c-fo-wg-vm-read, c-fo-cloud-opencost-read, c-fo-ingester-cloud-opencost, c-fo-ingester-rte, c-fo-ingester-aws, c-fo-ingester-gcp]
+
+# "" keeps the badge alone where the corridor is short: the cards carry the text.
+labels:
+  e-fo-1-cloud-alloy-wg: ""
+  e-fo-5-ingester-opencost: ""
+  c-fo-tunnel: ""
+  c-fo-cloud-opencost-read: ""
+  c-fo-ingester-rte: ""
+  c-fo-ingester-aws: ""
+  c-fo-ingester-gcp: ""
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · data plane"
+    color: emerald
+    lines:
+      - "[1] On each cloud, Alloy pushes its series to the local WireGuard pod, port 18080, with cluster=aws or gcp."
+      - "[2] The on-prem WireGuard pod relays them through the tunnel to vminsert."
+      - "[3] The on-prem Alloy pushes the hub's series, cluster=onprem."
+      - "[4] OpenCost on-prem prices them at the TCO, reading cluster=\"onprem\" only."
+      - "[5] Every pass, the CMP ingester pulls the allocations per namespace and day."
+      - "[6] It reads savings (replicas at 0) and rightsizing data with cluster=~\"onprem|\": history before 27/10 has no label."
+      - "[7] It upserts FOCUS lines; a closed day is never rewritten, a late change becomes an adjustment."
+  - id: card-bg
+    title: "Background · control plane"
+    color: orange
+    lines:
+      - "[A] The on-prem pod opens the tunnel, UDP 31820 to the cloud node. [B] Reads (18083) reach vmselect the same way, today for Argo Rollouts."
+      - "[C] Planned (Cloud#36): the cloud OpenCost reads its own cluster's series over 18083."
+      - "[D] Missing: the CMP would read the cloud OpenCost through aws-apps / gcp-apps :18081."
+      - "[E] Carbon intensity from RTE. [F] [G] Planned: the AWS and GCP invoices, behind finops_enabled."
+  - id: card-tunnel
+    title: "Tunnel ports"
+    color: amber
+    lines:
+      - "**18080** cloud → vminsert, metrics. Allowed: observability."
+      - "**18082** cloud → Loki, logs. Allowed: observability."
+      - "**18083** cloud → vmselect, reads. Allowed: argo-rollouts, finops (Cloud#36)."
+      - "**18081** on-prem → cloud, still whoami."
+      - "socat relays on both ends: nothing else crosses."
+  - id: card-gaps
+    title: "Gaps"
+    color: orange
+    lines:
+      - "!!G21!! **On-prem only advice.** No savings or rightsizing for apps on EKS / GKE yet."
+      - "!!G22!! **Stale tunnel diagram.** multicloud-links predates CNP-110."
+      - "!!G23!! **Port 18081.** Still whoami: the CMP cannot read the cloud OpenCost."

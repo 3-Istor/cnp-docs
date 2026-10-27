@@ -59,6 +59,18 @@ Deux chemins mènent aux chiffres. Le chemin comptable passe par l'ingestion et 
 c'est lui qui alimente l'interface, les budgets et les exports. Le chemin opérationnel
 reste dans VictoriaMetrics : Grafana y lit le burn rate en €/h, l'énergie et l'inoccupation.
 
+## D'où viennent les données entre les trois clusters
+
+*Comment les données d'usage et de coût de l'on-prem, d'EKS et de GKE arrivent-elles dans la CMP ?*
+
+![Flux de données FinOps](../01-architecture/diagrams/finops-data-flows.light.png#only-light)
+![Flux de données FinOps](../01-architecture/diagrams/finops-data-flows.dark.png#only-dark)
+
+- Un seul VictoriaMetrics, on-prem, reçoit les séries des trois clusters ; le label `cluster` les distingue.
+- Les clouds écrivent par le tunnel WireGuard (port 18080) et lisent par 18083 ; seuls les ports déclarés passent.
+- Tout ce qui est valorisé au TCO on-prem filtre sur `cluster="onprem"` (OpenCost) ou `cluster=~"onprem|"` (CMP, pour garder l'historique d'avant le label).
+- Source du schéma : `architecture/cnp`, vue `finops-data-flows`.
+
 ## Les sources
 
 | Source (`x_source`) | Ce qu'elle apporte | Base du montant | Fréquence |

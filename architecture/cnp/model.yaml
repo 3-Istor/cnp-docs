@@ -577,6 +577,27 @@ elements:
   - {id: hl-z-clouds, kind: region, color: orange, icon: kubernetes, title: "EKS · GKE", sub: "via WireGuard"}
   - {id: hl-clouds, kind: backend, parent: hl-z-clouds, icon: kubernetes, title: "Clusters cloud", tech: "[EKS · GKE]", desc: "Même socle, synchronisés<br>par Argo CD."}
 
+  # FinOps data flows (2026-10-27): how usage and cost data of the three clusters reach the CMP.
+  - {id: fo-z-cloud, kind: region, color: amber, icon: kubernetes, title: "PUBLIC CLOUD CLUSTERS", sub: "EKS cluster=aws · GKE cluster=gcp · same stack"}
+  - {id: fo-cloud-alloy, kind: backend, parent: fo-z-cloud, icon: grafana-alloy, title: "Alloy", tech: "[ns observability · CNP-110]", desc: "Scrapes kubelet, KSM, node-exporter;<br>adds the cluster label"}
+  - {id: fo-cloud-opencost, kind: backend, parent: fo-z-cloud, icon: opencost, title: "OpenCost", tech: "[ns finops · list prices]", desc: "Splits the invoice per namespace,<br>reads its own cluster only", status: planned, target: "Cloud#36", ports: [{name: api, protocol: TCP, port: 9003}]}
+  - {id: fo-cloud-wg, kind: cloud, parent: fo-z-cloud, icon: k8s-pod, title: "wireguard", tech: "[ns cnp-vpn · onprem-apps]", desc: "Relays declared ports only;<br>a NetworkPolicy picks<br>who may use each one", ports: [{name: write, protocol: TCP, port: 18080}, {name: read, protocol: TCP, port: 18083}, {name: wg, protocol: UDP, port: 31820}]}
+  - {id: fo-z-onprem, kind: region, color: cyan, icon: rack, title: "K3S CLUSTER · ON-PREM", sub: "hub · cluster=onprem"}
+  - {id: fo-g-vpn, kind: group, parent: fo-z-onprem, color: amber, icon: k8s-ns, title: "TUNNEL", sub: "ns wireguard"}
+  - {id: fo-onprem-wg, kind: cloud, parent: fo-g-vpn, icon: k8s-pod, title: "wireguard", tech: "[one pod per cloud]", desc: "Opens the tunnel; relays 18080,<br>18082, 18083 to their Services", multiplicity: "one per cloud", ports: [{name: to-cloud, protocol: TCP, port: 18081}]}
+  - {id: fo-g-obs, kind: group, parent: fo-z-onprem, color: orange, icon: grafana-alloy, title: "OBSERVABILITY", sub: "ns observability"}
+  - {id: fo-onprem-alloy, kind: backend, parent: fo-g-obs, icon: grafana-alloy, title: "Alloy", tech: "[DaemonSet]", desc: "Scrapes the hub, OpenCost<br>and offhours-guard"}
+  - {id: fo-vm, kind: database, parent: fo-g-obs, shape: cylinder, icon: grafana, title: "VictoriaMetrics", tech: "[cluster · 14 d]", desc: "Series of the three clusters,<br>told apart by the cluster label", ports: [{name: insert, protocol: TCP, port: 8480}, {name: select, protocol: TCP, port: 8481}]}
+  - {id: fo-g-opencost, kind: group, parent: fo-z-onprem, color: emerald, icon: opencost, title: "ALLOCATION", sub: "ns opencost"}
+  - {id: fo-opencost, kind: backend, parent: fo-g-opencost, icon: opencost, title: "OpenCost", tech: "[TCO custom pricing]", desc: "Cost per namespace and day,<br>queries cluster=onprem only", ports: [{name: api, protocol: TCP, port: 9003}]}
+  - {id: fo-g-cmp, kind: group, parent: fo-z-onprem, color: violet, icon: fastapi, title: "CMP", sub: "ns arcl-cmp"}
+  - {id: fo-ingester, kind: backend, parent: fo-g-cmp, icon: fastapi, title: "FinOps ingester", tech: "[CMP backend · loop]", desc: "Pulls every source, replays<br>3 days, upserts FOCUS lines"}
+  - {id: fo-db, kind: database, parent: fo-g-cmp, shape: cylinder, icon: sqlalchemy, title: "cost_line_items", tech: "[SQLite · FOCUS 1.2]", desc: "Cost lines, savings,<br>carbon, month closes"}
+  - {id: fo-z-ext, kind: region, color: slate, icon: globe, title: "EXTERNAL SOURCES", sub: "read over the Internet"}
+  - {id: fo-rte, kind: external, parent: fo-z-ext, icon: globe, title: "RTE éCO2mix", tech: "[ODRÉ open data API]", desc: "Grid carbon intensity per hour", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: fo-aws-bill, kind: external, parent: fo-z-ext, shape: cylinder, icon: globe, title: "AWS invoice", tech: "[Data Exports FOCUS · S3]", desc: "Amounts the shares split", status: planned, target: "finops_enabled", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: fo-gcp-bill, kind: external, parent: fo-z-ext, shape: cylinder, icon: globe, title: "GCP invoice", tech: "[Billing export · BigQuery]", desc: "Amounts the shares split", status: planned, target: "finops_enabled", ports: [{name: https, protocol: TCP, port: 443}]}
+
 connections:
   # Request path.
   - {id: e-1-browser-edge, from: user, to: cf-edge, port: https, protocol: HTTPS, verb: GET app, kind: flow}
@@ -886,6 +907,22 @@ connections:
   - {id: hl-c-portal-clouds, from: hl-portal, to: hl-clouds, protocol: WireGuard, verb: "synchronise", kind: flow}
   - {id: hl-c-apps-agw, from: hl-apps, to: hl-agw, verb: "les apps appellent les modèles", kind: flow, status: planned, target: IA-1}
 
+  # FinOps data flows
+  - {id: e-fo-1-cloud-alloy-wg, from: fo-cloud-alloy, to: fo-cloud-wg, kind: flow, port: write, protocol: HTTP, verb: remote_write}
+  - {id: e-fo-2-wg-vm, from: fo-onprem-wg, to: fo-vm, kind: flow, port: insert, protocol: HTTP, verb: "relay ◀ tunnel"}
+  - {id: e-fo-3-alloy-vm, from: fo-onprem-alloy, to: fo-vm, kind: flow, port: insert, protocol: HTTP, verb: remote_write}
+  - {id: e-fo-4-opencost-vm, from: fo-opencost, to: fo-vm, kind: flow, port: select, protocol: PromQL, verb: query}
+  - {id: e-fo-5-ingester-opencost, from: fo-ingester, to: fo-opencost, kind: flow, port: api, protocol: HTTP, verb: "GET /allocation"}
+  - {id: e-fo-6-ingester-vm, from: fo-ingester, to: fo-vm, kind: flow, port: select, protocol: PromQL, verb: "query onprem"}
+  - {id: e-fo-7-ingester-db, from: fo-ingester, to: fo-db, kind: flow, protocol: SQL, verb: upsert}
+  - {id: c-fo-tunnel, from: fo-onprem-wg, to: fo-cloud-wg, kind: tunnel, port: wg, protocol: WireGuard, verb: open}
+  - {id: c-fo-wg-vm-read, from: fo-onprem-wg, to: fo-vm, kind: flow, port: select, protocol: HTTP, verb: "relay ◀ tunnel"}
+  - {id: c-fo-ingester-rte, from: fo-ingester, to: fo-rte, kind: async, port: https, protocol: HTTPS, verb: "GET intensity"}
+  - {id: c-fo-ingester-aws, from: fo-ingester, to: fo-aws-bill, kind: async, port: https, protocol: HTTPS, verb: "read FOCUS"}
+  - {id: c-fo-ingester-gcp, from: fo-ingester, to: fo-gcp-bill, kind: async, port: https, protocol: HTTPS, verb: "query export"}
+  - {id: c-fo-cloud-opencost-read, from: fo-cloud-opencost, to: fo-cloud-wg, kind: flow, port: read, protocol: PromQL, verb: "query own cluster"}
+  - {id: c-fo-ingester-cloud-opencost, from: fo-ingester, to: fo-onprem-wg, kind: flow, port: to-cloud, protocol: HTTP, verb: "GET /allocation", status: planned, target: "flow to add"}
+
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
@@ -972,6 +1009,9 @@ annotations:
   - {id: G18, severity: medium, title: "Sync after a long down", text: "CNP-112: after a long down, Argo CD sync operations keep retrying against the destroyed cluster address; a manual unblock is needed.", targets: [c-argocd-b]}
   - {id: G19, severity: low, title: "Frontend start order", text: "CNP-114: the frontend nginx resolves the backend at start and crashes until the backend Service exists.", targets: [b1-front]}
   - {id: G20, severity: low, title: "Shared VaultSecret", text: "CNP-115: fullstack apps render the VaultSecret app-registry from both Applications; one stays OutOfSync.", targets: [b1-back]}
+  - {id: G21, severity: medium, title: "On-prem only advice", text: "Savings and rightsizing read cluster=~\"onprem|\" and price at the on-prem TCO; apps on EKS and GKE get no recommendation yet.", targets: [fo-ingester]}
+  - {id: G22, severity: low, title: "Stale tunnel diagram", text: "multicloud-links still says the VPN carries test flows only; since CNP-110 it carries metrics (18080), logs (18082) and reads (18083).", targets: [c-fo-tunnel]}
+  - {id: G23, severity: medium, title: "Port 18081", text: "The only on-prem to cloud flow still targets whoami (vpn-test): the CMP cannot read the cloud OpenCost until it points to opencost.finops:9003.", targets: [fo-onprem-wg]}
 
 # Who may act on what, today and after the segregation plan. deprecated: the plan removes
 # it; planned: the plan adds it, target = its phase (P1 root accounts, P2 CMP rights,

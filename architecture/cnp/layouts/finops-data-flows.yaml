@@ -1,0 +1,50 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2140, height: 1900}
+
+# Left: the clouds, then the hub, external sources under the hub. The tunnel [A] runs against
+# the reading direction (the hub opens it). Externals hang under the CMP on three lanes.
+elements:
+  fo-z-cloud: {x: 40, y: 220, w: 640, h: 520}
+  fo-cloud-alloy: {x: 40, y: 70, w: 300, h: 100}
+  fo-cloud-opencost: {x: 40, y: 300, w: 300, h: 100}
+  fo-cloud-wg: {x: 400, y: 70, w: 220, h: 330}
+
+  fo-z-onprem: {x: 780, y: 220, w: 1260, h: 900}
+  fo-g-vpn: {x: 40, y: 60, w: 340, h: 220}
+  fo-onprem-wg: {x: 40, y: 70, w: 260, h: 110}
+  fo-g-obs: {x: 860, y: 60, w: 360, h: 720}
+  fo-onprem-alloy: {x: 50, y: 70, w: 260, h: 100}
+  fo-vm: {x: 50, y: 300, w: 260, h: 300}
+  fo-g-opencost: {x: 440, y: 360, w: 340, h: 220}
+  fo-opencost: {x: 40, y: 70, w: 260, h: 110}
+  fo-g-cmp: {x: 40, y: 360, w: 340, h: 500}
+  fo-ingester: {x: 40, y: 70, w: 260, h: 120}
+  fo-db: {x: 120, y: 300, w: 200, h: 140}
+
+  fo-z-ext: {x: 780, y: 1180, w: 1260, h: 220}
+  fo-rte: {x: 300, y: 70, w: 300, h: 110}
+  fo-aws-bill: {x: 640, y: 70, w: 300, h: 110}
+  fo-gcp-bill: {x: 980, y: 70, w: 260, h: 110}
+
+edges:
+  e-fo-1-cloud-alloy-wg: {from: fo-cloud-alloy.right, to: fo-cloud-wg.left@50px}
+  c-fo-cloud-opencost-read: {from: fo-cloud-opencost.right, to: fo-cloud-wg.left@280px}
+  c-fo-tunnel: {from: fo-onprem-wg.left, to: fo-cloud-wg.right@115px, against_flow: true}
+  e-fo-2-wg-vm: {from: fo-onprem-wg.right@40px, to: fo-vm.left@80px, waypoints: [[1600, 390], [1600, 660]]}
+  c-fo-wg-vm-read: {from: fo-onprem-wg.right@75px, to: fo-vm.left@110px, waypoints: [[1580, 425], [1580, 690]]}
+  e-fo-3-alloy-vm: {from: fo-onprem-alloy.bottom, to: fo-vm.top}
+  e-fo-4-opencost-vm: {from: fo-opencost.right@80px, to: fo-vm.left@150px}
+  e-fo-5-ingester-opencost: {from: fo-ingester.right@55px, to: fo-opencost.left}
+  e-fo-6-ingester-vm: {from: fo-ingester.right@95px, to: fo-vm.left@260px, waypoints: [[1190, 745], [1190, 840]]}
+  e-fo-7-ingester-db: {from: fo-ingester.bottom@170px, to: fo-db.top}
+  c-fo-ingester-cloud-opencost: {from: fo-ingester.top, to: fo-onprem-wg.bottom, against_flow: true}
+  c-fo-ingester-rte: {from: fo-ingester.bottom@20px, to: fo-rte.top, waypoints: [[880, 1165], [1230, 1165]]}
+  c-fo-ingester-aws: {from: fo-ingester.bottom@35px, to: fo-aws-bill.top, waypoints: [[895, 1150], [1570, 1150]]}
+  c-fo-ingester-gcp: {from: fo-ingester.bottom@50px, to: fo-gcp-bill.top, waypoints: [[910, 1135], [1890, 1135]]}
+cards:
+  card-legend: {x: 40, y: 1460, w: 560, h: 400}
+  card-steps: {x: 630, y: 1460, w: 580, h: 400}
+  card-bg: {x: 1240, y: 1460, w: 480, h: 400}
+  card-tunnel: {x: 1750, y: 1460, w: 350, h: 210}
+  card-gaps: {x: 1750, y: 1690, w: 350, h: 170}
