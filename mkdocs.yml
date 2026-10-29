@@ -78,12 +78,15 @@ nav:
   - Guide Développeur: developer-onboarding-guide.md
   - Roadmap: README_ROADMAP.md
   - 1. Architecture & Topologies:
+      - Index des schémas: 01-architecture/00-diagram-index.md
       - Vue d'ensemble du système: 01-architecture/01-system-overview.md
       - Multi-tenancerie & Isolation: 01-architecture/02-tenancy-and-isolation.md
       - Topologie Réseau & Ingress: 01-architecture/03-network-topology.md
       - Plan de Reprise d'Activité (PRA): 01-architecture/04-disaster-recovery.md
       - Ségrégation des accès: 01-architecture/05-access-segregation.md
       - Journaux d'audit: 01-architecture/06-audit-logging.md
+      - Observabilité multicluster: 01-architecture/07-observability.md
+      - Sauvegarde des bases: 01-architecture/08-database-backups.md
   - 2. Composants Clés:
       - Portail & Dashboard CMP: 02-core-components/01-cmp-dashboard.md
       - Identités & Keycloak: 02-core-components/02-identity-keycloak.md
@@ -98,6 +101,7 @@ nav:
       - Configuration Développeur (cnp.yaml): 03-pipelines-and-workflows/03-developer-configuration-flow.md
       - Diagrammes de Flux Système: 03-pipelines-and-workflows/04-system-flows.md
       - Stratégie de Test & Mocking: 03-pipelines-and-workflows/05-testing-strategy.md
+      - Promotion et canary: 03-pipelines-and-workflows/06-release-canary.md
   - 4. Modèles & Templates:
       - Dépôts GitHub & Cartographie: 04-templates/00-github-repositories-landscape.md
       - Modèles d'Applications (Git): 04-templates/01-git-app-templates.md

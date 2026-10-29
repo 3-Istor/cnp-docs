@@ -1,0 +1,40 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Data · Restore an app database"
+subtitle: "What happens, in order, when a project admin restores an app database from the CMP?"
+meta:
+  - "Scope: one app with backups enabled on the K3s hub · main as of 2026-10-29 · derived from code (CMP security_databases.py, services/security/restore.py, RestoreDialog.tsx; infra-templates cnpg-cluster.yaml, values.yaml)"
+  - "Out of scope: EKS and GKE (backups not wired, CNP-165) · how the browser reaches the CMP (Cloudflare, Envoy) · the backup itself (see app-backup)"
+  - "Arrows: plain = request, dashed = reply. A restore never touches the running database: it builds <app>-db-r<N+1> beside it. The confirm call repeats the reads of the dry run."
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+participants: [admin-a, cmp-backend, bk-app-repo, argocd, hub-kapi, cnpg-operator, bk-db-next, ceph-rgw, app-pods]
+
+steps:
+  - {note: admin-a, text: "Security → Backups → Restore: picks a backup, optionally an instant"}
+  - {id: list, from: admin-a, to: cmp-backend, over: c-bk-admin-cmp, text: "GET /security/backups"}
+  - {id: kl, from: cmp-backend, to: hub-kapi, over: c-bk-cmp-kapi, text: "list Backups of <app>-db"}
+  - {reply: list, text: "restorable backups with backup_id"}
+  - {id: dry, from: admin-a, to: cmp-backend, over: c-bk-admin-cmp, text: "POST /security/restores · dry_run"}
+  - {id: chk, from: cmp-backend, to: hub-kapi, over: c-bk-cmp-kapi, text: "list Backups + Clusters (all Healthy?)"}
+  - {id: rd, from: cmp-backend, to: bk-app-repo, over: c-bk-cmp-repo, text: "read deploy/values(-backend).yaml"}
+  - {note: cmp-backend, text: "project admin only · 409 if a cluster is not healthy · refused if backups are off"}
+  - {reply: dry, text: "diff of deploy/values(-backend).yaml"}
+  - {id: go, from: admin-a, to: cmp-backend, over: c-bk-admin-cmp, text: "POST /security/restores · confirm"}
+  - {id: commit, from: cmp-backend, to: bk-app-repo, over: c-bk-cmp-repo, text: "commit db.restore: generation N+1, sourceServer, backupID, targetTime"}
+  - {reply: go, text: "committed"}
+
+  # Argo CD rolls the new generation out.
+  - {id: poll, from: argocd, to: bk-app-repo, over: c-bk-argocd-repo, text: "poll values"}
+  - {id: sync, from: argocd, to: hub-kapi, over: c-bk-argocd-kapi, text: "apply Cluster <app>-db-r<N+1> (wave -3)"}
+  - {id: watch, from: cnpg-operator, to: hub-kapi, over: c-bk-op-kapi, text: "create recovery pod"}
+  - {note: bk-db-next, text: "bootstrap.recovery: source = the current cluster's backups in the same ObjectStore"}
+  - {id: read, from: bk-db-next, to: ceph-rgw, over: c-bk-next-rgw, text: "read base backup + WAL up to targetTime"}
+  - {note: bk-db-next, text: "Cluster Healthy: Argo CD moves on to the workloads"}
+  - {id: wl, from: argocd, to: hub-kapi, over: c-bk-argocd-kapi, text: "apply workloads (wave 0): DB_HOST=<app>-db-r<N+1>-rw"}
+  - {note: app-pods, text: "the app is redeployed: a full canary in prod when release.strategy=canary"}
+  - {id: conn, from: app-pods, to: bk-db-next, over: c-bk-app-next, text: "connect to <app>-db-r<N+1>"}
+  - {note: argocd, text: "prune deletes the previous Cluster"}
+  - {note: ceph-rgw, text: "the previous generation's backups and WAL stay: the restore can be undone"}
+  - {note: app-pods, text: "writes made after the chosen point are lost"}

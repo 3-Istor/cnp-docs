@@ -4,9 +4,9 @@ type: topology
 title: "CNP · Multicloud · Where a project runs"
 subtitle: "What runs where between the on-prem hub, EKS and GKE, and which links cross between them?"
 meta:
-  - "Scope: hub (K3s) and its onprem target, EKS cnp-eks and GKE cnp-gke with one project and one app each · main as of 2026-10-18 · derived from code, cluster behaviour checked live on 18/10"
+  - "Scope: hub (K3s) and its onprem target, EKS cnp-eks and GKE cnp-gke with one project and one app each · main as of 2026-10-29 · derived from code, cluster behaviour checked live on 18/10"
   - "Out of scope: CMP and its project bootstrap · Image Updater · buckets, GitHub and the operator · per-project Keycloak (unused on clouds) · observability. Detail of every link between clusters, with the same letters: see multicloud-links."
-  - "v0.4 · source: cnp-docs/architecture/cnp"
+  - "v0.5 (2026-10-29: tunnel relays to on-prem observability) · source: cnp-docs/architecture/cnp"
 
 # Explicit, so an element added to the model enters this view only when listed here.
 include:
@@ -61,7 +61,7 @@ include:
   - wireguard-onprem
   - wireguard-onprem-gcp
 steps: [e-1-browser-edge, c-b-tunnel-gw, c-b-gw-b1, c-b1-front-back, c-b1-back-db]
-background: [c-argocd-b, c-argocd-gke, c-bsecret-vault, c-gkesecret-vault, c-wg-eks, c-wg-gke, c-vault-b-apiserver, c-vault-gke-apiserver, e-a-vso-vault, c-op-b-api, c-op-gke-api, c-op-vault, c-op-endpoint, c-wg-endpoint, c-op-ssm, c-op-state-s3, c-op-state-gcs, c-argocd-github, c-cmp-github, c-updater-github, c-updater-ghcr, c-b-nodes-ghcr, c-gke-nodes-ghcr, c-a-tunnel-edge, c-b-tunnel-edge, c-gke-tunnel-edge]
+background: [c-argocd-b, c-argocd-gke, c-bsecret-vault, c-gkesecret-vault, c-wg-eks, c-wg-gke, c-vault-b-apiserver, c-vault-gke-apiserver, e-a-vso-vault, c-op-b-api, c-op-gke-api, c-op-vault, c-op-endpoint, c-wg-endpoint, c-op-ssm, c-op-state-s3, c-op-state-gcs, c-argocd-github, c-cmp-github, c-updater-github, c-updater-ghcr, c-b-nodes-ghcr, c-gke-nodes-ghcr]
 
 labels:
   c-b-tunnel-gw: "via tunnel"
@@ -101,13 +101,19 @@ labels:
   c-b-nodes-ghcr: ""
   c-gke-nodes-ghcr: ""
   c-a-tunnel-edge: ""
+  c-bwg-onprem-vm: ""
+  c-bwg-onprem-loki: ""
+  c-bwg-onprem-select: ""
+  c-gkewg-onprem-vm: ""
+  c-gkewg-onprem-loki: ""
+  c-gkewg-onprem-select: ""
   c-b-tunnel-edge: ""
   c-gke-tunnel-edge: ""
 
 cards:
   - {id: card-legend, title: "Legend", color: slate, legend: true}
   - id: card-status
-    title: "Where things stand (2026-10-18)"
+    title: "Where things stand (2026-10-29)"
     color: amber
     lines:
       - "**One Argo CD** on the K3s hub drives onprem, EKS and GKE. Vault and the central Keycloak stay on the hub, which is also the onprem target."
@@ -119,7 +125,7 @@ cards:
     color: cyan
     lines:
       - "[1] The user opens <app>-<project>.3istor.com on Cloudflare (HTTPS 443)."
-      - "[2] Cloudflare relays the request to the letestaws-gateway Service (Envoy, HTTP 80) through the tunnel opened outbound by [Y]."
+      - "[2] Cloudflare relays the request to the letestaws-gateway Service (Envoy, HTTP 80) through the tunnel opened outbound by letestaws-tunnel."
       - "[3] HTTPRoute to the frontend Service :80 (nginx :3001)."
       - "[4] nginx proxies /api/ to the backend :8000."
       - "[5] The backend queries CNPG test-aws-db-rw :5432, on a local-path PVC."
@@ -129,14 +135,14 @@ cards:
     lines:
       - "[A] [B] Argo CD syncs the EKS / GKE API server (:443)."
       - "[C] [D] The cloud secret operator logs in to Vault at vault.3istor.com :443, public, through Cloudflare."
-      - "[E] [F] The on-prem WireGuard pods initiate UDP 31820 to the cloud node. Only test relays use it today."
-      - "[X] [Y] [Z] Each project tunnel is opened outbound to Cloudflare (QUIC 7844)."
+      - "[E] [F] The on-prem WireGuard pods initiate UDP 31820 to the cloud node. Unlettered: three relays carry cloud metrics, logs and canary queries home (TCP 18080, 18082, 18083, see multicloud-links)."
+      - "Unlettered: each project tunnel is opened outbound to Cloudflare (QUIC 7844)."
       - "Letters follow multicloud-links, which lists every link: [G] to [W] are there."
   - id: card-gaps
     title: "Gaps between the plan and the code"
     color: orange
     lines:
-      - "!!G18!! Argo CD keeps retrying against a destroyed cluster (CNP-112)."
+      - "!!G18!! Cloud Applications retry forever with refresh (CNP-112); deleting one while its cluster is down hangs on the finalizer."
       - "!!G19!! nginx crashes until the backend Service exists (CNP-114)."
       - "!!G20!! app-registry VaultSecret rendered twice, one OutOfSync (CNP-115)."
       - "!!G13!! Ricoberger operator: behaviour in a Vault outage untested."

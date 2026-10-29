@@ -50,15 +50,13 @@ Ce qui tourne aujourd'hui, estompé, et toute la landing zone IA en clair, dans 
 
 Le hub on-prem tel qu'il tourne aujourd'hui (estompé) et toute la landing zone IA (en clair), au niveau de détail des zooms : politiques et CRDs d'agentgateway, contrôleur, proxy, clients Keycloak, pipeline Alloy. Les trois niveaux d'isolation du sandbox sont trois nœuds distincts côte à côte (gVisor, Kata, runc standard) : la plateforme peut en proposer un, deux ou les trois, selon que l'agent exécute du code ou non. EKS et GKE restent résumés à leur API server. Grande image : l'ouvrir dans draw.io (`platform-detailed.*.drawio`) pour zoomer.
 
-![Platform overview, detailed](../01-architecture/diagrams/platform-detailed.light.png#only-light)
-![Platform overview, detailed](../01-architecture/diagrams/platform-detailed.dark.png#only-dark)
+![Platform overview, detailed](../01-architecture/diagrams/platform-detailed.light.png)
 
 ### Carte globale : plateforme actuelle et landing zone IA
 
 Toute la plateforme sur une seule toile : le hub on-prem, la landing zone IA proposée, GitHub, les modèles et les clusters EKS et GKE. Les numéros suivent un utilisateur, une app, un agent et une release ; les lettres, les tâches de fond.
 
-![CNP global map](../01-architecture/diagrams/platform-global.light.png#only-light)
-![CNP global map](../01-architecture/diagrams/platform-global.dark.png#only-dark)
+![CNP global map](../01-architecture/diagrams/platform-global.light.png)
 
 ### AI gateway : vue détaillée
 

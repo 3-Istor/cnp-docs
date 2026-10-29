@@ -1,0 +1,44 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Observability · A metric and a log line from EKS"
+subtitle: "What happens, in order, between a pod on EKS and the panel a project dev reads in Grafana?"
+meta:
+  - "Scope: one metric and one log line of an EKS app, then the dev's dashboard query · GKE is the same with cluster=gcp and tunnel 100.96.0.4/30 · main as of 2026-10-29 · derived from code (Cloud/terraform/public/platform/observability/values-alloy.yaml, K3s/k8s/config/{wireguard,observability}, CMP metrics_isolation.py)"
+  - "Out of scope: on-prem collection and audit (see observability) · alerting · OpenCost"
+  - "Arrows: plain = request, dashed = reply. Notes in grey say what checks or rewrites the data."
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+participants: [b-obs-targets, alloy-aws, b-wireguard, wireguard-onprem, vm-vminsert, vm-vmstorage, vm-vmselect, vmauth, loki-gateway, loki, grafana]
+
+steps:
+  # Write: a metric.
+  - {id: scrape, from: alloy-aws, to: b-obs-targets, over: c-alloyaws-targets, text: "GET /metrics (pod annotations)"}
+  - {reply: scrape, text: "samples"}
+  - {note: alloy-aws, text: "adds cluster=aws, namespace, pod"}
+  - {id: rw, from: alloy-aws, to: b-wireguard, over: c-alloyaws-relay-vm, text: "POST /insert/0/prometheus/api/v1/write · onprem-apps:18080"}
+  - {note: b-wireguard, text: "NetworkPolicy onprem-apps: only ns observability on 18080"}
+  - {id: relay, from: b-wireguard, to: wireguard-onprem, over: c-bwg-onprem-vm, text: "socat to 100.96.0.2:18080, in the tunnel"}
+  - {id: ins, from: wireguard-onprem, to: vm-vminsert, over: c-wgonprem-vminsert, text: "socat to vminsert:8480"}
+  - {note: vm-vminsert, text: "no credential: NetworkPolicy vminsert-writers admits the wireguard pods"}
+  - {id: store, from: vm-vminsert, to: vm-vmstorage, over: c-vminsert-vmstorage, text: "write series · :8400"}
+  - {note: alloy-aws, text: "tunnel down: the write fails and Alloy retries; no disk buffer yet (CNP-89)"}
+
+  # Write: a log line.
+  - {note: alloy-aws, text: "tails the pod log; tenant = namespace label cnp.3istor.com/project"}
+  - {id: push, from: alloy-aws, to: b-wireguard, over: c-alloyaws-relay-loki, text: "POST /loki/api/v1/push · :18082 · basic auth alloy"}
+  - {id: relay2, from: b-wireguard, to: wireguard-onprem, over: c-bwg-onprem-loki, text: "socat to 100.96.0.2:18082"}
+  - {id: gw, from: wireguard-onprem, to: loki-gateway, over: c-wgonprem-lokigw, text: "socat to loki-gateway:80"}
+  - {note: loki-gateway, text: "checks the alloy password (htpasswd from Vault)"}
+  - {id: ingest, from: loki-gateway, to: loki, over: c-lokigw-loki, text: "push, tenant set by Alloy, passed on"}
+
+  # Read: the dev opens the project dashboard.
+  - {note: grafana, text: "dev opens a dashboard of the project org"}
+  - {id: q, from: grafana, to: vmauth, over: c-grafana-vmauth, text: "query as project-<p>"}
+  - {note: vmauth, text: "adds extra_filters namespace=~<project namespaces>"}
+  - {id: q2, from: vmauth, to: vm-vmselect, over: c-vmauth-vmselect, text: "filtered query"}
+  - {id: q3, from: vm-vmselect, to: vm-vmstorage, over: c-vmselect-vmstorage, text: "read series · :8401"}
+  - {reply: q, text: "series of the project only, every cluster"}
+  - {id: lq, from: grafana, to: loki-gateway, over: c-grafana-lokigw, text: "query as grafana-projects, X-Scope-OrgID=<p>"}
+  - {id: lq2, from: loki-gateway, to: loki, over: c-lokigw-loki, text: "query tenant <p>"}
+  - {reply: lq, text: "log lines of the project only"}

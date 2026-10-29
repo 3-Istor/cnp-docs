@@ -83,6 +83,14 @@ steps: [e-1-browser-edge, e-2-tunnel-app, e-3-connector-envoy, c-app-aigw, c-age
 background: [e-a-vso-vault, c-vso-ai-secret, c-aigw-keycloak, c-agent-keycloak, c-wg-eks, c-wg-gke, c-argocd-b, c-argocd-gke]
 
 labels:
+  c-bwg-onprem-vm: ""
+  c-bwg-onprem-loki: ""
+  c-bwg-onprem-select: ""
+  c-gkewg-onprem-vm: ""
+  c-gkewg-onprem-loki: ""
+  c-gkewg-onprem-select: ""
+  c-cmp-b-api: ""
+  c-cmp-gke-api: ""
   c-sb-claim: ""
   c-sb-kyverno: ""
   e-1-browser-edge: ""
@@ -138,7 +146,7 @@ cards:
     lines:
       - "[A] [B] Vault and its operator deliver the Gemini key to the gateway only (zoom 6)."
       - "[C] [D] Keycloak issues one client per agent; the gateway caches its JWKS."
-      - "[E]–[H] WireGuard links the hub to EKS and GKE; Argo CD deploys to both (zoom 10)."
+      - "[E]–[H] WireGuard links the hub to EKS and GKE; Argo CD deploys to both (zoom 10). Unlettered: the tunnel relays cloud metrics, logs and canary queries home (TCP 18080, 18082, 18083), and the CMP reads cloud projects on the EKS / GKE API."
       - "Observability (Alloy, Loki, Tempo, Grafana) is left out of this map to keep it readable: see the ai-gateway view and zoom 9."
   - id: card-plan
     title: "Order of work"

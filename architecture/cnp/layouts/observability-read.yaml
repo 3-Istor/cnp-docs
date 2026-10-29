@@ -1,0 +1,50 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2380, height: 1700}
+
+# Readers left, front doors (vmauth, Loki gateway) in the middle, stores right, Discord outside.
+elements:
+  z-cluster: {x: 40, y: 200, w: 1900, h: 1000}
+  g-cmp: {x: 40, y: 340, w: 320, h: 170}
+  cmp-backend: {x: 30, y: 60, w: 260, h: 90}
+  g-rollouts: {x: 40, y: 600, w: 320, h: 170}
+  argo-rollouts: {x: 30, y: 60, w: 260, h: 90}
+  g-observability: {x: 440, y: 80, w: 1420, h: 880}
+  grafana: {x: 20, y: 60, w: 260, h: 90}
+  o-vmauth-secret: {x: 20, y: 190, w: 260, h: 80}
+  vmalert: {x: 20, y: 640, w: 260, h: 90}
+  vmauth: {x: 400, y: 160, w: 260, h: 90}
+  loki-gateway: {x: 400, y: 420, w: 260, h: 90}
+  vm-vmselect: {x: 780, y: 160, w: 260, h: 130}
+  loki: {x: 780, y: 420, w: 260, h: 90}
+  alertmanager: {x: 780, y: 640, w: 260, h: 90}
+  vm-vmstorage: {x: 1140, y: 160, w: 260, h: 100}
+  z-internet: {x: 2010, y: 880, w: 320, h: 240}
+  discord: {x: 30, y: 80, w: 260, h: 90}
+
+edges:
+  c-grafana-vmauth: {from: grafana.right@45px, to: vmauth.left@55px, waypoints: [[830, 385], [830, 495]]}
+  c-vmauth-vmselect: {from: vmauth.right@85px, to: vm-vmselect.left@85px}
+  c-vmselect-vmstorage: {from: vm-vmselect.right@50px, to: vm-vmstorage.left@50px}
+  c-grafana-lokigw: {from: grafana.right@75px, to: loki-gateway.left@55px, waypoints: [[800, 415], [800, 755]], label_at: [800, 470]}
+  c-lokigw-loki: {from: loki-gateway.right@60px, to: loki.left@60px, label_at: [1162, 760]}
+  c-grafana-vmselect: {from: grafana.right@20px, to: vm-vmselect.left@55px, waypoints: [[1230, 360], [1230, 495]]}
+  c-cmp-vmselect: {from: cmp-backend.right@15px, to: vm-vmselect.left@70px, waypoints: [[1215, 615], [1215, 510]], label_at: [960, 615]}
+  c-cmp-lokigw: {from: cmp-backend.right@60px, to: loki-gateway.left@75px, waypoints: [[840, 660], [840, 775]]}
+  c-rollouts-vmselect: {from: argo-rollouts.right@40px, to: vm-vmselect.left@100px, waypoints: [[1200, 900], [1200, 540]]}
+  c-vmalert-vmselect: {from: vmalert.right@20px, to: vm-vmselect.left@115px, waypoints: [[1185, 940], [1185, 555]]}
+  c-vmalert-am: {from: vmalert.right@75px, to: alertmanager.left@75px}
+  c-loki-am: {from: loki.bottom, to: alertmanager.top}
+  c-am-discord: {from: alertmanager.right@45px, to: discord.left@45px, waypoints: [[1975, 965], [1975, 1005]]}
+  c-cmp-grafana: {from: cmp-backend.right@5px, to: grafana.left@60px, waypoints: [[465, 605], [465, 400]]}
+  c-grafana-discord: {from: grafana.right@85px, to: discord.left@60px, waypoints: [[785, 425], [785, 255], [1990, 255], [1990, 1020]]}
+  c-cmp-discord: {from: cmp-backend.right@75px, to: discord.left@75px, waypoints: [[420, 675], [420, 1180], [1960, 1180], [1960, 1035]]}
+  r-cmp-vmauthsecret: {from: cmp-backend.right@40px, to: o-vmauth-secret.left@50px, waypoints: [[450, 640], [450, 520]]}
+  r-vmauth-secret: {from: vmauth.bottom, to: o-vmauth-secret.bottom, waypoints: [[1010, 590], [630, 590]]}
+
+cards:
+  card-legend: {x: 40, y: 1260, w: 480, h: 400}
+  card-steps: {x: 560, y: 1260, w: 560, h: 190}
+  card-bg: {x: 1160, y: 1260, w: 640, h: 400}
+  card-iso: {x: 1840, y: 1260, w: 500, h: 400}
+  card-gaps: {x: 560, y: 1480, w: 560, h: 180}

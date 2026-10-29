@@ -236,7 +236,7 @@ edges:
   c-id-provision: {from: cmp-backend.right@80px, to: kc-client-cmp.left@30px, waypoints: [[3230, 410], [3230, 670]], label_at: [3636, 670]}
   c-id-vault: {from: cmp-backend.right@60px, to: vault-a.left@30px, waypoints: [[3210, 390], [3210, 510]], label_at: [3412, 510]}
   c-id-vso-read: {from: vso.bottom@280px, to: vault-a.left@50px, waypoints: [[3530, 530]], label_at: [3530, 468]}
-  c-mcp-api: {from: cmp-mcp.bottom@240px, to: cmp-backend.top@280px, waypoints: [[2700, 650], [3130, 650], [3130, 290], [3090, 290]], label_at: [3130, 468]}
+  c-mcp-api: {from: cmp-mcp.bottom@240px, to: cmp-backend.top@280px, waypoints: [[2700, 650], [3130, 650], [3130, 290], [3090, 290]], label_at: [2900, 650]}
   c-mcp-app-repos: {from: cmp-mcp.bottom@280px, to: gh-project-repos.top@70px, waypoints: [[2740, 610], [2780, 610], [2780, 250], [6440, 250], [6440, 450], [6550, 450]], label_at: [3118, 250]}
   c-md-quota: {from: gemini.bottom@30px, to: md-quota.top@30px, label_at: [6510, 2588]}
   c-ob-1: {from: ob-recv.right@30px, to: ob-k8s.left@30px, label_at: [4716, 4060]}
@@ -288,7 +288,7 @@ edges:
   c-th-run: {from: th-proxy.right@50px, to: th-server.left@50px}
   c-updater-app-repos: {from: image-updater.bottom@280px, to: gh-project-repos.right@80px, waypoints: [[3090, 980], [6860, 980], [6860, 560]], label_at: [6588, 980], against_flow: true}
   c-updater-ghcr: {from: image-updater.bottom@260px, to: ghcr.bottom@30px, waypoints: [[3070, 990], [6510, 990]], label_at: [6510, 864], against_flow: true}
-  c-updater-github: {from: image-updater.right@30px, to: github.left@60px, waypoints: [[3220, 790], [3220, 310], [6450, 310], [6450, 390]], label_at: [3220, 744]}
+  c-updater-github: {from: image-updater.right@30px, to: github.left@60px, waypoints: [[3220, 790], [3220, 310], [6450, 310], [6450, 390]], label_at: [4800, 310]}
   e-1-browser-edge: {from: user.right@30px, to: cf-edge.top@180px, waypoints: [[340, 360], [340, 740], [250, 740]], label_at: [340, 498]}
   e-2-tunnel-app: {from: cloudflared-app.bottom@30px, to: cf-edge.top@260px, waypoints: [[1000, 590], [330, 590]], label_at: [666, 590]}
   e-3-connector-envoy: {from: cloudflared-app.bottom@120px, to: envoy-shared-gateway.top@230px, waypoints: [[1090, 740], [770, 740], [770, 730], [760, 730]], label_at: [1090, 584]}
@@ -387,6 +387,9 @@ edges:
   c-md-gpu: {from: md-svc-text.right@25px, to: md-gpu.left@25px}
   c-md-store: {from: md-svc-text.right@85px, to: md-store.left@20px, waypoints: [[7235, 3135], [7235, 3198]]}
   r-md-guard: {from: md-store.left@60px, to: md-guard.right@60px}
+  # CMP reads cloud projects on the EKS / GKE API, alongside the Argo CD edges.
+  c-cmp-b-api: {from: cmp-backend.right@45px, to: b-apiserver.left@80px, waypoints: [[3150, 375], [3150, 1010], [3745, 1010], [3745, 2030], [6415, 2030], [6415, 3830]]}
+  c-cmp-gke-api: {from: cmp-backend.right@95px, to: gke-apiserver.left@80px, waypoints: [[3165, 425], [3165, 1025], [3760, 1025], [3760, 2015], [6400, 2015], [6400, 4110]]}
 cards:
   card-steps: {x: 40, y: 5840, w: 3600, h: 320}
   card-background: {x: 3700, y: 5840, w: 3600, h: 320}

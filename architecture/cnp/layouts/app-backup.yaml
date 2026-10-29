@@ -1,0 +1,44 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2360, height: 1630}
+elements:
+  z-cluster: {x: 40, y: 220, w: 1640, h: 940}
+  g-cmp: {x: 40, y: 60, w: 320, h: 150}
+  cmp-backend: {x: 30, y: 50, w: 260, h: 80}
+  g-gitops: {x: 40, y: 280, w: 320, h: 150}
+  argocd: {x: 30, y: 50, w: 260, h: 80}
+  g-data: {x: 500, y: 60, w: 340, h: 180}
+  cnpg-operator: {x: 30, y: 60, w: 280, h: 80}
+  g-bk-app: {x: 960, y: 60, w: 640, h: 560}
+  bk-premig: {x: 30, y: 50, w: 250, h: 80}
+  bk-scheduled: {x: 360, y: 50, w: 250, h: 80}
+  bk-db: {x: 170, y: 235, w: 300, h: 110}
+  bk-objectstore: {x: 20, y: 420, w: 250, h: 80}
+  bk-secret: {x: 360, y: 420, w: 250, h: 80}
+  g-bk-kapi: {x: 40, y: 720, w: 760, h: 170}
+  hub-kapi: {x: 450, y: 60, w: 260, h: 90}
+  z-github: {x: 1760, y: 220, w: 560, h: 220}
+  bk-app-repo: {x: 60, y: 70, w: 360, h: 100}
+  z-ceph: {x: 1760, y: 520, w: 560, h: 480}
+  ceph-rgw: {x: 40, y: 30, w: 300, h: 110}
+  bk-bucket-app: {x: 40, y: 220, w: 300, h: 110}
+edges:
+  c-bk-db-kapi: {from: bk-db.left@80px, to: hub-kapi.top@240px, against_flow: true, waypoints: [[980, 595], [980, 860], [770, 860]]}
+  c-bk-db-rgw: {from: bk-db.right, to: ceph-rgw.left@55px, waypoints: [[1700, 570], [1700, 605]], label_at: [1580, 570]}
+  c-bk-op-kapi: {from: cnpg-operator.bottom, to: hub-kapi.top@180px}
+  c-bk-cmp-kapi: {from: cmp-backend.right@60px, to: hub-kapi.top@110px, waypoints: [[450, 390], [450, 900], [640, 900]]}
+  c-bk-argocd-kapi: {from: argocd.right@60px, to: hub-kapi.top@30px, waypoints: [[430, 610], [430, 920], [560, 920]]}
+  c-bk-cmp-repo: {from: cmp-backend.right@20px, to: bk-app-repo.left@80px, waypoints: [[480, 350], [480, 180], [1730, 180], [1730, 370]]}
+  c-bk-argocd-repo: {from: argocd.right@20px, to: bk-app-repo.left@55px, waypoints: [[500, 570], [500, 160], [1750, 160], [1750, 345]]}
+  r-bk-db-store: {from: bk-db.bottom@30px, to: bk-objectstore.top@180px}
+  r-bk-store-secret: {from: bk-objectstore.right, to: bk-secret.left}
+  r-bk-store-bucket: {from: bk-objectstore.bottom@130px, to: bk-bucket-app.left@60px, waypoints: [[1150, 800]]}
+  r-bk-sched-db: {from: bk-scheduled.bottom@60px, to: bk-db.top@250px}
+  r-bk-premig-db: {from: bk-premig.bottom@200px, to: bk-db.top@60px}
+cards:
+  card-legend: {x: 40, y: 1200, w: 480, h: 390}
+  card-steps: {x: 540, y: 1200, w: 420, h: 390}
+  card-bg: {x: 980, y: 1200, w: 460, h: 390}
+  card-migration: {x: 1460, y: 1200, w: 300, h: 390}
+  card-clouds: {x: 1780, y: 1200, w: 260, h: 390}
+  card-gaps: {x: 2060, y: 1200, w: 260, h: 390}

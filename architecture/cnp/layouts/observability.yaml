@@ -1,0 +1,77 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2900, height: 1860}
+
+# Clouds left, hub WireGuard and sources, then the stores, Ceph outside the cluster.
+elements:
+  z-cloud-a: {x: 40, y: 400, w: 700, h: 420}
+  g-b-platform: {x: 20, y: 60, w: 340, h: 340}
+  alloy-aws: {x: 20, y: 60, w: 300, h: 80}
+  b-obs-targets: {x: 20, y: 220, w: 300, h: 80}
+  b-wireguard: {x: 440, y: 180, w: 240, h: 180}
+  z-cloud-b: {x: 40, y: 880, w: 700, h: 420}
+  g-gke-platform: {x: 20, y: 60, w: 340, h: 340}
+  alloy-gcp: {x: 20, y: 60, w: 300, h: 80}
+  gke-obs-targets: {x: 20, y: 220, w: 300, h: 80}
+  gke-wireguard: {x: 440, y: 180, w: 240, h: 180}
+  z-cluster: {x: 820, y: 120, w: 1580, h: 1240}
+  g-obs-sources: {x: 40, y: 60, w: 340, h: 290}
+  o-hub-targets: {x: 20, y: 60, w: 300, h: 80}
+  o-audit-sources: {x: 20, y: 170, w: 300, h: 90}
+  g-vpn: {x: 40, y: 410, w: 300, h: 800}
+  wireguard-onprem: {x: 20, y: 70, w: 260, h: 150}
+  wireguard-onprem-gcp: {x: 20, y: 550, w: 260, h: 150}
+  g-observability: {x: 480, y: 60, w: 1060, h: 1000}
+  alloy-onprem: {x: 20, y: 120, w: 300, h: 90}
+  vm-vminsert: {x: 400, y: 380, w: 260, h: 110}
+  vm-vmstorage: {x: 780, y: 380, w: 260, h: 100}
+  loki-gateway: {x: 400, y: 640, w: 260, h: 140}
+  loki: {x: 780, y: 640, w: 260, h: 90}
+  audit-archive-job: {x: 20, y: 640, w: 300, h: 110}
+  z-ceph: {x: 2460, y: 600, w: 400, h: 520}
+  ceph-rgw: {x: 40, y: 70, w: 300, h: 90}
+  loki-bucket: {x: 40, y: 220, w: 300, h: 90}
+  audit-bucket: {x: 40, y: 370, w: 300, h: 100}
+
+edges:
+  # Clouds: Alloy to its targets and to the cloud end of the tunnel.
+  c-alloyaws-targets: {from: alloy-aws.bottom, to: b-obs-targets.top}
+  c-alloyaws-relay-vm: {from: alloy-aws.right@25px, to: b-wireguard.left@60px, waypoints: [[455, 545], [455, 640]], label_at: [455, 600]}
+  c-alloyaws-relay-loki: {from: alloy-aws.right@55px, to: b-wireguard.left@90px, waypoints: [[440, 575], [440, 670]], label_at: [410, 575]}
+  c-alloygcp-targets: {from: alloy-gcp.bottom, to: gke-obs-targets.top}
+  c-alloygcp-relay-vm: {from: alloy-gcp.right@25px, to: gke-wireguard.left@60px, waypoints: [[455, 1025], [455, 1120]], label_at: [455, 1080]}
+  c-alloygcp-relay-loki: {from: alloy-gcp.right@55px, to: gke-wireguard.left@90px, waypoints: [[440, 1055], [440, 1150]], label_at: [410, 1055]}
+  # Inside the tunnels: the cloud socat opens TCP to the on-prem tunnel IP.
+  c-bwg-onprem-vm: {from: b-wireguard.right@70px, to: wireguard-onprem.left@50px}
+  c-bwg-onprem-loki: {from: b-wireguard.right@100px, to: wireguard-onprem.left@80px}
+  c-bwg-onprem-select: {from: b-wireguard.right@130px, to: wireguard-onprem.left@110px}
+  c-wg-eks: {from: wireguard-onprem.left@135px, to: b-wireguard.right@155px, against_flow: true}
+  c-gkewg-onprem-vm: {from: gke-wireguard.right@70px, to: wireguard-onprem-gcp.left@50px}
+  c-gkewg-onprem-loki: {from: gke-wireguard.right@100px, to: wireguard-onprem-gcp.left@80px}
+  c-gkewg-onprem-select: {from: gke-wireguard.right@130px, to: wireguard-onprem-gcp.left@110px}
+  c-wg-gke: {from: wireguard-onprem-gcp.left@135px, to: gke-wireguard.right@155px, against_flow: true}
+  # Hub relays to the stores.
+  c-wgonprem-vminsert: {from: wireguard-onprem.right@35px, to: vm-vminsert.left@75px, label_at: [1230, 635]}
+  c-wgonprem-lokigw: {from: wireguard-onprem.right@50px, to: loki-gateway.left@75px, waypoints: [[1660, 650], [1660, 895]], label_at: [1500, 650]}
+  c-wggcp-vminsert: {from: wireguard-onprem-gcp.right@20px, to: vm-vminsert.left@95px, waypoints: [[1675, 1100], [1675, 655]]}
+  c-wggcp-lokigw: {from: wireguard-onprem-gcp.right@50px, to: loki-gateway.left@115px, waypoints: [[1690, 1130], [1690, 935]]}
+  # Hub Alloy.
+  c-alloy-hubtargets: {from: alloy-onprem.left@15px, to: o-hub-targets.right@75px, against_flow: true}
+  c-alloy-auditsrc: {from: alloy-onprem.left@60px, to: o-audit-sources.right@10px, against_flow: true}
+  c-alloy-vminsert: {from: alloy-onprem.right@30px, to: vm-vminsert.left@55px, waypoints: [[1645, 330], [1645, 615]]}
+  c-alloy-lokigw: {from: alloy-onprem.right@60px, to: loki-gateway.left@55px, waypoints: [[1630, 360], [1630, 875]]}
+  # Stores.
+  c-vminsert-vmstorage: {from: vm-vminsert.right@65px, to: vm-vmstorage.left@65px}
+  c-lokigw-loki: {from: loki-gateway.right@60px, to: loki.left@60px}
+  c-loki-bucket: {from: loki.right@20px, to: ceph-rgw.left@60px, waypoints: [[2420, 840], [2420, 730]]}
+  c-archive-lokigw: {from: audit-archive-job.right@95px, to: loki-gateway.left@95px}
+  c-archive-rgw: {from: audit-archive-job.bottom, to: ceph-rgw.left@80px, waypoints: [[1470, 1250], [2440, 1250], [2440, 750]]}
+  r-rgw-lokibucket: {from: ceph-rgw.bottom, to: loki-bucket.top}
+  r-rgw-auditbucket: {from: ceph-rgw.right@45px, to: audit-bucket.right@50px, waypoints: [[2830, 715], [2830, 1020]]}
+
+cards:
+  card-legend: {x: 40, y: 1420, w: 540, h: 400}
+  card-steps: {x: 620, y: 1420, w: 620, h: 190}
+  card-bg: {x: 1280, y: 1420, w: 820, h: 400}
+  card-allow: {x: 2140, y: 1420, w: 720, h: 280}
+  card-gaps: {x: 620, y: 1640, w: 620, h: 180}

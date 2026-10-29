@@ -1,0 +1,50 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · CMP · Reading a cloud project"
+subtitle: "What happens when a dev opens a tab of an AWS or GCP project in the CMP?"
+meta:
+  - "Scope: Releases, Security, Environments, Backups tabs of an aws or gcp project, and the deploy guard · main as of 2026-10-29"
+  - "Sources: CMP services/clusters/state.py, kube_client.py, routers/deployments.py, frontend NotConnected.tsx"
+  - "Out of scope: on-prem projects (no state check) · how Argo CD syncs the cloud · Grafana"
+  - "Gaps: G7 the CMP API does not check the JWT audience"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+participants: [dev-a, cmp-frontend, cmp-backend, seq-k3s-api, cloud-api, seq-loki]
+
+steps:
+  # The cluster state cache: refreshed lazily, never on the request path.
+  - {note: cmp-backend, text: "background, not on a request path: cache older than 60 s → one refresh task, callers never wait"}
+  - {id: state, from: cmp-backend, to: seq-k3s-api, over: c-cmp-k3s-state, text: "GET Application argocd/wireguard-<cloud>"}
+  - {reply: state, text: "health, sync status, conditions"}
+  - {note: cmp-backend, text: "Healthy → up · Progressing → starting · else down · no Application → unknown"}
+  - {note: cmp-backend, text: "up → down if sync is Unknown or a condition ends in Error (Argo CD keeps a stale Healthy)"}
+
+  # Request A: the cluster is up.
+  - {id: page, from: dev-a, to: cmp-frontend, over: c-dev-cmpfront, text: "open project › Releases"}
+  - {id: tab, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "GET /api/... (browser fetch)"}
+  - {note: cmp-backend, text: "kube_client(cloud=<cloud>): cached state is up"}
+  - {id: creds, from: cmp-backend, to: seq-k3s-api, over: c-cmp-k3s-api, text: "GET Secret argocd/cluster-<cloud> (cached 60 s)"}
+  - {reply: creds, text: "server, bearerToken, caData"}
+  - {id: read, from: cmp-backend, to: cloud-api, over: c-cmp-cloud-api, text: "GET rollouts, pods, Trivy reports, CNPG backups"}
+  - {note: cloud-api, text: "401 → the backend re-reads the Secret once"}
+  - {reply: read, text: "objects"}
+  - {reply: tab, text: "200 · tab data"}
+
+  # Request B: the cluster is not up.
+  - {id: tab2, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "GET /api/... while <cloud> is not up"}
+  - {note: cmp-backend, text: "cached state is down, starting or unknown: nothing is sent to the cloud API"}
+  - {reply: tab2, text: "503 cluster_not_connected"}
+  - {note: cmp-frontend, text: "« Cluster AWS non connecté » in the tab"}
+
+  # Activity does not touch the cluster.
+  - {id: logs, from: cmp-backend, to: seq-loki, over: c-seq-cmp-loki, text: "Activity tab: query tenant <project>"}
+  - {note: seq-loki, text: "logs pushed earlier through WireGuard: readable while the cloud is down"}
+
+  # Deploy guard, on app creation and environment actions.
+  - {id: deploy, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "POST deployment on <cloud>"}
+  - {id: fresh, from: cmp-backend, to: seq-k3s-api, over: c-cmp-k3s-api, text: "ensure_cluster_up: fresh read, no cache"}
+  - {reply: fresh, text: "state"}
+  - {note: cmp-backend, text: "unknown → re-read up to 4 times, 5 s apart"}
+  - {note: cmp-backend, text: "outcome: up → 202 · down or starting → 409 · still unknown → 503"}
+  - {reply: deploy, text: "202, 409 or 503 (one of the three)"}

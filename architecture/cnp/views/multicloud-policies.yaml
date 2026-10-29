@@ -2,12 +2,11 @@ apiVersion: noodle/v1alpha1
 kind: View
 type: topology
 title: "CNP · Multicloud · Who may reach a project"
-subtitle: "What may reach a project's workloads on each cluster, and what enforces it?"
+subtitle: "What may reach a project's workloads and the tunnel relays on each cluster, and what enforces it?"
 meta:
-  - "Scope: ingress to one project's namespaces on on-prem (K3s), EKS and GKE, plus the cloud perimeter · main as of 2026-10-18 · derived from code, matrix of 18/10 checked live (marked live)"
-  - "Out of scope: egress (open everywhere) · traffic inside the WireGuard tunnel · the hub's own namespaces. Drawn as a topology: a matrix holds grants, not network rules."
-  - "v0.1 · source: cnp-docs/architecture/cnp"
-
+  - "Scope: ingress to one project's namespaces on on-prem (K3s), EKS and GKE, the cloud perimeter and the cloud end of the tunnel relays · main as of 2026-10-29 · derived from code; project matrix of 18/10 checked live (marked live)"
+  - "Out of scope: egress (open everywhere) · the hub's own namespaces, except the on-prem end of the relays (card) · admission of tenant workloads beyond the cloud guardrails. Drawn as a topology: a matrix holds grants, not network rules."
+  - "v0.2 · source: cnp-docs/architecture/cnp"
 include:
   - z-pol-in
   - z-pol-out
@@ -33,6 +32,12 @@ include:
   - pol-np-gke
   - pol-perimeter
   - pol-no-lb
+  - pol-np-vpn
+  - pol-vap
+  - z-pol-cloud-in
+  - pol-c-obs
+  - pol-c-rollouts
+  - pol-c-other
 
 labels:
   c-pol-same: "allow (live, clouds)"
@@ -46,7 +51,11 @@ labels:
   c-pol-internet-api: "denied (outside allow-list)"
   c-pol-wg: "UDP, K3s IP only"
   c-pol-api: "allow (K3s IP)"
-  c-pol-operator-api: "allow (operator IP)"
+  c-pol-operator-api: "allow (K3s egress, SOCKS)"
+  c-pol-c-obs: "allow 18080"
+  c-pol-c-obs-loki: "allow 18082"
+  c-pol-c-rollouts: "allow 18083"
+  c-pol-c-other: "denied 18080-18083 (onprem-apps)"
 
 cards:
   - {id: card-legend, title: "Legend", color: slate, legend: true}
@@ -58,8 +67,17 @@ cards:
       - "**EKS, GKE:** one NetworkPolicy cnp-project-ingress per project namespace, same sources, no host rule. Enforced by the VPC CNI agent (enableNetworkPolicy) on EKS and Dataplane V2 on GKE."
       - "**Both policies exist only when features.workloads and features.networkIsolation are on (default true).**"
       - "**Live 18/10, EKS and GKE only:** same namespace allowed, same project other namespace allowed, default to project blocked, kubelet probes OK, DNS and Internet egress OK."
-      - "**Cloud perimeter:** UDP 31820 only from vpn_source_cidrs (the K3s egress), API :443 only from api_allowed_cidrs (K3s egress IP and the operator's IP). EKS API access entry for the operator only."
-      - "**Inbound:** no LoadBalancer exists (cnp.sh down aborts if one does), GKE HTTP LB add-on disabled. Apps leave through outbound Cloudflare tunnels."
+      - "**Cloud perimeter:** UDP 31820 only from vpn_source_cidrs, API :443 only from api_allowed_cidrs. Both: api_allowed_cidrs = the K3s egress 176.186.130.237/32. The operator gets there through the SOCKS proxy on pae-node-1. EKS API access entry for the operator only."
+      - "**Inbound:** guardrails refuse LoadBalancer Services and Ingress, cnp.sh down aborts if a LoadBalancer exists, GKE HTTP LB add-on disabled. Apps leave through outbound Cloudflare tunnels."
+  - id: card-relays
+    title: "Tunnel relays and cloud guardrails"
+    color: amber
+    lines:
+      - "**onprem-apps (ns cnp-vpn, EKS and GKE):** 18080 and 18082 from ns observability only, 18083 from ns argo-rollouts only, UDP 51820 from anywhere (the SG / firewall keeps it to the K3s egress). Namespace selectors: any pod in those namespaces qualifies."
+      - "**Guardrails:** three ValidatingAdmissionPolicies, Deny and failurePolicy Fail: cnp-deny-loadbalancer, cnp-deny-ingress, cnp-local-path-only (PVCs). Reason: no paid cloud resource."
+      - "**On-prem end:** vminsert-writers and vmselect-readers admit the wireguard and wireguard-gcp pods; vmstorage takes only vminsert and vmselect."
+      - "!!Gap!! The Loki gateway has no NetworkPolicy: any pod reaches it, basic auth is the only check. vminsert takes the relayed writes with no credential."
+      - "**Kyverno on clouds:** disallow-latest-and-untagged-images, pod-security-restricted, require-resources-and-memory-limits. Enforce or Audit: not checked."
   - id: card-guard
     title: "GitOps guard rails"
     color: orange
@@ -70,6 +88,6 @@ cards:
     title: "Sources"
     color: slate
     lines:
-      - "cnp-project-base/templates/{ccnp,networkpolicy,app-project}.yaml · infra-templates/templates/ · K3s/k8s/config/argocd"
-      - "Cloud/terraform/public/aws/EKS/main.tf (VPC CNI, security group) · Cloud/terraform/public/gcp/GKE/main.tf (Dataplane V2, firewall) · Cloud/terraform/public/modules/cluster-addons"
+      - "cnp-project-base/templates/{ccnp,networkpolicy,app-project}.yaml · infra-templates/templates/ · K3s/k8s/config/argocd · K3s/k8s/config/observability/{vm,loki}-networkpolicies"
+      - "Cloud/terraform/public/{aws/EKS,gcp/GKE}/main.tf (VPC CNI, SG, Dataplane V2, firewall) · */kubernetes/onprem-apps-netpol.yaml · platform/guardrails.yaml · platform/kyverno/policies"
       - "Live matrix 18/10 on letestaws (EKS) and letestgcp (GKE)."
