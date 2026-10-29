@@ -1,43 +1,43 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: sequence
-title: "CNP · CMP · A project and an app on AWS"
-subtitle: "What happens, in order, when a dev creates a project on AWS and deploys an app into it?"
+title: "CNP · CMP · A project and an app on a public cloud"
+subtitle: "What happens, in order, when a dev creates a project on a public cloud and deploys an app into it?"
 meta:
-  - "Scope: CMP backend, Terraform in the CMP pod, cnp-projects registry, Argo CD, EKS · GCP works the same · main as of 2026-10-29"
+  - "Scope: CMP backend, Terraform in the CMP pod, cnp-projects registry, Argo CD, the public cloud target (EKS or GKE, same steps) · main as of 2026-10-29"
   - "Sources: CMP routers/projects.py, deployments.py, services/project_*.py · app-templates · K3s applicationset-*.yaml"
   - "Out of scope: image build · Image Updater · state check (see cmp-cloud-read) · user path to the app (see app-runtime)"
   - "Gaps: G7 the CMP API does not check the JWT audience · G18 deleting a cloud Application while its cluster is down hangs on the finalizer"
-  - "v0.1 · source: cnp-docs/architecture/cnp"
+  - "v0.2 (2026-10-29: any public cloud) · source: cnp-docs/architecture/cnp"
 
 participants: [dev-a, cmp-backend, seq-keycloak, seq-vault, cf-api, github, argocd, b-apiserver]
 
 steps:
   # 1. Create the project.
-  - {id: create, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "POST /api/projects · target_cloud aws"}
+  - {id: create, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "POST /api/projects · target_cloud aws|gcp"}
   - {note: cmp-backend, text: "checks settings, leftovers, free name · !!no cluster state check!!"}
-  - {id: record, from: cmp-backend, to: github, over: c-cmp-github, text: "PUT cnp-projects registry/projects/<p>.yaml · targetCloud aws"}
+  - {id: record, from: cmp-backend, to: github, over: c-cmp-github, text: "PUT cnp-projects registry/projects/<p>.yaml · targetCloud <cloud>"}
   - {reply: create, text: "202 · project PROVISIONING"}
   - {note: cmp-backend, text: "background: terraform apply project-bootstrap, state in S3"}
   - {id: kc, from: cmp-backend, to: seq-keycloak, over: c-cmp-keycloak, text: "groups <p>-admins, <p>-members, tenant realm"}
-  - {id: vault, from: cmp-backend, to: seq-vault, over: c-cmp-vault, text: "mount project-<p>, role on auth/kubernetes-aws"}
+  - {id: vault, from: cmp-backend, to: seq-vault, over: c-cmp-vault, text: "mount project-<p>, role on auth/kubernetes-<cloud>"}
   - {id: tunnel, from: cmp-backend, to: cf-api, over: c-cmp-cfapi, text: "tunnel <p>, DNS status- and offhours-"}
   - {note: cmp-backend, text: "+ Grafana org and datasources · creator added as project admin"}
 
-  # 2. Argo CD bootstraps the project on EKS.
+  # 2. Argo CD bootstraps the project on the cloud.
   - {id: poll, from: argocd, to: github, over: c-argocd-github, text: "poll registry/projects/*.yaml"}
-  - {note: argocd, text: "ApplicationSets: <p>-appproject on onprem, <p>-bootstrap to destination aws"}
+  - {note: argocd, text: "ApplicationSets: <p>-appproject on onprem, <p>-bootstrap to destination <cloud>"}
   - {id: boot, from: argocd, to: b-apiserver, over: c-argocd-b, text: "sync cnp-project-base into <p>-system"}
   - {note: b-apiserver, text: "namespaces, NetworkPolicies, Envoy Gateway, cloudflared, Gatus"}
   - {note: b-apiserver, text: "<p>-tunnel opens outbound to Cloudflare (token from Vault)"}
 
   # 3. Deploy an app.
   - {id: deploy, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "POST deployment from a template"}
-  - {note: cmp-backend, text: "aws must be up, else 409 / 503 · then terraform apply k3s-gitops-app"}
+  - {note: cmp-backend, text: "<cloud> must be up, else 409 / 503 · then terraform apply k3s-gitops-app"}
   - {reply: deploy, text: "202 · PENDING"}
   - {id: repo, from: cmp-backend, to: github, over: c-cmp-github, text: "create app repo + deploy/values.yaml"}
   - {id: client, from: cmp-backend, to: seq-keycloak, over: c-cmp-keycloak, text: "OIDC client"}
-  - {id: secrets, from: cmp-backend, to: seq-vault, over: c-cmp-vault, text: "app secrets, app-registry, role on kubernetes-aws"}
+  - {id: secrets, from: cmp-backend, to: seq-vault, over: c-cmp-vault, text: "app secrets, app-registry, role on kubernetes-<cloud>"}
   - {id: cname, from: cmp-backend, to: cf-api, over: c-cmp-cfapi, text: "CNAME <app>-<p>.3istor.com"}
   - {id: register, from: cmp-backend, to: github, over: c-cmp-github, text: "register_app in the registry record"}
   - {id: poll2, from: argocd, to: github, over: c-argocd-github, text: "poll registry + app repo"}

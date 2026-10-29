@@ -23,9 +23,9 @@ elements:
   - {id: g-a-system, kind: group, parent: z-onprem-target, color: indigo, icon: k8s-ns, title: "<project-a>-system"}
   - {id: g-a-app-a, kind: group, parent: z-onprem-target, color: sky, icon: k8s-ns, title: "<project-a>-<app-a>"}
   - {id: g-a-app-b, kind: group, parent: z-onprem-target, color: violet, icon: k8s-ns, title: "<project-a>-<app-b>"}
-  - {id: z-cloud-a, kind: region, color: amber, icon: kubernetes, title: "EKS TARGET CLUSTER", sub: "cnp-eks · eu-west-3 · k8s 1.35 · VPC CNI + NetworkPolicy"}
-  - {id: g-b-system, kind: group, parent: z-cloud-a, color: indigo, icon: k8s-ns, title: "letestaws-system", sub: "project letestaws"}
-  - {id: g-b-app, kind: group, parent: z-cloud-a, color: sky, icon: k8s-ns, title: "letestaws-test-aws", sub: "app test-aws"}
+  - {id: z-cloud-a, kind: region, color: amber, icon: kubernetes, title: "PUBLIC CLOUD TARGET CLUSTER", sub: "EKS · GKE · same platform base"}
+  - {id: g-b-system, kind: group, parent: z-cloud-a, color: indigo, icon: k8s-ns, title: "<project>-system", sub: "one project"}
+  - {id: g-b-app, kind: group, parent: z-cloud-a, color: sky, icon: k8s-ns, title: "<project>-<app>", sub: "one app"}
 
   - {id: user, kind: frontend, parent: z-internet, shape: actor, icon: user, title: "User", desc: "web browser"}
 
@@ -92,14 +92,14 @@ elements:
   - {id: a2-db, kind: database, parent: g-a-app-b, shape: cylinder, icon: cnpg, title: "<app-b>-db", tech: "[CloudNativePG]", desc: "Same cloud as the app", ports: [{name: postgres, protocol: TCP, port: 5432}]}
   - {id: a-apiserver, kind: backend, parent: z-onprem-target, icon: kubernetes, title: "kube-apiserver", tech: "[K3s]", desc: "Argo CD target onprem", ports: [{name: https, protocol: TCP, port: 6443}]}
   - {id: a-secret-op, kind: security, parent: z-onprem-target, icon: vault, title: "Secret operator", tech: "[vault-secrets-operator]", desc: "Pulls secrets from Vault"}
-  - {id: b-tunnel, kind: cloud, parent: g-b-system, icon: cloudflare, title: "letestaws-tunnel", tech: "[cloudflared · Deployment]", desc: "Outbound to Cloudflare"}
-  - {id: b-gateway, kind: backend, parent: g-b-system, icon: envoy-gateway, title: "letestaws-gateway", tech: "[Gateway API · class eg]", desc: "Routes *.3istor.com :80", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: b-tunnel, kind: cloud, parent: g-b-system, icon: cloudflare, title: "<project>-tunnel", tech: "[cloudflared · Deployment]", desc: "Outbound to Cloudflare"}
+  - {id: b-gateway, kind: backend, parent: g-b-system, icon: envoy-gateway, title: "<project>-gateway", tech: "[Gateway API · class eg]", desc: "Routes *.3istor.com :80", ports: [{name: http, protocol: TCP, port: 80}]}
   - {id: b-keycloak, kind: security, parent: g-b-system, icon: keycloak, title: "Keycloak IAMaaS", tech: "[per project · D-04]", desc: "End-user login", ports: [{name: http, protocol: TCP, port: 8080}]}
-  - {id: b1-front, kind: frontend, parent: g-b-app, icon: react, title: "test-aws-frontend", tech: "[nginx :3001]", desc: "Serves UI, proxies /api/", ports: [{name: http, protocol: TCP, port: 80}]}
-  - {id: b1-back, kind: backend, parent: g-b-app, icon: fastapi, title: "test-aws-backend", tech: "[FastAPI]", desc: "Persistent counter API", ports: [{name: http, protocol: TCP, port: 8000}]}
-  - {id: b1-db, kind: database, parent: g-b-app, shape: cylinder, icon: cnpg, title: "test-aws-db", tech: "[CNPG · local-path]", desc: "PVC on node disk", ports: [{name: postgres, protocol: TCP, port: 5432}]}
-  - {id: b-apiserver, kind: backend, parent: z-cloud-a, icon: kubernetes, title: "EKS API server", tech: "[cnp-eks]", desc: "Allowed from the hub egress IP", ports: [{name: https, protocol: TCP, port: 443}]}
-  - {id: b-secret-op, kind: security, parent: g-b-platform, icon: vault, title: "Vault Secrets Operator", tech: "[Ricoberger chart 3.0.0]", desc: "Logs in at auth/kubernetes-aws"}
+  - {id: b1-front, kind: frontend, parent: g-b-app, icon: react, title: "<app>-frontend", tech: "[nginx :3001]", desc: "Serves UI, proxies /api/", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: b1-back, kind: backend, parent: g-b-app, icon: fastapi, title: "<app>-backend", tech: "[FastAPI]", desc: "API, owns the data", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: b1-db, kind: database, parent: g-b-app, shape: cylinder, icon: cnpg, title: "<app>-db", tech: "[CNPG · local-path]", desc: "PVC on node disk", ports: [{name: postgres, protocol: TCP, port: 5432}]}
+  - {id: b-apiserver, kind: backend, parent: z-cloud-a, icon: kubernetes, title: "Cloud API server", tech: "[EKS · GKE]", desc: "Allowed from the hub egress IP", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: b-secret-op, kind: security, parent: g-b-platform, icon: vault, title: "Vault Secrets Operator", tech: "[Ricoberger chart 3.0.0]", desc: "Logs in at kubernetes-<cloud>"}
 
   - {id: github, kind: external, parent: z-github, icon: github, title: "GitHub", tech: "[cnp-projects · charts]", desc: "Project registry, templates", ports: [{name: https, protocol: TCP, port: 443}]}
 
@@ -171,44 +171,26 @@ elements:
   - {id: aws-account-workloads, kind: cloud, parent: z-aws-shared, icon: globe, title: workloads account, tech: "[AWS account]", desc: Project clusters, status: planned, target: P4}
 
   # Multicloud (2026-10-18): EKS and GKE targets, hub extras, buckets, operator.
-  - {id: g-b-platform, kind: group, parent: z-cloud-a, color: emerald, icon: kubernetes, title: "PLATFORM BASE", sub: "Argo CD platform-aws"}
+  - {id: g-b-platform, kind: group, parent: z-cloud-a, color: emerald, icon: kubernetes, title: "PLATFORM BASE", sub: "Argo CD platform-<cloud>"}
   - {id: b-envoy, kind: backend, parent: g-b-platform, icon: envoy-gateway, title: "Envoy Gateway", tech: "[1.9.0 · GatewayClass eg]", desc: "One Gateway per project"}
   - {id: b-cnpg, kind: database, parent: g-b-platform, icon: cnpg, title: "CloudNativePG", tech: "[operator 0.29.0]", desc: "One PG cluster per app"}
   - {id: b-localpath, kind: database, parent: g-b-platform, icon: k8s-ns, title: "local-path", tech: "[StorageClass]", desc: "Node disk, lost on down"}
   - {id: b-wireguard, kind: cloud, parent: z-cloud-a, icon: k8s-pod, title: "wireguard", tech: "[ns cnp-vpn · NodePort]", desc: "Cloud end of the tunnel", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
-  - {id: z-cloud-b, kind: region, color: sky, icon: kubernetes, title: "GKE TARGET CLUSTER", sub: "cnp-gke · europe-west9-a · Dataplane V2"}
-  - {id: g-gke-system, kind: group, parent: z-cloud-b, color: indigo, icon: k8s-ns, title: "letestgcp-system", sub: "project letestgcp"}
-  - {id: g-gke-app, kind: group, parent: z-cloud-b, color: sky, icon: k8s-ns, title: "letestgcp-test-gcp", sub: "app test-gcp"}
-  - {id: g-gke-platform, kind: group, parent: z-cloud-b, color: emerald, icon: kubernetes, title: "PLATFORM BASE", sub: "Argo CD platform-gcp"}
-  - {id: gke-tunnel, kind: cloud, parent: g-gke-system, icon: cloudflare, title: "letestgcp-tunnel", tech: "[cloudflared · Deployment]", desc: "Outbound to Cloudflare"}
-  - {id: gke-gateway, kind: backend, parent: g-gke-system, icon: envoy-gateway, title: "letestgcp-gateway", tech: "[Gateway API · class eg]", desc: "Routes *.3istor.com :80", ports: [{name: http, protocol: TCP, port: 80}]}
-  - {id: gke-front, kind: frontend, parent: g-gke-app, icon: react, title: "test-gcp-frontend", tech: "[nginx :3001]", desc: "Serves UI, proxies /api/", ports: [{name: http, protocol: TCP, port: 80}]}
-  - {id: gke-back, kind: backend, parent: g-gke-app, icon: fastapi, title: "test-gcp-backend", tech: "[FastAPI]", desc: "API, owns the data", ports: [{name: http, protocol: TCP, port: 8000}]}
-  - {id: gke-db, kind: database, parent: g-gke-app, shape: cylinder, icon: cnpg, title: "test-gcp-db", tech: "[CNPG · local-path]", desc: "PVC on node disk", ports: [{name: postgres, protocol: TCP, port: 5432}]}
-  - {id: gke-envoy, kind: backend, parent: g-gke-platform, icon: envoy-gateway, title: "Envoy Gateway", tech: "[1.9.0 · GatewayClass eg]", desc: "One Gateway per project"}
-  - {id: gke-cnpg, kind: database, parent: g-gke-platform, icon: cnpg, title: "CloudNativePG", tech: "[operator 0.29.0]", desc: "One PG cluster per app"}
-  - {id: gke-localpath, kind: database, parent: g-gke-platform, icon: k8s-ns, title: "local-path", tech: "[StorageClass]", desc: "Node disk, lost on down"}
-  - {id: gke-secret-op, kind: security, parent: g-gke-platform, icon: vault, title: "Vault Secrets Operator", tech: "[Ricoberger chart 3.0.0]", desc: "Logs in at auth/kubernetes-gcp"}
-  - {id: gke-apiserver, kind: backend, parent: z-cloud-b, icon: kubernetes, title: "GKE API server", tech: "[cnp-gke]", desc: "Allowed from the hub egress IP", ports: [{name: https, protocol: TCP, port: 443}]}
-  - {id: gke-wireguard, kind: cloud, parent: z-cloud-b, icon: k8s-pod, title: "wireguard", tech: "[ns cnp-vpn · NodePort]", desc: "Cloud end of the tunnel", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
   - {id: appsets, kind: backend, parent: g-gitops, icon: argo, title: "Registry ApplicationSets", tech: "[cnp-projects · aws, gcp]", desc: "Projects, apps, platform, VPN"}
   - {id: image-updater, kind: tool, parent: g-gitops, icon: argo, title: "Image Updater", tech: "[X.Y.Z prod · X.Y.Z-rc.N staging]", desc: "Writes new tags back to Git"}
   - {id: vault-auth, kind: security, parent: g-secrets, icon: vault, title: "Kubernetes auth", tech: "[kubernetes · -aws · -gcp]", desc: "TokenReview per cloud, SA vault-auth"}
   - {id: ssm-kubeconfig, kind: database, parent: z-aws-shared, icon: k8s-secret, title: "SSM kubeconfig", tech: "[/cnp/eks/kubeconfig]", desc: "Written by the EKS root", ports: [{name: https, protocol: TCP, port: 443}]}
-  - {id: b-allow, kind: security, parent: z-cloud-a, icon: k8s-crd, title: "Allow-list", tech: "[EKS SG · api_allowed_cidrs]", desc: "K3s egress 176.186.130.237/32"}
-  - {id: gke-allow, kind: security, parent: z-cloud-b, icon: k8s-crd, title: "Allow-list", tech: "[GKE firewall · API networks]", desc: "K3s egress 176.186.130.237/32"}
+  - {id: b-allow, kind: security, parent: z-cloud-a, icon: k8s-crd, title: "Allow-list", tech: "[API allow-list · SG · firewall]", desc: "K3s egress 176.186.130.237/32<br>API: public_access_cidrs (EKS),<br>authorized networks (GKE)<br>UDP 31820: SG · firewall"}
   - {id: b-nodes, kind: backend, parent: z-cloud-a, icon: kubernetes, title: "Worker node", tech: "[containerd]", desc: "Pulls app images, app-registry"}
-  - {id: gke-nodes, kind: backend, parent: z-cloud-b, icon: kubernetes, title: "Worker node", tech: "[containerd]", desc: "Pulls app images, app-registry"}
   - {id: g-vpn, kind: group, parent: z-cluster, color: amber, icon: k8s-ns, title: "WIREGUARD", sub: "ns wireguard"}
-  - {id: wireguard-onprem, kind: cloud, parent: g-vpn, icon: k8s-pod, title: "wireguard (EKS)", tech: "[100.96.0.0/30]", desc: "Initiates, keepalive 25 s", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
-  - {id: wireguard-onprem-gcp, kind: cloud, parent: g-vpn, icon: k8s-pod, title: "wireguard-gcp (GKE)", tech: "[100.96.0.4/30]", desc: "Initiates, keepalive 25 s", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
+  - {id: wireguard-onprem, kind: cloud, parent: g-vpn, icon: k8s-pod, title: "wireguard-<cloud>", tech: "[100.96.0.0/30 · .4/30]", desc: "Initiates, keepalive 25 s", multiplicity: "one per cloud", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
   - {id: tfstate-s3, kind: database, parent: z-aws-shared, shape: cylinder, icon: terraform, title: "istor-cnp-tfstate", tech: "[S3 bucket]", desc: "EKS, K3s, CMP and endpoints state", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: endpoint-bucket, kind: database, parent: z-aws-shared, shape: cylinder, icon: k8s-ns, title: "cnp-wireguard-endpoints", tech: "[S3 bucket · public read]", desc: "Objects aws, gcp = IP:31820", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: z-gcp-shared, kind: region, color: sky, icon: globe, title: "GOOGLE CLOUD", sub: "project cnp"}
   - {id: tfstate-gcs, kind: database, parent: z-gcp-shared, shape: cylinder, icon: terraform, title: "cnp-tfstate", tech: "[GCS bucket]", desc: "GKE state", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: ghcr, kind: external, parent: z-github, icon: github, title: "GHCR", tech: "[container registry]", desc: "App images", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: z-operator, kind: region, color: slate, icon: user, title: "OPERATOR", sub: "workstation"}
-  - {id: operator, kind: external, parent: z-operator, icon: terraform, title: "cnp.sh", tech: "[Terraform · EKS/ and GKE/]", desc: "up / down by hand (CNP-109)"}
+  - {id: operator, kind: external, parent: z-operator, icon: terraform, title: "cnp.sh", tech: "[Terraform · aws/EKS · gcp/GKE]", desc: "up / down by hand (CNP-109)"}
 
 
   # View multicloud-policies: who may reach a project's workloads, and what blocks the rest.
@@ -234,13 +216,13 @@ elements:
   - {id: pol-ccnp, kind: security, parent: z-pol-enf, icon: cilium, title: "On-prem · Cilium", tech: "[CiliumClusterwideNetworkPolicy]", desc: "cnp-project-<p>-ingress, with host rule"}
   - {id: pol-np-eks, kind: security, parent: z-pol-enf, icon: k8s-crd, title: "EKS · NetworkPolicy", tech: "[VPC CNI agent]", desc: "cnp-project-ingress per namespace"}
   - {id: pol-np-gke, kind: security, parent: z-pol-enf, icon: k8s-crd, title: "GKE · NetworkPolicy", tech: "[Dataplane V2]", desc: "cnp-project-ingress per namespace"}
-  - {id: pol-perimeter, kind: security, parent: z-pol-enf, icon: k8s-crd, title: "Cloud perimeter", tech: "[EKS SG · GKE firewall]", desc: "UDP 31820 and API from allowed CIDRs"}
+  - {id: pol-perimeter, kind: security, parent: z-pol-enf, icon: k8s-crd, title: "Cloud perimeter", tech: "[API allow-list · SG · firewall]", desc: "API: public_access_cidrs, authorized nets<br>UDP 31820: SG (EKS), firewall (GKE)"}
   - {id: pol-no-lb, kind: security, parent: z-pol-enf, icon: k8s-svc, title: "No LoadBalancer", tech: "[cnp.sh down guard]", desc: "Apps leave through outbound tunnels"}
 
   # View cloud-up: generic participants for "<cloud>".
   - {id: cloud-control, kind: cloud, icon: globe, title: "AWS / GCP API", tech: "[cloud control plane]", desc: "Creates cluster, nodes, firewall", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: cloud-api, kind: backend, icon: kubernetes, title: "<cloud> API", tech: "[Kubernetes API]", desc: "EKS or GKE API server", ports: [{name: https, protocol: TCP, port: 443}]}
-  - {id: cloud-vso, kind: security, icon: vault, title: "Cloud VSO", tech: "[platform-<cloud>]", desc: "Logs in at auth/kubernetes-<cloud>"}
+  - {id: cloud-vso, kind: security, icon: vault, title: "Cloud VSO", tech: "[platform-<cloud>]", desc: "Logs in at kubernetes-<cloud>"}
   - {id: cloud-wg, kind: cloud, icon: k8s-pod, title: "Cloud WireGuard", tech: "[wireguard-<cloud>]", desc: "Listens on the node", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
   - {id: up-wg-onprem, kind: cloud, icon: k8s-pod, title: "On-prem WireGuard", tech: "[ns wireguard]", desc: "Initiates, keepalive 25 s", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
 
@@ -594,10 +576,8 @@ elements:
   - {id: alertmanager, kind: backend, parent: g-observability, icon: k8s-deploy, title: "Alertmanager", tech: "[discord-default · -critical]", desc: "Routes alerts to Discord", ports: [{name: http, protocol: TCP, port: 9093}]}
   - {id: audit-archive-job, kind: tool, parent: g-observability, icon: k8s-deploy, title: "audit-archive", tech: "[CronJob · hourly]", desc: "Copies audit streams to a locked bucket"}
   - {id: argo-rollouts, kind: backend, parent: g-rollouts, icon: argo, title: "Argo Rollouts", tech: "[gatewayAPI plugin 0.17.0]", desc: "Canary steps, weights, analysis"}
-  - {id: alloy-aws, kind: backend, parent: g-b-platform, icon: grafana-alloy, title: "Alloy", tech: "[cluster=aws · ns observability]", desc: "Pushes to on-prem via the tunnel"}
+  - {id: alloy-aws, kind: backend, parent: g-b-platform, icon: grafana-alloy, title: "Alloy", tech: "[cluster=aws|gcp · observability]", desc: "Pushes to on-prem via the tunnel"}
   - {id: b-rollouts, kind: backend, parent: g-b-platform, icon: argo, title: "Argo Rollouts", tech: "[ns argo-rollouts]", desc: "Analysis reads on-prem vmselect"}
-  - {id: alloy-gcp, kind: backend, parent: g-gke-platform, icon: grafana-alloy, title: "Alloy", tech: "[cluster=gcp · ns observability]", desc: "Pushes to on-prem via the tunnel"}
-  - {id: gke-rollouts, kind: backend, parent: g-gke-platform, icon: argo, title: "Argo Rollouts", tech: "[ns argo-rollouts]", desc: "Analysis reads on-prem vmselect"}
   - {id: z-ceph, kind: region, color: violet, icon: ceph, title: "OPENSTACK CEPH", sub: "RGW 192.168.1.110 · pae-node-1 · outside K3s"}
   - {id: ceph-rgw, kind: database, parent: z-ceph, icon: ceph, title: "Ceph RGW", tech: "[S3 · plain HTTP]", desc: "Buckets made by Rook OBCs", ports: [{name: s3, protocol: TCP, port: 7480}]}
   - {id: loki-bucket, kind: database, parent: z-ceph, shape: cylinder, icon: ceph, title: "loki-data", tech: "[bucket]", desc: "Log chunks, 7 / 14 / 30 d"}
@@ -621,16 +601,14 @@ elements:
   - {id: g-obs-sources, kind: group, parent: z-cluster, color: sky, icon: k8s-ns, title: "HUB SOURCES", sub: "other namespaces"}
   - {id: o-hub-targets, kind: backend, parent: g-obs-sources, icon: k8s-pod, title: "Scrape targets", tech: "[app pods · Envoy · exporters]", desc: "Annotated pods, kubelet, KSM"}
   - {id: o-audit-sources, kind: security, parent: g-obs-sources, icon: k8s-crd, title: "Audit sources", tech: "[audit.log · Vault · Keycloak · Hubble]", desc: "Tailed as pod logs or host file"}
-  - {id: b-obs-targets, kind: backend, parent: g-b-platform, icon: k8s-pod, title: "Scrape targets", tech: "[app pods · node-exporter · KSM]", desc: "Pods and logs of EKS"}
-  - {id: gke-obs-targets, kind: backend, parent: g-gke-platform, icon: k8s-pod, title: "Scrape targets", tech: "[app pods · node-exporter · KSM]", desc: "Pods and logs of GKE"}
+  - {id: b-obs-targets, kind: backend, parent: g-b-platform, icon: k8s-pod, title: "Scrape targets", tech: "[app pods · node-exporter · KSM]", desc: "Pods and logs of the cloud"}
   - {id: o-vmauth-secret, kind: database, parent: g-observability, icon: k8s-secret, title: "vmauth-projects", tech: "[Secret · auth.yml]", desc: "One user per project, from CMP"}
   - {id: s2-z-sources, kind: region, color: cyan, icon: kubernetes, title: "CLUSTERS"}
   - {id: s2-z-store, kind: region, color: violet, icon: rack, title: "STORE", sub: "on-prem"}
   - {id: s2-z-read, kind: region, color: emerald, icon: grafana, title: "READ"}
   - {id: s2-z-out, kind: region, color: slate, icon: globe, title: "INTERNET"}
   - {id: s2-onprem, kind: backend, parent: s2-z-sources, icon: rack, title: "On-prem apps", tech: "[Alloy]"}
-  - {id: s2-aws, kind: backend, parent: s2-z-sources, icon: kubernetes, title: "AWS apps", tech: "[Alloy · WireGuard]"}
-  - {id: s2-gcp, kind: backend, parent: s2-z-sources, icon: kubernetes, title: "GCP apps", tech: "[Alloy · WireGuard]"}
+  - {id: s2-cloud, kind: backend, parent: s2-z-sources, icon: kubernetes, title: "Public cloud apps", tech: "[AWS · GCP · Alloy · WireGuard]", multiplicity: "AWS and GCP"}
   - {id: s2-vm, kind: database, parent: s2-z-store, shape: cylinder, icon: k8s-deploy, title: "Metrics", tech: "[VictoriaMetrics]"}
   - {id: s2-loki, kind: database, parent: s2-z-store, shape: cylinder, icon: loki, title: "Logs", tech: "[Loki]"}
   - {id: s2-ceph, kind: database, parent: s2-z-store, shape: cylinder, icon: ceph, title: "Object storage", tech: "[Ceph]"}
@@ -667,8 +645,7 @@ elements:
   - {id: s1-argocd, kind: backend, parent: s1-z-hub, icon: argo, title: "Argo CD", desc: "Deploys what Git describes"}
   - {id: s1-github, kind: external, parent: s1-z-git, icon: github, title: "GitHub", desc: "Project list and app code"}
   - {id: s1-onprem, kind: backend, parent: s1-z-clusters, icon: rack, title: "On-prem cluster"}
-  - {id: s1-eks, kind: backend, parent: s1-z-clusters, icon: kubernetes, title: "AWS cluster"}
-  - {id: s1-gke, kind: backend, parent: s1-z-clusters, icon: kubernetes, title: "Google Cloud cluster"}
+  - {id: s1-cloud, kind: backend, parent: s1-z-clusters, icon: kubernetes, title: "Public cloud clusters", desc: "AWS and Google Cloud, same setup", multiplicity: "AWS and GCP"}
   - {id: s1-obs, kind: backend, parent: s1-z-obs, icon: grafana-alloy, title: "Metrics, logs, audit trail"}
   # --- CNP-168 · G1 elements (backups) ---
   # Sources: infra-templates/templates/{cnpg-cluster,cnpg-backup,migrations}.yaml,
@@ -688,6 +665,55 @@ elements:
   - {id: bk-bucket-app, kind: database, parent: z-ceph, shape: cylinder, icon: ceph, title: "cnpg-<base>", tech: "[bucket · OBC ceph-bucket]", desc: "Deleted with the app unless kept"}
   # --- CNP-168 · G2 elements (releases) ---
 
+  # --- CNP-169 · project & app elements ---
+  # Sources: cnp-project-base/templates, K3s/k8s/config/argocd/applicationset-{projects,apps}.yaml,
+  # app-templates/templates/{project-bootstrap,k3s-gitops-app}, infra-templates/templates, CMP services.
+  # Project anatomy: the target cluster is drawn once, on-prem or public cloud alike.
+  - {id: z-pa-target, kind: region, color: emerald, icon: kubernetes, title: "TARGET CLUSTER", sub: "spec.targetCloud: onprem (the hub itself) or a public cloud"}
+  - {id: g-pa-system, kind: group, parent: z-pa-target, color: indigo, icon: k8s-ns, title: "<p>-system", sub: "cnp-project-base"}
+  - {id: g-pa-apps, kind: group, parent: z-pa-target, color: sky, icon: k8s-ns, title: "<p>-<app>", sub: "one per app · -stg with staging"}
+  - {id: pa-tunnel, kind: cloud, parent: g-pa-system, icon: cloudflare, title: "<p>-tunnel", tech: "[cloudflared · token from Vault]", desc: "The project's only connector"}
+  - {id: pa-gateway, kind: backend, parent: g-pa-system, icon: envoy-gateway, title: "<p>-gateway", tech: "[Gateway · EnvoyProxy · ClientTrafficPolicy]", desc: "Routes <app>-<p>.3istor.com", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: pa-gatus, kind: backend, parent: g-pa-system, icon: k8s-deploy, title: "Gatus", tech: "[status-<p>.3istor.com]", desc: "Status page of the apps"}
+  - {id: pa-offhours, kind: backend, parent: g-pa-system, icon: k8s-deploy, title: "offhours-guard", tech: "[offhours-<p>.3istor.com]", desc: "Sleeps apps 01:00–07:00"}
+  - {id: pa-isolation, kind: security, parent: g-pa-system, icon: cilium, title: "Ingress policy", tech: "[CCNP on-prem · NetworkPolicy on clouds]", desc: "Own project, envoy-gateway-system,<br>observability, cnpg-system (+ CMP on-prem)"}
+  - {id: pa-app, kind: backend, parent: g-pa-apps, icon: k8s-deploy, title: "<app>", tech: "[infra-templates · front, back, db]", desc: "Zoom: app-runtime", multiplicity: "one per app and environment", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: pa-appproject, kind: security, parent: g-gitops, icon: argo, title: "AppProjects <p>, <p>-platform", tech: "[Argo CD]", desc: "Repos, namespaces, roles admins / members"}
+  - {id: pa-applications, kind: backend, parent: g-gitops, icon: argo, title: "Applications", tech: "[<p>-bootstrap · <p>-<app>-<c>[-stg]]", desc: "Generated from the registry record"}
+  - {id: pa-kc-groups, kind: security, parent: g-identity, icon: keycloak, title: "project-<p>-admins, -members", tech: "[groups · realm 3istor]", desc: "Who is in the team"}
+  - {id: pa-kc-realm, kind: security, parent: g-identity, icon: keycloak, title: "Realm <p>", tech: "[brokers the 3istor login]", desc: "App logins, one OIDC client per app"}
+  - {id: pa-vault-mount, kind: database, parent: g-secrets, icon: vault, title: "KV project-<p>", tech: "[role: kubernetes / kubernetes-<cloud>]", desc: "Tunnel token, app secrets"}
+  - {id: pa-grafana-org, kind: frontend, parent: g-observability, icon: grafana, title: "Grafana org <p>", tech: "[2 datasources · 2 dashboards]", desc: "Project dashboards and alerts"}
+  - {id: pa-vmauth-user, kind: security, parent: g-observability, icon: k8s-secret, title: "vmauth user project-<p>", tech: "[Secret vmauth-projects]", desc: "Metrics of its namespaces only"}
+  - {id: pa-loki-tenant, kind: database, parent: g-observability, icon: loki, title: "Loki tenant <p>", tech: "[X-Scope-OrgID]", desc: "Logs of its namespaces"}
+  - {id: pa-kube-api, kind: backend, parent: z-pa-target, icon: kubernetes, title: "Kubernetes API", tech: "[target cluster]", desc: "Argo CD applies the project here", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: pa-registry, kind: external, parent: z-github, icon: github, title: "registry/projects/<p>.yaml", tech: "[cnp-projects]", desc: "targetCloud, apps, environments", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: pa-app-repos, kind: external, parent: z-github, icon: github, title: "<app> repos", tech: "[GitHub · deploy/values*.yaml]", desc: "Code and deployment values", multiplicity: "one per app", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: pa-cf, kind: cloud, parent: z-cloudflare, icon: cloudflare, title: "Tunnel cnp-<p>-tunnel", tech: "[DNS status-, offhours-, <app>-<p>]", desc: "TLS ends here", ports: [{name: https, protocol: TCP, port: 443}, {name: quic, protocol: UDP, port: 7844}]}
+  # App runtime: one app seen from inside, on any target cluster.
+  - {id: z-ar-target, kind: region, color: emerald, icon: kubernetes, title: "TARGET CLUSTER", sub: "on-prem K3s or public cloud (EKS · GKE)"}
+  - {id: g-ar-system, kind: group, parent: z-ar-target, color: indigo, icon: k8s-ns, title: "<project>-system", sub: "per project"}
+  - {id: g-ar-app, kind: group, parent: z-ar-target, color: sky, icon: k8s-ns, title: "<project>-<app>", sub: "prod · <project>-<app>-stg when staging is on"}
+  - {id: g-ar-platform, kind: group, parent: z-ar-target, color: emerald, icon: kubernetes, title: "PLATFORM ON THE CLUSTER", sub: "shared by every project"}
+  - {id: g-ar-other, kind: group, parent: z-ar-target, color: slate, icon: k8s-ns, title: "OTHER PROJECT"}
+  - {id: ar-tunnel, kind: cloud, parent: g-ar-system, icon: cloudflare, title: "<project>-tunnel", tech: "[cloudflared]", desc: "Outbound to Cloudflare"}
+  - {id: ar-gateway, kind: backend, parent: g-ar-system, icon: envoy-gateway, title: "<project>-gateway", tech: "[Gateway in <project>-system]", desc: "Envoy pod in envoy-gateway-system;<br>runs the login, splits canary traffic", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: ar-isolation, kind: security, parent: g-ar-system, icon: cilium, title: "Ingress policy", tech: "[CCNP on-prem · NetworkPolicy on clouds]", desc: "Allows own project, envoy-gateway-system,<br>observability, cnpg-system (+ CMP on-prem)"}
+  - {id: ar-route, kind: backend, parent: g-ar-app, icon: k8s-crd, title: "HTTPRoute + SecurityPolicy", tech: "[<app>-<project>.3istor.com]", desc: "OIDC login, optional allowed groups"}
+  - {id: ar-frontend, kind: frontend, parent: g-ar-app, icon: react, title: "<app>-frontend", tech: "[Rollout or Deployment · stable / canary]", desc: "Serves the UI, calls the backend", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: ar-backend, kind: backend, parent: g-ar-app, icon: fastapi, title: "<app>-backend", tech: "[Rollout or Deployment · no route]", desc: "API, owns the data", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: ar-db, kind: database, parent: g-ar-app, shape: cylinder, icon: cnpg, title: "<app>-db", tech: "[CloudNativePG · 1 instance]", desc: "PVC ceph-block, local-path on clouds", ports: [{name: postgres, protocol: TCP, port: 5432}]}
+  - {id: ar-migrate, kind: tool, parent: g-ar-app, icon: k8s-pod, title: "migrate Job", tech: "[Sync hook · after a backup]", desc: "Runs /app/migrate per version"}
+  - {id: ar-secret, kind: database, parent: g-ar-app, icon: k8s-secret, title: "Secrets", tech: "[<fullname>-secrets · app-registry]", desc: "Written by the secret operator"}
+  - {id: ar-vso, kind: security, parent: g-ar-platform, icon: vault, title: "Secret operator", tech: "[VaultSecret → Secret]", desc: "Logs in with the app's Vault role"}
+  - {id: ar-alloy, kind: backend, parent: g-ar-platform, icon: grafana-alloy, title: "Alloy", tech: "[annotated pods · pod logs]", desc: "Pushes to the hub, via tunnel on clouds"}
+  - {id: ar-rollouts, kind: backend, parent: g-ar-platform, icon: argo, title: "Argo Rollouts", tech: "[canary in prod]", desc: "Smoke Job, error-rate analysis"}
+  - {id: ar-other, kind: external, parent: g-ar-other, icon: k8s-pod, title: "Other project pods", tech: "[any of its namespaces]", desc: "Must not reach the app"}
+  - {id: ar-cf, kind: cloud, parent: z-cloudflare, icon: cloudflare, title: "Cloudflare Edge", tech: "[project tunnel cnp-<project>-tunnel]", desc: "TLS ends here", ports: [{name: https, protocol: TCP, port: 443}, {name: quic, protocol: UDP, port: 7844}]}
+  - {id: ar-keycloak, kind: security, parent: g-identity, icon: keycloak, title: "Keycloak", tech: "[auth.3istor.com · realm <project>]", desc: "Login and token endpoint", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: ar-vault, kind: database, parent: g-secrets, icon: vault, title: "Vault", tech: "[vault.vault.svc on-prem]", desc: "Mount project-<project>", ports: [{name: http, protocol: TCP, port: 8200}]}
+  - {id: ar-hub-obs, kind: database, parent: g-observability, icon: grafana, title: "VictoriaMetrics · Loki", tech: "[on-prem stores]", desc: "Metrics, logs, analysis queries"}
+
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
@@ -699,22 +725,13 @@ connections:
   - {id: c-alloyaws-relay-vm, from: alloy-aws, to: b-wireguard, port: relay-vm, protocol: HTTP, verb: remote_write, kind: flow}
   - {id: c-alloyaws-relay-loki, from: alloy-aws, to: b-wireguard, port: relay-loki, protocol: HTTP, verb: push logs, kind: flow}
   - {id: c-brollouts-relay-select, from: b-rollouts, to: b-wireguard, port: relay-select, protocol: HTTP, verb: query, kind: flow}
-  - {id: c-alloygcp-relay-vm, from: alloy-gcp, to: gke-wireguard, port: relay-vm, protocol: HTTP, verb: remote_write, kind: flow}
-  - {id: c-alloygcp-relay-loki, from: alloy-gcp, to: gke-wireguard, port: relay-loki, protocol: HTTP, verb: push logs, kind: flow}
-  - {id: c-gkerollouts-relay-select, from: gke-rollouts, to: gke-wireguard, port: relay-select, protocol: HTTP, verb: query, kind: flow}
   # Inside the tunnel: the cloud socat opens TCP to the on-prem tunnel IP.
   - {id: c-bwg-onprem-vm, from: b-wireguard, to: wireguard-onprem, port: relay-vm, protocol: TCP in tunnel, verb: relay, kind: flow}
   - {id: c-bwg-onprem-loki, from: b-wireguard, to: wireguard-onprem, port: relay-loki, protocol: TCP in tunnel, verb: relay, kind: flow}
   - {id: c-bwg-onprem-select, from: b-wireguard, to: wireguard-onprem, port: relay-select, protocol: TCP in tunnel, verb: relay, kind: flow}
-  - {id: c-gkewg-onprem-vm, from: gke-wireguard, to: wireguard-onprem-gcp, port: relay-vm, protocol: TCP in tunnel, verb: relay, kind: flow}
-  - {id: c-gkewg-onprem-loki, from: gke-wireguard, to: wireguard-onprem-gcp, port: relay-loki, protocol: TCP in tunnel, verb: relay, kind: flow}
-  - {id: c-gkewg-onprem-select, from: gke-wireguard, to: wireguard-onprem-gcp, port: relay-select, protocol: TCP in tunnel, verb: relay, kind: flow}
   - {id: c-wgonprem-vminsert, from: wireguard-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: relay 18080, kind: flow}
   - {id: c-wgonprem-lokigw, from: wireguard-onprem, to: loki-gateway, port: http, protocol: HTTP, verb: relay 18082, kind: flow}
   - {id: c-wgonprem-vmselect, from: wireguard-onprem, to: vm-vmselect, port: read, protocol: HTTP, verb: relay 18083, kind: flow}
-  - {id: c-wggcp-vminsert, from: wireguard-onprem-gcp, to: vm-vminsert, port: write, protocol: HTTP, verb: relay 18080, kind: flow}
-  - {id: c-wggcp-lokigw, from: wireguard-onprem-gcp, to: loki-gateway, port: http, protocol: HTTP, verb: relay 18082, kind: flow}
-  - {id: c-wggcp-vmselect, from: wireguard-onprem-gcp, to: vm-vmselect, port: read, protocol: HTTP, verb: relay 18083, kind: flow}
   - {id: c-grafana-vmselect, from: grafana, to: vm-vmselect, port: read, protocol: HTTP, verb: "org 1, unfiltered", kind: flow}
   - {id: c-grafana-vmauth, from: grafana, to: vmauth, port: http, protocol: HTTP, verb: "project org", kind: flow}
   - {id: c-vmauth-vmselect, from: vmauth, to: vm-vmselect, port: read, protocol: HTTP, verb: "query + namespace filter", kind: flow}
@@ -728,7 +745,6 @@ connections:
   # --- CNP-168 · T1 T3 F1 connections ---
   - {id: c-op-pae, from: operator, to: pae-node-1, port: ssh, protocol: SSH, verb: "SOCKS 127.0.0.1:1080", kind: tunnel}
   - {id: c-cmp-b-api, from: cmp-backend, to: b-apiserver, port: https, protocol: HTTPS, verb: "read pods, rollouts, scans", kind: async}
-  - {id: c-cmp-gke-api, from: cmp-backend, to: gke-apiserver, port: https, protocol: HTTPS, verb: "read pods, rollouts, scans", kind: async}
   - {id: c-pol-c-obs, from: pol-c-obs, to: pol-wg, port: relay-vm, verb: allow, protocol: TCP, kind: flow}
   - {id: c-pol-c-obs-loki, from: pol-c-obs, to: pol-wg, port: relay-loki, verb: allow, protocol: TCP, kind: flow}
   - {id: c-pol-c-rollouts, from: pol-c-rollouts, to: pol-wg, port: relay-select, verb: allow, protocol: TCP, kind: flow}
@@ -740,7 +756,6 @@ connections:
   - {id: c-up-cmp-state, from: up-cmp, to: up-hub-api, port: https, protocol: HTTPS, verb: "read Application wireguard-<cloud>", kind: async}
   # --- CNP-168 · T2 F3 S2 connections ---
   - {id: c-alloyaws-targets, from: alloy-aws, to: b-obs-targets, protocol: HTTP, verb: scrape · tail, kind: flow}
-  - {id: c-alloygcp-targets, from: alloy-gcp, to: gke-obs-targets, protocol: HTTP, verb: scrape · tail, kind: flow}
   - {id: c-alloy-hubtargets, from: alloy-onprem, to: o-hub-targets, protocol: HTTP, verb: scrape · tail, kind: flow}
   - {id: c-alloy-auditsrc, from: alloy-onprem, to: o-audit-sources, protocol: file · K8s API, verb: tail, kind: flow}
   - {id: c-archive-lokigw, from: audit-archive-job, to: loki-gateway, port: http, protocol: HTTP, verb: "logcli export, user archive", kind: flow}
@@ -754,10 +769,8 @@ connections:
   - {id: c-s2-alerts-loki, from: s2-alerts, to: s2-loki, verb: evaluate, kind: flow}
   - {id: c-s2-onprem-vm, from: s2-onprem, to: s2-vm, verb: metrics, kind: flow}
   - {id: c-s2-onprem-loki, from: s2-onprem, to: s2-loki, verb: logs, kind: flow}
-  - {id: c-s2-aws-vm, from: s2-aws, to: s2-vm, verb: metrics, kind: flow}
-  - {id: c-s2-aws-loki, from: s2-aws, to: s2-loki, verb: logs, kind: flow}
-  - {id: c-s2-gcp-vm, from: s2-gcp, to: s2-vm, verb: metrics, kind: flow}
-  - {id: c-s2-gcp-loki, from: s2-gcp, to: s2-loki, verb: logs, kind: flow}
+  - {id: c-s2-cloud-vm, from: s2-cloud, to: s2-vm, verb: metrics, kind: flow}
+  - {id: c-s2-cloud-loki, from: s2-cloud, to: s2-loki, verb: logs, kind: flow}
   - {id: c-s2-loki-ceph, from: s2-loki, to: s2-ceph, verb: chunks, kind: flow}
   - {id: c-s2-grafana-vm, from: s2-grafana, to: s2-vm, verb: query, kind: flow}
   - {id: c-s2-grafana-loki, from: s2-grafana, to: s2-loki, verb: query, kind: flow}
@@ -789,14 +802,12 @@ connections:
   - {id: s1-c-dev-grafana, from: s1-dev, to: s1-grafana, verb: "watches apps", kind: flow}
   - {id: s1-c-argocd-github, from: s1-argocd, to: s1-github, verb: "reads", kind: async}
   - {id: s1-c-argocd-onprem, from: s1-argocd, to: s1-onprem, verb: "deploys", kind: async}
-  - {id: s1-c-argocd-eks, from: s1-argocd, to: s1-eks, verb: "deploys", kind: async}
-  - {id: s1-c-argocd-gke, from: s1-argocd, to: s1-gke, verb: "deploys", kind: async}
+  - {id: s1-c-argocd-cloud, from: s1-argocd, to: s1-cloud, verb: "deploys", kind: async}
   - {id: s1-c-onprem-cf, from: s1-onprem, to: s1-cloudflare, verb: "secure tunnel", kind: tunnel}
-  - {id: s1-c-eks-cf, from: s1-eks, to: s1-cloudflare, verb: "secure tunnel", kind: tunnel}
-  - {id: s1-c-gke-cf, from: s1-gke, to: s1-cloudflare, verb: "secure tunnel", kind: tunnel}
+  - {id: s1-c-cloud-cf, from: s1-cloud, to: s1-cloudflare, verb: "secure tunnel", kind: tunnel}
+  - {id: s1-c-operator-cloud, from: s1-operator, to: s1-cloud, verb: "starts and stops", kind: flow}
   - {id: s1-c-onprem-obs, from: s1-onprem, to: s1-obs, verb: "sends metrics and logs", kind: flow}
-  - {id: s1-c-eks-obs, from: s1-eks, to: s1-obs, verb: "sends metrics and logs", kind: flow}
-  - {id: s1-c-gke-obs, from: s1-gke, to: s1-obs, verb: "sends metrics and logs", kind: flow}
+  - {id: s1-c-cloud-obs, from: s1-cloud, to: s1-obs, verb: "sends metrics and logs", kind: flow}
   - {id: s1-c-grafana-obs, from: s1-grafana, to: s1-obs, verb: "reads", kind: flow}
   # --- CNP-168 · G1 connections ---
   - {id: c-bk-db-kapi, from: bk-db, to: hub-kapi, port: https, protocol: HTTPS, verb: instance manager watches Backup, kind: async}
@@ -817,6 +828,28 @@ connections:
   - {id: c-rl-dev-cmp, from: dev-a, to: cmp-backend, port: http, protocol: HTTPS, verb: "/api via Cloudflare + Envoy", kind: flow}
   - {id: c-rl-rollouts-kapi, from: argo-rollouts, to: hub-kapi, port: https, protocol: HTTPS, verb: "scale ReplicaSets, patch HTTPRoute weights", kind: flow}
   - {id: c-rl-updater-repo, from: image-updater, to: bk-app-repo, port: https, protocol: HTTPS, verb: write back staging tag, kind: async}
+
+  # --- CNP-169 · project & app connections ---
+  - {id: c-pa-user-cf, from: user, to: pa-cf, port: https, protocol: HTTPS, verb: "GET <app>-<p>", kind: flow}
+  - {id: c-pa-tunnel-cf, from: pa-tunnel, to: pa-cf, port: quic, protocol: QUIC, verb: outbound tunnel, kind: tunnel}
+  - {id: c-pa-tunnel-gw, from: pa-tunnel, to: pa-gateway, port: http, protocol: HTTP, verb: proxy, kind: flow}
+  - {id: c-pa-gw-app, from: pa-gateway, to: pa-app, port: http, protocol: HTTP, verb: route, kind: flow}
+  - {id: c-pa-argocd-registry, from: argocd, to: pa-registry, port: https, protocol: HTTPS, verb: poll, kind: async}
+  - {id: c-pa-argocd-target, from: argocd, to: pa-kube-api, port: https, protocol: HTTPS, verb: apply, kind: async}
+  - {id: c-pa-argocd-repos, from: argocd, to: pa-app-repos, port: https, protocol: HTTPS, verb: read values, kind: async}
+  - {id: c-ar-user-cf, from: user, to: ar-cf, port: https, protocol: HTTPS, verb: "GET <app>-<project>", kind: flow}
+  - {id: c-ar-tunnel-edge, from: ar-tunnel, to: ar-cf, port: quic, protocol: QUIC, verb: outbound tunnel, kind: tunnel}
+  - {id: c-ar-tunnel-gw, from: ar-tunnel, to: ar-gateway, port: http, protocol: HTTP, verb: proxy, kind: flow}
+  - {id: c-ar-gw-front, from: ar-gateway, to: ar-frontend, port: http, protocol: HTTP, verb: "route, stable / canary weights", kind: flow}
+  - {id: c-ar-front-back, from: ar-frontend, to: ar-backend, port: http, protocol: HTTP, verb: "BACKEND_HOST /api", kind: flow}
+  - {id: c-ar-back-db, from: ar-backend, to: ar-db, port: postgres, protocol: SQL, verb: query, kind: flow}
+  - {id: c-ar-gw-keycloak, from: ar-gateway, to: ar-keycloak, port: https, protocol: "HTTPS auth.3istor.com", verb: token, kind: auth}
+  - {id: c-ar-vso-vault, from: ar-vso, to: ar-vault, port: http, protocol: HTTP in-cluster, verb: "read project-<project>/<app>", kind: auth}
+  - {id: c-ar-alloy-obs, from: ar-alloy, to: ar-hub-obs, protocol: HTTP, verb: push metrics and logs, kind: async}
+  - {id: c-ar-rollouts-obs, from: ar-rollouts, to: ar-hub-obs, protocol: HTTP, verb: analysis query, kind: async}
+  - {id: c-ar-migrate-db, from: ar-migrate, to: ar-db, port: postgres, protocol: SQL, verb: migrate, kind: flow}
+  - {id: c-ar-db-rgw, from: ar-db, to: ceph-rgw, port: s3, protocol: S3 HTTP, verb: "WAL + base backups", kind: async}
+  - {id: x-ar-other, from: ar-other, to: ar-frontend, port: http, protocol: HTTP, verb: any call, kind: flow, denied: true, enforced_by: [ar-isolation]}
   - {id: c-rl-smoke-svc, from: bk-smoke, to: app-service, port: http, protocol: HTTP, verb: GET canary /healthz, kind: flow}
 
   # Request path.
@@ -872,12 +905,8 @@ connections:
   - {id: x-cross-tenant, from: g-tenant-a, to: g-tenant-b, verb: cross-tenant traffic, kind: flow, denied: true}
 
   # Multicloud (2026-10-18).
-  - {id: c-argocd-gke, from: argocd, to: gke-apiserver, port: https, protocol: HTTPS, verb: sync, kind: async}
   - {id: c-vault-b-apiserver, from: vault-auth, to: b-apiserver, port: https, protocol: HTTPS, verb: TokenReview, kind: auth}
-  - {id: c-vault-gke-apiserver, from: vault-auth, to: gke-apiserver, port: https, protocol: HTTPS, verb: TokenReview, kind: auth}
-  - {id: c-gkesecret-vault, from: gke-secret-op, to: vault, port: public, protocol: HTTPS, verb: login + read, kind: async}
   - {id: c-wg-eks, from: wireguard-onprem, to: b-wireguard, port: wg, protocol: WireGuard, verb: initiate tunnel, kind: tunnel}
-  - {id: c-wg-gke, from: wireguard-onprem-gcp, to: gke-wireguard, port: wg, protocol: WireGuard, verb: initiate tunnel, kind: tunnel}
   - {id: c-op-vault, from: operator, to: vault, port: public, protocol: HTTPS, verb: write cluster entry + auth config, kind: async}
   - {id: c-op-endpoint, from: operator, to: endpoint-bucket, port: https, protocol: HTTPS, verb: put endpoint, kind: async}
   - {id: c-op-state-s3, from: operator, to: tfstate-s3, port: https, protocol: HTTPS, verb: state, kind: async}
@@ -886,15 +915,8 @@ connections:
   - {id: c-updater-ghcr, from: image-updater, to: ghcr, port: https, protocol: HTTPS, verb: list tags, kind: async}
   - {id: c-updater-github, from: image-updater, to: github, port: https, protocol: HTTPS, verb: write back, kind: async}
   - {id: c-op-b-api, from: pae-node-1, to: b-apiserver, port: https, protocol: HTTPS, verb: "terraform, kubectl via SOCKS", kind: async}
-  - {id: c-op-gke-api, from: pae-node-1, to: gke-apiserver, port: https, protocol: HTTPS, verb: "terraform, kubectl via SOCKS", kind: async}
   - {id: c-op-ssm, from: operator, to: ssm-kubeconfig, port: https, protocol: HTTPS, verb: put kubeconfig, kind: async}
   - {id: c-b-nodes-ghcr, from: b-nodes, to: ghcr, port: https, protocol: HTTPS, verb: pull images, kind: async}
-  - {id: c-gke-nodes-ghcr, from: gke-nodes, to: ghcr, port: https, protocol: HTTPS, verb: pull images, kind: async}
-  - {id: c-gke-tunnel-edge, from: gke-tunnel, to: cf-edge, port: quic, protocol: QUIC, verb: open tunnel, kind: tunnel}
-  - {id: c-gke-tunnel-gw, from: gke-tunnel, to: gke-gateway, port: http, protocol: HTTP, verb: forward, kind: flow}
-  - {id: c-gke-gw-front, from: gke-gateway, to: gke-front, port: http, protocol: HTTP, verb: route, kind: flow}
-  - {id: c-gke-front-back, from: gke-front, to: gke-back, port: http, protocol: HTTP, verb: call API, kind: flow}
-  - {id: c-gke-back-db, from: gke-back, to: gke-db, port: postgres, protocol: SQL, verb: query, kind: flow}
 
 
 
@@ -1131,8 +1153,6 @@ references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
   - {id: r-b-allow-wg, from: b-allow, to: b-wireguard, kind: allows}
-  - {id: r-gke-allow-api, from: gke-allow, to: gke-apiserver, kind: allows}
-  - {id: r-gke-allow-wg, from: gke-allow, to: gke-wireguard, kind: allows}
   - {id: r-ctp-gateway, from: client-traffic-policy, to: envoy-shared-gateway, kind: targetRef}
   - {id: r-route-gateway, from: httproute, to: envoy-shared-gateway, kind: parentRef}
   - {id: r-policy-route, from: security-policy, to: httproute, kind: targetRef}
@@ -1209,6 +1229,19 @@ references:
   - {id: r-cmp-vmauthsecret, from: cmp-backend, to: o-vmauth-secret, kind: "patches (K8s API)"}
   - {id: r-vmauth-secret, from: vmauth, to: o-vmauth-secret, kind: "reloads users (30 s)"}
 
+  # CNP-169 project & app
+  - {id: r-pa-appproject-apps, from: pa-appproject, to: pa-applications, kind: bounds}
+  - {id: r-pa-appproject-groups, from: pa-appproject, to: pa-kc-groups, kind: roles}
+  - {id: r-pa-realm-groups, from: pa-kc-realm, to: pa-kc-groups, kind: brokers}
+  - {id: r-pa-app-vault, from: pa-app, to: pa-vault-mount, kind: secrets}
+  - {id: r-pa-app-realm, from: pa-app, to: pa-kc-realm, kind: OIDC client}
+  - {id: r-pa-grafana-vmauth, from: pa-grafana-org, to: pa-vmauth-user, kind: datasource}
+  - {id: r-pa-grafana-loki, from: pa-grafana-org, to: pa-loki-tenant, kind: datasource}
+  - {id: r-ar-route-gw, from: ar-route, to: ar-gateway, kind: parentRef}
+  - {id: r-ar-route-front, from: ar-route, to: ar-frontend, kind: backendRef}
+  - {id: r-ar-vso-secret, from: ar-vso, to: ar-secret, kind: writes}
+  - {id: r-ar-back-secret, from: ar-backend, to: ar-secret, kind: envFrom}
+
 annotations:
   # CNP-168 G1
   - {id: GB1, severity: medium, title: "Backup credentials outside Vault", targets: [bk-secret]}
@@ -1228,7 +1261,7 @@ annotations:
   - {id: G8, severity: high, title: "Pod sandbox", targets: [app-pods]}
   - {id: G9, severity: medium, title: "Keycloak ReferenceGrant", targets: [security-policy]}
   - {id: G10, severity: medium, title: "Shared gateway label", targets: [httproute]}
-  - {id: G13, severity: medium, title: "Secret operator", text: "The Ricoberger vault-secrets-operator (chart 3.0.0, image v1.26.0), not HashiCorp VSO, on the hub and on both clouds: whether a synced Secret survives a Vault outage is untested (GD-1).", targets: [b-secret-op, gke-secret-op]}
+  - {id: G13, severity: medium, title: "Secret operator", text: "The Ricoberger vault-secrets-operator (chart 3.0.0, image v1.26.0), not HashiCorp VSO, on the hub and on both clouds: whether a synced Secret survives a Vault outage is untested (GD-1).", targets: [b-secret-op]}
   - {id: G15, severity: high, title: "CMP Vault token", text: "The CMP's VAULT_TOKEN comes from kvv2/arcl-cmp; its policy was not checked. Drawn as the root token, the worst case.", targets: [vault-root-token]}
   - {id: G17, severity: high, title: "GitOps write", text: "main is unprotected on K3s, cnp-projects, cnp-project-base, app-templates and CMP (checked 2026-10-02); the members' base permission was not checked. Whoever pushes to the GitOps repos deploys anywhere through Argo CD.", targets: [gh-base]}
   - {id: G16, severity: medium, title: "Cloudflare token scope", text: "CLOUDFLARE_API_TOKEN scope was not checked. Drawn as write on the zone and tunnels.", targets: [cf-token]}

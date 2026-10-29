@@ -1,9 +1,9 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 2880, height: 3200}
+canvas: {width: 2880, height: 2990}
 
 # Left: operator and the buckets it writes. Then the hub, the clouds, GitHub. Hub to cloud
-# links cross corridor 2 (x 1200-1500); the hub keeps a right margin (x 1020-1200) where the
+# links cross corridor 2 (x 1200-1500); the cloud zone stands for EKS and GKE; the hub keeps a right margin (x 1020-1200) where the
 # six relays from the WireGuard pods drop to the observability group. against_flow: a cloud
 # or the operator calling towards the hub or the buckets, against the reading direction.
 elements:
@@ -16,23 +16,22 @@ elements:
   z-gcp-shared: {x: 40, y: 1010, w: 420, h: 190}
   tfstate-gcs: {x: 30, y: 60, w: 360, h: 100}
 
-  z-cluster: {x: 600, y: 260, w: 600, h: 2332}
+  z-cluster: {x: 600, y: 260, w: 600, h: 2122}
   pae-node-1: {x: 40, y: 60, w: 380, h: 80}
   g-secrets: {x: 40, y: 180, w: 380, h: 414}
   vso: {x: 40, y: 60, w: 300, h: 80}
   vault: {x: 40, y: 200, w: 300, h: 80}
   vault-auth: {x: 40, y: 304, w: 300, h: 80}
-  g-vpn: {x: 40, y: 654, w: 380, h: 464}
+  g-vpn: {x: 40, y: 654, w: 380, h: 254}
   wireguard-onprem: {x: 40, y: 60, w: 300, h: 170}
-  wireguard-onprem-gcp: {x: 40, y: 254, w: 300, h: 170}
-  g-observability: {x: 40, y: 1178, w: 380, h: 530}
+  g-observability: {x: 40, y: 968, w: 380, h: 530}
   vm-vminsert: {x: 40, y: 90, w: 300, h: 80}
   loki-gateway: {x: 40, y: 250, w: 300, h: 80}
   vm-vmselect: {x: 40, y: 410, w: 300, h: 80}
-  g-gitops: {x: 40, y: 1768, w: 380, h: 274}
+  g-gitops: {x: 40, y: 1558, w: 380, h: 274}
   argocd: {x: 40, y: 60, w: 300, h: 80}
   image-updater: {x: 40, y: 164, w: 300, h: 80}
-  g-cmp: {x: 40, y: 2102, w: 380, h: 170}
+  g-cmp: {x: 40, y: 1892, w: 380, h: 170}
   cmp-backend: {x: 40, y: 60, w: 300, h: 80}
 
   z-cloud-a: {x: 1500, y: 260, w: 700, h: 920}
@@ -44,16 +43,7 @@ elements:
   b-secret-op: {x: 20, y: 60, w: 260, h: 90}
   alloy-aws: {x: 20, y: 174, w: 260, h: 90}
   b-rollouts: {x: 20, y: 288, w: 260, h: 90}
-  z-cloud-b: {x: 1500, y: 1240, w: 700, h: 920}
-  gke-apiserver: {x: 40, y: 60, w: 260, h: 170}
-  gke-wireguard: {x: 40, y: 270, w: 260, h: 150}
-  gke-allow: {x: 400, y: 90, w: 260, h: 220}
-  gke-nodes: {x: 400, y: 360, w: 260, h: 90}
-  g-gke-platform: {x: 20, y: 480, w: 360, h: 410}
-  gke-secret-op: {x: 20, y: 60, w: 260, h: 90}
-  alloy-gcp: {x: 20, y: 174, w: 260, h: 90}
-  gke-rollouts: {x: 20, y: 288, w: 260, h: 90}
-  z-github: {x: 2400, y: 2220, w: 420, h: 410}
+  z-github: {x: 1500, y: 1810, w: 420, h: 410}
   github: {x: 30, y: 60, w: 360, h: 150}
   ghcr: {x: 30, y: 240, w: 360, h: 130}
 
@@ -73,61 +63,43 @@ edges:
 
   # Hub to clouds (corridor 2, one lane per edge).
   c-op-b-api: {from: pae-node-1.right@55px, to: b-apiserver.left@55px}
-  c-op-gke-api: {from: pae-node-1.right@25px, to: gke-apiserver.left@55px, waypoints: [[1220, 345], [1220, 1355]], label_at: [1120, 345]}
   c-vault-b-apiserver: {from: vault-auth.right@25px, to: b-apiserver.left@85px, waypoints: [[1236, 769], [1236, 405]], label_at: [1236, 560]}
-  c-vault-gke-apiserver: {from: vault-auth.right@55px, to: gke-apiserver.left@85px, waypoints: [[1252, 799], [1252, 1385]], label_at: [1252, 1130]}
   c-wg-eks: {from: wireguard-onprem.right@20px, to: b-wireguard.left@135px, waypoints: [[1268, 994], [1268, 665]], label_at: [1268, 900]}
-  c-wg-gke: {from: wireguard-onprem-gcp.right@20px, to: gke-wireguard.left@135px, waypoints: [[1284, 1188], [1284, 1645]], label_at: [1284, 1400]}
   c-bsecret-vault: {from: b-secret-op.left@45px, to: vault.right@15px, waypoints: [[1396, 845], [1396, 655]], against_flow: true, label_at: [1396, 750]}
-  c-gkesecret-vault: {from: gke-secret-op.left@45px, to: vault.right@45px, waypoints: [[1412, 1825], [1412, 685]], against_flow: true, label_at: [1412, 1700]}
-  c-argocd-b: {from: argocd.right@15px, to: b-apiserver.left@115px, waypoints: [[1428, 2103], [1428, 435]], label_at: [1120, 2103]}
-  c-argocd-gke: {from: argocd.right@35px, to: gke-apiserver.left@115px, waypoints: [[1444, 2123], [1444, 1415]], label_at: [1250, 2123]}
-  c-cmp-b-api: {from: cmp-backend.right@12px, to: b-apiserver.left@145px, waypoints: [[1460, 2434], [1460, 465]], label_at: [1250, 2434]}
-  c-cmp-gke-api: {from: cmp-backend.right@26px, to: gke-apiserver.left@145px, waypoints: [[1476, 2448], [1476, 1445]], label_at: [1290, 2448]}
+  c-argocd-b: {from: argocd.right@15px, to: b-apiserver.left@115px, waypoints: [[1428, 1893], [1428, 435]], label_at: [1120, 1893]}
+  c-cmp-b-api: {from: cmp-backend.right@12px, to: b-apiserver.left@145px, waypoints: [[1460, 2224], [1460, 465]], label_at: [1250, 2224]}
 
   # Relays inside the tunnel: the cloud socat opens TCP to the on-prem tunnel IP.
   c-bwg-onprem-vm: {from: b-wireguard.left@60px, to: wireguard-onprem.right@45px, waypoints: [[1300, 590], [1300, 1019]], against_flow: true}
   c-bwg-onprem-loki: {from: b-wireguard.left@85px, to: wireguard-onprem.right@65px, waypoints: [[1316, 615], [1316, 1039]], against_flow: true}
   c-bwg-onprem-select: {from: b-wireguard.left@110px, to: wireguard-onprem.right@85px, waypoints: [[1332, 640], [1332, 1059]], against_flow: true}
-  c-gkewg-onprem-vm: {from: gke-wireguard.left@60px, to: wireguard-onprem-gcp.right@45px, waypoints: [[1380, 1570], [1380, 1213]], against_flow: true}
-  c-gkewg-onprem-loki: {from: gke-wireguard.left@85px, to: wireguard-onprem-gcp.right@65px, waypoints: [[1364, 1595], [1364, 1233]], against_flow: true}
-  c-gkewg-onprem-select: {from: gke-wireguard.left@110px, to: wireguard-onprem-gcp.right@85px, waypoints: [[1348, 1620], [1348, 1253]], against_flow: true}
 
   # On-prem end of the relays, down the hub's right margin into the observability group.
-  c-wgonprem-vmselect: {from: wireguard-onprem.right@110px, to: vm-vmselect.top@160px, waypoints: [[1112, 1084], [1112, 1808], [840, 1808]]}
-  c-wgonprem-lokigw: {from: wireguard-onprem.right@128px, to: loki-gateway.top@160px, waypoints: [[1076, 1102], [1076, 1646], [840, 1646]]}
-  c-wgonprem-vminsert: {from: wireguard-onprem.right@146px, to: vm-vminsert.top@150px, waypoints: [[1040, 1120], [1040, 1490], [830, 1490]]}
-  c-wggcp-vmselect: {from: wireguard-onprem-gcp.right@110px, to: vm-vmselect.top@250px, waypoints: [[1130, 1278], [1130, 1826], [930, 1826]]}
-  c-wggcp-lokigw: {from: wireguard-onprem-gcp.right@128px, to: loki-gateway.top@250px, waypoints: [[1094, 1296], [1094, 1664], [930, 1664]]}
-  c-wggcp-vminsert: {from: wireguard-onprem-gcp.right@146px, to: vm-vminsert.top@240px, waypoints: [[1058, 1314], [1058, 1505], [920, 1505]]}
+  c-wgonprem-vmselect: {from: wireguard-onprem.right@110px, to: vm-vmselect.top@160px, waypoints: [[1112, 1084], [1112, 1598], [840, 1598]]}
+  c-wgonprem-lokigw: {from: wireguard-onprem.right@128px, to: loki-gateway.top@160px, waypoints: [[1076, 1102], [1076, 1436], [840, 1436]]}
+  c-wgonprem-vminsert: {from: wireguard-onprem.right@146px, to: vm-vminsert.top@150px, waypoints: [[1040, 1120], [1040, 1280], [830, 1280]]}
 
   # The CMP reads metrics and logs (Environments, Activity) from the hub.
-  c-cmp-lokigw: {from: cmp-backend.right@40px, to: loki-gateway.top@70px, waypoints: [[1165, 2462], [1165, 1628], [750, 1628]]}
-  c-cmp-vmselect: {from: cmp-backend.right@68px, to: vm-vmselect.top@70px, waypoints: [[1180, 2490], [1180, 1790], [750, 1790]]}
+  c-cmp-lokigw: {from: cmp-backend.right@40px, to: loki-gateway.top@70px, waypoints: [[1165, 2252], [1165, 1418], [750, 1418]]}
+  c-cmp-vmselect: {from: cmp-backend.right@68px, to: vm-vmselect.top@70px, waypoints: [[1180, 2280], [1180, 1580], [750, 1580]]}
 
   # Cloud clients of the relays: agents calling home, up into the cloud WireGuard pod.
   c-alloyaws-relay-vm: {from: alloy-aws.right@30px, to: b-wireguard.bottom@50px, waypoints: [[1816, 944], [1816, 724], [1590, 724]], against_flow: true}
   c-alloyaws-relay-loki: {from: alloy-aws.right@60px, to: b-wireguard.bottom@130px, waypoints: [[1834, 974], [1834, 708], [1670, 708]], against_flow: true}
   c-brollouts-relay-select: {from: b-rollouts.right@45px, to: b-wireguard.bottom@210px, waypoints: [[1852, 1073], [1852, 692], [1750, 692]], against_flow: true}
-  c-alloygcp-relay-vm: {from: alloy-gcp.right@30px, to: gke-wireguard.bottom@50px, waypoints: [[1816, 1924], [1816, 1704], [1590, 1704]], against_flow: true}
-  c-alloygcp-relay-loki: {from: alloy-gcp.right@60px, to: gke-wireguard.bottom@130px, waypoints: [[1834, 1954], [1834, 1688], [1670, 1688]], against_flow: true}
-  c-gkerollouts-relay-select: {from: gke-rollouts.right@45px, to: gke-wireguard.bottom@210px, waypoints: [[1852, 2053], [1852, 1672], [1750, 1672]], against_flow: true}
 
   # To GitHub, under the clouds.
-  c-argocd-github: {from: argocd.right@60px, to: github.left@60px, waypoints: [[1300, 2148], [1300, 2340]], label_at: [1900, 2340]}
-  c-updater-github: {from: image-updater.right@25px, to: github.left@90px, waypoints: [[1316, 2217], [1316, 2370]], label_at: [2000, 2370]}
-  c-cmp-github: {from: cmp-backend.right@54px, to: github.left@120px, waypoints: [[1348, 2476], [1348, 2400]], label_at: [2100, 2400]}
-  c-updater-ghcr: {from: image-updater.right@55px, to: ghcr.left@55px, waypoints: [[1332, 2247], [1332, 2515]], label_at: [1900, 2515]}
-  c-b-nodes-ghcr: {from: b-nodes.right@45px, to: ghcr.left@80px, waypoints: [[2260, 665], [2260, 2540]], label_at: [2260, 900]}
-  c-gke-nodes-ghcr: {from: gke-nodes.right@45px, to: ghcr.left@105px, waypoints: [[2290, 1645], [2290, 2565]], label_at: [2290, 1800]}
+  c-argocd-github: {from: argocd.right@60px, to: github.left@68px, label_at: [1250, 1938]}
+  c-updater-github: {from: image-updater.right@25px, to: github.left@137px, label_at: [1250, 2007]}
+  c-cmp-github: {from: cmp-backend.right@54px, to: github.left@100px, waypoints: [[1348, 2266], [1348, 1970]], label_at: [1348, 2210]}
+  c-updater-ghcr: {from: image-updater.right@55px, to: ghcr.left@70px, waypoints: [[1332, 2037], [1332, 2120]], label_at: [1440, 2120]}
+  c-b-nodes-ghcr: {from: b-nodes.right@45px, to: ghcr.left@100px, waypoints: [[2260, 665], [2260, 2260], [1480, 2260], [1480, 2150]], label_at: [2260, 900]}
   r-b-allow-api: {from: b-allow.left@30px, to: b-apiserver.right@60px, waypoints: []}
   r-b-allow-wg: {from: b-allow.left@200px, to: b-wireguard.right@20px, waypoints: []}
-  r-gke-allow-api: {from: gke-allow.left@30px, to: gke-apiserver.right@60px, waypoints: []}
-  r-gke-allow-wg: {from: gke-allow.left@200px, to: gke-wireguard.right@20px, waypoints: []}
 
 cards:
-  card-legend: {x: 40, y: 2700, w: 520, h: 460}
-  card-bg: {x: 590, y: 2700, w: 820, h: 460}
-  card-allow: {x: 1440, y: 2700, w: 520, h: 460}
-  card-tunnel: {x: 1990, y: 2700, w: 450, h: 460}
-  card-gaps: {x: 2470, y: 2700, w: 370, h: 460}
+  card-legend: {x: 40, y: 2490, w: 520, h: 460}
+  card-bg: {x: 590, y: 2490, w: 820, h: 460}
+  card-allow: {x: 1440, y: 2490, w: 520, h: 460}
+  card-tunnel: {x: 1990, y: 2490, w: 450, h: 460}
+  card-gaps: {x: 2470, y: 2490, w: 370, h: 460}

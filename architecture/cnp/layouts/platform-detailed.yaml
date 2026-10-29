@@ -10,7 +10,6 @@ elements:
   z-google-ai: {x: 6440, y: 2400, w: 420, h: 500}
   z-homelab-gpu: {x: 6440, y: 2980, w: 1200, h: 600}
   z-cloud-a: {x: 6440, y: 3680, w: 420, h: 200}
-  z-cloud-b: {x: 6440, y: 3960, w: 420, h: 200}
   z-sb-compute: {x: 500, y: 5560, w: 3700, h: 200}
   user: {x: 142, y: 70, w: 56, h: 56}
   id-user: {x: 142, y: 220, w: 56, h: 56}
@@ -48,7 +47,6 @@ elements:
   md-store: {x: 820, y: 198, w: 340, h: 104}
   md-guard: {x: 430, y: 198, w: 340, h: 104}
   b-apiserver: {x: 40, y: 70, w: 340, h: 100}
-  gke-apiserver: {x: 40, y: 70, w: 340, h: 100}
   sb-hv: {x: 1380, y: 70, w: 300, h: 100}
   sb-nested: {x: 1740, y: 70, w: 300, h: 100}
   g-ai-gateway: {x: 60, y: 1100, w: 2750, h: 906}
@@ -226,7 +224,6 @@ edges:
   c-argocd-apiserver: {from: argocd.bottom@240px, to: kube-apiserver.bottom@140px, waypoints: [[2700, 900], [3390, 900]], label_at: [3006, 900], against_flow: true}
   c-argocd-app-repos: {from: argocd.right@80px, to: gh-project-repos.left@80px, waypoints: [[2790, 840], [2790, 970], [6450, 970], [6450, 560]], label_at: [3000, 970]}
   c-argocd-github: {from: argocd.right@30px, to: github.top@70px, waypoints: [[2790, 790], [2790, 300], [6550, 300]], label_at: [3032, 300]}
-  c-argocd-gke: {from: argocd.bottom@280px, to: gke-apiserver.left@60px, waypoints: [[2740, 1340], [6440, 1340], [6440, 4090]], label_at: [4590, 1340]}
   c-cmp-github: {from: cmp-backend.right@30px, to: github.top@180px, waypoints: [[3210, 360], [3210, 240], [6660, 240]], label_at: [6536, 240]}
   c-envoy-cmp-backend: {from: envoy-shared-gateway.right@50px, to: cmp-backend.top@80px, waypoints: [[860, 810], [860, 240], [2890, 240]], label_at: [1874, 240]}
   c-envoy-cmp-frontend: {from: envoy-shared-gateway.right@70px, to: cmp-frontend.left@80px, waypoints: [[940, 830], [940, 680], [2360, 680], [2360, 410]], label_at: [1742, 680]}
@@ -387,9 +384,8 @@ edges:
   c-md-gpu: {from: md-svc-text.right@25px, to: md-gpu.left@25px}
   c-md-store: {from: md-svc-text.right@85px, to: md-store.left@20px, waypoints: [[7235, 3135], [7235, 3198]]}
   r-md-guard: {from: md-store.left@60px, to: md-guard.right@60px}
-  # CMP reads cloud projects on the EKS / GKE API, alongside the Argo CD edges.
+  # CMP reads cloud projects on the cloud API, alongside the Argo CD edges.
   c-cmp-b-api: {from: cmp-backend.right@45px, to: b-apiserver.left@80px, waypoints: [[3150, 375], [3150, 1010], [3745, 1010], [3745, 2030], [6415, 2030], [6415, 3830]]}
-  c-cmp-gke-api: {from: cmp-backend.right@95px, to: gke-apiserver.left@80px, waypoints: [[3165, 425], [3165, 1025], [3760, 1025], [3760, 2015], [6400, 2015], [6400, 4110]]}
 cards:
   card-steps: {x: 40, y: 5840, w: 3600, h: 320}
   card-background: {x: 3700, y: 5840, w: 3600, h: 320}

@@ -5,10 +5,10 @@ state: diff
 title: "CNP · Global map · current platform and AI landing zone"
 subtitle: "Every zoom on one canvas: how a user, an app, an agent and a release cross the platform, and what the AI landing zone adds"
 meta:
-  - "Scope: on-prem hub and its EKS and GKE targets, 2026-10-22 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
-  - "Out of scope: observability (ai-gateway view) · cnp.sh and Terraform state (multicloud view) · RBAC and grants (access-matrix view) · per-cluster policies (multicloud-policies view) · what runs on the GPU server"
+  - "Scope: on-prem hub and its public cloud targets (EKS and GKE, drawn once), 2026-10-29 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
+  - "Out of scope: observability (ai-gateway view) · cnp.sh and Terraform state (multicloud-links view) · RBAC and grants (access-matrix view) · per-cluster policies (multicloud-policies view) · what runs on the GPU server"
   - "Assumed: agentgateway on its own GatewayClass, beside Envoy Gateway; Gemini free tier first, the GPU server on 429 or for Local projects"
-  - "v0.1 · source: cnp-docs/architecture/cnp"
+  - "v0.2 (2026-10-29: EKS and GKE drawn once) · source: cnp-docs/architecture/cnp"
 
 include:
   - z-internet
@@ -52,7 +52,6 @@ include:
   - cilium-default-deny
   - g-vpn
   - wireguard-onprem
-  - wireguard-onprem-gcp
   - g-ai-gateway
   - ai-gw-proxy
   - ai-gw-route
@@ -71,26 +70,19 @@ include:
   - z-cloud-a
   - b-wireguard
   - b-apiserver
-  - z-cloud-b
-  - gke-wireguard
-  - gke-apiserver
   - z-google-ai
   - gemini
   - z-homelab-gpu
   - gpu-server
 
 steps: [e-1-browser-edge, e-2-tunnel-app, e-3-connector-envoy, c-app-aigw, c-agent-aigw, c-aigw-gemini, c-aigw-gpu, c-aigw-cmp-mcp, c-mcp-app-repos, c-repos-ghcr, c-updater-ghcr, c-argocd-app-repos, c-argocd-apiserver]
-background: [e-a-vso-vault, c-vso-ai-secret, c-aigw-keycloak, c-agent-keycloak, c-wg-eks, c-wg-gke, c-argocd-b, c-argocd-gke]
+background: [e-a-vso-vault, c-vso-ai-secret, c-aigw-keycloak, c-agent-keycloak, c-wg-eks, c-argocd-b]
 
 labels:
   c-bwg-onprem-vm: ""
   c-bwg-onprem-loki: ""
   c-bwg-onprem-select: ""
-  c-gkewg-onprem-vm: ""
-  c-gkewg-onprem-loki: ""
-  c-gkewg-onprem-select: ""
   c-cmp-b-api: ""
-  c-cmp-gke-api: ""
   c-sb-claim: ""
   c-sb-kyverno: ""
   e-1-browser-edge: ""
@@ -126,9 +118,7 @@ labels:
   c-repos-ghcr: ""
   c-argocd-apiserver: ""
   c-argocd-b: ""
-  c-argocd-gke: ""
   c-wg-eks: ""
-  c-wg-gke: ""
 
 cards:
   - id: card-steps
@@ -146,7 +136,7 @@ cards:
     lines:
       - "[A] [B] Vault and its operator deliver the Gemini key to the gateway only (zoom 6)."
       - "[C] [D] Keycloak issues one client per agent; the gateway caches its JWKS."
-      - "[E]–[H] WireGuard links the hub to EKS and GKE; Argo CD deploys to both (zoom 10). Unlettered: the tunnel relays cloud metrics, logs and canary queries home (TCP 18080, 18082, 18083), and the CMP reads cloud projects on the EKS / GKE API."
+      - "[E] [F] WireGuard links the hub to the public cloud target (EKS and GKE, drawn once); Argo CD deploys there (zoom 10). Unlettered: the tunnel relays cloud metrics, logs and canary queries home (TCP 18080, 18082, 18083), and the CMP reads cloud projects on the cloud API."
       - "Observability (Alloy, Loki, Tempo, Grafana) is left out of this map to keep it readable: see the ai-gateway view and zoom 9."
   - id: card-plan
     title: "Order of work"

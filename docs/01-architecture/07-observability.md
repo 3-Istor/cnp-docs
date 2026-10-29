@@ -1,6 +1,6 @@
 # Observabilité multicluster
 
-Métriques, logs et audit des trois clusters (on-prem, EKS, GKE) finissent sur l'on-prem : VictoriaMetrics, Loki, Ceph RGW. Les clouds n'ont qu'un agent (Alloy) qui pousse par le tunnel WireGuard. Schémas générés depuis le code avec noodle, sources dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp).
+Métriques, logs et audit des trois clusters (on-prem, EKS, GKE) finissent sur l'on-prem : VictoriaMetrics, Loki, Ceph RGW. Les clouds publics (EKS et GKE, dessinés une seule fois) n'ont qu'un agent (Alloy) qui pousse par le tunnel WireGuard. Schémas générés depuis le code avec noodle, sources dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp).
 
 ## En un coup d'œil
 
@@ -10,7 +10,7 @@ Métriques, logs et audit des trois clusters (on-prem, EKS, GKE) finissent sur l
 
 ## Collecte
 
-*Comment les métriques, logs et événements d'audit d'on-prem, EKS et GKE atteignent les stockages on-prem ?*
+*Comment les métriques, logs et événements d'audit de l'on-prem et des clouds publics atteignent les stockages on-prem ?*
 
 ![Collecte de l'observabilité](diagrams/observability.light.png)
 
@@ -31,6 +31,6 @@ Métriques, logs et audit des trois clusters (on-prem, EKS, GKE) finissent sur l
 
 ## Parcours d'une métrique
 
-*Que se passe-t-il, dans l'ordre, entre un pod sur EKS et le panneau Grafana d'un dev ?*
+*Que se passe-t-il, dans l'ordre, entre un pod sur un cloud public et le panneau Grafana d'un dev ?*
 
-![Parcours d'une métrique depuis EKS](diagrams/observability-metric-path.light.png)
+![Parcours d'une métrique depuis un cloud public](diagrams/observability-metric-path.light.png)

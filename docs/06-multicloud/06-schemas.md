@@ -1,6 +1,6 @@
 # Schémas
 
-Six vues, générées depuis le code avec noodle. Pour les régénérer : [`architecture/README.md`](https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md). Pour agir : [procédures opérateur](07-procedures-operateur.md).
+Six vues, générées depuis le code avec noodle. EKS et GKE ont la même plateforme : ils sont dessinés une seule fois, comme « cluster cloud public ». Pour les régénérer : [`architecture/README.md`](https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md). Pour agir : [procédures opérateur](07-procedures-operateur.md).
 
 ## Où tourne quoi
 
@@ -53,11 +53,11 @@ Six vues, générées depuis le code avec noodle. Pour les régénérer : [`arch
 - L'état du cluster vient de l'Application Argo CD `wireguard-<cloud>`, relue toutes les 60 s : `up` seulement si Healthy, sync connu et aucune condition `*Error`.
 - Cluster pas `up` : aucun appel n'est fait, l'API répond 503 `cluster_not_connected` et l'onglet affiche « non connecté ».
 
-## Un projet et une app sur AWS
+## Un projet et une app sur un cloud public
 
-*Que se passe-t-il, dans l'ordre, quand un dev crée un projet sur AWS puis y déploie une app ?*
+*Que se passe-t-il, dans l'ordre, quand un dev crée un projet sur un cloud public (AWS ou GCP) puis y déploie une app ?*
 
-![Projet et app sur AWS](../01-architecture/diagrams/project-create-cloud.light.png)
+![Projet et app sur un cloud public](../01-architecture/diagrams/project-create-cloud.light.png)
 
 - Le CMP n'appelle jamais l'API du cluster pour créer : il écrit dans `cnp-projects` et les repos d'app, Argo CD déploie sur `targetCloud`.
 - Le déploiement d'une app est refusé si le cluster n'est pas `up` ; la création du projet ne l'est pas.

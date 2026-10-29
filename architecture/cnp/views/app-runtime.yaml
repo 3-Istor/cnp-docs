@@ -2,58 +2,111 @@ apiVersion: noodle/v1alpha1
 kind: View
 type: topology
 title: "CNP · Application runtime view"
-subtitle: "Seen from inside one app: who reaches it, what it reaches, what should stay out, and what the platform hands it."
+subtitle: "Seen from inside one app: what it contains, who reaches it, what it reaches, and what stays out."
 meta:
-  - "Scope: one generic app <project>-<app> built from infra-templates · on-prem K3s · main as of 2026-09-30 · derived from code"
-  - "Out of scope: how the project is created (platform overview) · the login flow (OIDC sequence) · per-project gateway and Keycloak, both off by default"
-  - "v0.1 · source: cnp-docs/architecture/cnp"
+  - "Scope: one fullstack app <project>-<app> built from infra-templates, on any target cluster (on-prem K3s or public cloud) · main as of 2026-10-29"
+  - "Sources: infra-templates/templates · app-templates/templates/k3s-gitops-app/templates/values-*.yaml.tpl · cnp-project-base/templates/{gateway,tunnel,network-policy}.yaml · K3s/k8s/config/argo-rollouts"
+  - "Out of scope: what else the project owns (see project-anatomy) · the login flow (oidc-login) · the canary and promotion steps (canary-release) · backup and restore (app-backup, app-restore)"
+  - "v0.2 · source: cnp-docs/architecture/cnp"
 
 # Explicit, so an element added to the model enters this view only when listed here.
 include:
+  - z-internet
+  - user
+  - z-cloudflare
+  - ar-cf
+  - z-ar-target
+  - g-ar-system
+  - ar-tunnel
+  - ar-gateway
+  - g-ar-app
+  - ar-route
+  - ar-secret
+  - ar-frontend
+  - ar-backend
+  - ar-db
+  - ar-isolation
+  - ar-migrate
+  - g-ar-other
+  - ar-other
+  - g-ar-platform
+  - ar-vso
+  - ar-alloy
+  - ar-rollouts
   - z-cluster
-  - g-gateway
-  - envoy-shared-gateway
   - g-identity
-  - keycloak
+  - ar-keycloak
   - g-secrets
-  - vso
-  - vault
-  - g-tenant-a
-  - cloudflared-app
-  - httproute
-  - app-service
-  - app-pods
-  - security-policy
-  - app-secret
-  - cnpg
-  - g-tenant-b
-  - tenant-b-pods
-steps: [e-3-connector-envoy, e-4-envoy-service, e-5-service-pods, e-6-pods-db]
-background: [e-a-vso-vault, e-b-vso-secret]
+  - ar-vault
+  - g-observability
+  - ar-hub-obs
+  - z-ceph
+  - ceph-rgw
 
+steps: [c-ar-user-cf, c-ar-tunnel-gw, c-ar-gw-front, c-ar-front-back, c-ar-back-db]
+background: [c-ar-tunnel-edge, c-ar-gw-keycloak, c-ar-vso-vault, c-ar-alloy-obs, c-ar-rollouts-obs, c-ar-migrate-db, c-ar-db-rgw]
+
+# "" keeps the badge alone on short segments: the steps card carries the text.
 labels:
-  x-cross-tenant: "not blocked: no Cilium policy"
+  c-ar-tunnel-gw: ""
+  c-ar-gw-front: ""
+  c-ar-front-back: ""
+  c-ar-back-db: ""
+  c-ar-migrate-db: ""
+  c-ar-gw-keycloak: ""
+  x-ar-other: ""
+  c-ar-rollouts-obs: ""
+  c-ar-alloy-obs: ""
 
 cards:
-  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-legend
+    title: "Legend"
+    color: slate
+    lines:
+      - "Solid grey: a request, client → server. Dashed red: authentication. Dashed orange: tunnel opened outbound. Dashed purple: background sync."
+      - "Red cross: a connection that must not happen. Dotted grey: an object reference, not traffic."
+      - "Large dashed frame: cluster or SaaS. Small frame: namespace or functional group."
+      - "[1] request step · [A] background step · TCP 80: listening port on the server."
+  - id: card-steps
+    title: "Request path · data plane"
+    color: emerald
+    lines:
+      - "[1] A user opens <app>-<project>.3istor.com; Cloudflare ends TLS."
+      - "[2] The project tunnel relays the request to <project>-gateway :80."
+      - "[3] The gateway runs the OIDC login of the route, then sends the request to the frontend; in prod with a canary, by stable / canary weights."
+      - "[4] The frontend calls the backend at BACKEND_HOST :8000; the backend has no route of its own."
+      - "[5] The backend queries <app>-db-rw :5432."
+      - "Pods of another project are denied at ingress: the policy only lets in the project's own namespaces, envoy-gateway-system, observability and cnpg-system (+ the CMP on-prem)."
+  - id: card-bg
+    title: "Background"
+    color: orange
+    lines:
+      - "[A] The tunnel is opened outbound. [B] The gateway exchanges the code with Keycloak at auth.3istor.com :443, realm <project>, client cnp-<project>-<app>."
+      - "[C] On-prem, the secret operator reads Vault in-cluster (http://vault.vault.svc.cluster.local:8200) with role <project>-<app>-role and writes the app Secrets."
+      - "[D] Alloy scrapes annotated pods, tails pod logs and pushes both to the hub. [E] Argo Rollouts queries the metrics for the canary analysis."
+      - "[F] The migrate Job runs /app/migrate once the database is ready, before each new version. [G] The database archives WAL and base backups (opt-in)."
   - id: card-contract
     title: "Runtime contract"
     color: indigo
     lines:
-      - "**Env.** DB_HOST=<fullname>-db-rw, DB_PORT=5432, DB_NAME; DB_USER and DB_PASSWORD from the Secret. envFrom <fullname>-secrets adds every key synced from Vault."
-      - "**Secrets.** A VaultSecret reads kvv2 project-<project>/<app>; VSO, with its own service account, writes <fullname>-secrets. The image pull secret app-registry arrives the same way."
-      - "**Identity.** OIDC client cnp-<project>-<app> in realm 3istor, callback /oauth2/callback. Envoy runs the login before the app sees a request."
-      - "**Endpoints.** HTTP on the Service target port (backend 8000, frontend 3001), /health expected. Probes are declared, not rendered !!G8!!."
-      - "**Sandbox.** No securityContext rendered and images without USER: root, default capabilities, writable filesystem !!G8!!."
-      - "**Sizing.** CMP defaults: requests 50m / 256Mi, limits 500m backend or 250m frontend / 256Mi. Kyverno only warns on missing limits."
-      - "**Database.** CloudNativePG, PostgreSQL 16, 1 instance, 1Gi, no backup. **Off hours:** offhours-guard can scale the app to zero."
+      - "**Env.** DB_HOST=<app>-db-rw, DB_PORT=5432, DB_NAME, DB_USER and DB_PASSWORD; envFrom <fullname>-secrets adds every key synced from Vault project-<project>/<app>."
+      - "**Image.** Pulled from GHCR with the Secret app-registry, also synced from Vault."
+      - "**Probes.** Liveness and readiness on /health by default."
+      - "**Sizing.** Requests 50m / 256Mi; limits 500m (backend) or 250m (frontend) / 256Mi."
+      - "**Off hours.** offhours-guard sleeps the app 01:00–07:00 (Paris) and wakes it on demand."
+  - id: card-clouds
+    title: "On a public cloud"
+    color: amber
+    lines:
+      - "**Same chart, same namespaces.** Only the path to the hub changes."
+      - "**Login.** OIDC token calls go to auth.3istor.com over the Internet, as on-prem (the SecurityPolicy never uses a .svc address)."
+      - "**Secrets.** The cloud secret operator reads vault.3istor.com :443, public, through Cloudflare."
+      - "**Observability.** Alloy pushes through the WireGuard relays (18080, 18082); the canary analysis reads through 18083."
+      - "**Data.** PVC on local-path: lost when the cluster goes down. Backups to Ceph RGW are not wired, keep db.backup off."
+      - "**Guardrails.** No Service LoadBalancer, no Ingress, no PVC other than local-path (admission policies)."
   - id: card-gaps
-    title: "Gaps between docs and code"
+    title: "Gaps"
     color: orange
     lines:
-      - "!!G1!! **Network isolation.** Docs describe a default-deny CCNP per project. None in code: other tenants reach the app's Service."
-      - "!!G2!! **Authorization.** No groups-claim check: any account in realm 3istor opens the app."
-      - "!!G8!! **Pod sandbox.** See the runtime contract: root, no probes."
-      - "!!G9!! **ReferenceGrant.** Envoy reaches Keycloak only from 8 hand-listed namespaces; a new app's is not added."
-      - "!!G10!! **Gateway label.** New app namespaces never get prod-gateway-access: routes on the shared gateway are not accepted."
-      - "!!G4!! Tunnels target Envoy's Service by name. !!G5!! One tunnel per app on :latest. !!G6!! The token call likely hairpins via Cloudflare."
+      - "**Egress is open.** The ingress policy denies other projects coming in, not the app going out."
+      - "**Kyverno audits only.** Restricted pod security is reported, not enforced; tenant namespaces run under baseline."

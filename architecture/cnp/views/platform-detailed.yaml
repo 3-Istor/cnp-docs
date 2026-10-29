@@ -7,7 +7,7 @@ subtitle: "Every zoom on one canvas: the hub as it runs today and the AI landing
 meta:
   - "Scope: on-prem K3s hub and the AI landing zone proposal of 2026-10-23 · drawn in full: what the proposals add (P0–P2, IA-1–IA-3) · faded: what already runs"
   - "Three sandbox tiers side by side: standard (runc), gVisor and Kata, each on its own worker node; a platform can offer one, two or all three"
-  - "Out of scope: EKS and GKE internals (multicloud views) · RBAC and grants (access matrix) · CI pipelines"
+  - "Out of scope: public cloud internals (multicloud views) · RBAC and grants (access matrix) · CI pipelines"
   - "v0.1 · source: cnp-docs/architecture/cnp · each zoom view lists its own sources"
 
 include:
@@ -225,8 +225,6 @@ include:
   - md-svc-image
   - z-cloud-a
   - b-apiserver
-  - z-cloud-b
-  - gke-apiserver
   - z-sb-compute
   - sb-hv
   - sb-nested
@@ -258,7 +256,6 @@ cards:
 
 labels:
   c-cmp-b-api: ""
-  c-cmp-gke-api: ""
   c-ob-agent: ""
   c-th-proxy-kapi: ""
   c-th-jwks: ""

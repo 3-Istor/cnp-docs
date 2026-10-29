@@ -18,8 +18,7 @@ elements:
   s1-cloudflare: {x: 30, y: 44, w: 460, h: 72}
   s1-z-clusters: {x: 800, y: 480, w: 880, h: 170}
   s1-onprem: {x: 30, y: 50, w: 240, h: 72}
-  s1-eks: {x: 320, y: 50, w: 240, h: 72}
-  s1-gke: {x: 610, y: 50, w: 240, h: 72}
+  s1-cloud: {x: 470, y: 44, w: 300, h: 84}
   s1-z-obs: {x: 800, y: 720, w: 880, h: 150}
   s1-obs: {x: 30, y: 44, w: 820, h: 72}
 edges:
@@ -32,14 +31,12 @@ edges:
   s1-c-cmp-github: {from: s1-cmp.right@20px, to: s1-github.left@20px, waypoints: [[685, 670], [685, 264]], label_at: [757, 264]}
   s1-c-argocd-github: {from: s1-argocd.right@20px, to: s1-github.left@52px, waypoints: [[670, 790], [670, 296]], label_at: [770, 296]}
   s1-c-argocd-onprem: {from: s1-argocd.right@38px, to: s1-onprem.left, waypoints: [[700, 808], [700, 566]], label_at: [775, 566]}
-  s1-c-argocd-eks: {from: s1-argocd.right@56px, to: s1-eks.top@60px, waypoints: [[715, 826], [715, 380], [1180, 380]], label_at: [960, 380]}
-  s1-c-argocd-gke: {from: s1-argocd.right@74px, to: s1-gke.top@60px, waypoints: [[730, 844], [730, 400], [1470, 400]], label_at: [1395, 400]}
+  s1-c-argocd-cloud: {from: s1-argocd.right@56px, to: s1-cloud.top@60px, waypoints: [[715, 826], [715, 380], [1330, 380]], label_at: [1030, 380]}
   s1-c-onprem-cf: {from: s1-onprem.top@200px, to: s1-cloudflare.bottom@30px, against_flow: true, waypoints: [[1030, 440], [1220, 440]], label_at: [1125, 440]}
-  s1-c-eks-cf: {from: s1-eks.top@200px, to: s1-cloudflare.bottom@130px, against_flow: true}
-  s1-c-gke-cf: {from: s1-gke.top@200px, to: s1-cloudflare.bottom@420px, against_flow: true}
+  s1-c-cloud-cf: {from: s1-cloud.top@220px, to: s1-cloudflare.bottom@300px, against_flow: true}
   s1-c-onprem-obs: {from: s1-onprem.bottom@200px, to: s1-obs.top@200px}
-  s1-c-eks-obs: {from: s1-eks.bottom, to: s1-obs.top@410px}
-  s1-c-gke-obs: {from: s1-gke.bottom, to: s1-obs.top@700px}
+  s1-c-operator-cloud: {from: s1-operator.right@46px, to: s1-cloud.top@250px, waypoints: [[225, 968], [225, 1060], [1700, 1060], [1700, 440], [1520, 440]], label_at: [900, 1060]}
+  s1-c-cloud-obs: {from: s1-cloud.bottom, to: s1-obs.top@540px}
   s1-c-grafana-obs: {from: s1-grafana.right, to: s1-obs.left, waypoints: [[655, 566], [655, 800]], label_at: [632, 566]}
 cards:
   card-legend: {x: 40, y: 1080, w: 800, h: 220}
