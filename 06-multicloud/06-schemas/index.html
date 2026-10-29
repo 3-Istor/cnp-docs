@@ -328,7 +328,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../04-templates/00-github-repositories-landscape.md" class="md-tabs__link">
+        <a href="../../04-templates/00-github-repositories-landscape/" class="md-tabs__link">
           
   
   
@@ -1386,7 +1386,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-templates/00-github-repositories-landscape.md" class="md-nav__link">
+      <a href="../../04-templates/00-github-repositories-landscape/" class="md-nav__link">
         
   
   
@@ -2264,10 +2264,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#un-projet-et-une-app-sur-aws" class="md-nav__link">
+  <a href="#un-projet-et-une-app-sur-un-cloud-public" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Un projet et une app sur AWS
+        Un projet et une app sur un cloud public
       
     </span>
   </a>
@@ -2878,10 +2878,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#un-projet-et-une-app-sur-aws" class="md-nav__link">
+  <a href="#un-projet-et-une-app-sur-un-cloud-public" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Un projet et une app sur AWS
+        Un projet et une app sur un cloud public
       
     </span>
   </a>
@@ -2906,7 +2906,7 @@
 
 
 <h1 id="schemas">Schémas<a class="headerlink" href="#schemas" title="Permanent link">&para;</a></h1>
-<p>Six vues, générées depuis le code avec noodle. Pour les régénérer : <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a>. Pour agir : <a href="../07-procedures-operateur/">procédures opérateur</a>.</p>
+<p>Six vues, générées depuis le code avec noodle. EKS et GKE ont la même plateforme : ils sont dessinés une seule fois, comme « cluster cloud public ». Pour les régénérer : <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a>. Pour agir : <a href="../07-procedures-operateur/">procédures opérateur</a>.</p>
 <h2 id="ou-tourne-quoi">Où tourne quoi<a class="headerlink" href="#ou-tourne-quoi" title="Permanent link">&para;</a></h2>
 <p><em>Ce qui reste sur le hub on-prem, ce qui part avec chaque projet vers son cloud cible, et quels liens traversent.</em></p>
 <p><img alt="CNP multicloud" src="../../01-architecture/diagrams/multicloud.light.png" /></p>
@@ -2948,9 +2948,9 @@
 <li>L'état du cluster vient de l'Application Argo CD <code>wireguard-&lt;cloud&gt;</code>, relue toutes les 60 s : <code>up</code> seulement si Healthy, sync connu et aucune condition <code>*Error</code>.</li>
 <li>Cluster pas <code>up</code> : aucun appel n'est fait, l'API répond 503 <code>cluster_not_connected</code> et l'onglet affiche « non connecté ».</li>
 </ul>
-<h2 id="un-projet-et-une-app-sur-aws">Un projet et une app sur AWS<a class="headerlink" href="#un-projet-et-une-app-sur-aws" title="Permanent link">&para;</a></h2>
-<p><em>Que se passe-t-il, dans l'ordre, quand un dev crée un projet sur AWS puis y déploie une app ?</em></p>
-<p><img alt="Projet et app sur AWS" src="../../01-architecture/diagrams/project-create-cloud.light.png" /></p>
+<h2 id="un-projet-et-une-app-sur-un-cloud-public">Un projet et une app sur un cloud public<a class="headerlink" href="#un-projet-et-une-app-sur-un-cloud-public" title="Permanent link">&para;</a></h2>
+<p><em>Que se passe-t-il, dans l'ordre, quand un dev crée un projet sur un cloud public (AWS ou GCP) puis y déploie une app ?</em></p>
+<p><img alt="Projet et app sur un cloud public" src="../../01-architecture/diagrams/project-create-cloud.light.png" /></p>
 <ul>
 <li>Le CMP n'appelle jamais l'API du cluster pour créer : il écrit dans <code>cnp-projects</code> et les repos d'app, Argo CD déploie sur <code>targetCloud</code>.</li>
 <li>Le déploiement d'une app est refusé si le cluster n'est pas <code>up</code> ; la création du projet ne l'est pas.</li>

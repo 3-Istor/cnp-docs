@@ -330,7 +330,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../04-templates/00-github-repositories-landscape.md" class="md-tabs__link">
+        <a href="../../04-templates/00-github-repositories-landscape/" class="md-tabs__link">
           
   
   
@@ -1471,7 +1471,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../04-templates/00-github-repositories-landscape.md" class="md-nav__link">
+      <a href="../../04-templates/00-github-repositories-landscape/" class="md-nav__link">
         
   
   
@@ -2840,7 +2840,7 @@
 
 
 <h1 id="index-des-schemas">Index des schémas<a class="headerlink" href="#index-des-schemas" title="Permanent link">&para;</a></h1>
-<p>Quel ticket a changé quoi, et quel schéma le montre. Tous les schémas sont générés depuis le code avec noodle : sources dans <a href="https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp"><code>architecture/cnp</code></a>, procédure dans <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a>. État au 29/10/2026.</p>
+<p>Quel ticket a changé quoi, et quel schéma le montre. Tous les schémas sont générés depuis le code avec noodle : sources dans <a href="https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp"><code>architecture/cnp</code></a>, procédure dans <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a>. État au 29/10/2026. EKS et GKE ayant la même plateforme, les schémas les dessinent une seule fois (« cluster cloud public »).</p>
 <h2 id="par-public">Par public<a class="headerlink" href="#par-public" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
@@ -2856,7 +2856,7 @@
 </tr>
 <tr>
 <td>Dev d'une équipe projet</td>
-<td><a href="../../06-multicloud/06-schemas/#un-projet-et-une-app-sur-aws">Un projet et une app sur AWS</a>, <a href="../../03-pipelines-and-workflows/06-release-canary/">Promotion et canary</a>, <a href="../08-database-backups/">Sauvegarde des bases</a></td>
+<td><a href="../../06-multicloud/06-schemas/#un-projet-et-une-app-sur-un-cloud-public">Un projet et une app sur un cloud public</a>, <a href="../../03-pipelines-and-workflows/06-release-canary/">Promotion et canary</a>, <a href="../08-database-backups/">Sauvegarde des bases</a></td>
 </tr>
 <tr>
 <td>Équipe plateforme</td>
@@ -2952,6 +2952,12 @@
 <td>Vue d'ensemble des acteurs</td>
 <td>Dev, admin projet, finance, opérateur</td>
 <td><code>platform-actors</code></td>
+</tr>
+<tr>
+<td>—</td>
+<td>Ce qu'un projet reçoit, et une app vue de l'intérieur</td>
+<td><code>&lt;p&gt;-system</code>, namespaces d'apps, AppProjects, realm, mount Vault, org Grafana</td>
+<td><code>project-anatomy</code>, <code>app-runtime</code></td>
 </tr>
 </tbody>
 </table>
