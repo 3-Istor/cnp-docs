@@ -7,7 +7,7 @@
 # exported at scale 1, and every PNG is then checked against the drawio: its last strip must
 # hold content, or the script fails.
 #
-# VIEWS="a b" builds only those views.
+# VIEWS="a b" builds only those views. THEMES="light" builds only that theme (default: dark light).
 #
 # PNG_QUALITY is the pngquant min-max quality, 80-95 by default. draw.io exports PNGs
 # several times larger than needed; "off" keeps them as exported.
@@ -66,7 +66,7 @@ for system in */; do
   for view in "$system"/views/*.yaml; do
     id=$(basename "$view" .yaml)
     [[ -z ${VIEWS:-} || " $VIEWS " == *" $id "* ]] || continue
-    for theme in dark light; do
+    for theme in ${THEMES:-dark light}; do
       out=$out_dir/$id.$theme
       noodle render "$system" -view "$id" -icons "$icons" -theme "$theme" -o "$out.drawio"
       width=$(page_attr "$out.drawio" pageWidth)

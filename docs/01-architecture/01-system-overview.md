@@ -5,6 +5,10 @@ The CNP relies on a decoupled, asynchronous, and GitOps-driven architecture. Ins
 
 The Single Source of Truth (SSOT) is always Git.
 
+### Who uses what
+
+![Who uses the platform](diagrams/platform-actors.light.png)
+
 ### Platform map
 
 ![CNP platform overview](diagrams/platform-overview.light.png#only-light)

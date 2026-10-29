@@ -1,0 +1,89 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Observability · Reading and project isolation"
+subtitle: "Who reads metrics and logs, and how does each project see only its own?"
+meta:
+  - "Scope: Grafana orgs, vmauth, vmselect, the Loki gateway and tenants, CMP and Argo Rollouts reads, alerting to Discord · main as of 2026-10-29 · derived from code (K3s/k8s/config/observability, CMP/backend/app/services/metrics_isolation.py, app-templates project-bootstrap/grafana.tf)"
+  - "Out of scope: the write path (see observability) · OpenCost (FinOps view, later) · dashboards · how users log in to Grafana"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-cluster
+  - g-cmp
+  - cmp-backend
+  - g-rollouts
+  - argo-rollouts
+  - g-observability
+  - grafana
+  - o-vmauth-secret
+  - vmauth
+  - vm-vmselect
+  - vm-vmstorage
+  - loki-gateway
+  - loki
+  - vmalert
+  - alertmanager
+  - z-internet
+  - discord
+
+steps: [c-grafana-vmauth, c-vmauth-vmselect, c-vmselect-vmstorage]
+background: [c-grafana-lokigw, c-lokigw-loki, c-grafana-vmselect, c-cmp-vmselect, c-cmp-lokigw, c-rollouts-vmselect, c-vmalert-vmselect, c-vmalert-am, c-loki-am, c-am-discord, c-cmp-grafana, c-grafana-discord, c-cmp-discord]
+
+# "" keeps the badge alone: the cards carry the text.
+labels:
+  c-grafana-vmauth: ""
+  c-vmauth-vmselect: ""
+  c-vmselect-vmstorage: ""
+  c-grafana-lokigw: ""
+  c-lokigw-loki: ""
+  c-grafana-vmselect: ""
+  c-cmp-vmselect: ""
+  c-cmp-lokigw: ""
+  c-rollouts-vmselect: ""
+  c-vmalert-vmselect: ""
+  c-vmalert-am: ""
+  c-loki-am: ""
+  c-am-discord: ""
+  c-cmp-grafana: ""
+  r-cmp-vmauthsecret: ""
+  r-vmauth-secret: ""
+  c-grafana-discord: ""
+  c-cmp-discord: ""
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · a project dashboard"
+    color: emerald
+    lines:
+      - "[1] A panel of the project's Grafana org queries vmauth :8427 as user project-<p> (HMAC password, datasource pinned by Terraform)."
+      - "[2] vmauth forwards to vmselect with extra_filters[]={namespace=~<project namespaces>}."
+      - "[3] vmselect reads vmstorage: the series of the three clusters, label cluster=onprem|aws|gcp."
+  - id: card-bg
+    title: "Background"
+    color: orange
+    lines:
+      - "[A] [B] Logs: the project org queries the Loki gateway as grafana-projects with X-Scope-OrgID=<project>; the gateway proxies to Loki."
+      - "[C] Org 1 (platform admins) reads vmselect directly, unfiltered."
+      - "[D] [E] The CMP reads vmselect directly and Loki as user cmp (activity, audit). It rewrites the Secret vmauth-projects: one user per project, namespaces from K3s labels and, for cloud projects, from its DB."
+      - "[F] Argo Rollouts analysis queries vmselect :8481 on-prem; on EKS and GKE through the tunnel relay :18083."
+      - "[G] [H] vmalert evaluates the platform rules and fires to Alertmanager. [I] The Loki ruler fires the security and log rules. [J] Alertmanager posts to Discord (default and critical)."
+      - "Dotted: the CMP patches the Secret vmauth-projects through the K8s API; vmauth reloads it every 30 s."
+      - "[K] The CMP provisions each project org in Grafana: datasources, dashboards, alert rules and Discord contact points."
+      - "[L] Grafana posts each project's alerts to its contact point: the app webhook, else the project one, else the platform one."
+      - "[M] The CMP posts app health and budget alerts to Discord itself."
+  - id: card-iso
+    title: "How a project sees only its own"
+    color: rose
+    lines:
+      - "**Metrics**: vmauth user per project, filtered by namespace. NetworkPolicy vmselect-readers admits vmauth, vmalert, Grafana, CMP backend, Argo Rollouts, OpenCost and the WireGuard pods."
+      - "**Logs**: one Loki tenant per project (label cnp.3istor.com/project), set by Alloy at write and by the pinned header at read."
+      - "**Grafana**: project admins are Editors in their org and cannot edit datasources."
+  - id: card-gaps
+    title: "Gaps"
+    color: orange
+    lines:
+      - "!!GO3!! The vmauth filter matches namespaces only: a namespace name reused on two clusters would leak between projects."
+      - "Org 1 and the CMP read vmselect unfiltered, by design: platform side only."
+      - "!!G7!! CMP API auth (see the platform views)."

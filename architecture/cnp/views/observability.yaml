@@ -1,0 +1,108 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Observability · Collection from three clusters"
+subtitle: "How do metrics, logs and audit events of on-prem, EKS and GKE reach the on-prem stores?"
+meta:
+  - "Scope: write path of the three clusters, the WireGuard relays, VictoriaMetrics, Loki, Ceph RGW and the audit archive · main as of 2026-10-29 · derived from code (K3s/k8s/config/{observability,wireguard}, K3s/terraform/{loki,audit}.tf, Cloud/terraform/public/platform)"
+  - "Out of scope: the read side and per-project isolation (see observability-read) · OpenCost internals (FinOps view, later) · Kyverno, Trivy · dashboards"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-cloud-a
+  - g-b-platform
+  - alloy-aws
+  - b-obs-targets
+  - b-wireguard
+  - z-cloud-b
+  - g-gke-platform
+  - alloy-gcp
+  - gke-obs-targets
+  - gke-wireguard
+  - z-cluster
+  - g-obs-sources
+  - o-hub-targets
+  - o-audit-sources
+  - g-vpn
+  - wireguard-onprem
+  - wireguard-onprem-gcp
+  - g-observability
+  - alloy-onprem
+  - vm-vminsert
+  - vm-vmstorage
+  - loki-gateway
+  - loki
+  - audit-archive-job
+  - z-ceph
+  - ceph-rgw
+  - loki-bucket
+  - audit-bucket
+
+steps: [c-alloyaws-relay-vm, c-bwg-onprem-vm, c-wgonprem-vminsert, c-vminsert-vmstorage]
+background: [c-wg-eks, c-wg-gke, c-alloyaws-targets, c-alloygcp-targets, c-alloyaws-relay-loki, c-bwg-onprem-loki, c-wgonprem-lokigw, c-alloygcp-relay-vm, c-alloygcp-relay-loki, c-gkewg-onprem-vm, c-gkewg-onprem-loki, c-wggcp-vminsert, c-wggcp-lokigw, c-alloy-hubtargets, c-alloy-auditsrc, c-alloy-vminsert, c-alloy-lokigw, c-lokigw-loki, c-loki-bucket, c-archive-lokigw, c-archive-rgw, c-bwg-onprem-select, c-gkewg-onprem-select]
+
+labels:
+  c-wg-eks: ""
+  c-wg-gke: ""
+  c-alloyaws-relay-vm: ""
+  c-alloyaws-relay-loki: ""
+  c-alloygcp-relay-vm: ""
+  c-alloygcp-relay-loki: ""
+  c-bwg-onprem-vm: ""
+  c-bwg-onprem-loki: ""
+  c-bwg-onprem-select: ""
+  c-gkewg-onprem-vm: ""
+  c-gkewg-onprem-loki: ""
+  c-gkewg-onprem-select: ""
+  c-wgonprem-vminsert: ""
+  c-wgonprem-lokigw: ""
+  c-wggcp-vminsert: ""
+  c-wggcp-lokigw: ""
+  c-alloy-vminsert: ""
+  c-alloy-lokigw: ""
+  c-alloy-hubtargets: ""
+  c-alloy-auditsrc: ""
+  c-archive-lokigw: ""
+  c-archive-rgw: ""
+  c-loki-bucket: ""
+  c-lokigw-loki: ""
+  c-vminsert-vmstorage: ""
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · a metric from EKS"
+    color: emerald
+    lines:
+      - "[1] Alloy (cluster=aws) remote_writes to onprem-apps.cnp-vpn :18080, the cloud end of the tunnel."
+      - "[2] socat in the cloud WireGuard pod relays it to the on-prem tunnel IP 100.96.0.2 :18080."
+      - "[3] The on-prem WireGuard pod relays it to vminsert :8480 (/insert/0/prometheus)."
+      - "[4] vminsert writes to vmstorage :8400: 20 GiB on ceph-block, 14 days."
+      - "Logs and audit events take the same road as the lettered flows below."
+  - id: card-bg
+    title: "Background"
+    color: orange
+    lines:
+      - "[A] [B] The on-prem pods open the tunnels (UDP 31820). [C] [D] Each cloud Alloy scrapes its pods, node-exporter and kube-state-metrics, and tails pod logs."
+      - "[E] [F] [G] Logs take the same road on :18082 to the Loki gateway (basic auth alloy, password from Vault via observability-role)."
+      - "[H] to [M] GKE does the same with label cluster=gcp, tunnel 100.96.0.4/30."
+      - "[N] [O] On-prem Alloy (cluster=onprem) scrapes the hub and tails K3s audit.log, Vault audit, Keycloak events and Hubble policy drops."
+      - "[P] [Q] It writes straight to vminsert and the Loki gateway. [R] Alloy sets the tenant (project label, else default); the gateway checks the client and passes it to Loki. [S] Loki keeps chunks in loki-data on Ceph RGW."
+      - "[T] [U] Every hour audit-archive exports the audit streams and puts them in cnp-audit-archive (Object Lock, 30 days)."
+      - "[V] [W] :18083 carries reads of vmselect for Argo Rollouts: see observability-read."
+  - id: card-allow
+    title: "Who may write"
+    color: rose
+    lines:
+      - "**Clouds**: NetworkPolicy onprem-apps (ns cnp-vpn) admits ns observability on 18080, 18082 and ns argo-rollouts on 18083."
+      - "**vminsert**: vminsert-writers admits Alloy, vmalert and the wireguard / wireguard-gcp pods."
+      - "**vmstorage**: vmstorage-cluster-only admits vminsert and vmselect."
+      - "**Loki**: loki-gateway-only admits the gateway. Each client has its own basic-auth user (alloy, grafana, archive, cmp, grafana-projects)."
+      - "**Retention**: Loki 14 days by default, 7 or 30 days by label; audit streams 30 days."
+  - id: card-gaps
+    title: "Gaps"
+    color: orange
+    lines:
+      - "!!GO1!! vminsert has no auth: the cloud cluster label is set by the client. Any pod of ns observability on a cloud may write."
+      - "!!GO2!! The Loki gateway :80 has no NetworkPolicy: basic auth alone protects it."
+      - "!!GO4!! EKS and GKE API server audit, cloud Vault and Keycloak events are not collected."

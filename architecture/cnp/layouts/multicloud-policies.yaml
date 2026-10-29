@@ -1,6 +1,6 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 2300, height: 1580}
+canvas: {width: 2300, height: 1980}
 
 # Callers left, the protected workloads in the middle, what enforces on the right. Each
 # caller reaches the workloads on its own lane: allowed edges first, denied ones below.
@@ -20,15 +20,21 @@ elements:
   pol-wg-onprem: {x: 40, y: 398, w: 320, h: 72}
   z-pol-target: {x: 760, y: 390, w: 380, h: 430}
   pol-workloads: {x: 40, y: 70, w: 300, h: 330}
-  z-pol-perim: {x: 760, y: 1070, w: 380, h: 450}
+  z-pol-perim: {x: 760, y: 1070, w: 380, h: 520}
   pol-api: {x: 40, y: 72, w: 300, h: 200}
-  pol-wg: {x: 40, y: 306, w: 300, h: 110}
-  z-pol-enf: {x: 1240, y: 210, w: 420, h: 600}
+  pol-wg: {x: 40, y: 306, w: 300, h: 180}
+  z-pol-enf: {x: 1240, y: 210, w: 420, h: 800}
   pol-ccnp: {x: 40, y: 70, w: 340, h: 80}
   pol-np-eks: {x: 40, y: 174, w: 340, h: 80}
   pol-np-gke: {x: 40, y: 278, w: 340, h: 80}
   pol-perimeter: {x: 40, y: 382, w: 340, h: 80}
   pol-no-lb: {x: 40, y: 486, w: 340, h: 80}
+  pol-vap: {x: 40, y: 590, w: 340, h: 80}
+  pol-np-vpn: {x: 40, y: 694, w: 340, h: 80}
+  z-pol-cloud-in: {x: 40, y: 1560, w: 400, h: 360}
+  pol-c-obs: {x: 40, y: 70, w: 320, h: 72}
+  pol-c-rollouts: {x: 40, y: 166, w: 320, h: 72}
+  pol-c-other: {x: 40, y: 262, w: 320, h: 72}
 
 edges:
   c-pol-same: {from: pol-same-ns.right, to: pol-workloads.left@36px, waypoints: [[730, 316], [730, 496]]}
@@ -43,9 +49,14 @@ edges:
   c-pol-api: {from: pol-argo-op.right, to: pol-api.left@60px, label_at: [640, 1202]}
   c-pol-operator-api: {from: pol-operator.right, to: pol-api.left@156px}
   c-pol-wg: {from: pol-wg-onprem.right, to: pol-wg.left@58px}
+  c-pol-c-obs: {from: pol-c-obs.right@24px, to: pol-wg.left@90px, waypoints: [[645, 1654], [645, 1466]], label_at: [520, 1654]}
+  c-pol-c-obs-loki: {from: pol-c-obs.right@48px, to: pol-wg.left@115px, waypoints: [[660, 1678], [660, 1491]], label_at: [520, 1678]}
+  c-pol-c-rollouts: {from: pol-c-rollouts.right@36px, to: pol-wg.left@140px, waypoints: [[690, 1762], [690, 1516]], label_at: [540, 1762]}
+  c-pol-c-other: {from: pol-c-other.right@36px, to: pol-wg.left@165px, waypoints: [[720, 1858], [720, 1541]], label_at: [540, 1858]}
 
 cards:
   card-legend: {x: 1740, y: 210, w: 500, h: 290}
-  card-rules: {x: 1740, y: 540, w: 500, h: 540}
-  card-guard: {x: 1240, y: 850, w: 420, h: 330}
-  card-sources: {x: 1740, y: 1120, w: 500, h: 270}
+  card-rules: {x: 1740, y: 540, w: 500, h: 600}
+  card-relays: {x: 1240, y: 1180, w: 1000, h: 300}
+  card-guard: {x: 1240, y: 1520, w: 480, h: 330}
+  card-sources: {x: 1760, y: 1520, w: 480, h: 330}

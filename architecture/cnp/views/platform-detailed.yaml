@@ -257,6 +257,8 @@ cards:
   - {id: card-legend, title: Legend, color: slate, legend: true}
 
 labels:
+  c-cmp-b-api: ""
+  c-cmp-gke-api: ""
   c-ob-agent: ""
   c-th-proxy-kapi: ""
   c-th-jwks: ""

@@ -1,0 +1,46 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 1900, height: 1060}
+
+# Clusters left, stores in the middle, readers right: readers query against the reading direction.
+elements:
+  s2-z-sources: {x: 40, y: 200, w: 360, h: 560}
+  s2-onprem: {x: 30, y: 70, w: 300, h: 90}
+  s2-aws: {x: 30, y: 220, w: 300, h: 90}
+  s2-gcp: {x: 30, y: 370, w: 300, h: 90}
+  s2-z-store: {x: 520, y: 200, w: 360, h: 560}
+  s2-vm: {x: 30, y: 70, w: 300, h: 90}
+  s2-loki: {x: 30, y: 220, w: 300, h: 90}
+  s2-ceph: {x: 30, y: 370, w: 300, h: 90}
+  s2-z-read: {x: 1000, y: 200, w: 400, h: 560}
+  s2-grafana: {x: 50, y: 70, w: 300, h: 90}
+  s2-cmp: {x: 50, y: 190, w: 300, h: 90}
+  s2-opencost: {x: 50, y: 310, w: 300, h: 90}
+  s2-alerts: {x: 50, y: 430, w: 300, h: 90}
+  s2-z-out: {x: 1500, y: 600, w: 360, h: 180}
+  s2-discord: {x: 30, y: 60, w: 300, h: 80}
+
+edges:
+  # Metrics bundle (on-prem, AWS, GCP top to bottom), then the logs bundle.
+  c-s2-onprem-vm: {from: s2-onprem.right@30px, to: s2-vm.left@30px}
+  c-s2-aws-vm: {from: s2-aws.right@30px, to: s2-vm.left@50px, waypoints: [[450, 450], [450, 320]]}
+  c-s2-gcp-vm: {from: s2-gcp.right@30px, to: s2-vm.left@70px, waypoints: [[470, 600], [470, 340]]}
+  c-s2-onprem-loki: {from: s2-onprem.right@60px, to: s2-loki.left@25px, waypoints: [[500, 330], [500, 445]]}
+  c-s2-aws-loki: {from: s2-aws.right@60px, to: s2-loki.left@60px}
+  c-s2-gcp-loki: {from: s2-gcp.right@60px, to: s2-loki.left@85px, waypoints: [[485, 630], [485, 505]]}
+  c-s2-loki-ceph: {from: s2-loki.bottom, to: s2-ceph.top}
+  c-s2-grafana-vm: {from: s2-grafana.left@30px, to: s2-vm.right@30px, against_flow: true}
+  c-s2-cmp-vm: {from: s2-cmp.left@20px, to: s2-vm.right@50px, waypoints: [[920, 410], [920, 320]], against_flow: true}
+  c-s2-opencost-vm: {from: s2-opencost.left@20px, to: s2-vm.right@65px, waypoints: [[900, 530], [900, 335]], against_flow: true}
+  c-s2-alerts-vm: {from: s2-alerts.left@20px, to: s2-vm.right@80px, waypoints: [[880, 650], [880, 350]], against_flow: true}
+  c-s2-grafana-loki: {from: s2-grafana.left@70px, to: s2-loki.right@20px, waypoints: [[960, 340], [960, 440]], against_flow: true}
+  c-s2-cmp-loki: {from: s2-cmp.left@60px, to: s2-loki.right@50px, waypoints: [[940, 450], [940, 470]], against_flow: true}
+  c-s2-alerts-loki: {from: s2-alerts.left@60px, to: s2-loki.right@80px, waypoints: [[980, 690], [980, 500]], against_flow: true}
+  # To Discord: outer lane for the highest source, so nothing crosses.
+  c-s2-grafana-discord: {from: s2-grafana.right@45px, to: s2-discord.left@15px, waypoints: [[1480, 315], [1480, 675]]}
+  c-s2-cmp-discord: {from: s2-cmp.right@45px, to: s2-discord.left@35px, waypoints: [[1460, 435], [1460, 695]]}
+  c-s2-alerts-discord: {from: s2-alerts.right@40px, to: s2-discord.left@55px, waypoints: [[1440, 670], [1440, 715]]}
+
+cards:
+  card-legend: {x: 40, y: 820, w: 760, h: 200}
+  card-read: {x: 840, y: 820, w: 1020, h: 200}

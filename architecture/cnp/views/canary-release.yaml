@@ -1,0 +1,43 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Delivery · From staging to a prod canary"
+subtitle: "What happens, in order, when a dev promotes a release from staging to prod with a canary?"
+meta:
+  - "Scope: one app with staging on and release.strategy=canary, preset safe · main as of 2026-10-29 · derived from code (CMP routers/environments.py, services/environments/{promotion,loop}.py, routers/releases.py, services/release; infra-templates rollout.yaml; K3s argo-rollouts analysis-templates, applicationset-apps, helm/cnp-image-updaters/templates/imageupdaters.yaml)"
+  - "On EKS / GKE the same flow runs against the cloud API, and the analysis reads vmselect through the tunnel (onprem-apps.cnp-vpn :18083)."
+  - "Out of scope: blue-green (not supported) · emergency and rollback promotions (they skip soak and approval) · end-user traffic through Cloudflare"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+participants: [dev-a, admin-a, cmp-backend, image-updater, bk-app-repo, argocd, hub-kapi, argo-rollouts, bk-smoke, app-service, vm-vmselect]
+
+steps:
+  # Staging follows every build.
+  - {id: s-write, from: image-updater, to: bk-app-repo, over: c-rl-updater-repo, text: "write deploy/env/staging/<c>.yaml on main (X.Y.Z-rc.N tags only)"}
+  - {id: s-poll, from: argocd, to: bk-app-repo, over: c-bk-argocd-repo, text: "poll values"}
+  - {id: s-sync, from: argocd, to: hub-kapi, over: c-bk-argocd-kapi, text: "sync <p>-<app>-<c>-stg in ns <p>-<app>-stg"}
+
+  # Promotion, driven by the CMP.
+  - {id: start, from: dev-a, to: cmp-backend, over: c-rl-dev-cmp, text: "POST /deployments/{id}/promotions"}
+  - {note: cmp-backend, text: "member may start · staging must run one version · digests fixed now"}
+  - {reply: start, text: "201 · promotion running (or waiting_approval)"}
+  - {note: cmp-backend, text: "environment loop, every 15 s: smoke → app suites → soak (while staging is awake)"}
+  - {id: approve, from: admin-a, to: cmp-backend, over: c-bk-admin-cmp, text: "POST /promotions/{pid}/approve (if the policy asks)"}
+  - {id: commit, from: cmp-backend, to: bk-app-repo, over: c-bk-cmp-repo, text: "loop commits deploy/env/prod/<c>.yaml image.tag = <version>@sha256 · tag release/<version>"}
+
+  # Prod: Argo CD syncs, Argo Rollouts runs the canary.
+  - {id: p-poll, from: argocd, to: bk-app-repo, over: c-bk-argocd-repo, text: "poll values"}
+  - {id: p-sync, from: argocd, to: hub-kapi, over: c-bk-argocd-kapi, text: "sync prod Application: new Rollout revision"}
+  - {note: argo-rollouts, text: "canary only in prod · preset safe: 10 % → 25 % → pause → 50 % → 100 %"}
+  - {id: scale, from: argo-rollouts, to: hub-kapi, over: c-rl-rollouts-kapi, text: "setCanaryScale 1: canary ReplicaSet + Job cnp-smoke"}
+  - {id: smoke, from: bk-smoke, to: app-service, over: c-rl-smoke-svc, text: "GET <app>-canary /healthz, expects 2xx"}
+  - {id: w10, from: argo-rollouts, to: hub-kapi, over: c-rl-rollouts-kapi, text: "patch HTTPRoute weights: stable 90, canary 10"}
+  - {note: argo-rollouts, text: "Envoy Gateway applies the weights · cookie stickiness"}
+  - {id: q, from: argo-rollouts, to: vm-vmselect, over: c-rollouts-vmselect, text: "cnp-error-rate: ≥ 50 requests, ≤ 1 % errors, every 20 s"}
+  - {reply: q, text: "successful"}
+  - {id: w25, from: argo-rollouts, to: hub-kapi, over: c-rl-rollouts-kapi, text: "weights 75 / 25, then pause"}
+  - {note: dev-a, text: "Release tab follows the rollout (SSE)"}
+  - {id: promote, from: dev-a, to: cmp-backend, over: c-rl-dev-cmp, text: "POST /release/promote"}
+  - {id: patch, from: cmp-backend, to: hub-kapi, over: c-bk-cmp-kapi, text: "merge-patch rollouts/status: next step"}
+  - {id: w50, from: argo-rollouts, to: hub-kapi, over: c-rl-rollouts-kapi, text: "50 %, analysis, then 100 %: canary becomes stable"}
+  - {note: argo-rollouts, text: "no data = Inconclusive, never promotes on silence · vmselect unreachable = abort · Abort in the CMP patches status.abort"}

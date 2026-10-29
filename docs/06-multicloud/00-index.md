@@ -12,8 +12,7 @@ provisionner peuvent s'arrêter ; servir, non.
 
 ## Vue d'ensemble
 
-![CNP multicloud](../01-architecture/diagrams/multicloud.light.png#only-light)
-![CNP multicloud](../01-architecture/diagrams/multicloud.dark.png#only-dark)
+![CNP multicloud](../01-architecture/diagrams/multicloud.light.png)
 
 Deux clusters cibles, `onprem` et un `<cloud-a>` générique (AWS d'abord, puis GCP), un
 projet chacun, pilotés par le hub d'administration (Argo CD, Vault). `<cloud-a>` est encore

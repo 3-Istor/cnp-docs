@@ -80,10 +80,17 @@ edges:
   c-gke-back-db: {from: gke-back.right@60px, to: gke-db.left@60px}
   c-argocd-b: {from: argocd.right@25px, to: b-apiserver.left@62px, waypoints: [[600, 765], [600, 702]], label_at: [600, 733]}
   c-argocd-gke: {from: argocd.right@55px, to: gke-apiserver.left@62px, waypoints: [[618, 795], [618, 1322]], label_at: [618, 900]}
-  c-bsecret-vault: {from: b-secret-op.left@45px, to: vault.right@20px, waypoints: [[636, 1015], [636, 1410]], against_flow: true, label_at: [636, 1100]}
+  c-bsecret-vault: {from: b-secret-op.left@45px, to: vault.right@20px, waypoints: [[636, 1015], [636, 1410]], against_flow: true, label_at: [636, 1300]}
   c-gkesecret-vault: {from: gke-secret-op.left@45px, to: vault.right@60px, waypoints: [[654, 1635], [654, 1450]], against_flow: true, label_at: [654, 1550]}
   c-wg-eks: {from: wireguard-onprem.right@30px, to: b-wireguard.left@65px, waypoints: [[672, 1080], [672, 835]], label_at: [672, 960]}
-  c-wg-gke: {from: wireguard-onprem-gcp.right@30px, to: gke-wireguard.left@65px, waypoints: [[690, 1184], [690, 1455]], label_at: [690, 1400]}
+  c-wg-gke: {from: wireguard-onprem-gcp.right@30px, to: gke-wireguard.left@65px, waypoints: [[690, 1184], [690, 1455]], label_at: [585, 1184]}
+  # Tunnel relays, cloud to on-prem observability (TCP 18080, 18082, 18083).
+  c-bwg-onprem-vm: {from: b-wireguard.left@15px, to: wireguard-onprem.right@45px, waypoints: [[700, 785], [700, 1095]], against_flow: true}
+  c-bwg-onprem-loki: {from: b-wireguard.left@30px, to: wireguard-onprem.right@60px, waypoints: [[714, 800], [714, 1110]], against_flow: true}
+  c-bwg-onprem-select: {from: b-wireguard.left@45px, to: wireguard-onprem.right@75px, waypoints: [[728, 815], [728, 1125]], against_flow: true}
+  c-gkewg-onprem-vm: {from: gke-wireguard.left@15px, to: wireguard-onprem-gcp.right@45px, waypoints: [[728, 1405], [728, 1199]], against_flow: true}
+  c-gkewg-onprem-loki: {from: gke-wireguard.left@30px, to: wireguard-onprem-gcp.right@60px, waypoints: [[714, 1420], [714, 1214]], against_flow: true}
+  c-gkewg-onprem-select: {from: gke-wireguard.left@45px, to: wireguard-onprem-gcp.right@75px, waypoints: [[700, 1435], [700, 1229]], against_flow: true}
 
 cards:
   card-legend: {x: 40, y: 1810, w: 560, h: 340}

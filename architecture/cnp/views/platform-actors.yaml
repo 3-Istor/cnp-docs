@@ -1,0 +1,52 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Who uses what"
+subtitle: "Who uses the platform, through which tool, and where do the apps run?"
+meta:
+  - "Scope: people, the tools they open, the three clusters and what links them · main as of 2026-10-29 · one box per product, details in the other views"
+  - "Out of scope: ports, namespaces, secrets, security rules (see multicloud-links, multicloud-policies, observability)"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - s1-z-people
+  - s1-enduser
+  - s1-dev
+  - s1-padmin
+  - s1-finance
+  - s1-operator
+  - s1-z-edge
+  - s1-cloudflare
+  - s1-z-hub
+  - s1-cmp
+  - s1-grafana
+  - s1-argocd
+  - s1-z-git
+  - s1-github
+  - s1-z-clusters
+  - s1-onprem
+  - s1-eks
+  - s1-gke
+  - s1-z-obs
+  - s1-obs
+
+labels:
+  s1-c-eks-cf: ""
+  s1-c-gke-cf: ""
+
+cards:
+  - id: card-legend
+    title: "How to read the arrows"
+    color: slate
+    lines:
+      - "Solid grey: a person or a tool uses another one."
+      - "Dashed purple: Argo CD works in the background, reading Git and deploying."
+      - "Dashed orange: a cluster opens a secure tunnel to Cloudflare, so nothing enters it from the Internet."
+  - id: card-read
+    title: "Reading it"
+    color: emerald
+    lines:
+      - "Everyone logs in once, with the same company account, in every tool."
+      - "The CMP writes to GitHub; Argo CD reads GitHub and deploys to the cluster chosen for the project."
+      - "An operator starts and stops the cloud clusters to control costs."
+      - "AWS and GCP send metrics and logs back to the on-prem hub."

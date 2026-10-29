@@ -1,0 +1,81 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Data · App database backups"
+subtitle: "How is an app database backed up on-prem, and who can trigger a backup?"
+meta:
+  - "Scope: one app with db.backup.enabled on the K3s hub and its Ceph RGW bucket (the shared Keycloak database backs up the same way, see the cards) · main as of 2026-10-29 · derived from code (infra-templates cnpg-cluster, cnpg-backup, migrations; K3s cnp-projects-db, rook-ceph, cnpg; CMP security_databases, deployments)"
+  - "Out of scope: EKS and GKE (backups not wired, CNP-165) · the restore steps (see app-restore) · how the admin reaches the CMP (see runtime) · Rook internals"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-cluster
+  - g-cmp
+  - cmp-backend
+  - g-gitops
+  - argocd
+  - g-bk-kapi
+  - hub-kapi
+  - g-data
+  - cnpg-operator
+  - g-bk-app
+  - bk-db
+  - bk-objectstore
+  - bk-scheduled
+  - bk-premig
+  - bk-secret
+  - z-ceph
+  - ceph-rgw
+  - bk-bucket-app
+  - z-github
+  - bk-app-repo
+
+steps: [c-bk-db-rgw]
+background: [c-bk-db-kapi, c-bk-op-kapi, c-bk-argocd-kapi, c-bk-argocd-repo, c-bk-cmp-repo, c-bk-cmp-kapi]
+
+labels:
+  c-bk-op-kapi: ""
+  c-bk-db-kapi: ""
+  c-bk-argocd-kapi: ""
+  c-bk-cmp-kapi: ""
+  c-bk-db-rgw: "backup + WAL · S3"
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · data plane"
+    color: emerald
+    lines:
+      - "[1] The instance sends WAL continuously and a base backup for every Backup object to s3://cnpg-<base>/ on Ceph RGW :7480, so any instant can be restored."
+      - "Backup objects come from the ScheduledBackup (03:00), the pre-migration hook, or Back up now [F]."
+      - "Retention 7 d by default (db.backup.retentionPolicy). The bucket is deleted with the app, unless keepAfterDelete (StorageClass ceph-bucket-retain)."
+  - id: card-bg
+    title: "Background · control plane"
+    color: orange
+    lines:
+      - "[A] The instance manager in the DB pod watches its Cluster and Backup objects."
+      - "[B] The CNPG operator watches Cluster, Backup and ScheduledBackup objects."
+      - "Not drawn: the shared Keycloak database backs up the same way to bucket cnpg-cnp-projects-keycloak at 02:00, 14 d, always on."
+      - "[C] [D] Argo CD reads the app repo values and syncs the chart in waves: bucket claim -5, ObjectStore -4, Cluster -3, pre-migration Backup -2, migration Job -1, workloads 0."
+      - "[E] The CMP commits db.backup.* (Settings toggle, project admin) or db.restore.* (restore) to the app repo, after showing the diff."
+      - "[F] Back up now: the CMP creates a Backup <cluster>-manual-<ts> through the K8s API (ClusterRole cmp-security-reader)."
+  - id: card-migration
+    title: "Backup before each migration (CNP-140)"
+    color: violet
+    lines:
+      - "When the image tag changes, a Backup pre-<sha8> runs as a Sync hook (wave -2), then the migration Job (wave -1)."
+      - "The Job used to be PreSync: on a first sync it ran before the database existed and the app never synced."
+      - "Argo CD waits on custom health checks: Cluster Healthy, Backup completed (Degraded on failure)."
+  - id: card-clouds
+    title: "On EKS and GKE"
+    color: amber
+    lines:
+      - "No backup: no barman plugin, no ObjectBucketClaim CRD, and RGW is not reachable through the tunnel (relays 18080, 18082, 18083 only)."
+      - "Databases sit on local-path and are lost at cnp.sh down. Cloud backups are CNP-165."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!GB1!! **Credentials.** The S3 keys are a Secret made by Rook with the bucket, not a Vault secret."
+      - "!!GB2!! **Transport.** Backups go to http://192.168.1.110:7480 in clear, on the LAN."
+      - "The PRA page (04-disaster-recovery) predates this: it describes a SQLite CMP and no app database backup."

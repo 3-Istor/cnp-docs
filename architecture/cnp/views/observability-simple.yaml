@@ -1,0 +1,64 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Observability · At a glance"
+subtitle: "Where do the metrics and logs of every cluster go, and who reads them?"
+meta:
+  - "Scope: the three clusters, the on-prem stores and their readers, names only · main as of 2026-10-29 · detail: observability and observability-read"
+  - "Out of scope: protocols, ports, credentials · OpenCost on the clouds (later)"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - s2-z-sources
+  - s2-onprem
+  - s2-aws
+  - s2-gcp
+  - s2-z-store
+  - s2-vm
+  - s2-loki
+  - s2-ceph
+  - s2-z-read
+  - s2-grafana
+  - s2-cmp
+  - s2-opencost
+  - s2-alerts
+  - s2-z-out
+  - s2-discord
+
+# Names only: no arrow labels.
+labels:
+  c-s2-onprem-vm: ""
+  c-s2-onprem-loki: ""
+  c-s2-aws-vm: ""
+  c-s2-aws-loki: ""
+  c-s2-gcp-vm: ""
+  c-s2-gcp-loki: ""
+  c-s2-loki-ceph: ""
+  c-s2-grafana-vm: ""
+  c-s2-grafana-loki: ""
+  c-s2-cmp-vm: ""
+  c-s2-cmp-loki: ""
+  c-s2-opencost-vm: ""
+  c-s2-alerts-vm: ""
+  c-s2-alerts-discord: ""
+  c-s2-cmp-discord: ""
+  c-s2-grafana-discord: ""
+  c-s2-alerts-loki: ""
+
+cards:
+  - id: card-legend
+    title: "How to read"
+    color: slate
+    lines:
+      - "**Green**: where the apps run, or a service of the platform."
+      - "**Violet**: where the data is kept."
+      - "**Cyan**: what people open (Grafana, the CMP portal)."
+      - "**Grey**: outside the platform, or a tool."
+      - "Arrows point from who asks to who answers."
+  - id: card-read
+    title: "In short"
+    color: emerald
+    lines:
+      - "Every cluster runs Alloy. AWS and GCP send through the WireGuard tunnels to the on-prem stores."
+      - "Each project sees only its own metrics and logs in Grafana and in the CMP."
+      - "Alerts go to Discord, from Grafana, the alert rules and the CMP. Costs are read from the same metrics (OpenCost, on-prem today)."
