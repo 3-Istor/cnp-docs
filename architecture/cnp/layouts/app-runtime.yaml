@@ -1,44 +1,67 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 2240, height: 1500}
+canvas: {width: 2320, height: 2000}
 
 # Element boxes are relative to their parent zone. Edge waypoints and labels are
 # canvas coordinates.
 elements:
-  z-cluster: {x: 40, y: 220, w: 2160, h: 840}
-  g-gateway: {x: 40, y: 70, w: 400, h: 230}
-  envoy-shared-gateway: {x: 20, y: 80, w: 260, h: 120}
-  g-identity: {x: 520, y: 70, w: 320, h: 230}
-  keycloak: {x: 40, y: 80, w: 250, h: 100}
-  g-secrets: {x: 920, y: 70, w: 740, h: 230}
-  vso: {x: 40, y: 80, w: 240, h: 90}
-  vault: {x: 460, y: 80, w: 240, h: 90}
-  g-tenant-a: {x: 40, y: 380, w: 1480, h: 400}
-  cloudflared-app: {x: 40, y: 60, w: 240, h: 90}
-  httproute: {x: 360, y: 60, w: 240, h: 80}
-  app-service: {x: 680, y: 60, w: 220, h: 80}
-  app-pods: {x: 1060, y: 60, w: 240, h: 80}
-  security-policy: {x: 360, y: 280, w: 240, h: 90}
-  app-secret: {x: 680, y: 280, w: 220, h: 80}
-  cnpg: {x: 1060, y: 270, w: 240, h: 100}
-  g-tenant-b: {x: 1720, y: 380, w: 400, h: 260}
-  tenant-b-pods: {x: 40, y: 120, w: 300, h: 64}
+  z-internet: {x: 40, y: 200, w: 320, h: 200}
+  user: {x: 132, y: 80, w: 56, h: 56}
+  z-cloudflare: {x: 40, y: 460, w: 320, h: 220}
+  ar-cf: {x: 20, y: 70, w: 280, h: 110}
+
+  z-ar-target: {x: 440, y: 200, w: 1660, h: 860}
+  g-ar-system: {x: 30, y: 60, w: 360, h: 470}
+  ar-tunnel: {x: 40, y: 70, w: 300, h: 90}
+  ar-gateway: {x: 40, y: 220, w: 300, h: 110}
+  ar-isolation: {x: 30, y: 360, w: 320, h: 100}
+  g-ar-app: {x: 480, y: 60, w: 1150, h: 510}
+  ar-route: {x: 40, y: 70, w: 300, h: 90}
+  ar-secret: {x: 440, y: 70, w: 300, h: 90}
+  ar-frontend: {x: 40, y: 220, w: 320, h: 110}
+  ar-backend: {x: 440, y: 220, w: 320, h: 90}
+  ar-db: {x: 820, y: 210, w: 280, h: 110}
+  ar-migrate: {x: 820, y: 380, w: 280, h: 90}
+  g-ar-other: {x: 30, y: 590, w: 280, h: 190}
+  ar-other: {x: 30, y: 70, w: 220, h: 90}
+  g-ar-platform: {x: 480, y: 640, w: 1150, h: 190}
+  ar-vso: {x: 40, y: 70, w: 300, h: 90}
+  ar-alloy: {x: 420, y: 70, w: 300, h: 90}
+  ar-rollouts: {x: 800, y: 70, w: 300, h: 90}
+
+  z-cluster: {x: 440, y: 1140, w: 1320, h: 280}
+  g-identity: {x: 30, y: 60, w: 400, h: 190}
+  ar-keycloak: {x: 40, y: 70, w: 340, h: 90}
+  g-secrets: {x: 490, y: 60, w: 340, h: 190}
+  ar-vault: {x: 20, y: 70, w: 300, h: 90}
+  g-observability: {x: 890, y: 60, w: 400, h: 190}
+  ar-hub-obs: {x: 40, y: 70, w: 320, h: 90}
+  z-ceph: {x: 1840, y: 1140, w: 440, h: 280}
+  ceph-rgw: {x: 40, y: 80, w: 320, h: 100}
 
 edges:
-  e-3-connector-envoy: {from: cloudflared-app.right, to: envoy-shared-gateway.top@180px, waypoints: [[400, 705], [400, 340], [280, 340]]}
-  e-4-envoy-service: {from: envoy-shared-gateway.bottom@220px, to: app-service.top, waypoints: [[320, 560], [870, 560]]}
-  e-5-service-pods: {from: app-service.right, to: app-pods.left@55px}
-  e-6-pods-db: {from: app-pods.bottom, to: cnpg.top}
-  e-oidc-envoy-keycloak: {from: envoy-shared-gateway.right, to: keycloak.left}
-  e-a-vso-vault: {from: vso.right, to: vault.left@60px}
-  e-b-vso-secret: {from: vso.bottom@150px, to: app-secret.top, waypoints: [[1150, 575], [720, 575], [720, 850], [870, 850]], label_at: [1060, 575]}
-  x-cross-tenant: {from: g-tenant-a.right@60px, to: g-tenant-b.left}
-  r-route-gateway: {from: httproute.top@40px, to: envoy-shared-gateway.bottom, waypoints: [[480, 545], [240, 545]]}
-  r-policy-route: {from: security-policy.top, to: httproute.bottom}
-  r-policy-secret: {from: security-policy.right, to: app-secret.left}
-  r-pods-secret: {from: app-pods.bottom@40px, to: app-secret.top, waypoints: [[1180, 800], [930, 800]]}
+  c-ar-user-cf: {from: user.right, to: ar-cf.top, waypoints: [[300, 308]]}
+  c-ar-tunnel-edge: {from: ar-tunnel.left@45px, to: ar-cf.right@70px, waypoints: [[400, 375], [400, 600]], against_flow: true}
+  c-ar-tunnel-gw: {from: ar-tunnel.bottom@150px, to: ar-gateway.top@150px}
+  c-ar-gw-front: {from: ar-gateway.right@60px, to: ar-frontend.left@60px}
+  c-ar-front-back: {from: ar-frontend.right@60px, to: ar-backend.left@60px}
+  c-ar-back-db: {from: ar-backend.right@60px, to: ar-db.left@70px}
+  x-ar-other: {from: ar-other.right@45px, to: ar-frontend.left@100px, waypoints: [[890, 905], [890, 580]]}
+  c-ar-gw-keycloak: {from: ar-gateway.right@80px, to: ar-keycloak.top@320px, waypoints: [[850, 560], [850, 1100], [830, 1100]]}
+  c-ar-vso-vault: {from: ar-vso.bottom@190px, to: ar-vault.top@200px}
+  c-ar-alloy-obs: {from: ar-alloy.bottom@260px, to: ar-hub-obs.top@230px}
+  c-ar-rollouts-obs: {from: ar-rollouts.bottom@40px, to: ar-hub-obs.top@290px, waypoints: [[1760, 1100], [1660, 1100]]}
+  c-ar-migrate-db: {from: ar-migrate.top@130px, to: ar-db.bottom@130px, against_flow: true}
+  c-ar-db-rgw: {from: ar-db.right@60px, to: ceph-rgw.left@60px, waypoints: [[2085, 530], [2085, 1110], [1800, 1110], [1800, 1280]], label_at: [2085, 760]}
+  r-ar-route-gw: {from: ar-route.left@45px, to: ar-gateway.right@20px, waypoints: [[870, 375], [870, 500]]}
+  r-ar-route-front: {from: ar-route.bottom, to: ar-frontend.top}
+  r-ar-vso-secret: {from: ar-vso.right@20px, to: ar-secret.left, waypoints: [[1294, 930], [1294, 375]]}
+  r-ar-back-secret: {from: ar-backend.top, to: ar-secret.bottom}
 
 cards:
-  card-legend: {x: 40, y: 1120, w: 520, h: 340}
-  card-contract: {x: 590, y: 1120, w: 900, h: 340}
-  card-gaps: {x: 1520, y: 1120, w: 680, h: 340}
+  card-legend: {x: 40, y: 1490, w: 460, h: 470}
+  card-steps: {x: 540, y: 1490, w: 560, h: 230}
+  card-bg: {x: 540, y: 1750, w: 560, h: 210}
+  card-contract: {x: 1140, y: 1490, w: 560, h: 280}
+  card-clouds: {x: 1740, y: 1490, w: 500, h: 280}
+  card-gaps: {x: 1140, y: 1800, w: 1100, h: 160}

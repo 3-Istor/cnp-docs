@@ -18,5 +18,5 @@
 
 ## Optional
 
-- [Repository landscape](https://3-istor.github.io/cnp-docs/repositories-landscape/)
+- [Repository landscape](https://3-istor.github.io/cnp-docs/04-templates/00-github-repositories-landscape/)
 - [Roadmap](https://3-istor.github.io/cnp-docs/README_ROADMAP/)

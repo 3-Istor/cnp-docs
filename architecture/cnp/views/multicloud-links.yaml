@@ -4,9 +4,9 @@ type: topology
 title: "CNP · Multicloud · Links between the hub and the clouds"
 subtitle: "Which links cross between the on-prem hub and the public clouds, who opens them, and what allows them?"
 meta:
-  - "Scope: every connection between the K3s hub, EKS cnp-eks, GKE cnp-gke, the buckets, GitHub and the operator · main as of 2026-10-29 · derived from code: K3s/k8s/config/{wireguard,argocd,observability}, K3s/terraform/{roles.tf,policies}, Cloud/terraform/public/{aws/EKS,gcp/GKE}/{cnp.sh,main.tf,kubernetes}, platform/{observability,argo-rollouts}, CMP/backend/app/services/kube_client.py"
+  - "Scope: every connection between the K3s hub, the public cloud target (drawn once for EKS cnp-eks and GKE cnp-gke: same links), the buckets, GitHub and the operator · main as of 2026-10-29 · derived from code: K3s/k8s/config/{wireguard,argocd,observability}, K3s/terraform/{roles.tf,policies}, Cloud/terraform/public/{aws/EKS,gcp/GKE}/{cnp.sh,main.tf,kubernetes}, platform/{observability,argo-rollouts}, CMP/backend/app/services/kube_client.py"
   - "Out of scope: projects, apps and their tunnels to Cloudflare (see multicloud) · tenants of the hub · what observability does with the data (see observability)"
-  - "v0.3 · source: cnp-docs/architecture/cnp"
+  - "v0.4 (2026-10-29: EKS and GKE drawn as one public cloud target) · source: cnp-docs/architecture/cnp"
 
 include:
   - z-cluster
@@ -17,7 +17,6 @@ include:
   - vault-auth
   - g-vpn
   - wireguard-onprem
-  - wireguard-onprem-gcp
   - g-observability
   - vm-vminsert
   - loki-gateway
@@ -36,15 +35,6 @@ include:
   - b-secret-op
   - alloy-aws
   - b-rollouts
-  - z-cloud-b
-  - gke-apiserver
-  - gke-wireguard
-  - gke-allow
-  - gke-nodes
-  - g-gke-platform
-  - gke-secret-op
-  - alloy-gcp
-  - gke-rollouts
   - z-operator
   - operator
   - z-aws-shared
@@ -56,22 +46,17 @@ include:
   - z-github
   - github
   - ghcr
-background: [c-argocd-b, c-argocd-gke, c-bsecret-vault, c-gkesecret-vault, c-wg-eks, c-wg-gke, c-vault-b-apiserver, c-vault-gke-apiserver, e-a-vso-vault, c-op-b-api, c-op-gke-api, c-op-vault, c-op-endpoint, c-wg-endpoint, c-op-ssm, c-op-state-s3, c-op-state-gcs, c-argocd-github, c-cmp-github, c-updater-github, c-updater-ghcr, c-b-nodes-ghcr, c-gke-nodes-ghcr, c-op-pae, c-cmp-b-api, c-cmp-gke-api]
+background: [c-argocd-b, c-bsecret-vault, c-wg-eks, c-vault-b-apiserver, e-a-vso-vault, c-op-b-api, c-op-vault, c-op-endpoint, c-wg-endpoint, c-op-ssm, c-op-state-s3, c-op-state-gcs, c-argocd-github, c-cmp-github, c-updater-github, c-updater-ghcr, c-b-nodes-ghcr, c-op-pae, c-cmp-b-api]
 
 # "" keeps the badge alone: the cards carry the text. The relays have no letter: the
 # port badges (TCP 18080, 18082, 18083) name them.
 labels:
   c-argocd-b: ""
-  c-argocd-gke: ""
   c-bsecret-vault: ""
-  c-gkesecret-vault: ""
   c-wg-eks: ""
-  c-wg-gke: ""
   c-vault-b-apiserver: ""
-  c-vault-gke-apiserver: ""
   e-a-vso-vault: ""
   c-op-b-api: ""
-  c-op-gke-api: ""
   c-op-vault: ""
   c-op-endpoint: ""
   c-wg-endpoint: ""
@@ -83,30 +68,19 @@ labels:
   c-updater-github: ""
   c-updater-ghcr: ""
   c-b-nodes-ghcr: ""
-  c-gke-nodes-ghcr: ""
   c-op-pae: ""
   c-cmp-b-api: ""
-  c-cmp-gke-api: ""
   c-cmp-lokigw: ""
   c-cmp-vmselect: ""
   c-alloyaws-relay-vm: ""
   c-alloyaws-relay-loki: ""
   c-brollouts-relay-select: ""
-  c-alloygcp-relay-vm: ""
-  c-alloygcp-relay-loki: ""
-  c-gkerollouts-relay-select: ""
   c-bwg-onprem-vm: ""
   c-bwg-onprem-loki: ""
   c-bwg-onprem-select: ""
-  c-gkewg-onprem-vm: ""
-  c-gkewg-onprem-loki: ""
-  c-gkewg-onprem-select: ""
   c-wgonprem-vminsert: ""
   c-wgonprem-lokigw: ""
   c-wgonprem-vmselect: ""
-  c-wggcp-vminsert: ""
-  c-wggcp-lokigw: ""
-  c-wggcp-vmselect: ""
 
 notes:
   - {id: n-vault, text: "Clouds and the operator reach Vault at **vault.3istor.com :443**, public, through Cloudflare and the platform tunnel. Vault listens on 8200 behind it."}
@@ -117,21 +91,21 @@ cards:
     title: "Background · control plane"
     color: orange
     lines:
-      - "[A] [B] Argo CD syncs the EKS / GKE API (:443) with the argocd-manager token. CNP-112: cloud Applications retry forever."
-      - "[C] [D] The cloud secret operator logs in at auth/kubernetes-aws / -gcp on vault.3istor.com :443, with vault-secrets-operator-role and, for Alloy's Loki password, observability-role."
-      - "[E] [F] The on-prem WireGuard pods initiate UDP 31820 to the cloud node (NodePort, pod 51820)."
-      - "[G] [H] Vault checks service-account tokens with TokenReview (SA vault-auth, auth-delegator). [I] The hub secret operator reads Vault."
-      - "[X] The operator opens ssh -D 1080 to pae-node-1. [J] [K] Terraform and kubectl reach the cloud API through that SOCKS proxy, so the API sees the on-prem egress IP."
-      - "[L] Terraform writes the cluster entry kvv2/argocd/clusters/<cloud> and the auth config into Vault. [M] It publishes <node IP>:31820 in the endpoint bucket. [N] The on-prem pod re-reads it when the last handshake is older than 180 s."
-      - "[O] [P] [Q] The EKS kubeconfig in SSM, and the Terraform state in S3 and GCS."
-      - "[R] Argo CD polls cnp-projects. [S] The CMP writes the registry record. [T] [U] Image Updater reads GHCR tags and writes back to Git. [V] [W] Cloud nodes pull images from GHCR."
-      - "[Y] [Z] The CMP reads pods, rollouts, scans and backups of cloud projects, with the token of the Argo CD Secret cluster-<cloud>. It refuses to call unless the cluster state is up."
+      - "[A] Argo CD syncs the cloud API (:443) with the argocd-manager token. CNP-112: cloud Applications retry forever."
+      - "[B] The cloud secret operator logs in at auth/kubernetes-<cloud> (kubernetes-aws, kubernetes-gcp) on vault.3istor.com :443, with vault-secrets-operator-role and, for Alloy's Loki password, observability-role."
+      - "[C] The on-prem WireGuard pod (one per cloud) initiates UDP 31820 to the cloud node (NodePort, pod 51820)."
+      - "[D] Vault checks service-account tokens with TokenReview (SA vault-auth, auth-delegator). [E] The hub secret operator reads Vault."
+      - "[R] The operator opens ssh -D 1080 to pae-node-1. [F] Terraform and kubectl reach the cloud API through that SOCKS proxy, so the API sees the on-prem egress IP."
+      - "[G] Terraform writes the cluster entry kvv2/argocd/clusters/<cloud> and the auth config into Vault. [H] It publishes <node IP>:31820 in the endpoint bucket (on AWS, for both clouds). [I] The on-prem pod re-reads it when the last handshake is older than 180 s."
+      - "[J] [K] [L] Provider-specific: the EKS kubeconfig in SSM and its state in S3; the GKE state in GCS."
+      - "[M] Argo CD polls cnp-projects. [N] The CMP writes the registry record. [O] [P] Image Updater reads GHCR tags and writes back to Git. [Q] Cloud nodes pull images from GHCR."
+      - "[S] The CMP reads pods, rollouts, scans and backups of cloud projects, with the token of the Argo CD Secret cluster-<cloud>. It refuses to call unless the cluster state is up."
   - id: card-allow
     title: "Who allows it"
     color: rose
     lines:
-      - "**Cloud API :443**: only api_allowed_cidrs = the K3s egress 176.186.130.237/32. The operator gets there through pae-node-1, Argo CD and the CMP from the K3s pods. EKS: API access entry for the operator only."
-      - "**UDP 31820**: EKS security group and GKE firewall, only from vpn_source_cidrs (the K3s egress)."
+      - "**Cloud API :443**: only api_allowed_cidrs = the K3s egress 176.186.130.237/32, set as EKS public_access_cidrs and GKE master authorized networks. The operator gets there through pae-node-1, Argo CD and the CMP from the K3s pods. EKS: API access entry for the operator only."
+      - "**UDP 31820**: security group (EKS) or firewall (GKE), only from vpn_source_cidrs (the K3s egress)."
       - "**Relays 18080 / 18082 / 18083**: NetworkPolicy onprem-apps in cnp-vpn on each cloud; on-prem, the VictoriaMetrics policies admit the wireguard pods. See multicloud-policies."
       - "**Vault**: a Kubernetes auth mount per cloud (kubernetes-aws, kubernetes-gcp), kept across down."
       - "**Inbound to workloads**: none. Guardrails refuse LoadBalancer Services and Ingress; apps are reached only through outbound Cloudflare tunnels."
@@ -143,8 +117,8 @@ cards:
       - "Clients: Alloy (ns observability) writes 18080 and 18082 with label cluster=aws|gcp; Argo Rollouts reads 18083."
       - "On-prem to cloud: :18081 to the cloud whoami, test only."
       - "Not through the tunnel: the CMP reads vmselect :8481 and the Loki gateway :80 directly, inside the hub."
-      - "Argo CD [A] [B], Vault [C] [D] [G] [H], the CMP [Y] [Z] and app traffic stay on the public Internet, limited by the allow-lists."
-      - "Tunnels: 100.96.0.0/30 (AWS .1, on-prem .2) and 100.96.0.4/30 (GCP .5, on-prem .6)."
+      - "Argo CD [A], Vault [B] [D], the CMP [S] and app traffic stay on the public Internet, limited by the allow-lists."
+      - "One tunnel per cloud: 100.96.0.0/30 (AWS .1, on-prem .2), 100.96.0.4/30 (GCP .5, on-prem .6)."
   - id: card-gaps
     title: "Gaps between the plan and the code"
     color: orange

@@ -6,8 +6,7 @@ canvas: {width: 1900, height: 1060}
 elements:
   s2-z-sources: {x: 40, y: 200, w: 360, h: 560}
   s2-onprem: {x: 30, y: 70, w: 300, h: 90}
-  s2-aws: {x: 30, y: 220, w: 300, h: 90}
-  s2-gcp: {x: 30, y: 370, w: 300, h: 90}
+  s2-cloud: {x: 30, y: 220, w: 300, h: 90}
   s2-z-store: {x: 520, y: 200, w: 360, h: 560}
   s2-vm: {x: 30, y: 70, w: 300, h: 90}
   s2-loki: {x: 30, y: 220, w: 300, h: 90}
@@ -21,13 +20,11 @@ elements:
   s2-discord: {x: 30, y: 60, w: 300, h: 80}
 
 edges:
-  # Metrics bundle (on-prem, AWS, GCP top to bottom), then the logs bundle.
+  # Metrics bundle (on-prem, then public clouds), then the logs bundle.
   c-s2-onprem-vm: {from: s2-onprem.right@30px, to: s2-vm.left@30px}
-  c-s2-aws-vm: {from: s2-aws.right@30px, to: s2-vm.left@50px, waypoints: [[450, 450], [450, 320]]}
-  c-s2-gcp-vm: {from: s2-gcp.right@30px, to: s2-vm.left@70px, waypoints: [[470, 600], [470, 340]]}
+  c-s2-cloud-vm: {from: s2-cloud.right@30px, to: s2-vm.left@50px, waypoints: [[450, 450], [450, 320]]}
   c-s2-onprem-loki: {from: s2-onprem.right@60px, to: s2-loki.left@25px, waypoints: [[500, 330], [500, 445]]}
-  c-s2-aws-loki: {from: s2-aws.right@60px, to: s2-loki.left@60px}
-  c-s2-gcp-loki: {from: s2-gcp.right@60px, to: s2-loki.left@85px, waypoints: [[485, 630], [485, 505]]}
+  c-s2-cloud-loki: {from: s2-cloud.right@60px, to: s2-loki.left@60px}
   c-s2-loki-ceph: {from: s2-loki.bottom, to: s2-ceph.top}
   c-s2-grafana-vm: {from: s2-grafana.left@30px, to: s2-vm.right@30px, against_flow: true}
   c-s2-cmp-vm: {from: s2-cmp.left@20px, to: s2-vm.right@50px, waypoints: [[920, 410], [920, 320]], against_flow: true}

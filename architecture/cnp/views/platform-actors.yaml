@@ -6,7 +6,7 @@ subtitle: "Who uses the platform, through which tool, and where do the apps run?
 meta:
   - "Scope: people, the tools they open, the three clusters and what links them · main as of 2026-10-29 · one box per product, details in the other views"
   - "Out of scope: ports, namespaces, secrets, security rules (see multicloud-links, multicloud-policies, observability)"
-  - "v0.1 · source: cnp-docs/architecture/cnp"
+  - "v0.2 · source: cnp-docs/architecture/cnp"
 
 include:
   - s1-z-people
@@ -25,14 +25,12 @@ include:
   - s1-github
   - s1-z-clusters
   - s1-onprem
-  - s1-eks
-  - s1-gke
+  - s1-cloud
   - s1-z-obs
   - s1-obs
 
 labels:
-  s1-c-eks-cf: ""
-  s1-c-gke-cf: ""
+  s1-c-cloud-cf: ""
 
 cards:
   - id: card-legend
@@ -49,4 +47,5 @@ cards:
       - "Everyone logs in once, with the same company account, in every tool."
       - "The CMP writes to GitHub; Argo CD reads GitHub and deploys to the cluster chosen for the project."
       - "An operator starts and stops the cloud clusters to control costs."
-      - "AWS and GCP send metrics and logs back to the on-prem hub."
+      - "The public cloud box stands for AWS and Google Cloud: same setup on both."
+      - "The public clouds send metrics and logs back to the on-prem hub."

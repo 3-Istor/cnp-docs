@@ -1,0 +1,88 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Anatomy of a project"
+subtitle: "What does the platform create for one project, on its target cluster and around it?"
+meta:
+  - "Scope: one project <p> with its apps · target cluster drawn once, on-prem or public cloud alike · main as of 2026-10-29"
+  - "Sources: cnp-project-base/templates · K3s/k8s/config/argocd/applicationset-{projects,apps}.yaml · app-templates/templates/{project-bootstrap,k3s-gitops-app} · CMP services/{project_registry,metrics_isolation}.py"
+  - "Out of scope: inside an app (see app-runtime) · how the project is created, in order (see project-create-cloud) · platform-wide services not owned by the project"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-internet
+  - user
+  - z-cloudflare
+  - pa-cf
+  - z-pa-target
+  - g-pa-system
+  - pa-tunnel
+  - pa-gateway
+  - pa-gatus
+  - pa-offhours
+  - pa-isolation
+  - g-pa-apps
+  - pa-app
+  - pa-kube-api
+  - z-cluster
+  - g-gitops
+  - argocd
+  - pa-appproject
+  - pa-applications
+  - g-identity
+  - pa-kc-realm
+  - pa-kc-groups
+  - g-secrets
+  - pa-vault-mount
+  - g-observability
+  - pa-grafana-org
+  - pa-vmauth-user
+  - pa-loki-tenant
+  - z-github
+  - pa-registry
+  - pa-app-repos
+
+labels:
+  r-pa-grafana-loki: ""
+
+steps: [c-pa-user-cf, c-pa-tunnel-gw, c-pa-gw-app]
+background: [c-pa-tunnel-cf, c-pa-argocd-registry, c-pa-argocd-repos, c-pa-argocd-target]
+
+cards:
+  - id: card-legend
+    title: "Legend"
+    color: slate
+    lines:
+      - "Solid grey: a request, client → server. Dashed orange: tunnel opened outbound. Dashed purple: background sync."
+      - "Dotted grey: an object reference (owns, bounds, datasource), not traffic."
+      - "Large dashed frame: cluster or SaaS. Small frame: namespace or functional group. Stack: one per app."
+      - "[1] request step · [A] background step · TCP 80: listening port on the server."
+  - id: card-steps
+    title: "Request path · data plane"
+    color: emerald
+    lines:
+      - "[1] A user opens <app>-<p>.3istor.com: the project's Cloudflare tunnel ends TLS."
+      - "[2] The project connector relays the request to the project gateway."
+      - "[3] The gateway runs the OIDC login of the route, then sends the request to the app."
+  - id: card-bg
+    title: "Background"
+    color: orange
+    lines:
+      - "[A] <p>-tunnel opens the tunnel outbound: nothing enters the cluster from the Internet."
+      - "[B] Argo CD polls the registry record and generates the project's Applications. [C] It reads each app's values from its repo."
+      - "[D] Argo CD applies <p>-bootstrap and every app Application to the target cluster API: destination.name = spec.targetCloud (on-prem: https://kubernetes.default.svc; clouds: the cluster-<cloud> Secret)."
+  - id: card-made
+    title: "Who creates what"
+    color: indigo
+    lines:
+      - "**CMP:** the registry record (targetCloud, apps, environments, features) and the vmauth user project-<p>."
+      - "**Terraform project-bootstrap** (in the CMP pod): Keycloak groups and realm <p>, Vault mount project-<p> with its role on kubernetes (on-prem) or kubernetes-<cloud>, the Cloudflare tunnel and DNS, the Grafana org."
+      - "**Terraform k3s-gitops-app**, per app: the app repo, its OIDC client in realm <p>, its Vault secrets and role, its DNS record."
+      - "**cnp-project-base**, by Argo CD: everything in <p>-system, the app namespaces and the ingress policy. Tenants cannot edit the policy (AppProject blacklist)."
+  - id: card-access
+    title: "Who sees what"
+    color: rose
+    lines:
+      - "**Argo CD:** project-<p>-admins and -members get the project roles of AppProject <p>; <p>-platform holds what tenants cannot touch."
+      - "**Apps:** realm <p> brokers the 3istor login; an app can be limited to groups with ingress.allowedGroups (empty by default)."
+      - "**Data:** Grafana org <p> reads metrics through vmauth (its namespaces only) and logs from Loki tenant <p>."
