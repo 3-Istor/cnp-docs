@@ -268,7 +268,7 @@
     
     
       <li class="md-tabs__item">
-        <a href="../../01-architecture/01-system-overview/" class="md-tabs__link">
+        <a href="../../01-architecture/00-diagram-index/" class="md-tabs__link">
           
   
   
@@ -599,6 +599,34 @@
   
   
     <li class="md-nav__item">
+      <a href="../../01-architecture/00-diagram-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index des schémas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
       <a href="../../01-architecture/01-system-overview/" class="md-nav__link">
         
   
@@ -747,6 +775,62 @@
     
   
     Journaux d'audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/07-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observabilité multicluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-architecture/08-database-backups/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sauvegarde des bases
   
 
     
@@ -1197,6 +1281,34 @@
     
   
     Stratégie de Test & Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/06-release-canary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion et canary
   
 
     
@@ -2140,6 +2252,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#le-cmp-lit-un-projet-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Le CMP lit un projet cloud
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#un-projet-et-une-app-sur-aws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Un projet et une app sur AWS
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2732,6 +2866,28 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#le-cmp-lit-un-projet-cloud" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Le CMP lit un projet cloud
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#un-projet-et-une-app-sur-aws" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Un projet et une app sur AWS
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -2750,11 +2906,10 @@
 
 
 <h1 id="schemas">Schémas<a class="headerlink" href="#schemas" title="Permanent link">&para;</a></h1>
-<p>Quatre vues, générées depuis le code avec noodle. Pour les régénérer : <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a>. Pour agir : <a href="../07-procedures-operateur/">procédures opérateur</a>.</p>
+<p>Six vues, générées depuis le code avec noodle. Pour les régénérer : <a href="https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md"><code>architecture/README.md</code></a>. Pour agir : <a href="../07-procedures-operateur/">procédures opérateur</a>.</p>
 <h2 id="ou-tourne-quoi">Où tourne quoi<a class="headerlink" href="#ou-tourne-quoi" title="Permanent link">&para;</a></h2>
 <p><em>Ce qui reste sur le hub on-prem, ce qui part avec chaque projet vers son cloud cible, et quels liens traversent.</em></p>
-<p><img alt="CNP multicloud" src="../../01-architecture/diagrams/multicloud.light.png#only-light" />
-<img alt="CNP multicloud" src="../../01-architecture/diagrams/multicloud.dark.png#only-dark" /></p>
+<p><img alt="CNP multicloud" src="../../01-architecture/diagrams/multicloud.light.png" /></p>
 <ul>
 <li>Chemin de requête (plan de données) : l'utilisateur atteint l'app par un tunnel Cloudflare sortant, sur le cluster cible.</li>
 <li>Plan de contrôle (arrière-plan) : Argo CD, Vault, CMP restent sur le hub.</li>
@@ -2762,30 +2917,43 @@
 </ul>
 <h2 id="liens-hub-clouds">Liens hub / clouds<a class="headerlink" href="#liens-hub-clouds" title="Permanent link">&para;</a></h2>
 <p><em>Quels liens traversent entre le hub et les clouds publics, qui les ouvre, et qu'est-ce qui les autorise ?</em></p>
-<p><img alt="CNP multicloud links" src="../../01-architecture/diagrams/multicloud-links.light.png#only-light" />
-<img alt="CNP multicloud links" src="../../01-architecture/diagrams/multicloud-links.dark.png#only-dark" /></p>
+<p><img alt="CNP multicloud links" src="../../01-architecture/diagrams/multicloud-links.light.png" /></p>
 <ul>
 <li>Chaque flèche part de l'initiateur : WireGuard est ouvert depuis l'on-prem (UDP 31820), jamais depuis le cloud.</li>
-<li>Argo CD, Vault et le trafic applicatif passent aujourd'hui par Internet ; le VPN ne porte que des flux de test.</li>
-<li>Les API des clusters ne répondent qu'aux CIDR autorisés (<code>api_allowed_cidrs</code>).</li>
+<li>Argo CD, Vault et le trafic applicatif passent par Internet. Le tunnel porte trois relais cloud → on-prem : 18080 (métriques), 18082 (logs), 18083 (lecture des métriques pour Argo Rollouts).</li>
+<li>Les API des clusters ne répondent qu'à l'IP de sortie on-prem (<code>api_allowed_cidrs</code>). L'opérateur y passe par le proxy SOCKS de <code>pae-node-1</code>, le CMP avec le jeton du Secret Argo CD <code>cluster-&lt;cloud&gt;</code>.</li>
 </ul>
 <h2 id="qui-peut-atteindre-un-projet">Qui peut atteindre un projet<a class="headerlink" href="#qui-peut-atteindre-un-projet" title="Permanent link">&para;</a></h2>
 <p><em>Qu'est-ce qui peut atteindre les workloads d'un projet sur chaque cluster, et qu'est-ce qui l'impose ?</em></p>
-<p><img alt="CNP multicloud policies" src="../../01-architecture/diagrams/multicloud-policies.light.png#only-light" />
-<img alt="CNP multicloud policies" src="../../01-architecture/diagrams/multicloud-policies.dark.png#only-dark" /></p>
+<p><img alt="CNP multicloud policies" src="../../01-architecture/diagrams/multicloud-policies.light.png" /></p>
 <ul>
 <li>Par cluster : CiliumClusterwideNetworkPolicy on-prem, NetworkPolicy sur EKS et GKE, mêmes sources autorisées.</li>
 <li>Garde-fous GitOps : les AppProjects bornent namespaces, destinations et objets cluster.</li>
-<li>Aucun LoadBalancer : pas de chemin entrant vers les workloads.</li>
+<li>Aucun LoadBalancer : pas de chemin entrant vers les workloads. Sur les clouds, trois ValidatingAdmissionPolicy refusent les Services LoadBalancer, les Ingress et les PVC hors <code>local-path</code>.</li>
+<li>Les relais du tunnel côté cloud ne sont ouverts qu'aux namespaces <code>observability</code> et <code>argo-rollouts</code> (NetworkPolicy <code>onprem-apps</code>).</li>
 </ul>
 <h2 id="cnpsh-up"><code>cnp.sh up</code><a class="headerlink" href="#cnpsh-up" title="Permanent link">&para;</a></h2>
 <p><em>Que se passe-t-il, dans l'ordre, quand l'opérateur lance <code>cnp.sh up</code> pour un cloud public ?</em></p>
-<p><img alt="CNP cnp.sh up" src="../../01-architecture/diagrams/cloud-up.light.png#only-light" />
-<img alt="CNP cnp.sh up" src="../../01-architecture/diagrams/cloud-up.dark.png#only-dark" /></p>
+<p><img alt="CNP cnp.sh up" src="../../01-architecture/diagrams/cloud-up.light.png" /></p>
 <ul>
 <li>Lire dans l'ordre : Terraform (cluster, nœud, addons), puis ce qui est automatique (Argo, Vault, WireGuard).</li>
 <li>Les étapes d'<code>up</code> posent les secrets de liaison : jeton Argo, config Vault, clé WireGuard, endpoint.</li>
+<li>Les Applications cloud réessaient sans fin : tout se resynchronise après un <code>up</code> sans action manuelle. L'état du cluster dans le CMP passe à <code>up</code> dans la minute.</li>
 <li>Ce qui survit à <code>cnp.sh down</code> est listé dans les <a href="../07-procedures-operateur/#down">procédures opérateur</a>.</li>
+</ul>
+<h2 id="le-cmp-lit-un-projet-cloud">Le CMP lit un projet cloud<a class="headerlink" href="#le-cmp-lit-un-projet-cloud" title="Permanent link">&para;</a></h2>
+<p><em>Que se passe-t-il quand un dev ouvre un onglet d'un projet AWS ou GCP dans le CMP ?</em></p>
+<p><img alt="CMP et cluster cloud" src="../../01-architecture/diagrams/cmp-cloud-read.light.png" /></p>
+<ul>
+<li>L'état du cluster vient de l'Application Argo CD <code>wireguard-&lt;cloud&gt;</code>, relue toutes les 60 s : <code>up</code> seulement si Healthy, sync connu et aucune condition <code>*Error</code>.</li>
+<li>Cluster pas <code>up</code> : aucun appel n'est fait, l'API répond 503 <code>cluster_not_connected</code> et l'onglet affiche « non connecté ».</li>
+</ul>
+<h2 id="un-projet-et-une-app-sur-aws">Un projet et une app sur AWS<a class="headerlink" href="#un-projet-et-une-app-sur-aws" title="Permanent link">&para;</a></h2>
+<p><em>Que se passe-t-il, dans l'ordre, quand un dev crée un projet sur AWS puis y déploie une app ?</em></p>
+<p><img alt="Projet et app sur AWS" src="../../01-architecture/diagrams/project-create-cloud.light.png" /></p>
+<ul>
+<li>Le CMP n'appelle jamais l'API du cluster pour créer : il écrit dans <code>cnp-projects</code> et les repos d'app, Argo CD déploie sur <code>targetCloud</code>.</li>
+<li>Le déploiement d'une app est refusé si le cluster n'est pas <code>up</code> ; la création du projet ne l'est pas.</li>
 </ul>
 
 

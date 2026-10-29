@@ -13,7 +13,7 @@
       
       
       
-        <link rel="prev" href="../../README_ROADMAP/">
+        <link rel="prev" href="../00-diagram-index/">
       
       
         <link rel="next" href="../02-tenancy-and-isolation/">
@@ -270,7 +270,7 @@
     
     
       <li class="md-tabs__item md-tabs__item--active">
-        <a href="./" class="md-tabs__link">
+        <a href="../00-diagram-index/" class="md-tabs__link">
           
   
   
@@ -601,6 +601,34 @@
                 
   
   
+  
+  
+    <li class="md-nav__item">
+      <a href="../00-diagram-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index des schémas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
     
   
   
@@ -674,6 +702,17 @@
   
     <nav class="md-nav" aria-label="1. Architectural Paradigm">
       <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#who-uses-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who uses what
+      
+    </span>
+  </a>
+  
+</li>
         
           <li class="md-nav__item">
   <a href="#platform-map" class="md-nav__link">
@@ -888,6 +927,62 @@
     
   
     Journaux d'audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../07-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observabilité multicluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../08-database-backups/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sauvegarde des bases
   
 
     
@@ -1338,6 +1433,34 @@
     
   
     Stratégie de Test & Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-pipelines-and-workflows/06-release-canary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion et canary
   
 
     
@@ -2746,6 +2869,17 @@
       <ul class="md-nav__list">
         
           <li class="md-nav__item">
+  <a href="#who-uses-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Who uses what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#platform-map" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2843,6 +2977,8 @@
 <h2 id="1-architectural-paradigm">1. Architectural Paradigm<a class="headerlink" href="#1-architectural-paradigm" title="Permanent link">&para;</a></h2>
 <p>The CNP relies on a decoupled, asynchronous, and GitOps-driven architecture. Instead of the Cloud Management Platform (CMP) directly interfacing with Kubernetes API servers to deploy pods, it acts as an <strong>Orchestrator of Orchestrators</strong>. </p>
 <p>The Single Source of Truth (SSOT) is always Git.</p>
+<h3 id="who-uses-what">Who uses what<a class="headerlink" href="#who-uses-what" title="Permanent link">&para;</a></h3>
+<p><img alt="Who uses the platform" src="../diagrams/platform-actors.light.png" /></p>
 <h3 id="platform-map">Platform map<a class="headerlink" href="#platform-map" title="Permanent link">&para;</a></h3>
 <p><img alt="CNP platform overview" src="../diagrams/platform-overview.light.png#only-light" />
 <img alt="CNP platform overview" src="../diagrams/platform-overview.dark.png#only-dark" /></p>
