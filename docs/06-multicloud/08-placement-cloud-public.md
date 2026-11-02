@@ -22,7 +22,10 @@ servent aux décideurs.
        (`CMP/backend/app/services/clusters/state.py`) ; `starting`, `down` et `unknown`
        excluent le cloud ;
     2. entre deux clouds `up`, le moins cher en coût total moyen, d'après les données
-       OpenCost (CNP-89). Le nombre d'apps déjà déployées sur un cloud ne compte pas.
+       OpenCost (CNP-89). Le nombre d'apps déjà déployées sur un cloud ne compte pas ;
+    3. tant que ce coût moyen par cloud n'existe pas, les nouveaux projets alternent entre
+       AWS et GCP. `GET /api/finops/estimates` ne suffit pas : c'est le coût mensuel estimé
+       d'une app par cluster, compute seul.
 3. Le choix n'est pas figé. Un projet peut changer de cloud plus tard :
     - CNP-132 : bascule en un clic par le owner ou un admin du projet ;
     - CNP-133 : migration de masse par un admin plateforme ;
@@ -49,12 +52,6 @@ servent aux décideurs.
   ([vocabulaire](00-index.md#vocabulaire)). D'ici là, changer de cloud reste recréer le
   projet, comme le dit le portail (« This cannot be changed later »).
 - I-5 tient : une bascule déplace tout le projet, prod et staging ensemble.
-
-**Point ouvert — à confirmer par Hugo.** Quel cloud choisir quand AWS et GCP sont `up` et
-que l'API de coût OpenCost (CNP-89) n'existe pas encore. Ce qui existe :
-`GET /api/finops/estimates` (`CMP/backend/app/services/finops/estimate.py`), le coût
-mensuel estimé d'une app sur chaque cluster, compute seul. Ce n'est pas un coût total moyen
-par cloud.
 
 ---
 
