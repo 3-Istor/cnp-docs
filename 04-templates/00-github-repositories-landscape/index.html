@@ -2117,6 +2117,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#mises-a-jour-des-dependances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mises à jour des dépendances
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#documentation-cnp_8" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -2182,6 +2193,17 @@
     <span class="md-ellipsis">
       
         Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mises-a-jour-des-dependances_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mises à jour des dépendances
       
     </span>
   </a>
@@ -4348,6 +4370,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#mises-a-jour-des-dependances" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mises à jour des dépendances
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#documentation-cnp_8" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4413,6 +4446,17 @@
     <span class="md-ellipsis">
       
         Sorties et consommateurs
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mises-a-jour-des-dependances_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mises à jour des dépendances
       
     </span>
   </a>
@@ -5187,9 +5231,21 @@ flowchart TB
 </tr>
 </tbody>
 </table>
+<h4 id="mises-a-jour-des-dependances">Mises à jour des dépendances<a class="headerlink" href="#mises-a-jour-des-dependances" title="Permanent link">&para;</a></h4>
+<ul>
+<li>Dependabot passe chaque jour et ne propose une version qu'après 7 jours (<code>cooldown</code>).</li>
+<li>Le job <code>dependabot-merge</code> de <code>ci.yml</code> merge les mineures et les patchs, 0.x compris, une fois les tests (exécutés dans l'image) et le build passés.</li>
+<li>Le template intègre ainsi chaque version le jour de ses 7 jours. Une app créée depuis la CMP démarre sans PR de mise à jour, et ses propres PR Dependabot se mergent de la même façon.</li>
+<li>Les actions épinglées du <code>security.yml</code> écrit dans chaque app viennent d'<code>app-templates</code>. Renovate les y tient à jour selon la même règle (7 jours, merge automatique).</li>
+</ul>
+<p>Limites connues :</p>
+<ul>
+<li><strong>Montées majeures.</strong> Elles attendent un humain, dans le template comme dans les apps. Tant qu'une majeure reste ouverte dans le template, chaque nouvelle app reçoit la même PR à sa création : la traiter vite dans le template.</li>
+<li><strong>Pas de CI sur <code>main</code> après un merge du bot.</strong> GitHub ne déclenche aucun workflow pour un push fait avec <code>GITHUB_TOKEN</code>. Un merge de <code>dependabot-merge</code> ne relance donc ni la CI sur <code>main</code> ni l'image <code>latest</code>. La CI de la PR a validé le changement, et un tag de release reconstruit les images.</li>
+</ul>
 <h4 id="documentation-cnp_8">Documentation CNP<a class="headerlink" href="#documentation-cnp_8" title="Permanent link">&para;</a></h4>
 <p><a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
-<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/requirements.txt">backend/requirements.txt</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/package.json">frontend/package.json</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/Dockerfile">backend/Dockerfile</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/Dockerfile">frontend/Dockerfile</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-frontend.yaml">deploy/values-frontend.yaml</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-backend.yaml">deploy/values-backend.yaml</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/workflows/ci.yml">.github/workflows/ci.yml</a>.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/requirements.txt">backend/requirements.txt</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/package.json">frontend/package.json</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/Dockerfile">backend/Dockerfile</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/Dockerfile">frontend/Dockerfile</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-frontend.yaml">deploy/values-frontend.yaml</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-backend.yaml">deploy/values-backend.yaml</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/workflows/ci.yml">.github/workflows/ci.yml</a>, <a href="https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/dependabot.yml">.github/dependabot.yml</a>.</p>
 <h3 id="template-html-css">template-html-css<a class="headerlink" href="#template-html-css" title="Permanent link">&para;</a></h3>
 <h4 id="role_9">Rôle<a class="headerlink" href="#role_9" title="Permanent link">&para;</a></h4>
 <p>Modèle de dépôt applicatif statique : site HTML/CSS servi par Nginx, accompagné d’une CI Docker et de valeurs de déploiement Kubernetes.</p>
@@ -5237,9 +5293,14 @@ flowchart TB
 </tr>
 </tbody>
 </table>
+<h4 id="mises-a-jour-des-dependances_1">Mises à jour des dépendances<a class="headerlink" href="#mises-a-jour-des-dependances_1" title="Permanent link">&para;</a></h4>
+<p>Mêmes règles que <code>template-app-webapp-python-fastapi-react</code> :
+- Dependabot passe chaque jour, avec un délai de 7 jours.
+- Le job <code>dependabot-merge</code> de <code>ci.yml</code> merge les mineures et les patchs une fois l'image construite.
+- Les mêmes limites connues s'appliquent : majeures en attente, pas de CI sur <code>main</code> après un merge du bot.</p>
 <h4 id="documentation-cnp_9">Documentation CNP<a class="headerlink" href="#documentation-cnp_9" title="Permanent link">&para;</a></h4>
 <p><a href="https://github.com/3-Istor/template-html-css/blob/main/README.md">README du dépôt</a>. Cette fiche fait partie de la cartographie centrale.</p>
-<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/template-html-css/blob/main/Dockerfile">Dockerfile</a>, <a href="https://github.com/3-Istor/template-html-css/blob/main/deploy/values.yaml">deploy/values.yaml</a>, <a href="https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml">.github/workflows/ci.yml</a>.</p>
+<p><strong>Sources vérifiables :</strong> <a href="https://github.com/3-Istor/template-html-css/blob/main/Dockerfile">Dockerfile</a>, <a href="https://github.com/3-Istor/template-html-css/blob/main/deploy/values.yaml">deploy/values.yaml</a>, <a href="https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml">.github/workflows/ci.yml</a>, <a href="https://github.com/3-Istor/template-html-css/blob/main/.github/dependabot.yml">.github/dependabot.yml</a>.</p>
 <h3 id="test-import">test-import<a class="headerlink" href="#test-import" title="Permanent link">&para;</a></h3>
 <h4 id="role_10">Rôle<a class="headerlink" href="#role_10" title="Permanent link">&para;</a></h4>
 <p>Dépôt applicatif de test contenant une base HTML/CSS semblable au template statique. Il permet de travailler sur un exemple d’application ; son nom seul ne prouve pas un workflow d’import CMP.</p>
