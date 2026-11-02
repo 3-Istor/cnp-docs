@@ -102,6 +102,7 @@ nav:
       - Diagrammes de Flux Système: 03-pipelines-and-workflows/04-system-flows.md
       - Stratégie de Test & Mocking: 03-pipelines-and-workflows/05-testing-strategy.md
       - Promotion et canary: 03-pipelines-and-workflows/06-release-canary.md
+      - Runner de secours (quota Actions): 03-pipelines-and-workflows/07-runner-fallback.md
   - 4. Modèles & Templates:
       - Dépôts GitHub & Cartographie: 04-templates/00-github-repositories-landscape.md
       - Modèles d'Applications (Git): 04-templates/01-git-app-templates.md
