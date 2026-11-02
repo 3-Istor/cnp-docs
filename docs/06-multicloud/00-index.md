@@ -31,6 +31,7 @@ dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architec
 | [Nettoyage et décommissionnement](05-nettoyage-et-decommissionnement.md) | Le job de clean par projet et par cloud |
 | [Schémas](06-schemas.md) | Les quatre vues : où tourne quoi, liens, politiques d'accès, `cnp.sh up` |
 | [Procédures opérateur EKS/GKE](07-procedures-operateur.md) | Prérequis, `cnp.sh`, vérifications, `down`, problèmes connus |
+| [Décision D-15](08-placement-cloud-public.md) | Placement en cloud public : règles du choix AWS/GCP, comparaison et textes des cartes |
 
 ## État
 

@@ -130,6 +130,7 @@ nav:
       - Nettoyage & Décommissionnement: 06-multicloud/05-nettoyage-et-decommissionnement.md
       - Schémas: 06-multicloud/06-schemas.md
       - Procédures opérateur EKS/GKE: 06-multicloud/07-procedures-operateur.md
+      - Décision D-15 (placement): 06-multicloud/08-placement-cloud-public.md
   - 7. Landing zone IA:
       - Vue d'ensemble: 07-ai-landing-zone/00-index.md
       - Stack cible et compromis: 07-ai-landing-zone/01-stack-cible.md
