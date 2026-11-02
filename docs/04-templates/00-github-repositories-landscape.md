@@ -335,11 +335,23 @@ Python, FastAPI, Uvicorn, SQLAlchemy et Pydantic Settings ; JavaScript/JSX, Reac
 | GHCR / cluster cible | Deux images, `<owner>/<repo>/frontend` et `<owner>/<repo>/backend`, construites par la CI du dépôt. |
 | K3s / Argo CD / infra-templates | `deploy/values-frontend.yaml` et `deploy/values-backend.yaml` de la copie applicative, utilisés pour rendre le chart générique. |
 
+#### Mises à jour des dépendances
+
+- Dependabot passe chaque jour et ne propose une version qu'après 7 jours (`cooldown`).
+- Le job `dependabot-merge` de `ci.yml` merge les mineures et les patchs, 0.x compris, une fois les tests (exécutés dans l'image) et le build passés.
+- Le template intègre ainsi chaque version le jour de ses 7 jours. Une app créée depuis la CMP démarre sans PR de mise à jour, et ses propres PR Dependabot se mergent de la même façon.
+- Les actions épinglées du `security.yml` écrit dans chaque app viennent d'`app-templates`. Renovate les y tient à jour selon la même règle (7 jours, merge automatique).
+
+Limites connues :
+
+- **Montées majeures.** Elles attendent un humain, dans le template comme dans les apps. Tant qu'une majeure reste ouverte dans le template, chaque nouvelle app reçoit la même PR à sa création : la traiter vite dans le template.
+- **Pas de CI sur `main` après un merge du bot.** GitHub ne déclenche aucun workflow pour un push fait avec `GITHUB_TOKEN`. Un merge de `dependabot-merge` ne relance donc ni la CI sur `main` ni l'image `latest`. La CI de la PR a validé le changement, et un tag de release reconstruit les images.
+
 #### Documentation CNP
 
 [README du dépôt](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/README.md). Cette fiche fait partie de la cartographie centrale.
 
-**Sources vérifiables :** [backend/requirements.txt](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/requirements.txt), [frontend/package.json](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/package.json), [backend/Dockerfile](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/Dockerfile), [frontend/Dockerfile](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/Dockerfile), [deploy/values-frontend.yaml](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-frontend.yaml), [deploy/values-backend.yaml](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-backend.yaml), [.github/workflows/ci.yml](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/workflows/ci.yml).
+**Sources vérifiables :** [backend/requirements.txt](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/requirements.txt), [frontend/package.json](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/package.json), [backend/Dockerfile](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/backend/Dockerfile), [frontend/Dockerfile](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/frontend/Dockerfile), [deploy/values-frontend.yaml](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-frontend.yaml), [deploy/values-backend.yaml](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/deploy/values-backend.yaml), [.github/workflows/ci.yml](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/workflows/ci.yml), [.github/dependabot.yml](https://github.com/3-Istor/template-app-webapp-python-fastapi-react/blob/main/.github/dependabot.yml).
 
 ### template-html-css
 
@@ -366,11 +378,18 @@ HTML5, CSS, Nginx Alpine, Docker, YAML Helm et GitHub Actions.
 | GHCR / cluster cible | Image `<owner>/<repo>` contenant le site servi par Nginx. |
 | K3s / Argo CD / infra-templates | `deploy/values.yaml` de la copie applicative, consommé avec le chart générique. |
 
+#### Mises à jour des dépendances
+
+Mêmes règles que `template-app-webapp-python-fastapi-react` :
+- Dependabot passe chaque jour, avec un délai de 7 jours.
+- Le job `dependabot-merge` de `ci.yml` merge les mineures et les patchs une fois l'image construite.
+- Les mêmes limites connues s'appliquent : majeures en attente, pas de CI sur `main` après un merge du bot.
+
 #### Documentation CNP
 
 [README du dépôt](https://github.com/3-Istor/template-html-css/blob/main/README.md). Cette fiche fait partie de la cartographie centrale.
 
-**Sources vérifiables :** [Dockerfile](https://github.com/3-Istor/template-html-css/blob/main/Dockerfile), [deploy/values.yaml](https://github.com/3-Istor/template-html-css/blob/main/deploy/values.yaml), [.github/workflows/ci.yml](https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml).
+**Sources vérifiables :** [Dockerfile](https://github.com/3-Istor/template-html-css/blob/main/Dockerfile), [deploy/values.yaml](https://github.com/3-Istor/template-html-css/blob/main/deploy/values.yaml), [.github/workflows/ci.yml](https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml), [.github/dependabot.yml](https://github.com/3-Istor/template-html-css/blob/main/.github/dependabot.yml).
 
 ### test-import
 
