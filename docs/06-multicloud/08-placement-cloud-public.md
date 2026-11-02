@@ -1,8 +1,7 @@
 # Décision de placement cloud
 
 Prise le 2026-11-02 par Hugo (product owner), ticket CNP-131. La numérotation continue
-celle de [D-14](../08-finops/01-decisions.md). Les textes des cartes sont un brouillon, à
-valider par Hugo sur la maquette.
+celle de [D-14](../08-finops/01-decisions.md).
 
 ---
 
