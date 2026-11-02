@@ -378,11 +378,18 @@ HTML5, CSS, Nginx Alpine, Docker, YAML Helm et GitHub Actions.
 | GHCR / cluster cible | Image `<owner>/<repo>` contenant le site servi par Nginx. |
 | K3s / Argo CD / infra-templates | `deploy/values.yaml` de la copie applicative, consommé avec le chart générique. |
 
+#### Mises à jour des dépendances
+
+Mêmes règles que `template-app-webapp-python-fastapi-react` :
+- Dependabot passe chaque jour, avec un délai de 7 jours.
+- Le job `dependabot-merge` de `ci.yml` merge les mineures et les patchs une fois l'image construite.
+- Les mêmes limites connues s'appliquent : majeures en attente, pas de CI sur `main` après un merge du bot.
+
 #### Documentation CNP
 
 [README du dépôt](https://github.com/3-Istor/template-html-css/blob/main/README.md). Cette fiche fait partie de la cartographie centrale.
 
-**Sources vérifiables :** [Dockerfile](https://github.com/3-Istor/template-html-css/blob/main/Dockerfile), [deploy/values.yaml](https://github.com/3-Istor/template-html-css/blob/main/deploy/values.yaml), [.github/workflows/ci.yml](https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml).
+**Sources vérifiables :** [Dockerfile](https://github.com/3-Istor/template-html-css/blob/main/Dockerfile), [deploy/values.yaml](https://github.com/3-Istor/template-html-css/blob/main/deploy/values.yaml), [.github/workflows/ci.yml](https://github.com/3-Istor/template-html-css/blob/main/.github/workflows/ci.yml), [.github/dependabot.yml](https://github.com/3-Istor/template-html-css/blob/main/.github/dependabot.yml).
 
 ### test-import
 
