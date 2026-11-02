@@ -71,33 +71,12 @@ ni SLA, ni mesure de latence.
 
 La latence n'apparaît pas dans les cartes : rien ne la départage dans les dépôts.
 
-### Textes des cartes
+### Cartes du portail
 
-Langue : anglais, celle de `CreateProjectModal.tsx`.
+Le portail reste épuré (décision Hugo, 2026-11-02) : chaque carte affiche un nom et une ligne,
+en anglais. Le comparatif ci-dessus vit ici, pas dans l'interface.
 
-**On-prem**
-
-*For projects with sensitive data that can tolerate an outage.*
-
-- Cheapest option
-- Data stays on our own servers
-- Database backups with point-in-time restore
-
-Cons:
-
-- Less resilient than public cloud: one cluster, an outage stops your app
-- Capacity limited to our own servers
-
-**Public cloud**
-
-*For projects that must keep running through an on-prem outage.*
-
-- Keeps serving if on-prem goes down
-- Runs on AWS (EKS) or GCP (GKE): we pick the cheaper one that is up
-- Capacity grows without new hardware
-
-Cons:
-
-- Costs more than on-prem
-- Data hosted by AWS or Google (Paris region)
-- Database backups not available
+| Carte | Ligne |
+|---|---|
+| On-prem | Cheapest. Data stays on our servers. |
+| Public cloud | Keeps running if on-prem is down. |
