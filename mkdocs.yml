@@ -95,6 +95,7 @@ nav:
       - Intégration GitHub App: 02-core-components/05-github-integration.md
       - Schéma Base de Données: 02-core-components/06-database-schema.md
       - Architecture Frontend (Next.js): 02-core-components/07-frontend-architecture.md
+      - Protection contre la suppression: 02-core-components/08-deletion-protection.md
   - 3. Pipelines & Workflows:
       - Provisioning Day-0: 03-pipelines-and-workflows/01-app-provisioning-flow.md
       - Pipelines de CI/CD: 03-pipelines-and-workflows/02-ci-cd-pipelines.md
