@@ -6,7 +6,7 @@ Une release passe par staging, puis est promue en prod par un commit du CMP. En 
 
 ![De staging au canary en prod](../01-architecture/diagrams/canary-release.light.png)
 
-- Staging : Argo CD Image Updater commite chaque tag `X.Y.Z-rc.N` dans `deploy/env/staging/`.
+- Staging : Argo CD Image Updater commite chaque tag `X.Y.Z-rc.N` dans `deploy/env/staging/`. Un projet peut avoir une app en staging sans rien demander ; au-delà, un admin plateforme monte le plafond (`spec.environments[staging].maxApps` dans le registre, `0` l'interdit).
 - Promotion : asynchrone. La boucle d'environnement du CMP (toutes les 15 s) enchaîne smoke, suites de l'app, soak, approbation d'un admin si la politique l'exige, puis commite `image.tag@digest` dans `deploy/env/prod/` et pose le tag GitHub `release/<version>`.
 - Canary (preset `safe`) : 10 % → analyse → 25 % → pause manuelle → 50 % → analyse → 100 %. Le poids passe par l'HTTPRoute (plugin Gateway API).
 - Analyse `cnp-error-rate` : pas de données = non concluant (jamais de promotion sur du silence), `vmselect` injoignable = abandon. Sur EKS/GKE, la requête passe par le relais WireGuard 18083.
