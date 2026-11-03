@@ -2817,7 +2817,7 @@
 <p><em>Que se passe-t-il quand un dev promeut une release de staging vers la prod en canary ?</em></p>
 <p><img alt="De staging au canary en prod" src="../../01-architecture/diagrams/canary-release.light.png" /></p>
 <ul>
-<li>Staging : Argo CD Image Updater commite chaque tag <code>X.Y.Z-rc.N</code> dans <code>deploy/env/staging/</code>.</li>
+<li>Staging : Argo CD Image Updater commite chaque tag <code>X.Y.Z-rc.N</code> dans <code>deploy/env/staging/</code>. Un projet peut avoir une app en staging sans rien demander ; au-delà, un admin plateforme monte le plafond (<code>spec.environments[staging].maxApps</code> dans le registre, <code>0</code> l'interdit).</li>
 <li>Promotion : asynchrone. La boucle d'environnement du CMP (toutes les 15 s) enchaîne smoke, suites de l'app, soak, approbation d'un admin si la politique l'exige, puis commite <code>image.tag@digest</code> dans <code>deploy/env/prod/</code> et pose le tag GitHub <code>release/&lt;version&gt;</code>.</li>
 <li>Canary (preset <code>safe</code>) : 10 % → analyse → 25 % → pause manuelle → 50 % → analyse → 100 %. Le poids passe par l'HTTPRoute (plugin Gateway API).</li>
 <li>Analyse <code>cnp-error-rate</code> : pas de données = non concluant (jamais de promotion sur du silence), <code>vmselect</code> injoignable = abandon. Sur EKS/GKE, la requête passe par le relais WireGuard 18083.</li>
