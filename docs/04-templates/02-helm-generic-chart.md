@@ -23,6 +23,7 @@ graph TD
 
     subgraph Ingress & Edge Routing
         Helm -->|ingress.enabled| HRoute[HTTPRoute]
+        Helm -->|ingress.publicPaths| PRoute[HTTPRoute: public-route]
         Helm -->|ingress.enabled| CF[Deployment: cloudflared]
     end
 
@@ -101,6 +102,26 @@ When `ingress.sso_protected: true` is configured, the chart deploys an Envoy Gat
       provider:
         issuer: "https://auth.3istor.com/realms/{{ .Values.ingress.realm }}"
   ```
+  Production uses the realm `<project>`; the staging values file written by the CMP sets `ingress.realm: <project>-staging` (see [Identity & Keycloak](../02-core-components/02-identity-keycloak.md#4-project-realms)).
+* **Token forwarding**: `sso_protected: true` alone makes Envoy send `Authorization: Bearer <access token>` of the project realm to the app on every request (`forwardAccessToken`). The OIDC cookies are encrypted, so this header is the only way the app learns who is logged in. It used to require `allowedGroups`.
+* **`ingress.allowedGroups`** (empty by default) adds on top a JWT check against the realm JWKS and a default-deny rule on the `groups` claim. Values are the flat names of the project realm (`project-members`, `project-admins`).
+* **The app must validate the token**: issuer (per environment) and signature, against the realm JWKS. Other pods can call the app's Service without crossing the gateway, so the header alone proves nothing.
+
+---
+
+### E. Public Paths (`public-route.yaml`)
+`ingress.publicPaths` opens a few paths of an SSO-protected app, such as a webhook or a device endpoint that carries its own credentials:
+```yaml
+ingress:
+  sso_protected: true
+  publicPaths:
+    - { path: /api/v1/telemetry, method: POST }   # method and match are optional
+```
+* **Rendering**: a second `HTTPRoute`, `<fullname>-public-route`, on the same hostname and gateway. The `SecurityPolicy` targets only `<fullname>-route`, and Gateway API ranks an `Exact` match above the `/` prefix, so these paths skip the SSO.
+* **No login, no token**: nothing is forwarded on these paths. The endpoint must authenticate the caller itself (optispace: the device sends its own `X-Api-Key`).
+* **Matching**: `match` defaults to `Exact` (`/a` does not match `/a/`); `PathPrefix` only when asked. No `method` means all methods.
+* **Refused at render time**: a path not starting with `/`, and `/` as a `PathPrefix` (use `sso_protected: false` instead).
+* **Canary**: the public route targets the `-stable` Service only; it is never part of the traffic split.
 
 ---
 

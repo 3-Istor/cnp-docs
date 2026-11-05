@@ -1,6 +1,6 @@
 # Identity & Access Management: Keycloak Integration
 
-Keycloak serves as the central Identity Provider (IdP) for the entire CNP ecosystem. It secures the developer portal (CMP), infrastructure platforms (Vault, ArgoCD), and deployed end-user applications via Envoy Gateway edge routing.
+Keycloak serves as the central Identity Provider (IdP) for the entire CNP ecosystem. It secures the developer portal (CMP), infrastructure platforms (Vault, ArgoCD), and deployed end-user applications via Envoy Gateway edge routing. The central instance runs Keycloak **26.8.1** (see [section 6](#6-version-and-upgrades)).
 
 ---
 
@@ -16,7 +16,7 @@ Instead of baking the theme directly into a heavy, custom Keycloak container ima
 flowchart LR
     subgraph Pod [Keycloak Pod]
         subgraph InitContainer [InitContainer: theme-provider-init]
-            Image[ghcr.io/thegostsniperfr/keycloak-theme-kube-lab:latest]
+            Image[ghcr.io/thegostsniperfr/keycloak-theme-kube-lab@sha256:c31626bb...]
             Image -->|Extracts theme files| MountInit[/providers/]
         end
 
@@ -44,14 +44,17 @@ extraVolumeMounts: |
 # InitContainer copy-paste mechanism
 extraInitContainers: |
   - name: theme-provider-init
-    image: ghcr.io/thegostsniperfr/keycloak-theme-kube-lab:latest
-    imagePullPolicy: Always
+    # Pinned on a digest: the theme overrides internal login templates and must be retested on every Keycloak bump.
+    image: ghcr.io/thegostsniperfr/keycloak-theme-kube-lab@sha256:c31626bb1de27aea9339e6d8fab99d0d4b395c6165ee52f10698083e522dd37a
+    imagePullPolicy: IfNotPresent
     volumeMounts:
       - name: theme-providers
         mountPath: /providers
 ```
 
 On pod startup, the `theme-provider-init` container copies its theme files into `/providers` (the shared volume) and exits. The main Keycloak container then starts, mounts the same volume at `/opt/keycloak/providers`, reads the theme files, and compiles the visual layer.
+
+The theme image used to follow `:latest` with `imagePullPolicy: Always`, so a theme release could break the login page at any pod restart. It is now pinned on a digest: moving it is a deliberate change, made together with a Keycloak bump and followed by a login test.
 
 ---
 
@@ -113,9 +116,13 @@ resource "keycloak_authentication_execution_config" "condition_role_config" {
 Keycloak maps tenant permissions into OIDC tokens to enforce downstream security boundaries.
 
 ### Project Group Convention
-When a project is created, the CMP dynamically provisions two Keycloak groups:
+When a project is created, the CMP dynamically provisions two groups in the platform realm (`3istor`):
 * `project-<project_name>-admins`
 * `project-<project_name>-members`
+
+Each project realm (see [section 4](#4-project-realms)) has its own flat groups, filled at every broker login from the platform groups above (the mapper re-evaluates the claim each time, so removing someone from the platform group removes them from the realm group at their next login):
+* `project-admins` and `project-members`: the project's developers. These are the names applications and `ingress.allowedGroups` see.
+* `users`: customers who signed up (see [section 5](#5-customer-sign-up)). Never `project-members`.
 
 ### OIDC Scope Mapping (`groups` scope)
 To transmit these memberships securely to downstream consumers (ArgoCD, Envoy Gateway, Vault), Keycloak maps group memberships into the JWT token payload.
@@ -139,8 +146,55 @@ resource "keycloak_openid_group_membership_protocol_mapper" "group_mapper" {
 
 ### Downstream Consumption Matrix:
 * **ArgoCD**: Reads the `groups` claim. If it contains `project-alpha-admins`, it grants sync/override permissions inside the matching `project-alpha` ArgoCD `AppProject`.
-* **Envoy Gateway**: Reads the `groups` claim at the edge. If the user tries to access `api.alpha.3istor.com` but lacks `project-alpha-members` or `project-alpha-admins`, Envoy blocks the connection.
+* **Envoy Gateway**: Reads the `groups` claim of the project realm token at the edge. If `ingress.allowedGroups` is set and the user tries to access `api.alpha.3istor.com` without `project-members` or `project-admins`, Envoy blocks the connection. Without `allowedGroups`, any account of the realm gets in, and the token is forwarded to the app either way (see the [generic chart](../04-templates/02-helm-generic-chart.md#d-edge-sso-openid-connect-securitypolicyyaml)).
 * **Vault**: Maps the `groups` claim to a Vault identity group alias, granting access to the `kvv2/data/projects/alpha/*` path.
+
+---
+
+## 4. Project Realms
+
+Each project owns its Keycloak realms for the end users of its apps. Developers log in there through a broker ("Log in with 3istor Platform", identity provider `3istor-platform`) that points at a client of the platform realm.
+
+| Realm | Created | Sign-up | Admin login (Vault, mount `project-<p>`) | App clients |
+|---|---|---|---|---|
+| `<p>` (prod) | with the project | closed, unless [customer sign-up](#5-customer-sign-up) is on | `keycloak-tenant-admin` | `cnp-<p>-<app>` |
+| `<p>-staging` | at the first staging activation of an app | never open | `keycloak-tenant-admin-staging` | `cnp-<p>-<app>-stg` |
+
+The staging realm has the same content as the prod one (broker client `broker-<p>-staging` in `3istor`, groups `project-members` / `project-admins` with their mappers, `groups` scope, a local `admin`), so developers log in to staging with their usual account. It is created by the Terraform module `app-templates/templates/k3s-gitops-app/staging-realm` (state `cnp/projects/<p>/_staging-realm`) and destroyed with the project. A project name ending in `-staging` is refused.
+
+* **Wiring**: when staging is turned on, the CMP writes `ingress.realm` and `auth.realm` in `deploy/env/staging/*.yaml`, so the staging route authenticates against the staging realm. An app that validates tokens must therefore read its issuer per environment (`https://auth.3istor.com/realms/<p>-staging`); a prod issuer rejects every staging token.
+* **Test accounts on staging**: create them in the staging realm, with the console (`https://admin-auth.3istor.com/admin/<p>-staging/console/`, credentials in Vault) or, with customer sign-up on, through the staging app's own client.
+* **Existing staging apps** created before the staging realm existed are moved with `python -m app.scripts.move_staging_realm <deployment id>` (CMP backend, platform admin, one-off per app). The staging OIDC client is recreated in the new realm.
+
+---
+
+## 5. Customer Sign-up
+
+Lets the end customers of a project's apps create their own accounts. Off by default.
+
+* **Switch**: project "···" menu, "Customer sign-up" (project admins and platform admins). API: `PUT /api/projects/{name}/customer-signup` with `{"enabled": true|false}`, refused (`403`) for AI assistants because opening a project to the public is a person's decision. The state is `spec.selfRegistration` in the project registry.
+* **On**:
+    * The realm `<p>` opens registration. Sign-ups land in the default group `users`, never in `project-members`.
+    * Organizations are enabled in `<p>` and `<p>-staging`.
+    * In both realms, each app client `cnp-<p>-*` gets a service account holding `manage-organizations`, `manage-users` and `view-users` of its own realm (never `manage-realm`), and the `organization` default scope, so tokens carry an `organization` claim.
+    * Staging never opens registration.
+* **Re-applied** when an app is created and when staging is activated, so new clients get their rights. A Keycloak failure never fails the deployment; the `PUT` answers `502` after saving the flag, and sending the value again retries.
+* **Off** only closes registration. Organizations, accounts, group and service accounts stay.
+* **No e-mail**: there is no SMTP, so no address verification and no organization invitation. The app adds members itself.
+* **How an app uses it**: with its own client id and secret (already delivered by Vault), the app gets a `client_credentials` token from its realm and calls `/admin/realms/<realm>/organizations` to create an organization and add a member, and creates an organization group `admins` for the company's administrators. The app-side recipe is in the template's `using-cnp-services/reference/identity.md`.
+
+!!! warning
+    `manage-users` lets an app edit any user of its realm, including the group membership of brokered developers. A leaked app client secret therefore lets its holder edit any account of that realm: keep app secrets tight.
+
+---
+
+## 6. Version and Upgrades
+
+* **Version**: 26.8.1, set by `image.tag` in `k8s/config/keycloak/values.yaml` of the K3s repository (it was 26.5.5 until CNP-217).
+* **Procedure**: rehearse on a copy of the Keycloak database, take a `pg_dump` just before, then upgrade. The schema migrations of 26.6 and 26.8 are one-way: the rollback is the previous image **plus** the restored dump, not a downgrade in place.
+* **Theme**: pinned on a digest (see section 1); retest the login page on each bump.
+* **Sessions**: since 26.7, session cookies use SHA-384, so every user logs in once again after the upgrade.
+* **Open point**: the Keycloak database has no scheduled backup (follow-up). Until then, the `pg_dump` taken before an upgrade is the only copy.
 
 ---
 **Next Step**: Continue to [ArgoCD GitOps Delivery Specifications](04-gitops-argocd.md) (or return to the [Project Overview](../index.md)).
