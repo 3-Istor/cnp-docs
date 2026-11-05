@@ -278,7 +278,7 @@ point ouvert reçoit une valeur par défaut. Validées par Brian le 2026-10-25 ;
 | D24 | Rétention | Traces Tempo : 7 jours. Logs d'accès de la gateway : 30 jours (D14). Prompts et réponses : jamais stockés, sauf opt-in du projet. | 1 |
 | D25 | Chat de test de la CMP | Ses tokens comptent dans le budget de l'agent ; pas de budget séparé. | 2 |
 | D26 | Premiers templates d'agent | (1) agent kagent déclaratif vide (consignes, modèle, outils), (2) agent de questions sur une documentation (UC7 sous forme d'agent). L'app UC7 de la phase 1 n'est pas un template d'agent (D31). | 2 |
-| D27 | Version de Keycloak | Le cluster est en 26.5.5. La phase 1 utilise un secret client depuis Vault ; la montée en 26.6 ou plus est la première tâche de la phase 2, avant la federated client authentication (D3). | 2 |
+| D27 | Version de Keycloak | Le cluster est en 26.5.5 (à la rédaction). La phase 1 utilise un secret client depuis Vault ; la montée en 26.6 ou plus est la première tâche de la phase 2, avant la federated client authentication (D3). | 2 |
 | D28 | Où tester | Il n'y a qu'un cluster (K3s on-prem). Chaque nouvelle brique est d'abord installée sur un cluster k3d local, sur la machine de l'agent d'implémentation, et ne passe sur le cluster principal qu'une fois ses vérifications réussies. | 1 |
 | D29 | Comment s'écrit un agent | Par défaut, un agent **kagent déclaratif** : un CR `Agent` de type `Declarative` (consignes, `ModelConfig`, outils MCP), sans code ; la boucle est fournie par kagent. Pour une logique que le déclaratif ne sait pas exprimer, un agent **BYO** : une image écrite avec LangGraph (une bibliothèque Python qui tourne dans le conteneur de l'agent, quelques centaines de Mo), construite par la CI comme les apps. Dans les deux cas, le CR `Agent` sert à déployer l'agent. À ne pas confondre avec Langfuse, l'outil d'observabilité écarté en D7. | 2 |
 | D30 | Tempo | Chart Grafana `tempo` en mode monolithique dans le namespace `observability`, stockage sur volume, 7 jours. | 1 |
@@ -355,7 +355,7 @@ vérifie ces points sur le cluster avant toute modification.
 
 | Composant | Version ou état dans Git | Conséquence |
 |---|---|---|
-| Keycloak | 26.5.5 (chart codecentric `keycloakx` 7.2.2) | Token exchange standard disponible ; federated client authentication non (D27) |
+| Keycloak | 26.5.5 (à la rédaction ; chart codecentric `keycloakx` 7.2.2) | Token exchange standard disponible ; federated client authentication non (D27) |
 | Cilium | 1.20.0 | |
 | Envoy Gateway | 1.9.0 | Reste l'entrée des apps (D1) |
 | Kyverno | chart 3.8.2 ; PSS restricted en **Audit** | G8 : passer en Enforce (T0.3) |

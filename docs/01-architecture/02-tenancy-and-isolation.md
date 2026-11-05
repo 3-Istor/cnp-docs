@@ -18,7 +18,7 @@ The platform maps team boundaries (Projects) to isolated cluster boundaries (App
 | Dimension | Logical Scope (Project) | Physical Scope (Application) |
 | :--- | :--- | :--- |
 | **ArgoCD** | `AppProject` (Governance sandbox) | `Application` (Reconciliation runner) |
-| **Keycloak** | Parent Group (`project-alpha-admins`) | Client ID (`cnp-alpha-frontend`) |
+| **Keycloak** | Platform groups (`project-alpha-admins`, `-members`, `-guests`) and realms `alpha` / `alpha-staging` | Client ID (`cnp-alpha-frontend`, `cnp-alpha-frontend-stg` in staging) |
 | **HashiCorp Vault** | Isolated KV Path (`kvv2/projects/alpha/`) | Kubernetes Auth Role (`alpha-frontend-role`) |
 | **Kubernetes** | Network Policy (`CiliumClusterwideNetworkPolicy`) | Dedicated `Namespace` (`alpha-frontend`) |
 
@@ -141,7 +141,17 @@ Edge security is enforced at the network proxy layer, eliminating the need for d
 1. **Authentication Handshake**: Envoy Gateway terminates incoming TLS connections at the edge.
 2. **SecurityPolicy Binding**: If `sso_protected: true` is enabled in `values.yaml`, Envoy intercepts the route using an OIDC filter.
 3. **Keycloak Validation**: Envoy redirects unauthenticated users to Keycloak.
-4. **Token Verification**: Keycloak mints a JWT token on success. Envoy verifies the signature and checks that the user's `groups` claim contains either the `project-<project_name>-members` or `project-<project_name>-admins` roles before forwarding the HTTP request to the target pod.
+4. **Token Verification**: Keycloak mints a JWT token on success. When `ingress.allowedGroups` is set, Envoy verifies the signature and checks that the user's `groups` claim contains `project-members` or `project-admins` before forwarding the request; the token is forwarded to the app either way (see the [generic chart](../04-templates/02-helm-generic-chart.md#d-edge-sso-openid-connect-securitypolicyyaml)).
+
+Each project owns two Keycloak realms for its apps, and the group names differ between realms (details in [Identity & Keycloak](../02-core-components/02-identity-keycloak.md#4-project-realms)):
+
+| Realm | Groups | Who |
+| :--- | :--- | :--- |
+| Platform (`3istor`) | `project-<p>-admins`, `project-<p>-members`, `project-<p>-guests` | Developers; read by Argo CD and Vault |
+| `<p>` (prod) and `<p>-staging` | `project-admins`, `project-members`, filled at each login by the broker mappers from the platform groups | Developers, whom the app routes check |
+| `<p>` (prod) | `users` | Default group of the realm once customer sign-up has been turned on, given to every new account; not a customer marker |
+
+The staging realm has the same content as the prod one but never opens sign-up, so staging test accounts and prod customers never mix.
 
 ---
 
