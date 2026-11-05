@@ -106,6 +106,7 @@ When `ingress.sso_protected: true` is configured, the chart deploys an Envoy Gat
 * **Token forwarding**: `sso_protected: true` alone makes Envoy send `Authorization: Bearer <access token>` of the project realm to the app on every request (`forwardAccessToken`). The OIDC cookies are encrypted, so this header is the only way the app learns who is logged in. It used to require `allowedGroups`.
 * **`ingress.allowedGroups`** (empty by default) adds on top a JWT check against the realm JWKS and a default-deny rule on the `groups` claim. Values are the flat names of the project realm (`project-members`, `project-admins`).
 * **The app must validate the token**: issuer (per environment) and signature, against the realm JWKS. Other pods can call the app's Service without crossing the gateway, so the header alone proves nothing.
+* **Fetching the JWKS**: pods reach `auth.3istor.com` through Cloudflare, which answers `403` to the `Python-urllib` User-Agent (urllib's default, used by PyJWT's `PyJWKClient`). The app sees every token as invalid. Send its own User-Agent (`PyJWKClient(url, headers={"User-Agent": "<app>-backend"})`); `requests` and `httpx` defaults pass.
 
 ---
 
