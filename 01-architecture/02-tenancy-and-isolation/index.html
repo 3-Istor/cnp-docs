@@ -3183,8 +3183,8 @@
 </tr>
 <tr>
 <td style="text-align: left;"><strong>Keycloak</strong></td>
-<td style="text-align: left;">Parent Group (<code>project-alpha-admins</code>)</td>
-<td style="text-align: left;">Client ID (<code>cnp-alpha-frontend</code>)</td>
+<td style="text-align: left;">Platform groups (<code>project-alpha-admins</code>, <code>-members</code>, <code>-guests</code>) and realms <code>alpha</code> / <code>alpha-staging</code></td>
+<td style="text-align: left;">Client ID (<code>cnp-alpha-frontend</code>, <code>cnp-alpha-frontend-stg</code> in staging)</td>
 </tr>
 <tr>
 <td style="text-align: left;"><strong>HashiCorp Vault</strong></td>
@@ -3298,8 +3298,36 @@
 <li><strong>Authentication Handshake</strong>: Envoy Gateway terminates incoming TLS connections at the edge.</li>
 <li><strong>SecurityPolicy Binding</strong>: If <code>sso_protected: true</code> is enabled in <code>values.yaml</code>, Envoy intercepts the route using an OIDC filter.</li>
 <li><strong>Keycloak Validation</strong>: Envoy redirects unauthenticated users to Keycloak.</li>
-<li><strong>Token Verification</strong>: Keycloak mints a JWT token on success. Envoy verifies the signature and checks that the user's <code>groups</code> claim contains either the <code>project-&lt;project_name&gt;-members</code> or <code>project-&lt;project_name&gt;-admins</code> roles before forwarding the HTTP request to the target pod.</li>
+<li><strong>Token Verification</strong>: Keycloak mints a JWT token on success. When <code>ingress.allowedGroups</code> is set, Envoy verifies the signature and checks that the user's <code>groups</code> claim contains <code>project-members</code> or <code>project-admins</code> before forwarding the request; the token is forwarded to the app either way (see the <a href="../../04-templates/02-helm-generic-chart/#d-edge-sso-openid-connect-securitypolicyyaml">generic chart</a>).</li>
 </ol>
+<p>Each project owns two Keycloak realms for its apps, and the group names differ between realms (details in <a href="../../02-core-components/02-identity-keycloak/#4-project-realms">Identity &amp; Keycloak</a>):</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Realm</th>
+<th style="text-align: left;">Groups</th>
+<th style="text-align: left;">Who</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;">Platform (<code>3istor</code>)</td>
+<td style="text-align: left;"><code>project-&lt;p&gt;-admins</code>, <code>project-&lt;p&gt;-members</code>, <code>project-&lt;p&gt;-guests</code></td>
+<td style="text-align: left;">Developers; read by Argo CD and Vault</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>&lt;p&gt;</code> (prod) and <code>&lt;p&gt;-staging</code></td>
+<td style="text-align: left;"><code>project-admins</code>, <code>project-members</code>, filled at each login by the broker mappers from the platform groups</td>
+<td style="text-align: left;">Developers, whom the app routes check</td>
+</tr>
+<tr>
+<td style="text-align: left;"><code>&lt;p&gt;</code> (prod)</td>
+<td style="text-align: left;"><code>users</code></td>
+<td style="text-align: left;">Default group of the realm once customer sign-up has been turned on, given to every new account; not a customer marker</td>
+</tr>
+</tbody>
+</table>
+<p>The staging realm has the same content as the prod one but never opens sign-up, so staging test accounts and prod customers never mix.</p>
 <hr />
 <h2 id="5-secrets-isolation-hashicorp-vault-vso">5. Secrets Isolation (HashiCorp Vault &amp; VSO)<a class="headerlink" href="#5-secrets-isolation-hashicorp-vault-vso" title="Permanent link">&para;</a></h2>
 <p>Secrets are isolated at rest inside Vault and synchronized dynamically into Kubernetes using the <code>vault-secrets-operator</code>.</p>

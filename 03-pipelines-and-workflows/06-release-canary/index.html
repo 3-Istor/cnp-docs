@@ -1343,6 +1343,24 @@
         
       
       
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion et canary
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
       <a href="./" class="md-nav__link md-nav__link--active">
         
   
@@ -1359,6 +1377,58 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creer-une-release-new-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Créer une release (« New release »)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historique-des-deploiements-et-retour-arriere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Historique des déploiements et retour arrière
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ecart-staging-prod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Écart staging / prod
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
       
     </li>
   
@@ -2797,6 +2867,47 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#creer-une-release-new-release" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Créer une release (« New release »)
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#historique-des-deploiements-et-retour-arriere" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Historique des déploiements et retour arrière
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#ecart-staging-prod" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Écart staging / prod
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -2818,10 +2929,31 @@
 <p><img alt="De staging au canary en prod" src="../../01-architecture/diagrams/canary-release.light.png" /></p>
 <ul>
 <li>Staging : Argo CD Image Updater commite chaque tag <code>X.Y.Z-rc.N</code> dans <code>deploy/env/staging/</code>. Un projet peut avoir une app en staging sans rien demander ; au-delà, un admin plateforme monte le plafond (<code>spec.environments[staging].maxApps</code> dans le registre, <code>0</code> l'interdit).</li>
-<li>Promotion : asynchrone. La boucle d'environnement du CMP (toutes les 15 s) enchaîne smoke, suites de l'app, soak, approbation d'un admin si la politique l'exige, puis commite <code>image.tag@digest</code> dans <code>deploy/env/prod/</code> et pose le tag GitHub <code>release/&lt;version&gt;</code>.</li>
+<li>Promotion : asynchrone. La boucle d'environnement du CMP (toutes les 15 s) enchaîne smoke, suites de l'app, soak, approbation d'un admin si la politique l'exige, puis commite <code>image.tag@digest</code> dans <code>deploy/env/prod/</code> et pose le tag GitHub <code>release/X.Y.Z-rc.N</code> (jamais <code>vX.Y.Z</code>, qui relancerait la CI). Ce tag marque la version X.Y.Z comme promue.</li>
 <li>Canary (preset <code>safe</code>) : 10 % → analyse → 25 % → pause manuelle → 50 % → analyse → 100 %. Le poids passe par l'HTTPRoute (plugin Gateway API).</li>
 <li>Analyse <code>cnp-error-rate</code> : pas de données = non concluant (jamais de promotion sur du silence), <code>vmselect</code> injoignable = abandon. Sur EKS/GKE, la requête passe par le relais WireGuard 18083.</li>
-<li>Onglet Release du CMP : promouvoir, sauter une étape, abandonner, relancer.</li>
+<li>Onglet Release du CMP : créer une release, promouvoir, sauter une étape, abandonner, relancer. Voir ci-dessous.</li>
+</ul>
+<h2 id="creer-une-release-new-release">Créer une release (« New release »)<a class="headerlink" href="#creer-une-release-new-release" title="Permanent link">&para;</a></h2>
+<p>Le bouton propose les tags d'après ceux du dépôt, sans rien à saisir :</p>
+<ul>
+<li>Avec staging : tant que la version n'est pas promue, le candidat suivant <code>vX.Y.Z-rc.(N+1)</code> ; une fois promue, un patch, minor ou major en <code>-rc.1</code>. Sans staging : <code>vX.Y.Z</code>.</li>
+<li>Une version est promue quand elle porte un tag <code>release/X.Y.Z-rc.N</code> (laissé par une promotion) ou un tag final <code>vX.Y.Z</code>. Seule la version la plus récente compte : un candidat plus ancien qu'une version finale est abandonné. Les autres tags sont ignorés.</li>
+<li>Le tag est posé sur le dernier commit de <code>main</code> affiché dans la boîte de dialogue ; <code>409</code> si <code>main</code> a bougé entre-temps. La CI démarre sur le tag, puis Image Updater déploie le candidat en staging.</li>
+<li>L'outil MCP <code>cut_release</code> applique la même règle (<code>bump</code> : <code>candidate</code>, <code>patch</code>, <code>minor</code>, <code>major</code>). Une confirmation donnée à un assistant vaut pour ce tag et ce commit seulement.</li>
+<li>Seuls les 100 premiers tags renvoyés par GitHub sont lus : les suivants sont ignorés.</li>
+</ul>
+<h2 id="historique-des-deploiements-et-retour-arriere">Historique des déploiements et retour arrière<a class="headerlink" href="#historique-des-deploiements-et-retour-arriere" title="Permanent link">&para;</a></h2>
+<ul>
+<li>L'onglet Deployments liste aussi les apps en rolling update, pas seulement les canary : une ligne par révision (ReplicaSet) de chaque Deployment, en staging et en prod, avec les colonnes Env et Composant (cette dernière n'apparaît que si l'app a plusieurs composants). Un Deployment référencé par un Rollout (canary) est exclu : son historique est celui du canary.</li>
+<li>« Roll back » n'apparaît que sur une ligne prod d'une app avec staging, quand elle correspond à une promotion terminée, et jamais sur la version qui tourne en prod. Il relance le retour arrière de promotion existant.</li>
+<li>Ailleurs (pas de staging, ou version jamais promue) : il n'y a pas de retour arrière depuis l'historique, publier une nouvelle release.</li>
+</ul>
+<h2 id="ecart-staging-prod">Écart staging / prod<a class="headerlink" href="#ecart-staging-prod" title="Permanent link">&para;</a></h2>
+<p>Dans l'onglet Environments de l'app, une carte compare ce qui tourne, rien d'autre : tag d'image, replicas prêts, requests CPU et mémoire de chaque composant. Chaque champ a le statut « Identical », « Different » ou « — » (inconnu).</p>
+<ul>
+<li>Staging endormi (offhours) : quand tous les composants de staging sont à 0 replica voulu (0/0), la colonne Staging affiche « Asleep » et le titre « (asleep) ». Un composant endormi parmi d'autres qui tournent montre ses valeurs avec le statut « — », jamais « Different ».</li>
+<li>La carte est repliée par défaut. Son titre ne porte le nombre d'écarts que si au moins un champ est comparable. Chaque valeur a son bouton Copy (au survol, toujours visible au tactile). La carte « Release not enabled » a disparu.</li>
 </ul>
 
 

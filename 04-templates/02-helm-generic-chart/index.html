@@ -1640,6 +1640,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#e-public-paths-public-routeyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. Public Paths (public-route.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3124,6 +3135,17 @@
   
 </li>
         
+          <li class="md-nav__item">
+  <a href="#e-public-paths-public-routeyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        E. Public Paths (public-route.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
       </ul>
     </nav>
   
@@ -3287,6 +3309,7 @@
 
     subgraph Ingress &amp; Edge Routing
         Helm --&gt;|ingress.enabled| HRoute[HTTPRoute]
+        Helm --&gt;|ingress.publicPaths| PRoute[HTTPRoute: public-route]
         Helm --&gt;|ingress.enabled| CF[Deployment: cloudflared]
     end
 
@@ -3351,7 +3374,24 @@
 </span><span id="__span-2-7"><a id="__codelineno-2-7" name="__codelineno-2-7" href="#__codelineno-2-7"></a><span class="w">  </span><span class="nt">oidc</span><span class="p">:</span>
 </span><span id="__span-2-8"><a id="__codelineno-2-8" name="__codelineno-2-8" href="#__codelineno-2-8"></a><span class="w">    </span><span class="nt">provider</span><span class="p">:</span>
 </span><span id="__span-2-9"><a id="__codelineno-2-9" name="__codelineno-2-9" href="#__codelineno-2-9"></a><span class="w">      </span><span class="nt">issuer</span><span class="p">:</span><span class="w"> </span><span class="s">"https://auth.3istor.com/realms/{{</span><span class="nv"> </span><span class="s">.Values.ingress.realm</span><span class="nv"> </span><span class="s">}}"</span>
-</span></code></pre></div></p>
+</span></code></pre></div>
+  Production uses the realm <code>&lt;project&gt;</code>; the staging values file written by the CMP sets <code>ingress.realm: &lt;project&gt;-staging</code> (see <a href="../../02-core-components/02-identity-keycloak/#4-project-realms">Identity &amp; Keycloak</a>).
+* <strong>Token forwarding</strong>: <code>sso_protected: true</code> alone makes Envoy send <code>Authorization: Bearer &lt;access token&gt;</code> of the project realm to the app on every request (<code>forwardAccessToken</code>). The OIDC cookies are encrypted, so this header is the only way the app learns who is logged in. It used to require <code>allowedGroups</code>.
+* <strong><code>ingress.allowedGroups</code></strong> (empty by default) adds on top a JWT check against the realm JWKS and a default-deny rule on the <code>groups</code> claim. Values are the flat names of the project realm (<code>project-members</code>, <code>project-admins</code>).
+* <strong>The app must validate the token</strong>: issuer (per environment) and signature, against the realm JWKS. Other pods can call the app's Service without crossing the gateway, so the header alone proves nothing.</p>
+<hr />
+<h3 id="e-public-paths-public-routeyaml">E. Public Paths (<code>public-route.yaml</code>)<a class="headerlink" href="#e-public-paths-public-routeyaml" title="Permanent link">&para;</a></h3>
+<p><code>ingress.publicPaths</code> opens a few paths of an SSO-protected app, such as a webhook or a device endpoint that carries its own credentials:
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="nt">ingress</span><span class="p">:</span>
+</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="w">  </span><span class="nt">sso_protected</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">true</span>
+</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="nt">publicPaths</span><span class="p">:</span>
+</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">    </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">{</span><span class="nt"> path</span><span class="p">:</span><span class="w"> </span><span class="nv">/api/v1/telemetry</span><span class="p p-Indicator">,</span><span class="nt"> method</span><span class="p">:</span><span class="w"> </span><span class="nv">POST</span><span class="w"> </span><span class="p p-Indicator">}</span><span class="w">   </span><span class="c1"># method and match are optional</span>
+</span></code></pre></div>
+* <strong>Rendering</strong>: a second <code>HTTPRoute</code>, <code>&lt;fullname&gt;-public-route</code>, on the same hostname and gateway. The <code>SecurityPolicy</code> targets only <code>&lt;fullname&gt;-route</code>, and Gateway API ranks an <code>Exact</code> match above the <code>/</code> prefix, so these paths skip the SSO.
+* <strong>No login, no token</strong>: nothing is forwarded on these paths. The endpoint must authenticate the caller itself (optispace: the device sends its own <code>X-Api-Key</code>).
+* <strong>Matching</strong>: <code>match</code> defaults to <code>Exact</code> (<code>/a</code> does not match <code>/a/</code>); <code>PathPrefix</code> only when asked. No <code>method</code> means all methods.
+* <strong>Refused at render time</strong>: a path not starting with <code>/</code>, and <code>/</code> as a <code>PathPrefix</code> (use <code>sso_protected: false</code> instead).
+* <strong>Canary</strong>: the public route targets the <code>-stable</code> Service only; it is never part of the traffic split.</p>
 <hr />
 <h2 id="4-advanced-operational-pipelines">4. Advanced Operational Pipelines<a class="headerlink" href="#4-advanced-operational-pipelines" title="Permanent link">&para;</a></h2>
 <h3 id="a-gatus-offhours-auto-discovery-bypass-flow">A. Gatus / Offhours Auto-Discovery Bypass Flow<a class="headerlink" href="#a-gatus-offhours-auto-discovery-bypass-flow" title="Permanent link">&para;</a></h3>
@@ -3386,61 +3426,61 @@
     end</code></pre>
 <h4 id="annotation-logic">Annotation Logic<a class="headerlink" href="#annotation-logic" title="Permanent link">&para;</a></h4>
 <p>To support this behavior without manual configuration, the chart dynamically computes Gatus annotations depending on whether the app is public (uses Ingress/HTTPRoute) or strictly internal (Service only):</p>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-3-1"><a id="__codelineno-3-1" name="__codelineno-3-1" href="#__codelineno-3-1"></a><span class="c1"># templates/httproute.yaml Gatus annotation logic</span>
-</span><span id="__span-3-2"><a id="__codelineno-3-2" name="__codelineno-3-2" href="#__codelineno-3-2"></a><span class="nt">annotations</span><span class="p">:</span>
-</span><span id="__span-3-3"><a id="__codelineno-3-3" name="__codelineno-3-3" href="#__codelineno-3-3"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">gatus.3istor.com/{{ .Values.project_name }}-enabled</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">"true"</span>
-</span><span id="__span-3-4"><a id="__codelineno-3-4" name="__codelineno-3-4" href="#__codelineno-3-4"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">gatus.3istor.com/{{ .Values.project_name }}-endpoint</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
-</span><span id="__span-3-5"><a id="__codelineno-3-5" name="__codelineno-3-5" href="#__codelineno-3-5"></a><span class="w">    </span><span class="no">group: "Applications"</span>
-</span><span id="__span-3-6"><a id="__codelineno-3-6" name="__codelineno-3-6" href="#__codelineno-3-6"></a><span class="w">    </span><span class="no">{{- if .Values.offhours.enabled }}</span>
-</span><span id="__span-3-7"><a id="__codelineno-3-7" name="__codelineno-3-7" href="#__codelineno-3-7"></a><span class="w">    </span><span class="no">url: "http://offhours-guard.{{ .Values.project_name }}-system.svc.cluster.local:8082/health/{{ .Release.Namespace }}/{{ include "cnp-generic-app.fullname" . }}?port={{ (index .Values.service.ports 0).port }}&amp;path={{ .Values.monitoring.path | default "/" }}"</span>
-</span><span id="__span-3-8"><a id="__codelineno-3-8" name="__codelineno-3-8" href="#__codelineno-3-8"></a><span class="w">    </span><span class="no">{{- else }}</span>
-</span><span id="__span-3-9"><a id="__codelineno-3-9" name="__codelineno-3-9" href="#__codelineno-3-9"></a><span class="w">    </span><span class="no">url: "https://{{ .Values.ingress.hostname }}{{ .Values.monitoring.path | default "/" }}"</span>
-</span><span id="__span-3-10"><a id="__codelineno-3-10" name="__codelineno-3-10" href="#__codelineno-3-10"></a><span class="w">    </span><span class="no">{{- end }}</span>
-</span><span id="__span-3-11"><a id="__codelineno-3-11" name="__codelineno-3-11" href="#__codelineno-3-11"></a><span class="w">    </span><span class="no">conditions:</span>
-</span><span id="__span-3-12"><a id="__codelineno-3-12" name="__codelineno-3-12" href="#__codelineno-3-12"></a><span class="w">      </span><span class="no">- "[STATUS] == 200"</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a><span class="c1"># templates/httproute.yaml Gatus annotation logic</span>
+</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a><span class="nt">annotations</span><span class="p">:</span>
+</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">gatus.3istor.com/{{ .Values.project_name }}-enabled</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="s">"true"</span>
+</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">gatus.3istor.com/{{ .Values.project_name }}-endpoint</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
+</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a><span class="w">    </span><span class="no">group: "Applications"</span>
+</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a><span class="w">    </span><span class="no">{{- if .Values.offhours.enabled }}</span>
+</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a><span class="w">    </span><span class="no">url: "http://offhours-guard.{{ .Values.project_name }}-system.svc.cluster.local:8082/health/{{ .Release.Namespace }}/{{ include "cnp-generic-app.fullname" . }}?port={{ (index .Values.service.ports 0).port }}&amp;path={{ .Values.monitoring.path | default "/" }}"</span>
+</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a><span class="w">    </span><span class="no">{{- else }}</span>
+</span><span id="__span-4-9"><a id="__codelineno-4-9" name="__codelineno-4-9" href="#__codelineno-4-9"></a><span class="w">    </span><span class="no">url: "https://{{ .Values.ingress.hostname }}{{ .Values.monitoring.path | default "/" }}"</span>
+</span><span id="__span-4-10"><a id="__codelineno-4-10" name="__codelineno-4-10" href="#__codelineno-4-10"></a><span class="w">    </span><span class="no">{{- end }}</span>
+</span><span id="__span-4-11"><a id="__codelineno-4-11" name="__codelineno-4-11" href="#__codelineno-4-11"></a><span class="w">    </span><span class="no">conditions:</span>
+</span><span id="__span-4-12"><a id="__codelineno-4-12" name="__codelineno-4-12" href="#__codelineno-4-12"></a><span class="w">      </span><span class="no">- "[STATUS] == 200"</span>
 </span></code></pre></div>
 <hr />
 <h3 id="b-database-provisioning-garage-s3-backups-cnpg">B. Database Provisioning &amp; Garage S3 Backups (CNPG)<a class="headerlink" href="#b-database-provisioning-garage-s3-backups-cnpg" title="Permanent link">&para;</a></h3>
 <p>When <code>db.enabled: true</code> is configured, the chart deploys a CloudNativePG (CNPG) postgres cluster. To survive physical node or site failures, the database is configured for continuous WAL archiving and automated daily backups on local <strong>Garage S3</strong> buckets.</p>
 <h4 id="database-archiving-architecture">Database Archiving Architecture:<a class="headerlink" href="#database-archiving-architecture" title="Permanent link">&para;</a></h4>
-<div class="language-text highlight"><pre><span></span><code><span id="__span-4-1"><a id="__codelineno-4-1" name="__codelineno-4-1" href="#__codelineno-4-1"></a>  [ HashiCorp Vault ]
-</span><span id="__span-4-2"><a id="__codelineno-4-2" name="__codelineno-4-2" href="#__codelineno-4-2"></a>          │ (Decrypts Credentials)
-</span><span id="__span-4-3"><a id="__codelineno-4-3" name="__codelineno-4-3" href="#__codelineno-4-3"></a>          ▼
-</span><span id="__span-4-4"><a id="__codelineno-4-4" name="__codelineno-4-4" href="#__codelineno-4-4"></a>   [ VaultSecret ]
-</span><span id="__span-4-5"><a id="__codelineno-4-5" name="__codelineno-4-5" href="#__codelineno-4-5"></a>          │ (Syncs K8s Secret)
-</span><span id="__span-4-6"><a id="__codelineno-4-6" name="__codelineno-4-6" href="#__codelineno-4-6"></a>          ▼
-</span><span id="__span-4-7"><a id="__codelineno-4-7" name="__codelineno-4-7" href="#__codelineno-4-7"></a>   [ CNPG Cluster ] ──(Continuous WAL Archiving)──► [ Garage S3 Bucket ]
-</span><span id="__span-4-8"><a id="__codelineno-4-8" name="__codelineno-4-8" href="#__codelineno-4-8"></a>  (db-secrets / s3-creds)                             (s3.3istor.com)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a>  [ HashiCorp Vault ]
+</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a>          │ (Decrypts Credentials)
+</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a>          ▼
+</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a>   [ VaultSecret ]
+</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a>          │ (Syncs K8s Secret)
+</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a>          ▼
+</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a>   [ CNPG Cluster ] ──(Continuous WAL Archiving)──► [ Garage S3 Bucket ]
+</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>  (db-secrets / s3-creds)                             (s3.3istor.com)
 </span></code></pre></div>
 <h4 id="cnpg-cluster-resource-mapping">CNPG Cluster Resource Mapping:<a class="headerlink" href="#cnpg-cluster-resource-mapping" title="Permanent link">&para;</a></h4>
-<div class="language-yaml highlight"><pre><span></span><code><span id="__span-5-1"><a id="__codelineno-5-1" name="__codelineno-5-1" href="#__codelineno-5-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgresql.cnpg.io/v1</span>
-</span><span id="__span-5-2"><a id="__codelineno-5-2" name="__codelineno-5-2" href="#__codelineno-5-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
-</span><span id="__span-5-3"><a id="__codelineno-5-3" name="__codelineno-5-3" href="#__codelineno-5-3"></a><span class="nt">metadata</span><span class="p">:</span>
-</span><span id="__span-5-4"><a id="__codelineno-5-4" name="__codelineno-5-4" href="#__codelineno-5-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "cnp-generic-app.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-db</span>
-</span><span id="__span-5-5"><a id="__codelineno-5-5" name="__codelineno-5-5" href="#__codelineno-5-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Release.Namespace</span><span class="w"> </span><span class="p p-Indicator">}}</span>
-</span><span id="__span-5-6"><a id="__codelineno-5-6" name="__codelineno-5-6" href="#__codelineno-5-6"></a><span class="nt">spec</span><span class="p">:</span>
-</span><span id="__span-5-7"><a id="__codelineno-5-7" name="__codelineno-5-7" href="#__codelineno-5-7"></a><span class="w">  </span><span class="nt">instances</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
-</span><span id="__span-5-8"><a id="__codelineno-5-8" name="__codelineno-5-8" href="#__codelineno-5-8"></a>
-</span><span id="__span-5-9"><a id="__codelineno-5-9" name="__codelineno-5-9" href="#__codelineno-5-9"></a><span class="w">  </span><span class="c1"># Credentials matching the synced Vault secret</span>
-</span><span id="__span-5-10"><a id="__codelineno-5-10" name="__codelineno-5-10" href="#__codelineno-5-10"></a><span class="w">  </span><span class="nt">bootstrap</span><span class="p">:</span>
-</span><span id="__span-5-11"><a id="__codelineno-5-11" name="__codelineno-5-11" href="#__codelineno-5-11"></a><span class="w">    </span><span class="nt">initdb</span><span class="p">:</span>
-</span><span id="__span-5-12"><a id="__codelineno-5-12" name="__codelineno-5-12" href="#__codelineno-5-12"></a><span class="w">      </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.db.name | default .Values.app_name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
-</span><span id="__span-5-13"><a id="__codelineno-5-13" name="__codelineno-5-13" href="#__codelineno-5-13"></a><span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
-</span><span id="__span-5-14"><a id="__codelineno-5-14" name="__codelineno-5-14" href="#__codelineno-5-14"></a><span class="w">      </span><span class="nt">secret</span><span class="p">:</span>
-</span><span id="__span-5-15"><a id="__codelineno-5-15" name="__codelineno-5-15" href="#__codelineno-5-15"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "cnp-generic-app.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-secrets</span>
-</span><span id="__span-5-16"><a id="__codelineno-5-16" name="__codelineno-5-16" href="#__codelineno-5-16"></a>
-</span><span id="__span-5-17"><a id="__codelineno-5-17" name="__codelineno-5-17" href="#__codelineno-5-17"></a><span class="w">  </span><span class="c1"># Persistent Storage</span>
-</span><span id="__span-5-18"><a id="__codelineno-5-18" name="__codelineno-5-18" href="#__codelineno-5-18"></a><span class="w">  </span><span class="nt">storage</span><span class="p">:</span>
-</span><span id="__span-5-19"><a id="__codelineno-5-19" name="__codelineno-5-19" href="#__codelineno-5-19"></a><span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.db.storage | default "1Gi"</span><span class="w"> </span><span class="p p-Indicator">}}</span>
-</span><span id="__span-5-20"><a id="__codelineno-5-20" name="__codelineno-5-20" href="#__codelineno-5-20"></a><span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local-path</span>
-</span><span id="__span-5-21"><a id="__codelineno-5-21" name="__codelineno-5-21" href="#__codelineno-5-21"></a>
-</span><span id="__span-5-22"><a id="__codelineno-5-22" name="__codelineno-5-22" href="#__codelineno-5-22"></a><span class="w">  </span><span class="c1"># Continuous Archiving to S3</span>
-</span><span id="__span-5-23"><a id="__codelineno-5-23" name="__codelineno-5-23" href="#__codelineno-5-23"></a><span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
-</span><span id="__span-5-24"><a id="__codelineno-5-24" name="__codelineno-5-24" href="#__codelineno-5-24"></a><span class="w">    </span><span class="nt">barmanObjectStore</span><span class="p">:</span>
-</span><span id="__span-5-25"><a id="__codelineno-5-25" name="__codelineno-5-25" href="#__codelineno-5-25"></a><span class="w">      </span><span class="nt">destinationPath</span><span class="p">:</span><span class="w"> </span><span class="s">"s3://database-backups/{{</span><span class="nv"> </span><span class="s">.Values.project_name</span><span class="nv"> </span><span class="s">}}/{{</span><span class="nv"> </span><span class="s">.Values.app_name</span><span class="nv"> </span><span class="s">}}"</span>
-</span><span id="__span-5-26"><a id="__codelineno-5-26" name="__codelineno-5-26" href="#__codelineno-5-26"></a><span class="w">      </span><span class="nt">endpointURL</span><span class="p">:</span><span class="w"> </span><span class="s">"https://s3.3istor.com"</span>
-</span><span id="__span-5-27"><a id="__codelineno-5-27" name="__codelineno-5-27" href="#__codelineno-5-27"></a><span class="w">      </span><span class="nt">s3Credentials</span><span class="p">:</span>
-</span><span id="__span-5-28"><a id="__codelineno-5-28" name="__codelineno-5-28" href="#__codelineno-5-28"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "cnp-generic-app.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-secrets</span><span class="w"> </span><span class="c1"># Uses the Vault-synced secret</span>
+<div class="language-yaml highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a><span class="nt">apiVersion</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">postgresql.cnpg.io/v1</span>
+</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a><span class="nt">kind</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Cluster</span>
+</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a><span class="nt">metadata</span><span class="p">:</span>
+</span><span id="__span-6-4"><a id="__codelineno-6-4" name="__codelineno-6-4" href="#__codelineno-6-4"></a><span class="w">  </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "cnp-generic-app.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-db</span>
+</span><span id="__span-6-5"><a id="__codelineno-6-5" name="__codelineno-6-5" href="#__codelineno-6-5"></a><span class="w">  </span><span class="nt">namespace</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Release.Namespace</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-6-6"><a id="__codelineno-6-6" name="__codelineno-6-6" href="#__codelineno-6-6"></a><span class="nt">spec</span><span class="p">:</span>
+</span><span id="__span-6-7"><a id="__codelineno-6-7" name="__codelineno-6-7" href="#__codelineno-6-7"></a><span class="w">  </span><span class="nt">instances</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1</span>
+</span><span id="__span-6-8"><a id="__codelineno-6-8" name="__codelineno-6-8" href="#__codelineno-6-8"></a>
+</span><span id="__span-6-9"><a id="__codelineno-6-9" name="__codelineno-6-9" href="#__codelineno-6-9"></a><span class="w">  </span><span class="c1"># Credentials matching the synced Vault secret</span>
+</span><span id="__span-6-10"><a id="__codelineno-6-10" name="__codelineno-6-10" href="#__codelineno-6-10"></a><span class="w">  </span><span class="nt">bootstrap</span><span class="p">:</span>
+</span><span id="__span-6-11"><a id="__codelineno-6-11" name="__codelineno-6-11" href="#__codelineno-6-11"></a><span class="w">    </span><span class="nt">initdb</span><span class="p">:</span>
+</span><span id="__span-6-12"><a id="__codelineno-6-12" name="__codelineno-6-12" href="#__codelineno-6-12"></a><span class="w">      </span><span class="nt">database</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.db.name | default .Values.app_name</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-6-13"><a id="__codelineno-6-13" name="__codelineno-6-13" href="#__codelineno-6-13"></a><span class="w">      </span><span class="nt">owner</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">app</span>
+</span><span id="__span-6-14"><a id="__codelineno-6-14" name="__codelineno-6-14" href="#__codelineno-6-14"></a><span class="w">      </span><span class="nt">secret</span><span class="p">:</span>
+</span><span id="__span-6-15"><a id="__codelineno-6-15" name="__codelineno-6-15" href="#__codelineno-6-15"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "cnp-generic-app.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-secrets</span>
+</span><span id="__span-6-16"><a id="__codelineno-6-16" name="__codelineno-6-16" href="#__codelineno-6-16"></a>
+</span><span id="__span-6-17"><a id="__codelineno-6-17" name="__codelineno-6-17" href="#__codelineno-6-17"></a><span class="w">  </span><span class="c1"># Persistent Storage</span>
+</span><span id="__span-6-18"><a id="__codelineno-6-18" name="__codelineno-6-18" href="#__codelineno-6-18"></a><span class="w">  </span><span class="nt">storage</span><span class="p">:</span>
+</span><span id="__span-6-19"><a id="__codelineno-6-19" name="__codelineno-6-19" href="#__codelineno-6-19"></a><span class="w">    </span><span class="nt">size</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">.Values.db.storage | default "1Gi"</span><span class="w"> </span><span class="p p-Indicator">}}</span>
+</span><span id="__span-6-20"><a id="__codelineno-6-20" name="__codelineno-6-20" href="#__codelineno-6-20"></a><span class="w">    </span><span class="nt">storageClass</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">local-path</span>
+</span><span id="__span-6-21"><a id="__codelineno-6-21" name="__codelineno-6-21" href="#__codelineno-6-21"></a>
+</span><span id="__span-6-22"><a id="__codelineno-6-22" name="__codelineno-6-22" href="#__codelineno-6-22"></a><span class="w">  </span><span class="c1"># Continuous Archiving to S3</span>
+</span><span id="__span-6-23"><a id="__codelineno-6-23" name="__codelineno-6-23" href="#__codelineno-6-23"></a><span class="w">  </span><span class="nt">backup</span><span class="p">:</span>
+</span><span id="__span-6-24"><a id="__codelineno-6-24" name="__codelineno-6-24" href="#__codelineno-6-24"></a><span class="w">    </span><span class="nt">barmanObjectStore</span><span class="p">:</span>
+</span><span id="__span-6-25"><a id="__codelineno-6-25" name="__codelineno-6-25" href="#__codelineno-6-25"></a><span class="w">      </span><span class="nt">destinationPath</span><span class="p">:</span><span class="w"> </span><span class="s">"s3://database-backups/{{</span><span class="nv"> </span><span class="s">.Values.project_name</span><span class="nv"> </span><span class="s">}}/{{</span><span class="nv"> </span><span class="s">.Values.app_name</span><span class="nv"> </span><span class="s">}}"</span>
+</span><span id="__span-6-26"><a id="__codelineno-6-26" name="__codelineno-6-26" href="#__codelineno-6-26"></a><span class="w">      </span><span class="nt">endpointURL</span><span class="p">:</span><span class="w"> </span><span class="s">"https://s3.3istor.com"</span>
+</span><span id="__span-6-27"><a id="__codelineno-6-27" name="__codelineno-6-27" href="#__codelineno-6-27"></a><span class="w">      </span><span class="nt">s3Credentials</span><span class="p">:</span>
+</span><span id="__span-6-28"><a id="__codelineno-6-28" name="__codelineno-6-28" href="#__codelineno-6-28"></a><span class="w">        </span><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">{{</span><span class="w"> </span><span class="nv">include "cnp-generic-app.fullname" .</span><span class="w"> </span><span class="p p-Indicator">}}</span><span class="l l-Scalar l-Scalar-Plain">-secrets</span><span class="w"> </span><span class="c1"># Uses the Vault-synced secret</span>
 </span></code></pre></div>
 <hr />
 <h2 id="5-handling-multi-tier-applications-eg-react-fastapi">5. Handling Multi-Tier Applications (e.g., React + FastAPI)<a class="headerlink" href="#5-handling-multi-tier-applications-eg-react-fastapi" title="Permanent link">&para;</a></h2>
@@ -3448,9 +3488,9 @@
 For complex architectures like the <code>template-app-webapp-python-fastapi-react</code> stack, the CMP provisions <strong>multiple ArgoCD Applications</strong>, all pointing to this exact same Helm chart, but feeding it different values files.</p>
 <h3 id="the-multi-tier-gitops-setup">The Multi-Tier GitOps Setup<a class="headerlink" href="#the-multi-tier-gitops-setup" title="Permanent link">&para;</a></h3>
 <p>In a full-stack repository, the <code>deploy/</code> folder looks like this:
-<div class="language-text highlight"><pre><span></span><code><span id="__span-6-1"><a id="__codelineno-6-1" name="__codelineno-6-1" href="#__codelineno-6-1"></a>deploy/
-</span><span id="__span-6-2"><a id="__codelineno-6-2" name="__codelineno-6-2" href="#__codelineno-6-2"></a>├── values-frontend.yaml  (React)
-</span><span id="__span-6-3"><a id="__codelineno-6-3" name="__codelineno-6-3" href="#__codelineno-6-3"></a>└── values-backend.yaml   (FastAPI)
+<div class="language-text highlight"><pre><span></span><code><span id="__span-7-1"><a id="__codelineno-7-1" name="__codelineno-7-1" href="#__codelineno-7-1"></a>deploy/
+</span><span id="__span-7-2"><a id="__codelineno-7-2" name="__codelineno-7-2" href="#__codelineno-7-2"></a>├── values-frontend.yaml  (React)
+</span><span id="__span-7-3"><a id="__codelineno-7-3" name="__codelineno-7-3" href="#__codelineno-7-3"></a>└── values-backend.yaml   (FastAPI)
 </span></code></pre></div></p>
 <p><strong>Backend Instantiation (<code>values-backend.yaml</code>):</strong>
 * <code>image.repository</code>: <code>ghcr.io/3-istor/[app]/backend</code>

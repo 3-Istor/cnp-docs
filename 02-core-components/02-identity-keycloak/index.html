@@ -1145,6 +1145,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4-project-realms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Project Realms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-customer-sign-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Customer Sign-up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-version-and-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Version and Upgrades
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3130,6 +3163,39 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#4-project-realms" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Project Realms
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-customer-sign-up" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. Customer Sign-up
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-version-and-upgrades" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Version and Upgrades
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3148,7 +3214,7 @@
 
 
 <h1 id="identity-access-management-keycloak-integration">Identity &amp; Access Management: Keycloak Integration<a class="headerlink" href="#identity-access-management-keycloak-integration" title="Permanent link">&para;</a></h1>
-<p>Keycloak serves as the central Identity Provider (IdP) for the entire CNP ecosystem. It secures the developer portal (CMP), infrastructure platforms (Vault, ArgoCD), and deployed end-user applications via Envoy Gateway edge routing.</p>
+<p>Keycloak serves as the central Identity Provider (IdP) for the entire CNP ecosystem. It secures the developer portal (CMP), infrastructure platforms (Vault, ArgoCD), and deployed end-user applications via Envoy Gateway edge routing. The central instance runs Keycloak <strong>26.8.1</strong> (see <a href="#6-version-and-upgrades">section 6</a>).</p>
 <hr />
 <h2 id="1-custom-theme-extraction-pipeline-devops">1. Custom Theme Extraction Pipeline (DevOps)<a class="headerlink" href="#1-custom-theme-extraction-pipeline-devops" title="Permanent link">&para;</a></h2>
 <p>To provide a cohesive brand identity for the portal, CNP implements a customized theme named <code>keycloak-theme-kube-lab</code>. </p>
@@ -3157,7 +3223,7 @@
 <pre class="mermaid"><code>flowchart LR
     subgraph Pod [Keycloak Pod]
         subgraph InitContainer [InitContainer: theme-provider-init]
-            Image[ghcr.io/thegostsniperfr/keycloak-theme-kube-lab:latest]
+            Image[ghcr.io/thegostsniperfr/keycloak-theme-kube-lab@sha256:c31626bb...]
             Image --&gt;|Extracts theme files| MountInit[/providers/]
         end
 
@@ -3182,13 +3248,15 @@
 </span><span id="__span-0-11"><a id="__codelineno-0-11" name="__codelineno-0-11" href="#__codelineno-0-11"></a><span class="c1"># InitContainer copy-paste mechanism</span>
 </span><span id="__span-0-12"><a id="__codelineno-0-12" name="__codelineno-0-12" href="#__codelineno-0-12"></a><span class="nt">extraInitContainers</span><span class="p">:</span><span class="w"> </span><span class="p p-Indicator">|</span>
 </span><span id="__span-0-13"><a id="__codelineno-0-13" name="__codelineno-0-13" href="#__codelineno-0-13"></a><span class="w">  </span><span class="no">- name: theme-provider-init</span>
-</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="no">image: ghcr.io/thegostsniperfr/keycloak-theme-kube-lab:latest</span>
-</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="no">imagePullPolicy: Always</span>
-</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="no">volumeMounts:</span>
-</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">      </span><span class="no">- name: theme-providers</span>
-</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">        </span><span class="no">mountPath: /providers</span>
+</span><span id="__span-0-14"><a id="__codelineno-0-14" name="__codelineno-0-14" href="#__codelineno-0-14"></a><span class="w">    </span><span class="no"># Pinned: the theme overrides internal login templates and must be retested on every Keycloak bump.</span>
+</span><span id="__span-0-15"><a id="__codelineno-0-15" name="__codelineno-0-15" href="#__codelineno-0-15"></a><span class="w">    </span><span class="no">image: ghcr.io/thegostsniperfr/keycloak-theme-kube-lab@sha256:c31626bb1de27aea9339e6d8fab99d0d4b395c6165ee52f10698083e522dd37a</span>
+</span><span id="__span-0-16"><a id="__codelineno-0-16" name="__codelineno-0-16" href="#__codelineno-0-16"></a><span class="w">    </span><span class="no">imagePullPolicy: IfNotPresent</span>
+</span><span id="__span-0-17"><a id="__codelineno-0-17" name="__codelineno-0-17" href="#__codelineno-0-17"></a><span class="w">    </span><span class="no">volumeMounts:</span>
+</span><span id="__span-0-18"><a id="__codelineno-0-18" name="__codelineno-0-18" href="#__codelineno-0-18"></a><span class="w">      </span><span class="no">- name: theme-providers</span>
+</span><span id="__span-0-19"><a id="__codelineno-0-19" name="__codelineno-0-19" href="#__codelineno-0-19"></a><span class="w">        </span><span class="no">mountPath: /providers</span>
 </span></code></pre></div>
 <p>On pod startup, the <code>theme-provider-init</code> container copies its theme files into <code>/providers</code> (the shared volume) and exits. The main Keycloak container then starts, mounts the same volume at <code>/opt/keycloak/providers</code>, reads the theme files, and compiles the visual layer.</p>
+<p>The theme image used to follow <code>:latest</code> with <code>imagePullPolicy: Always</code>, so a theme release could break the login page at any pod restart. It is now pinned on a digest: moving it is a deliberate change, made together with a Keycloak bump and followed by a login test.</p>
 <hr />
 <h2 id="2-browser-authentication-flow-browser-3-istor-login-v4">2. Browser Authentication Flow (<code>Browser-3-istor-Login-v4</code>)<a class="headerlink" href="#2-browser-authentication-flow-browser-3-istor-login-v4" title="Permanent link">&para;</a></h2>
 <p>CNP enforces a secure, two-stage authentication and authorization flow. Even if an attacker compromises a user's credentials and passes MFA, Keycloak blocks access at the IdP level if the user lacks the explicit authorization role.</p>
@@ -3237,9 +3305,13 @@
 <h2 id="3-project-scopes-group-mappings">3. Project Scopes &amp; Group Mappings<a class="headerlink" href="#3-project-scopes-group-mappings" title="Permanent link">&para;</a></h2>
 <p>Keycloak maps tenant permissions into OIDC tokens to enforce downstream security boundaries.</p>
 <h3 id="project-group-convention">Project Group Convention<a class="headerlink" href="#project-group-convention" title="Permanent link">&para;</a></h3>
-<p>When a project is created, the CMP dynamically provisions two Keycloak groups:
+<p>When a project is created, the CMP dynamically provisions three groups in the platform realm (<code>3istor</code>):
 * <code>project-&lt;project_name&gt;-admins</code>
-* <code>project-&lt;project_name&gt;-members</code></p>
+* <code>project-&lt;project_name&gt;-members</code>
+* <code>project-&lt;project_name&gt;-guests</code></p>
+<p>Each project realm (see <a href="#4-project-realms">section 4</a>) has its own flat groups, filled at every broker login from the platform groups above (the mapper re-evaluates the claim each time, so removing someone from the platform group removes them from the realm group at their next login):
+* <code>project-admins</code> and <code>project-members</code>: the project's developers. These are the names applications and <code>ingress.allowedGroups</code> see.
+* <code>users</code>: only in the prod realm <code>&lt;p&gt;</code>, created when <a href="#5-customer-sign-up">customer sign-up</a> is first turned on, never in <code>&lt;p&gt;-staging</code>. It is the realm's default group: Keycloak adds it to <strong>every</strong> new account (sign-ups, accounts an app creates, service-account users, developers at their first broker login), so it does not mean "customer". Apps rely on organization membership instead.</p>
 <h3 id="oidc-scope-mapping-groups-scope">OIDC Scope Mapping (<code>groups</code> scope)<a class="headerlink" href="#oidc-scope-mapping-groups-scope" title="Permanent link">&para;</a></h3>
 <p>To transmit these memberships securely to downstream consumers (ArgoCD, Envoy Gateway, Vault), Keycloak maps group memberships into the JWT token payload.</p>
 <div class="language-hcl highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># terraform/scopes.tf extract</span>
@@ -3260,8 +3332,78 @@
 <h3 id="downstream-consumption-matrix">Downstream Consumption Matrix:<a class="headerlink" href="#downstream-consumption-matrix" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>ArgoCD</strong>: Reads the <code>groups</code> claim. If it contains <code>project-alpha-admins</code>, it grants sync/override permissions inside the matching <code>project-alpha</code> ArgoCD <code>AppProject</code>.</li>
-<li><strong>Envoy Gateway</strong>: Reads the <code>groups</code> claim at the edge. If the user tries to access <code>api.alpha.3istor.com</code> but lacks <code>project-alpha-members</code> or <code>project-alpha-admins</code>, Envoy blocks the connection.</li>
+<li><strong>Envoy Gateway</strong>: Reads the <code>groups</code> claim of the project realm token at the edge. If <code>ingress.allowedGroups</code> is set and the user tries to access <code>api.alpha.3istor.com</code> without <code>project-members</code> or <code>project-admins</code>, Envoy blocks the connection. Token forwarding is described in the <a href="../../04-templates/02-helm-generic-chart/#d-edge-sso-openid-connect-securitypolicyyaml">generic chart</a>.</li>
 <li><strong>Vault</strong>: Maps the <code>groups</code> claim to a Vault identity group alias, granting access to the <code>kvv2/data/projects/alpha/*</code> path.</li>
+</ul>
+<hr />
+<h2 id="4-project-realms">4. Project Realms<a class="headerlink" href="#4-project-realms" title="Permanent link">&para;</a></h2>
+<p>Each project owns its Keycloak realms for the end users of its apps. Developers log in there through a broker ("Log in with 3istor Platform", identity provider <code>3istor-platform</code>) that points at a client of the platform realm.</p>
+<table>
+<thead>
+<tr>
+<th>Realm</th>
+<th>Created</th>
+<th>Sign-up</th>
+<th>Admin login (Vault, mount <code>project-&lt;p&gt;</code>)</th>
+<th>App clients</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;p&gt;</code> (prod)</td>
+<td>with the project</td>
+<td>closed, unless <a href="#5-customer-sign-up">customer sign-up</a> is on</td>
+<td><code>keycloak-tenant-admin</code></td>
+<td><code>cnp-&lt;p&gt;-&lt;app&gt;</code></td>
+</tr>
+<tr>
+<td><code>&lt;p&gt;-staging</code></td>
+<td>at the first staging activation of an app</td>
+<td>never open</td>
+<td><code>keycloak-tenant-admin-staging</code></td>
+<td><code>cnp-&lt;p&gt;-&lt;app&gt;-stg</code></td>
+</tr>
+</tbody>
+</table>
+<p>The staging realm has the same content as the prod one (broker client <code>broker-&lt;p&gt;-staging</code> in <code>3istor</code>, groups <code>project-members</code> / <code>project-admins</code> with their mappers, <code>groups</code> scope, a local <code>admin</code>), so developers log in to staging with their usual account. It is created by the Terraform module <code>app-templates/templates/k3s-gitops-app/staging-realm</code> (state <code>cnp/projects/&lt;p&gt;/_staging-realm</code>) and destroyed with the project. A project name ending in <code>-staging</code> is refused.</p>
+<ul>
+<li><strong>Wiring</strong>: when staging is turned on, the CMP writes <code>ingress.realm</code> and <code>auth.realm</code> in <code>deploy/env/staging/*.yaml</code>, so the staging route authenticates against the staging realm. An app that validates tokens must therefore read its issuer per environment (<code>https://auth.3istor.com/realms/&lt;p&gt;-staging</code>); a prod issuer rejects every staging token.</li>
+<li><strong>Test accounts on staging</strong>: create them in the staging realm, with the console (<code>https://admin-auth.3istor.com/admin/&lt;p&gt;-staging/console/</code>, credentials in Vault) or, with customer sign-up on, through the staging app's own client.</li>
+<li><strong>Existing staging apps</strong> created before the staging realm existed are moved with <code>python -m app.scripts.move_staging_realm &lt;deployment id&gt;</code> (CMP backend, platform admin, one-off per app). The staging OIDC client is recreated in the new realm.</li>
+<li><strong>Own Keycloak</strong>: an app whose config sets <code>keycloak_realm_id</code> keeps that realm in staging. No <code>&lt;p&gt;-staging</code> is created for it and the move script has nothing to move.</li>
+</ul>
+<hr />
+<h2 id="5-customer-sign-up">5. Customer Sign-up<a class="headerlink" href="#5-customer-sign-up" title="Permanent link">&para;</a></h2>
+<p>Lets the end customers of a project's apps create their own accounts. Off by default.</p>
+<ul>
+<li><strong>Switch</strong>: project "···" menu, "Turn on customer sign-up" / "Turn off customer sign-up" (project admins and platform admins). API: <code>PUT /api/projects/{name}/customer-signup</code> with <code>{"enabled": true|false}</code>, refused (<code>403</code>) for AI assistants because opening a project to the public is a person's decision. The state is <code>spec.selfRegistration</code> in the project registry.</li>
+<li><strong>On</strong>:<ul>
+<li>The realm <code>&lt;p&gt;</code> opens registration. Sign-ups land in the default group <code>users</code> (created if missing), never in <code>project-members</code>.</li>
+<li>Organizations are enabled in <code>&lt;p&gt;</code> and <code>&lt;p&gt;-staging</code>.</li>
+<li>Each app client gets a service account holding <code>manage-organizations</code> and <code>manage-users</code> of its own realm (never <code>manage-realm</code>; Keycloak grants viewing users with <code>manage-users</code>), and the <code>organization</code> default scope, so tokens carry an <code>organization</code> claim. Prod clients <code>cnp-&lt;p&gt;-&lt;app&gt;</code> get this in <code>&lt;p&gt;</code> only, staging clients <code>cnp-&lt;p&gt;-&lt;app&gt;-stg</code> in <code>&lt;p&gt;-staging</code> only.</li>
+<li>Staging never opens registration.</li>
+</ul>
+</li>
+<li><strong>Re-applied</strong> when an app is created and when staging is activated, so new clients get their rights. Re-applying the app Terraform keeps the default scopes and service account the CMP added. A Keycloak failure never fails the deployment. Turning on, a failure answers <code>502</code> after saving the flag, and sending the value again retries.</li>
+<li><strong>Off</strong> only closes registration. Organizations, accounts, group and service accounts stay. Keycloak is called first and the flag written after, so a failure answers <code>502</code> and leaves sign-up on.</li>
+<li><strong>No e-mail</strong>: there is no SMTP, so no address verification and no organization invitation. The app adds members itself.</li>
+<li><strong>How an app uses it</strong>: with its own client id and secret (already delivered by Vault), the app gets a <code>client_credentials</code> token from its realm and calls <code>/admin/realms/&lt;realm&gt;/organizations</code> to create an organization and add a member, and creates an organization group <code>admins</code> for the company's administrators. The app-side recipe is in the template's <code>using-cnp-services/reference/identity.md</code>.</li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code>manage-users</code> lets an app edit any user of its realm, including the group membership of brokered developers. A leaked app client secret therefore lets its holder edit any account of that realm: keep app secrets tight.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>The realm is shared by all apps of the project. With sign-up on, any self-registered account passes the SSO of every app exposed to "project users" (SSO without <code>allowedGroups</code>). Switch internal apps to "project members" before turning sign-up on.</p>
+</div>
+<hr />
+<h2 id="6-version-and-upgrades">6. Version and Upgrades<a class="headerlink" href="#6-version-and-upgrades" title="Permanent link">&para;</a></h2>
+<ul>
+<li><strong>Version</strong>: 26.8.1, set by <code>image.tag</code> in <code>k8s/config/keycloak/values.yaml</code> of the K3s repository.</li>
+<li><strong>Procedure</strong>: rehearse on a copy of the Keycloak database, take a <code>pg_dump</code> just before, then upgrade. The schema migrations of 26.6 and 26.8 are one-way: the rollback is the previous image <strong>plus</strong> the restored dump, not a downgrade in place.</li>
+<li><strong>Sessions</strong>: since 26.7, session cookies use SHA-384, so every user logs in once again after the upgrade.</li>
+<li><strong>Open point</strong>: the Keycloak database has no scheduled backup (follow-up). Until then, the <code>pg_dump</code> taken before an upgrade is the only copy.</li>
 </ul>
 <hr />
 <p><strong>Next Step</strong>: Continue to <a href="../04-gitops-argocd/">ArgoCD GitOps Delivery Specifications</a> (or return to the <a href="../../">Project Overview</a>).</p>
