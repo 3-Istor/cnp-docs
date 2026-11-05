@@ -20,7 +20,7 @@ Le bouton propose les tags d'après ceux du dépôt, sans rien à saisir :
 - Une version est promue quand elle porte un tag `release/X.Y.Z-rc.N` (laissé par une promotion) ou un tag final `vX.Y.Z`. Seule la version la plus récente compte : un candidat plus ancien qu'une version finale est abandonné. Les autres tags sont ignorés.
 - Le tag est posé sur le dernier commit de `main` affiché dans la boîte de dialogue ; `409` si `main` a bougé entre-temps. La CI démarre sur le tag, puis Image Updater déploie le candidat en staging.
 - L'outil MCP `cut_release` applique la même règle (`bump` : `candidate`, `patch`, `minor`, `major`). Une confirmation donnée à un assistant vaut pour ce tag et ce commit seulement.
-- Seuls les 100 premiers tags du dépôt sont lus : au-delà, les plus récents peuvent manquer aux choix proposés.
+- Seuls les 100 premiers tags renvoyés par GitHub sont lus : les suivants sont ignorés.
 
 ## Historique des déploiements et retour arrière
 
