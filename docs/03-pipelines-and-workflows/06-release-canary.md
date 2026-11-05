@@ -20,6 +20,7 @@ Le bouton propose les tags d'après ceux du dépôt, sans rien à saisir :
 - Une version est promue quand elle porte un tag `release/X.Y.Z-rc.N` (laissé par une promotion) ou un tag final `vX.Y.Z`. Seule la version la plus récente compte : un candidat plus ancien qu'une version finale est abandonné. Les autres tags sont ignorés.
 - Le tag est posé sur le dernier commit de `main` affiché dans la boîte de dialogue ; `409` si `main` a bougé entre-temps. La CI démarre sur le tag, puis Image Updater déploie le candidat en staging.
 - L'outil MCP `cut_release` applique la même règle (`bump` : `candidate`, `patch`, `minor`, `major`). Une confirmation donnée à un assistant vaut pour ce tag et ce commit seulement.
+- Seuls les 100 premiers tags du dépôt sont lus : au-delà, les plus récents peuvent manquer aux choix proposés.
 
 ## Historique des déploiements et retour arrière
 
@@ -29,7 +30,7 @@ Le bouton propose les tags d'après ceux du dépôt, sans rien à saisir :
 
 ## Écart staging / prod
 
-Une carte compare ce qui tourne, rien d'autre : tag d'image, replicas prêts, requests CPU et mémoire de chaque composant. Chaque champ vaut `same`, `differs` ou `unknown`.
+Dans l'onglet Environments de l'app, une carte compare ce qui tourne, rien d'autre : tag d'image, replicas prêts, requests CPU et mémoire de chaque composant. Chaque champ a le statut « Identical », « Different » ou « — » (inconnu).
 
-- Un composant endormi en staging (offhours, 0 replica prêt) affiche « Asleep » et n'est jamais « différent » : ses champs restent `unknown`.
-- La carte est repliée par défaut, avec le nombre d'écarts dans son titre, et se copie en un clic. La carte « Release not enabled » a disparu.
+- Staging endormi (offhours) : quand tous les composants de staging sont à 0 replica voulu (0/0), la colonne Staging affiche « Asleep » et le titre « (asleep) ». Un composant endormi parmi d'autres qui tournent montre ses valeurs avec le statut « — », jamais « Different ».
+- La carte est repliée par défaut. Son titre ne porte le nombre d'écarts que si au moins un champ est comparable. Chaque valeur a son bouton Copy (au survol, toujours visible au tactile). La carte « Release not enabled » a disparu.

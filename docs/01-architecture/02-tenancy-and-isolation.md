@@ -141,7 +141,7 @@ Edge security is enforced at the network proxy layer, eliminating the need for d
 1. **Authentication Handshake**: Envoy Gateway terminates incoming TLS connections at the edge.
 2. **SecurityPolicy Binding**: If `sso_protected: true` is enabled in `values.yaml`, Envoy intercepts the route using an OIDC filter.
 3. **Keycloak Validation**: Envoy redirects unauthenticated users to Keycloak.
-4. **Token Verification**: Keycloak mints a JWT token on success. When `ingress.allowedGroups` is set, Envoy verifies the signature and checks that the user's `groups` claim contains `project-members` or `project-admins` before forwarding the HTTP request to the target pod. Without `allowedGroups`, any account of the project realm gets in. The access token is forwarded to the app in both cases, and the app must validate it.
+4. **Token Verification**: Keycloak mints a JWT token on success. When `ingress.allowedGroups` is set, Envoy verifies the signature and checks that the user's `groups` claim contains `project-members` or `project-admins` before forwarding the request; the token is forwarded to the app either way (see the [generic chart](../04-templates/02-helm-generic-chart.md#d-edge-sso-openid-connect-securitypolicyyaml)).
 
 Each project owns two Keycloak realms for its apps, and the group names differ between realms (details in [Identity & Keycloak](../02-core-components/02-identity-keycloak.md#4-project-realms)):
 
@@ -149,7 +149,7 @@ Each project owns two Keycloak realms for its apps, and the group names differ b
 | :--- | :--- | :--- |
 | Platform (`3istor`) | `project-<p>-admins`, `project-<p>-members`, `project-<p>-guests` | Developers; read by Argo CD and Vault |
 | `<p>` (prod) and `<p>-staging` | `project-admins`, `project-members`, filled at each login by the broker mappers from the platform groups | Developers, whom the app routes check |
-| `<p>` (prod) | `users` | Customers who signed up, when customer sign-up is on; never `project-members` |
+| `<p>` (prod) | `users` | Default group of the realm once customer sign-up has been turned on, given to every new account; not a customer marker |
 
 The staging realm has the same content as the prod one but never opens sign-up, so staging test accounts and prod customers never mix.
 
