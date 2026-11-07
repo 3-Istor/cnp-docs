@@ -804,10 +804,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#access-matrix" class="md-nav__link">
+  <a href="#target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Access matrix
+        Target
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What changes
       
     </span>
   </a>
@@ -2874,10 +2885,21 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#access-matrix" class="md-nav__link">
+  <a href="#target" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Access matrix
+        Target
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#what-changes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What changes
       
     </span>
   </a>
@@ -2955,13 +2977,96 @@ is a closed box across Vault, Keycloak, Argo CD and Kubernetes.</p>
 </tr>
 </tbody>
 </table>
+<p>The CMP portal follows the same identities: a Keycloak group gives the platform and the
+portal rights alike, and the portal reads the token's <code>groups</code> claim. Its own changes run
+in five lots (<a href="https://3istors.atlassian.net/browse/CNP-228">CNP-228</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Lot</th>
+<th>What changes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>L1</strong> Authorization holes</td>
+<td>The API refuses tokens issued to another realm client; catalog resync and the list of closed months leave the signed-in users</td>
+</tr>
+<tr>
+<td><strong>L2</strong> Keycloak groups</td>
+<td><code>security-auditor</code> and <code>finops</code> groups, demo accounts per role, a dedicated <code>cnp-portal</code> client</td>
+</tr>
+<tr>
+<td><strong>L3</strong> Roles in the portal</td>
+<td>Platform admin from the <code>infra</code> group instead of a username list; auditor reads every project and approves critical CVE exceptions; FinOps reads every project's costs, exports and closes the month</td>
+</tr>
+<tr>
+<td><strong>L4</strong> Grafana and Argo CD</td>
+<td>The Grafana platform org stops taking every new user as Viewer; the auditor reads Argo CD</td>
+</tr>
+<tr>
+<td><strong>L5</strong> Cleanup</td>
+<td><code>FINOPS_ADMIN_USERS</code> and <code>FINOPS_FINANCE_USERS</code> leave the CMP values</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr>
+<th>Identity</th>
+<th>Keycloak group</th>
+<th>In the portal</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Platform admin</td>
+<td><code>infra</code></td>
+<td>Every project, platform views, security policy, catalog</td>
+</tr>
+<tr>
+<td>Auditor</td>
+<td><code>security-auditor</code></td>
+<td>Reads every project except logs and secrets; approves critical CVE exceptions</td>
+</tr>
+<tr>
+<td>FinOps</td>
+<td><code>finops</code></td>
+<td>Every project's costs, exports, month close</td>
+</tr>
+<tr>
+<td>Project owner</td>
+<td>the project's creator, in its admins</td>
+<td>Admin rights plus the budget</td>
+</tr>
+<tr>
+<td>Project admin</td>
+<td><code>&lt;project&gt;-admins</code></td>
+<td>Deploys, configures, manages members, approves CVE exceptions below critical</td>
+</tr>
+<tr>
+<td>Project developer</td>
+<td><code>&lt;project&gt;-members</code></td>
+<td>Operates apps, reads logs, requests CVE exceptions</td>
+</tr>
+<tr>
+<td>Project guest</td>
+<td><code>&lt;project&gt;-guests</code></td>
+<td>Sees apps, releases and costs</td>
+</tr>
+</tbody>
+</table>
 <p>OpenStack stays out of scope: it hosts the cluster and keeps one admin account to deploy it.</p>
-<h2 id="access-matrix">Access matrix<a class="headerlink" href="#access-matrix" title="Permanent link">&para;</a></h2>
+<h2 id="target">Target<a class="headerlink" href="#target" title="Permanent link">&para;</a></h2>
+<p><img alt="CNP access matrix, target" src="../diagrams/access-matrix-target.light.png#only-light" />
+<img alt="CNP access matrix, target" src="../diagrams/access-matrix-target.dark.png#only-dark" /></p>
+<p>The end state only: who can touch what once every phase and lot is done.</p>
+<h2 id="what-changes">What changes<a class="headerlink" href="#what-changes" title="Permanent link">&para;</a></h2>
 <p><img alt="CNP access matrix" src="../diagrams/access-matrix.light.png#only-light" />
 <img alt="CNP access matrix" src="../diagrams/access-matrix.dark.png#only-dark" /></p>
 <p>Read a row for everything an identity can do, a column for who can touch a resource. The
 fill is the level after the plan; the frame and its tag show what the plan changes and in
-which phase. A workload column touched by another project's identity is a leak.</p>
+which phase or lot. A workload column touched by another project's identity is a leak.</p>
 <h2 id="what-the-plan-does-not-remove">What the plan does not remove<a class="headerlink" href="#what-the-plan-does-not-remove" title="Permanent link">&para;</a></h2>
 <ul>
 <li><strong>GitOps is admin.</strong> Argo CD's controller can apply anything anywhere, so whoever can merge into the GitOps repos can deploy anywhere. The plan guards those repos (reviewed pull requests, CODEOWNERS); it does not shrink the controller.</li>
