@@ -112,14 +112,29 @@ elements:
   - {id: admin, kind: frontend, parent: z-team, shape: actor, icon: user, title: Platform admin, desc: groups infra and member}
   - {id: dev-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> dev", desc: groups member and project-a}
   - {id: admin-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> admin", desc: "groups member, project-a, its admins"}
-  - {id: auditor, kind: frontend, parent: z-team, shape: actor, icon: user, title: Auditor, desc: security review, status: planned, target: P3}
+  - {id: owner-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> owner", desc: "created the project; also in its admins"}
+  - {id: guest-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> guest", desc: "groups member, project-a guests"}
+  - {id: auditor, kind: frontend, parent: z-team, shape: actor, icon: user, title: Auditor, desc: security review, status: planned, target: L2}
   - {id: root, kind: external, parent: z-team, shape: actor, icon: user, title: Root accounts, desc: holder of the root credentials}
   - {id: grp-infra, kind: security, parent: g-identity, icon: keycloak, title: infra, tech: "[Keycloak group]", desc: Platform admins}
   - {id: grp-member, kind: security, parent: g-identity, icon: keycloak, title: member, tech: "[Keycloak group]", desc: Every team member}
   - {id: grp-k3s-dev, kind: security, parent: g-identity, icon: keycloak, title: "k3s-dev, k3s-view", tech: "[Keycloak groups]", desc: Cluster-wide kubectl view}
   - {id: grp-a-members, kind: security, parent: g-identity, icon: keycloak, title: "project-<a>-members", tech: "[Keycloak group]", desc: Made by project-bootstrap}
   - {id: grp-a-admins, kind: security, parent: g-identity, icon: keycloak, title: "project-<a>-admins", tech: "[Keycloak group]", desc: Made by project-bootstrap}
-  - {id: grp-auditor, kind: security, parent: g-identity, icon: keycloak, title: security-auditor, tech: "[Keycloak group]", desc: Reads everything, status: planned, target: P3}
+  - {id: grp-a-guests, kind: security, parent: g-identity, icon: keycloak, title: "project-<a>-guests", tech: "[Keycloak group]", desc: Made by the CMP}
+  # Portal resources: what a person reaches through the CMP, by capability (CNP-228)
+  - {id: cmp-apps-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> apps", tech: "[CMP]", desc: "Deploy, operate, releases"}
+  - {id: cmp-logs-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> logs", tech: "[CMP · Loki]", desc: "Application logs"}
+  - {id: cmp-security-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> security", tech: "[CMP]", desc: "Findings, CVE exceptions"}
+  - {id: cmp-costs-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> costs", tech: "[CMP · FinOps]", desc: "Costs, recommendations, budget"}
+  - {id: cmp-project-b, kind: frontend, parent: g-cmp, icon: react, title: "<project-b> in the portal", tech: "[CMP]", desc: "Any page of another project"}
+  - {id: cmp-platform-view, kind: frontend, parent: g-cmp, icon: react, title: Platform view, tech: "[CMP]", desc: "Activity and security of every project"}
+  - {id: cmp-finance, kind: frontend, parent: g-cmp, icon: react, title: Finance, tech: "[CMP · FinOps]", desc: "Platform totals, exports, month close"}
+  - {id: cmp-settings, kind: frontend, parent: g-cmp, icon: react, title: Portal settings, tech: "[CMP]", desc: "Security policy, catalog, infra health"}
+  - {id: cmp-admin-list, kind: security, parent: g-cmp, icon: k8s-crd, title: FINOPS_ADMIN_USERS, tech: "[CMP values]", desc: "Usernames outside Keycloak", status: deprecated}
+  - {id: cmp-authz, kind: security, parent: g-cmp, icon: k8s-crd, title: CMP authz, tech: "[groups claim]", desc: "Capability table per identity", status: planned, target: L3}
+  - {id: grafana-auto-assign, kind: security, parent: g-observability, icon: grafana, title: auto_assign_org, tech: "[grafana.ini]", desc: "Every new user is Viewer of org 1"}
+  - {id: grp-auditor, kind: security, parent: g-identity, icon: keycloak, title: security-auditor, tech: "[Keycloak group]", desc: Reads everything, status: planned, target: L2}
   - {id: kc-master-admin, kind: security, parent: g-identity, icon: keycloak, title: Master admin, tech: "[Keycloak user]", desc: "Realm master, every realm"}
   - {id: kc-realm-admin, kind: security, parent: g-identity, icon: keycloak, title: realm-management, tech: "[Keycloak client roles]", desc: Realm 3istor only, status: planned, target: P1}
   - {id: kc-client-cmp, kind: security, parent: g-identity, icon: keycloak, title: cmp-provisioner, tech: "[Keycloak client]", desc: "Service account, realm 3istor", status: planned, target: P2}
@@ -164,8 +179,8 @@ elements:
   - {id: grp-k3s-admin, kind: security, parent: g-identity, icon: keycloak, title: k3s-admin, tech: "[Keycloak group]", desc: kubectl cluster-admin over OIDC}
   - {id: crb-admin, kind: security, parent: g-rbac, icon: k8s-crd, title: oidc-admin-binding, tech: "[ClusterRoleBinding]", desc: "k3s-admin: cluster-admin"}
   - {id: crb-argocd, kind: security, parent: g-rbac, icon: k8s-crd, title: argocd-application-controller, tech: "[ClusterRoleBinding]", desc: Argo CD deploys anywhere}
-  - {id: finops, kind: frontend, parent: z-team, shape: actor, icon: user, title: FinOps, desc: cost review, status: planned, target: P4}
-  - {id: grp-finops, kind: security, parent: g-identity, icon: keycloak, title: finops, tech: "[Keycloak group]", desc: Billing read, status: planned, target: P4}
+  - {id: finops, kind: frontend, parent: z-team, shape: actor, icon: user, title: FinOps, desc: cost review, status: planned, target: L2}
+  - {id: grp-finops, kind: security, parent: g-identity, icon: keycloak, title: finops, tech: "[Keycloak group]", desc: Billing read, status: planned, target: L2}
   - {id: aws-account-mgmt, kind: cloud, parent: z-aws-shared, icon: globe, title: management account, tech: "[AWS account]", desc: "Organization, billing, SCPs", status: planned, target: P4}
   - {id: aws-account-logs, kind: cloud, parent: z-aws-shared, icon: globe, title: log-archive account, tech: "[AWS account]", desc: Every account's trail, status: planned, target: P4}
   - {id: aws-account-workloads, kind: cloud, parent: z-aws-shared, icon: globe, title: workloads account, tech: "[AWS account]", desc: Project clusters, status: planned, target: P4}
@@ -1280,12 +1295,17 @@ memberships:
   - {id: m-admin-a-member, subject: admin-a, group: grp-member, auth: {method: oidc, mfa: true}}
   - {id: m-admin-a-members, subject: admin-a, group: grp-a-members, auth: {method: oidc, mfa: true}}
   - {id: m-admin-a-admins, subject: admin-a, group: grp-a-admins, auth: {method: oidc, mfa: true}}
-  - {id: m-auditor, subject: auditor, group: grp-auditor, auth: {method: oidc, mfa: true}, status: planned, target: P3}
+  - {id: m-owner-a-member, subject: owner-a, group: grp-member, auth: {method: oidc, mfa: true}}
+  - {id: m-owner-a-members, subject: owner-a, group: grp-a-members, auth: {method: oidc, mfa: true}}
+  - {id: m-owner-a-admins, subject: owner-a, group: grp-a-admins, auth: {method: oidc, mfa: true}}
+  - {id: m-guest-a-member, subject: guest-a, group: grp-member, auth: {method: oidc, mfa: true}}
+  - {id: m-guest-a, subject: guest-a, group: grp-a-guests, auth: {method: oidc, mfa: true}}
+  - {id: m-auditor, subject: auditor, group: grp-auditor, auth: {method: oidc, mfa: true}, status: planned, target: L2}
   - {id: m-vso, subject: vso, group: role-vso, auth: {method: k8s-sa, lifetime: 24h}}
   - {id: m-cmp-role, subject: cmp-backend, group: role-cmp, auth: {method: k8s-sa, lifetime: 1h}, status: planned, target: P2}
 
   - {id: m-admin-k3s-admin, subject: admin, group: grp-k3s-admin, auth: {method: oidc, mfa: true}, status: planned, target: P1}
-  - {id: m-finops, subject: finops, group: grp-finops, auth: {method: oidc, mfa: true}, status: planned, target: P4}
+  - {id: m-finops, subject: finops, group: grp-finops, auth: {method: oidc, mfa: true}, status: planned, target: L2}
 grants:
   # Platform admins
   - {id: g-infra-vault-sys, subject: grp-infra, resource: vault-sys, level: admin, via: [policy-vault-admin]}
@@ -1402,3 +1422,53 @@ grants:
   - {id: g-infra-audit, subject: grp-infra, resource: audit-logs, level: read, status: planned, target: P1}
   - {id: g-auditor-audit, subject: grp-auditor, resource: audit-logs, level: read, status: planned, target: P3}
   - {id: g-root-audit, subject: root, resource: audit-logs, level: breakglass, status: planned, target: P1}
+  # CMP portal (CNP-228). L1 authz holes, L2 Keycloak groups, L3 roles in the portal,
+  # L4 Grafana and Argo CD, L5 cleanup. Platform admins come from a username list today.
+  - {id: g-admin-cmp-apps-a, subject: admin, resource: cmp-apps-a, level: admin, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-admin-cmp-logs-a, subject: admin, resource: cmp-logs-a, level: read, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-admin-cmp-security-a, subject: admin, resource: cmp-security-a, level: admin, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-admin-cmp-costs-a, subject: admin, resource: cmp-costs-a, level: admin, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-admin-cmp-project-b, subject: admin, resource: cmp-project-b, level: admin, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-admin-cmp-platform-view, subject: admin, resource: cmp-platform-view, level: read, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-admin-cmp-finance, subject: admin, resource: cmp-finance, level: admin, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-admin-cmp-settings, subject: admin, resource: cmp-settings, level: admin, via: [cmp-admin-list], status: deprecated, target: L3}
+  - {id: g-infra-cmp-apps-a, subject: grp-infra, resource: cmp-apps-a, level: admin, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-infra-cmp-logs-a, subject: grp-infra, resource: cmp-logs-a, level: read, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-infra-cmp-security-a, subject: grp-infra, resource: cmp-security-a, level: admin, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-infra-cmp-costs-a, subject: grp-infra, resource: cmp-costs-a, level: admin, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-infra-cmp-project-b, subject: grp-infra, resource: cmp-project-b, level: admin, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-infra-cmp-platform-view, subject: grp-infra, resource: cmp-platform-view, level: read, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-infra-cmp-finance, subject: grp-infra, resource: cmp-finance, level: admin, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-infra-cmp-settings, subject: grp-infra, resource: cmp-settings, level: admin, via: [cmp-authz], status: planned, target: L3}
+  # Every signed-in user, today: catalog resync and the list of closed months
+  - {id: g-member-cmp-settings, subject: grp-member, resource: cmp-settings, level: write, scope: catalog resync, status: deprecated, target: L1}
+  - {id: g-member-cmp-finance, subject: grp-member, resource: cmp-finance, level: read, scope: closed months, status: deprecated, target: L1}
+  # Project roles: unchanged, except critical CVE exceptions move to the auditor
+  - {id: g-a-admins-cmp-apps, subject: grp-a-admins, resource: cmp-apps-a, level: admin}
+  - {id: g-a-admins-cmp-logs, subject: grp-a-admins, resource: cmp-logs-a, level: read}
+  - {id: g-a-admins-cmp-security, subject: grp-a-admins, resource: cmp-security-a, level: admin, scope: approves every exception, status: deprecated, target: L3}
+  - {id: g-a-admins-cmp-security-new, subject: grp-a-admins, resource: cmp-security-a, level: write, scope: approves exceptions below critical, status: planned, target: L3}
+  - {id: g-a-admins-cmp-costs, subject: grp-a-admins, resource: cmp-costs-a, level: write, scope: applies recommendations}
+  - {id: g-owner-a-cmp-costs, subject: owner-a, resource: cmp-costs-a, level: admin, scope: budget}
+  - {id: g-a-members-cmp-apps, subject: grp-a-members, resource: cmp-apps-a, level: write, scope: "operate, no deploy"}
+  - {id: g-a-members-cmp-logs, subject: grp-a-members, resource: cmp-logs-a, level: read}
+  - {id: g-a-members-cmp-security, subject: grp-a-members, resource: cmp-security-a, level: write, scope: requests exceptions}
+  - {id: g-a-members-cmp-costs, subject: grp-a-members, resource: cmp-costs-a, level: read}
+  - {id: g-a-guests-cmp-apps, subject: grp-a-guests, resource: cmp-apps-a, level: read}
+  - {id: g-a-guests-cmp-costs, subject: grp-a-guests, resource: cmp-costs-a, level: read}
+  # Auditor: reads every project, no logs, approves critical CVE exceptions
+  - {id: g-auditor-cmp-apps-a, subject: grp-auditor, resource: cmp-apps-a, level: read, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-auditor-cmp-security-a, subject: grp-auditor, resource: cmp-security-a, level: write, scope: approves critical exceptions, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-auditor-cmp-costs-a, subject: grp-auditor, resource: cmp-costs-a, level: read, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-auditor-cmp-project-b, subject: grp-auditor, resource: cmp-project-b, level: read, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-auditor-cmp-platform-view, subject: grp-auditor, resource: cmp-platform-view, level: read, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-auditor-cmp-finance, subject: grp-auditor, resource: cmp-finance, level: read, via: [cmp-authz], status: planned, target: L3}
+  # FinOps: every project's costs, exports and month close, nothing else
+  - {id: g-finops-cmp-apps-a, subject: grp-finops, resource: cmp-apps-a, level: read, scope: app list, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-finops-cmp-costs-a, subject: grp-finops, resource: cmp-costs-a, level: read, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-finops-cmp-project-b, subject: grp-finops, resource: cmp-project-b, level: read, scope: costs, via: [cmp-authz], status: planned, target: L3}
+  - {id: g-finops-cmp-finance, subject: grp-finops, resource: cmp-finance, level: write, scope: "exports, month close", via: [cmp-authz], status: planned, target: L3}
+  # Grafana platform org: open to every member today, it reads every namespace's metrics
+  - {id: g-member-grafana, subject: grp-member, resource: grafana, level: read, scope: org 1, via: [grafana-auto-assign], status: deprecated, target: L4}
+  - {id: g-infra-grafana, subject: grp-infra, resource: grafana, level: admin, scope: org 1, via: [cmp-authz], status: planned, target: L4}
+  - {id: g-auditor-grafana, subject: grp-auditor, resource: grafana, level: read, scope: org 1, via: [cmp-authz], status: planned, target: L4}

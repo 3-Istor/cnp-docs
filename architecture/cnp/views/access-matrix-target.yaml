@@ -1,0 +1,59 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: matrix
+title: CNP · Access matrix · target
+subtitle: Who can touch what once the segregation plan and the portal roles are done. One row per identity, one column per resource by access plane, the CMP portal included.
+meta:
+  - "Read a row: everything an identity can do. Read a column: who can touch a resource. A cell empty for another project's identity is the isolation."
+  - "Keycloak is the only source: groups give the platform and the portal rights alike. Project owner, admin, member and guest are the project's groups; owner is the creator."
+  - "The before and after view is access-matrix. This one shows the end state only."
+state: target
+identities:
+  - {title: Break-glass, items: [root]}
+  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, grp-infra-elevated, auditor, finops, grp-member, owner-a, admin-a, dev-a, guest-a, grp-k3s-dev]}
+  - {title: Service accounts, items: [cmp-backend, vso, argocd]}
+resources:
+  - {title: Control plane, sub: identity and rules, color: indigo, items: [keycloak, vault-sys, audit-logs]}
+  - {title: Management plane, sub: what runs and deploys the platform, color: cyan, items: [apps-platform, kube-apiserver, github, gh-project-repos, cf-edge, tfstate, vault-kvv2, grafana]}
+  - {title: Workloads plane, sub: a project is a closed box, color: slate, items: [vault-a, apps-a, g-tenant-a, vault-b, apps-b, g-tenant-b]}
+  - {title: Portal, sub: what the CMP lets a person do, color: sky, items: [cmp-apps-a, cmp-logs-a, cmp-security-a, cmp-costs-a, cmp-project-b, cmp-platform-view, cmp-finance, cmp-settings]}
+  - {title: AWS accounts, sub: created in P4, color: sky, items: [aws-account-mgmt, aws-account-logs, aws-account-workloads]}
+labels:
+  keycloak: "Keycloak<br>realm 3istor"
+  vault-sys: "Vault<br>config"
+  apps-platform: "Argo CD<br>platform apps"
+  kube-apiserver: "Kubernetes<br>cluster"
+  github: "GitHub<br>GitOps repos"
+  gh-project-repos: "GitHub<br>app repos"
+  audit-logs: "Audit<br>logs"
+  cf-edge: "Cloudflare<br>DNS, tunnels"
+  tfstate: "Terraform<br>state"
+  vault-kvv2: "Vault<br>kvv2/"
+  vault-a: "Project A<br>secrets"
+  apps-a: "Project A<br>apps"
+  g-tenant-a: "Project A<br>namespace"
+  vault-b: "Project B<br>secrets"
+  apps-b: "Project B<br>apps"
+  g-tenant-b: "Project B<br>namespace"
+  grafana: "Grafana<br>platform org"
+  cmp-apps-a: "Project A<br>apps"
+  cmp-logs-a: "Project A<br>logs"
+  cmp-security-a: "Project A<br>security"
+  cmp-costs-a: "Project A<br>costs"
+  cmp-project-b: "Project B<br>any page"
+  cmp-platform-view: "Platform<br>view"
+  cmp-finance: "Finance<br>exports"
+  cmp-settings: "Portal<br>settings"
+  aws-account-mgmt: "management"
+  aws-account-logs: "log-archive"
+  aws-account-workloads: "workloads"
+  root: Root accounts
+  owner-a: Project A owner
+  admin-a: Project A admin
+  guest-a: Project A guest
+  dev-a: Project A developer
+  grp-infra-elevated: Platform admin, elevated
+  grp-member: All team members
+  grp-k3s-dev: k3s-dev, k3s-view members
+  cmp-backend: CMP backend
+  argocd: Argo CD controller

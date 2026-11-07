@@ -14,16 +14,45 @@ The plan runs in four phases, shown on every change in the matrix:
 | **P3** Tenant isolation, GitOps | A project's members read its secrets and admins write them; kubectl rights per project; the global read roles go. Platform admins reach tenant secrets only through a one-hour, audited elevation. The GitOps repos take changes through reviewed pull requests only |
 | **P4** Cloud accounts | AWS organization with management, log-archive and workloads accounts; Terraform state behind a role assumed for one hour |
 
+The CMP portal follows the same identities: a Keycloak group gives the platform and the
+portal rights alike, and the portal reads the token's `groups` claim. Its own changes run
+in five lots ([CNP-228](https://3istors.atlassian.net/browse/CNP-228)):
+
+| Lot | What changes |
+|---|---|
+| **L1** Authorization holes | The API refuses tokens issued to another realm client; catalog resync and the list of closed months leave the signed-in users |
+| **L2** Keycloak groups | `security-auditor` and `finops` groups, demo accounts per role, a dedicated `cnp-portal` client |
+| **L3** Roles in the portal | Platform admin from the `infra` group instead of a username list; auditor reads every project and approves critical CVE exceptions; FinOps reads every project's costs, exports and closes the month |
+| **L4** Grafana and Argo CD | The Grafana platform org stops taking every new user as Viewer; the auditor reads Argo CD |
+| **L5** Cleanup | `FINOPS_ADMIN_USERS` and `FINOPS_FINANCE_USERS` leave the CMP values |
+
+| Identity | Keycloak group | In the portal |
+|---|---|---|
+| Platform admin | `infra` | Every project, platform views, security policy, catalog |
+| Auditor | `security-auditor` | Reads every project except logs and secrets; approves critical CVE exceptions |
+| FinOps | `finops` | Every project's costs, exports, month close |
+| Project owner | the project's creator, in its admins | Admin rights plus the budget |
+| Project admin | `<project>-admins` | Deploys, configures, manages members, approves CVE exceptions below critical |
+| Project developer | `<project>-members` | Operates apps, reads logs, requests CVE exceptions |
+| Project guest | `<project>-guests` | Sees apps, releases and costs |
+
 OpenStack stays out of scope: it hosts the cluster and keeps one admin account to deploy it.
 
-## Access matrix
+## Target
+
+![CNP access matrix, target](diagrams/access-matrix-target.light.png#only-light)
+![CNP access matrix, target](diagrams/access-matrix-target.dark.png#only-dark)
+
+The end state only: who can touch what once every phase and lot is done.
+
+## What changes
 
 ![CNP access matrix](diagrams/access-matrix.light.png#only-light)
 ![CNP access matrix](diagrams/access-matrix.dark.png#only-dark)
 
 Read a row for everything an identity can do, a column for who can touch a resource. The
 fill is the level after the plan; the frame and its tag show what the plan changes and in
-which phase. A workload column touched by another project's identity is a leak.
+which phase or lot. A workload column touched by another project's identity is a leak.
 
 ## What the plan does not remove
 
