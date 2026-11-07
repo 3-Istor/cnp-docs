@@ -112,6 +112,7 @@ elements:
   - {id: admin, kind: frontend, parent: z-team, shape: actor, icon: user, title: Platform admin, desc: groups infra and member}
   - {id: dev-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> dev", desc: groups member and project-a}
   - {id: admin-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> admin", desc: "groups member, project-a, its admins"}
+  - {id: platform-team, kind: frontend, parent: z-team, shape: actor, icon: user, title: Platform team, desc: "the six developers; IAM users, MVP"}
   - {id: owner-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> owner", desc: "created the project; also in its admins"}
   - {id: guest-a, kind: frontend, parent: z-team, shape: actor, icon: user, title: "<project-a> guest", desc: "groups member, project-a guests"}
   - {id: auditor, kind: frontend, parent: z-team, shape: actor, icon: user, title: Auditor, desc: security review, status: planned, target: L2}
@@ -1286,7 +1287,7 @@ annotations:
   - {id: G16, severity: medium, title: "Cloudflare token scope", text: "CLOUDFLARE_API_TOKEN scope was not checked. Drawn as write on the zone and tunnels.", targets: [cf-token]}
   - {id: G18, severity: medium, title: "Delete during a down", text: "CNP-112: cloud Applications retry forever with refresh, so syncs resume after a down. Remaining risk: deleting a cloud Application while its cluster is down hangs on the finalizer.", targets: [c-argocd-b]}
   - {id: G19, severity: low, title: "Frontend start order", text: "CNP-114: the frontend nginx resolves the backend at start and crashes until the backend Service exists.", targets: [b1-front]}
-  - {id: G21, severity: high, title: "Every AWS user is admin", text: "IAM group 3istors gives AdministratorAccess to the six team members; four long-lived access keys exist. Checked with aws iam on 2026-11-07.", targets: [iam-3istors]}
+  - {id: G21, severity: high, title: "Team accounts are cloud admins", text: "Accepted for the MVP: IAM group 3istors gives AdministratorAccess to the six team members, who develop the platform, like break-glass accounts used daily. The platform's own identities, its users and the demo accounts follow the matrix. Checked with aws iam on 2026-11-07.", targets: [iam-3istors]}
   - {id: G22, severity: medium, title: "GCP IAM not verified", text: "Who holds the GCP project's roles is not checked (no gcloud on hand); drawn as the platform admin.", targets: [gcp-project]}
   - {id: G20, severity: low, title: "Shared VaultSecret", text: "CNP-115: fullstack apps render the VaultSecret app-registry from both Applications; one stays OutOfSync.", targets: [b1-back]}
 
@@ -1478,17 +1479,14 @@ grants:
   - {id: g-member-grafana, subject: grp-member, resource: grafana, level: read, scope: org 1, via: [grafana-auto-assign], status: deprecated, target: L4}
   - {id: g-infra-grafana, subject: grp-infra, resource: grafana, level: admin, scope: org 1, via: [cmp-authz], status: planned, target: L4}
   - {id: g-auditor-grafana, subject: grp-auditor, resource: grafana, level: read, scope: org 1, via: [cmp-authz], status: planned, target: L4}
-  # Public clouds, today: every team member is AWS admin through one IAM group (G21);
-  # GCP roles are not verified (G22), drawn as the platform admin. P4 federates both.
-  - {id: g-member-aws-workloads, subject: grp-member, resource: aws-account-workloads, level: admin, via: [iam-3istors], auth: {method: access-key}, status: deprecated, target: P4}
-  - {id: g-member-eks, subject: grp-member, resource: eks-cluster, level: admin, scope: through IAM, via: [iam-3istors], auth: {method: access-key}, status: deprecated, target: P4}
-  - {id: g-infra-eks, subject: grp-infra, resource: eks-cluster, level: admin, scope: access entry, auth: {method: federated, lifetime: 1h}, status: planned, target: P4}
+  # Public clouds: team accounts stay admin during the MVP, accepted (G21); GCP roles
+  # are not verified (G22), drawn as the platform admin.
+  - {id: g-team-aws-workloads, subject: platform-team, resource: aws-account-workloads, level: admin, via: [iam-3istors], auth: {method: access-key}}
+  - {id: g-team-eks, subject: platform-team, resource: eks-cluster, level: admin, scope: through IAM, via: [iam-3istors], auth: {method: access-key}}
   - {id: g-auditor-eks, subject: grp-auditor, resource: eks-cluster, level: read, status: planned, target: P4}
   - {id: g-argocd-eks, subject: argocd, resource: eks-cluster, level: admin}
-  - {id: g-admin-gcp-project, subject: admin, resource: gcp-project, level: admin, status: deprecated, target: P4}
-  - {id: g-admin-gke, subject: admin, resource: gke-cluster, level: admin, status: deprecated, target: P4}
-  - {id: g-infra-gcp-project, subject: grp-infra, resource: gcp-project, level: admin, auth: {method: federated, lifetime: 1h}, status: planned, target: P4}
-  - {id: g-infra-gke, subject: grp-infra, resource: gke-cluster, level: admin, auth: {method: federated, lifetime: 1h}, status: planned, target: P4}
+  - {id: g-admin-gcp-project, subject: admin, resource: gcp-project, level: admin}
+  - {id: g-admin-gke, subject: admin, resource: gke-cluster, level: admin}
   - {id: g-auditor-gcp-project, subject: grp-auditor, resource: gcp-project, level: read, status: planned, target: P4}
   - {id: g-auditor-gke, subject: grp-auditor, resource: gke-cluster, level: read, status: planned, target: P4}
   - {id: g-finops-gcp-project, subject: grp-finops, resource: gcp-project, level: read, scope: billing, status: planned, target: P4}

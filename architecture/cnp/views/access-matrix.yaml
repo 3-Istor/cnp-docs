@@ -4,6 +4,7 @@ type: matrix
 title: CNP · Access matrix · what the segregation plan and the portal roles change
 subtitle: One row per identity, one column per resource by access plane, the CMP portal included. A cell shows the level after the plan, and what the plan changed to get there.
 meta:
+  - "Team accounts develop the platform: broad on purpose during the MVP, like break-glass accounts used daily (G21). Segregation applies to the platform's own identities, its users and the shared demo accounts, one per identity."
   - "Read a row: everything an identity can do. Read a column: who can touch a resource. A workload column touched by another project's identity is a leak."
   - "Not verified: the policy of the CMP's Vault token (G15, drawn as the root token), the scope of its Cloudflare token (G16), the members' GitHub base permission (G17, main is unprotected: checked) and who holds Cloudflare super admin, drawn as the platform admin. GCP project roles (G22), drawn as the platform admin."
   - "Plan phases: P1 root accounts and audit trail, P2 CMP rights, P3 tenant isolation and GitOps protection, P4 cloud accounts."
@@ -12,7 +13,7 @@ meta:
 state: diff
 identities:
   - {title: Break-glass, items: [root]}
-  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, grp-infra-elevated, auditor, finops, grp-member, owner-a, admin-a, dev-a, guest-a, grp-k3s-dev]}
+  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, grp-infra-elevated, auditor, finops, platform-team, grp-member, owner-a, admin-a, dev-a, guest-a, grp-k3s-dev]}
   - {title: Service accounts, items: [cmp-backend, vso, argocd]}
 resources:
   - {title: Control plane, sub: identity and rules, color: indigo, items: [keycloak, vault-sys, audit-logs]}

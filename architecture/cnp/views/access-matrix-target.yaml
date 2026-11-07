@@ -4,13 +4,14 @@ type: matrix
 title: CNP · Access matrix · target
 subtitle: Who can touch what once the segregation plan and the portal roles are done. One row per identity, one column per resource by access plane, the CMP portal included.
 meta:
+  - "Team accounts develop the platform: broad on purpose during the MVP, like break-glass accounts used daily (G21). Segregation applies to the platform's own identities, its users and the shared demo accounts, one per identity."
   - "Read a row: everything an identity can do. Read a column: who can touch a resource. A cell empty for another project's identity is the isolation."
   - "Keycloak is the only source: groups give the platform and the portal rights alike. Project owner, admin, member and guest are the project's groups; owner is the creator."
   - "The before and after view is access-matrix. This one shows the end state only."
 state: target
 identities:
   - {title: Break-glass, items: [root]}
-  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, grp-infra-elevated, auditor, finops, grp-member, owner-a, admin-a, dev-a, guest-a, grp-k3s-dev]}
+  - {title: People, sub: "a Keycloak group, OIDC + MFA", items: [admin, grp-infra-elevated, auditor, finops, platform-team, grp-member, owner-a, admin-a, dev-a, guest-a, grp-k3s-dev]}
   - {title: Service accounts, items: [cmp-backend, vso, argocd]}
 resources:
   - {title: Control plane, sub: identity and rules, color: indigo, items: [keycloak, vault-sys, audit-logs]}
