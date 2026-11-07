@@ -43,3 +43,25 @@ steps:
   - {id: poll2, from: argocd, to: github, over: c-argocd-github, text: "poll registry + app repo"}
   - {id: sync, from: argocd, to: b-apiserver, over: c-argocd-b, text: "sync <p>-<app>-<component>: infra-templates chart"}
   - {note: b-apiserver, text: "nodes pull the image from GHCR, Secret app-registry"}
+hidden_annotations:
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
