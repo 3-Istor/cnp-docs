@@ -149,7 +149,7 @@ Each project owns two Keycloak realms for its apps, and the group names differ b
 | :--- | :--- | :--- |
 | Platform (`3istor`) | `project-<p>-admins`, `project-<p>-members`, `project-<p>-guests` | Developers; read by Argo CD and Vault |
 | `<p>` (prod) and `<p>-staging` | `project-admins`, `project-members`, filled at each login by the broker mappers from the platform groups | Developers, whom the app routes check |
-| `<p>` (prod) | `users` | Default group of the realm once customer sign-up has been turned on, given to every new account; not a customer marker |
+| `<p>` (prod) | `users` | Default group of the realm once customer access has been set to `companies` or `open`, given to every new account; not a customer marker |
 
 The staging realm has the same content as the prod one but never opens sign-up, so staging test accounts and prod customers never mix.
 
