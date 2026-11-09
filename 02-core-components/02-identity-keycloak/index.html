@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.0">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
     
     
       
@@ -1157,13 +1157,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-customer-sign-up" class="md-nav__link">
+  <a href="#5-customer-access" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Customer Sign-up
+        5. Customer Access
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="5. Customer Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-client-company" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a client company
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3175,13 +3192,30 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#5-customer-sign-up" class="md-nav__link">
+  <a href="#5-customer-access" class="md-nav__link">
     <span class="md-ellipsis">
       
-        5. Customer Sign-up
+        5. Customer Access
       
     </span>
   </a>
+  
+    <nav class="md-nav" aria-label="5. Customer Access">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#adding-a-client-company" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Adding a client company
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
   
 </li>
       
@@ -3311,7 +3345,7 @@
 * <code>project-&lt;project_name&gt;-guests</code></p>
 <p>Each project realm (see <a href="#4-project-realms">section 4</a>) has its own flat groups, filled at every broker login from the platform groups above (the mapper re-evaluates the claim each time, so removing someone from the platform group removes them from the realm group at their next login):
 * <code>project-admins</code> and <code>project-members</code>: the project's developers. These are the names applications and <code>ingress.allowedGroups</code> see.
-* <code>users</code>: only in the prod realm <code>&lt;p&gt;</code>, created when <a href="#5-customer-sign-up">customer sign-up</a> is first turned on, never in <code>&lt;p&gt;-staging</code>. It is the realm's default group: Keycloak adds it to <strong>every</strong> new account (sign-ups, accounts an app creates, service-account users, developers at their first broker login), so it does not mean "customer". Apps rely on organization membership instead.</p>
+* <code>users</code>: only in the prod realm <code>&lt;p&gt;</code>, created when <a href="#5-customer-access">customer access</a> is first set to <code>companies</code> or <code>open</code>, never in <code>&lt;p&gt;-staging</code>. It is the realm's default group: Keycloak adds it to <strong>every</strong> new account (sign-ups, accounts an app creates, service-account users, developers at their first broker login), so it does not mean "customer". Apps rely on organization membership instead.</p>
 <h3 id="oidc-scope-mapping-groups-scope">OIDC Scope Mapping (<code>groups</code> scope)<a class="headerlink" href="#oidc-scope-mapping-groups-scope" title="Permanent link">&para;</a></h3>
 <p>To transmit these memberships securely to downstream consumers (ArgoCD, Envoy Gateway, Vault), Keycloak maps group memberships into the JWT token payload.</p>
 <div class="language-hcl highlight"><pre><span></span><code><span id="__span-2-1"><a id="__codelineno-2-1" name="__codelineno-2-1" href="#__codelineno-2-1"></a><span class="c1"># terraform/scopes.tf extract</span>
@@ -3352,7 +3386,7 @@
 <tr>
 <td><code>&lt;p&gt;</code> (prod)</td>
 <td>with the project</td>
-<td>closed, unless <a href="#5-customer-sign-up">customer sign-up</a> is on</td>
+<td>closed, unless <a href="#5-customer-access">customer access</a> is <code>open</code></td>
 <td><code>keycloak-tenant-admin</code></td>
 <td><code>cnp-&lt;p&gt;-&lt;app&gt;</code></td>
 </tr>
@@ -3368,26 +3402,71 @@
 <p>The staging realm has the same content as the prod one (broker client <code>broker-&lt;p&gt;-staging</code> in <code>3istor</code>, groups <code>project-members</code> / <code>project-admins</code> with their mappers, <code>groups</code> scope, a local <code>admin</code>), so developers log in to staging with their usual account. It is created by the Terraform module <code>app-templates/templates/k3s-gitops-app/staging-realm</code> (state <code>cnp/projects/&lt;p&gt;/_staging-realm</code>) and destroyed with the project. A project name ending in <code>-staging</code> is refused.</p>
 <ul>
 <li><strong>Wiring</strong>: when staging is turned on, the CMP writes <code>ingress.realm</code> and <code>auth.realm</code> in <code>deploy/env/staging/*.yaml</code>, so the staging route authenticates against the staging realm. An app that validates tokens must therefore read its issuer per environment (<code>https://auth.3istor.com/realms/&lt;p&gt;-staging</code>); a prod issuer rejects every staging token.</li>
-<li><strong>Test accounts on staging</strong>: create them in the staging realm, with the console (<code>https://admin-auth.3istor.com/admin/&lt;p&gt;-staging/console/</code>, credentials in Vault) or, with customer sign-up on, through the staging app's own client.</li>
+<li><strong>Test accounts on staging</strong>: create them in the staging realm, with the console (<code>https://admin-auth.3istor.com/admin/&lt;p&gt;-staging/console/</code>, credentials in Vault) or, with customer access set to <code>companies</code> or <code>open</code>, through the staging app's own client.</li>
 <li><strong>Existing staging apps</strong> created before the staging realm existed are moved with <code>python -m app.scripts.move_staging_realm &lt;deployment id&gt;</code> (CMP backend, platform admin, one-off per app). The staging OIDC client is recreated in the new realm.</li>
 <li><strong>Own Keycloak</strong>: an app whose config sets <code>keycloak_realm_id</code> keeps that realm in staging. No <code>&lt;p&gt;-staging</code> is created for it and the move script has nothing to move.</li>
 </ul>
 <hr />
-<h2 id="5-customer-sign-up">5. Customer Sign-up<a class="headerlink" href="#5-customer-sign-up" title="Permanent link">&para;</a></h2>
-<p>Lets the end customers of a project's apps create their own accounts. Off by default.</p>
+<h2 id="5-customer-access">5. Customer Access<a class="headerlink" href="#5-customer-access" title="Permanent link">&para;</a></h2>
+<p>How the end customers of a project's apps get an account. One mode per project: registration is a realm setting, so all apps of a project share it. <code>closed</code> by default.</p>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Registration in <code>&lt;p&gt;</code></th>
+<th>Organizations, <code>organization</code> scope, app rights</th>
+<th>Customers get in through</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>closed</code></td>
+<td>closed</td>
+<td>left as they are</td>
+<td>accounts the project creates</td>
+</tr>
+<tr>
+<td><code>companies</code></td>
+<td>closed</td>
+<td>on</td>
+<td>their company's identity provider (<a href="#adding-a-client-company">adding a client company</a>) or an organization invitation</td>
+</tr>
+<tr>
+<td><code>open</code></td>
+<td>open</td>
+<td>on</td>
+<td>self-registration ("Register"), plus the above</td>
+</tr>
+</tbody>
+</table>
 <ul>
-<li><strong>Switch</strong>: project "···" menu, "Turn on customer sign-up" / "Turn off customer sign-up" (project admins and platform admins). API: <code>PUT /api/projects/{name}/customer-signup</code> with <code>{"enabled": true|false}</code>, refused (<code>403</code>) for AI assistants because opening a project to the public is a person's decision. The state is <code>spec.selfRegistration</code> in the project registry.</li>
-<li><strong>On</strong>:<ul>
-<li>The realm <code>&lt;p&gt;</code> opens registration. Sign-ups land in the default group <code>users</code> (created if missing), never in <code>project-members</code>.</li>
-<li>Organizations are enabled in <code>&lt;p&gt;</code> and <code>&lt;p&gt;-staging</code>.</li>
-<li>Each app client gets a service account holding <code>manage-organizations</code> and <code>manage-users</code> of its own realm (never <code>manage-realm</code>; Keycloak grants viewing users with <code>manage-users</code>), and the <code>organization</code> default scope, so tokens carry an <code>organization</code> claim. Prod clients <code>cnp-&lt;p&gt;-&lt;app&gt;</code> get this in <code>&lt;p&gt;</code> only, staging clients <code>cnp-&lt;p&gt;-&lt;app&gt;-stg</code> in <code>&lt;p&gt;-staging</code> only.</li>
-<li>Staging never opens registration.</li>
+<li><strong>Setting</strong>: project settings, Access, "Customer access" (project admins and platform admins). API: <code>PUT /api/projects/{name}/customer-access</code> with <code>{"mode": "closed"|"companies"|"open"}</code>, refused (<code>403</code>) for AI assistants because opening a project to the public is a person's decision. The mode is <code>spec.customerAccess</code> in the project registry; a record from before the modes with <code>selfRegistration: true</code> reads as <code>open</code>.</li>
+<li><strong><code>companies</code> and <code>open</code></strong>:<ul>
+<li>Organizations are enabled in <code>&lt;p&gt;</code> and <code>&lt;p&gt;-staging</code>. New accounts land in the default group <code>users</code> (created if missing), never in <code>project-members</code>.</li>
+<li>Each app client gets a service account holding <code>manage-organizations</code> and <code>manage-users</code> of its own realm (never <code>manage-realm</code>; Keycloak grants viewing users with <code>manage-users</code>), and the <code>organization</code> default scope: the access token carries <code>"organization": ["&lt;alias&gt;"]</code> without the app asking for the scope (checked on Keycloak 26.8.1). Prod clients <code>cnp-&lt;p&gt;-&lt;app&gt;</code> get this in <code>&lt;p&gt;</code> only, staging clients <code>cnp-&lt;p&gt;-&lt;app&gt;-stg</code> in <code>&lt;p&gt;-staging</code> only.</li>
+<li>Only <code>open</code> opens registration, and only in <code>&lt;p&gt;</code>. Staging never opens it.</li>
 </ul>
 </li>
-<li><strong>Re-applied</strong> when an app is created and when staging is activated, so new clients get their rights. Re-applying the app Terraform keeps the default scopes and service account the CMP added. A Keycloak failure never fails the deployment. Turning on, a failure answers <code>502</code> after saving the flag, and sending the value again retries.</li>
-<li><strong>Off</strong> only closes registration. Organizations, accounts, group and service accounts stay. Keycloak is called first and the flag written after, so a failure answers <code>502</code> and leaves sign-up on.</li>
-<li><strong>No e-mail</strong>: there is no SMTP, so no address verification and no organization invitation. The app adds members itself.</li>
-<li><strong>How an app uses it</strong>: with its own client id and secret (already delivered by Vault), the app gets a <code>client_credentials</code> token from its realm and calls <code>/admin/realms/&lt;realm&gt;/organizations</code> to create an organization and add a member, and creates an organization group <code>admins</code> for the company's administrators. The app-side recipe is in the template's <code>using-cnp-services/reference/identity.md</code>.</li>
+<li><strong>Order</strong>: <code>open</code> saves the mode, then opens Keycloak; a Keycloak failure answers <code>502</code> with the mode saved, and sending it again retries. Every other mode updates Keycloak first, then the registry, so a failure never leaves registration open.</li>
+<li><strong>Re-applied</strong> when an app is created and when staging is activated, so new clients get their rights. Re-applying the app Terraform keeps the default scopes and service account the CMP added. A Keycloak failure never fails the deployment.</li>
+<li><strong><code>closed</code></strong> only closes registration. Organizations, accounts, group and service accounts stay.</li>
+<li><strong>No e-mail yet</strong>: the project realms have no SMTP, so no address verification and no organization invitation e-mail (an invitation works with registration closed once SMTP exists: the link opens registration for that address only). Until then, companies come in through their identity provider, and the app or a platform admin adds other members.</li>
+<li><strong>How an app uses it</strong>: with its own client id and secret (already delivered by Vault), the app gets a <code>client_credentials</code> token from its realm and calls <code>/admin/realms/&lt;realm&gt;/organizations</code> to create an organization and add a member. The app-side recipe is in the template's <code>using-cnp-services/reference/identity.md</code>.</li>
+</ul>
+<h3 id="adding-a-client-company">Adding a client company<a class="headerlink" href="#adding-a-client-company" title="Permanent link">&para;</a></h3>
+<p>Platform admins, in the console of <code>&lt;p&gt;</code> (<code>https://admin-auth.3istor.com/admin/&lt;p&gt;/console/</code>), and in <code>&lt;p&gt;-staging</code> for tests. The project must be in <code>companies</code> or <code>open</code> mode.</p>
+<ol>
+<li><strong>Identity provider</strong>: Identity providers, OpenID Connect v1.0 (or SAML v2.0). Alias <code>&lt;company&gt;-sso</code> (EPITA: <code>epita</code>). Give the company the redirect URI <code>https://auth.3istor.com/realms/&lt;p&gt;/broker/&lt;alias&gt;/endpoint</code> and enter the client id and secret it returns. <strong>Trust email: on</strong>: Keycloak 26.8 adds a brokered account to an organization only if its address is verified.</li>
+<li><strong>Organization</strong>: Organizations, Create. Name, <strong>alias</strong> (the company id apps store, fixed for good), and the company's e-mail domains. A domain belongs to one organization only.</li>
+<li><strong>Link</strong>: the organization's Identity providers tab, link the provider, auto-membership on. A linked provider no longer shows as a button on the login page: people type their e-mail and step 4 sends them to their company, so the page stays the same whatever the number of companies. Unlinked providers (3istor Platform) keep their button.</li>
+<li><strong>Routing</strong>: Domains tab, edit each domain: Identity provider = the alias above, Auto redirect on. Someone who types an address of that domain goes straight to the company's login. An account that already has a password is not redirected, so demo accounts keep logging in with theirs.</li>
+<li><strong>Company administrators</strong>: the group the app expects (optispace: top-level group <code>facility-managers</code>, created once per realm). Add the administrator once their account exists, after their first login through the company.</li>
+<li><strong>Check</strong>: log in to the app with an address of the company. The access token carries <code>"organization": ["&lt;alias&gt;"]</code>.</li>
+</ol>
+<p>Rules: an account belongs to one organization only, and apps refuse an account with several (optispace answers <code>403 NO_ORGANIZATION</code>). Never add a member to a second organization.</p>
+<ul>
+<li><strong>Test company</strong>: a realm of the central Keycloak plays the company's identity provider: users with addresses in a test domain, and one confidential client whose redirect URI is the broker endpoint above.</li>
+<li><strong>EPITA</strong>: Identity providers, <strong>Microsoft</strong>, alias <code>epita</code>, Tenant ID <code>3534b3d7-316c-4bc9-9ede-605c860f49d2</code> (EPITA's tenant: only <code>prenom.nom@epita.fr</code> accounts get in). Client id and secret come from a Microsoft Entra app registration with the redirect URI of each realm (<code>&lt;p&gt;</code> and <code>&lt;p&gt;-staging</code>), multi-tenant if it is not registered in the EPITA tenant. Keycloak reads the profile from Microsoft Graph (<code>User.Read</code>, there by default). If the tenant blocks user consent, sign-in shows "admin approval required" and EPITA IT has to approve the app. Domain <code>epita.fr</code>. The CRI (<code>https://cri.epita.fr</code>, used by the Forge) has no dynamic registration: a client there must be requested.</li>
 </ul>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
@@ -3465,7 +3544,7 @@
       <script id="__config" type="application/json">{"annotate": null, "base": "../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
     
     
-      <script src="../../assets/javascripts/bundle.c21346df.min.js"></script>
+      <script src="../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
       
     
   </body>
