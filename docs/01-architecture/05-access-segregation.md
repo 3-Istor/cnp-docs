@@ -11,8 +11,17 @@ The plan runs in four phases, shown on every change in the matrix:
 |---|---|
 | **P1** Root accounts, audit trail | Vault root token revoked; Keycloak master admin, a second GitHub org owner, Cloudflare super admin and cloud roots kept offline for break-glass only; platform admins use kubectl over OIDC instead of a committed kubeconfig. Vault, K3s, Keycloak and Argo CD audit logs shipped to an append-only store that only break-glass can delete |
 | **P2** CMP rights | The CMP backend leaves the root token and the master admin for a scoped Vault role, a Keycloak client and scoped Cloudflare tokens |
-| **P3** Tenant isolation, GitOps | A project's members read its secrets and admins write them; kubectl rights per project; the global read roles go. Platform admins reach tenant secrets only through a one-hour, audited elevation. The GitOps repos take changes through reviewed pull requests only |
-| **P4** Cloud accounts | AWS organization with management, log-archive and workloads accounts; Terraform state behind a role assumed for one hour |
+| **P3** Tenant isolation, GitOps | A project's members read its secrets and admins write them; kubectl rights per project; the global read roles go. Platform admins reach tenant secrets only through just-in-time access brokered by the CMP portal: requested there, approved by a second platform admin, expiring on its own, audited. The GitOps repos take changes through reviewed pull requests only |
+| **P4** Cloud accounts | AWS organization with management, log-archive and workloads accounts; Terraform state behind a role assumed for one hour through Keycloak federation (`AssumeRoleWithWebIdentity`, like `cnp-finops-reader`) |
+
+Where it stands on 2026-11-11:
+
+| Phase | Done | Still to do |
+|---|---|---|
+| **P1** | Vault root token revoked, generated again from the unseal keys for break-glass; kubectl over OIDC (`k3s-admin`), the committed kubeconfig is gone; Vault, K3s, Keycloak and Argo CD audit logs in Loki with an Object Lock archive | Keycloak realm roles for `infra` and the master admin kept offline; a second GitHub owner kept offline (one owner today, `G23`); Cloudflare super admin |
+| **P2** | The CMP logs into Vault as Kubernetes auth role `cmp-backend` (1-hour token) | Removing the static `VAULT_TOKEN`, kept in the CMP values as a rollback path until a create and delete test passes (`G15`); Keycloak client `cmp-provisioner` in place of the master admin; scoped Cloudflare tokens |
+| **P3** | Members read and admins write their project's secrets; kubectl per project; no global Argo CD read for members | Just-in-time access and `vault_data_admin`; GitHub ruleset on `main`; `k3s-dev` and `k3s-view` removed; the auditor's Vault, Keycloak, kubectl and audit log reads |
+| **P4** | Nothing | AWS organization (none yet: one account); Terraform state role |
 
 The CMP portal follows the same identities: a Keycloak group gives the platform and the
 portal rights alike, and the portal reads the token's `groups` claim. Its own changes run
@@ -67,7 +76,8 @@ it adds, and `target` the phase. When a phase is done, delete its `deprecated` e
 drop `status` and `target` from its `planned` ones; the matrix then shows the new state with
 fewer changes, until none is left.
 
-Facts not verified yet are badged in the model: the policy of the CMP's Vault token
-(`G15`), the scope of its Cloudflare token (`G16`), the members' GitHub base permission
-(`G17`; that `main` is unprotected on the platform repos was checked); who holds
-Cloudflare super admin is not checked either and is drawn as the platform admin.
+Facts not verified yet are badged in the model: the policy of the CMP's static Vault
+token (`G15`) and the scope of its Cloudflare token (`G16`); who holds Cloudflare super
+admin is not checked either and is drawn as the platform admin. Checked on 2026-11-11:
+the GitHub org gives every member write on every repo, does not require 2FA, has no
+ruleset and protects `main` on CMP only (`G17`), and has a single owner (`G23`).
