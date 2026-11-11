@@ -138,15 +138,15 @@ elements:
   - {id: kc-master-admin, kind: security, parent: g-identity, icon: keycloak, title: Master admin, tech: "[Keycloak user]", desc: "Realm master, every realm"}
   - {id: kc-realm-admin, kind: security, parent: g-identity, icon: keycloak, title: realm-management, tech: "[Keycloak client roles]", desc: Realm 3istor only, status: planned, target: P1}
   - {id: kc-client-cmp, kind: security, parent: g-identity, icon: keycloak, title: cmp-provisioner, tech: "[Keycloak client]", desc: "Service account, realm 3istor", status: planned, target: P2}
-  - {id: vault-root-token, kind: database, parent: g-secrets, icon: k8s-secret, title: Root token, tech: "[Vault token]", desc: "Static, in CMP and scripts"}
-  - {id: vault-generate-root, kind: database, parent: g-secrets, icon: vault, title: generate-root, tech: "[unseal keys]", desc: From the offline vault, status: planned, target: P1}
+  - {id: vault-root-token, kind: database, parent: g-secrets, icon: k8s-secret, title: Static token, tech: "[Vault token]", desc: "VAULT_TOKEN, CMP rollback path"}
+  - {id: vault-generate-root, kind: database, parent: g-secrets, icon: vault, title: generate-root, tech: "[unseal keys]", desc: From the offline vault}
   - {id: policy-vault-admin, kind: database, parent: g-secrets, icon: vault, title: vault_admin, tech: "[Vault policy]", desc: "path *"}
   - {id: policy-a-dev, kind: database, parent: g-secrets, icon: vault, title: "project-<a>-dev", tech: "[Vault policy]", desc: "CRUD project-<a>/*"}
-  - {id: policy-a-read, kind: database, parent: g-secrets, icon: vault, title: "project-<a>-read", tech: "[Vault policy]", desc: "read project-<a>/*", status: planned, target: P3}
+  - {id: policy-a-read, kind: database, parent: g-secrets, icon: vault, title: "project-<a>-read", tech: "[Vault policy]", desc: "read project-<a>/*"}
   - {id: policy-vso, kind: database, parent: g-secrets, icon: vault, title: vault-secrets-operator, tech: "[Vault policy]", desc: "read kvv2/*, project-*/*"}
   - {id: role-vso, kind: database, parent: g-secrets, icon: vault, title: VSO roles, tech: "[Vault k8s auth roles]", desc: Bound to the VSO SA}
-  - {id: role-cmp, kind: database, parent: g-secrets, icon: vault, title: cmp role, tech: "[Vault k8s auth role]", desc: Bound to the CMP SA, status: planned, target: P2}
-  - {id: policy-cmp, kind: database, parent: g-secrets, icon: vault, title: cmp-provisioner, tech: "[Vault policy]", desc: "project-* mounts, policies, roles", status: planned, target: P2}
+  - {id: role-cmp, kind: database, parent: g-secrets, icon: vault, title: cmp-backend, tech: "[Vault k8s auth role]", desc: "SA arcl-cmp, token 1 hour"}
+  - {id: policy-cmp, kind: database, parent: g-secrets, icon: vault, title: cmp-backend, tech: "[Vault policy]", desc: "project-* mounts, policies, roles, groups"}
   - {id: vault-sys, kind: database, parent: g-secrets, shape: cylinder, icon: vault, title: Vault config, tech: "[sys, auth, policies]", desc: "Mounts, policies, auth roles"}
   - {id: vault-kvv2, kind: database, parent: g-secrets, shape: cylinder, icon: vault, title: kvv2/, tech: "[KV v2 mount]", desc: Platform secrets}
   - {id: vault-a, kind: database, parent: g-secrets, shape: cylinder, icon: vault, title: "project-<a>/", tech: "[KV v2 mount]", desc: Tenant A secrets}
@@ -158,24 +158,23 @@ elements:
   - {id: apps-platform, kind: backend, parent: g-gitops, icon: argo, title: Platform apps, tech: "[Argo CD]", desc: "Vault, Keycloak, CMP, ..."}
   - {id: apps-a, kind: backend, parent: g-gitops, icon: argo, title: "<project-a> apps", tech: "[Argo CD AppProject]", desc: Tenant A}
   - {id: apps-b, kind: backend, parent: g-gitops, icon: argo, title: "<project-b> apps", tech: "[Argo CD AppProject]", desc: Tenant B}
-  - {id: kubeconfig-admin, kind: security, parent: g-rbac, icon: k8s-secret, title: Admin kubeconfig, tech: "[client certificate]", desc: Committed in the Cloud repo}
   - {id: crb-view, kind: security, parent: g-rbac, icon: k8s-crd, title: oidc-view-binding, tech: "[ClusterRoleBinding]", desc: "k3s-dev, k3s-view: view"}
   - {id: rb-a-edit, kind: security, parent: g-rbac, icon: k8s-crd, title: "project-<a>-operator", tech: "[Role + RoleBinding]", desc: "admins: operate pods, no network policy in <a>"}
   - {id: rb-a-view, kind: security, parent: g-rbac, icon: k8s-crd, title: "project-<a>-view", tech: "[RoleBinding]", desc: "members: view in <a>"}
   - {id: cf-token, kind: cloud, parent: z-cloudflare, icon: k8s-secret, title: Cloudflare API token, tech: "[API token]", desc: "Static, scope not verified"}
   - {id: cf-token-scoped, kind: cloud, parent: z-cloudflare, icon: k8s-secret, title: Scoped tokens, tech: "[API tokens]", desc: "DNS edit, tunnel edit", status: planned, target: P2}
   - {id: github-app, kind: cloud, parent: z-github, icon: github, title: CMP GitHub App, tech: "[installation token]", desc: Expires after 1 hour}
-  - {id: aws-key, kind: cloud, parent: z-aws-shared, icon: k8s-secret, title: Access key, tech: "[IAM user key]", desc: "Long-lived, personal account"}
+  - {id: aws-key, kind: cloud, parent: z-aws-shared, icon: k8s-secret, title: Access key, tech: "[IAM user key]", desc: "Long-lived; cmp-tfstate for the CMP"}
   - {id: aws-root, kind: cloud, parent: z-aws-shared, icon: k8s-secret, title: Management root, tech: "[AWS root user]", desc: "MFA, no access key", status: planned, target: P4}
-  - {id: aws-role, kind: cloud, parent: z-aws-shared, icon: terraform, title: tfstate role, tech: "[IAM role via Vault]", desc: Assumed for 1 hour, status: planned, target: P4}
+  - {id: aws-role, kind: cloud, parent: z-aws-shared, icon: terraform, title: tfstate role, tech: "[IAM role · Keycloak federation]", desc: "AssumeRoleWithWebIdentity, 1 hour", status: planned, target: P4}
   - {id: tfstate, kind: cloud, parent: z-aws-shared, shape: cylinder, icon: terraform, title: Terraform state, tech: "[S3 + DynamoDB]", desc: Every project's state}
   - {id: gh-owner, kind: external, parent: z-github, icon: github, title: Org owner, tech: "[GitHub role]", desc: Full control of the org}
   - {id: gh-base, kind: external, parent: z-github, icon: github, title: Member write, tech: "[GitHub permission]", desc: "Push to main, no protection"}
   - {id: gh-ruleset, kind: external, parent: z-github, icon: github, title: main ruleset, tech: "[GitHub ruleset]", desc: "PR, 1 review, CODEOWNERS", status: planned, target: P3}
   - {id: gh-project-repos, kind: external, parent: z-github, icon: github, title: App repos, tech: "[GitHub · one per project]", desc: Created by the CMP from templates, ports: [{name: https, protocol: TCP, port: 443}]}
-  - {id: grp-infra-elevated, kind: security, parent: g-identity, icon: keycloak, title: infra-elevated, tech: "[Keycloak group · JIT]", desc: "Granted on request, 1 hour", status: planned, target: P3}
+  - {id: grp-infra-elevated, kind: security, parent: g-identity, icon: keycloak, title: Just-in-time access, tech: "[CMP portal · JIT]", desc: "Second infra approves, expires itself", status: planned, target: P3}
   - {id: policy-vault-data, kind: database, parent: g-secrets, icon: vault, title: vault_data_admin, tech: "[Vault policy]", desc: "project-*/*, audited", status: planned, target: P3}
-  - {id: audit-logs, kind: database, parent: g-ops, shape: cylinder, icon: grafana-alloy, title: Audit logs, tech: "[Loki · append-only]", desc: "Vault, K3s, Keycloak, Argo CD", status: planned, target: P1}
+  - {id: audit-logs, kind: database, parent: g-ops, shape: cylinder, icon: grafana-alloy, title: Audit logs, tech: "[Loki · append-only]", desc: "Vault, K3s, Keycloak, Argo CD; Object Lock archive"}
   - {id: grp-k3s-admin, kind: security, parent: g-identity, icon: keycloak, title: k3s-admin, tech: "[Keycloak group]", desc: kubectl cluster-admin over OIDC}
   - {id: crb-admin, kind: security, parent: g-rbac, icon: k8s-crd, title: oidc-admin-binding, tech: "[ClusterRoleBinding]", desc: "k3s-admin: cluster-admin"}
   - {id: crb-argocd, kind: security, parent: g-rbac, icon: k8s-crd, title: argocd-application-controller, tech: "[ClusterRoleBinding]", desc: Argo CD deploys anywhere}
@@ -1281,12 +1280,13 @@ annotations:
   - {id: G9, severity: medium, title: "Keycloak ReferenceGrant", targets: [security-policy]}
   - {id: G10, severity: medium, title: "Shared gateway label", targets: [httproute]}
   - {id: G13, severity: medium, title: "Secret operator", text: "The Ricoberger vault-secrets-operator (chart 3.0.0, image v1.26.0), not HashiCorp VSO, on the hub and on both clouds: whether a synced Secret survives a Vault outage is untested (GD-1).", targets: [b-secret-op]}
-  - {id: G15, severity: high, title: "CMP Vault token", text: "The CMP's VAULT_TOKEN comes from kvv2/arcl-cmp; its policy was not checked. Drawn as the root token, the worst case.", targets: [vault-root-token]}
-  - {id: G17, severity: high, title: "GitOps write", text: "main is unprotected on K3s, cnp-projects, cnp-project-base, app-templates and CMP (checked 2026-10-02); the members' base permission was not checked. Whoever pushes to the GitOps repos deploys anywhere through Argo CD.", targets: [gh-base]}
+  - {id: G15, severity: high, title: "CMP Vault token", text: "The CMP logs in as Vault role cmp-backend (1-hour token, policy cmp-backend). Its static VAULT_TOKEN from kvv2/arcl-cmp stays in the CMP values as a rollback path until a project create and delete test passes; that token's policy was not checked, drawn as admin.", targets: [vault-root-token]}
+  - {id: G17, severity: high, title: "GitOps write", text: "GitHub org 3-Istor, free plan: default repository permission write, 2FA not required, no rulesets; only main of CMP is protected, so K3s, cnp-projects, cnp-project-base and app-templates take direct pushes (checked 2026-11-11). Whoever pushes to the GitOps repos deploys anywhere through Argo CD.", targets: [gh-base]}
+  - {id: G23, severity: medium, title: "Single GitHub owner", text: "The org 3-Istor has one owner, who uses it daily: no second owner is kept offline for break-glass, and losing that account locks the org (checked 2026-11-11).", targets: [gh-owner]}
   - {id: G16, severity: medium, title: "Cloudflare token scope", text: "CLOUDFLARE_API_TOKEN scope was not checked. Drawn as write on the zone and tunnels.", targets: [cf-token]}
   - {id: G18, severity: medium, title: "Delete during a down", text: "CNP-112: cloud Applications retry forever with refresh, so syncs resume after a down. Remaining risk: deleting a cloud Application while its cluster is down hangs on the finalizer.", targets: [c-argocd-b]}
   - {id: G19, severity: low, title: "Frontend start order", text: "CNP-114: the frontend nginx resolves the backend at start and crashes until the backend Service exists.", targets: [b1-front]}
-  - {id: G21, severity: high, title: "Team accounts are cloud admins", text: "Accepted for the MVP: IAM group 3istors gives AdministratorAccess to the six team members, who develop the platform, like break-glass accounts used daily. The platform's own identities, its users and the demo accounts follow the matrix. Checked with aws iam on 2026-11-07.", targets: [iam-3istors]}
+  - {id: G21, severity: high, title: "Team accounts are cloud admins", text: "Accepted for the MVP: IAM group 3istors gives AdministratorAccess to the six team members, who develop the platform, like break-glass accounts used daily. The platform's own identities, its users and the demo accounts follow the matrix. Checked with aws iam on 2026-11-07. No AWS Organization yet: one account, IAM users for the six members and cmp-tfstate, the CMP's state user (checked 2026-11-11).", targets: [iam-3istors]}
   - {id: G22, severity: medium, title: "GCP IAM not verified", text: "Who holds the GCP project's roles is not checked (no gcloud on hand); drawn as the platform admin.", targets: [gcp-project]}
   - {id: G20, severity: low, title: "Shared VaultSecret", text: "CNP-115: fullstack apps render the VaultSecret app-registry from both Applications; one stays OutOfSync.", targets: [b1-back]}
 
@@ -1308,9 +1308,9 @@ memberships:
   - {id: m-guest-a, subject: guest-a, group: grp-a-guests, auth: {method: oidc, mfa: true}}
   - {id: m-auditor, subject: auditor, group: grp-auditor, auth: {method: oidc, mfa: true}}
   - {id: m-vso, subject: vso, group: role-vso, auth: {method: k8s-sa, lifetime: 24h}}
-  - {id: m-cmp-role, subject: cmp-backend, group: role-cmp, auth: {method: k8s-sa, lifetime: 1h}, status: planned, target: P2}
+  - {id: m-cmp-role, subject: cmp-backend, group: role-cmp, auth: {method: k8s-sa, lifetime: 1h}}
 
-  - {id: m-admin-k3s-admin, subject: admin, group: grp-k3s-admin, auth: {method: oidc, mfa: true}, status: planned, target: P1}
+  - {id: m-admin-k3s-admin, subject: admin, group: grp-k3s-admin, auth: {method: oidc, mfa: true}}
   - {id: m-finops, subject: finops, group: grp-finops, auth: {method: oidc, mfa: true}}
 grants:
   # Platform admins
@@ -1322,9 +1322,6 @@ grants:
   - {id: g-infra-apps-a, subject: grp-infra, resource: apps-a, level: admin, via: [argocd-admin]}
   - {id: g-infra-apps-b, subject: grp-infra, resource: apps-b, level: admin, via: [argocd-admin]}
   - {id: g-infra-realm, subject: grp-infra, resource: keycloak, level: admin, via: [kc-realm-admin], status: planned, target: P1}
-  - {id: g-admin-kube-platform, subject: admin, resource: kube-apiserver, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated, target: P1}
-  - {id: g-admin-kube-a, subject: admin, resource: g-tenant-a, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated, target: P1}
-  - {id: g-admin-kube-b, subject: admin, resource: g-tenant-b, level: admin, via: [kubeconfig-admin], auth: {method: static-token, lifetime: 1y}, status: deprecated, target: P1}
 
   # Every team member, today
   - {id: g-k3s-dev-platform, subject: grp-k3s-dev, resource: kube-apiserver, level: read, via: [crb-view], status: deprecated, target: P3}
@@ -1354,7 +1351,7 @@ grants:
   - {id: g-vso-a, subject: role-vso, resource: vault-a, level: read, via: [policy-vso]}
   - {id: g-vso-b, subject: role-vso, resource: vault-b, level: read, via: [policy-vso]}
 
-  # CMP, today
+  # CMP: the static Vault token stays wired as a rollback path (G15)
   - {id: g-cmp-vault-sys, subject: cmp-backend, resource: vault-sys, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P2}
   - {id: g-cmp-vault-kvv2, subject: cmp-backend, resource: vault-kvv2, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P2}
   - {id: g-cmp-vault-a, subject: cmp-backend, resource: vault-a, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P2}
@@ -1364,29 +1361,26 @@ grants:
   - {id: g-cmp-cf, subject: cmp-backend, resource: cf-edge, level: write, via: [cf-token], auth: {method: static-token}, status: deprecated, target: P2}
   - {id: g-cmp-gh, subject: cmp-backend, resource: github, level: write, scope: project records, via: [github-app], auth: {method: federated, lifetime: 1h}}
   - {id: g-cmp-gh-repos, subject: cmp-backend, resource: gh-project-repos, level: write, scope: creates them, via: [github-app], auth: {method: federated, lifetime: 1h}}
-  # CMP, target
-  - {id: g-cmp-new-vault-sys, subject: role-cmp, resource: vault-sys, level: write, scope: "project-* mounts, policies, roles", via: [policy-cmp], status: planned, target: P2}
-  - {id: g-cmp-new-vault-a, subject: role-cmp, resource: vault-a, level: write, scope: "project-*", via: [policy-cmp], status: planned, target: P2}
-  - {id: g-cmp-new-vault-b, subject: role-cmp, resource: vault-b, level: write, scope: "project-*", via: [policy-cmp], status: planned, target: P2}
+  # CMP: Vault role cmp-backend is live; Keycloak client, Cloudflare tokens and tfstate role to come
+  - {id: g-cmp-new-vault-sys, subject: role-cmp, resource: vault-sys, level: write, scope: "project-* mounts, policies, roles", via: [policy-cmp]}
+  - {id: g-cmp-new-vault-kvv2, subject: role-cmp, resource: vault-kvv2, level: read, scope: "projects/*", via: [policy-cmp]}
+  - {id: g-cmp-new-vault-a, subject: role-cmp, resource: vault-a, level: write, scope: "project-*", via: [policy-cmp]}
+  - {id: g-cmp-new-vault-b, subject: role-cmp, resource: vault-b, level: write, scope: "project-*", via: [policy-cmp]}
   - {id: g-cmp-new-realm, subject: cmp-backend, resource: keycloak, level: write, scope: project groups, via: [kc-client-cmp], auth: {method: federated, lifetime: 5m}, status: planned, target: P2}
   - {id: g-cmp-new-cf, subject: cmp-backend, resource: cf-edge, level: write, scope: "DNS, tunnels", via: [cf-token-scoped], auth: {method: static-token}, status: planned, target: P2}
   - {id: g-cmp-new-tfstate, subject: cmp-backend, resource: tfstate, level: write, scope: "projects/*", via: [aws-role], auth: {method: federated, lifetime: 1h}, status: planned, target: P4}
 
-  # Root accounts: used daily today, break-glass only after P1 and P4
-  - {id: g-root-vault, subject: root, resource: vault-sys, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
-  - {id: g-root-vault-kvv2, subject: root, resource: vault-kvv2, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
-  - {id: g-root-vault-a, subject: root, resource: vault-a, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
-  - {id: g-root-vault-b, subject: root, resource: vault-b, level: admin, via: [vault-root-token], auth: {method: static-token}, status: deprecated, target: P1}
+  # Root accounts: break-glass only; Terraform state still used daily until P4
   - {id: g-root-realm, subject: root, resource: keycloak, level: admin, via: [kc-master-admin], auth: {method: password}, status: deprecated, target: P1}
   - {id: g-root-tfstate, subject: root, resource: tfstate, level: admin, via: [aws-key], auth: {method: access-key}, status: deprecated, target: P4}
-  - {id: g-root-vault-bg, subject: root, resource: vault-sys, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
-  - {id: g-root-vault-kvv2-bg, subject: root, resource: vault-kvv2, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
-  - {id: g-root-vault-a-bg, subject: root, resource: vault-a, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
-  - {id: g-root-vault-b-bg, subject: root, resource: vault-b, level: breakglass, via: [vault-generate-root], status: planned, target: P1}
+  - {id: g-root-vault-bg, subject: root, resource: vault-sys, level: breakglass, via: [vault-generate-root]}
+  - {id: g-root-vault-kvv2-bg, subject: root, resource: vault-kvv2, level: breakglass, via: [vault-generate-root]}
+  - {id: g-root-vault-a-bg, subject: root, resource: vault-a, level: breakglass, via: [vault-generate-root]}
+  - {id: g-root-vault-b-bg, subject: root, resource: vault-b, level: breakglass, via: [vault-generate-root]}
   - {id: g-root-realm-bg, subject: root, resource: keycloak, level: breakglass, via: [kc-master-admin], status: planned, target: P1}
   - {id: g-root-tfstate-bg, subject: root, resource: tfstate, level: breakglass, via: [aws-root], auth: {method: password, mfa: true}, status: planned, target: P4}
 
-  # kubectl for platform admins over OIDC, replacing the committed kubeconfig
+  # kubectl for platform admins over OIDC
   - {id: g-k3s-admin-platform, subject: grp-k3s-admin, resource: kube-apiserver, level: admin, via: [crb-admin]}
   - {id: g-k3s-admin-a, subject: grp-k3s-admin, resource: g-tenant-a, level: admin, via: [crb-admin]}
   - {id: g-k3s-admin-b, subject: grp-k3s-admin, resource: g-tenant-b, level: admin, via: [crb-admin]}
@@ -1404,7 +1398,8 @@ grants:
   - {id: g-auditor-keycloak, subject: grp-auditor, resource: keycloak, level: read, scope: events, status: planned, target: P3}
   - {id: g-finops-aws-mgmt, subject: grp-finops, resource: aws-account-mgmt, level: read, scope: billing, status: planned, target: P4}
 
-  # Platform admins manage the platform; tenant data only through a time-bound elevation
+  # Platform admins manage the platform; tenant data only through just-in-time access
+  # requested in the CMP portal, approved by a second platform admin, expiring on its own
   - {id: g-elevated-vault-a, subject: grp-infra-elevated, resource: vault-a, level: admin, via: [policy-vault-data], status: planned, target: P3}
   - {id: g-elevated-vault-b, subject: grp-infra-elevated, resource: vault-b, level: admin, via: [policy-vault-data], status: planned, target: P3}
 
@@ -1421,9 +1416,9 @@ grants:
   - {id: g-root-cf, subject: root, resource: cf-edge, level: breakglass, status: planned, target: P1}
 
   # Audit trail: everyone who administers reads it, nobody but break-glass deletes it
-  - {id: g-infra-audit, subject: grp-infra, resource: audit-logs, level: read, status: planned, target: P1}
+  - {id: g-infra-audit, subject: grp-infra, resource: audit-logs, level: read}
   - {id: g-auditor-audit, subject: grp-auditor, resource: audit-logs, level: read, status: planned, target: P3}
-  - {id: g-root-audit, subject: root, resource: audit-logs, level: breakglass, status: planned, target: P1}
+  - {id: g-root-audit, subject: root, resource: audit-logs, level: breakglass}
   # CMP portal (CNP-228). L1 authz holes, L2 Keycloak groups, L3 roles in the portal,
   # L4 Grafana and Argo CD, L5 cleanup. Platform admins come from a username list today.
   - {id: g-infra-cmp-apps-a, subject: grp-infra, resource: cmp-apps-a, level: admin, via: [cmp-authz]}

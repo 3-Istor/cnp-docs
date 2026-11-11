@@ -196,7 +196,7 @@
         <mxCell id="mx-row1-bar" value="" style="rounded=0;fillColor=#94a3b8;strokeColor=none;movable=0;" vertex="1" parent="1">
           <mxGeometry x="40" y="416" width="4" height="58" as="geometry" />
         </mxCell>
-        <mxCell id="mx-row2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;Platform admin, elevated&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#94a3b8&quot; style=&quot;font-size:10px&quot;&gt;Granted on request, 1 hour&lt;/font&gt;&lt;/span&gt;" style="rounded=0;html=1;fillColor=#0b1222;strokeColor=none;align=left;verticalAlign=middle;spacingLeft=14;whiteSpace=wrap;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#f8fafc;" vertex="1" parent="1">
+        <mxCell id="mx-row2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;Platform admin, just in time&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#94a3b8&quot; style=&quot;font-size:10px&quot;&gt;Second infra approves, expires itself&lt;/font&gt;&lt;/span&gt;" style="rounded=0;html=1;fillColor=#0b1222;strokeColor=none;align=left;verticalAlign=middle;spacingLeft=14;whiteSpace=wrap;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#f8fafc;" vertex="1" parent="1">
           <mxGeometry x="40" y="478" width="260" height="58" as="geometry" />
         </mxCell>
         <mxCell id="mx-row2-bar" value="" style="rounded=0;fillColor=#94a3b8;strokeColor=none;movable=0;" vertex="1" parent="1">
@@ -1417,7 +1417,7 @@
         <mxCell id="mx-cell380" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;WRITE&lt;/b&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;movable=0;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#c4b5fd;fillColor=#2e1065;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="1196" y="1140" width="104" height="58" as="geometry" />
         </mxCell>
-        <mxCell id="mx-cell381" value="" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;movable=0;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#94a3b8;fillColor=#111827;strokeColor=none;" vertex="1" parent="1">
+        <mxCell id="mx-cell381" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;READ&lt;/b&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;movable=0;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#7dd3fc;fillColor=#082f49;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="1304" y="1140" width="104" height="58" as="geometry" />
         </mxCell>
         <mxCell id="mx-cell382" value="" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;align=center;verticalAlign=middle;whiteSpace=wrap;movable=0;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#94a3b8;fillColor=#111827;strokeColor=none;" vertex="1" parent="1">

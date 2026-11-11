@@ -69,3 +69,4 @@ hidden_annotations:
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"

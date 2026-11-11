@@ -56,7 +56,7 @@ labels:
   admin-a: Project A admin
   guest-a: Project A guest
   dev-a: Project A developer
-  grp-infra-elevated: Platform admin, elevated
+  grp-infra-elevated: Platform admin, just in time
   grp-member: All team members
   grp-k3s-dev: k3s-dev, k3s-view members
   cmp-backend: CMP backend
