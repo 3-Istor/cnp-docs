@@ -11,9 +11,9 @@ bout le plus tôt possible, puis industrialise l'import.
 | 3. Epitweet à la main | Valeurs écrites à la main dans cnp-projects, images construites par une exécution du workflow | CNP-238, CNP-239 | **Epitweet tourne de bout en bout** |
 | 4. Build | Workflow central (Dockerfile du repo, Dockerfile réparé, Railpack), callback OIDC, commit atomique du registre | CNP-238 | Un build relancé redéploie un seul service |
 | 5. Analyse | Analyseur Python et plan d'import | CNP-237 | Le plan d'epitweet liste 7 apps, 4 bases et les liens |
-| 6. Parcours | Liaison GitHub et GitLab, tables d'import, brouillon sur la carte, Apply avec step-up, suivi | CNP-241 | Epitweet importé depuis le portail |
+| 6. Parcours | Installation de CNP-Portal et jetons restreints, tables d'import, brouillon sur la carte, Apply avec step-up, suivi | CNP-241 | Epitweet importé depuis le portail |
 | 7. Topologie | Métriques Hubble dans VictoriaMetrics, API, onglet avec React Flow | CNP-242 | Les arêtes apparaissent quand on clique dans epitweet |
-| 8. Rebuild et MCP | Webhook, polling, rattrapage ; outils MCP | CNP-243, CNP-244 | Un push redéploie le service touché |
+| 8. Rebuild et MCP | Webhook, rattrapage ; outils MCP | CNP-243, CNP-244 | Un push redéploie le service touché |
 | 9. Recette et doc | Corpus, epitweet, fermeture des PRs de Joe | CNP-245, CNP-246 | Tout ci-dessous est vert |
 
 ## Recette
@@ -41,13 +41,14 @@ Tout se passe sur le vrai cluster, dans des projets de test supprimés à la fin
 | Spring Boot | Maven, avec Dockerfile multi-étapes |
 | Quarkus | Dockerfile qui attend un artefact compilé |
 | Monorepo avec docker-compose | plusieurs services et une base |
-| Repo GitLab | importé par OAuth GitLab |
+| Monorepo sans docker-compose | plusieurs services, chacun avec son Dockerfile |
 
 **Sécurité**
 
 - [ ] Un member ne peut ni analyser ni importer : le bouton est absent, et l'API répond 403.
 - [ ] Un callback de build rejoué, ou venant d'une autre tentative, est refusé.
 - [ ] Un webhook à signature invalide est refusé et journalisé.
+- [ ] Un jeton émis pour une installation utilisateur n'a que `contents:read` et `metadata:read` sur un seul repo : une écriture ou la lecture d'un autre repo échoue.
 - [ ] Un alias vers un service hors du projet est refusé à l'écriture.
 - [ ] Une archive piégée (lien symbolique sortant, fichier énorme, chemin `..`) est refusée sans lecture hors du dossier.
 - [ ] Les constats critiques et majeurs de l'audit de sécurité sont fermés ou acceptés par écrit.

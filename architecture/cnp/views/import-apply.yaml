@@ -8,7 +8,7 @@ meta:
   - "The node pulls the image (kubelet) with the project pull credential; drawn from the app."
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
-participants: [user, im-import, vault, im-build-prepare, im-gh-import-app, im-user-repo, im-build-publish, pa-registry, argocd, im-chart, kube-apiserver, ghcr, im-service]
+participants: [user, im-import, vault, im-build-prepare, github-app, im-user-repo, im-build-publish, pa-registry, argocd, im-chart, kube-apiserver, ghcr, im-service]
 
 steps:
   - {id: apply, from: user, to: im-import, over: c-im-user-import, text: "POST /api/projects/{p}/import/{id}/apply"}
@@ -18,8 +18,11 @@ steps:
   - {note: im-import, text: "admin or owner · rows import_builds with attempt_id · lock per project"}
   - {id: dispatch, from: im-import, to: im-build-prepare, over: c-im-import-dispatch, text: "workflow_dispatch via the GitHub API, CNP-Portal token · {import_build_id, attempt_id, project, sha}"}
   - {reply: apply2, text: "202 · progress per service"}
-  - {id: tok, from: im-build-prepare, to: im-gh-import-app, over: c-im-prepare-token, text: "create-github-app-token · repositories: <repo>"}
-  - {reply: tok, text: "token, 1 h, this repo only"}
+  - {id: tok, from: im-build-prepare, to: im-import, over: c-im-prepare-cmp, text: "repo token request · GitHub OIDC JWT"}
+  - {note: im-import, text: "checks repo, job_workflow_ref, run_id, attempt_id"}
+  - {id: mint, from: im-import, to: github-app, over: c-im-import-gh-api, text: "POST /app/installations/{id}/access_tokens · contents:read, metadata:read, repositories: [<repo>]"}
+  - {reply: mint, text: "token, 1 h, this repo only, read"}
+  - {reply: tok, text: "the token"}
   - {id: src, from: im-build-prepare, to: im-user-repo, over: c-im-prepare-repo, text: "GET tarball @SHA"}
   - {reply: src, text: "tar.gz"}
   - {note: im-build-prepare, text: "gitleaks + trivy fs: stop on a secret or a critical · on stop, publish reports status=blocked, no digest, no commit"}
@@ -67,6 +70,5 @@ hidden_annotations:
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G20: "targets b1-back, not drawn in this view"
-  GI1: "targets github-app, not drawn in this view"
   GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

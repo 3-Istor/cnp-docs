@@ -163,7 +163,7 @@ elements:
   - {id: rb-a-view, kind: security, parent: g-rbac, icon: k8s-crd, title: "project-<a>-view", tech: "[RoleBinding]", desc: "members: view in <a>"}
   - {id: cf-token, kind: cloud, parent: z-cloudflare, icon: k8s-secret, title: Cloudflare API token, tech: "[API token]", desc: "Static, scope not verified"}
   - {id: cf-token-scoped, kind: cloud, parent: z-cloudflare, icon: k8s-secret, title: Scoped tokens, tech: "[API tokens]", desc: "DNS edit, tunnel edit", status: planned, target: P2}
-  - {id: github-app, kind: cloud, parent: z-github, icon: github, title: CMP GitHub App, tech: "[installation token]", desc: Expires after 1 hour}
+  - {id: github-app, kind: cloud, parent: z-github, icon: github, title: CNP-Portal, tech: "[GitHub App · installation token]", desc: Expires after 1 hour, ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: aws-key, kind: cloud, parent: z-aws-shared, icon: k8s-secret, title: Access key, tech: "[IAM user key]", desc: "Long-lived; cmp-tfstate for the CMP"}
   - {id: aws-root, kind: cloud, parent: z-aws-shared, icon: k8s-secret, title: Management root, tech: "[AWS root user]", desc: "MFA, no access key", status: planned, target: P4}
   - {id: aws-role, kind: cloud, parent: z-aws-shared, icon: terraform, title: tfstate role, tech: "[IAM role · Keycloak federation]", desc: "AssumeRoleWithWebIdentity, 1 hour", status: planned, target: P4}
@@ -734,7 +734,9 @@ elements:
 
   # CNP-158 repo import (planned). Design: import spec v2 (2026-11-13). Existing parts
   # reused from above: user, cmp-frontend, cmp-backend, argocd, pa-appproject, kube-apiserver,
-  # github-app (CNP-Portal), pa-registry, ghcr, vault, vm-vmselect, alloy-onprem.
+  # github-app (CNP-Portal), pa-registry, ghcr, vault, vm-vmselect, alloy-onprem. Decided
+  # 2026-11-13: one GitHub App only. Users install CNP-Portal on chosen repos; for a user
+  # installation the CMP mints tokens down-scoped to contents:read, metadata:read and one repo.
   - {id: im-import, kind: backend, parent: g-cmp, icon: fastapi, title: "Import module", tech: "[CMP backend · /api/import]", desc: "Plans, builds, commits the registry", ports: [{name: http, protocol: TCP, port: 8000}], status: planned, target: CNP-241}
   - {id: im-wizard, kind: frontend, parent: g-cmp, icon: react, title: "Import wizard", tech: "[CMP frontend page]", desc: "Repo, branch, draft canvas, Apply", ports: [{name: http, protocol: TCP, port: 3000}], status: planned, target: CNP-241}
   - {id: im-analyzer, kind: backend, parent: g-cmp, icon: python, title: "Analyzer", tech: "[Python · CMP or extern-project-analyzer]", desc: "Parses compose, Dockerfiles; runs nothing", status: planned, target: CNP-237}
@@ -743,15 +745,11 @@ elements:
   - {id: im-backing, kind: database, parent: im-g-project, shape: cylinder, icon: k8s-deploy, title: "<backing> app", tech: "[type backing · StatefulSet + PVC]", desc: "Mongo, Redis, Neo4j, Elasticsearch", multiplicity: "one per backing service", status: planned, target: CNP-239}
   - {id: im-chart, kind: external, parent: z-github, icon: github, title: "infra-templates", tech: "[Helm chart · HEAD]", desc: "Gains a workload block (CNP-239)", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: im-g-build, kind: group, parent: z-github, color: indigo, icon: github-actions, title: "BUILD WORKFLOW", sub: "repo extern-project-analyzer · GitHub-hosted runners", status: planned, target: CNP-238}
-  - {id: im-build-prepare, kind: backend, parent: im-g-build, icon: github-actions, title: "job prepare", tech: "[id-token · CNP-Import key in env]", desc: "Fetches the source, gitleaks, trivy fs"}
+  - {id: im-build-prepare, kind: backend, parent: im-g-build, icon: github-actions, title: "job prepare", tech: "[id-token · repo token from the CMP]", desc: "Fetches the source, gitleaks, trivy fs"}
   - {id: im-build-build, kind: backend, parent: im-g-build, icon: github-actions, title: "job build", tech: "[no secret, no id-token]", desc: "buildx, Trivy image, Syft SBOM"}
   - {id: im-build-publish, kind: backend, parent: im-g-build, icon: github-actions, title: "job publish", tech: "[id-token · packages:write]", desc: "Pushes by digest, calls CMP back"}
   - {id: im-z-github-user, kind: region, color: slate, icon: github, title: "GITHUB · USER ACCOUNT", sub: "the user's own account or org"}
-  - {id: im-gh-import-app, kind: security, parent: im-z-github-user, icon: github, title: "CNP-Import", tech: "[GitHub App · contents:read]", desc: "Installed by the user on chosen repos", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: CNP-240}
   - {id: im-user-repo, kind: external, parent: im-z-github-user, icon: github, title: "<user> repo", tech: "[GitHub · compose, Dockerfiles]", desc: "Stays the source of truth", ports: [{name: https, protocol: TCP, port: 443}]}
-  - {id: im-z-gitlab, kind: region, color: orange, icon: gitlab, title: "GITLAB", sub: "gitlab.com · gitlab.cri.epita.fr"}
-  - {id: im-gitlab-oauth, kind: security, parent: im-z-gitlab, icon: gitlab, title: "CNP OAuth app", tech: "[read_repository · read_api]", desc: "One per GitLab instance, PKCE", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: CNP-240}
-  - {id: im-gitlab-repo, kind: external, parent: im-z-gitlab, icon: gitlab, title: "<user> project", tech: "[GitLab · compose, Dockerfiles]", desc: "Polled every 5 min", ports: [{name: https, protocol: TCP, port: 443}]}
   # CNP-242 project Topology (planned): where nodes and edges come from.
   - {id: tp-canvas, kind: frontend, parent: z-internet, icon: react, title: "Topology tab", tech: "[React Flow + ELK · browser]", desc: "Declared vs observed edges", status: planned, target: CNP-242}
   - {id: tp-api, kind: backend, parent: g-cmp, icon: fastapi, title: "Topology API", tech: "[CMP backend · /api/…/topology]", desc: "Merges declared and observed", ports: [{name: http, protocol: TCP, port: 8000}], status: planned, target: CNP-242}
@@ -1220,18 +1218,13 @@ connections:
   # tunnel and Envoy like every CMP call; those hops are folded into one connection here.
   - {id: c-im-user-wizard, from: user, to: im-wizard, port: http, protocol: HTTPS, verb: "open wizard, canvas", kind: flow, status: planned, target: CNP-241}
   - {id: c-im-user-import, from: user, to: im-import, port: http, protocol: HTTPS, verb: "/api/import/*", kind: flow, status: planned, target: CNP-241}
-  - {id: c-im-user-gh-install, from: user, to: im-gh-import-app, port: https, protocol: HTTPS, verb: "install, OAuth consent", kind: flow, status: planned, target: CNP-240}
-  - {id: c-im-user-gitlab, from: user, to: im-gitlab-oauth, port: https, protocol: HTTPS, verb: "authorize, PKCE", kind: flow, status: planned, target: CNP-240}
-  - {id: c-im-import-gh-api, from: im-import, to: im-gh-import-app, port: https, protocol: HTTPS, verb: "OAuth token, installations, HEAD", kind: auth, status: planned, target: CNP-240}
-  - {id: c-im-import-gitlab-oauth, from: im-import, to: im-gitlab-oauth, port: https, protocol: HTTPS, verb: "token exchange", kind: auth, status: planned, target: CNP-240}
+  - {id: c-im-user-gh-install, from: user, to: github-app, port: https, protocol: HTTPS, verb: "install on chosen repos, OAuth consent", kind: flow, status: planned, target: CNP-240}
+  - {id: c-im-import-gh-api, from: im-import, to: github-app, port: https, protocol: HTTPS, verb: "down-scoped token: contents:read, 1 repo", kind: auth, status: planned, target: CNP-240}
   - {id: c-im-import-analyzer, from: im-import, to: im-analyzer, protocol: in-process, verb: "analyze(repo, SHA)", kind: flow, status: planned, target: CNP-237}
   - {id: c-im-analyzer-repo, from: im-analyzer, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA, size cap", kind: flow, status: planned, target: CNP-237}
-  - {id: c-im-analyzer-gitlab, from: im-analyzer, to: im-gitlab-repo, port: https, protocol: HTTPS, verb: "archive @SHA, size cap", kind: flow, status: planned, target: CNP-237}
   - {id: c-im-import-dispatch, from: im-import, to: im-build-prepare, protocol: HTTPS, verb: "workflow_dispatch (ids, SHA)", kind: flow, status: planned, target: CNP-238}
-  - {id: c-im-prepare-token, from: im-build-prepare, to: im-gh-import-app, port: https, protocol: HTTPS, verb: "installation token, 1 repo", kind: auth, status: planned, target: CNP-238}
-  - {id: c-im-prepare-cmp, from: im-build-prepare, to: im-import, port: http, protocol: HTTPS, verb: "GitLab token for OIDC JWT", kind: auth, status: planned, target: CNP-238}
+  - {id: c-im-prepare-cmp, from: im-build-prepare, to: im-import, port: http, protocol: HTTPS, verb: "repo token for OIDC JWT", kind: auth, status: planned, target: CNP-238}
   - {id: c-im-prepare-repo, from: im-build-prepare, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA", kind: flow, status: planned, target: CNP-238}
-  - {id: c-im-prepare-gitlab, from: im-build-prepare, to: im-gitlab-repo, port: https, protocol: HTTPS, verb: "archive @SHA", kind: flow, status: planned, target: CNP-238}
   - {id: c-im-publish-ghcr, from: im-build-publish, to: ghcr, port: https, protocol: HTTPS, verb: "push imports/<p>/<app>", kind: flow, status: planned, target: CNP-238}
   - {id: c-im-publish-callback, from: im-build-publish, to: im-import, port: http, protocol: HTTPS, verb: "callback, GitHub OIDC JWT", kind: flow, status: planned, target: CNP-238}
   - {id: c-im-import-registry, from: im-import, to: pa-registry, port: https, protocol: HTTPS, verb: "commit as CNP-Portal", kind: flow, status: planned, target: CNP-238}
@@ -1242,8 +1235,7 @@ connections:
   - {id: c-im-import-smoke, from: im-import, to: im-service, protocol: HTTP, verb: "post-deploy smoke", kind: flow, status: planned, target: CNP-241}
   - {id: c-im-service-backing, from: im-service, to: im-backing, protocol: TCP, verb: "dependsOn alias", kind: flow, status: planned, target: CNP-240}
   - {id: c-im-import-vault, from: im-import, to: vault, port: http, protocol: HTTP, verb: "write generated creds", kind: flow, status: planned, target: CNP-239}
-  - {id: c-im-gh-webhook, from: im-gh-import-app, to: im-import, port: http, protocol: HTTPS, verb: "push webhook, HMAC", kind: async, status: planned, target: CNP-244}
-  - {id: c-im-import-gitlab-poll, from: im-import, to: im-gitlab-repo, port: https, protocol: HTTPS, verb: "poll branch HEAD, 5 min", kind: async, status: planned, target: CNP-244}
+  - {id: c-im-gh-webhook, from: github-app, to: im-import, port: http, protocol: HTTPS, verb: "push webhook, HMAC", kind: async, status: planned, target: CNP-244}
   - {id: c-im-mcp-import, from: cmp-mcp, to: im-import, protocol: in-process, verb: "import tools, same token", kind: flow, status: planned, target: CNP-243}
   # CNP-242 project Topology (planned).
   - {id: c-tp-canvas-api, from: tp-canvas, to: tp-api, port: http, protocol: HTTPS, verb: "GET topology", kind: flow, status: planned, target: CNP-242}
@@ -1414,7 +1406,7 @@ annotations:
   - {id: G20, severity: low, title: "Shared VaultSecret", text: "CNP-115: fullstack apps render the VaultSecret app-registry from both Applications; one stays OutOfSync.", targets: [b1-back]}
 
   # CNP-158 import: design spec v2 against the code (2026-11-13).
-  - {id: GI1, severity: high, title: "CNP-Portal on user accounts", text: "The CMP already asks users to install CNP-Portal, the org's near-admin GitHub App, on their own account (user_github_installations, routers/account.py). The import design forbids it: CNP-Import replaces that flow.", targets: [github-app]}
+  - {id: GI1, severity: high, title: "CNP-Portal on user accounts", text: "Decided 2026-11-13: users install CNP-Portal on chosen repos (user_github_installations, routers/account.py), and the CMP must mint tokens for user installations down-scoped to contents:read, metadata:read and one repo. Today it mints full tokens. Residual risk accepted: the installation holds every CNP-Portal permission.", targets: [github-app]}
   - {id: GI2, severity: medium, title: "Step-up is off", text: "Apply relies on a passkey step-up, but STEP_UP_ENABLED defaults to false in the CMP: without it, Apply runs on a plain session.", targets: [c-im-user-import]}
   - {id: GI3, severity: low, title: "No vmagent", text: "The design has vmagent scrape Hubble metrics. The cluster runs no vmagent: Alloy scrapes and remote-writes to VictoriaMetrics.", targets: [c-tp-alloy-hubble]}
   - {id: GI4, severity: high, title: "AppProject trusts every repoURL", text: "AppProject <p> sourceRepos lists every spec.apps[].repoURL. An imported app that kept the user repo as repoURL would let Argo CD read it: imported apps must carry source, not repoURL.", targets: [x-im-argocd-user-repo]}
@@ -1598,13 +1590,11 @@ grants:
   - {id: g-finops-gcp-project, subject: grp-finops, resource: gcp-project, level: read, scope: billing, status: planned, target: P4}
   - {id: g-argocd-gke, subject: argocd, resource: gke-cluster, level: admin}
   # CNP-158 repo import (planned): machine identities, project roles, AI agents.
-  - {id: g-im-app-user-repo, subject: im-gh-import-app, resource: im-user-repo, level: read, scope: "contents, metadata · repos the user picked", auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-240}
-  - {id: g-im-prepare-user-repo, subject: im-build-prepare, resource: im-user-repo, level: read, scope: "one repo, one run", via: [im-gh-import-app], auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-238}
-  - {id: g-im-prepare-gitlab, subject: im-build-prepare, resource: im-gitlab-repo, level: read, scope: "token handed by the CMP for one run", via: [im-gitlab-oauth], auth: {method: oidc, lifetime: 1h}, status: planned, target: CNP-238}
+  - {id: g-im-app-user-repo, subject: github-app, resource: im-user-repo, level: write, scope: "repos the user picked · CNP-Portal rights, used read-only (accepted)", auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-240}
+  - {id: g-im-prepare-user-repo, subject: im-build-prepare, resource: im-user-repo, level: read, scope: "one repo, one run · token minted by the CMP", via: [github-app], auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-238}
   - {id: g-im-publish-ghcr, subject: im-build-publish, resource: ghcr, level: write, scope: "packages imports/<p>/*", auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-238}
   - {id: g-im-publish-callback, subject: im-build-publish, resource: im-import, level: write, scope: "build callback: digests of its own run", auth: {method: oidc, lifetime: 5m}, status: planned, target: CNP-238}
-  - {id: g-im-import-user-repo, subject: im-import, resource: im-user-repo, level: read, scope: "analysis, HEAD checks", via: [im-gh-import-app], auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-237}
-  - {id: g-im-import-gitlab, subject: im-import, resource: im-gitlab-repo, level: read, scope: "read_repository, read_api", via: [im-gitlab-oauth], auth: {method: oidc}, status: planned, target: CNP-240}
+  - {id: g-im-import-user-repo, subject: im-import, resource: im-user-repo, level: read, scope: "analysis, HEAD checks · down-scoped token", via: [github-app], auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-237}
   - {id: g-im-import-registry, subject: im-import, resource: pa-registry, level: write, scope: "values, digests, dependsOn", via: [github-app], auth: {method: federated, lifetime: 1h}, status: planned, target: CNP-238}
   - {id: g-im-argocd-registry, subject: argocd, resource: pa-registry, level: read}
   - {id: g-im-admins-import, subject: grp-a-admins, resource: im-import, level: write, scope: "analyze, import, apply with step-up, rebuild, delete", status: planned, target: CNP-241}

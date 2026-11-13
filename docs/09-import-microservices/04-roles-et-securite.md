@@ -15,7 +15,7 @@ ci-dessous.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | Voir la carte du projet | | ✓ | ✓ | ✓ | ✓ | ✓ | |
 | Voir le statut d'un import, ses rapports de scan et son SBOM | | ✓ | ✓ | ✓ | ✓ | ✓ | |
-| Relier son compte GitHub ou GitLab | ✓ | ✓ | ✓ | ✓ | ✓ | | |
+| Installer CNP-Portal sur ses repos et relier son compte GitHub | ✓ | ✓ | ✓ | ✓ | ✓ | | |
 | Analyser un repo, éditer le plan | | | ✓ | ✓ | | | |
 | Appliquer un import (passkey récente) | | | ✓ | ✓ | | | |
 | Relier ou délier deux apps | | | ✓ | ✓ | | | |
@@ -31,9 +31,9 @@ il agit, avec en plus une confirmation dans le portail pour toute écriture (voi
 
 | Identité | Ce qu'elle peut faire | Ce qu'elle ne peut pas faire | Où vit son secret |
 | --- | --- | --- | --- |
-| App GitHub **CNP-Import** | Lire le contenu des repos que l'utilisateur a choisis ; recevoir les `push` | Écrire, ouvrir une PR, lire un repo non choisi | Clé privée dans Vault, utilisée par le CMP seul |
-| Application OAuth GitLab | Lire les repos de l'utilisateur, à sa demande | Écrire ; toucher une instance non listée | Secret client dans Vault ; jetons utilisateurs chiffrés en base |
-| CMP | Émettre un jeton CNP-Import d'une heure, limité à un repo, après vérification OIDC du workflow ; récupérer lui-même l'archive GitLab ; écrire cnp-projects | Utiliser CNP-Portal sur un compte utilisateur | Vault (rôle Kubernetes `cmp-backend`) |
+| App GitHub **CNP-Portal**, sur l'org 3-Istor | Ce qu'elle fait aujourd'hui, avec des permissions réduites au besoin réel : créer les repos d'apps, écrire cnp-projects, lancer le workflow de build | Ce que ses permissions réduites n'autorisent plus | Clé privée dans Vault, utilisée par le CMP seul |
+| App GitHub **CNP-Portal**, sur un compte utilisateur | Par des jetons restreints : lire le contenu et les métadonnées d'un seul repo choisi ; recevoir les `push` | Par ces jetons : écrire, ouvrir une PR, lire un repo non choisi. L'installation détient plus de droits, jamais utilisés (risque accepté) | Même clé, dans Vault, utilisée par le CMP seul |
+| CMP | Émettre pour une installation utilisateur un jeton CNP-Portal d'une heure, `contents:read` et `metadata:read`, limité à un repo, après vérification OIDC du workflow ; écrire cnp-projects | Demander un jeton non restreint pour une installation utilisateur | Vault (rôle Kubernetes `cmp-backend`) |
 | Workflow de build central | Job `prepare` : recevoir le jeton du CMP. Job `publish` : pousser `ghcr.io/3-istor/imports/<projet>/<app>` | Aucun secret durable ; aucun `id-token` dans le job qui exécute le code importé | Aucun, identité OIDC GitHub |
 | Argo CD | Lire cnp-projects et infra-templates | Lire un repo d'utilisateur | Inchangé |
 | Agent IA (MCP) | Lire la carte, analyser, proposer un brouillon | Appliquer, relier ou délier sans confirmation humaine dans le portail | Jeton de l'utilisateur, 5 minutes |
@@ -43,9 +43,9 @@ il agit, avec en plus une confirmation dans le portail pour toute écriture (voi
 | # | Décision | Constat |
 | --- | --- | --- |
 | D13 | Le CMP fixe lui-même le propriétaire GitHub et l'installation à la création d'app, au lieu de les lire dans la requête. Correctif sur `main`, avant l'import | Haute, confirmée : `POST /api/deployments` accepte un `github_installation_id` du client. Pas exploitable aujourd'hui, mais il le deviendrait dès qu'une autre installation existerait |
-| D14 | La clé de CNP-Import reste dans le CMP. Le job `prepare` reçoit un jeton d'une heure, limité à un repo, en échange de son jeton OIDC | Une clé d'app dans le dépôt de CI pourrait lire les repos de tous les tenants |
-| D15 | Pour GitLab, le CMP télécharge lui-même l'archive et la passe au workflow ; le jeton utilisateur ne sort pas du CMP | Le jeton GitLab couvre tout le compte de l'utilisateur |
-| D16 | Valeurs du bloc `workload` générées par le CMP, schéma strict (pas de privileged, de hostPath, de capacités ajoutées, ni de `host` dans les sondes), Kyverno en mode Deny pour les namespaces d'apps importées | Le chart recopie `securityContext` et les sondes tels quels |
+| D14 | La clé de CNP-Portal reste dans le CMP. Le job `prepare` reçoit un jeton d'une heure, en lecture, limité à un repo, en échange de son jeton OIDC | Une clé d'app dans le dépôt de CI pourrait lire les repos de tous les tenants |
+| D15 | Jetons utilisateur restreints par repo et par permission : pour une installation utilisateur, le CMP demande toujours `permissions: {contents: read, metadata: read}` et `repositories: [<le repo>]`. Une seule fonction du CMP émet ces jetons, et elle refuse une installation non prouvée | Une app GitHub a un seul jeu de permissions pour toutes ses installations |
+| D16 | Valeurs du bloc `workload` générées par le CMP, schéma strict : pas de privileged, de hostPath, de capacités ajoutées, ni de `host` dans les sondes. Kyverno en mode Deny est hors périmètre : chantier séparé | Le chart recopie `securityContext` et les sondes tels quels |
 | D17 | Volumes des bases conservés à la suppression du StatefulSet ; le CMP les supprime explicitement après confirmation | Une mauvaise écriture du registre suivie d'un prune Argo détruirait des données |
 | D18 | Alias limités aux apps du même projet ; la cible est calculée par le CMP, et les noms réservés (`kubernetes`, `vault`, services plateforme) sont refusés | Un alias libre pourrait relayer vers Vault ou l'API Kubernetes |
 | D19 | `import_repo`, `link_apps` et `unlink_apps` au niveau `confirm` de la politique MCP : confirmation dans le portail, pas un booléen fourni par l'agent | Le contenu du repo lu par l'agent peut contenir une injection de prompt |
@@ -54,6 +54,10 @@ il agit, avec en plus une confirmation dans le portail pour toute écriture (voi
 
 ## Risques acceptés
 
+- CNP-Portal installé chez un utilisateur détient sur ses repos toutes les permissions de l'app,
+  que l'utilisateur accorde à l'installation. La plateforme n'en utilise que la lecture, par des
+  jetons restreints. Une fuite de la clé privée donnerait ces droits complets : la clé ne sort
+  pas de Vault et du CMP. Accepté par Brian le 13/11.
 - Le code importé a accès au réseau pendant son build, sur un runner GitHub éphémère. Il ne peut
   nuire qu'à lui-même, borné par les délais.
 - Les métriques Hubble d'un projet peuvent montrer le nom d'une charge d'un autre projet qu'il a

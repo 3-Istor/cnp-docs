@@ -2,29 +2,29 @@ apiVersion: noodle/v1alpha1
 kind: View
 type: sequence
 title: "CNP · Repo import · S1 Linking GitHub"
-subtitle: "How does a user let CNP read chosen GitHub repos, without CNP-Portal ever touching their account?"
+subtitle: "How does a user install CNP-Portal on chosen repos, and how does the CMP prove the installation is theirs?"
 meta:
   - "Scope: S1 of the import design, planned (CNP-240) · connections of the import-overview model · design spec v2 (2026-11-13)"
   - "Browser calls to the CMP cross Cloudflare, the platform tunnel and Envoy: folded into one hop."
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
-participants: [user, im-wizard, im-import, im-gh-import-app]
+participants: [user, im-wizard, im-import, github-app]
 
 steps:
   - {id: open, from: user, to: im-wizard, over: c-im-user-wizard, text: "Project › Import › Connect GitHub"}
   - {id: start, from: user, to: im-import, over: c-im-user-import, text: "POST /api/import/github/link · Keycloak session"}
   - {note: im-import, text: "single-use state + PKCE verifier, kept server-side"}
-  - {reply: start, text: "302 → github.com/apps/cnp-import/installations/new?state"}
-  - {id: install, from: user, to: im-gh-import-app, over: c-im-user-gh-install, text: "install CNP-Import on chosen repos, authorize"}
-  - {note: im-gh-import-app, text: "contents:read, metadata:read only"}
+  - {reply: start, text: "302 → github.com/apps/cnp-portal/installations/new?state"}
+  - {id: install, from: user, to: github-app, over: c-im-user-gh-install, text: "install CNP-Portal on chosen repos, authorize"}
+  - {note: github-app, text: "the user grants CNP-Portal's permissions on these repos"}
   - {reply: install, text: "302 → CMP callback ?code&installation_id&state"}
   - {id: cb, from: user, to: im-import, over: c-im-user-import, text: "GET /api/import/github/callback"}
   - {note: im-import, text: "state must match, consumed once"}
-  - {id: tok, from: im-import, to: im-gh-import-app, over: c-im-import-gh-api, text: "POST /login/oauth/access_token · code + verifier"}
+  - {id: tok, from: im-import, to: github-app, over: c-im-import-gh-api, text: "POST /login/oauth/access_token · code + verifier"}
   - {reply: tok, text: "user-to-server token"}
-  - {id: proof, from: im-import, to: im-gh-import-app, over: c-im-import-gh-api, text: "GET /user/installations, then its repositories"}
+  - {id: proof, from: im-import, to: github-app, over: c-im-import-gh-api, text: "GET /user/installations, then its repositories"}
   - {reply: proof, text: "the installation is the user's; repo list"}
-  - {note: im-import, text: "stores installation id and repos; tokens Fernet-encrypted"}
+  - {note: im-import, text: "stores installation id and repos; tokens Fernet-encrypted · later tokens: contents:read, metadata:read, one repo"}
   - {reply: cb, text: "linked · repo picker"}
 hidden_annotations:
   GB1: "targets bk-secret, not drawn in this view"
@@ -53,6 +53,5 @@ hidden_annotations:
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G20: "targets b1-back, not drawn in this view"
-  GI1: "targets github-app, not drawn in this view"
   GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

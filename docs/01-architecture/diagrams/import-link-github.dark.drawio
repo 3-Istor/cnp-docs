@@ -1,20 +1,20 @@
 <mxfile host="archgen">
   <diagram id="import-link-github-dark" name="CNP · Repo import · S1 Linking GitHub (dark)">
-    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1195" pageHeight="1068" background="#020617" math="0" shadow="0">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1210" pageHeight="1068" background="#020617" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMTk1IiBoZWlnaHQ9IjEwNjgiPjxkZWZzPjxwYXR0ZXJuIGlkPSJnIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMxZTI5M2IiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDIwNjE3Ii8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
-          <mxGeometry x="0" y="0" width="1195" height="1068" as="geometry" />
+        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMjEwIiBoZWlnaHQ9IjEwNjgiPjxkZWZzPjxwYXR0ZXJuIGlkPSJnIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMxZTI5M2IiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDIwNjE3Ii8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1210" height="1068" as="geometry" />
         </mxCell>
         <mxCell id="header-dot" value="" style="ellipse;fillColor=#34d399;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="40" y="44" width="12" height="12" as="geometry" />
         </mxCell>
         <mxCell id="header-title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;CNP · Repo import · S1 Linking GitHub&lt;/b&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=24;fontColor=#f8fafc;" vertex="1" parent="1">
-          <mxGeometry x="64" y="30" width="795" height="40" as="geometry" />
+          <mxGeometry x="64" y="30" width="810" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:13px&quot;&gt;How does a user let CNP read chosen GitHub repos, without CNP-Portal ever touching their account?&lt;/font&gt;&lt;br&gt;Scope: S1 of the import design, planned (CNP-240) · connections of the import-overview model · design spec v2 (2026-11-13)&lt;br&gt;Browser calls to the CMP cross Cloudflare, the platform tunnel and Envoy: folded into one hop.&lt;br&gt;v0.1 · source: cnp-docs/architecture/cnp&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#94a3b8;" vertex="1" parent="1">
-          <mxGeometry x="64" y="74" width="795" height="80" as="geometry" />
+        <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:13px&quot;&gt;How does a user install CNP-Portal on chosen repos, and how does the CMP prove the installation is theirs?&lt;/font&gt;&lt;br&gt;Scope: S1 of the import design, planned (CNP-240) · connections of the import-overview model · design spec v2 (2026-11-13)&lt;br&gt;Browser calls to the CMP cross Cloudflare, the platform tunnel and Envoy: folded into one hop.&lt;br&gt;v0.1 · source: cnp-docs/architecture/cnp&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#94a3b8;" vertex="1" parent="1">
+          <mxGeometry x="64" y="74" width="810" height="80" as="geometry" />
         </mxCell>
         <mxCell id="life-user" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
@@ -34,7 +34,7 @@
             <mxPoint x="675" y="1028" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="life-im-gh-import-app" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+        <mxCell id="life-github-app" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1035" y="256" as="sourcePoint" />
             <mxPoint x="1035" y="1028" as="targetPoint" />
@@ -54,14 +54,14 @@
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-reply-start-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;3&lt;/span&gt; 302 → github.com/apps/cnp-import/installations/new?state&lt;/span&gt;" style="html=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+        <mxCell id="msg-reply-start-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;3&lt;/span&gt; 302 → github.com/apps/cnp-portal/installations/new?state&lt;/span&gt;" style="html=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="675" y="460" as="sourcePoint" />
             <mxPoint x="130" y="460" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-install" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;4&lt;/span&gt; install CNP-Import on chosen repos, authorize&lt;/span&gt;" style="html=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" edge="1" parent="1">
+        <mxCell id="msg-install" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;4&lt;/span&gt; install CNP-Portal on chosen repos, authorize&lt;/span&gt;" style="html=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="130" y="508" as="sourcePoint" />
             <mxPoint x="1035" y="508" as="targetPoint" />
@@ -135,23 +135,23 @@
         <mxCell id="im-import__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjMDA5Njg4IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+RmFzdEFQSTwvdGl0bGU+PHBhdGggZD0iTTEyIC4wMzg3QzUuMzcyOS4wMzg0LjAwMDMgNS4zOTMxIDAgMTEuOTk4OGMtLjAwMSA2LjYwNjYgNS4zNzIgMTEuOTYyOCAxMiAxMS45NjI1IDYuNjI4LjAwMDMgMTIuMDAxLTUuMzU1OSAxMi0xMS45NjI1LS4wMDAzLTYuNjA1Ny01LjM3MjktMTEuOTYwNC0xMi0xMS45Nm0tLjgyOSA1LjQxNTNoNy41NWwtNy41ODA1IDUuMzI4NGg1LjE4MjhMNS4yNzkgMTguNTQzNnEyLjk0NjYtNi41NDQ0IDUuODkyLTEzLjA4OTYiLz48L3N2Zz4=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="im-import">
           <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="im-gh-import-app" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;CNP-Import&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[GitHub App · contents:read]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#3f152f;html=1;whiteSpace=wrap;strokeColor=#fb7185;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
-          <mxGeometry x="915" y="200" width="240" height="56" as="geometry" />
+        <mxCell id="github-app" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;CNP-Portal&lt;/font&gt;&lt;/b&gt; &lt;b&gt;&lt;font color=&quot;#fb923c&quot; style=&quot;font-size:10px&quot;&gt;⚠ GI1&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[GitHub App · installation token]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#2f2022;html=1;whiteSpace=wrap;strokeColor=#fbbf24;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="900" y="200" width="270" height="56" as="geometry" />
         </mxCell>
-        <mxCell id="im-gh-import-app__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjZTJlOGYwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0SHViPC90aXRsZT48cGF0aCBkPSJNMTIgLjI5N2MtNi42MyAwLTEyIDUuMzczLTEyIDEyIDAgNS4zMDMgMy40MzggOS44IDguMjA1IDExLjM4NS42LjExMy44Mi0uMjU4LjgyLS41NzcgMC0uMjg1LS4wMS0xLjA0LS4wMTUtMi4wNC0zLjMzOC43MjQtNC4wNDItMS42MS00LjA0Mi0xLjYxQzQuNDIyIDE4LjA3IDMuNjMzIDE3LjcgMy42MzMgMTcuN2MtMS4wODctLjc0NC4wODQtLjcyOS4wODQtLjcyOSAxLjIwNS4wODQgMS44MzggMS4yMzYgMS44MzggMS4yMzYgMS4wNyAxLjgzNSAyLjgwOSAxLjMwNSAzLjQ5NS45OTguMTA4LS43NzYuNDE3LTEuMzA1Ljc2LTEuNjA1LTIuNjY1LS4zLTUuNDY2LTEuMzMyLTUuNDY2LTUuOTMgMC0xLjMxLjQ2NS0yLjM4IDEuMjM1LTMuMjItLjEzNS0uMzAzLS41NC0xLjUyMy4xMDUtMy4xNzYgMCAwIDEuMDA1LS4zMjIgMy4zIDEuMjMuOTYtLjI2NyAxLjk4LS4zOTkgMy0uNDA1IDEuMDIuMDA2IDIuMDQuMTM4IDMgLjQwNSAyLjI4LTEuNTUyIDMuMjg1LTEuMjMgMy4yODUtMS4yMy42NDUgMS42NTMuMjQgMi44NzMuMTIgMy4xNzYuNzY1Ljg0IDEuMjMgMS45MSAxLjIzIDMuMjIgMCA0LjYxLTIuODA1IDUuNjI1LTUuNDc1IDUuOTIuNDIuMzYuODEgMS4wOTYuODEgMi4yMiAwIDEuNjA2LS4wMTUgMi44OTYtLjAxNSAzLjI4NiAwIC4zMTUuMjEuNjkuODI1LjU3QzIwLjU2NSAyMi4wOTIgMjQgMTcuNTkyIDI0IDEyLjI5N2MwLTYuNjI3LTUuMzczLTEyLTEyLTEyIi8+PC9zdmc+Cg==;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="im-gh-import-app">
+        <mxCell id="github-app__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjZTJlOGYwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0SHViPC90aXRsZT48cGF0aCBkPSJNMTIgLjI5N2MtNi42MyAwLTEyIDUuMzczLTEyIDEyIDAgNS4zMDMgMy40MzggOS44IDguMjA1IDExLjM4NS42LjExMy44Mi0uMjU4LjgyLS41NzcgMC0uMjg1LS4wMS0xLjA0LS4wMTUtMi4wNC0zLjMzOC43MjQtNC4wNDItMS42MS00LjA0Mi0xLjYxQzQuNDIyIDE4LjA3IDMuNjMzIDE3LjcgMy42MzMgMTcuN2MtMS4wODctLjc0NC4wODQtLjcyOS4wODQtLjcyOSAxLjIwNS4wODQgMS44MzggMS4yMzYgMS44MzggMS4yMzYgMS4wNyAxLjgzNSAyLjgwOSAxLjMwNSAzLjQ5NS45OTguMTA4LS43NzYuNDE3LTEuMzA1Ljc2LTEuNjA1LTIuNjY1LS4zLTUuNDY2LTEuMzMyLTUuNDY2LTUuOTMgMC0xLjMxLjQ2NS0yLjM4IDEuMjM1LTMuMjItLjEzNS0uMzAzLS41NC0xLjUyMy4xMDUtMy4xNzYgMCAwIDEuMDA1LS4zMjIgMy4zIDEuMjMuOTYtLjI2NyAxLjk4LS4zOTkgMy0uNDA1IDEuMDIuMDA2IDIuMDQuMTM4IDMgLjQwNSAyLjI4LTEuNTUyIDMuMjg1LTEuMjMgMy4yODUtMS4yMy42NDUgMS42NTMuMjQgMi44NzMuMTIgMy4xNzYuNzY1Ljg0IDEuMjMgMS45MSAxLjIzIDMuMjIgMCA0LjYxLTIuODA1IDUuNjI1LTUuNDc1IDUuOTIuNDIuMzYuODEgMS4wOTYuODEgMi4yMiAwIDEuNjA2LS4wMTUgMi44OTYtLjAxNSAzLjI4NiAwIC4zMTUuMjEuNjkuODI1LjU3QzIwLjU2NSAyMi4wOTIgMjQgMTcuNTkyIDI0IDEyLjI5N2MwLTYuNjI3LTUuMzczLTEyLTEyLTEyIi8+PC9zdmc+Cg==;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="github-app">
           <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
         </mxCell>
         <mxCell id="note-1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;single-use state + PKCE verifier, kept server-side&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
           <mxGeometry x="509" y="398" width="332" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="note-2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;contents:read, metadata:read only&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
-          <mxGeometry x="920" y="542" width="230" height="28" as="geometry" />
+        <mxCell id="note-2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;the user grants CNP-Portal&amp;#39;s permissions on these repos&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="854" y="542" width="362" height="28" as="geometry" />
         </mxCell>
         <mxCell id="note-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;state must match, consumed once&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
           <mxGeometry x="566" y="686" width="218" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="note-4" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;stores installation id and repos; tokens Fernet-encrypted&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
-          <mxGeometry x="488" y="926" width="374" height="28" as="geometry" />
+        <mxCell id="note-4" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;stores installation id and repos; tokens Fernet-encrypted · later tokens: contents:read, metadata:read, one repo&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="323" y="926" width="704" height="28" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

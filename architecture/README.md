@@ -36,11 +36,10 @@ one diagram, and `layouts/` places the topology views.
 | `import-overview` | What does importing a repo add to the platform, and which path does an import take? (planned, CNP-158) | Import et microservices |
 | `import-epitweet` | Once imported, how does epitweet run in a CNP project: who calls whom, over which bus, on which data? (planned) | Import et microservices |
 | `topology-data` | Where does the project Topology view get its nodes and edges? (planned, CNP-242) | Import et microservices |
-| `import-link-github` | How does a user let CNP read chosen GitHub repos, without CNP-Portal ever touching their account? (S1, planned) | Import et microservices |
-| `import-link-gitlab` | How does a user let CNP read their GitLab projects? (S2, planned) | Import et microservices |
+| `import-link-github` | How does a user install CNP-Portal on chosen repos, and how does the CMP prove the installation is theirs? (S1, planned) | Import et microservices |
 | `import-analyze` | What happens between picking a repo and seeing the draft on the canvas? (S3, planned) | Import et microservices |
 | `import-apply` | What happens, in order, from Apply to a running, smoke-tested app, and who holds which credential? (S4, planned) | Import et microservices |
-| `import-rebuild` | How does a push to the user's repo reach the cluster, on GitHub, on GitLab, and after the night's sleep? (S5, planned) | Import et microservices |
+| `import-rebuild` | How does a push to the user's repo reach the cluster, and what catches up after the night's sleep? (S5, planned) | Import et microservices |
 | `app-link` | What happens when a user draws an edge between two apps on the Topology canvas, until the edge turns solid? (S6, planned) | Import et microservices |
 | `import-agent` | What may an assistant do with the import tools, and where does the user have to step in? (S8, planned) | Import et microservices |
 | `access-matrix-import` | Who may touch the user's code, the import, the images and the registry once import ships? (planned) | Import et microservices |

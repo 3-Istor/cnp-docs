@@ -4,16 +4,16 @@ type: sequence
 title: "CNP · Repo import · S3 Analysis and draft"
 subtitle: "What happens between picking a repo and seeing the draft on the canvas, and what runs the user's code? Nothing."
 meta:
-  - "Scope: S3 of the import design, planned (CNP-237 analyzer, CNP-241 UI) · GitHub shown; GitLab uses the OAuth token and the archive API · design spec v2 (2026-11-13)"
+  - "Scope: S3 of the import design, planned (CNP-237 analyzer, CNP-241 UI) · design spec v2 (2026-11-13)"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
-participants: [user, im-wizard, im-import, im-gh-import-app, im-analyzer, im-user-repo]
+participants: [user, im-wizard, im-import, github-app, im-analyzer, im-user-repo]
 
 steps:
   - {id: pick, from: user, to: im-wizard, over: c-im-user-wizard, text: "pick repo and branch"}
   - {id: req, from: user, to: im-import, over: c-im-user-import, text: "POST /api/projects/{p}/import/analyze {repo, branch}"}
   - {note: im-import, text: "admin or owner of p · one source per repo per project"}
-  - {id: head, from: im-import, to: im-gh-import-app, over: c-im-import-gh-api, text: "installation token for this repo · GET branch HEAD"}
+  - {id: head, from: im-import, to: github-app, over: c-im-import-gh-api, text: "installation token: contents:read, metadata:read, this repo · GET branch HEAD"}
   - {reply: head, text: "SHA"}
   - {id: an, from: im-import, to: im-analyzer, over: c-im-import-analyzer, text: "analyze(repo, SHA)"}
   - {id: tar, from: im-analyzer, to: im-user-repo, over: c-im-analyzer-repo, text: "GET tarball @SHA · size cap"}
@@ -51,6 +51,5 @@ hidden_annotations:
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G20: "targets b1-back, not drawn in this view"
-  GI1: "targets github-app, not drawn in this view"
   GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

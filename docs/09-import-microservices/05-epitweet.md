@@ -9,9 +9,9 @@ tourner sans modifier son code, et ce que ça coûte en mémoire.
 
 ## Ce que contient le repo
 
-Source : GitLab de l'EPITA, branche `tooling/test-frontend`. La branche `main` n'a ni Dockerfile
-ni front. L'archive de démonstration correspond à cette branche, plus `seed.sh`,
-`k8s/frontend.yaml` et `frontend/DEPLOY.md`.
+Source : un repo GitHub, où est poussé le contenu de la branche `tooling/test-frontend` du
+repo d'origine. La branche `main` d'origine n'a ni Dockerfile ni front. Le repo de
+démonstration contient aussi `seed.sh`, `k8s/frontend.yaml` et `frontend/DEPLOY.md`.
 
 | Composant | Techno | Port | Dépend de | Devient sur la CNP |
 | --- | --- | --- | --- | --- |
@@ -56,13 +56,11 @@ environ 85 %). Epitweet tient en réglant chaque composant :
 | frontend nginx | 32 Mio | 64 Mio | |
 | **Total** | **environ 3,4 Gio** | | |
 
-C'est juste. L'aperçu d'import affiche cette jauge avant l'application, et l'offhours endort le
-projet la nuit. Si ça ne passe pas, tout est prêt pour un projet sur cloud public, mais rien n'est
+C'est juste. Environ 4 Gio pour epitweet sont acceptés depuis le 13/11. L'aperçu d'import
+affiche cette jauge avant l'application, et l'offhours endort le projet la nuit. Si ça ne passe pas, tout est prêt pour un projet sur cloud public, mais rien n'est
 lancé sans l'accord de Brian.
 
 ## Ce qui reste à valider
 
-- Importer depuis le GitLab de l'EPITA demande une application OAuth sur `gitlab.cri.epita.fr`.
-  Si l'instance la refuse, la démo part d'un miroir GitHub de la branche.
 - La recette fonctionnelle : créer un compte, poster, suivre, liker et chercher depuis l'URL
   publique, avec les arêtes qui apparaissent sur la carte du projet.

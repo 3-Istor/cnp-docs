@@ -1,9 +1,9 @@
 # Import de repos, microservices et topologie
 
-**Statut : dossier de conception à valider, rien n'est construit.** Ticket parent
+**Statut : validé le 13/11/2026, implémentation en cours.** Ticket parent
 [CNP-158](https://3istors.atlassian.net/browse/CNP-158), sous-tâches CNP-237 à CNP-246.
 
-Une équipe arrive avec son code existant : un repo GitHub ou GitLab, parfois un monorepo de
+Une équipe arrive avec son code existant : un repo GitHub, parfois un monorepo de
 microservices avec son docker-compose et ses bases. La CNP le lit à un commit figé et propose un
 plan d'import sur la carte du projet. Après validation, elle construit chaque service, lance les
 bases, relie les services entre eux sans toucher à leur code et montre en continu qui parle à qui.
@@ -19,7 +19,7 @@ Elasticsearch, importés tels quels.
 | --- | --- |
 | [Valeur pour les utilisateurs](01-valeur.md) | Études 2025-2026, personas, fonctions retenues en v1 et après |
 | [Architecture](02-architecture.md) | Ce qui est ajouté composant par composant, sources de la topologie, décisions D1 à D12 |
-| [Parcours](03-parcours.md) | Les 7 parcours avec leurs diagrammes de séquence |
+| [Parcours](03-parcours.md) | Les 6 parcours avec leurs diagrammes de séquence |
 | [Rôles et sécurité](04-roles-et-securite.md) | Qui peut faire quoi, identités techniques, décisions D13 à D21 |
 | [Epitweet](05-epitweet.md) | Ce que contient epitweet, ce que la CNP ajoute, budget mémoire |
 | [Audit du premier import](06-audit-travail-existant.md) | Pourquoi les PRs de CNP-96 ne sont pas fusionnées, ce qu'on en reprend |
@@ -39,15 +39,18 @@ Elasticsearch, importés tels quels.
 5. Audit de sécurité du design et du code repris, avec revérification indépendante du constat
    confirmé.
 
-## Ce qu'il faut trancher
+## Décisions de Brian du 13/11
 
-- **Constat haut sur `main`** (D13) : `POST /api/deployments` accepte un `github_installation_id`
-  fourni par le client. Il n'est pas exploitable tant que CNP-Portal n'est installé que sur
-  3-Istor. Je propose de le corriger en tête de ce chantier.
-- **Nouvelle app GitHub CNP-Import** (D3) : elle se crée dans les réglages de l'org 3-Istor par
-  un owner.
-- **Application OAuth sur le GitLab de l'EPITA** : à déclarer par un compte EPITA. Sinon, la
-  démonstration part d'un miroir GitHub.
-- **Kyverno en mode Deny** sur les namespaces d'apps importées (D16) : les apps existantes ne
-  sont pas concernées.
-- **Mémoire** : epitweet demande environ 3,4 Gio sur les 4 Gio libres du cluster on-prem.
+- **Une seule app GitHub : CNP-Portal.** Pas d'app CNP-Import. Ses permissions sont réduites à
+  ce que la plateforme utilise vraiment. L'utilisateur installe CNP-Portal sur son compte ou son
+  organisation, en choisissant ses repos. Pour une installation utilisateur, le CMP ne demande
+  que des jetons `contents:read` et `metadata:read`, limités à un repo. Le risque résiduel est
+  accepté par écrit (D14, D15).
+- **Constat haut sur `main`** (D13) : corrigé en tête du chantier. Il devient exploitable dès
+  que CNP-Portal est installé hors de 3-Istor.
+- **Pas de GitLab dans ce chantier.** Epitweet est poussé sur GitHub. Un import depuis GitLab
+  reste une extension possible plus tard.
+- **Kyverno en mode Deny : chantier séparé.** Ce chantier garde le schéma strict des valeurs
+  générées par le CMP (D16).
+- **Mémoire** : environ 4 Gio pour epitweet, accepté.
+- Le reste du dossier est approuvé tel quel.

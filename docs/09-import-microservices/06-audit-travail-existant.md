@@ -40,7 +40,7 @@ modèle lui-même bloque :
 
 | Brique | Où elle va | Ajustement |
 | --- | --- | --- |
-| Liaison GitHub par OAuth avec PKCE, state à usage unique lié à la session, jetons chiffrés, preuve de l'installation et des droits sur le repo | CMP, liaison des comptes | Clé de chiffrement rotative ; installation de CNP-Import, pas de CNP-Portal. Elle ferme aussi un trou de `main`, qui accepte un `installation_id` sans preuve |
+| Liaison GitHub par OAuth avec PKCE, state à usage unique lié à la session, jetons chiffrés, preuve de l'installation et des droits sur le repo | CMP, liaison des comptes | Clé de chiffrement rotative ; installation de CNP-Portal avec jetons restreints à un repo en lecture. Elle ferme aussi un trou de `main`, qui accepte un `installation_id` sans preuve |
 | Vérification OIDC des callbacks de CI, transitions d'état gardées par tentative | CMP, callbacks de build | Épingler `job_workflow_ref` sur une révision taguée, pas sur la tête de `main` |
 | Découpage de la CI : préparation sans code utilisateur, build sans secret, publication | Workflow central | Matrice ou reactor unique pour N services |
 | Refus des sous-modules, LFS et liens symboliques ; contrôle des chemins | Analyseur | Inchangé |

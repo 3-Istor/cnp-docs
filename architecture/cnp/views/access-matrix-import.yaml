@@ -6,20 +6,20 @@ subtitle: "Who may touch the user's code, the import, the images and the registr
 meta:
   - "Everything here is planned (CNP-158: CNP-237 analyzer, CNP-238 build, CNP-239 chart, CNP-240 links, CNP-241 UI, CNP-242 topology, CNP-243 MCP); existing rows kept for contrast."
   - "Read a column: who can read a user's repo. Argo CD has no cell there on purpose: it reads cnp-projects and infra-templates only (GI4)."
+  - "CNP-Portal holds its own permissions on the repos a user picks; the CMP only mints read tokens for one repo from it. Residual risk accepted on 2026-11-13 (GI1)."
   - "Guests get nothing new. The AI agent acts with its user's rights; import and link need the user's confirmation, Apply is never autonomous."
   - "Source: import design spec v2 (2026-11-13) · CMP core/roles.py, services/authz.py · v0.1 · source: cnp-docs/architecture/cnp"
 state: diff
 identities:
   - {title: People, sub: "a Keycloak group, OIDC", items: [grp-a-admins, grp-a-members, grp-a-guests, grp-auditor, grp-infra]}
   - {title: AI agent, sub: "MCP, user's token", items: [assistant-remote]}
-  - {title: Machine identities, items: [im-gh-import-app, im-build-prepare, im-build-publish, im-import, im-service, argocd]}
+  - {title: Machine identities, items: [github-app, im-build-prepare, im-build-publish, im-import, im-service, argocd]}
 resources:
-  - {title: User source, sub: outside CNP, color: slate, items: [im-user-repo, im-gitlab-repo]}
+  - {title: User source, sub: outside CNP, color: slate, items: [im-user-repo]}
   - {title: Import plane, sub: CMP, color: sky, items: [im-import, tp-api]}
   - {title: Delivery, sub: org 3-Istor, color: cyan, items: [ghcr, pa-registry]}
 labels:
   im-user-repo: "GitHub<br>user repo"
-  im-gitlab-repo: "GitLab<br>user project"
   im-import: "CMP import<br>module"
   tp-api: "Topology<br>view, link"
   ghcr: "GHCR<br>imports/<p>"
@@ -30,7 +30,7 @@ labels:
   grp-auditor: "security-auditor"
   grp-infra: "Platform infra"
   assistant-remote: "AI assistant"
-  im-gh-import-app: "CNP-Import app"
+  github-app: "CNP-Portal app"
   im-build-prepare: "Build · job prepare"
   im-build-publish: "Build · job publish"
   im-service: "Imported app (kubelet)"

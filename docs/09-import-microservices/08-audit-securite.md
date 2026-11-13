@@ -2,6 +2,25 @@
 
 Date : 2026-11-13. Méthode : skill `security-audit` de Cloudflare, mode scoped. Les 14 constats existent aussi au format JSON du skill, validés par son script `validate-findings.cjs`.
 
+## Décisions postérieures à l'audit
+
+Le 13/11, après cet audit, Brian a tranché autrement sur trois points. Le corps du rapport est
+laissé tel qu'il a été écrit.
+
+- **Une seule app GitHub, CNP-Portal.** L'audit recommandait une app CNP-Import en lecture
+  seule. Les utilisateurs installent finalement CNP-Portal, dont les permissions sont réduites au
+  besoin réel. Pour une installation utilisateur, le CMP restreint chaque jeton à
+  `contents:read`, `metadata:read` et un seul repo, via `POST /app/installations/{id}/access_tokens`.
+  La plateforme n'utilise donc que la lecture sur les repos des utilisateurs, comme avec
+  CNP-Import. La clé reste dans le CMP et le job `prepare` reçoit un jeton d'une heure après
+  vérification OIDC, ce qui ferme D1. Le correctif du constat haut sur `main` reste un prérequis,
+  car ce constat devient exploitable dès la première installation hors de 3-Istor. Le risque
+  résiduel est accepté par écrit : l'installation détient plus de droits que ceux utilisés.
+- **Kyverno en mode Deny** devient un chantier séparé. Ce chantier garde le schéma strict des
+  valeurs générées par le CMP (D3).
+- **GitLab est retiré du périmètre.** Le constat D2, sur le jeton GitLab transmis à la CI, ne
+  s'applique plus.
+
 ## 1. Synthèse
 
 Le design v2 corrige le défaut majeur du design de Joe : il crée une GitHub App dédiée `CNP-Import` en lecture seule au lieu d'installer `CNP-Portal` sur les comptes des utilisateurs. Il faut garder cette décision. L'audit du code montre qu'installer CNP-Portal chez les utilisateurs serait exploitable dès aujourd'hui par un admin de n'importe quel projet. `POST /api/deployments` accepte un `github_installation_id` et un `github_owner` fournis par le client, puis Terraform agit sur ce compte avec les droits complets de CNP-Portal.
