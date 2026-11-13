@@ -1,0 +1,129 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · Observability · Target: full VictoriaMetrics"
+subtitle: "What replaces Loki, Alloy and the VictoriaMetrics cluster, who writes and reads each signal, and how an alert reaches Discord?"
+meta:
+  - "Scope: on-prem hub, write path of metrics, logs and traces, reads by projects and platform, the single alert chain, backups and the AI audit record · proposal of 2026-11-13 (CNP-185, waves V1 to V6)"
+  - "Out of scope: public clouds (same collectors, through the WireGuard relays), NetworkPolicies (one per store, D8), Gatus and OpenCost internals, dashboards"
+  - "v0.1 (2026-11-13, proposal) · source: cnp-docs/architecture/cnp · current stack: views observability and observability-read"
+include:
+  - z-cluster
+  - g-obs-sources
+  - o-hub-targets
+  - o-audit-sources
+  - vo-app-otel
+  - vo-ai-sources
+  - g-vo
+  - g-vo-collect
+  - vo-vmagent
+  - vo-vlagent
+  - vo-otelcol
+  - g-vo-store
+  - vo-vmsingle
+  - vo-vlogs
+  - vo-vtraces
+  - g-vo-read
+  - vo-grafana
+  - vo-vmauth
+  - g-vo-alert
+  - vo-vmalert
+  - vo-alertmanager
+  - vo-backup
+  - vo-audit-record
+  - g-cmp
+  - cmp-backend
+  - g-rollouts
+  - argo-rollouts
+  - z-internet
+  - discord
+  - vo-deadman
+  - z-ceph
+  - ceph-rgw
+  - audit-bucket
+steps: [c-vo-vmagent-targets, c-vo-vmagent-vmsingle, c-vo-vmalert-vmsingle, c-vo-vmalert-am, c-vo-am-discord]
+background: [c-vo-vlagent-audit, c-vo-vlagent-vlogs, c-vo-vmagent-appotel, c-vo-appotel-otelcol, c-vo-ai-otelcol, c-vo-otelcol-vtraces, c-vo-grafana-vmauth, c-vo-grafana-vmsingle, c-vo-vmauth-vmsingle, c-vo-vmauth-vlogs, c-vo-cmp-vmsingle, c-vo-cmp-vlogs, c-vo-cmp-vtraces, c-vo-rollouts-vmsingle, c-vo-vmalert-vlogs, c-vo-cmp-am, c-cmp-discord, c-vo-am-deadman, c-vo-deadman-discord, c-vo-backup-rgw, c-vo-audit-vtraces, c-vo-audit-rgw]
+labels:
+  c-vo-vmagent-targets: ""
+  c-vo-vmagent-vmsingle: ""
+  c-vo-vmalert-vmsingle: ""
+  c-vo-vmalert-am: ""
+  c-vo-am-discord: ""
+  c-vo-vlagent-audit: ""
+  c-vo-vlagent-vlogs: ""
+  c-vo-vmagent-appotel: ""
+  c-vo-appotel-otelcol: ""
+  c-vo-ai-otelcol: ""
+  c-vo-otelcol-vtraces: ""
+  c-vo-grafana-vmauth: ""
+  c-vo-grafana-vmsingle: ""
+  c-vo-vmauth-vmsingle: ""
+  c-vo-vmauth-vlogs: ""
+  c-vo-cmp-vmsingle: ""
+  c-vo-cmp-vlogs: ""
+  c-vo-cmp-vtraces: ""
+  c-vo-rollouts-vmsingle: ""
+  c-vo-vmalert-vlogs: ""
+  c-vo-cmp-am: ""
+  c-cmp-discord: ""
+  c-vo-am-deadman: ""
+  c-vo-deadman-discord: ""
+  c-vo-backup-rgw: ""
+  c-vo-audit-vtraces: ""
+  c-vo-audit-rgw: ""
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · a failing app becomes a Discord message"
+    color: emerald
+    lines:
+      - "[1] vmagent scrapes Envoy, kubelet, kube-state-metrics and annotated pods every 30 s, and forces the namespace label."
+      - "[2] It remote_writes to VMSingle :8428: 30 days, under 150k series after the diet."
+      - "[3] vmalert evaluates platform rules and the VMRules the CMP writes per project, each group pinned to the project's namespaces."
+      - "[4] It sends firing alerts to Alertmanager :9093, which groups them and picks the app webhook, else the project's, else the platform's."
+      - "[5] One Discord message per group: value, runbook, portal link, @here when critical."
+  - id: card-bg
+    title: "Background"
+    color: orange
+    lines:
+      - "[A] [B] vlagent tails pod logs and the k3s audit.log, and inserts into VictoriaLogs :9428 (30 days, disk cap)."
+      - "[C] [D] [E] [F] Template apps expose /metrics and send OTLP spans; the AI landing zone sends GenAI spans. The collector matches the pod from the connection, strips client k8s.* attributes and PII, and exports to VictoriaTraces."
+      - "[G] to [N] Reads: project Grafana orgs go through vmauth (one user per project, read paths only, filters forced). Org 1, the CMP and Argo Rollouts read the stores directly, behind NetworkPolicies, so a vmauth outage never aborts a canary."
+      - "[O] vmalert runs log rules on VictoriaLogs. [P] [Q] The CMP mutes alerts (project matcher forced) and posts its own events in the same format."
+      - "[R] [S] A Watchdog alert pings the dead man's switch every 5 min; silence for 15 min means the alert chain is down."
+      - "[T] vmbackup copies metrics to Ceph RGW daily. [U] [V] audit-record reads each finished agent run, signs it with Vault transit, and puts it under Object Lock for 180 days."
+  - id: card-replaces
+    title: "What goes away"
+    color: rose
+    lines:
+      - "**Alloy** (1.8 GiB on two nodes) → vmagent + vlagent."
+      - "**Loki** + nginx gateway + per-project tenants → VictoriaLogs + vmauth filters."
+      - "**VM cluster** (vminsert, vmselect, vmstorage) → VMSingle; the old Service names stay as aliases, so rollback is a selector flip."
+      - "**Grafana-managed project alerts**, the Loki ruler → vmalert. Custom Grafana rules of projects stay."
+      - "Tempo, planned by the AI landing zone, is not installed: it stays the fallback for VictoriaTraces (pre-1.0)."
+hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  GO3: "targets vmauth (the current one), not drawn in this view"

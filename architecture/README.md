@@ -33,6 +33,10 @@ one diagram, and `layouts/` places the topology views.
 | `platform-detailed` | How do all the AI landing zone parts connect to each other and to the hub, at zoom level of detail? (proposal) | AI landing zone |
 | `ai-gateway` | How does an agent's call reach a model or a tool, and what checks it on the way? (proposal, planned) | AI landing zone |
 | `ai-gateway-call` | What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent? (proposal, planned) | AI landing zone |
+| `observability-target` | What replaces Loki, Alloy and the VictoriaMetrics cluster, who writes and reads each signal, and how an alert reaches Discord? (proposal, CNP-185) | Observabilité |
+| `observability-alert-flow` | What happens, in order, when an app starts failing, until a developer mutes the alert from the portal? (proposal) | Observabilité |
+| `observability-ai-run` | What is recorded when a hosted agent fixes an app, who approves, and where the audit record ends up? (proposal) | Observabilité |
+| `observability-catalog` | What does every app get from the platform, without code, and what does it take to get it? (proposal) | Observabilité |
 
 To change a diagram, edit the model (facts), the view (what is shown) or the layout
 (where), then rebuild every view, dark and light, into `docs/01-architecture/diagrams/`:

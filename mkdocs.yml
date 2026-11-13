@@ -149,3 +149,18 @@ nav:
       - Architecture: 08-finops/02-architecture.md
       - Méthodes de calcul: 08-finops/03-methodes.md
       - Exploitation: 08-finops/04-exploitation.md
+  - 10. Observabilité (proposition):
+      - Vue d'ensemble: 10-observabilite/00-index.md
+      - Existant: 10-observabilite/01-existant.md
+      - État de l'art: 10-observabilite/02-etat-de-l-art.md
+      - Architecture cible: 10-observabilite/03-architecture.md
+      - Offre aux projets: 10-observabilite/04-offre-projets.md
+      - Dashboards et vues: 10-observabilite/05-dashboards.md
+      - Alerting: 10-observabilite/06-alerting.md
+      - IA et conformité: 10-observabilite/07-ia-et-conformite.md
+      - Plan et recette: 10-observabilite/08-plan-et-recette.md
+      - Idées et revue: 10-observabilite/09-idees-et-revue.md
+      - Annexes:
+          - Veille VictoriaMetrics: 10-observabilite/annexes/veille-victoriametrics.md
+          - Veille observabilité et Datadog: 10-observabilite/annexes/veille-observabilite-datadog.md
+          - Veille traçabilité IA: 10-observabilite/annexes/veille-tracabilite-ia.md

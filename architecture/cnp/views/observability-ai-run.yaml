@@ -1,0 +1,53 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Observability · One agent run, traced and signed"
+subtitle: "What is recorded when a hosted agent fixes an app, who approves, and where the audit record ends up?"
+meta:
+  - "Scope: one task of a hosted agent through agentgateway and the CMP MCP server, with a human approval (proposal, wave V6, decision D20)"
+  - "Out of scope: guardrail internals, budgets (AI landing zone docs), sandbox execution (same span pattern)"
+  - "Follows the ANSSI agentic AI guide v1.0 and the CNIL/CIANum note of 2026: approval and logs out of the agent's reach. No AI Act conformity claim."
+  - "v0.1 (2026-11-13, proposal) · source: cnp-docs/architecture/cnp"
+participants: [dev-a, cmp-backend, vo-ai-agent, vo-ai-gw, vo-ai-model, vo-otelcol, vo-vtraces, vo-audit-record, vault, ceph-rgw]
+steps:
+  - {id: a1, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "Ask the agent to fix <app> (span cmp.request, user sub)"}
+  - {id: a2, from: cmp-backend, to: vo-ai-agent, over: c-vo-cmp-agent, text: "start task, traceparent"}
+  - {id: a3, from: vo-ai-agent, to: vo-ai-gw, over: c-vo-agent-gw, text: "chat (span invoke_agent)"}
+  - {id: a4, from: vo-ai-gw, to: vo-ai-model, over: c-vo-gw-model, text: "chat: model, tokens, cost, guardrail verdict"}
+  - {id: a5, from: vo-ai-gw, to: cmp-backend, over: c-vo-gw-cmp, text: "MCP get_app_logs (span execute_tool, args hashed)"}
+  - {id: a6, from: vo-ai-gw, to: cmp-backend, over: c-vo-gw-cmp, text: "MCP cut_release"}
+  - {note: cmp-backend, text: "needs_user_confirmation: span cnp.approval waits"}
+  - {id: a7, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "Approve (approver sub, action hash)"}
+  - {note: cmp-backend, text: "release tagged, rollout starts: span cnp.deploy"}
+  - {id: a8, from: vo-ai-gw, to: vo-otelcol, over: c-vo-gw-otelcol, text: "spans of the run, no prompt content"}
+  - {id: a9, from: vo-otelcol, to: vo-vtraces, over: c-vo-otelcol-vtraces, text: "one trace, 7 days"}
+  - {id: a10, from: vo-audit-record, to: vo-vtraces, over: c-vo-audit-vtraces, text: "read the finished trace"}
+  - {id: a11, from: vo-audit-record, to: vault, over: c-vo-audit-vault, text: "sign the record (transit)"}
+  - {id: a12, from: vo-audit-record, to: ceph-rgw, over: c-vo-audit-rgw, text: "put record + chain head, Object Lock 180 d"}
+  - {note: ceph-rgw, text: "the agent has no right on this bucket nor on transit"}
+hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"

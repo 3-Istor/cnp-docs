@@ -599,7 +599,7 @@ elements:
   - {id: z-ceph, kind: region, color: violet, icon: ceph, title: "OPENSTACK CEPH", sub: "RGW 192.168.1.110 · pae-node-1 · outside K3s"}
   - {id: ceph-rgw, kind: database, parent: z-ceph, icon: ceph, title: "Ceph RGW", tech: "[S3 · plain HTTP]", desc: "Buckets made by Rook OBCs", ports: [{name: s3, protocol: TCP, port: 7480}]}
   - {id: loki-bucket, kind: database, parent: z-ceph, shape: cylinder, icon: ceph, title: "loki-data", tech: "[bucket]", desc: "Log chunks, 7 / 14 / 30 d"}
-  - {id: audit-bucket, kind: database, parent: z-ceph, shape: cylinder, icon: ceph, title: "cnp-audit-archive", tech: "[Object Lock · COMPLIANCE 30 d]", desc: "Nobody deletes before expiry"}
+  - {id: audit-bucket, kind: database, parent: z-ceph, shape: cylinder, icon: ceph, title: "cnp-audit-archive", tech: "[Object Lock · COMPLIANCE 180 d]", desc: "Nobody deletes before expiry"}
   - {id: discord, kind: external, parent: z-internet, icon: discord, title: "Discord", tech: "[webhooks]", desc: "Platform and project alerts"}
 
   # --- CNP-168 · T1 T3 F1 elements (multicloud delta) ---
@@ -731,6 +731,32 @@ elements:
   - {id: ar-keycloak, kind: security, parent: g-identity, icon: keycloak, title: "Keycloak", tech: "[auth.3istor.com · realm <project>]", desc: "Login and token endpoint", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: ar-vault, kind: database, parent: g-secrets, icon: vault, title: "Vault", tech: "[vault.vault.svc on-prem]", desc: "Mount project-<project>", ports: [{name: http, protocol: TCP, port: 8200}]}
   - {id: ar-hub-obs, kind: database, parent: g-observability, icon: grafana, title: "VictoriaMetrics · Loki", tech: "[on-prem stores]", desc: "Metrics, logs, analysis queries"}
+
+  # Observability target (proposal, CNP-185, 2026-11-13): full VictoriaMetrics. Waves V0-V6 in docs/10-observabilite.
+  - {id: g-vo, kind: group, parent: z-cluster, color: orange, icon: victoriametrics, title: "OBSERVABILITY · TARGET", sub: "ns observability · VictoriaMetrics operator"}
+  - {id: g-vo-collect, kind: group, parent: g-vo, color: sky, icon: k8s-ns, title: "COLLECT"}
+  - {id: g-vo-store, kind: group, parent: g-vo, color: violet, icon: victoriametrics, title: "STORE", sub: "Ceph RBD volumes"}
+  - {id: g-vo-read, kind: group, parent: g-vo, color: emerald, icon: grafana, title: "READ"}
+  - {id: g-vo-alert, kind: group, parent: g-vo, color: rose, icon: prometheus, title: "ALERT"}
+  - {id: vo-app-otel, kind: backend, parent: g-obs-sources, icon: opentelemetry, title: "Template apps", tech: "[OTel SDK · /metrics · JSON logs]", desc: "Traces, business metrics,<br>trace_id in every log line", status: planned, target: V4}
+  - {id: vo-ai-sources, kind: backend, parent: g-obs-sources, icon: opentelemetry, title: "AI landing zone", tech: "[agentgateway · kagent · MCP]", desc: "GenAI spans, tokens, decisions", status: planned, target: V6}
+  - {id: vo-vmagent, kind: backend, parent: g-vo-collect, icon: victoriametrics, title: "vmagent", tech: "[VMAgent · 1 replica]", desc: "Scrapes every target, enforces<br>the namespace label", status: planned, target: V1}
+  - {id: vo-vlagent, kind: backend, parent: g-vo-collect, icon: victoriametrics, title: "vlagent", tech: "[DaemonSet]", desc: "Tails pod logs and k3s audit.log", status: planned, target: V2}
+  - {id: vo-otelcol, kind: backend, parent: g-vo-collect, icon: opentelemetry, title: "OTel Collector", tech: "[gateway · 1 replica]", desc: "Pod from the connection, strips<br>client k8s.* and PII", ports: [{name: otlp, protocol: TCP, port: 4317}], status: planned, target: V4}
+  - {id: vo-vmsingle, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VMSingle", tech: "[metrics · 30 d · < 150k series]", desc: "Replaces the VM cluster", ports: [{name: http, protocol: TCP, port: 8428}], status: planned, target: V1}
+  - {id: vo-vlogs, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VictoriaLogs", tech: "[single · 30 d · disk cap]", desc: "Replaces Loki", ports: [{name: http, protocol: TCP, port: 9428}], status: planned, target: V2}
+  - {id: vo-vtraces, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VictoriaTraces", tech: "[single · 7 d · pre-1.0]", desc: "Tempo stays the fallback", ports: [{name: http, protocol: TCP, port: 10428}], status: planned, target: V4}
+  - {id: vo-vmauth, kind: security, parent: g-vo-read, icon: victoriametrics, title: "vmauth ×2", tech: "[VMUser per project · read paths]", desc: "Forces the project's filters", ports: [{name: http, protocol: TCP, port: 8427}], status: planned, target: V1}
+  - {id: vo-grafana, kind: frontend, parent: g-vo-read, icon: grafana, title: "Grafana", tech: "[org 1 + one org per project]", desc: "Dashboards only, one folder per role"}
+  - {id: vo-vmalert, kind: backend, parent: g-vo-alert, icon: victoriametrics, title: "vmalert ×2", tech: "[metrics rules · vlogs rules]", desc: "Platform rules and CMP VMRules", status: planned, target: V3}
+  - {id: vo-alertmanager, kind: backend, parent: g-vo-alert, icon: prometheus, title: "Alertmanager", tech: "[VMAlertmanager · route by app]", desc: "App, then project, then platform", ports: [{name: http, protocol: TCP, port: 9093}], status: planned, target: V3}
+  - {id: vo-backup, kind: tool, parent: g-vo, icon: victoriametrics, title: "vmbackup", tech: "[daily]", desc: "Metrics backup to RGW", status: planned, target: V1}
+  - {id: vo-audit-record, kind: tool, parent: g-vo, icon: k8s-deploy, title: "audit-record", tech: "[Go job · Vault transit]", desc: "Signed, hash-chained record<br>per agent run", status: planned, target: V6}
+  - {id: vo-deadman, kind: external, parent: z-internet, icon: globe, title: "Dead man's switch", tech: "[healthchecks.io]", desc: "Tells Discord when pings stop", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: V3}
+  # AI run sequence participants (proposal, D20).
+  - {id: vo-ai-agent, kind: backend, parent: g-vo, icon: k8s-pod, title: "Hosted agent", tech: "[kagent]", desc: "Runs one task", status: planned, target: V6}
+  - {id: vo-ai-gw, kind: security, parent: g-vo, icon: k8s-deploy, title: "agentgateway", tech: "[models · MCP]", desc: "Budget, guardrails, token counts", status: planned, target: V6}
+  - {id: vo-ai-model, kind: external, parent: z-internet, icon: globe, title: "Model", tech: "[Claude · Gemini · Ollama]", desc: "Answers"}
 
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
@@ -1167,6 +1193,40 @@ connections:
   - {id: hl-c-portal-clouds, from: hl-portal, to: hl-clouds, protocol: WireGuard, verb: "synchronise", kind: flow}
   - {id: hl-c-apps-agw, from: hl-apps, to: hl-agw, verb: "les apps appellent les modèles", kind: flow, status: planned, target: IA-1}
 
+  # Observability target (proposal, CNP-185).
+  - {id: c-vo-vmagent-targets, from: vo-vmagent, to: o-hub-targets, kind: flow, protocol: HTTP, verb: scrape}
+  - {id: c-vo-vmagent-appotel, from: vo-vmagent, to: vo-app-otel, kind: flow, protocol: HTTP, verb: "scrape /metrics"}
+  - {id: c-vo-vlagent-audit, from: vo-vlagent, to: o-audit-sources, kind: flow, protocol: file, verb: tail}
+  - {id: c-vo-appotel-otelcol, from: vo-app-otel, to: vo-otelcol, kind: flow, port: otlp, protocol: OTLP, verb: "send spans"}
+  - {id: c-vo-ai-otelcol, from: vo-ai-sources, to: vo-otelcol, kind: flow, port: otlp, protocol: OTLP, verb: "send GenAI spans"}
+  - {id: c-vo-vmagent-vmsingle, from: vo-vmagent, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: remote_write}
+  - {id: c-vo-vlagent-vlogs, from: vo-vlagent, to: vo-vlogs, kind: flow, port: http, protocol: HTTP, verb: insert}
+  - {id: c-vo-otelcol-vtraces, from: vo-otelcol, to: vo-vtraces, kind: flow, port: http, protocol: OTLP, verb: export}
+  - {id: c-vo-grafana-vmauth, from: vo-grafana, to: vo-vmauth, kind: flow, port: http, protocol: HTTP, verb: "project orgs"}
+  - {id: c-vo-vmauth-vmsingle, from: vo-vmauth, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: "query + filters"}
+  - {id: c-vo-vmauth-vlogs, from: vo-vmauth, to: vo-vlogs, kind: flow, port: http, protocol: HTTP, verb: "query + filters"}
+  - {id: c-vo-grafana-vmsingle, from: vo-grafana, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: "org 1"}
+  - {id: c-vo-cmp-vmsingle, from: cmp-backend, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: query}
+  - {id: c-vo-cmp-vlogs, from: cmp-backend, to: vo-vlogs, kind: flow, port: http, protocol: HTTP, verb: LogsQL}
+  - {id: c-vo-cmp-vtraces, from: cmp-backend, to: vo-vtraces, kind: flow, port: http, protocol: HTTP, verb: "Jaeger API"}
+  - {id: c-vo-rollouts-vmsingle, from: argo-rollouts, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: "canary analysis"}
+  - {id: c-vo-vmalert-vmsingle, from: vo-vmalert, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: evaluate}
+  - {id: c-vo-vmalert-vlogs, from: vo-vmalert, to: vo-vlogs, kind: flow, port: http, protocol: HTTP, verb: "evaluate vlogs"}
+  - {id: c-vo-vmalert-am, from: vo-vmalert, to: vo-alertmanager, kind: flow, port: http, protocol: HTTP, verb: "send alerts"}
+  - {id: c-vo-am-discord, from: vo-alertmanager, to: discord, kind: flow, protocol: HTTPS, verb: "webhook of the app"}
+  - {id: c-vo-am-deadman, from: vo-alertmanager, to: vo-deadman, kind: flow, port: https, protocol: HTTPS, verb: "Watchdog ping"}
+  - {id: c-vo-deadman-discord, from: vo-deadman, to: discord, kind: flow, protocol: HTTPS, verb: "alert when silent"}
+  - {id: c-vo-cmp-am, from: cmp-backend, to: vo-alertmanager, kind: flow, port: http, protocol: HTTP, verb: "silence, project only"}
+  - {id: c-vo-backup-rgw, from: vo-backup, to: ceph-rgw, kind: async, port: s3, protocol: S3, verb: "daily backup"}
+  - {id: c-vo-audit-vtraces, from: vo-audit-record, to: vo-vtraces, kind: async, port: http, protocol: HTTP, verb: "read finished runs"}
+  - {id: c-vo-audit-vault, from: vo-audit-record, to: vault, kind: flow, protocol: HTTP, verb: "sign · transit"}
+  - {id: c-vo-audit-rgw, from: vo-audit-record, to: ceph-rgw, kind: async, port: s3, protocol: S3, verb: "put, Object Lock"}
+  - {id: c-vo-cmp-agent, from: cmp-backend, to: vo-ai-agent, kind: flow, protocol: A2A, verb: "start task"}
+  - {id: c-vo-agent-gw, from: vo-ai-agent, to: vo-ai-gw, kind: flow, protocol: HTTP, verb: "model and tool calls"}
+  - {id: c-vo-gw-model, from: vo-ai-gw, to: vo-ai-model, kind: flow, protocol: HTTPS, verb: chat}
+  - {id: c-vo-gw-cmp, from: vo-ai-gw, to: cmp-backend, kind: flow, protocol: MCP, verb: "tool call"}
+  - {id: c-vo-gw-otelcol, from: vo-ai-gw, to: vo-otelcol, kind: flow, port: otlp, protocol: OTLP, verb: spans}
+
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
@@ -1469,3 +1529,13 @@ grants:
   - {id: g-auditor-gke, subject: grp-auditor, resource: gke-cluster, level: read, status: planned, target: P4}
   - {id: g-finops-gcp-project, subject: grp-finops, resource: gcp-project, level: read, scope: billing, status: planned, target: P4}
   - {id: g-argocd-gke, subject: argocd, resource: gke-cluster, level: admin}
+
+offerings:
+  - {id: off-golden, title: "Golden signals", icon: envoy, summary: "Requests, errors and latency per route, with deploy markers", provides: ["Overview tab", "Grafana dashboard per app", "canary vs stable"], request: "Nothing: every app behind the gateway", backed_by: [vo-vmagent, vo-vmsingle, vo-grafana], status: planned, target: V1}
+  - {id: off-logs, title: "Logs and top errors", icon: victoriametrics, summary: "30 days of logs, full-text search, errors grouped by pattern", provides: ["Logs tab", "top 5 errors", "log to trace"], request: "Nothing: write to stdout, JSON preferred", backed_by: [vo-vlagent, vo-vlogs, vo-vmauth], status: planned, target: V2}
+  - {id: off-slo, title: "SLO and error budget", icon: victoriametrics, summary: "Availability 99.5 % and p95 < 500 ms by default, burn-rate alerts", provides: ["error budget in Overview", "fast and slow burn alerts", "target set in Settings"], request: "Nothing for prod apps; tune the target in Settings", backed_by: [vo-vmalert, vo-vmsingle], status: planned, target: V3}
+  - {id: off-alerts, title: "Alerts to Discord", icon: discord, summary: "One message per alert group, runbook link, mute from the portal", provides: ["app or project webhook", "critical, warning, daily digest", "dead man's switch"], request: "Paste the webhook in project or app Settings", backed_by: [vo-vmalert, vo-alertmanager, discord], status: planned, target: V3}
+  - {id: off-traces, title: "Distributed traces", icon: opentelemetry, summary: "One request followed from the front to the database", provides: ["Traces tab", "slow and failed traces", "trace to logs"], request: "Template apps: on by default. Others: OTLP to the collector", backed_by: [vo-otelcol, vo-vtraces], status: planned, target: V4}
+  - {id: off-status, title: "Status page and checks", icon: gatus, summary: "Probes generated from the app catalogue, public page per project", provides: ["status-<project>.3istor.com", "uptime history"], request: "Turn on the public page in project Settings", backed_by: [gatus], status: planned, target: V4}
+  - {id: off-cost, title: "Cost per request", icon: opencost, summary: "Daily cost, cost per 1,000 requests, requests vs real usage", provides: ["Costs tab", "rightsizing hints"], request: "Nothing", backed_by: [opencost, vo-vmsingle], status: planned, target: V5}
+  - {id: off-ai, title: "AI agent runs", icon: opentelemetry, summary: "Every agent task as one trace, approvals included, signed audit record", provides: ["trace per run", "tokens and cost", "exportable record, 180 days"], request: "Agents hosted on CNP: automatic", backed_by: [vo-ai-gw, vo-otelcol, vo-vtraces, vo-audit-record], status: planned, target: V6}

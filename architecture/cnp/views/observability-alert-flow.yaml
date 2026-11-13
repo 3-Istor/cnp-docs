@@ -1,0 +1,50 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Observability · From a burning error budget to Discord"
+subtitle: "What happens, in order, when an app starts failing, until a developer mutes the alert from the portal?"
+meta:
+  - "Scope: one fast-burn SLO alert for a prod app, routing, mute, dead man's switch (proposal, waves V1 and V3)"
+  - "Out of scope: canary analysis and rollback, log-based rules (same path from vmalert on)"
+  - "v0.1 (2026-11-13, proposal, CNP-185) · source: cnp-docs/architecture/cnp"
+participants: [vo-vmagent, vo-vmsingle, vo-vmalert, vo-alertmanager, discord, dev-a, cmp-backend, vo-deadman]
+steps:
+  - {id: s1, from: vo-vmagent, to: vo-vmsingle, over: c-vo-vmagent-vmsingle, text: "remote_write Envoy series, 30 s"}
+  - {note: vo-vmsingle, text: "5xx of <app> rises to 4 %"}
+  - {id: s2, from: vo-vmalert, to: vo-vmsingle, over: c-vo-vmalert-vmsingle, text: "evaluate SLO rules, extra_filters of the project"}
+  - {reply: s2, text: "burn rate 14.4 over 1 h and 5 min"}
+  - {id: s3, from: vo-vmalert, to: vo-alertmanager, over: c-vo-vmalert-am, text: "SLOFastBurn{app, project, severity=critical}"}
+  - {note: vo-alertmanager, text: "route app webhook, else project, else platform; group 30 s"}
+  - {id: s4, from: vo-alertmanager, to: discord, over: c-vo-am-discord, text: "one message: value, runbook, portal link, @here"}
+  - {id: s5, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "Mute 1 h (member of the project)"}
+  - {id: s6, from: cmp-backend, to: vo-alertmanager, over: c-vo-cmp-am, text: "POST silence, matcher project=<p> forced"}
+  - {reply: s6, text: "silence id, shown in the Alerts tab"}
+  - {id: s7, from: vo-alertmanager, to: vo-deadman, over: c-vo-am-deadman, text: "Watchdog ping every 5 min"}
+  - {note: vo-deadman, text: "no ping for 15 min: the alert chain is down"}
+  - {id: s8, from: vo-deadman, to: discord, over: c-vo-deadman-discord, text: "platform alert, outside the cluster"}
+hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
