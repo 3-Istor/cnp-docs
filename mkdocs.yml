@@ -150,3 +150,6 @@ nav:
       - Architecture: 08-finops/02-architecture.md
       - Méthodes de calcul: 08-finops/03-methodes.md
       - Exploitation: 08-finops/04-exploitation.md
+  - 9. Conformité:
+      - Registre RGPD (brouillon): 09-conformite/01-registre-rgpd.md
+      - Matrice OWASP MCP et agentique: 09-conformite/02-matrice-owasp-mcp.md
