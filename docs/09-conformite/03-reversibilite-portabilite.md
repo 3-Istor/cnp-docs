@@ -174,6 +174,11 @@ TARGET_S3_ENDPOINT=https://s3.example AWS_ACCESS_KEY_ID=... AWS_SECRET_ACCESS_KE
   scripts/export-drill/restore.sh export.tar.gz <sha256>
 ```
 
+Le PostgreSQL cible doit être au moins de la version de `pg_dump` qui a fait l'export
+(18 aujourd'hui, celle des clusters CNPG). Un dump fait par un `pg_dump` plus récent
+contient des réglages qu'un serveur plus ancien refuse : l'exercice l'a montré avec un
+dump 17 restauré dans un PostgreSQL 16.
+
 1. Vérifie le SHA-256 de l'archive, refuse un chemin absolu ou contenant `..`.
 2. Vérifie chaque fichier contre le manifeste, dans les deux sens.
 3. Applique les namespaces puis les objets Kubernetes au contexte `kubectl` courant ;
@@ -195,10 +200,10 @@ sur `main` et chaque lundi, sans aucun secret de la plateforme :
 flowchart LR
   subgraph runner[Runner GitHub]
     seed[Projet de test<br/>CMP SQLite, faux cluster,<br/>faux Vault, Keycloak, Loki]
-    src[(PostgreSQL 16<br/>source)]
+    src[(PostgreSQL 18<br/>source)]
     garage[(Garage v2.2.0<br/>buckets source + exports)]
     exp[Code d'export de la CMP<br/>pg_dump, S3, git réels]
-    dst[(PostgreSQL 16<br/>cible)]
+    dst[(PostgreSQL 18<br/>cible)]
     kind[[kind vierge]]
     restore[restore.sh]
   end
@@ -212,7 +217,7 @@ flowchart LR
   restore -- objets --> garage
 ```
 
-1. `run.sh` démarre Garage (la version de la plateforme) et deux PostgreSQL, avec des
+1. `run.sh` démarre Garage et deux PostgreSQL 18, les versions de la plateforme, avec des
    identifiants tirés au hasard à chaque exécution.
 2. `make_fixture.py` remplit un projet de test (250 clients, 1000 commandes, 3 objets,
    un dépôt git à deux branches) et lance le vrai code d'export ; seuls la base CMP,
