@@ -1,0 +1,176 @@
+<mxfile host="archgen">
+  <diagram id="import-rebuild-dark" name="CNP · Repo import · S5 Rebuild on push (dark)">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1850" pageHeight="1020" background="#020617" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODUwIiBoZWlnaHQ9IjEwMjAiPjxkZWZzPjxwYXR0ZXJuIGlkPSJnIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiMxZTI5M2IiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMDIwNjE3Ii8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1850" height="1020" as="geometry" />
+        </mxCell>
+        <mxCell id="header-dot" value="" style="ellipse;fillColor=#34d399;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="44" width="12" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="header-title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;CNP · Repo import · S5 Rebuild on push&lt;/b&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=24;fontColor=#f8fafc;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="1450" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:13px&quot;&gt;How does a push to the user&amp;#39;s repo reach the cluster, on GitHub, on GitLab, and after the night&amp;#39;s sleep?&lt;/font&gt;&lt;br&gt;Scope: S5 of the import design, planned (CNP-244) · the build and deploy steps are those of import-apply · design spec v2 (2026-11-13)&lt;br&gt;v0.1 · source: cnp-docs/architecture/cnp&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#94a3b8;" vertex="1" parent="1">
+          <mxGeometry x="64" y="74" width="1450" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="life-im-gh-import-app" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="256" as="sourcePoint" />
+            <mxPoint x="160" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-im-gitlab-repo" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="256" as="sourcePoint" />
+            <mxPoint x="470" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-im-import" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="256" as="sourcePoint" />
+            <mxPoint x="780" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-im-build-prepare" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1100" y="256" as="sourcePoint" />
+            <mxPoint x="1100" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-pa-registry" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1435" y="256" as="sourcePoint" />
+            <mxPoint x="1435" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-argocd" value="" style="html=1;endArrow=none;strokeColor=#94a3b8;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1720" y="256" as="sourcePoint" />
+            <mxPoint x="1720" y="980" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-hook" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;1&lt;/span&gt; push event · X-Hub-Signature-256&lt;/span&gt;" style="html=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#c4b5fd;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="316" as="sourcePoint" />
+            <mxPoint x="780" y="316" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-reply-hook-2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;2&lt;/span&gt; 202&lt;/span&gt;" style="html=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#c4b5fd;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="412" as="sourcePoint" />
+            <mxPoint x="160" y="412" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-d1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;3&lt;/span&gt; workflow_dispatch {ids, SHA}&lt;/span&gt;" style="html=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="460" as="sourcePoint" />
+            <mxPoint x="1100" y="460" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-c1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;4&lt;/span&gt; commit the new digests&lt;/span&gt;" style="html=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="556" as="sourcePoint" />
+            <mxPoint x="1435" y="556" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-p1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;5&lt;/span&gt; poll, then sync&lt;/span&gt;" style="html=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#c4b5fd;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1720" y="604" as="sourcePoint" />
+            <mxPoint x="1435" y="604" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-poll" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;6&lt;/span&gt; GitLab: GET branch HEAD, every 5 min&lt;/span&gt;" style="html=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#c4b5fd;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="652" as="sourcePoint" />
+            <mxPoint x="470" y="652" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-reply-poll-7" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;7&lt;/span&gt; SHA&lt;/span&gt;" style="html=1;strokeColor=#a78bfa;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#c4b5fd;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="470" y="700" as="sourcePoint" />
+            <mxPoint x="780" y="700" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-head" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;8&lt;/span&gt; GET branch HEAD per tracked repo&lt;/span&gt;" style="html=1;strokeColor=#fb7185;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#fda4af;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="844" as="sourcePoint" />
+            <mxPoint x="160" y="844" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-reply-head-9" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;9&lt;/span&gt; SHA&lt;/span&gt;" style="html=1;strokeColor=#fb7185;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#fda4af;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="160" y="892" as="sourcePoint" />
+            <mxPoint x="780" y="892" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-d2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#f8fafc;color:#020617;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;10&lt;/span&gt; one rebuild per missed push&lt;/span&gt;" style="html=1;strokeColor=#94a3b8;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#020617;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="780" y="940" as="sourcePoint" />
+            <mxPoint x="1100" y="940" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="im-gh-import-app" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;CNP-Import&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[GitHub App · contents:read]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#3f152f;html=1;whiteSpace=wrap;strokeColor=#fb7185;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="240" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="im-gh-import-app__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjZTJlOGYwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0SHViPC90aXRsZT48cGF0aCBkPSJNMTIgLjI5N2MtNi42MyAwLTEyIDUuMzczLTEyIDEyIDAgNS4zMDMgMy40MzggOS44IDguMjA1IDExLjM4NS42LjExMy44Mi0uMjU4LjgyLS41NzcgMC0uMjg1LS4wMS0xLjA0LS4wMTUtMi4wNC0zLjMzOC43MjQtNC4wNDItMS42MS00LjA0Mi0xLjYxQzQuNDIyIDE4LjA3IDMuNjMzIDE3LjcgMy42MzMgMTcuN2MtMS4wODctLjc0NC4wODQtLjcyOS4wODQtLjcyOSAxLjIwNS4wODQgMS44MzggMS4yMzYgMS44MzggMS4yMzYgMS4wNyAxLjgzNSAyLjgwOSAxLjMwNSAzLjQ5NS45OTguMTA4LS43NzYuNDE3LTEuMzA1Ljc2LTEuNjA1LTIuNjY1LS4zLTUuNDY2LTEuMzMyLTUuNDY2LTUuOTMgMC0xLjMxLjQ2NS0yLjM4IDEuMjM1LTMuMjItLjEzNS0uMzAzLS41NC0xLjUyMy4xMDUtMy4xNzYgMCAwIDEuMDA1LS4zMjIgMy4zIDEuMjMuOTYtLjI2NyAxLjk4LS4zOTkgMy0uNDA1IDEuMDIuMDA2IDIuMDQuMTM4IDMgLjQwNSAyLjI4LTEuNTUyIDMuMjg1LTEuMjMgMy4yODUtMS4yMy42NDUgMS42NTMuMjQgMi44NzMuMTIgMy4xNzYuNzY1Ljg0IDEuMjMgMS45MSAxLjIzIDMuMjIgMCA0LjYxLTIuODA1IDUuNjI1LTUuNDc1IDUuOTIuNDIuMzYuODEgMS4wOTYuODEgMi4yMiAwIDEuNjA2LS4wMTUgMi44OTYtLjAxNSAzLjI4NiAwIC4zMTUuMjEuNjkuODI1LjU3QzIwLjU2NSAyMi4wOTIgMjQgMTcuNTkyIDI0IDEyLjI5N2MwLTYuNjI3LTUuMzczLTEyLTEyLTEyIi8+PC9zdmc+Cg==;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="im-gh-import-app">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="im-gitlab-repo" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;&amp;lt;user&amp;gt; project&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[GitLab · compose, Dockerfiles]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#172033;html=1;whiteSpace=wrap;strokeColor=#94a3b8;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="340" y="200" width="260" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="im-gitlab-repo__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjRkM2RDI2IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0TGFiPC90aXRsZT48cGF0aCBkPSJtMjMuNjAwNCA5LjU5MjctLjAzMzctLjA4NjJMMjAuMy45ODE0YS44NTEuODUxIDAgMCAwLS4zMzYyLS40MDUuODc0OC44NzQ4IDAgMCAwLS45OTk3LjA1MzkuODc0OC44NzQ4IDAgMCAwLS4yOS40Mzk5bC0yLjIwNTUgNi43NDhINy41Mzc1bC0yLjIwNTctNi43NDhhLjg1NzMuODU3MyAwIDAgMC0uMjktLjQ0MTIuODc0OC44NzQ4IDAgMCAwLS45OTk3LS4wNTM3Ljg1ODUuODU4NSAwIDAgMC0uMzM2Mi40MDQ5TC40MzMyIDkuNTAxNWwtLjAzMjUuMDg2MmE2LjA2NTcgNi4wNjU3IDAgMCAwIDIuMDExOSA3LjAxMDVsLjAxMTMuMDA4Ny4wMy4wMjEzIDQuOTc2IDMuNzI2NCAyLjQ2MiAxLjg2MzMgMS40OTk1IDEuMTMyMWExLjAwODUgMS4wMDg1IDAgMCAwIDEuMjE5NyAwbDEuNDk5NS0xLjEzMjEgMi40NjE5LTEuODYzMyA1LjAwNi0zLjc0ODkuMDEyNS0uMDFhNi4wNjgyIDYuMDY4MiAwIDAgMCAyLjAwOTQtNy4wMDN6Ii8+PC9zdmc+;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="im-gitlab-repo">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="im-import" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;Import module&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[CMP backend · /api/import]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#0b2d31;html=1;whiteSpace=wrap;strokeColor=#34d399;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="660" y="200" width="240" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="im-import__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjMDA5Njg4IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+RmFzdEFQSTwvdGl0bGU+PHBhdGggZD0iTTEyIC4wMzg3QzUuMzcyOS4wMzg0LjAwMDMgNS4zOTMxIDAgMTEuOTk4OGMtLjAwMSA2LjYwNjYgNS4zNzIgMTEuOTYyOCAxMiAxMS45NjI1IDYuNjI4LjAwMDMgMTIuMDAxLTUuMzU1OSAxMi0xMS45NjI1LS4wMDAzLTYuNjA1Ny01LjM3MjktMTEuOTYwNC0xMi0xMS45Nm0tLjgyOSA1LjQxNTNoNy41NWwtNy41ODA1IDUuMzI4NGg1LjE4MjhMNS4yNzkgMTguNTQzNnEyLjk0NjYtNi41NDQ0IDUuODkyLTEzLjA4OTYiLz48L3N2Zz4=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="im-import">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="im-build-prepare" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;job prepare&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[id-token · CNP-Import key in env]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#0b2d31;html=1;whiteSpace=wrap;strokeColor=#34d399;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="960" y="200" width="280" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="im-build-prepare__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjMjA4OEZGIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0SHViIEFjdGlvbnM8L3RpdGxlPjxwYXRoIGQ9Ik0xMC45ODQgMTMuODM2YS41LjUgMCAwIDEtLjM1My0uMTQ2bC0uNzQ1LS43NDNhLjUuNSAwIDEgMSAuNzA2LS43MDhsLjM5Mi4zOTEgMS4xODEtMS4xOGEuNS41IDAgMCAxIC43MDguNzA3bC0xLjUzNSAxLjUzM2EuNTA0LjUwNCAwIDAgMS0uMzU0LjE0NnptOS4zNTMtLjE0N2wxLjUzNC0xLjUzMmEuNS41IDAgMCAwLS43MDctLjcwN2wtMS4xODEgMS4xOC0uMzkyLS4zOTFhLjUuNSAwIDEgMC0uNzA2LjcwOGwuNzQ2Ljc0M2EuNDk3LjQ5NyAwIDAgMCAuNzA2LS4wMDF6TTQuNTI3IDcuNDUybDIuNTU3LTEuNTg1QTEgMSAwIDAgMCA3LjA5IDQuMTdMNC41MzMgMi41NkExIDEgMCAwIDAgMyAzLjQwNnYzLjE5NmExLjAwMSAxLjAwMSAwIDAgMCAxLjUyNy44NXptMi4wMy0yLjQzNkw0IDYuNjAyVjMuNDA2bDIuNTU3IDEuNjF6TTI0IDEyLjVjMCAxLjkzLTEuNTcgMy41LTMuNSAzLjVhMy41MDMgMy41MDMgMCAwIDEtMy40Ni0zaC0yLjA4YTMuNTAzIDMuNTAzIDAgMCAxLTMuNDYgMyAzLjUwMiAzLjUwMiAwIDAgMS0zLjQ2LTNoLS41NThjLS45NzIgMC0xLjg1LS4zOTktMi40ODItMS4wNDJWMTdjMCAxLjY1NCAxLjM0NiAzIDMgM2guMDRjLjI0NC0xLjY5MyAxLjctMyAzLjQ2LTMgMS45MyAwIDMuNSAxLjU3IDMuNSAzLjVTMTMuNDMgMjQgMTEuNSAyNGEzLjUwMiAzLjUwMiAwIDAgMS0zLjQ2LTNIOGMtMi4yMDYgMC00LTEuNzk0LTQtNFY5Ljg5OUE1LjAwOCA1LjAwOCAwIDAgMSAwIDVjMC0yLjc1NyAyLjI0My01IDUtNXM1IDIuMjQzIDUgNWE1LjAwNSA1LjAwNSAwIDAgMS00Ljk1MiA0Ljk5OEEyLjQ4MiAyLjQ4MiAwIDAgMCA3LjQ4MiAxMmguNTU4Yy4yNDQtMS42OTMgMS43LTMgMy40Ni0zYTMuNTAyIDMuNTAyIDAgMCAxIDMuNDYgM2gyLjA4YTMuNTAzIDMuNTAzIDAgMCAxIDMuNDYtM2MxLjkzIDAgMy41IDEuNTcgMy41IDMuNXptLTE1IDhjMCAxLjM3OCAxLjEyMiAyLjUgMi41IDIuNXMyLjUtMS4xMjIgMi41LTIuNS0xLjEyMi0yLjUtMi41LTIuNVM5IDE5LjEyMiA5IDIwLjV6TTUgOWMyLjIwNiAwIDQtMS43OTQgNC00UzcuMjA2IDEgNSAxIDEgMi43OTQgMSA1czEuNzk0IDQgNCA0em05IDMuNWMwLTEuMzc4LTEuMTIyLTIuNS0yLjUtMi41UzkgMTEuMTIyIDkgMTIuNXMxLjEyMiAyLjUgMi41IDIuNSAyLjUtMS4xMjIgMi41LTIuNXptOSAwYzAtMS4zNzgtMS4xMjItMi41LTIuNS0yLjVTMTggMTEuMTIyIDE4IDEyLjVzMS4xMjIgMi41IDIuNSAyLjUgMi41LTEuMTIyIDIuNS0yLjV6bS0xMyA4YS41LjUgMCAxIDAgMSAwIC41LjUgMCAwIDAtMSAwem0yIDBhLjUuNSAwIDEgMCAxIDAgLjUuNSAwIDAgMC0xIDB6bTEyIDBjMCAxLjkzLTEuNTcgMy41LTMuNSAzLjVhMy41MDMgMy41MDMgMCAwIDEtMy40Ni0zLjAwMmMtLjAwNy4wMDEtLjAxMy4wMDUtLjAyMS4wMDVsLS41MDYuMDE3aC0uMDE3YS41LjUgMCAwIDEtLjAxNi0uOTk5bC41MDYtLjAxN2MuMDE4LS4wMDIuMDM1LjAwNi4wNTIuMDA3QTMuNTAzIDMuNTAzIDAgMCAxIDIwLjUgMTdjMS45MyAwIDMuNSAxLjU3IDMuNSAzLjV6bS0xIDBjMC0xLjM3OC0xLjEyMi0yLjUtMi41LTIuNVMxOCAxOS4xMjIgMTggMjAuNXMxLjEyMiAyLjUgMi41IDIuNSAyLjUtMS4xMjIgMi41LTIuNXoiLz48L3N2Zz4=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="im-build-prepare">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="pa-registry" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;registry/projects/&amp;lt;p&amp;gt;.yaml&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[cnp-projects]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#172033;html=1;whiteSpace=wrap;strokeColor=#94a3b8;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="200" width="270" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="pa-registry__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjZTJlOGYwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+R2l0SHViPC90aXRsZT48cGF0aCBkPSJNMTIgLjI5N2MtNi42MyAwLTEyIDUuMzczLTEyIDEyIDAgNS4zMDMgMy40MzggOS44IDguMjA1IDExLjM4NS42LjExMy44Mi0uMjU4LjgyLS41NzcgMC0uMjg1LS4wMS0xLjA0LS4wMTUtMi4wNC0zLjMzOC43MjQtNC4wNDItMS42MS00LjA0Mi0xLjYxQzQuNDIyIDE4LjA3IDMuNjMzIDE3LjcgMy42MzMgMTcuN2MtMS4wODctLjc0NC4wODQtLjcyOS4wODQtLjcyOSAxLjIwNS4wODQgMS44MzggMS4yMzYgMS44MzggMS4yMzYgMS4wNyAxLjgzNSAyLjgwOSAxLjMwNSAzLjQ5NS45OTguMTA4LS43NzYuNDE3LTEuMzA1Ljc2LTEuNjA1LTIuNjY1LS4zLTUuNDY2LTEuMzMyLTUuNDY2LTUuOTMgMC0xLjMxLjQ2NS0yLjM4IDEuMjM1LTMuMjItLjEzNS0uMzAzLS41NC0xLjUyMy4xMDUtMy4xNzYgMCAwIDEuMDA1LS4zMjIgMy4zIDEuMjMuOTYtLjI2NyAxLjk4LS4zOTkgMy0uNDA1IDEuMDIuMDA2IDIuMDQuMTM4IDMgLjQwNSAyLjI4LTEuNTUyIDMuMjg1LTEuMjMgMy4yODUtMS4yMy42NDUgMS42NTMuMjQgMi44NzMuMTIgMy4xNzYuNzY1Ljg0IDEuMjMgMS45MSAxLjIzIDMuMjIgMCA0LjYxLTIuODA1IDUuNjI1LTUuNDc1IDUuOTIuNDIuMzYuODEgMS4wOTYuODEgMi4yMiAwIDEuNjA2LS4wMTUgMi44OTYtLjAxNSAzLjI4NiAwIC4zMTUuMjEuNjkuODI1LjU3QzIwLjU2NSAyMi4wOTIgMjQgMTcuNTkyIDI0IDEyLjI5N2MwLTYuNjI3LTUuMzczLTEyLTEyLTEyIi8+PC9zdmc+Cg==;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="pa-registry">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="argocd" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#f8fafc&quot; style=&quot;font-size:12px&quot;&gt;Argo CD&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#e2e8f0&quot; style=&quot;font-size:10px&quot;&gt;[ApplicationSets]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#0b2d31;html=1;whiteSpace=wrap;strokeColor=#34d399;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="1630" y="200" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="argocd__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiBmaWxsPSJub25lIiB2aWV3Qm94PSIwIDAgNTgxIDc0NyI+CiAgPHBhdGggaWQ9ImEiIGZpbGw9IiNmZmYiIGQ9Ik0zMzYuNzYgNDM3LjYxYzAgMjguMzEtMTguODMgNDMuMzYtNDkuMjkgNDMuMzYtMzAuNDUgMC00Ny4yLTE3Ljg0LTQ3LjItNDMuMzYgMCAwIDE2Ljc1IDIzLjY1IDQ3LjIgMjMuNjUgMzAuNDYgMCA0OS4zLTIzLjY1IDQ5LjMtMjMuNjVaIi8+CiAgPHBhdGggZmlsbD0iI0UyRjVGQyIgZD0iTTI5MC41IDU0Ny45OGMxNDguNDcgMCAyNjguODQtMTIwLjQ1IDI2OC44NC0yNjkuMDQgMC0xNDguNTgtMTIwLjM3LTI2OS4wMy0yNjguODQtMjY5LjAzLTE0OC40NyAwLTI2OC44NCAxMjAuNDUtMjY4Ljg0IDI2OS4wMyAwIDE0OC41OSAxMjAuMzcgMjY5LjA0IDI2OC44NCAyNjkuMDRaIi8+CiAgPHBhdGggZmlsbD0iI0NERUNGNiIgZD0iTTI5MC41IDUwNC4wNGMxMjEuMzYgMCAyMTkuNzQtOTguNDUgMjE5Ljc0LTIxOS45UzQxMS44NiA2NC4yNCAyOTAuNSA2NC4yNGMtMTIxLjM2IDAtMjE5Ljc0IDk4LjQ1LTIxOS43NCAyMTkuOXM5OC4zOCAyMTkuOSAyMTkuNzQgMjE5LjlaIi8+CiAgPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTIwOC4zMSA5MS41MWExMi45OCAxMi45OCAwIDEgMCAwLTI1Ljk2IDEyLjk4IDEyLjk4IDAgMCAwIDAgMjUuOTZabS05Ni41NyAzMjUuODJhNC41IDQuNSAwIDEgMCA3LjA4LTUuNTRjLTg3LjgtMTEyLjIxLTM3LjE1LTI1Ny42NSA2Mi41LTMxNC43NGE0LjUgNC41IDAgMCAwLTQuNDctNy44QzczLjIzIDE0OC42IDIwLjAzIDMwMC4xMiAxMTEuNzQgNDE3LjMzWiIvPgogIDxwYXRoIGZpbGw9IiNCNUQyRjMiIGQ9Ik0xOS4yNiAyMjUuNTRhMy41IDMuNSAwIDEgMC03IDBoN1ptLTcgMTA1LjM4YTMuNSAzLjUgMCAxIDAgNyAwaC03Wm01NTUuMDctMTA1Ljg4YTMuNSAzLjUgMCAxIDAtNyAwaDdabS03IDEwNS4zOGEzLjUgMy41IDAgMSAwIDcgMGgtN1pNMjg5Ljc5IDU1NS45N2MxNTMuMjggMCAyNzcuNTQtMTI0LjM1IDI3Ny41NC0yNzcuNzNoLTdjMCAxNDkuNTItMTIxLjEzIDI3MC43My0yNzAuNTQgMjcwLjczdjdabTI3Ny41NC0yNzcuNzNDNTY3LjMzIDEyNC44NCA0NDMuMDcuNSAyODkuNzkuNXY3YzE0OS40MSAwIDI3MC41NCAxMjEuMjEgMjcwLjU0IDI3MC43NGg3Wk0yODkuNzkuNUMxMzYuNTEuNSAxMi4yNiAxMjQuODUgMTIuMjYgMjc4LjI0aDdDMTkuMjYgMTI4LjcgMTQwLjM4IDcuNSAyODkuNzkgNy41di03Wk0xMi4yNiAyNzguMjRjMCAxNTMuMzggMTI0LjI1IDI3Ny43MyAyNzcuNTMgMjc3Ljczdi03Yy0xNDkuNCAwLTI3MC41My0xMjEuMi0yNzAuNTMtMjcwLjczaC03Wm0wLTUyLjd2MTA1LjM4aDdWMjI1LjU0aC03Wm01NDguMDctLjV2MTA1LjM4aDdWMjI1LjA0aC03WiIvPgogIDxwYXRoIGZpbGw9IiNCNUQyRjMiIGQ9Ik0yMS42NiAyMjUuNzNhMTAuODQgMTAuODQgMCAxIDAtMjEuNjYgMHYxMDYuNDNhMTAuODQgMTAuODQgMCAxIDAgMjEuNjYgMFYyMjUuNzNabTU1OS4zNCAwYTEwLjg0IDEwLjg0IDAgMSAwLTIxLjY2IDB2MTA2LjQzYTEwLjg0IDEwLjg0IDAgMSAwIDIxLjY2IDBWMjI1LjczWiIvPgogIDxwYXRoIGZpbGw9IiNGRTczM0UiIGQ9Ik0xNzEuMTcgNjg3Ljc2YzEyLjUzLTUuMSA5Ljk4LTEwLjIgOS45OC0xMi43NGwtNi4xLTkyLjU1LTUuMzctNDYuMy04LjEyLTI4OS4wN2MwLTY4LjYgNTAuNzMtMTMyLjcyIDEyNy4zLTEzMi43MnMxMzAuNzYgNjEuNzEgMTMwLjg4IDEzMi43N2MtMi4yIDEzNy4yNC01LjkgMTg5LjQ3LTExLjA3IDI4OC4wMi0uNjMgMTMuNDctMi4zOCAzMy44Ni0yLjk2IDQ2LjMyLTIuODggNjEuNjYtNi4xNCA5MS44Ny02LjE0IDkzLjUzIDAgMi41NS0yLjU0IDcuNjQgOS45OCAxMi43NCAxMi41MiA1LjEgNDEuNDYgMTEuNzEgNDEuNDYgMTMuMzMgMCAxLjYtNDguODkgMC00OC44OSAwLTI4LjAyIDAtMjguMDItMjAuOTgtMjguMDItMjYuMDcgMC01LjEtNy42NC05Mi42LTcuNjQtOTIuNmwtMi41NSAxMTIuOTljMCA1LjEgMi41NSAxMi43NCAyMC4zOCAxNy44NCAwIDAgMzguOTEgNS44OSAzOC45MSA4LjAxIDAgMi4xMy00Ni41NSAwLTQ2LjU1IDAtMzUuNDUgMC0zNS40NS0yMC43NS0zNS40NS0yMC43NWwtNy42NC05Mi42UzMzMSA3MDAuNSAzMzEgNzEzLjI0YzAgOS45OSAxLjczIDE3LjYzIDI5LjU0IDIyLjczIDEzLjQzIDMuNzMgNDAuNTQgOC4zNSA0MC41NCAxMC4yIDAgMS44NS02MS44NiAwLTYxLjg2IDAtMzMuMTEtMi41NS0zNi4yNC0yNS41LTM2LjI0LTI1LjVsLTEyLjU1LTQ2LjE0LTEyLjUgNDYuMTVzLTUuMDkgMjIuOTQtMzguMiAyNS40OWMwIDAtNTYuMTcgMS44NS01Ni4xNyAwczIyLjUtNS45OSAzNi44MS0xMC4yYzE5LjM2LTUuNjkgMjkuNTUtMTIuNzQgMjkuNTUtMjIuNzMgMC0xMi43NC0yLjU1LTEwNS4zNS0yLjU1LTEwNS4zNWwtNy42NCA5Mi42czAgMjIuNzQtMzUuNDUgMjIuNzRjMCAwLTUwLjUuMTUtNTAuNS0xLjk4IDAtMi4xMiA0Mi42NC04IDQyLjY0LTggMTcuODMtNS4xIDIwLjM4LTEyLjc1IDIwLjM4LTE3Ljg1bC0yLjU1LTExM3MtNy42NCA4Ny41LTcuNjQgOTIuNmMwIDUuMSAwIDI4LjA1LTI4LjAyIDI4LjA1IDAgMC00Ny4xMy0yLjMzLTQ3LjEzLTMuOTUgMC0xLjYgMjcuMTgtNi4yNSAzOS43LTExLjM1WiIvPgogIDxwYXRoIGZpbGw9IiNGRTY0NDYiIGQ9Ik0xNjkuNjggNTM2LjE2cy01LjIzIDEyLjgtMTcuMDUgMTkuN2MtMTEuODEgNi45LTI1LjUxIDkuMTQtMzguNCAxMC44NCAwIDAgMTcuNzIgOC44NyAzOS4zOSA2LjkgMTMuNTgtMS4xIDE5LjI4IDIuMzYgMjEuNDIgOC44N2wtNS4zNi00Ni4zWm0yMzguOTktLjk5czcuNjMgMTIuOCAxOS40NSAxOS43YzExLjgyIDYuOSAyNS41MSA5LjE1IDM4LjQgMTAuODUgMCAwLTE3LjcyIDguODctMzkuMzggNi45LTEzLjU4LTEuMS0xOS4yOSAyLjM1LTIxLjQzIDguODdsMi45Ni00Ni4zMloiLz4KICA8cGF0aCBmaWxsPSIjRkU2NDQ2IiBkPSJtNDA4LjgxIDUzMyAuOTktMTYuMDJjLTYyLjU2IDI5LjU0LTEyMC43IDI2LjQzLTEyMC43IDI2LjQzcy01OC40OSAyLjQ1LTExOS45Mi0yNi41N2wuNCAxNS41N3M0My44MiAyNi45NCAxMTkuNTIgMjYuOTRjNzUuNyAwIDExOS43MS0yNi4zNSAxMTkuNzEtMjYuMzVaIiBvcGFjaXR5PSIuMyIvPgogIDxwYXRoIGZpbGw9IiNGRUE3NzciIGQ9Ik0yMzguNzggMTk0LjI1YTE3Ljg0IDE3Ljg0IDAgMSAwLS4wMS0zNS42NyAxNy44NCAxNy44NCAwIDAgMCAuMDEgMzUuNjdaIiBvcGFjaXR5PSIuNSIvPgogIDxwYXRoIGZpbGw9IiNGRTZCM0MiIGQ9Ik00MTkuNSAyNDkuMDZzMS44OC0yMi4zNC03Ljg4LTQ4Ljk0Yy0yNi43Ny03My4wMS05Mi41Ni04Ny43MS0xMjguMDItODUuNjQgMCAwIDUwLjI4IDIzLjc2IDUyLjYxIDk5LjggMS4wNiAzMy43MiAxLjA2IDM0Ljc4IDEuMDYgMzQuNzhoODIuMjNaIi8+CiAgPHVzZSB4bGluazpocmVmPSIjYSIvPgogIDx1c2UgeGxpbms6aHJlZj0iI2EiLz4KICA8cGF0aCBmaWxsPSIjZmZmIiBkPSJNMzM2Ljc2IDQzNy42MWMwIDI4LjMxLTExLjM5IDcyLjkyLTQ5LjI5IDcyLjkycy00Ny4yLTQ3LjQtNDcuMi03Mi45MmMwIDAgMCA0My4zNiA0Ny4yIDQzLjM2IDUxLjYyIDAgNDkuMy00My4zNiA0OS4zLTQzLjM2WiIvPgogIDxwYXRoIGZpbGw9IiMwNzA5MDkiIGQ9Ik0zMzYuNzYgNDM3LjYxYzAgMjguMzEtMTEuMzkgNzIuOTItNDkuMjkgNzIuOTJzLTQ3LjItNDcuNC00Ny4yLTcyLjkyYzAgMCAwIDQzLjM2IDQ3LjIgNDMuMzYgNTEuNjIgMCA0OS4zLTQzLjM2IDQ5LjMtNDMuMzZaIi8+CiAgPHBhdGggZmlsbD0iI0ZFNjQ0NiIgZD0iTTE5Ny45MyAzOTQuMjVhNzcuODIgNzcuODIgMCAwIDAgNzcuOC03Ny44NWMwLTQzLTM0LjgzLTc3Ljg1LTc3LjgtNzcuODVhNzcuODIgNzcuODIgMCAwIDAtNzcuOCA3Ny44NWMwIDQzIDM0Ljg0IDc3Ljg1IDc3LjggNzcuODVaIi8+CiAgPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTE5Ny43MyAzNzguMzJhNjAuOTQgNjAuOTQgMCAwIDAgNjAuOTItNjAuOTYgNjAuOTQgNjAuOTQgMCAwIDAtNjAuOTItNjAuOTcgNjAuOTQgNjAuOTQgMCAwIDAtNjAuOTIgNjAuOTcgNjAuOTQgNjAuOTQgMCAwIDAgNjAuOTIgNjAuOTZaIi8+CiAgPHBhdGggZmlsbD0iIzA5MEIwQiIgZD0iTTE5NS45NiAzMjUuMjdhMTguNzIgMTguNzIgMCAxIDAtLjAxLTM3LjQ0IDE4LjcyIDE4LjcyIDAgMCAwIC4wMSAzNy40NFoiLz4KICA8cGF0aCBmaWxsPSIjRkU2NDQ2IiBkPSJNMzgxLjEgMzk0LjI1YTc3LjgyIDc3LjgyIDAgMCAwIDc3Ljc5LTc3Ljg1YzAtNDMtMzQuODMtNzcuODUtNzcuOC03Ny44NWE3Ny44MiA3Ny44MiAwIDAgMC03Ny43OSA3Ny44NWMwIDQzIDM0LjgzIDc3Ljg1IDc3LjggNzcuODVaIi8+CiAgPHBhdGggZmlsbD0iI2ZmZiIgZD0iTTM3OCAzNzguMjFhNjAuOTQgNjAuOTQgMCAwIDAgNjAuOTMtNjAuOTZBNjAuOTQgNjAuOTQgMCAwIDAgMzc4IDI1Ni4yOWE2MC45NCA2MC45NCAwIDAgMC02MC45MiA2MC45NkE2MC45NCA2MC45NCAwIDAgMCAzNzggMzc4LjIxWiIvPgogIDxwYXRoIGZpbGw9IiMwOTBCMEIiIGQ9Ik0zNzkuMTMgMzI1LjI3YTE4LjcyIDE4LjcyIDAgMSAwLS4wMi0zNy40NCAxOC43MiAxOC43MiAwIDAgMCAuMDEgMzcuNDRaIi8+Cjwvc3ZnPg==;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="argocd">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;HMAC check · tracked repo and branch? new SHA: new import_build&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="575" y="350" width="410" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;prepare, build, publish, callback: as in import-apply&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="925" y="494" width="350" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;new SHA or the Rebuild button: same dispatch&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="632" y="734" width="296" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-4" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;after the offhours wake-up (07:00): reconcile every tracked branch&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#0b1222;strokeColor=#94a3b8;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#e2e8f0;" vertex="1" parent="1">
+          <mxGeometry x="566" y="782" width="428" height="28" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,110 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Project Topology · Where the data comes from"
+subtitle: "Where does the project Topology view get its nodes and edges?"
+meta:
+  - "Scope: the Topology tab of one project, on-prem · hatched = planned (CNP-242), Hubble Relay later · the rest exists on main as of 2026-11-13"
+  - "Sources: import design spec v2 · K3s k8s/config/kube-system/values.yaml (Hubble), observability/values-{vm,alloy}.yaml · CMP services/{kube_client,activity_sources}.py"
+  - "Out of scope: linking two apps (sequence app-link) · public clouds (no Hubble metrics there yet) · Grafana"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-internet
+  - tp-canvas
+  - z-cluster
+  - g-cmp
+  - tp-api
+  - g-gitops
+  - argocd
+  - g-ag-kapi
+  - kube-apiserver
+  - g-observability
+  - vm-vmselect
+  - vm-vmstorage
+  - alloy-onprem
+  - vm-vminsert
+  - tp-g-cilium
+  - tp-hubble-relay
+  - tp-hubble-metrics
+  - tp-hubble-export
+  - z-github
+  - pa-registry
+
+steps: [c-tp-canvas-api, c-tp-api-registry, c-tp-api-kapi, c-tp-api-vmselect, c-vmselect-vmstorage]
+background: [c-pa-argocd-registry, c-argocd-apiserver, c-tp-alloy-hubble, c-alloy-vminsert, c-vminsert-vmstorage, c-tp-alloy-export]
+
+labels:
+  c-vmselect-vmstorage: ""
+  c-vminsert-vmstorage: ""
+  r-tp-relay-metrics: ""
+  c-alloy-vminsert: ""
+  c-tp-canvas-api: ""
+  c-argocd-apiserver: ""
+  c-tp-api-kapi: ""
+
+notes:
+  - {id: n-offhours, text: "offhours-guard writes each OffhoursSchedule's status.currentState (asleep, awake) through the same API: the node card shows it."}
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · reading the Topology"
+    color: emerald
+    lines:
+      - "[1] The tab asks the CMP for the project's topology; the user needs member or above."
+      - "[2] **Nodes and declared edges.** The registry record lists the apps and their dependsOn links."
+      - "[3] **Node state.** Application health and sync from Argo CD, offhours state from the OffhoursSchedule, both read through the API."
+      - "[4] **Observed edges.** Flow counters by source and destination workload and verdict, over the last minutes, [5] from vmstorage."
+  - id: card-bg
+    title: "Background"
+    color: violet
+    lines:
+      - "[A] Argo CD polls the registry and [B] applies, then writes Application health."
+      - "[C] Alloy scrapes the Hubble flow metrics on each cilium-agent (:9965), [D] remote-writes them, [E] vminsert stores them."
+      - "[F] Today only dropped flows leave Cilium, as logs to Loki; the CMP already reads POLICY_DENIED from there."
+  - id: card-edges
+    title: "Edge states on the canvas"
+    color: indigo
+    lines:
+      - "**Declared and observed:** solid. **Declared only:** dashed grey."
+      - "**Observed only:** amber, with a 'declare this link' action."
+      - "**Denied:** red, from flows with verdict DROPPED."
+      - "Hubble Relay (later) feeds a drawer of live flows for one edge; the canvas never depends on it."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!GI3!! **No vmagent.** The design has vmagent scrape Hubble; the cluster runs none: Alloy scrapes and writes to VictoriaMetrics."
+      - "!!GO1!! **vminsert has no auth.** Cloud writes carry no credential (see observability views)."
+      - "**No allowed-flow data today.** Hubble metrics, relay and UI are all off: the Topology can show declared links only until CNP-242 turns metrics on."
+
+hidden_annotations:
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"

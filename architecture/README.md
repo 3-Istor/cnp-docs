@@ -33,6 +33,17 @@ one diagram, and `layouts/` places the topology views.
 | `platform-detailed` | How do all the AI landing zone parts connect to each other and to the hub, at zoom level of detail? (proposal) | AI landing zone |
 | `ai-gateway` | How does an agent's call reach a model or a tool, and what checks it on the way? (proposal, planned) | AI landing zone |
 | `ai-gateway-call` | What happens, in order, when a hosted agent asks a model and Gemini's free quota is spent? (proposal, planned) | AI landing zone |
+| `import-overview` | What does importing a repo add to the platform, and which path does an import take? (planned, CNP-158) | Import et microservices |
+| `import-epitweet` | Once imported, how does epitweet run in a CNP project: who calls whom, over which bus, on which data? (planned) | Import et microservices |
+| `topology-data` | Where does the project Topology view get its nodes and edges? (planned, CNP-242) | Import et microservices |
+| `import-link-github` | How does a user let CNP read chosen GitHub repos, without CNP-Portal ever touching their account? (S1, planned) | Import et microservices |
+| `import-link-gitlab` | How does a user let CNP read their GitLab projects? (S2, planned) | Import et microservices |
+| `import-analyze` | What happens between picking a repo and seeing the draft on the canvas? (S3, planned) | Import et microservices |
+| `import-apply` | What happens, in order, from Apply to a running, smoke-tested app, and who holds which credential? (S4, planned) | Import et microservices |
+| `import-rebuild` | How does a push to the user's repo reach the cluster, on GitHub, on GitLab, and after the night's sleep? (S5, planned) | Import et microservices |
+| `app-link` | What happens when a user draws an edge between two apps on the Topology canvas, until the edge turns solid? (S6, planned) | Import et microservices |
+| `import-agent` | What may an assistant do with the import tools, and where does the user have to step in? (S8, planned) | Import et microservices |
+| `access-matrix-import` | Who may touch the user's code, the import, the images and the registry once import ships? (planned) | Import et microservices |
 
 To change a diagram, edit the model (facts), the view (what is shown) or the layout
 (where), then rebuild every view, dark and light, into `docs/01-architecture/diagrams/`:

@@ -1,0 +1,179 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Repo import · What it adds"
+subtitle: "What does importing a repo add to the platform, and which path does an import take?"
+meta:
+  - "Scope: importing a GitHub or GitLab repo into an existing project, on-prem · hatched = planned (CNP-158 and its tickets), the rest exists on main as of 2026-11-13"
+  - "Sources: import design spec v2 (2026-11-13) · CMP services/{github_service,project_registry,step_up,authz}.py, mcp_server.py · K3s applicationset-apps.yaml · cnp-project-base templates/{app-project,network-policy}.yaml · infra-templates"
+  - "Out of scope: the order of each flow (sequences import-link-github, import-link-gitlab, import-analyze, import-apply, import-rebuild, app-link, import-agent) · inside an imported app (import-epitweet) · Cloudflare, tunnel and Envoy hops to the CMP"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - z-internet
+  - user
+  - im-z-github-user
+  - im-gh-import-app
+  - im-user-repo
+  - im-z-gitlab
+  - im-gitlab-oauth
+  - im-gitlab-repo
+  - z-cluster
+  - g-cmp
+  - im-wizard
+  - cmp-frontend
+  - cmp-backend
+  - im-import
+  - im-analyzer
+  - im-g-project
+  - im-service
+  - im-backing
+  - g-secrets
+  - vault
+  - g-observability
+  - vm-vmselect
+  - g-gitops
+  - argocd
+  - pa-appproject
+  - g-ag-kapi
+  - kube-apiserver
+  - z-github
+  - im-g-build
+  - im-build-prepare
+  - im-build-build
+  - im-build-publish
+  - ghcr
+  - pa-registry
+  - im-chart
+  - github-app
+
+steps:
+  - c-im-user-import
+  - c-im-import-dispatch
+  - c-im-prepare-token
+  - c-im-prepare-repo
+  - c-im-publish-ghcr
+  - c-im-publish-callback
+  - c-im-import-registry
+  - c-pa-argocd-registry
+  - c-im-argocd-chart
+  - c-argocd-apiserver
+  - c-im-service-ghcr
+  - c-im-import-kapi
+  - c-im-import-smoke
+background:
+  - c-im-user-gh-install
+  - c-im-user-gitlab
+  - c-im-import-gh-api
+  - c-im-import-gitlab-oauth
+  - c-im-import-analyzer
+  - c-im-analyzer-repo
+  - c-im-analyzer-gitlab
+  - c-im-gh-webhook
+  - c-im-import-gitlab-poll
+  - c-im-import-vault
+  - c-im-prepare-cmp
+  - c-im-prepare-gitlab
+  - c-cmp-vmselect
+  - c-im-user-wizard
+  - c-im-service-backing
+
+# "" keeps the step badge alone in the dense band and corridors: the cards carry the text.
+labels:
+  c-im-user-import: "POST apply · step-up"
+  c-cmp-vmselect: "Topology: observed flows · HTTP"
+  c-im-prepare-token: ""
+  c-im-prepare-repo: ""
+  c-im-prepare-gitlab: ""
+  c-im-analyzer-repo: ""
+  c-im-analyzer-gitlab: ""
+  c-im-import-gh-api: ""
+  c-im-import-gitlab-oauth: ""
+  c-im-import-gitlab-poll: ""
+  c-im-gh-webhook: ""
+  c-im-user-gitlab: ""
+  c-im-import-registry: ""
+  c-im-prepare-cmp: ""
+  c-im-publish-callback: ""
+  c-im-service-backing: ""
+  c-pa-argocd-registry: ""
+  c-im-argocd-chart: ""
+  c-argocd-apiserver: ""
+  c-im-import-kapi: ""
+  x-im-argocd-user-repo: ""
+  r-im-wizard-frontend: ""
+  r-im-import-backend: ""
+  c-im-user-wizard: ""
+  c-im-user-gh-install: ""
+
+notes:
+  - {id: n-portal, text: "**CNP-Portal never leaves org 3-Istor.** It holds near-admin org rights; users install CNP-Import, read-only, on the repos they pick."}
+  - {id: n-gitlab, text: "GitLab path: same jobs, the prepare job gets a short GitLab token from the CMP against its OIDC JWT."}
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · Apply (S4)"
+    color: emerald
+    lines:
+      - "[1] An admin or owner applies the draft; the CMP asks for a passkey step-up first."
+      - "[2] The import module writes the import rows and dispatches the build workflow with ids and the SHA only."
+      - "[3] Job prepare mints a CNP-Import token for the one repo, [4] downloads the tarball at that SHA, runs gitleaks and trivy fs. No user code runs with a secret."
+      - "Job build has no secret and no id-token: buildx, Trivy image, Syft SBOM."
+      - "[5] Job publish pushes ghcr.io/3-istor/imports/<p>/<app> by digest, [6] then calls the CMP back with its GitHub OIDC JWT."
+      - "[7] One Git Data commit writes values, digests and dependsOn to the registry, as CNP-Portal. An app enters spec.apps with its first digest."
+      - "[8] The ApplicationSet picks the record up and creates the Applications, [9] which render infra-templates with $values from cnp-projects, [10] and apply the workloads."
+      - "[11] The kubelet pulls the image by digest with the project pull credential. [12] The CMP reads Application health, [13] then runs a smoke check (the project policy lets arcl-cmp in)."
+  - id: card-bg
+    title: "Background · linking, analysis, rebuild"
+    color: violet
+    lines:
+      - "[A] The user installs CNP-Import on chosen repos; [C] the CMP proves it with the OAuth user token and GET /user/installations (S1)."
+      - "[B] GitLab: OAuth with PKCE, [D] tokens kept encrypted (S2)."
+      - "[E] Analysis (S3): [F] the analyzer downloads a size-capped tarball at the SHA, [G] or the GitLab archive; it parses compose, Dockerfiles, poms and nginx, and executes nothing."
+      - "[H] GitHub push webhook (HMAC), [I] GitLab polling every 5 min: both start a rebuild (S5)."
+      - "[J] A Terraform run in the CMP pod writes the backing apps' generated credentials to Vault kvv2 project-<p>/<app>, after the build passed. [M] The CMP already reads VictoriaMetrics; the Topology tab adds observed flows (view topology-data)."
+      - "[K] GitLab builds: job prepare trades its OIDC JWT for a short GitLab token, [L] then downloads the archive. [N] The wizard and the draft canvas. [O] An imported service reaches its backing app through a dependsOn alias."
+  - id: card-trust
+    title: "Who touches the user's code"
+    color: rose
+    lines:
+      - "**Read only, short lived.** CNP-Import (contents:read, metadata:read) and GitLab OAuth (read_repository, read_api); tokens of 1 hour, scoped to one repo for a build."
+      - "**Argo CD never reads a user repo.** It reads cnp-projects and infra-templates; images come by digest from GHCR."
+      - "**The user repo stays the source of truth.** CNP writes nothing to it: no deploy/values, no Image Updater."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!GI1!! **CNP-Portal on user accounts.** The CMP already sends users to install CNP-Portal on their own account (user_github_installations). The design forbids it."
+      - "!!GI2!! **Step-up is off.** STEP_UP_ENABLED defaults to false: Apply would run on a plain session."
+      - "!!GI4!! **AppProject trusts every repoURL.** sourceRepos lists each spec.apps[].repoURL: an imported app must carry source, not repoURL."
+      - "**Registry writes.** Today one Contents API PUT per change; the design moves to one Git Data API commit per apply or callback."
+
+hidden_annotations:
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
