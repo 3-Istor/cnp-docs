@@ -1,0 +1,74 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · Repo import · S4 Apply"
+subtitle: "What happens, in order, from Apply to a running, smoke-tested app, and who holds which credential at each step?"
+meta:
+  - "Scope: S4 of the import design, planned (CNP-238 build, CNP-239 chart, CNP-241 UI) · GitHub source · design spec v2 (2026-11-13) · Argo CD and the chart as on main"
+  - "The node pulls the image (kubelet) with the project pull credential; drawn from the app."
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+participants: [user, im-import, vault, im-build-prepare, github-app, im-user-repo, im-build-publish, pa-registry, argocd, im-chart, kube-apiserver, ghcr, im-service]
+
+steps:
+  - {id: apply, from: user, to: im-import, over: c-im-user-import, text: "POST /api/projects/{p}/import/{id}/apply"}
+  - {reply: apply, text: "401 step_up_required · acr gold, max_age 300"}
+  - {note: user, text: "re-login at Keycloak with a passkey"}
+  - {id: apply2, from: user, to: im-import, over: c-im-user-import, text: "POST …/apply · fresh token"}
+  - {note: im-import, text: "admin or owner · rows import_builds with attempt_id · lock per project"}
+  - {id: dispatch, from: im-import, to: im-build-prepare, over: c-im-import-dispatch, text: "workflow_dispatch via the GitHub API, CNP-Portal token · {import_build_id, attempt_id, project, sha}"}
+  - {reply: apply2, text: "202 · progress per service"}
+  - {id: tok, from: im-build-prepare, to: im-import, over: c-im-prepare-cmp, text: "repo token request · GitHub OIDC JWT"}
+  - {note: im-import, text: "checks repo, job_workflow_ref, run_id, attempt_id"}
+  - {id: mint, from: im-import, to: github-app, over: c-im-import-gh-api, text: "POST /app/installations/{id}/access_tokens · contents:read, metadata:read, repositories: [<repo>]"}
+  - {reply: mint, text: "token, 1 h, this repo only, read"}
+  - {reply: tok, text: "the token"}
+  - {id: src, from: im-build-prepare, to: im-user-repo, over: c-im-prepare-repo, text: "GET tarball @SHA"}
+  - {reply: src, text: "tar.gz"}
+  - {note: im-build-prepare, text: "gitleaks + trivy fs: stop on a secret or a critical · on stop, publish reports status=blocked, no digest, no commit"}
+  - {note: im-build-publish, text: "job build ran before it: no secret, no id-token · buildx, Trivy image, Syft SBOM · source and images passed as Actions artifacts"}
+  - {id: push, from: im-build-publish, to: ghcr, over: c-im-publish-ghcr, text: "push imports/<p>/<app> for each service"}
+  - {reply: push, text: "digests"}
+  - {id: cb, from: im-build-publish, to: im-import, over: c-im-publish-callback, text: "callback {attempt_id, digests, reports} · GitHub OIDC JWT"}
+  - {note: im-import, text: "checks repo, job_workflow_ref, run_id, attempt_id"}
+  - {id: creds, from: im-import, to: vault, over: c-im-import-vault, text: "Terraform run in the CMP pod: generated credentials, kvv2 project-<p>/<app>"}
+  - {id: commit, from: im-import, to: pa-registry, over: c-im-import-registry, text: "one Git Data commit: values, digests, dependsOn, as CNP-Portal"}
+  - {id: poll, from: argocd, to: pa-registry, over: c-pa-argocd-registry, text: "poll registry/projects/<p>.yaml + apps/<p>/<app>/values.yaml"}
+  - {note: argocd, text: "refresh by GitHub push webhook, else the 3 min poll"}
+  - {id: render, from: argocd, to: im-chart, over: c-im-argocd-chart, text: "fetch the chart @HEAD, render with $values from cnp-projects"}
+  - {id: sync, from: argocd, to: kube-apiserver, over: c-argocd-apiserver, text: "ApplicationSet creates <p>-<app>-<component>, then syncs Deployment or StatefulSet, Service, VaultSecret"}
+  - {note: im-service, text: "VaultSecret syncs the generated credentials and the project pull credential"}
+  - {id: pull, from: im-service, to: ghcr, over: c-im-service-ghcr, text: "pull by digest · project pull credential"}
+  - {id: health, from: im-import, to: kube-apiserver, over: c-im-import-kapi, text: "poll Application health (label cnp.3istor.com/app)"}
+  - {reply: health, text: "Healthy"}
+  - {id: smoke, from: im-import, to: im-service, over: c-im-import-smoke, text: "post-deploy smoke: TCP or HTTP on the service port"}
+  - {note: im-import, text: "status per service in the wizard · audit_events"}
+hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"

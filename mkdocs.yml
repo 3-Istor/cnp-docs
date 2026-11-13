@@ -154,3 +154,13 @@ nav:
       - Registre RGPD (brouillon): 09-conformite/01-registre-rgpd.md
       - Matrice OWASP MCP et agentique: 09-conformite/02-matrice-owasp-mcp.md
       - Réversibilité et portabilité: 09-conformite/03-reversibilite-portabilite.md
+  - 10. Import et microservices:
+      - Vue d'ensemble: 09-import-microservices/00-index.md
+      - Valeur pour les utilisateurs: 09-import-microservices/01-valeur.md
+      - Architecture: 09-import-microservices/02-architecture.md
+      - Parcours: 09-import-microservices/03-parcours.md
+      - Rôles et sécurité: 09-import-microservices/04-roles-et-securite.md
+      - Epitweet: 09-import-microservices/05-epitweet.md
+      - Audit du premier import: 09-import-microservices/06-audit-travail-existant.md
+      - Plan et recette: 09-import-microservices/07-plan-et-recette.md
+      - Audit de sécurité: 09-import-microservices/08-audit-securite.md
