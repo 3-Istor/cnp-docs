@@ -9,7 +9,8 @@ de traitement de données.
 !!! info "État au 13/11/2026"
     Export et exercice de restauration : CMP
     [#216](https://github.com/3-Istor/CMP/pull/216), câblage plateforme : K3s
-    [#184](https://github.com/3-Istor/K3s/pull/184). Les délais contractuels
+    [#184](https://github.com/3-Istor/K3s/pull/184) et cnp-project-base
+    [#34](https://github.com/3-Istor/cnp-project-base/pull/34). Les délais contractuels
     marqués **[Décision]** sont des propositions, à valider par le responsable
     du service avant d'être repris dans les conditions d'utilisation.
 
@@ -59,9 +60,9 @@ nouvelle table de la CMP n'y est pas classée.
 | Applications Argo CD (sources, fichiers de valeurs, révisions) | Argo CD | Client | Oui | `gitops/applications/<app>.json` | JSON (manifeste Kubernetes) |
 | Objets Kubernetes des namespaces du projet (Deployments, Services, ConfigMaps, HTTPRoutes, CNPG Clusters, VaultSecrets...) | Cluster | Client | Oui, nettoyés pour être réappliqués ailleurs | `kubernetes/<ns>/<Kind>/<nom>.json` | JSON (manifeste Kubernetes) |
 | Noms et clés des Secrets Kubernetes | Cluster | Plateforme | Noms seulement | `kubernetes/<ns>/secret-names.json` | JSON |
-| Bases PostgreSQL (CNPG) | Cluster CNPG de chaque app | Client | Oui, dump logique + nombre de lignes par table | `databases/<ns>/<cluster>.sql` | SQL `pg_dump` texte |
+| Bases PostgreSQL (CNPG) | Cluster CNPG de chaque app | Client | Oui, dump logique + nombre de lignes par table, fait dans le namespace du projet ([détail](#dump-des-bases)) | `databases/<ns>/<cluster>.sql` | SQL `pg_dump` texte |
 | Buckets du projet (ObjectBucketClaims Ceph RGW) | Ceph RGW | Client | Oui, objet par objet | `objects/<ns>/<bucket>/<clé>` | Octets bruts |
-| Secrets du projet (Vault `project-<nom>`) | Vault | Client | Noms toujours, valeurs sur demande explicite | `secrets/names.json`, `secrets/values.json` | JSON |
+| Secrets du projet (Vault `project-<nom>`) | Vault | Client | Chemins et noms des clés ; les valeurs restent dans Vault ([pourquoi](#secrets-les-valeurs-restent-dans-vault)) | `secrets/names.json` | JSON |
 | Realms Keycloak du projet (`<projet>`, `<projet>-staging`) | Keycloak | Client | Configuration sans secrets, utilisateurs sans mots de passe | `identity/<realm>/realm.json`, `users.jsonl` | JSON, JSON Lines |
 | Membres du projet et leur rôle | Groupes Keycloak de la plateforme | Client | Oui | `identity/members.json` | JSON |
 | Journaux applicatifs | Loki, namespaces exacts du projet | Client | Oui, ce que Loki conserve (14 jours) | `logs/<projet>.jsonl` | JSON Lines |
@@ -69,18 +70,44 @@ nouvelle table de la CMP n'y est pas classée.
 | Métriques | Prometheus | Client | Non, sur demande | | |
 | Volumes de StatefulSet (ex. MongoDB) | Cluster | Client | Non, copie à la demande | | |
 
-### Secrets : noms par défaut, valeurs sur demande
+### Secrets : les valeurs restent dans Vault
 
-Les valeurs des secrets du projet sont des données du client : il les a saisies. Elles
-ne partent pourtant dans l'archive que si le propriétaire coche l'option
-(`include_secret_values`), pour trois raisons :
+Les valeurs des secrets du projet sont des données du client, mais aucun export ne les
+emporte, même à la demande. L'archive donne chaque chemin du montage `project-<nom>` et
+le nom de ses clés ; les valeurs restent dans Vault, où les membres du projet les lisent
+(les admins les écrivent) pendant toute la transition et jusqu'à l'effacement. Le
+client les recopie de là vers son nouvel hébergeur.
 
-1. un lien présigné est un porteur : quiconque le reçoit lit l'archive, secrets compris ;
-2. une archive circule (poste, ticket, stockage partagé) bien plus que Vault ;
-3. le nouvel hébergeur doit de toute façon émettre ses propres identifiants
-   (base, registre, OIDC) : seuls les secrets métier du client ont une valeur hors CNP.
+1. Un lien présigné est un porteur : quiconque le reçoit lit l'archive entière.
+2. Une archive circule (poste, ticket, stockage partagé) bien plus que Vault, où chaque
+   lecture est authentifiée et journalisée.
+3. Le nouvel hébergeur émet de toute façon ses propres identifiants (base, registre,
+   OIDC) : seuls les secrets métier du client ont une valeur hors CNP.
 
-L'option demande la même passkey que l'export et figure dans le journal d'audit.
+`manifest.json` le rappelle sous `not_exported`.
+
+### Dump des bases
+
+La CMP ne se connecte à aucune base d'un projet et ne lit aucun de leurs mots de passe.
+Pour chaque cluster CNPG, elle crée dans le namespace de l'app :
+
+- un Secret qui ne contient que deux URL présignées d'écriture (le dump et le comptage
+  des lignes), valables une heure, pour cet export seulement ;
+- un Job dans **l'image du cluster lui-même** (`spec.imageName`, épinglée par digest),
+  donc un `pg_dump` de la version exacte du serveur. Il lit l'identifiant et le mot de
+  passe dans le Secret de l'app, vérifie le TLS contre `<cluster>-ca` (`verify-full`),
+  écrit dans un `emptyDir`, puis dépose les deux fichiers par les URL. Profil
+  restricted, système de fichiers en lecture seule, pas de jeton de ServiceAccount.
+
+La CMP récupère ensuite les fichiers dans son propre bucket et supprime le Job, le
+Secret et les fichiers temporaires. Le chemin réseau reste dans le projet (le Job
+parle à `<cluster>-rw` dans son namespace) et dans le cluster (Garage par son Service).
+
+Droits nécessaires, par namespace et posés par cnp-project-base : `jobs`
+get/create/deletecollection et `secrets` create/deletecollection dans les namespaces
+d'apps, lecture des objets exportés partout dans le projet. Ni `pods/exec` ni
+`pods/log` : lire le dump par les journaux du pod l'aurait tronqué à la rotation des
+logs du kubelet (10 Mio par défaut).
 
 ## Formats
 
@@ -92,7 +119,6 @@ L'archive est un `.tar.gz`. `manifest.json`, à sa racine, décrit chaque fichie
   "export_id": "3f1c...",
   "project": "shop",
   "created_at": "2026-11-13T10:00:00Z",
-  "include_secret_values": false,
   "items": [
     {
       "path": "databases/shop-web/shop-web-backend-db.sql",
@@ -116,7 +142,7 @@ L'archive est un `.tar.gz`. `manifest.json`, à sa racine, décrit chaque fichie
 | `git.bundle` | Toutes les refs, `metadata.head` | `git clone <fichier>.bundle` |
 | `postgres.dump` | SQL texte sans propriétaire ni droits, `metadata.row_counts` | `psql -f` dans n'importe quel PostgreSQL ≥ version source |
 | `object` | Contenu brut, `metadata.bucket` et `metadata.key` | `aws s3 cp`, `mc cp` |
-| `vault.secret-names`, `vault.secret-values` | `{chemin: [clés]}` ou `{chemin: {clé: valeur}}` | `vault kv put` |
+| `vault.secret-names` | `{chemin: [clés]}` | Recopier les valeurs depuis Vault |
 | `keycloak.realm`, `keycloak.users` | Export partiel Keycloak, secrets masqués | Import de realm Keycloak |
 | `loki.logs` | `{time, labels, line}` par ligne | `jq`, import Loki |
 
@@ -138,8 +164,7 @@ un autre.
 ```bash
 # 1. Lancer l'export (propriétaire, passkey récente)
 curl -X POST https://cmp.3istor.com/api/projects/shop/export \
-  -H "Authorization: Bearer $TOKEN" -H 'Content-Type: application/json' \
-  -d '{"include_secret_values": false}'
+  -H "Authorization: Bearer $TOKEN"
 # -> 202 {"id": "3f1c...", "status": "pending", ...}
 
 # 2. Suivre : pending, running, puis ready ou partial
@@ -199,16 +224,21 @@ sur `main` et chaque lundi, sans aucun secret de la plateforme :
 ```mermaid
 flowchart LR
   subgraph runner[Runner GitHub]
-    seed[Projet de test<br/>CMP SQLite, faux cluster,<br/>faux Vault, Keycloak, Loki]
-    src[(PostgreSQL 18<br/>source)]
+    seed[Projet de test<br/>CMP SQLite, faux listing du cluster,<br/>faux Vault, Keycloak, Loki]
+    subgraph source[kind drill-source]
+      src[(PostgreSQL 18 TLS<br/>shop-db-rw)]
+      job[Job de dump<br/>image CNPG]
+    end
     garage[(Garage v2.2.0<br/>buckets source + exports)]
-    exp[Code d'export de la CMP<br/>pg_dump, S3, git réels]
+    exp[Code d'export de la CMP<br/>Job, S3, git réels]
     dst[(PostgreSQL 18<br/>cible)]
-    kind[[kind vierge]]
+    kind[[kind cible vierge]]
     restore[restore.sh]
   end
   seed --> exp
-  src --> exp
+  exp -- crée --> job
+  job --> src
+  job -- PUT présigné --> garage
   garage --> exp
   exp -- archive --> garage
   garage -- lien présigné --> restore
@@ -217,11 +247,15 @@ flowchart LR
   restore -- objets --> garage
 ```
 
-1. `run.sh` démarre Garage et deux PostgreSQL 18, les versions de la plateforme, avec des
-   identifiants tirés au hasard à chaque exécution.
+1. `run.sh` crée un cluster kind source, y installe la base du projet comme CNPG la
+   présente (Service `shop-db-rw`, certificat TLS signé par le CA du Secret
+   `shop-db-ca`, identifiants dans le Secret de l'app), et démarre Garage (la version de
+   la plateforme) et un PostgreSQL 18 cible, avec des identifiants tirés au hasard.
 2. `make_fixture.py` remplit un projet de test (250 clients, 1000 commandes, 3 objets,
-   un dépôt git à deux branches) et lance le vrai code d'export ; seuls la base CMP,
-   le cluster, Vault, Keycloak et Loki sont simulés.
+   un dépôt git à deux branches) et lance le vrai code d'export, dont le vrai Job de
+   dump dans le cluster source ; seuls la base CMP, le listing du cluster, Vault,
+   Keycloak et Loki sont simulés. Le job échoue si le Job ou son Secret restent après
+   l'export.
 3. L'archive est téléchargée par son lien présigné, comme le ferait le client, puis
    restaurée par `restore.sh` dans un cluster kind vierge, le PostgreSQL cible et
    Garage.
@@ -229,7 +263,7 @@ flowchart LR
    sinon le job échoue : les contrôles ne sont pas décoratifs.
 
 Le manifeste et `drill-report.json` sont gardés en artefact du job. Les adaptateurs
-simulés (API Kubernetes, Vault, Keycloak, Loki) ont leurs propres tests unitaires ; ils
+simulés (listing Kubernetes, Vault, Keycloak, Loki) ont leurs propres tests unitaires ; ils
 ne se vérifient en réel qu'avec un export d'un projet sandbox en production.
 
 ## Calendrier de sortie
@@ -255,7 +289,35 @@ gantt
 | Transition | 30 jours calendaires maximum (art. 25(2)(a)) | Service maintenu, assistance raisonnable, exports à volonté. Si une migration est techniquement impossible dans ce délai, le fournisseur le notifie sous 14 jours ouvrables et propose une transition d'au plus 7 mois (art. 25(4)). |
 | Fin de transition | | Export final avec la dernière version des données ; le projet passe en lecture seule. |
 | Récupération | 30 jours calendaires (art. 25(2)(g)) | L'archive finale est conservée 30 jours ; nouveaux liens à la demande. Un accès en lecture aux images GHCR est accordé pendant cette période **[Décision]**. |
-| Effacement | À l'issue de la récupération (art. 25(2)(h)) | Suppression des apps puis du projet par la CMP (namespaces et bases des apps, groupes Keycloak, politique Vault, AppProject Argo CD, réglages GitHub, état Terraform), purge automatique des archives. Les sauvegardes CNPG expirent sous 7 jours (`retentionPolicy: 7d`), les journaux Loki sous 14 jours. Le journal d'audit de la CMP suit sa propre durée (`AUDIT_RETENTION_DAYS`). |
+| Effacement | À l'issue de la récupération (art. 25(2)(h)) | Suppression des apps puis du projet par la CMP, purge automatique des archives. Ce qui part et ce qui reste : [Effacement](#effacement). |
+
+## Effacement
+
+Lu dans le code de suppression au 13/11/2026 (CMP `run_deletion` et
+`run_project_teardown`, modules Terraform `k3s-gitops-app` et `project-bootstrap`
+d'app-templates, chart cnp-project-base). Un projet ne se supprime qu'une fois toutes ses
+apps supprimées.
+
+| Donnée | Supprimée par | État |
+|---|---|---|
+| Dépôts des apps (organisation 3-Istor) | `github_repository` détruit avec l'app (pas d'`archive_on_destroy`) | Supprimés |
+| Paquets GHCR | `null_resource.delete_ghcr_packages` à la destruction de l'app | **Au mieux** : ignoré sans erreur si le jeton registre manque dans l'état Terraform, codes HTTP non vérifiés |
+| Namespaces, Deployments, PVC, bases CNPG des apps | Applications Argo CD retirées du registre, finalizer de suppression, prune | Supprimés ; PVC `local-path` en `Delete` |
+| Bucket de sauvegarde CNPG (`cnpg-*`, classe `ceph-bucket`) | ObjectBucketClaim supprimé, `reclaimPolicy: Delete` | Supprimé ; **à vérifier** que Rook purge un bucket non vide |
+| Montage Vault `project-<nom>` et secrets des apps | `vault_mount` du bootstrap, secrets KV des apps | Supprimés avec leurs données |
+| Realm `<projet>` | `keycloak_realm` du bootstrap | Supprimé |
+| Realm `<projet>-staging` | `staging_realm.destroy` avant le bootstrap | **Au mieux** : un échec est journalisé, la suppression du projet continue sans le signaler |
+| Base Keycloak du projet (realm dédié, option) | `Database`/`DatabaseRole` CNPG en `reclaimPolicy: delete` | Supprimée |
+| Groupes Keycloak, politiques Vault, AppProject, organisation Grafana, tunnel et DNS | Terraform du bootstrap | Supprimés |
+| Lignes de la base CMP | `delete_project_row` ne retire que la ligne `projects` | **Reste** : apps (`deployments` en `deleted`, avec leur configuration), environnements, promotions, releases, FinOps, sécurité, alertes, réglages assistants, revues d'accès ; audit et activité jusqu'à leur rétention |
+| Journaux Loki | Rétention | Expirent sous 14 jours |
+| Archive d'audit (`audit-archive`) | Rétention | Conservée 180 jours (preuve d'audit) |
+| Archives d'export | Boucle de rétention de la CMP | Supprimées au bout de 30 jours |
+
+Écarts à corriger pour que l'art. 25(2)(h) soit tenu, hors de ce chantier : purger les
+lignes CMP du projet à la suppression, rendre la suppression des paquets GHCR et du
+realm staging bloquante (ou au moins visible dans le statut du projet), et vérifier la
+purge des buckets Rook.
 
 ## Ce qui n'est pas exporté
 
@@ -274,16 +336,15 @@ gantt
 
 ## Reste à faire avant la production
 
-- **Bucket et clé Garage** `cnp-project-exports`, valeurs dans Vault
-  (K3s [#184](https://github.com/3-Istor/K3s/pull/184)). Sans elles, l'export répond 503.
-- **Dumps CNPG** : la CMP doit joindre `<cluster>-rw:5432` dans les namespaces des
-  projets. C'est un élargissement de ce que la CMP peut atteindre, à décider
-  **[Décision]** ; l'alternative est un Job `pg_dump` lancé dans le namespace du projet.
+- **Bucket et clé Garage** `cnp-project-exports`, valeurs dans Vault : procédure dans
+  K3s [#184](https://github.com/3-Istor/K3s/pull/184) (comme pour `cnp-app-icons`). Sans
+  elles, l'export répond 503.
+- **Droits de la CMP dans les namespaces des projets** : cnp-project-base
+  [#34](https://github.com/3-Istor/cnp-project-base/pull/34), à synchroniser avant le
+  premier export.
 - **Buckets des projets** : la découverte passe par les ObjectBucketClaims ; aucun projet
   n'en a hors sauvegardes CNPG au 13/11/2026.
 - **Volumes de StatefulSet et métriques** : procédure manuelle tant qu'ils ne sont pas
   collectés.
 - **Interface CMP** : l'API existe, pas encore de bouton dans le portail.
-- **Effacement complet** : vérifier, et compléter si besoin, que la suppression retire
-  aussi les dépôts des apps dans l'organisation 3-Istor, les paquets GHCR, le montage
-  Vault `project-<nom>` et les realms Keycloak du projet. Non vérifié au 13/11/2026.
+- **Effacement** : les écarts listés [plus haut](#effacement).
