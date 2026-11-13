@@ -422,6 +422,26 @@
   
 
       
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../09-conformite/01-registre-rgpd/" class="md-tabs__link">
+          
+  
+  
+  9. Conformité
+
+        </a>
+      </li>
+    
+  
+
+      
     </ul>
   </div>
 </nav>
@@ -999,6 +1019,34 @@
     
   
     Secrets statiques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../10-compliance-cis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conformité CIS
   
 
     
@@ -2930,6 +2978,119 @@
   
 
     
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Conformité
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    9. Conformité
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-conformite/01-registre-rgpd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registre RGPD (brouillon)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-conformite/02-matrice-owasp-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matrice OWASP MCP et agentique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
   </ul>
 </nav>
                   </div>
@@ -3101,7 +3262,7 @@
 </tr>
 </tbody>
 </table>
-<p>Chaque heure d'audit Kubernetes, Vault et Keycloak est en plus copiée dans un bucket verrouillé 30 jours (voir <a href="#archive-immuable">Archive immuable</a>).</p>
+<p>Chaque heure d'audit Kubernetes, Vault et Keycloak est en plus copiée dans un bucket verrouillé 180 jours (voir <a href="#archive-immuable">Archive immuable</a>).</p>
 <pre class="mermaid"><code>flowchart LR
   api[kube-apiserver&lt;br/&gt;audit.log] --&gt;|loki.source.file| alloy[Alloy]
   vault[Vault&lt;br/&gt;audit stdout] --&gt;|logs du pod| alloy
@@ -3364,9 +3525,10 @@ des règles qu'elle doit court-circuiter.</p>
 <ol>
 <li><code>logcli</code> exporte l'heure précédente depuis Loki : <code>{job="k8s-audit"}</code>, les réponses Vault, les events Keycloak. L'export lit par lots de 1 000 lignes, car 5 000 events d'audit dépassent la taille des messages gRPC internes de Loki.</li>
 <li><code>aws-cli</code> envoie les fichiers gzip dans le bucket RGW <code>cnp-audit-archive</code>, sous <code>audit/&lt;source&gt;/AAAA/MM/JJ/HH.jsonl.gz</code>.</li>
-<li>Le bucket a l'Object Lock en mode COMPLIANCE, 30 jours : ni supprimer une version ni raccourcir sa rétention n'est possible, même avec la permission de contournement.</li>
+<li>Le bucket a l'Object Lock en mode COMPLIANCE, 180 jours : ni supprimer une version ni raccourcir sa rétention n'est possible, même avec la permission de contournement. Une règle de cycle de vie expire les objets à 190 jours, ce qui donne la rétention glissante de 6 mois recommandée par la CNIL pour les journaux d'accès. Le réglage est fait à la main par <code>K3s/k8s/config/observability/audit-archive-retention.sh</code>, pas par Argo CD : une rétention COMPLIANCE s'allonge mais ne se raccourcit jamais. Les versions écrites avant le 13/11/2026 étaient verrouillées 30 jours.</li>
 <li>L'utilisateur RGW vient d'un <code>CephObjectStoreUser</code> Rook, dont le secret <code>rook-ceph-object-user-openstack-rgw-audit-archive</code> est monté dans le job.</li>
 <li>Un passage en échec déclenche l'alerte vmalert <code>AuditArchiveFailed</code>.</li>
+<li>Le même bucket reçoit les rapports CIS hebdomadaires sous <code>compliance/</code> (voir <a href="../10-compliance-cis/">Conformité CIS</a>) ; le job pose la bucket policy qui y autorise l'utilisateur <code>compliance-scans</code>.</li>
 </ol>
 <div class="admonition warning">
 <p class="admonition-title">Limite</p>
