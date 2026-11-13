@@ -7,11 +7,24 @@ Une équipe arrive avec son code existant : un repo GitHub, parfois un monorepo 
 microservices avec son docker-compose et ses bases. La CNP le lit à un commit figé et propose un
 plan d'import sur la carte du projet. Après validation, elle construit chaque service, lance les
 bases, relie les services entre eux sans toucher à leur code et montre en continu qui parle à qui.
-Le repo de l'utilisateur reste la source de vérité. Les mêmes liens et la même carte servent aux
-apps créées par template.
+Le repo de l'utilisateur reste la source de vérité. La carte montre aussi les apps créées par
+template ; les relier viendra en v2, le schéma du registre ne l'accepte pas encore.
 
 La démonstration est epitweet : 6 services Quarkus, un front React, MongoDB, Redis, Neo4j et
 Elasticsearch, importés tels quels.
+
+## Où on en est (13/11/2026 au soir)
+
+| Brique | Livré dans | État |
+| --- | --- | --- |
+| Correctif du constat haut, jetons restreints | CMP#212 | En prod |
+| Types `service` et `backing`, liens, chart `workload` | infra-templates#24 #27, cnp-project-base#33, K3s#181, cnp-projects#17 | En prod |
+| Analyseur v2 et workflow central | extern-project-analyzer#43 #44 | Mergé |
+| Backend d'import, liaison GitHub OAuth | CMP#217 | En prod (v0.3.105), import désactivé |
+| Onglet Topologie, assistant d'import | CMP#220 | En prod (v0.3.105) |
+| Métriques de flux Hubble | K3s#187 | En prod |
+| Configuration de l'import, clé de chiffrement | K3s#189 | Appliqué |
+| Runners des repos privés, réglages de CNP-Portal, premier import d'epitweet | | À faire |
 
 ## Les pages
 

@@ -18,10 +18,10 @@ l'utilisateur. Tout ce qui est décrit ici est **prévu** et en cours d'impléme
 | Tables d'import | CMP | `import_sources`, `import_services`, `import_builds`, unicité par projet | CNP-241 |
 | Workflow de build central | extern-project-analyzer | Jobs `prepare`, `build`, `publish` ; images `ghcr.io/3-istor/imports/<projet>/<app>` par digest | CNP-238 |
 | Écriture du registre | CMP | Un seul commit atomique par application ou par build, sous verrou | CNP-239 |
-| Types `service` et `backing` | cnp-projects, K3s, infra-templates | Schéma, ApplicationSet, chart (`workload`, StatefulSet). Chart fait sur une branche locale, rendu identique pour les apps existantes | CNP-239 |
+| Types `service` et `backing` | cnp-projects, K3s, infra-templates | Schéma, ApplicationSet, chart (`workload`, StatefulSet). Rendu identique pour les apps existantes, vérifié avant chaque merge | CNP-239 |
 | Liens `dependsOn` | cnp-projects, infra-templates, cnp-project-base | Alias ExternalName dans le namespace appelant ; plus tard, règles réseau par lien | CNP-240 |
 | Catalogue de bases | infra-templates | MongoDB, Redis, Neo4j, Elasticsearch épinglés par digest, non root, secrets Vault générés | CNP-239 |
-| Métriques Hubble | K3s (Cilium, vmagent) | Flux par workload et verdict, dans VictoriaMetrics | CNP-242 |
+| Métriques Hubble | K3s (Cilium, Alloy) | Flux par workload et verdict, dans VictoriaMetrics | CNP-242 |
 | Topologie | CMP | API et onglet du projet, canevas React Flow | CNP-242 |
 | Outils MCP | CMP, cnp-agent-kit | `analyze_repo`, `get_topology`, `import_repo`, `link_apps`, `unlink_apps` | CNP-243 |
 | Rebuild | CMP | Webhook signé de CNP-Portal, rattrapage au réveil | CNP-244 |

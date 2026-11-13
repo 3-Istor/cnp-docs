@@ -49,7 +49,7 @@ la suite, avec son effort.
 | Panneau « non supporté » : composant sans source, port hôte ignoré, route de santé absente | Développeur | Confiance : la plateforme dit ce qu'elle ne sait pas faire | v1 |
 | Secrets en dur détectés et remplacés par des secrets Vault générés | RSSI | Aucun secret du repo en production | v1 |
 | Liens déclarés et trafic observé sur la même carte, bouton « Déclarer ce lien » | Tech lead, RSSI | Le catalogue reste juste parce qu'il se compare au réel | v1 |
-| Relier deux apps en un clic, y compris des apps nées d'un template | Développeur | Les noms d'origine (`user-service:8081`) marchent sans toucher au code | v1 |
+| Relier deux apps importées en un clic (apps nées d'un template : v2) | Développeur | Les noms d'origine (`user-service:8081`) marchent sans toucher au code | v1 |
 | Dossier de preuve par import : plan, approbateur, SHA, digests, SBOM, résultats de scan | Auditeur, RSSI | La conformité sans travail en plus ; utile pour le Cyber Resilience Act | v1 |
 | Test fonctionnel après déploiement, affiché dans le suivi | Développeur | « Ça tourne » prouvé, pas supposé | v1 |
 | Agents IA : analyser, lire la carte, proposer un import, toujours confirmé par l'humain | Agent, développeur | IA utile et gouvernée | v1 |

@@ -82,7 +82,7 @@ projet, et les groupes plateforme `infra`, `security-auditor` et `finops`.
 
 ## 5. Relier deux apps
 
-*Qui : admin ou owner. Marche pour les apps importées et pour celles nées d'un template.*
+*Qui : admin ou owner, ou admin plateforme. En v1, entre apps importées seulement : le schéma du registre refuse encore les liens vers et depuis les apps nées d'un template.*
 
 Sur la carte, l'utilisateur tire un trait d'une app vers une autre, ou clique sur « Déclarer ce
 lien » sur une arête ambre. Il choisit le port et l'alias, par défaut le nom de la cible. Le CMP

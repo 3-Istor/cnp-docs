@@ -18,7 +18,7 @@ ci-dessous.
 | Installer CNP-Portal sur ses repos et relier son compte GitHub | ✓ | ✓ | ✓ | ✓ | ✓ | | |
 | Analyser un repo, éditer le plan | | | ✓ | ✓ | | | |
 | Appliquer un import (passkey récente) | | | ✓ | ✓ | | | |
-| Relier ou délier deux apps | | | ✓ | ✓ | | | |
+| Relier ou délier deux apps | | | ✓ | ✓ | ✓ | | |
 | Reconstruire, supprimer une app importée (passkey) | | | ✓ | ✓ | | | |
 | Coût par service importé | | ✓ | ✓ | ✓ | ✓ | | ✓ |
 | Activer l'import sur la plateforme, gérer le catalogue de bases | | | | | ✓ | | |
