@@ -88,6 +88,7 @@ nav:
       - Observabilité multicluster: 01-architecture/07-observability.md
       - Sauvegarde des bases: 01-architecture/08-database-backups.md
       - Secrets statiques: 01-architecture/09-static-secrets.md
+      - Conformité CIS: 01-architecture/10-compliance-cis.md
   - 2. Composants Clés:
       - Portail & Dashboard CMP: 02-core-components/01-cmp-dashboard.md
       - Identités & Keycloak: 02-core-components/02-identity-keycloak.md
@@ -149,7 +150,11 @@ nav:
       - Architecture: 08-finops/02-architecture.md
       - Méthodes de calcul: 08-finops/03-methodes.md
       - Exploitation: 08-finops/04-exploitation.md
-  - 9. Import et microservices:
+  - 9. Conformité:
+      - Registre RGPD (brouillon): 09-conformite/01-registre-rgpd.md
+      - Matrice OWASP MCP et agentique: 09-conformite/02-matrice-owasp-mcp.md
+      - Réversibilité et portabilité: 09-conformite/03-reversibilite-portabilite.md
+  - 10. Import et microservices:
       - Vue d'ensemble: 09-import-microservices/00-index.md
       - Valeur pour les utilisateurs: 09-import-microservices/01-valeur.md
       - Architecture: 09-import-microservices/02-architecture.md
