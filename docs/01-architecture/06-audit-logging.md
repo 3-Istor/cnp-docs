@@ -11,7 +11,7 @@ Qui a fait quoi sur la plateforme, et qui est prévenu quand ça compte. Quatre 
 | Keycloak | Logins, échecs, admin events, sur tous les realms | `K3s/terraform/audit.tf`, `project-bootstrap`, `cnp-project-base` | 30 j |
 | Cilium (Hubble) | Flux refusés par une network policy | `K3s/k8s/config/kube-system/values.yaml` | 14 j |
 
-Chaque heure d'audit Kubernetes, Vault et Keycloak est en plus copiée dans un bucket verrouillé 30 jours (voir [Archive immuable](#archive-immuable)).
+Chaque heure d'audit Kubernetes, Vault et Keycloak est en plus copiée dans un bucket verrouillé 180 jours (voir [Archive immuable](#archive-immuable)).
 
 ```mermaid
 flowchart LR
@@ -176,9 +176,10 @@ Le CronJob `observability/audit-archive` tourne à la minute 7 de chaque heure :
 
 1. `logcli` exporte l'heure précédente depuis Loki : `{job="k8s-audit"}`, les réponses Vault, les events Keycloak. L'export lit par lots de 1 000 lignes, car 5 000 events d'audit dépassent la taille des messages gRPC internes de Loki.
 2. `aws-cli` envoie les fichiers gzip dans le bucket RGW `cnp-audit-archive`, sous `audit/<source>/AAAA/MM/JJ/HH.jsonl.gz`.
-3. Le bucket a l'Object Lock en mode COMPLIANCE, 30 jours : ni supprimer une version ni raccourcir sa rétention n'est possible, même avec la permission de contournement.
+3. Le bucket a l'Object Lock en mode COMPLIANCE, 180 jours : ni supprimer une version ni raccourcir sa rétention n'est possible, même avec la permission de contournement. Une règle de cycle de vie expire les objets à 190 jours, ce qui donne la rétention glissante de 6 mois recommandée par la CNIL pour les journaux d'accès. Le réglage est fait à la main par `K3s/k8s/config/observability/audit-archive-retention.sh`, pas par Argo CD : une rétention COMPLIANCE s'allonge mais ne se raccourcit jamais. Les versions écrites avant le 13/11/2026 étaient verrouillées 30 jours.
 4. L'utilisateur RGW vient d'un `CephObjectStoreUser` Rook, dont le secret `rook-ceph-object-user-openstack-rgw-audit-archive` est monté dans le job.
 5. Un passage en échec déclenche l'alerte vmalert `AuditArchiveFailed`.
+6. Le même bucket reçoit les rapports CIS hebdomadaires sous `compliance/` (voir [Conformité CIS](10-compliance-cis.md)) ; le job pose la bucket policy qui y autorise l'utilisateur `compliance-scans`.
 
 !!! warning "Limite"
     L'Object Lock protège contre quiconque n'a que des accès S3 ou Kubernetes. Un admin Ceph

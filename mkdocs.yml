@@ -88,6 +88,7 @@ nav:
       - Observabilité multicluster: 01-architecture/07-observability.md
       - Sauvegarde des bases: 01-architecture/08-database-backups.md
       - Secrets statiques: 01-architecture/09-static-secrets.md
+      - Conformité CIS: 01-architecture/10-compliance-cis.md
   - 2. Composants Clés:
       - Portail & Dashboard CMP: 02-core-components/01-cmp-dashboard.md
       - Identités & Keycloak: 02-core-components/02-identity-keycloak.md
