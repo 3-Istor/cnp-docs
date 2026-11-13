@@ -153,3 +153,4 @@ nav:
   - 9. Conformité:
       - Registre RGPD (brouillon): 09-conformite/01-registre-rgpd.md
       - Matrice OWASP MCP et agentique: 09-conformite/02-matrice-owasp-mcp.md
+      - Réversibilité et portabilité: 09-conformite/03-reversibilite-portabilite.md
