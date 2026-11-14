@@ -4,7 +4,7 @@ type: sequence
 title: "CNP · Project Topology · S6 Linking two apps"
 subtitle: "What happens when a user draws an edge between two apps on the Topology canvas, until the edge turns solid?"
 meta:
-  - "Scope: S6 of the import design, planned (CNP-240 links, CNP-242 topology) · template and imported apps alike · design spec v2 (2026-11-13)"
+  - "Scope: S6 of the import design, in prod since 2026-11-14 (CNP-240 links, CNP-242 topology) · template and imported apps alike · design spec v2 (2026-11-13)"
   - "The isolation: links mode (one ingress rule per dependsOn) comes later; until then the project policy already lets apps of a project talk."
   - "v0.1 · source: cnp-docs/architecture/cnp"
 

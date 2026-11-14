@@ -1,0 +1,58 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2240, height: 2050}
+
+# Runners on the left (the lab VM on top, dev PCs below), registries and the edge in the
+# middle, GitHub on the right. Runners poll GitHub: their lanes run above the regions
+# (y 245 to 262) or below the dev PCs (y 1400 to 1410), then up the x 1690 to 1795 corridor.
+elements:
+  rn-z-epimac: {x: 40, y: 300, w: 1190, h: 640}
+  rn-g-ci: {x: 20, y: 60, w: 360, h: 350}
+  rn-persistent: {x: 20, y: 70, w: 320, h: 100}
+  rn-mirror: {x: 20, y: 220, w: 320, h: 90}
+  rn-g-import: {x: 450, y: 60, w: 720, h: 350}
+  rn-supervisor: {x: 20, y: 70, w: 300, h: 100}
+  rn-egress-fw: {x: 400, y: 70, w: 300, h: 100}
+  rn-ephemeral: {x: 20, y: 220, w: 300, h: 100}
+  rn-buildkit: {x: 400, y: 220, w: 300, h: 90}
+  rn-lab: {x: 470, y: 510, w: 300, h: 90}
+
+  rn-z-devpc: {x: 40, y: 1020, w: 1190, h: 360}
+  rn-dev-ci: {x: 20, y: 80, w: 320, h: 100}
+  rn-dev-import: {x: 460, y: 80, w: 300, h: 100}
+  rn-dev-buildkit: {x: 860, y: 80, w: 310, h: 90}
+  rn-dev-cache: {x: 860, y: 230, w: 310, h: 90}
+
+  z-internet: {x: 1330, y: 300, w: 340, h: 240}
+  rn-gcr-mirror: {x: 20, y: 80, w: 300, h: 110}
+  z-cloudflare: {x: 1330, y: 850, w: 340, h: 240}
+  cf-edge: {x: 20, y: 90, w: 300, h: 100}
+
+  z-github: {x: 1830, y: 300, w: 380, h: 420}
+  rn-gh-actions: {x: 20, y: 80, w: 340, h: 180}
+  ghcr: {x: 20, y: 300, w: 340, h: 90}
+
+edges:
+  c-rn-supervisor-actions: {from: rn-supervisor.right@60px, to: rn-gh-actions.left@80px, waypoints: [[850, 490], [850, 245], [1730, 245], [1730, 460]]}
+  c-rn-ephemeral-actions: {from: rn-ephemeral.bottom@200px, to: rn-gh-actions.left@100px, waypoints: [[710, 765], [1690, 765], [1690, 480]]}
+  c-rn-ephemeral-buildkit: {from: rn-ephemeral.right@50px, to: rn-buildkit.left@50px, label_at: [850, 630]}
+  c-rn-buildkit-gcr: {from: rn-buildkit.right@50px, to: rn-gcr-mirror.left@75px, waypoints: [[1270, 630], [1270, 455]]}
+  c-rn-ephemeral-ghcr: {from: rn-ephemeral.bottom@240px, to: ghcr.left@60px, waypoints: [[750, 785], [1750, 785], [1750, 660]], label_at: [1750, 720]}
+  c-rn-ephemeral-cmp: {from: rn-ephemeral.bottom@280px, to: cf-edge.left@60px, waypoints: [[790, 745], [1310, 745], [1310, 1000]]}
+  x-rn-ephemeral-lab: {from: rn-ephemeral.bottom@60px, to: rn-lab.top@60px}
+  c-rn-persistent-actions: {from: rn-persistent.right@60px, to: rn-gh-actions.left@60px, waypoints: [[445, 490], [445, 262], [1710, 262], [1710, 440]]}
+  c-rn-persistent-mirror: {from: rn-persistent.bottom@200px, to: rn-mirror.top@200px}
+  c-rn-mirror-gcr: {from: rn-mirror.bottom@200px, to: rn-gcr-mirror.left@55px, waypoints: [[280, 725], [1290, 725], [1290, 435]], label_at: [600, 725]}
+  c-rn-dev-ci-actions: {from: rn-dev-ci.bottom@80px, to: rn-gh-actions.left@130px, waypoints: [[140, 1410], [1775, 1410], [1775, 510]]}
+  c-rn-dev-ci-cache: {from: rn-dev-ci.bottom@160px, to: rn-dev-cache.left@65px, waypoints: [[220, 1315]]}
+  c-rn-dev-import-actions: {from: rn-dev-import.bottom@80px, to: rn-gh-actions.left@155px, waypoints: [[580, 1400], [1795, 1400], [1795, 535]]}
+  c-rn-dev-import-buildkit: {from: rn-dev-import.right@60px, to: rn-dev-buildkit.left@60px}
+  c-rn-dev-buildkit-cache: {from: rn-dev-buildkit.bottom@200px, to: rn-dev-cache.top@200px}
+  c-rn-dev-cache-gcr: {from: rn-dev-cache.right@45px, to: rn-gcr-mirror.left@95px, waypoints: [[1250, 1295], [1250, 475]]}
+
+cards:
+  card-legend: {x: 40, y: 1470, w: 580, h: 480}
+  card-steps: {x: 660, y: 1470, w: 780, h: 300}
+  card-bg: {x: 660, y: 1800, w: 780, h: 210}
+  card-risk: {x: 1480, y: 1470, w: 730, h: 300}
+  card-gaps: {x: 1480, y: 1800, w: 730, h: 150}

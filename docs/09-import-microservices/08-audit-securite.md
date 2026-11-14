@@ -4,8 +4,8 @@ Date : 2026-11-13. Méthode : skill `security-audit` de Cloudflare, mode scoped.
 
 ## Décisions postérieures à l'audit
 
-Le 13/11, après cet audit, Brian a tranché autrement sur trois points. Le corps du rapport est
-laissé tel qu'il a été écrit.
+Le 13/11, après cet audit, Brian a tranché autrement sur trois points, et la mise en prod du
+14/11 en a ajouté un quatrième. Le corps du rapport est laissé tel qu'il a été écrit.
 
 - **Une seule app GitHub, CNP-Portal.** L'audit recommandait une app CNP-Import en lecture
   seule. Les utilisateurs installent finalement CNP-Portal, dont les permissions sont réduites au
@@ -20,6 +20,11 @@ laissé tel qu'il a été écrit.
   valeurs générées par le CMP (D3).
 - **GitLab est retiré du périmètre.** Le constat D2, sur le jeton GitLab transmis à la CI, ne
   s'applique plus.
+- **Runners auto-hébergés éphémères (14/11).** Sans minutes GitHub pour les repos privés, le
+  workflow tourne sur des runners à usage unique de la VM du lab, chacun avec son BuildKit
+  rootless et un réseau sans accès au lab ni à l'hôte. Le job `prepare` du rapport s'appelle
+  `claim`. Le risque « runners GitHub hébergés » de la section 5 se lit donc sur ces runners. Le
+  détail est dans [Exploitation](09-exploitation.md).
 
 ## 1. Synthèse
 

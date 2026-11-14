@@ -4,7 +4,7 @@ type: topology
 title: "CNP · Project Topology · Where the data comes from"
 subtitle: "Where does the project Topology view get its nodes and edges?"
 meta:
-  - "Scope: the Topology tab of one project, on-prem · hatched = planned (CNP-242), Hubble Relay later · the rest exists on main as of 2026-11-13"
+  - "Scope: the Topology tab of one project, on-prem · in prod since 2026-11-14 (CNP-242) · hatched: Hubble Relay, later"
   - "Sources: import design spec v2 · K3s k8s/config/kube-system/values.yaml (Hubble), observability/values-{vm,alloy}.yaml · CMP services/{kube_client,activity_sources}.py"
   - "Out of scope: linking two apps (sequence app-link) · public clouds (no Hubble metrics there yet) · Grafana"
   - "v0.1 · source: cnp-docs/architecture/cnp"

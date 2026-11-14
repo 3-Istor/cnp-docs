@@ -1,0 +1,131 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Repo import · Worker callbacks"
+subtitle: "How does an import job reach the CMP, who checks its identity, and what does the CMP then write?"
+meta:
+  - "Scope: the calls of the import workflow to the CMP worker API, on-prem, as of 2026-11-14 · runners in view import-runners"
+  - "Sources: K3s k8s/config/arcl-cmp/{import-worker-route,api-jwt,cmp-values}.yaml · CMP services/imports/{oidc,deploy,generate,watch}.py · extern-project-analyzer cnp_analyzer/worker.py"
+  - "Out of scope: the build itself (view import-runners) · Argo CD sync and the smoke check (sequence import-apply) · the user's browser path"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - rn-z-epimac
+  - rn-g-import
+  - rn-ephemeral
+  - z-cloudflare
+  - cf-edge
+  - z-cluster
+  - g-connectivity
+  - cloudflared-platform
+  - g-gateway
+  - envoy-shared-gateway
+  - ic-worker-route
+  - ic-worker-jwt
+  - g-cmp
+  - im-import
+  - g-secrets
+  - vault-auth
+  - pa-vault-mount
+  - g-gitops
+  - argocd
+  - z-github
+  - rn-gh-actions
+  - ic-gh-oidc
+  - pa-registry
+
+steps:
+  - c-ic-import-actions
+  - c-rn-ephemeral-actions
+  - c-ic-runner-oidc
+  - c-rn-ephemeral-cmp
+  - e-oidc-platform-tunnel
+  - e-oidc-platform-envoy
+  - c-ic-envoy-import
+  - c-ic-import-vault-kv
+  - c-ic-import-vault-role
+  - c-im-import-registry
+background:
+  - c-ic-envoy-jwks
+  - c-ic-import-jwks
+  - c-pa-argocd-registry
+
+labels:
+  c-rn-ephemeral-actions: ""
+  c-ic-runner-oidc: ""
+  e-oidc-platform-tunnel: ""
+  e-oidc-platform-envoy: "forward cmp.3istor.com · HTTP"
+  c-im-import-registry: ""
+  c-ic-import-jwks: ""
+  c-ic-envoy-jwks: ""
+  c-ic-import-vault-role: ""
+  c-ic-import-vault-kv: ""
+  c-ic-envoy-import: ""
+  r-ic-route-gateway: ""
+  c-rn-ephemeral-cmp: ""
+  e-oidc-token-hairpin: ""
+  r-ic-jwt-route: ""
+
+notes:
+  - {id: n-401, text: "Envoy answers 401 to a JWT from any other issuer or audience. The Keycloak policy of cmp-route-route would refuse a GitHub token: hence the dedicated route."}
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · a callback of the import workflow"
+    color: emerald
+    lines:
+      - "[1] The CMP dispatches import.yml on main with the CNP-Portal installation token, then polls the run status. [2] An ephemeral runner takes the job."
+      - "[3] The job asks GitHub for an ID token with audience cmp-import, [4] and calls https://cmp.3istor.com/api/import/worker/* with it, User-Agent cnp-import-worker/1: Cloudflare refuses urllib's default one (error 1010)."
+      - "[5] Relayed through the platform tunnel, [6] then Envoy matches HTTPRoute cmp-api-import-worker, whose SecurityPolicy checks the GitHub signature and the audience."
+      - "[7] The CMP checks the claims again: repository and owner ids, workflow ref on main, job_workflow_sha in IMPORT_WORKFLOW_SHAS, workflow_dispatch, run id and attempt, runner_environment self-hosted."
+      - "[8] The CMP writes the project pull secret once (system/registry) and each app's secrets under project-<p>/<app>/imports, [9] then the Kubernetes auth role <project>-<app>-role (policy project-<p>-read-policy, mount kubernetes on-prem, kubernetes-<cloud> otherwise), [10] then one registry commit with the digests."
+  - id: card-bg
+    title: "Background"
+    color: violet
+    lines:
+      - "[A] Envoy fetches the GitHub Actions JWKS. [B] The CMP caches it for 1 h, refetches on an unknown key id at most once a minute, and keeps the cached keys when GitHub is unreachable."
+      - "[C] Argo CD picks the new record up and syncs the apps."
+      - "Deleting an imported app deletes its Vault role. The chart (infra-templates#26) refuses any vaultPath outside project-<p>/<app> and any vaultRole other than <project>-<app>-role."
+  - id: card-ops
+    title: "Operating rule: allow each analyzer commit"
+    color: rose
+    lines:
+      - "The workflow runs at the head of main of extern-project-analyzer, so **every commit merged on main** changes job_workflow_sha, even one that leaves import.yml alone."
+      - "Until its full SHA is in IMPORT_WORKFLOW_SHAS (K3s arcl-cmp/cmp-values.yaml), every callback gets 401 and imports fail. Merge the analyzer PR, then the K3s PR that adds the SHA."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!G3!! **Transport.** TLS ends at Cloudflare. In-cluster hops are plain HTTP, Vault included (tls_disable)."
+      - "!!G4!! **Coupling.** Tunnels target Envoy's Service by name."
+      - "!!G6!! **Token call.** No cluster-local path to auth.3istor.com found: likely hairpins via Cloudflare. Not used by this route."
+
+hidden_annotations:
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"

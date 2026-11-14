@@ -2,7 +2,9 @@
 
 Le code reste chez l'utilisateur ; tout ce qui sert à déployer vit côté plateforme. Seule la CI de
 build lit le repo source, en lecture seule, à un commit figé. Argo CD ne lit jamais le repo de
-l'utilisateur. Tout ce qui est décrit ici est **prévu** et en cours d'implémentation, sauf mention contraire.
+l'utilisateur. Tout ce qui est décrit ici est en prod depuis le 14/11/2026, sauf Hubble Relay.
+Les runners, les rappels du workflow et les gestes d'exploitation sont dans
+[Exploitation](09-exploitation.md).
 
 ![Ce que l'import ajoute à la plateforme](../01-architecture/diagrams/import-overview.light.png#only-light)
 ![Ce que l'import ajoute à la plateforme](../01-architecture/diagrams/import-overview.dark.png#only-dark)
@@ -14,13 +16,17 @@ l'utilisateur. Tout ce qui est décrit ici est **prévu** et en cours d'impléme
 | App GitHub **CNP-Portal** | GitHub org 3-Istor | App existante. Permissions réduites à ce que la plateforme utilise, événement `push`. Installée par l'utilisateur sur les seuls repos qu'il choisit | CNP-241 |
 | Jetons d'installation utilisateur | CMP | Toujours demandés avec `contents:read`, `metadata:read` et un seul repo | CNP-241 |
 | Liaison des comptes | CMP | OAuth avec PKCE, state à usage unique, jetons chiffrés, preuve de l'installation | CNP-241 |
-| Analyseur | CMP (module Python) | Lit le repo à un SHA figé et produit un plan d'import | CNP-237 |
+| Analyseur | extern-project-analyzer (`cnp_analyzer`) | Lit le repo à un SHA figé et produit un plan d'import. Tourne dans le job `claim` du workflow central, pas dans le CMP | CNP-237 |
 | Tables d'import | CMP | `import_sources`, `import_services`, `import_builds`, unicité par projet | CNP-241 |
-| Workflow de build central | extern-project-analyzer | Jobs `prepare`, `build`, `publish` ; images `ghcr.io/3-istor/imports/<projet>/<app>` par digest | CNP-238 |
+| Workflow de build central | extern-project-analyzer | Jobs `claim` (analyse ou préparation du build), `build`, `publish`, `report-failure`, `cleanup` ; images `ghcr.io/3-istor/imports/<projet>/<app>` par digest | CNP-238 |
+| Runners de l'import | Cloud (VM du lab), cnp-dev-runners | Un runner éphémère et un BuildKit rootless par job, réseau isolé, pare-feu de sortie | CNP-246 |
+| Route des rappels | K3s | HTTPRoute `cmp-api-import-worker` et SecurityPolicy JWT GitHub Actions, audience `cmp-import` | CNP-246 |
+| Rôles Vault par app | CMP, infra-templates | Rôle `<projet>-<app>-role` créé et supprimé par le CMP, chemin `project-<projet>/<app>` imposé par le chart | CNP-239 |
+| Suivi des échecs | CMP, extern-project-analyzer | Cause structurée, actions proposées, surveillance des workflows morts | CNP-268 |
 | Écriture du registre | CMP | Un seul commit atomique par application ou par build, sous verrou | CNP-239 |
 | Types `service` et `backing` | cnp-projects, K3s, infra-templates | Schéma, ApplicationSet, chart (`workload`, StatefulSet). Rendu identique pour les apps existantes, vérifié avant chaque merge | CNP-239 |
 | Liens `dependsOn` | cnp-projects, infra-templates, cnp-project-base | Alias ExternalName dans le namespace appelant ; plus tard, règles réseau par lien | CNP-240 |
-| Catalogue de bases | infra-templates | MongoDB, Redis, Neo4j, Elasticsearch épinglés par digest, non root, secrets Vault générés | CNP-239 |
+| Catalogue de bases | CMP (`services/imports/catalogue`), infra-templates | MongoDB, Redis, Neo4j, Elasticsearch épinglés par digest, non root, secrets Vault générés | CNP-239 |
 | Métriques Hubble | K3s (Cilium, Alloy) | Flux par workload et verdict, dans VictoriaMetrics | CNP-242 |
 | Topologie | CMP | API et onglet du projet, canevas React Flow | CNP-242 |
 | Outils MCP | CMP, cnp-agent-kit | `analyze_repo`, `get_topology`, `import_repo`, `link_apps`, `unlink_apps` | CNP-243 |
@@ -64,6 +70,6 @@ Le brouillon v1 a été confronté au code par une revue contradictoire. Chaque 
 | D7 | Alias ExternalName rendus par le chart de l'appelant ; règles réseau par lien dans la politique de projet, en entrée seulement | Une CiliumNetworkPolicy par app | L'AppProject interdit les objets Cilium aux tenants, et les règles Cilium s'additionnent : une règle par app ne restreindrait rien |
 | D8 | Arêtes observées depuis les métriques Hubble dans VictoriaMetrics | Collecteur gRPC Hubble Relay dans le CMP | Relay n'est pas déployé. Le CMP dort de 01:00 à 07:00 et perdrait des flux. Les métriques gardent l'historique |
 | D9 | Un credential de registre par projet. Terraform seulement pour le DNS des apps publiques et les secrets générés | Le module Terraform d'app pour chaque service | Onze exécutions par import, chacune créant un repo GitHub inutile |
-| D10 | Jeton de CI émis dans le workflow, jamais en entrée ; callback authentifié par OIDC GitHub | Jeton passé en `workflow_dispatch` | Les entrées sont lisibles dans le run |
+| D10 | Jeton de CI émis dans le workflow, jamais en entrée ; callback authentifié par OIDC GitHub, sur une route Envoy dédiée | Jeton passé en `workflow_dispatch` | Les entrées sont lisibles dans le run. La SecurityPolicy de la route principale du CMP refuse un JWT d'un autre émetteur que Keycloak |
 | D11 | Actions épinglées par SHA complet, Trivy installé avec vérification de hash | `trivy-action` par tag | 76 des 77 tags de `trivy-action` ont été réécrits par un attaquant le 19/03/2026 (CVE-2026-33634) |
 | D12 | Webhook GitHub plus rattrapage au réveil | Webhook seul | GitHub ne rejoue pas un webhook perdu pendant que le CMP dort |

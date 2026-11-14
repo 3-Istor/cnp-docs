@@ -4,7 +4,7 @@ type: matrix
 title: "CNP · Access matrix · Repo import"
 subtitle: "Who may touch the user's code, the import, the images and the registry once import ships? One row per identity, one column per resource."
 meta:
-  - "Everything here is planned (CNP-158: CNP-237 analyzer, CNP-238 build, CNP-239 chart, CNP-240 links, CNP-241 UI, CNP-242 topology, CNP-243 MCP); existing rows kept for contrast."
+  - "Everything here is in prod since 2026-11-14 (CNP-158: CNP-237 analyzer, CNP-238 build, CNP-239 chart, CNP-240 links, CNP-241 UI, CNP-242 topology, CNP-243 MCP); existing rows kept for contrast."
   - "Read a column: who can read a user's repo. Argo CD has no cell there on purpose: it reads cnp-projects and infra-templates only (GI4)."
   - "CNP-Portal holds its own permissions on the repos a user picks; the CMP only mints read tokens for one repo from it. Residual risk accepted on 2026-11-13 (GI1)."
   - "Guests get nothing new. The AI agent acts with its user's rights; import and link need the user's confirmation, Apply is never autonomous."
@@ -31,7 +31,7 @@ labels:
   grp-infra: "Platform infra"
   assistant-remote: "AI assistant"
   github-app: "CNP-Portal app"
-  im-build-prepare: "Build · job prepare"
+  im-build-prepare: "Build · job claim"
   im-build-publish: "Build · job publish"
   im-service: "Imported app (kubelet)"
   argocd: "Argo CD"

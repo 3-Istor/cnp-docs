@@ -40,27 +40,47 @@ Les services échangent des événements par Redis pub/sub (`user.created`, `pos
 | Aucun service n'expose de route de santé (`/q/health` absent des poms) | Sondes TCP | Pas de redémarrages en boucle sur un 404 |
 | `api-gateway` est décrit dans `k8s/` sans code source | Signalé dans le panneau « non supporté » de l'aperçu, écarté | L'aperçu dit honnêtement ce qui n'est pas importé |
 | Elasticsearch demande `vm.max_map_count` | `node.store.allow_mmap=false` dans le preset | Pas de réglage noyau sur les nœuds |
+| Kubernetes injecte `NEO4J_PORT_7687_TCP_PORT` et voisines pour le Service `neo4j`, que la validation stricte de Neo4j refuse | `NEO4J_server_config_strict__validation_enabled=false` dans le preset (CMP#227) | Le nom d'origine `neo4j` reste celui du Service |
 
 ## Budget mémoire
 
-Le cluster on-prem a environ 4 Gio de requests libres (deux nœuds, 20 Go et 8 Go, requests à
-environ 85 %). Epitweet tient en réglant chaque composant :
+Valeurs déployées le 14/11 (cnp-projects `apps/epitweet/*/values.yaml`). Epitweet tient en
+réglant chaque composant :
 
 | Composant | Request | Limite | Réglage |
 | --- | --- | --- | --- |
 | 6 services Quarkus | 6 × 192 Mio | 6 × 384 Mio | `-XX:MaxRAMPercentage=70`, SerialGC |
-| MongoDB | 384 Mio | 768 Mio | cache WiredTiger 0,25 Go |
+| MongoDB | 256 Mio | 512 Mio | |
 | Neo4j | 768 Mio | 1 Gio | heap 512 Mio, page cache 128 Mio |
 | Elasticsearch | 1 Gio | 1,25 Gio | heap 512 Mio |
-| Redis | 64 Mio | 128 Mio | |
+| Redis | 64 Mio | 256 Mio | |
 | frontend nginx | 32 Mio | 64 Mio | |
-| **Total** | **environ 3,4 Gio** | | |
+| **Total** | **environ 3,2 Gio** | | |
 
-C'est juste. Environ 4 Gio pour epitweet sont acceptés depuis le 13/11. L'aperçu d'import
+C'est juste. Environ 4 Gio pour epitweet sont acceptés depuis le 13/11. Le 14/11, le cluster
+réservait 95 % des requests mémoire du worker pour la moitié réellement utilisée, et
+Elasticsearch ne trouvait pas de place. Un premier lot de requests a été aligné sur l'usage
+mesuré (K3s#197, K3s#198), la suite est CNP-272. L'aperçu d'import
 affiche cette jauge avant l'application, et l'offhours endort le projet la nuit. Si ça ne passe pas, tout est prêt pour un projet sur cloud public, mais rien n'est
 lancé sans l'accord de Brian.
 
-## Ce qui reste à valider
+## Recette du 14/11
 
-- La recette fonctionnelle : créer un compte, poster, suivre, liker et chercher depuis l'URL
-  publique, avec les arêtes qui apparaissent sur la carte du projet.
+Epitweet est importé dans le projet `epitweet`, on-prem, et servi sur
+`frontend-epitweet.3istor.com`. Vérifié de bout en bout depuis l'URL publique :
+
+- comptes utilisateurs, stockés dans MongoDB ;
+- abonnements, dans le graphe Neo4j ;
+- posts et likes ;
+- fil d'actualité, alimenté par les événements Redis ;
+- recherche, sur Elasticsearch.
+
+Ce que ce premier import a montré, et qui reste à faire :
+
+- le front nginx démarrait avant ses services et le run passait en échec : ordre de
+  déploiement à suivre les liens (CNP-269) ;
+- les échecs de déploiement remontaient sans cause ni message (CNP-270) ;
+- le premier groupe de build envoyait environ 1 Go d'images et a calé sur une coupure réseau
+  (CNP-271 ; les couches partagées partent une fois par groupe depuis extern-project-analyzer#49) ;
+- les requests du cluster bloquaient le déploiement (CNP-272 ; deux lots passés, K3s#197 et
+  K3s#198).

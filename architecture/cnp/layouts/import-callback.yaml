@@ -1,0 +1,60 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 2950, height: 1720}
+
+# Runner and edge on the left, cluster in the middle, GitHub on the right. The runner's calls
+# to GitHub run above the regions (y 230, 245); the CMP's calls cross the x 2390 to 2500 corridor.
+elements:
+  rn-z-epimac: {x: 40, y: 300, w: 420, h: 280}
+  rn-g-import: {x: 20, y: 60, w: 380, h: 190}
+  rn-ephemeral: {x: 20, y: 60, w: 300, h: 100}
+  z-cloudflare: {x: 520, y: 300, w: 320, h: 260}
+  cf-edge: {x: 20, y: 100, w: 280, h: 100}
+
+  z-cluster: {x: 900, y: 300, w: 1490, h: 790}
+  g-connectivity: {x: 40, y: 60, w: 320, h: 170}
+  cloudflared-platform: {x: 20, y: 70, w: 280, h: 90}
+  g-gateway: {x: 40, y: 300, w: 660, h: 380}
+  envoy-shared-gateway: {x: 20, y: 80, w: 280, h: 90}
+  ic-worker-route: {x: 20, y: 230, w: 280, h: 100}
+  ic-worker-jwt: {x: 340, y: 230, w: 300, h: 100}
+  g-cmp: {x: 780, y: 60, w: 670, h: 200}
+  im-import: {x: 140, y: 80, w: 300, h: 100}
+  g-secrets: {x: 780, y: 320, w: 670, h: 190}
+  vault-auth: {x: 20, y: 70, w: 295, h: 90}
+  pa-vault-mount: {x: 345, y: 70, w: 310, h: 90}
+  g-gitops: {x: 780, y: 580, w: 670, h: 170}
+  argocd: {x: 20, y: 70, w: 300, h: 90}
+
+  z-github: {x: 2500, y: 300, w: 400, h: 790}
+  rn-gh-actions: {x: 40, y: 80, w: 320, h: 120}
+  ic-gh-oidc: {x: 40, y: 260, w: 320, h: 130}
+  pa-registry: {x: 40, y: 620, w: 320, h: 100}
+
+edges:
+  c-ic-import-actions: {from: im-import.right@20px, to: rn-gh-actions.left@80px}
+  c-rn-ephemeral-actions: {from: rn-ephemeral.right@20px, to: rn-gh-actions.left@60px, waypoints: [[475, 440], [475, 245], [2480, 245], [2480, 440]], label_at: [1200, 245]}
+  c-ic-runner-oidc: {from: rn-ephemeral.right@40px, to: ic-gh-oidc.left@55px, waypoints: [[490, 460], [490, 230], [2460, 230], [2460, 615]], label_at: [1800, 230]}
+  c-rn-ephemeral-cmp: {from: rn-ephemeral.right@70px, to: cf-edge.left@90px}
+  e-oidc-platform-tunnel: {from: cloudflared-platform.left@40px, to: cf-edge.right@70px, against_flow: true}
+  e-oidc-platform-envoy: {from: cloudflared-platform.bottom@200px, to: envoy-shared-gateway.top@200px, label_at: [1160, 560]}
+  c-ic-envoy-import: {from: envoy-shared-gateway.right@30px, to: im-import.left@70px, waypoints: [[1640, 710], [1640, 510]]}
+  c-ic-envoy-jwks: {from: envoy-shared-gateway.right@60px, to: ic-gh-oidc.left@110px, waypoints: [[1655, 740], [1655, 845], [2440, 845], [2440, 670]]}
+  c-ic-import-jwks: {from: im-import.right@75px, to: ic-gh-oidc.left@85px, waypoints: [[2410, 515], [2410, 645]]}
+  c-im-import-registry: {from: im-import.right@50px, to: pa-registry.left@60px, waypoints: [[2425, 490], [2425, 980]], label_at: [2425, 920]}
+  c-ic-import-vault-role: {from: im-import.bottom@120px, to: vault-auth.top@240px}
+  c-ic-import-vault-kv: {from: im-import.bottom@260px, to: pa-vault-mount.top@55px}
+  c-pa-argocd-registry: {from: argocd.right@55px, to: pa-registry.left@85px}
+  e-oidc-token-hairpin: {from: envoy-shared-gateway.left@60px, to: cf-edge.bottom@200px, waypoints: [[870, 740], [870, 535], [740, 535]], against_flow: true}
+  r-ic-route-gateway: {from: ic-worker-route.top@100px, to: envoy-shared-gateway.bottom@100px}
+  r-ic-jwt-route: {from: ic-worker-jwt.left@50px, to: ic-worker-route.right@50px}
+
+notes:
+  n-401: {x: 1240, y: 1110, w: 420, h: 110}
+
+cards:
+  card-legend: {x: 40, y: 1260, w: 600, h: 420}
+  card-steps: {x: 680, y: 1260, w: 1000, h: 420}
+  card-bg: {x: 1720, y: 1260, w: 1180, h: 200}
+  card-ops: {x: 1720, y: 1490, w: 1180, h: 190}
+  card-gaps: {x: 40, y: 640, w: 800, h: 160}

@@ -50,7 +50,7 @@ modèle lui-même bloque :
 
 Ce qu'on abandonne : la PR obligatoire et la reprise manuelle, l'égalité stricte des values, les
 credentials Argo par repo, les introspections de la plateforme à chaque requête et les scanners à
-regex comme barrière bloquante, remplacés par gitleaks et `trivy fs`.
+regex comme barrière bloquante, remplacés au design par gitleaks et `trivy fs`. En prod, seul le scan Trivy des images bloque (voir [Parcours](03-parcours.md#3-appliquer-limport)).
 
 Les six PRs seront fermées avec un commentaire qui renvoie vers les nouvelles et dit ce qui a été
 repris ([CNP-246](https://3istors.atlassian.net/browse/CNP-246)).

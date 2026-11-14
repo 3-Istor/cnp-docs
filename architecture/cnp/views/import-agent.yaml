@@ -4,7 +4,7 @@ type: sequence
 title: "CNP · Repo import · S8 Import by an AI agent"
 subtitle: "What may an assistant do with the import tools, and where does the user have to step in?"
 meta:
-  - "Scope: S8 of the import design, planned (CNP-243) · MCP connection and token as in agent-connect · design spec v2 (2026-11-13)"
+  - "Scope: S8 of the import design, in prod since 2026-11-14 (CNP-243) · MCP connection and token as in agent-connect · design spec v2 (2026-11-13)"
   - "The assistant acts with its user's rights; import and link need the user's confirmation; Apply is never autonomous."
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
@@ -16,9 +16,9 @@ steps:
   - {id: f1, from: envoy-shared-gateway, to: cmp-mcp, over: c-envoy-cmp-mcp, text: "POST /mcp"}
   - {note: cmp-mcp, text: "stake policy: analyze is a read, allowed"}
   - {id: a1, from: cmp-mcp, to: im-import, over: c-im-mcp-import, text: "analyze with the user's rights"}
-  - {id: a2, from: im-import, to: im-analyzer, over: c-im-import-analyzer, text: "analyze(repo, SHA)"}
-  - {reply: a2, text: "ImportPlan"}
-  - {reply: a1, text: "draft id, plan summary"}
+  - {id: a2, from: im-import, to: im-analyzer, over: c-im-import-analyzer, text: "analyze run (workflow, job claim)"}
+  - {reply: a1, text: "run_id · the agent follows it with get_import"}
+  - {reply: a2, text: "plan callback, minutes later"}
   - {reply: f1}
   - {reply: c1, text: "7 services, 4 backing, 1 unsupported"}
   - {id: c2, from: assistant-remote, to: cf-edge, over: c-assistant-edge, text: "tools/call import_repo {draft}"}

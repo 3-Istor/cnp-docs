@@ -1,7 +1,7 @@
 # Import de repos, microservices et topologie
 
-**Statut : validé le 13/11/2026, implémentation en cours.** Ticket parent
-[CNP-158](https://3istors.atlassian.net/browse/CNP-158), sous-tâches CNP-237 à CNP-246.
+**Statut : validé le 13/11/2026, en prod depuis le 14/11/2026.** Ticket parent
+[CNP-158](https://3istors.atlassian.net/browse/CNP-158), sous-tâches CNP-237 à CNP-246 et CNP-268.
 
 Une équipe arrive avec son code existant : un repo GitHub, parfois un monorepo de
 microservices avec son docker-compose et ses bases. La CNP le lit à un commit figé et propose un
@@ -13,18 +13,30 @@ template ; les relier viendra en v2, le schéma du registre ne l'accepte pas enc
 La démonstration est epitweet : 6 services Quarkus, un front React, MongoDB, Redis, Neo4j et
 Elasticsearch, importés tels quels.
 
-## Où on en est (13/11/2026 au soir)
+## Où on en est (14/11/2026)
 
 | Brique | Livré dans | État |
 | --- | --- | --- |
 | Correctif du constat haut, jetons restreints | CMP#212 | En prod |
 | Types `service` et `backing`, liens, chart `workload` | infra-templates#24 #27, cnp-project-base#33, K3s#181, cnp-projects#17 | En prod |
-| Analyseur v2 et workflow central | extern-project-analyzer#43 #44 | Mergé |
-| Backend d'import, liaison GitHub OAuth | CMP#217 | En prod (v0.3.105), import désactivé |
-| Onglet Topologie, assistant d'import | CMP#220 | En prod (v0.3.105) |
+| Rôle et chemin Vault dérivés de l'ApplicationSet | infra-templates#26 | En prod |
+| Analyseur v2 et workflow central | extern-project-analyzer#43 #44 #45 #47 #49 | En prod |
+| Backend d'import, liaison GitHub OAuth | CMP#217 #223 | En prod |
+| Onglet Topologie, assistant d'import | CMP#220 | En prod |
+| Outils MCP et rebuild | CMP#222 | En prod |
 | Métriques de flux Hubble | K3s#187 | En prod |
-| Configuration de l'import, clé de chiffrement | K3s#189 | Appliqué |
-| Runners des repos privés, réglages de CNP-Portal, premier import d'epitweet | | À faire |
+| Configuration de l'import, clé de chiffrement, secret du webhook | K3s#189 #191 | Appliqué |
+| Import activé, runners éphémères acceptés, commits de l'analyseur autorisés | K3s#192 #193 #194 #196 #199 | Appliqué |
+| Route dédiée aux rappels du workflow | K3s#195 | En prod |
+| Runners auto-hébergés : persistant, éphémères, renfort | Cloud#46 à #49, cnp-dev-runners, extern-project-analyzer#46, infra-templates#28 | En prod |
+| Échecs compréhensibles et actionnables (CNP-268) | CMP#224, extern-project-analyzer#48 | En prod |
+| Secrets et rôle Vault par app importée | CMP#225 #226 | En prod |
+| Neo4j démarre malgré les variables de service | CMP#227 | En prod |
+| Requests du cluster alignées sur l'usage, deux lots | K3s#197 #198 | Appliqué |
+| Couches d'images partagées envoyées une fois par groupe | extern-project-analyzer#49 | En prod |
+| Premier import d'epitweet, recette de bout en bout | | Fait le 14/11, voir [Epitweet](05-epitweet.md) |
+| Ordre de déploiement, causes d'échec de déploiement, suites de l'envoi d'images et des requests | CNP-269 à CNP-272 | À faire |
+| Runner persistant sur la VM des imports | | Risque ouvert, voir [Rôles et sécurité](04-roles-et-securite.md#risque-ouvert-le-runner-persistant-partage-la-vm-des-imports) |
 
 ## Les pages
 
@@ -34,10 +46,11 @@ Elasticsearch, importés tels quels.
 | [Architecture](02-architecture.md) | Ce qui est ajouté composant par composant, sources de la topologie, décisions D1 à D12 |
 | [Parcours](03-parcours.md) | Les 6 parcours avec leurs diagrammes de séquence |
 | [Rôles et sécurité](04-roles-et-securite.md) | Qui peut faire quoi, identités techniques, décisions D13 à D21 |
-| [Epitweet](05-epitweet.md) | Ce que contient epitweet, ce que la CNP ajoute, budget mémoire |
+| [Epitweet](05-epitweet.md) | Ce que contient epitweet, ce que la CNP ajoute, budget mémoire, recette du 14/11 |
 | [Audit du premier import](06-audit-travail-existant.md) | Pourquoi les PRs de CNP-96 ne sont pas fusionnées, ce qu'on en reprend |
 | [Plan et recette](07-plan-et-recette.md) | Ordre de livraison, jalons, critères de recette |
 | [Audit de sécurité](08-audit-securite.md) | Rapport complet, méthode du skill `security-audit` de Cloudflare |
+| [Exploitation](09-exploitation.md) | Runners, rappels du workflow, autoriser un commit de l'analyseur, rôles Vault, échecs, suites |
 
 ## Comment ce dossier a été construit
 
