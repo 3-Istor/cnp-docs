@@ -4,7 +4,7 @@ type: topology
 title: "CNP · Repo import · epitweet as CNP apps"
 subtitle: "Once imported, how does epitweet run in a CNP project: who calls whom, over which bus, on which data?"
 meta:
-  - "Scope: project epitweet on the on-prem cluster after an import (planned, CNP-158) · one namespace per app · prod only"
+  - "Scope: project epitweet on the on-prem cluster after an import (in prod since 2026-11-14, CNP-158) · one namespace per app · prod only"
   - "Sources: 2526-epitweet-mytinyx-24 branch tooling/test-frontend (docker-compose.yml, frontend/nginx.conf, tinyx/*/src/main, k8s/base) · import design spec v2 (sizing) · cnp-project-base, infra-templates"
   - "The K3S CLUSTER frame is the same on-prem cluster, drawn apart for the shared Vault."
   - "Out of scope: how the import builds and deploys it (import-overview, import-apply) · login on the public route (oidc-login) · staging"

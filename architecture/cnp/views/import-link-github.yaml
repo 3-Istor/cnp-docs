@@ -4,7 +4,7 @@ type: sequence
 title: "CNP · Repo import · S1 Linking GitHub"
 subtitle: "How does a user install CNP-Portal on chosen repos, and how does the CMP prove the installation is theirs?"
 meta:
-  - "Scope: S1 of the import design, planned (CNP-240) · connections of the import-overview model · design spec v2 (2026-11-13)"
+  - "Scope: S1 of the import design, in prod since 2026-11-14 (CNP-240) · connections of the import-overview model · design spec v2 (2026-11-13)"
   - "Browser calls to the CMP cross Cloudflare, the platform tunnel and Envoy: folded into one hop."
   - "v0.1 · source: cnp-docs/architecture/cnp"
 

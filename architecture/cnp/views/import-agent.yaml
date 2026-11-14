@@ -4,7 +4,7 @@ type: sequence
 title: "CNP · Repo import · S8 Import by an AI agent"
 subtitle: "What may an assistant do with the import tools, and where does the user have to step in?"
 meta:
-  - "Scope: S8 of the import design, planned (CNP-243) · MCP connection and token as in agent-connect · design spec v2 (2026-11-13)"
+  - "Scope: S8 of the import design, in prod since 2026-11-14 (CNP-243) · MCP connection and token as in agent-connect · design spec v2 (2026-11-13)"
   - "The assistant acts with its user's rights; import and link need the user's confirmation; Apply is never autonomous."
   - "v0.1 · source: cnp-docs/architecture/cnp"
 

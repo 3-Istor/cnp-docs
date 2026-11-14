@@ -2,7 +2,9 @@
 
 Le travail est découpé en dix sous-tâches de
 [CNP-158](https://3istors.atlassian.net/browse/CNP-158). L'ordre fait tourner epitweet de bout en
-bout le plus tôt possible, puis industrialise l'import.
+bout le plus tôt possible, puis industrialise l'import. Au 14/11, les étapes 1 à 8 sont en prod
+et epitweet a été importé et déployé on-prem ; l'étape 9 est en cours (CNP-245, CNP-246). Les
+suites de la recette sont CNP-269 à CNP-272, voir [Exploitation](09-exploitation.md#suites-connues).
 
 | Étape | Contenu | Tickets | Jalon |
 | --- | --- | --- | --- |
@@ -23,7 +25,7 @@ Tout se passe sur le vrai cluster, dans des projets de test supprimés à la fin
 **Epitweet**
 
 - [ ] Le plan liste 7 apps, 4 bases et les liens du front vers les 6 services, et signale api-gateway comme non supporté.
-- [ ] Créer un compte, poster, suivre, liker et chercher fonctionnent depuis l'URL publique.
+- [x] Créer un compte, poster, suivre, liker et chercher fonctionnent depuis l'URL publique (14/11, `frontend-epitweet.3istor.com`).
 - [ ] Les arêtes observées apparaissent sur la carte en moins de 2 minutes.
 - [ ] Les mots de passe du repo ne sont pas utilisés : les secrets viennent de Vault.
 - [ ] La suppression du projet ne laisse ni namespace, ni volume, ni image.

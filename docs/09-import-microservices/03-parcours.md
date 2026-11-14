@@ -27,9 +27,10 @@ projet, et les groupes plateforme `infra`, `security-auditor` et `finops`.
 
 1. Dans le projet, « Importer un repo » : repo GitHub, branche.
 2. Le CMP résout la branche en SHA. À partir de là, tout porte sur ce SHA.
-3. L'analyseur télécharge l'archive à ce SHA avec un jeton limité à ce seul repo, en lecture.
-   Il borne la taille et le nombre de fichiers, et refuse les liens symboliques sortants. Il
-   n'exécute rien.
+3. Le CMP lance le workflow central, dont le job `claim` fait l'analyse sur un runner
+   éphémère. L'analyseur télécharge l'archive à ce SHA avec un jeton limité à ce seul repo, en
+   lecture. Il borne la taille et le nombre de fichiers, et refuse les liens symboliques
+   sortants. Il n'exécute rien.
 4. Il produit le plan d'import, affiché en brouillon sur la carte du projet :
     - services et bases détectés ;
     - liens proposés ;
@@ -49,21 +50,27 @@ projet, et les groupes plateforme `infra`, `security-auditor` et `finops`.
 *Qui : admin ou owner, avec un step-up par passkey.*
 
 1. « Appliquer » demande une passkey récente, comme toute action sensible du portail.
+   En prod, le step-up est encore désactivé (`STEP_UP_ENABLED=false` dans les valeurs du CMP) :
+   « Appliquer » passe sur une session simple tant qu'il n'est pas activé.
 2. Le CMP enregistre l'import et son approbateur, puis lance le workflow de build central avec
    des identifiants opaques. Aucun jeton ne passe en entrée.
-3. Le job `prepare` présente son jeton OIDC au CMP, qui lui remet un jeton CNP-Portal d'une
-   heure, en lecture, limité au repo. Le job télécharge le source, puis lance gitleaks et
+3. Le job `claim` tourne sur un runner éphémère du groupe `cnp-import-ephemeral`. Il présente
+   son jeton OIDC au CMP par la route dédiée aux rappels, et le CMP lui remet un jeton
+   CNP-Portal d'une heure, en lecture, limité au repo. Le job télécharge le source, puis lance gitleaks et
    `trivy fs`, qui bloquent seulement sur les secrets et les erreurs critiques.
-4. Le job `build` n'a ni secret ni identité. Il construit chaque image, la scanne et produit son
-   SBOM.
+4. Le job `build` n'a ni secret ni identité. Il construit chaque image avec le BuildKit
+   rootless propre au job, la scanne et produit son SBOM.
 5. Le job `publish` pousse les images par digest. Il rappelle ensuite le CMP, qui vérifie le
    jeton OIDC de GitHub : repo, workflow à une révision épinglée, run, tentative.
-6. Le CMP revérifie les droits de l'utilisateur. Il écrit en un seul commit les valeurs, les
-   digests et les liens dans cnp-projects.
+6. Le CMP revérifie les droits de l'utilisateur. Il écrit les secrets générés de chaque app
+   dans Vault (`project-<projet>/<app>/imports`) et crée son rôle `<projet>-<app>-role`. Il écrit
+   ensuite en un seul commit les valeurs, les digests et les liens dans cnp-projects.
 7. Argo CD synchronise. Le CMP attend Synced et Healthy sur les révisions exactes, puis lance le
    test fonctionnel.
-8. Le suivi montre chaque service. Un échec sur un service n'arrête pas les autres et dit quoi
-   faire.
+8. Le suivi montre chaque service. Un échec dit à quelle étape, sur quelles apps et pourquoi,
+   avec un extrait de log nettoyé, et propose une action : corriger dans le repo, relancer,
+   réanalyser ou contacter la plateforme. Un workflow mort est marqué en échec en quelques
+   minutes. Le détail est dans [Exploitation](09-exploitation.md#quand-un-import-echoue).
 
 ![Appliquer un import](../01-architecture/diagrams/import-apply.light.png#only-light)
 ![Appliquer un import](../01-architecture/diagrams/import-apply.dark.png#only-dark)

@@ -732,53 +732,78 @@ elements:
   - {id: ar-vault, kind: database, parent: g-secrets, icon: vault, title: "Vault", tech: "[vault.vault.svc on-prem]", desc: "Mount project-<project>", ports: [{name: http, protocol: TCP, port: 8200}]}
   - {id: ar-hub-obs, kind: database, parent: g-observability, icon: grafana, title: "VictoriaMetrics · Loki", tech: "[on-prem stores]", desc: "Metrics, logs, analysis queries"}
 
-  # CNP-158 repo import (planned). Design: import spec v2 (2026-11-13). Existing parts
+  # CNP-158 repo import, in prod since 2026-11-14. Design: import spec v2 (2026-11-13). Existing parts
   # reused from above: user, cmp-frontend, cmp-backend, argocd, pa-appproject, kube-apiserver,
   # github-app (CNP-Portal), pa-registry, ghcr, vault, vm-vmselect, alloy-onprem. Decided
   # 2026-11-13: one GitHub App only. Users install CNP-Portal on chosen repos; for a user
   # installation the CMP mints tokens down-scoped to contents:read, metadata:read and one repo.
-  - {id: im-import, kind: backend, parent: g-cmp, icon: fastapi, title: "Import module", tech: "[CMP backend · /api/import]", desc: "Plans, builds, commits the registry", ports: [{name: http, protocol: TCP, port: 8000}], status: planned, target: CNP-241}
-  - {id: im-wizard, kind: frontend, parent: g-cmp, icon: react, title: "Import wizard", tech: "[CMP frontend page]", desc: "Repo, branch, draft canvas, Apply", ports: [{name: http, protocol: TCP, port: 3000}], status: planned, target: CNP-241}
-  - {id: im-analyzer, kind: backend, parent: g-cmp, icon: python, title: "Analyzer", tech: "[Python · CMP or extern-project-analyzer]", desc: "Parses compose, Dockerfiles; runs nothing", status: planned, target: CNP-237}
+  - {id: im-import, kind: backend, parent: g-cmp, icon: fastapi, title: "Import module", tech: "[CMP backend · /api/import]", desc: "Plans, builds, commits the registry", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: im-wizard, kind: frontend, parent: g-cmp, icon: react, title: "Import wizard", tech: "[CMP frontend page]", desc: "Repo, branch, draft canvas, Apply", ports: [{name: http, protocol: TCP, port: 3000}]}
+  - {id: im-analyzer, kind: backend, parent: g-cmp, icon: python, title: "Analyzer", tech: "[Python · workflow job claim]", desc: "Parses compose, Dockerfiles; runs nothing"}
   - {id: im-g-project, kind: group, parent: z-cluster, color: indigo, icon: k8s-ns, title: "PROJECT <p>", sub: "<p>-<app> namespaces"}
-  - {id: im-service, kind: backend, parent: im-g-project, icon: k8s-deploy, title: "<service> app", tech: "[type service · Deployment]", desc: "Image by digest, TCP or HTTP probes", multiplicity: "one per imported service", status: planned, target: CNP-239}
-  - {id: im-backing, kind: database, parent: im-g-project, shape: cylinder, icon: k8s-deploy, title: "<backing> app", tech: "[type backing · StatefulSet + PVC]", desc: "Mongo, Redis, Neo4j, Elasticsearch", multiplicity: "one per backing service", status: planned, target: CNP-239}
-  - {id: im-chart, kind: external, parent: z-github, icon: github, title: "infra-templates", tech: "[Helm chart · HEAD]", desc: "Gains a workload block (CNP-239)", ports: [{name: https, protocol: TCP, port: 443}]}
-  - {id: im-g-build, kind: group, parent: z-github, color: indigo, icon: github-actions, title: "BUILD WORKFLOW", sub: "repo extern-project-analyzer · GitHub-hosted runners", status: planned, target: CNP-238}
-  - {id: im-build-prepare, kind: backend, parent: im-g-build, icon: github-actions, title: "job prepare", tech: "[id-token · repo token from the CMP]", desc: "Fetches the source, gitleaks, trivy fs"}
+  - {id: im-service, kind: backend, parent: im-g-project, icon: k8s-deploy, title: "<service> app", tech: "[type service · Deployment]", desc: "Image by digest, TCP or HTTP probes", multiplicity: "one per imported service"}
+  - {id: im-backing, kind: database, parent: im-g-project, shape: cylinder, icon: k8s-deploy, title: "<backing> app", tech: "[type backing · StatefulSet + PVC]", desc: "Mongo, Redis, Neo4j, Elasticsearch", multiplicity: "one per backing service"}
+  - {id: im-chart, kind: external, parent: z-github, icon: github, title: "infra-templates", tech: "[Helm chart · HEAD]", desc: "workload block, StatefulSet mode", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: im-g-build, kind: group, parent: z-github, color: indigo, icon: github-actions, title: "BUILD WORKFLOW", sub: "repo extern-project-analyzer · ephemeral self-hosted runners"}
+  - {id: im-build-prepare, kind: backend, parent: im-g-build, icon: github-actions, title: "job claim", tech: "[id-token · repo token from the CMP]", desc: "Fetches the source, gitleaks, trivy fs"}
   - {id: im-build-build, kind: backend, parent: im-g-build, icon: github-actions, title: "job build", tech: "[no secret, no id-token]", desc: "buildx, Trivy image, Syft SBOM"}
   - {id: im-build-publish, kind: backend, parent: im-g-build, icon: github-actions, title: "job publish", tech: "[id-token · packages:write]", desc: "Pushes by digest, calls CMP back"}
   - {id: im-z-github-user, kind: region, color: slate, icon: github, title: "GITHUB · USER ACCOUNT", sub: "the user's own account or org"}
   - {id: im-user-repo, kind: external, parent: im-z-github-user, icon: github, title: "<user> repo", tech: "[GitHub · compose, Dockerfiles]", desc: "Stays the source of truth", ports: [{name: https, protocol: TCP, port: 443}]}
-  # CNP-242 project Topology (planned): where nodes and edges come from.
-  - {id: tp-canvas, kind: frontend, parent: z-internet, icon: react, title: "Topology tab", tech: "[React Flow + ELK · browser]", desc: "Declared vs observed edges", status: planned, target: CNP-242}
-  - {id: tp-api, kind: backend, parent: g-cmp, icon: fastapi, title: "Topology API", tech: "[CMP backend · /api/…/topology]", desc: "Merges declared and observed", ports: [{name: http, protocol: TCP, port: 8000}], status: planned, target: CNP-242}
+  # CNP-242 project Topology: where nodes and edges come from.
+  - {id: tp-canvas, kind: frontend, parent: z-internet, icon: react, title: "Topology tab", tech: "[React Flow + ELK · browser]", desc: "Declared vs observed edges"}
+  - {id: tp-api, kind: backend, parent: g-cmp, icon: fastapi, title: "Topology API", tech: "[CMP backend · /api/…/topology]", desc: "Merges declared and observed", ports: [{name: http, protocol: TCP, port: 8000}]}
   - {id: tp-g-cilium, kind: group, parent: z-cluster, color: amber, icon: cilium, title: "CNI", sub: "Cilium 1.20 · ns kube-system"}
-  - {id: tp-hubble-metrics, kind: security, parent: tp-g-cilium, icon: cilium, title: "Hubble flow metrics", tech: "[cilium-agent · flow, drop]", desc: "By workload and verdict", ports: [{name: metrics, protocol: TCP, port: 9965}], status: planned, target: CNP-242}
+  - {id: tp-hubble-metrics, kind: security, parent: tp-g-cilium, icon: cilium, title: "Hubble flow metrics", tech: "[cilium-agent · flow, drop]", desc: "By workload and verdict", ports: [{name: metrics, protocol: TCP, port: 9965}]}
   - {id: tp-hubble-export, kind: security, parent: tp-g-cilium, icon: cilium, title: "Hubble static export", tech: "[cilium-agent stdout]", desc: "DROPPED, POLICY_DENIED only"}
   - {id: tp-hubble-relay, kind: backend, parent: tp-g-cilium, icon: cilium, title: "Hubble Relay", tech: "[gRPC · live flows]", desc: "Live flows drawer, later", ports: [{name: grpc, protocol: TCP, port: 4245}], status: planned, target: later}
-  # CNP-158 import (planned): epitweet imported into project epitweet, one namespace per app.
+  # CNP-158 import: epitweet imported into project epitweet, one namespace per app.
   # Facts: 2526-epitweet-mytinyx-24 branch tooling/test-frontend (docker-compose.yml,
   # frontend/nginx.conf, tinyx/*/src/main), sizing from the import design spec v2.
-  - {id: et-g-front, kind: group, parent: z-ar-target, color: sky, icon: k8s-ns, title: "PUBLIC APP", sub: "ns epitweet-frontend", status: planned, target: CNP-158}
+  - {id: et-g-front, kind: group, parent: z-ar-target, color: sky, icon: k8s-ns, title: "PUBLIC APP", sub: "ns epitweet-frontend"}
   - {id: et-frontend, kind: frontend, parent: et-g-front, icon: nginx, title: "frontend", tech: "[nginx · React/Vite build · service]", desc: "Only public app; proxies /api/*", ports: [{name: http, protocol: TCP, port: 80}]}
-  - {id: et-aliases, kind: backend, parent: et-g-front, icon: k8s-svc, title: "ExternalName aliases", tech: "[1 Service per dependsOn, caller ns]", desc: "frontend 6 · post, like 1 · timeline 2", status: planned, target: CNP-240}
-  - {id: et-g-services, kind: group, parent: z-ar-target, color: emerald, icon: k8s-ns, title: "SERVICES", sub: "6 apps · ns epitweet-<service> each", status: planned, target: CNP-158}
+  - {id: et-aliases, kind: backend, parent: et-g-front, icon: k8s-svc, title: "ExternalName aliases", tech: "[1 Service per dependsOn, caller ns]", desc: "frontend 6 · post, like 1 · timeline 2"}
+  - {id: et-g-services, kind: group, parent: z-ar-target, color: emerald, icon: k8s-ns, title: "SERVICES", sub: "6 apps · ns epitweet-<service> each"}
   - {id: et-timeline, kind: backend, parent: et-g-services, icon: quarkus, title: "timeline-service", tech: "[Quarkus 3.0 · JVM 21]", desc: "Builds each user's timeline", ports: [{name: http, protocol: TCP, port: 8085}]}
   - {id: et-post, kind: backend, parent: et-g-services, icon: quarkus, title: "post-service", tech: "[Quarkus 3.0 · JVM 21]", desc: "Creates and deletes posts", ports: [{name: http, protocol: TCP, port: 8082}]}
   - {id: et-like, kind: backend, parent: et-g-services, icon: quarkus, title: "like-service", tech: "[Quarkus 3.0 · JVM 21]", desc: "Likes and unlikes", ports: [{name: http, protocol: TCP, port: 8083}]}
   - {id: et-social-graph, kind: backend, parent: et-g-services, icon: quarkus, title: "social-graph-service", tech: "[Quarkus 3.0 · JVM 21]", desc: "Follows and blocks", ports: [{name: http, protocol: TCP, port: 8084}]}
   - {id: et-user, kind: backend, parent: et-g-services, icon: quarkus, title: "user-service", tech: "[Quarkus 3.0 · JVM 21]", desc: "User accounts", ports: [{name: http, protocol: TCP, port: 8081}]}
   - {id: et-search, kind: backend, parent: et-g-services, icon: quarkus, title: "search-service", tech: "[Quarkus 3.0 · JVM 21]", desc: "Full-text search on posts", ports: [{name: http, protocol: TCP, port: 8086}]}
-  - {id: et-g-bus, kind: group, parent: z-ar-target, color: orange, icon: redis, title: "EVENT BUS", sub: "redis app · ns epitweet-redis · TCP 6379", status: planned, target: CNP-239}
+  - {id: et-g-bus, kind: group, parent: z-ar-target, color: orange, icon: redis, title: "EVENT BUS", sub: "redis app · ns epitweet-redis · TCP 6379"}
   - {id: et-ch-user, kind: bus, parent: et-g-bus, shape: pipe, icon: redis, title: "user.*", tech: "[created · deleted]", desc: "No replay"}
   - {id: et-ch-post, kind: bus, parent: et-g-bus, shape: pipe, icon: redis, title: "post.*", tech: "[created · deleted]", desc: "No replay"}
   - {id: et-ch-like, kind: bus, parent: et-g-bus, shape: pipe, icon: redis, title: "like.*", tech: "[like · unlike]", desc: "No replay"}
   - {id: et-ch-social, kind: bus, parent: et-g-bus, shape: pipe, icon: redis, title: "social.*", tech: "[follow · unfollow]", desc: "+ block: no subscriber"}
-  - {id: et-g-data, kind: group, parent: z-ar-target, color: violet, icon: k8s-ns, title: "BACKING APPS", sub: "StatefulSet + PVC · ns epitweet-<name>", status: planned, target: CNP-239}
-  - {id: et-mongodb, kind: database, parent: et-g-data, shape: cylinder, icon: mongodb, title: "mongodb", tech: "[mongo:7.0 · 384Mi]", desc: "One database per service", ports: [{name: mongo, protocol: TCP, port: 27017}]}
+  - {id: et-g-data, kind: group, parent: z-ar-target, color: violet, icon: k8s-ns, title: "BACKING APPS", sub: "StatefulSet + PVC · ns epitweet-<name>"}
+  - {id: et-mongodb, kind: database, parent: et-g-data, shape: cylinder, icon: mongodb, title: "mongodb", tech: "[mongo:7.0 · 256Mi]", desc: "One database per service", ports: [{name: mongo, protocol: TCP, port: 27017}]}
   - {id: et-neo4j, kind: database, parent: et-g-data, shape: cylinder, icon: neo4j, title: "neo4j", tech: "[neo4j:5 + APOC · 768Mi]", desc: "Follow and block graph", ports: [{name: bolt, protocol: TCP, port: 7687}]}
   - {id: et-elasticsearch, kind: database, parent: et-g-data, shape: cylinder, icon: elasticsearch, title: "elasticsearch", tech: "[8.11 single node · 1Gi]", desc: "Post index", ports: [{name: http, protocol: TCP, port: 9200}]}
+  # CNP-246 import operations (2026-11-14): where CI and import jobs run, and how an import
+  # job calls the CMP back. Facts: Cloud terraform/openstack/projects/epimac (runner.tf,
+  # cnp-import-runner/), cnp-dev-runners, K3s k8s/config/arcl-cmp/{import-worker-route,
+  # cmp-values}.yaml, CMP services/imports/{oidc,deploy,watch}.py.
+  - {id: rn-z-epimac, kind: region, color: violet, icon: openstack, title: "VM epimac-gitlab-runner", sub: "OpenStack lab"}
+  - {id: rn-g-ci, kind: group, parent: rn-z-epimac, color: emerald, icon: github-actions, title: "CI OF PRIVATE REPOS", sub: "runner group Default"}
+  - {id: rn-persistent, kind: backend, parent: rn-g-ci, icon: github-actions, title: "epimac-github-runner", tech: "[actions/runner · systemd · persistent]", desc: "Labels self-hosted, Linux, X64"}
+  - {id: rn-mirror, kind: database, parent: rn-g-ci, icon: docker, title: "docker-hub-mirror", tech: "[registry:2 · pull-through cache]", desc: "Docker Hub images for the host Docker", ports: [{name: registry, protocol: TCP, port: 5000}]}
+  - {id: rn-g-import, kind: group, parent: rn-z-epimac, color: amber, icon: github-actions, title: "IMPORT JOBS", sub: "runner group cnp-import-ephemeral"}
+  - {id: rn-supervisor, kind: backend, parent: rn-g-import, icon: github-actions, title: "cnp-import-runner", tech: "[systemd · bash · GitHub App]", desc: "Keeps one idle JIT runner registered"}
+  - {id: rn-egress-fw, kind: security, parent: rn-g-import, icon: openstack, title: "Egress firewall", tech: "[iptables DOCKER-USER, INPUT]", desc: "Job networks reach the internet only"}
+  - {id: rn-ephemeral, kind: backend, parent: rn-g-import, icon: github-actions, title: "Ephemeral runner", tech: "[JIT config · 1 job, then deleted]", desc: "Own /24 network, 1 GiB", multiplicity: "one per import job"}
+  - {id: rn-buildkit, kind: backend, parent: rn-g-import, icon: docker, title: "BuildKit rootless", tech: "[moby/buildkit · AppArmor profile]", desc: "Builds the job's images, 2 GiB", multiplicity: "one per import job", ports: [{name: buildkit, protocol: TCP, port: 1234}]}
+  - {id: rn-lab, kind: external, parent: rn-z-epimac, icon: openstack, title: "Lab, host, metadata", tech: "[private ranges · 169.254.0.0/16]", desc: "Never reachable from a job"}
+  - {id: rn-z-devpc, kind: region, color: sky, icon: docker, title: "DEV PC · cnp-dev-runners", sub: "an org owner, test periods only"}
+  - {id: rn-dev-ci, kind: backend, parent: rn-z-devpc, icon: github-actions, title: "CI runners", tech: "[group Default · label cnp-dev]", desc: "Own privileged dind per slot", multiplicity: "6 by default"}
+  - {id: rn-dev-import, kind: backend, parent: rn-z-devpc, icon: github-actions, title: "Import runners", tech: "[group cnp-import-ephemeral]", desc: "1 job each, then replaced", multiplicity: "2 by default"}
+  - {id: rn-dev-buildkit, kind: backend, parent: rn-z-devpc, icon: docker, title: "Shared BuildKit", tech: "[privileged · cnp-dev-runner-buildkitd]", desc: "Builds every import job's images", ports: [{name: buildkit, protocol: TCP, port: 1234}]}
+  - {id: rn-dev-cache, kind: database, parent: rn-z-devpc, icon: docker, title: "cnp-dev-runner-cache", tech: "[registry:2 · pull-through cache]", desc: "Docker Hub images, kept between runs", ports: [{name: registry, protocol: TCP, port: 5000}]}
+  - {id: rn-gcr-mirror, kind: external, parent: z-internet, icon: docker, title: "mirror.gcr.io", tech: "[Google's mirror of Docker Hub]", desc: "No anonymous pull quota", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: rn-gh-actions, kind: cloud, parent: z-github, icon: github-actions, title: "GitHub Actions", tech: "[org 3-Istor · Free plan]", desc: "Queues jobs, hands them to runners", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: ic-gh-oidc, kind: security, parent: z-github, icon: github-actions, title: "GitHub Actions OIDC", tech: "[token.actions.githubusercontent.com]", desc: "Signs job JWTs, serves the JWKS", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: ic-worker-route, kind: backend, parent: g-gateway, icon: k8s-crd, title: "HTTPRoute", tech: "[cmp-api-import-worker]", desc: "PathPrefix /api/import/worker"}
+  - {id: ic-worker-jwt, kind: security, parent: g-gateway, icon: k8s-crd, title: "SecurityPolicy", tech: "[cmp-api-import-worker-jwt]", desc: "GitHub issuer, audience cmp-import"}
+
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
@@ -1214,38 +1239,38 @@ connections:
   - {id: hl-c-portal-clouds, from: hl-portal, to: hl-clouds, protocol: WireGuard, verb: "synchronise", kind: flow}
   - {id: hl-c-apps-agw, from: hl-apps, to: hl-agw, verb: "les apps appellent les modèles", kind: flow, status: planned, target: IA-1}
 
-  # CNP-158 repo import (planned). Browser calls to the CMP cross Cloudflare, the platform
+  # CNP-158 repo import. Browser calls to the CMP cross Cloudflare, the platform
   # tunnel and Envoy like every CMP call; those hops are folded into one connection here.
-  - {id: c-im-user-wizard, from: user, to: im-wizard, port: http, protocol: HTTPS, verb: "open wizard, canvas", kind: flow, status: planned, target: CNP-241}
-  - {id: c-im-user-import, from: user, to: im-import, port: http, protocol: HTTPS, verb: "/api/import/*", kind: flow, status: planned, target: CNP-241}
-  - {id: c-im-user-gh-install, from: user, to: github-app, port: https, protocol: HTTPS, verb: "install on chosen repos, OAuth consent", kind: flow, status: planned, target: CNP-240}
-  - {id: c-im-import-gh-api, from: im-import, to: github-app, port: https, protocol: HTTPS, verb: "down-scoped token: contents:read, 1 repo", kind: auth, status: planned, target: CNP-240}
-  - {id: c-im-import-analyzer, from: im-import, to: im-analyzer, protocol: in-process, verb: "analyze(repo, SHA)", kind: flow, status: planned, target: CNP-237}
-  - {id: c-im-analyzer-repo, from: im-analyzer, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA, size cap", kind: flow, status: planned, target: CNP-237}
-  - {id: c-im-import-dispatch, from: im-import, to: im-build-prepare, protocol: HTTPS, verb: "workflow_dispatch (ids, SHA)", kind: flow, status: planned, target: CNP-238}
-  - {id: c-im-prepare-cmp, from: im-build-prepare, to: im-import, port: http, protocol: HTTPS, verb: "repo token for OIDC JWT", kind: auth, status: planned, target: CNP-238}
-  - {id: c-im-prepare-repo, from: im-build-prepare, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA", kind: flow, status: planned, target: CNP-238}
-  - {id: c-im-publish-ghcr, from: im-build-publish, to: ghcr, port: https, protocol: HTTPS, verb: "push imports/<p>/<app>", kind: flow, status: planned, target: CNP-238}
-  - {id: c-im-publish-callback, from: im-build-publish, to: im-import, port: http, protocol: HTTPS, verb: "callback, GitHub OIDC JWT", kind: flow, status: planned, target: CNP-238}
-  - {id: c-im-import-registry, from: im-import, to: pa-registry, port: https, protocol: HTTPS, verb: "commit as CNP-Portal", kind: flow, status: planned, target: CNP-238}
+  - {id: c-im-user-wizard, from: user, to: im-wizard, port: http, protocol: HTTPS, verb: "open wizard, canvas", kind: flow}
+  - {id: c-im-user-import, from: user, to: im-import, port: http, protocol: HTTPS, verb: "/api/import/*", kind: flow}
+  - {id: c-im-user-gh-install, from: user, to: github-app, port: https, protocol: HTTPS, verb: "install on chosen repos, OAuth consent", kind: flow}
+  - {id: c-im-import-gh-api, from: im-import, to: github-app, port: https, protocol: HTTPS, verb: "down-scoped token: contents:read, 1 repo", kind: auth}
+  - {id: c-im-import-analyzer, from: im-import, to: im-analyzer, protocol: in-process, verb: "analyze(repo, SHA)", kind: flow}
+  - {id: c-im-analyzer-repo, from: im-analyzer, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA, size cap", kind: flow}
+  - {id: c-im-import-dispatch, from: im-import, to: im-build-prepare, protocol: HTTPS, verb: "workflow_dispatch (ids, SHA)", kind: flow}
+  - {id: c-im-prepare-cmp, from: im-build-prepare, to: im-import, port: http, protocol: HTTPS, verb: "repo token for OIDC JWT", kind: auth}
+  - {id: c-im-prepare-repo, from: im-build-prepare, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA", kind: flow}
+  - {id: c-im-publish-ghcr, from: im-build-publish, to: ghcr, port: https, protocol: HTTPS, verb: "push imports/<p>/<app>", kind: flow}
+  - {id: c-im-publish-callback, from: im-build-publish, to: im-import, port: http, protocol: HTTPS, verb: "callback, GitHub OIDC JWT", kind: flow}
+  - {id: c-im-import-registry, from: im-import, to: pa-registry, port: https, protocol: HTTPS, verb: "commit as CNP-Portal", kind: flow}
   - {id: c-im-argocd-chart, from: argocd, to: im-chart, port: https, protocol: HTTPS, verb: "render chart", kind: async}
-  - {id: x-im-argocd-user-repo, from: argocd, to: im-user-repo, port: https, protocol: HTTPS, verb: "read user repo", kind: flow, denied: true, enforced_by: [pa-appproject], status: planned, target: CNP-239}
-  - {id: c-im-import-kapi, from: im-import, to: kube-apiserver, port: https, protocol: HTTPS, verb: "Application health", kind: flow, status: planned, target: CNP-241}
-  - {id: c-im-service-ghcr, from: im-service, to: ghcr, port: https, protocol: HTTPS, verb: "pull by digest", kind: flow, status: planned, target: CNP-239}
-  - {id: c-im-import-smoke, from: im-import, to: im-service, protocol: HTTP, verb: "post-deploy smoke", kind: flow, status: planned, target: CNP-241}
-  - {id: c-im-service-backing, from: im-service, to: im-backing, protocol: TCP, verb: "dependsOn alias", kind: flow, status: planned, target: CNP-240}
-  - {id: c-im-import-vault, from: im-import, to: vault, port: http, protocol: HTTP, verb: "write generated creds", kind: flow, status: planned, target: CNP-239}
-  - {id: c-im-gh-webhook, from: github-app, to: im-import, port: http, protocol: HTTPS, verb: "push webhook, HMAC", kind: async, status: planned, target: CNP-244}
-  - {id: c-im-mcp-import, from: cmp-mcp, to: im-import, protocol: in-process, verb: "import tools, same token", kind: flow, status: planned, target: CNP-243}
-  # CNP-242 project Topology (planned).
-  - {id: c-tp-canvas-api, from: tp-canvas, to: tp-api, port: http, protocol: HTTPS, verb: "GET topology", kind: flow, status: planned, target: CNP-242}
-  - {id: c-tp-api-registry, from: tp-api, to: pa-registry, port: https, protocol: HTTPS, verb: "apps, dependsOn", kind: flow, status: planned, target: CNP-242}
-  - {id: c-tp-api-kapi, from: tp-api, to: kube-apiserver, port: https, protocol: HTTPS, verb: "health, offhours state", kind: flow, status: planned, target: CNP-242}
-  - {id: c-tp-api-vmselect, from: tp-api, to: vm-vmselect, port: read, protocol: HTTP, verb: "flows by workload", kind: flow, status: planned, target: CNP-242}
-  - {id: c-tp-alloy-hubble, from: alloy-onprem, to: tp-hubble-metrics, port: metrics, protocol: HTTP, verb: "scrape", kind: async, status: planned, target: CNP-242}
+  - {id: x-im-argocd-user-repo, from: argocd, to: im-user-repo, port: https, protocol: HTTPS, verb: "read user repo", kind: flow, denied: true, enforced_by: [pa-appproject]}
+  - {id: c-im-import-kapi, from: im-import, to: kube-apiserver, port: https, protocol: HTTPS, verb: "Application health", kind: flow}
+  - {id: c-im-service-ghcr, from: im-service, to: ghcr, port: https, protocol: HTTPS, verb: "pull by digest", kind: flow}
+  - {id: c-im-import-smoke, from: im-import, to: im-service, protocol: HTTP, verb: "post-deploy smoke", kind: flow}
+  - {id: c-im-service-backing, from: im-service, to: im-backing, protocol: TCP, verb: "dependsOn alias", kind: flow}
+  - {id: c-im-import-vault, from: im-import, to: vault, port: http, protocol: HTTP, verb: "write role and secrets", kind: flow}
+  - {id: c-im-gh-webhook, from: github-app, to: im-import, port: http, protocol: HTTPS, verb: "push webhook, HMAC", kind: async}
+  - {id: c-im-mcp-import, from: cmp-mcp, to: im-import, protocol: in-process, verb: "import tools, same token", kind: flow}
+  # CNP-242 project Topology.
+  - {id: c-tp-canvas-api, from: tp-canvas, to: tp-api, port: http, protocol: HTTPS, verb: "GET topology", kind: flow}
+  - {id: c-tp-api-registry, from: tp-api, to: pa-registry, port: https, protocol: HTTPS, verb: "apps, dependsOn", kind: flow}
+  - {id: c-tp-api-kapi, from: tp-api, to: kube-apiserver, port: https, protocol: HTTPS, verb: "health, offhours state", kind: flow}
+  - {id: c-tp-api-vmselect, from: tp-api, to: vm-vmselect, port: read, protocol: HTTP, verb: "flows by workload", kind: flow}
+  - {id: c-tp-alloy-hubble, from: alloy-onprem, to: tp-hubble-metrics, port: metrics, protocol: HTTP, verb: "scrape", kind: async}
   - {id: c-tp-alloy-export, from: alloy-onprem, to: tp-hubble-export, protocol: pod logs, verb: "tail, then Loki", kind: async}
   - {id: c-tp-api-relay, from: tp-api, to: tp-hubble-relay, port: grpc, protocol: gRPC, verb: "live flows", kind: flow, status: planned, target: later}
-  # CNP-158 import (planned): epitweet runtime.
+  # CNP-158 import: epitweet runtime.
   - {id: c-et-gw-front, from: ar-gateway, to: et-frontend, port: http, protocol: HTTP, verb: "route frontend-epitweet", kind: flow}
   - {id: c-et-front-timeline, from: et-frontend, to: et-timeline, port: http, protocol: HTTP, verb: "/api/timeline", kind: flow}
   - {id: c-et-front-post, from: et-frontend, to: et-post, port: http, protocol: HTTP, verb: "/api/posts", kind: flow}
@@ -1275,6 +1300,31 @@ connections:
   - {id: c-et-timeline-mongo, from: et-timeline, to: et-mongodb, port: mongo, protocol: MongoDB, verb: epitweet_timelines, kind: flow}
   - {id: c-et-social-graph-neo4j, from: et-social-graph, to: et-neo4j, port: bolt, protocol: Bolt, verb: Cypher, kind: flow}
   - {id: c-et-search-es, from: et-search, to: et-elasticsearch, port: http, protocol: HTTP, verb: index and query, kind: flow}
+  # CNP-246 import operations (2026-11-14).
+  - {id: c-rn-persistent-actions, from: rn-persistent, to: rn-gh-actions, port: https, protocol: HTTPS, verb: "long-poll CI jobs", kind: tunnel}
+  - {id: c-rn-persistent-mirror, from: rn-persistent, to: rn-mirror, port: registry, protocol: HTTP, verb: "docker pull", kind: flow}
+  - {id: c-rn-mirror-gcr, from: rn-mirror, to: rn-gcr-mirror, port: https, protocol: HTTPS, verb: "pull on miss", kind: flow}
+  - {id: c-rn-supervisor-actions, from: rn-supervisor, to: rn-gh-actions, port: https, protocol: HTTPS, verb: "generate-jitconfig", kind: auth}
+  - {id: c-rn-ephemeral-actions, from: rn-ephemeral, to: rn-gh-actions, port: https, protocol: HTTPS, verb: "take one job", kind: tunnel}
+  - {id: c-rn-ephemeral-buildkit, from: rn-ephemeral, to: rn-buildkit, port: buildkit, protocol: TCP, verb: "buildx remote", kind: flow}
+  - {id: c-rn-buildkit-gcr, from: rn-buildkit, to: rn-gcr-mirror, port: https, protocol: HTTPS, verb: "docker.io base images", kind: flow}
+  - {id: c-rn-ephemeral-ghcr, from: rn-ephemeral, to: ghcr, port: https, protocol: HTTPS, verb: "push by digest", kind: flow}
+  - {id: c-rn-ephemeral-cmp, from: rn-ephemeral, to: cf-edge, port: https, protocol: HTTPS, verb: "worker API · GitHub JWT", kind: flow}
+  - {id: x-rn-ephemeral-lab, from: rn-ephemeral, to: rn-lab, protocol: any, verb: "reach the lab", kind: flow, denied: true, enforced_by: [rn-egress-fw]}
+  - {id: c-rn-dev-ci-actions, from: rn-dev-ci, to: rn-gh-actions, port: https, protocol: HTTPS, verb: "long-poll CI jobs", kind: tunnel}
+  - {id: c-rn-dev-ci-cache, from: rn-dev-ci, to: rn-dev-cache, port: registry, protocol: HTTP, verb: "docker pull", kind: flow}
+  - {id: c-rn-dev-import-actions, from: rn-dev-import, to: rn-gh-actions, port: https, protocol: HTTPS, verb: "take one job", kind: tunnel}
+  - {id: c-rn-dev-import-buildkit, from: rn-dev-import, to: rn-dev-buildkit, port: buildkit, protocol: TCP, verb: "buildx remote", kind: flow}
+  - {id: c-rn-dev-buildkit-cache, from: rn-dev-buildkit, to: rn-dev-cache, port: registry, protocol: HTTP, verb: "base images", kind: flow}
+  - {id: c-rn-dev-cache-gcr, from: rn-dev-cache, to: rn-gcr-mirror, port: https, protocol: HTTPS, verb: "pull on miss", kind: flow}
+  - {id: c-ic-import-actions, from: im-import, to: rn-gh-actions, port: https, protocol: HTTPS, verb: "dispatch · run status", kind: flow}
+  - {id: c-ic-runner-oidc, from: rn-ephemeral, to: ic-gh-oidc, port: https, protocol: HTTPS, verb: "ID token, aud cmp-import", kind: auth}
+  - {id: c-ic-envoy-import, from: envoy-shared-gateway, to: im-import, port: http, protocol: HTTP, verb: "route /api/import/worker", kind: flow}
+  - {id: c-ic-envoy-jwks, from: envoy-shared-gateway, to: ic-gh-oidc, port: https, protocol: HTTPS, verb: "fetch JWKS", kind: async}
+  - {id: c-ic-import-jwks, from: im-import, to: ic-gh-oidc, port: https, protocol: HTTPS, verb: "fetch JWKS, 1 h cache", kind: async}
+  - {id: c-ic-import-vault-role, from: im-import, to: vault-auth, protocol: HTTP, verb: "write <p>-<app>-role", kind: flow}
+  - {id: c-ic-import-vault-kv, from: im-import, to: pa-vault-mount, protocol: HTTP, verb: "write <app>/imports", kind: flow}
+
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
@@ -1369,12 +1419,15 @@ references:
   - {id: r-ar-back-secret, from: ar-backend, to: ar-secret, kind: envFrom}
 
   # CNP-158 repo import (planned).
-  - {id: r-im-wizard-frontend, from: im-wizard, to: cmp-frontend, kind: "page of", status: planned, target: CNP-241}
-  - {id: r-im-import-backend, from: im-import, to: cmp-backend, kind: "module of", status: planned, target: CNP-241}
+  - {id: r-im-wizard-frontend, from: im-wizard, to: cmp-frontend, kind: "page of"}
+  - {id: r-im-import-backend, from: im-import, to: cmp-backend, kind: "module of"}
   - {id: r-im-prepare-build, from: im-build-prepare, to: im-build-build, kind: "source artifact"}
   - {id: r-im-build-publish, from: im-build-build, to: im-build-publish, kind: "image artifacts"}
-  - {id: r-im-front-aliases, from: et-frontend, to: et-aliases, kind: "resolves via", status: planned, target: CNP-240}
+  - {id: r-im-front-aliases, from: et-frontend, to: et-aliases, kind: "resolves via"}
   - {id: r-tp-relay-metrics, from: tp-hubble-relay, to: tp-hubble-metrics, kind: "same agents"}
+  - {id: r-ic-route-gateway, from: ic-worker-route, to: envoy-shared-gateway, kind: parentRef}
+  - {id: r-ic-jwt-route, from: ic-worker-jwt, to: ic-worker-route, kind: targetRef}
+
 annotations:
   # CNP-168 G1
   - {id: GB1, severity: medium, title: "Backup credentials outside Vault", targets: [bk-secret]}

@@ -4,7 +4,7 @@ type: sequence
 title: "CNP · Repo import · S5 Rebuild on push"
 subtitle: "How does a push to the user's repo reach the cluster, and what catches up after the night's sleep?"
 meta:
-  - "Scope: S5 of the import design, planned (CNP-244) · the build and deploy steps are those of import-apply · design spec v2 (2026-11-13)"
+  - "Scope: S5 of the import design, in prod since 2026-11-14 (CNP-244) · the build and deploy steps are those of import-apply · design spec v2 (2026-11-13)"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
 participants: [github-app, im-import, im-build-prepare, pa-registry, argocd]
@@ -14,7 +14,7 @@ steps:
   - {note: im-import, text: "HMAC check · tracked repo and branch? new SHA: new import_build"}
   - {reply: hook, text: "202"}
   - {id: d1, from: im-import, to: im-build-prepare, over: c-im-import-dispatch, text: "workflow_dispatch {ids, SHA}"}
-  - {note: im-build-prepare, text: "prepare, build, publish, callback: as in import-apply"}
+  - {note: im-build-prepare, text: "claim, build, publish, callback: as in import-apply"}
   - {id: c1, from: im-import, to: pa-registry, over: c-im-import-registry, text: "commit the new digests"}
   - {id: p1, from: argocd, to: pa-registry, over: c-pa-argocd-registry, text: "poll, then sync"}
   - {note: im-import, text: "the Rebuild button: same dispatch"}

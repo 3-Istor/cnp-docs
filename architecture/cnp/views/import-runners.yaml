@@ -1,0 +1,129 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Repo import · Where jobs run"
+subtitle: "Where do import builds and private-repo CI run, and what can an import job reach?"
+meta:
+  - "Scope: GitHub Actions runners of org 3-Istor as of 2026-11-14 · the import workflow in extern-project-analyzer, the CI of private repos"
+  - "Sources: Cloud terraform/openstack/projects/epimac (runner.tf, cnp-import-runner/) · cnp-dev-runners runners, README · extern-project-analyzer .github/workflows/import.yml · K3s arcl-cmp/cmp-values.yaml"
+  - "Out of scope: the CMP side of the callback (view import-callback) · GitHub-hosted runners, still used by public repos · the GitLab runner on the same VM"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - rn-z-epimac
+  - rn-g-ci
+  - rn-persistent
+  - rn-mirror
+  - rn-g-import
+  - rn-supervisor
+  - rn-egress-fw
+  - rn-ephemeral
+  - rn-buildkit
+  - rn-lab
+  - rn-z-devpc
+  - rn-dev-ci
+  - rn-dev-import
+  - rn-dev-buildkit
+  - rn-dev-cache
+  - z-internet
+  - rn-gcr-mirror
+  - z-cloudflare
+  - cf-edge
+  - z-github
+  - rn-gh-actions
+  - ghcr
+
+steps:
+  - c-rn-supervisor-actions
+  - c-rn-ephemeral-actions
+  - c-rn-ephemeral-buildkit
+  - c-rn-buildkit-gcr
+  - c-rn-ephemeral-ghcr
+  - c-rn-ephemeral-cmp
+background:
+  - c-rn-persistent-actions
+  - c-rn-persistent-mirror
+  - c-rn-mirror-gcr
+  - c-rn-dev-ci-actions
+  - c-rn-dev-ci-cache
+  - c-rn-dev-import-actions
+  - c-rn-dev-import-buildkit
+  - c-rn-dev-buildkit-cache
+  - c-rn-dev-cache-gcr
+
+labels:
+  c-rn-supervisor-actions: ""
+  c-rn-ephemeral-actions: ""
+  c-rn-ephemeral-ghcr: ""
+  c-rn-persistent-actions: ""
+  c-rn-dev-ci-actions: ""
+  c-rn-dev-import-actions: ""
+  c-rn-mirror-gcr: ""
+  c-rn-buildkit-gcr: ""
+  c-rn-dev-cache-gcr: ""
+  c-rn-ephemeral-buildkit: ""
+  c-rn-dev-import-buildkit: ""
+  c-rn-persistent-mirror: ""
+  c-rn-dev-buildkit-cache: ""
+  c-rn-dev-ci-cache: ""
+
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · one import job on the VM"
+    color: emerald
+    lines:
+      - "[1] cnp-import-runner signs a JWT with the key of GitHub App cnp-import-runners-3istor (self-hosted runners: write only) and asks for a JIT runner config."
+      - "[2] A new runner container takes exactly one job of the import workflow, on a /24 network of its own."
+      - "[3] It builds through its own rootless BuildKit (CNP_IMPORT_BUILDKIT_ENDPOINT), [4] which pulls docker.io base images from mirror.gcr.io."
+      - "[5] Job publish pushes ghcr.io/3-istor/imports/<p>/<app> by digest, [6] then calls the CMP worker API with a GitHub OIDC JWT (view import-callback)."
+      - "The runner, its BuildKit and the network are deleted when the job ends. The firewall drops any packet from 10.250.0.0/16 to private ranges, the metadata service and the host."
+  - id: card-bg
+    title: "Background · CI and test periods"
+    color: violet
+    lines:
+      - "[A] epimac-github-runner, registered on the org, runs the CI of every private repo: GitHub Free gives private repos no hosted minutes left. [B] [C] Its Docker pulls Docker Hub images through a local cache of mirror.gcr.io."
+      - "[D] to [I] cnp-dev-runners: an org owner runs ./runners up on a PC with Docker, 6 CI and 2 import runners by default, each for one job, until Ctrl-C."
+      - "Private repos pick their runner with the repo variable CNP_CI_RUNS_ON: org variables do not reach private repos on the Free plan. Templates default to self-hosted, Linux, X64."
+  - id: card-risk
+    title: "What isolates an import job"
+    color: rose
+    lines:
+      - "**On the VM:** one job per runner, its own BuildKit and network, egress firewall, no Docker socket. The workflow asks for label cnp-import-ephemeral, which the persistent runner lacks."
+      - "**On a dev PC:** one job per runner, but a shared privileged BuildKit and no egress filter. For test periods, on code the team trusts."
+  - id: card-gaps
+    title: "Gaps between docs and code"
+    color: orange
+    lines:
+      - "!!G3!! **Transport.** TLS ends at Cloudflare. In-cluster hops are plain HTTP (view import-callback)."
+
+hidden_annotations:
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"

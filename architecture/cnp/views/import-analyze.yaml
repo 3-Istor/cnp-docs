@@ -4,7 +4,7 @@ type: sequence
 title: "CNP · Repo import · S3 Analysis and draft"
 subtitle: "What happens between picking a repo and seeing the draft on the canvas, and what runs the user's code? Nothing."
 meta:
-  - "Scope: S3 of the import design, planned (CNP-237 analyzer, CNP-241 UI) · design spec v2 (2026-11-13)"
+  - "Scope: S3 of the import design, in prod since 2026-11-14 (CNP-237 analyzer, CNP-241 UI) · design spec v2 (2026-11-13)"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
 participants: [user, im-wizard, im-import, github-app, im-analyzer, im-user-repo]
