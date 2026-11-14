@@ -1,11 +1,11 @@
 <mxfile host="archgen">
   <diagram id="import-analyze-light" name="CNP · Repo import · S3 Analysis and draft (light)">
-    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="2248" pageHeight="1020" background="#f8fafc" math="0" shadow="0">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="2248" pageHeight="1068" background="#f8fafc" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMjQ4IiBoZWlnaHQ9IjEwMjAiPjxkZWZzPjxwYXR0ZXJuIGlkPSJnIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlMmU4ZjAiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmYWZjIi8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
-          <mxGeometry x="0" y="0" width="2248" height="1020" as="geometry" />
+        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMjQ4IiBoZWlnaHQ9IjEwNjgiPjxkZWZzPjxwYXR0ZXJuIGlkPSJnIiB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPjxwYXRoIGQ9Ik0gNDAgMCBMIDAgMCAwIDQwIiBmaWxsPSJub25lIiBzdHJva2U9IiNlMmU4ZjAiIHN0cm9rZS13aWR0aD0iMC41Ii8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmYWZjIi8+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNnKSIvPjwvc3ZnPg==;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="2248" height="1068" as="geometry" />
         </mxCell>
         <mxCell id="header-dot" value="" style="ellipse;fillColor=#059669;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="40" y="44" width="12" height="12" as="geometry" />
@@ -13,43 +13,43 @@
         <mxCell id="header-title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;CNP · Repo import · S3 Analysis and draft&lt;/b&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=24;fontColor=#0f172a;" vertex="1" parent="1">
           <mxGeometry x="64" y="30" width="1848" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:13px&quot;&gt;What happens between picking a repo and seeing the draft on the canvas, and what runs the user&amp;#39;s code? Nothing.&lt;/font&gt;&lt;br&gt;Scope: S3 of the import design, in prod since 2026-11-14 (CNP-237 analyzer, CNP-241 UI) · design spec v2 (2026-11-13)&lt;br&gt;v0.1 · source: cnp-docs/architecture/cnp&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#475569;" vertex="1" parent="1">
+        <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:13px&quot;&gt;What happens between picking a repo and seeing the draft on the canvas, and what runs the user&amp;#39;s code? Nothing.&lt;/font&gt;&lt;br&gt;Scope: S3 of the import design, in prod since 2026-11-14 (CNP-237 analyzer, CNP-241 UI) · the analyzer runs in job claim of the build workflow, not in the CMP&lt;br&gt;v0.1 · source: cnp-docs/architecture/cnp&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#475569;" vertex="1" parent="1">
           <mxGeometry x="64" y="74" width="1848" height="80" as="geometry" />
         </mxCell>
         <mxCell id="life-user" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="130" y="256" as="sourcePoint" />
-            <mxPoint x="130" y="980" as="targetPoint" />
+            <mxPoint x="130" y="1028" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="life-im-wizard" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="634" y="256" as="sourcePoint" />
-            <mxPoint x="634" y="980" as="targetPoint" />
+            <mxPoint x="634" y="1028" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="life-im-import" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="909" y="256" as="sourcePoint" />
-            <mxPoint x="909" y="980" as="targetPoint" />
+            <mxPoint x="909" y="1028" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="life-github-app" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1443" y="256" as="sourcePoint" />
-            <mxPoint x="1443" y="980" as="targetPoint" />
+            <mxPoint x="1443" y="1028" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="life-im-analyzer" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1763" y="256" as="sourcePoint" />
-            <mxPoint x="1763" y="980" as="targetPoint" />
+            <mxPoint x="1763" y="1028" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="life-im-user-repo" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="2078" y="256" as="sourcePoint" />
-            <mxPoint x="2078" y="980" as="targetPoint" />
+            <mxPoint x="2078" y="1028" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="msg-pick" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;1&lt;/span&gt; pick repo and branch&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
@@ -59,7 +59,7 @@
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-req" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;2&lt;/span&gt; POST /api/projects/{p}/import/analyze {repo, branch} · &lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;⚠ GI2&lt;/font&gt;&lt;/b&gt;&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+        <mxCell id="msg-req" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;2&lt;/span&gt; POST /api/projects/{p}/imports {repo, branch} · &lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;⚠ GI2&lt;/font&gt;&lt;/b&gt;&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="130" y="364" as="sourcePoint" />
             <mxPoint x="909" y="364" as="targetPoint" />
@@ -80,45 +80,45 @@
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-an" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;5&lt;/span&gt; analyze(repo, SHA)&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+        <mxCell id="msg-an" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;5&lt;/span&gt; analyze run: workflow_dispatch {run_id, attempt_id}&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="909" y="556" as="sourcePoint" />
             <mxPoint x="1763" y="556" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-tar" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;6&lt;/span&gt; GET tarball @SHA · size cap&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+        <mxCell id="msg-reply-req-6" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;6&lt;/span&gt; 202 · run id: the wizard follows the run&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1763" y="604" as="sourcePoint" />
-            <mxPoint x="2078" y="604" as="targetPoint" />
+            <mxPoint x="909" y="604" as="sourcePoint" />
+            <mxPoint x="130" y="604" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-reply-tar-7" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;7&lt;/span&gt; tar.gz&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+        <mxCell id="msg-tar" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;7&lt;/span&gt; GET tarball @SHA · size cap&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="2078" y="652" as="sourcePoint" />
-            <mxPoint x="1763" y="652" as="targetPoint" />
+            <mxPoint x="1763" y="700" as="sourcePoint" />
+            <mxPoint x="2078" y="700" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-reply-an-8" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;8&lt;/span&gt; ImportPlan: services, backing, links, build, probes, capacity, confidence, unsupported&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+        <mxCell id="msg-reply-tar-8" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;8&lt;/span&gt; tar.gz&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="1763" y="796" as="sourcePoint" />
-            <mxPoint x="909" y="796" as="targetPoint" />
+            <mxPoint x="2078" y="748" as="sourcePoint" />
+            <mxPoint x="1763" y="748" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-reply-req-9" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;9&lt;/span&gt; 201 · draft&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+        <mxCell id="msg-reply-an-9" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;9&lt;/span&gt; plan callback POST /api/import/worker/…/plan: services, backing, links, build, probes, capacity, confidence, unsupported&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="909" y="892" as="sourcePoint" />
-            <mxPoint x="130" y="892" as="targetPoint" />
+            <mxPoint x="1763" y="892" as="sourcePoint" />
+            <mxPoint x="909" y="892" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
         <mxCell id="msg-show" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;10&lt;/span&gt; draft canvas: staged nodes and edges, capacity gauge, unsupported panel&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="130" y="940" as="sourcePoint" />
-            <mxPoint x="634" y="940" as="targetPoint" />
+            <mxPoint x="130" y="988" as="sourcePoint" />
+            <mxPoint x="634" y="988" as="targetPoint" />
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
@@ -161,14 +161,17 @@
         <mxCell id="note-1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;admin or owner of p · one source per repo per project&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="734" y="398" width="350" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="note-2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;no hooks, LFS, submodules, symlinks out · executes nothing&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1573" y="686" width="380" height="28" as="geometry" />
+        <mxCell id="note-2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;job claim on an ephemeral runner · claims the run with its GitHub OIDC JWT, gets a read token for this repo&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1426" y="638" width="674" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="note-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;compose with ${} interpolation, Dockerfiles, poms, workspaces, nginx proxy_pass, env URLs&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1480" y="734" width="566" height="28" as="geometry" />
+        <mxCell id="note-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;no hooks, LFS, submodules, symlinks out · executes nothing&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1573" y="782" width="380" height="28" as="geometry" />
         </mxCell>
-        <mxCell id="note-4" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;draft in import_sources, import_services&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="773" y="830" width="272" height="28" as="geometry" />
+        <mxCell id="note-4" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;compose with ${} interpolation, Dockerfiles, poms, workspaces, nginx proxy_pass, env URLs&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1480" y="830" width="566" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-5" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;draft in import_sources, import_services&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="773" y="926" width="272" height="28" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

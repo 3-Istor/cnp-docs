@@ -60,7 +60,7 @@
             <mxPoint x="0" y="-12" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="msg-d1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;3&lt;/span&gt; workflow_dispatch {ids, SHA}&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+        <mxCell id="msg-d1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;3&lt;/span&gt; workflow_dispatch {run_id, attempt_id}&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="511" y="460" as="sourcePoint" />
             <mxPoint x="836" y="460" as="targetPoint" />

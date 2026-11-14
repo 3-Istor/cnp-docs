@@ -16,9 +16,9 @@ steps:
   - {id: f1, from: envoy-shared-gateway, to: cmp-mcp, over: c-envoy-cmp-mcp, text: "POST /mcp"}
   - {note: cmp-mcp, text: "stake policy: analyze is a read, allowed"}
   - {id: a1, from: cmp-mcp, to: im-import, over: c-im-mcp-import, text: "analyze with the user's rights"}
-  - {id: a2, from: im-import, to: im-analyzer, over: c-im-import-analyzer, text: "analyze(repo, SHA)"}
-  - {reply: a2, text: "ImportPlan"}
-  - {reply: a1, text: "draft id, plan summary"}
+  - {id: a2, from: im-import, to: im-analyzer, over: c-im-import-analyzer, text: "analyze run (workflow, job claim)"}
+  - {reply: a1, text: "run_id · the agent follows it with get_import"}
+  - {reply: a2, text: "plan callback, minutes later"}
   - {reply: f1}
   - {reply: c1, text: "7 services, 4 backing, 1 unsupported"}
   - {id: c2, from: assistant-remote, to: cf-edge, over: c-assistant-edge, text: "tools/call import_repo {draft}"}

@@ -13,7 +13,7 @@ steps:
   - {id: hook, from: github-app, to: im-import, over: c-im-gh-webhook, text: "push event · X-Hub-Signature-256"}
   - {note: im-import, text: "HMAC check · tracked repo and branch? new SHA: new import_build"}
   - {reply: hook, text: "202"}
-  - {id: d1, from: im-import, to: im-build-prepare, over: c-im-import-dispatch, text: "workflow_dispatch {ids, SHA}"}
+  - {id: d1, from: im-import, to: im-build-prepare, over: c-im-import-dispatch, text: "workflow_dispatch {run_id, attempt_id}"}
   - {note: im-build-prepare, text: "claim, build, publish, callback: as in import-apply"}
   - {id: c1, from: im-import, to: pa-registry, over: c-im-import-registry, text: "commit the new digests"}
   - {id: p1, from: argocd, to: pa-registry, over: c-pa-argocd-registry, text: "poll, then sync"}

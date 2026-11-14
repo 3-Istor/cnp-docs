@@ -2,7 +2,7 @@
 
 Le travail est découpé en dix sous-tâches de
 [CNP-158](https://3istors.atlassian.net/browse/CNP-158). L'ordre fait tourner epitweet de bout en
-bout le plus tôt possible, puis industrialise l'import. Au 14/11, les étapes 1 à 8 sont en prod
+bout le plus tôt possible, puis industrialise l'import. Au 14/11, les étapes 1 à 8 sont réalisées
 et epitweet a été importé et déployé on-prem ; l'étape 9 est en cours (CNP-245, CNP-246). Les
 suites de la recette sont CNP-269 à CNP-272, voir [Exploitation](09-exploitation.md#suites-connues).
 

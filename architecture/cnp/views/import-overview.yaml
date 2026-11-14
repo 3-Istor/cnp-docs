@@ -100,10 +100,10 @@ cards:
     color: emerald
     lines:
       - "[1] An admin or owner applies the draft; the CMP asks for a passkey step-up first."
-      - "[2] The import module writes the import rows and dispatches the build workflow with ids and the SHA only."
+      - "[2] The import module writes the import rows and dispatches the build workflow with run_id and attempt_id only."
       - "[3] Job claim trades its GitHub OIDC JWT with the CMP, [4] which mints a CNP-Portal token down-scoped to contents:read and the one repo. The key never leaves the CMP."
-      - "[5] Job claim downloads the tarball at that SHA, runs gitleaks and trivy fs. No user code runs with a secret."
-      - "Job build has no secret and no id-token: buildx, Trivy image, Syft SBOM."
+      - "[5] Job claim downloads the tarball at that SHA and writes the build recipes. No user code runs with a secret."
+      - "Job build has no secret and no id-token: buildx, Trivy image (blocks on a fixable critical), Syft SBOM."
       - "[6] Job publish pushes ghcr.io/3-istor/imports/<p>/<app> by digest, [7] then calls the CMP back with its GitHub OIDC JWT."
       - "[8] One Git Data commit writes values, digests and dependsOn to the registry, as CNP-Portal. An app enters spec.apps with its first digest."
       - "[9] The ApplicationSet picks the record up and creates the Applications, [10] which render infra-templates with $values from cnp-projects, [11] and apply the workloads."
@@ -113,7 +113,7 @@ cards:
     color: violet
     lines:
       - "[A] The user installs CNP-Portal on chosen repos; the CMP proves it with the OAuth user token and GET /user/installations, over the same connection as [4] (S1)."
-      - "[B] Analysis (S3): [C] the analyzer downloads a size-capped tarball at the SHA with a down-scoped token; it parses compose, Dockerfiles, poms and nginx, and executes nothing."
+      - "[B] Analysis (S3), an analyze run of the build workflow: [C] the analyzer downloads a size-capped tarball at the SHA with a down-scoped token; it parses compose, Dockerfiles, poms and nginx, and executes nothing."
       - "[D] GitHub push webhook from CNP-Portal (HMAC) starts a rebuild; at wake-up the CMP compares each tracked branch HEAD (S5)."
       - "[E] After the build, the CMP writes each app's generated secrets to Vault (mount project-<p>, path <app>/imports) and its role <project>-<app>-role. [F] The CMP already reads VictoriaMetrics; the Topology tab adds observed flows (view topology-data)."
       - "[G] The wizard and the draft canvas. [H] An imported service reaches its backing app through a dependsOn alias."
@@ -132,7 +132,7 @@ cards:
       - "!!GI1!! **CNP-Portal on user accounts.** Accepted on 2026-11-13. Since CMP#212 the CMP mints down-scoped tokens for user installations; the installation itself keeps every permission."
       - "!!GI2!! **Step-up is off.** STEP_UP_ENABLED is false in prod (K3s cmp-values): Apply runs on a plain session."
       - "!!GI4!! **AppProject trusts every repoURL.** sourceRepos lists each spec.apps[].repoURL: an imported app must carry source, not repoURL."
-      - "**Registry writes.** Today one Contents API PUT per change; the design moves to one Git Data API commit per apply or callback."
+      - "**Analyzer placement.** Drawn in the CMP for readability: it runs in job claim of the build workflow, on an ephemeral runner (view import-runners)."
 
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"

@@ -89,8 +89,9 @@ cards:
     title: "What isolates an import job"
     color: rose
     lines:
-      - "**On the VM:** one job per runner, its own BuildKit and network, egress firewall, no Docker socket. The workflow asks for label cnp-import-ephemeral, which the persistent runner lacks."
-      - "**On a dev PC:** one job per runner, but a shared privileged BuildKit and no egress filter. For test periods, on code the team trusts."
+      - "**On the VM:** one job per runner, its own BuildKit and network, egress firewall, no Docker socket. The repo variable CNP_IMPORT_RUNS_ON asks for label cnp-import-ephemeral, which the persistent runner lacks: the CMP cannot tell them apart."
+      - "**On a dev PC:** one job per runner, but a privileged dind per slot, a shared privileged BuildKit and no egress filter. For test periods, on code the team trusts."
+      - "!!Open risk!! The persistent runner runs tenant app repos with sudo and the host Docker, which also runs the import runners and holds the App key."
   - id: card-gaps
     title: "Gaps between docs and code"
     color: orange

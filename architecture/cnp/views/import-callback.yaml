@@ -42,8 +42,8 @@ steps:
   - e-oidc-platform-tunnel
   - e-oidc-platform-envoy
   - c-ic-envoy-import
-  - c-ic-import-vault-role
   - c-ic-import-vault-kv
+  - c-ic-import-vault-role
   - c-im-import-registry
 background:
   - c-ic-envoy-jwks
@@ -79,7 +79,7 @@ cards:
       - "[3] The job asks GitHub for an ID token with audience cmp-import, [4] and calls https://cmp.3istor.com/api/import/worker/* with it, User-Agent cnp-import-worker/1: Cloudflare refuses urllib's default one (error 1010)."
       - "[5] Relayed through the platform tunnel, [6] then Envoy matches HTTPRoute cmp-api-import-worker, whose SecurityPolicy checks the GitHub signature and the audience."
       - "[7] The CMP checks the claims again: repository and owner ids, workflow ref on main, job_workflow_sha in IMPORT_WORKFLOW_SHAS, workflow_dispatch, run id and attempt, runner_environment self-hosted."
-      - "[8] For each app with a secret, the CMP writes the Kubernetes auth role <project>-<app>-role (policy project-<p>-read-policy, mount kubernetes on-prem, kubernetes-<cloud> otherwise), [9] the secrets under project-<p>/<app>/imports, [10] then one registry commit with the digests."
+      - "[8] The CMP writes the project pull secret once (system/registry) and each app's secrets under project-<p>/<app>/imports, [9] then the Kubernetes auth role <project>-<app>-role (policy project-<p>-read-policy, mount kubernetes on-prem, kubernetes-<cloud> otherwise), [10] then one registry commit with the digests."
   - id: card-bg
     title: "Background"
     color: violet

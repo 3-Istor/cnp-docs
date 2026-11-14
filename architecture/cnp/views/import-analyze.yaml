@@ -4,25 +4,26 @@ type: sequence
 title: "CNP · Repo import · S3 Analysis and draft"
 subtitle: "What happens between picking a repo and seeing the draft on the canvas, and what runs the user's code? Nothing."
 meta:
-  - "Scope: S3 of the import design, in prod since 2026-11-14 (CNP-237 analyzer, CNP-241 UI) · design spec v2 (2026-11-13)"
+  - "Scope: S3 of the import design, in prod since 2026-11-14 (CNP-237 analyzer, CNP-241 UI) · the analyzer runs in job claim of the build workflow, not in the CMP"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
 participants: [user, im-wizard, im-import, github-app, im-analyzer, im-user-repo]
 
 steps:
   - {id: pick, from: user, to: im-wizard, over: c-im-user-wizard, text: "pick repo and branch"}
-  - {id: req, from: user, to: im-import, over: c-im-user-import, text: "POST /api/projects/{p}/import/analyze {repo, branch}"}
+  - {id: req, from: user, to: im-import, over: c-im-user-import, text: "POST /api/projects/{p}/imports {repo, branch}"}
   - {note: im-import, text: "admin or owner of p · one source per repo per project"}
   - {id: head, from: im-import, to: github-app, over: c-im-import-gh-api, text: "installation token: contents:read, metadata:read, this repo · GET branch HEAD"}
   - {reply: head, text: "SHA"}
-  - {id: an, from: im-import, to: im-analyzer, over: c-im-import-analyzer, text: "analyze(repo, SHA)"}
+  - {id: an, from: im-import, to: im-analyzer, over: c-im-import-analyzer, text: "analyze run: workflow_dispatch {run_id, attempt_id}"}
+  - {reply: req, text: "202 · run id: the wizard follows the run"}
+  - {note: im-analyzer, text: "job claim on an ephemeral runner · claims the run with its GitHub OIDC JWT, gets a read token for this repo"}
   - {id: tar, from: im-analyzer, to: im-user-repo, over: c-im-analyzer-repo, text: "GET tarball @SHA · size cap"}
   - {reply: tar, text: "tar.gz"}
   - {note: im-analyzer, text: "no hooks, LFS, submodules, symlinks out · executes nothing"}
   - {note: im-analyzer, text: "compose with ${} interpolation, Dockerfiles, poms, workspaces, nginx proxy_pass, env URLs"}
-  - {reply: an, text: "ImportPlan: services, backing, links, build, probes, capacity, confidence, unsupported"}
+  - {reply: an, text: "plan callback POST /api/import/worker/…/plan: services, backing, links, build, probes, capacity, confidence, unsupported"}
   - {note: im-import, text: "draft in import_sources, import_services"}
-  - {reply: req, text: "201 · draft"}
   - {id: show, from: user, to: im-wizard, over: c-im-user-wizard, text: "draft canvas: staged nodes and edges, capacity gauge, unsupported panel"}
 hidden_annotations:
   GB1: "targets bk-secret, not drawn in this view"

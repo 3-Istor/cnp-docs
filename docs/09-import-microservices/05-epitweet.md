@@ -60,7 +60,7 @@ réglant chaque composant :
 C'est juste. Environ 4 Gio pour epitweet sont acceptés depuis le 13/11. Le 14/11, le cluster
 réservait 95 % des requests mémoire du worker pour la moitié réellement utilisée, et
 Elasticsearch ne trouvait pas de place. Un premier lot de requests a été aligné sur l'usage
-mesuré (K3s#197), la suite est CNP-272. L'aperçu d'import
+mesuré (K3s#197, K3s#198), la suite est CNP-272. L'aperçu d'import
 affiche cette jauge avant l'application, et l'offhours endort le projet la nuit. Si ça ne passe pas, tout est prêt pour un projet sur cloud public, mais rien n'est
 lancé sans l'accord de Brian.
 
@@ -81,5 +81,6 @@ Ce que ce premier import a montré, et qui reste à faire :
   déploiement à suivre les liens (CNP-269) ;
 - les échecs de déploiement remontaient sans cause ni message (CNP-270) ;
 - le premier groupe de build envoyait environ 1 Go d'images et a calé sur une coupure réseau
-  (CNP-271) ;
-- les requests du cluster bloquaient le déploiement (CNP-272).
+  (CNP-271 ; les couches partagées partent une fois par groupe depuis extern-project-analyzer#49) ;
+- les requests du cluster bloquaient le déploiement (CNP-272 ; deux lots passés, K3s#197 et
+  K3s#198).

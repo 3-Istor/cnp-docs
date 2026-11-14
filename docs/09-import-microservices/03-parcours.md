@@ -56,14 +56,16 @@ projet, et les groupes plateforme `infra`, `security-auditor` et `finops`.
    des identifiants opaques. Aucun jeton ne passe en entrée.
 3. Le job `claim` tourne sur un runner éphémère du groupe `cnp-import-ephemeral`. Il présente
    son jeton OIDC au CMP par la route dédiée aux rappels, et le CMP lui remet un jeton
-   CNP-Portal d'une heure, en lecture, limité au repo. Le job télécharge le source, puis lance gitleaks et
-   `trivy fs`, qui bloquent seulement sur les secrets et les erreurs critiques.
+   CNP-Portal d'une heure, en lecture, limité au repo. Le job télécharge le source et prépare
+   les recettes de build. Les secrets en dur du repo ont déjà été signalés sur le plan par le
+   CMP. gitleaks et `trivy fs`, prévus au design, ne tournent pas aujourd'hui.
 4. Le job `build` n'a ni secret ni identité. Il construit chaque image avec le BuildKit
-   rootless propre au job, la scanne et produit son SBOM.
+   rootless propre au job, la scanne avec Trivy, bloque sur une vulnérabilité critique qui a un
+   correctif, et produit son SBOM.
 5. Le job `publish` pousse les images par digest. Il rappelle ensuite le CMP, qui vérifie le
    jeton OIDC de GitHub : repo, workflow à une révision épinglée, run, tentative.
 6. Le CMP revérifie les droits de l'utilisateur. Il écrit les secrets générés de chaque app
-   dans Vault (`project-<projet>/<app>/imports`) et crée son rôle `<projet>-<app>-role`. Il écrit
+   dans Vault (`project-<projet>/<app>/imports`), puis crée son rôle `<projet>-<app>-role`. Il écrit
    ensuite en un seul commit les valeurs, les digests et les liens dans cnp-projects.
 7. Argo CD synchronise. Le CMP attend Synced et Healthy sur les révisions exactes, puis lance le
    test fonctionnel.

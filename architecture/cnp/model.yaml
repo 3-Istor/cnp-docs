@@ -745,7 +745,7 @@ elements:
   - {id: im-backing, kind: database, parent: im-g-project, shape: cylinder, icon: k8s-deploy, title: "<backing> app", tech: "[type backing · StatefulSet + PVC]", desc: "Mongo, Redis, Neo4j, Elasticsearch", multiplicity: "one per backing service"}
   - {id: im-chart, kind: external, parent: z-github, icon: github, title: "infra-templates", tech: "[Helm chart · HEAD]", desc: "workload block, StatefulSet mode", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: im-g-build, kind: group, parent: z-github, color: indigo, icon: github-actions, title: "BUILD WORKFLOW", sub: "repo extern-project-analyzer · ephemeral self-hosted runners"}
-  - {id: im-build-prepare, kind: backend, parent: im-g-build, icon: github-actions, title: "job claim", tech: "[id-token · repo token from the CMP]", desc: "Fetches the source, gitleaks, trivy fs"}
+  - {id: im-build-prepare, kind: backend, parent: im-g-build, icon: github-actions, title: "job claim", tech: "[id-token · repo token from the CMP]", desc: "Fetches the source, analyzes or plans"}
   - {id: im-build-build, kind: backend, parent: im-g-build, icon: github-actions, title: "job build", tech: "[no secret, no id-token]", desc: "buildx, Trivy image, Syft SBOM"}
   - {id: im-build-publish, kind: backend, parent: im-g-build, icon: github-actions, title: "job publish", tech: "[id-token · packages:write]", desc: "Pushes by digest, calls CMP back"}
   - {id: im-z-github-user, kind: region, color: slate, icon: github, title: "GITHUB · USER ACCOUNT", sub: "the user's own account or org"}
@@ -776,9 +776,9 @@ elements:
   - {id: et-ch-like, kind: bus, parent: et-g-bus, shape: pipe, icon: redis, title: "like.*", tech: "[like · unlike]", desc: "No replay"}
   - {id: et-ch-social, kind: bus, parent: et-g-bus, shape: pipe, icon: redis, title: "social.*", tech: "[follow · unfollow]", desc: "+ block: no subscriber"}
   - {id: et-g-data, kind: group, parent: z-ar-target, color: violet, icon: k8s-ns, title: "BACKING APPS", sub: "StatefulSet + PVC · ns epitweet-<name>"}
-  - {id: et-mongodb, kind: database, parent: et-g-data, shape: cylinder, icon: mongodb, title: "mongodb", tech: "[mongo:7.0 · 256Mi]", desc: "One database per service", ports: [{name: mongo, protocol: TCP, port: 27017}]}
-  - {id: et-neo4j, kind: database, parent: et-g-data, shape: cylinder, icon: neo4j, title: "neo4j", tech: "[neo4j:5 + APOC · 768Mi]", desc: "Follow and block graph", ports: [{name: bolt, protocol: TCP, port: 7687}]}
-  - {id: et-elasticsearch, kind: database, parent: et-g-data, shape: cylinder, icon: elasticsearch, title: "elasticsearch", tech: "[8.11 single node · 1Gi]", desc: "Post index", ports: [{name: http, protocol: TCP, port: 9200}]}
+  - {id: et-mongodb, kind: database, parent: et-g-data, shape: cylinder, icon: mongodb, title: "mongodb", tech: "[mongo:8.0 · 256Mi]", desc: "One database per service", ports: [{name: mongo, protocol: TCP, port: 27017}]}
+  - {id: et-neo4j, kind: database, parent: et-g-data, shape: cylinder, icon: neo4j, title: "neo4j", tech: "[neo4j:5.26 community · 768Mi]", desc: "Follow and block graph", ports: [{name: bolt, protocol: TCP, port: 7687}]}
+  - {id: et-elasticsearch, kind: database, parent: et-g-data, shape: cylinder, icon: elasticsearch, title: "elasticsearch", tech: "[8.19 single node · 1Gi]", desc: "Post index", ports: [{name: http, protocol: TCP, port: 9200}]}
   # CNP-246 import operations (2026-11-14): where CI and import jobs run, and how an import
   # job calls the CMP back. Facts: Cloud terraform/openstack/projects/epimac (runner.tf,
   # cnp-import-runner/), cnp-dev-runners, K3s k8s/config/arcl-cmp/{import-worker-route,
@@ -1245,9 +1245,9 @@ connections:
   - {id: c-im-user-import, from: user, to: im-import, port: http, protocol: HTTPS, verb: "/api/import/*", kind: flow}
   - {id: c-im-user-gh-install, from: user, to: github-app, port: https, protocol: HTTPS, verb: "install on chosen repos, OAuth consent", kind: flow}
   - {id: c-im-import-gh-api, from: im-import, to: github-app, port: https, protocol: HTTPS, verb: "down-scoped token: contents:read, 1 repo", kind: auth}
-  - {id: c-im-import-analyzer, from: im-import, to: im-analyzer, protocol: in-process, verb: "analyze(repo, SHA)", kind: flow}
+  - {id: c-im-import-analyzer, from: im-import, to: im-analyzer, protocol: workflow run, verb: "analyze(repo, SHA)", kind: flow}
   - {id: c-im-analyzer-repo, from: im-analyzer, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA, size cap", kind: flow}
-  - {id: c-im-import-dispatch, from: im-import, to: im-build-prepare, protocol: HTTPS, verb: "workflow_dispatch (ids, SHA)", kind: flow}
+  - {id: c-im-import-dispatch, from: im-import, to: im-build-prepare, protocol: HTTPS, verb: "workflow_dispatch (run_id, attempt_id)", kind: flow}
   - {id: c-im-prepare-cmp, from: im-build-prepare, to: im-import, port: http, protocol: HTTPS, verb: "repo token for OIDC JWT", kind: auth}
   - {id: c-im-prepare-repo, from: im-build-prepare, to: im-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA", kind: flow}
   - {id: c-im-publish-ghcr, from: im-build-publish, to: ghcr, port: https, protocol: HTTPS, verb: "push imports/<p>/<app>", kind: flow}
