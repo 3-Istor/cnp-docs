@@ -3419,6 +3419,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3559,9 +3587,10 @@ projet, et les groupes plateforme <code>infra</code>, <code>security-auditor</co
 <ol>
 <li>Dans le projet, « Importer un repo » : repo GitHub, branche.</li>
 <li>Le CMP résout la branche en SHA. À partir de là, tout porte sur ce SHA.</li>
-<li>L'analyseur télécharge l'archive à ce SHA avec un jeton limité à ce seul repo, en lecture.
-   Il borne la taille et le nombre de fichiers, et refuse les liens symboliques sortants. Il
-   n'exécute rien.</li>
+<li>Le CMP lance le workflow central, dont le job <code>claim</code> fait l'analyse sur un runner
+   éphémère. L'analyseur télécharge l'archive à ce SHA avec un jeton limité à ce seul repo, en
+   lecture. Il borne la taille et le nombre de fichiers, et refuse les liens symboliques
+   sortants. Il n'exécute rien.</li>
 <li>Il produit le plan d'import, affiché en brouillon sur la carte du projet :<ul>
 <li>services et bases détectés ;</li>
 <li>liens proposés ;</li>
@@ -3580,22 +3609,30 @@ projet, et les groupes plateforme <code>infra</code>, <code>security-auditor</co
 <h2 id="3-appliquer-limport">3. Appliquer l'import<a class="headerlink" href="#3-appliquer-limport" title="Permanent link">&para;</a></h2>
 <p><em>Qui : admin ou owner, avec un step-up par passkey.</em></p>
 <ol>
-<li>« Appliquer » demande une passkey récente, comme toute action sensible du portail.</li>
+<li>« Appliquer » demande une passkey récente, comme toute action sensible du portail.
+   En prod, le step-up est encore désactivé (<code>STEP_UP_ENABLED=false</code> dans les valeurs du CMP) :
+   « Appliquer » passe sur une session simple tant qu'il n'est pas activé.</li>
 <li>Le CMP enregistre l'import et son approbateur, puis lance le workflow de build central avec
    des identifiants opaques. Aucun jeton ne passe en entrée.</li>
-<li>Le job <code>prepare</code> présente son jeton OIDC au CMP, qui lui remet un jeton CNP-Portal d'une
-   heure, en lecture, limité au repo. Le job télécharge le source, puis lance gitleaks et
-   <code>trivy fs</code>, qui bloquent seulement sur les secrets et les erreurs critiques.</li>
-<li>Le job <code>build</code> n'a ni secret ni identité. Il construit chaque image, la scanne et produit son
-   SBOM.</li>
+<li>Le job <code>claim</code> tourne sur un runner éphémère du groupe <code>cnp-import-ephemeral</code>. Il présente
+   son jeton OIDC au CMP par la route dédiée aux rappels, et le CMP lui remet un jeton
+   CNP-Portal d'une heure, en lecture, limité au repo. Le job télécharge le source et prépare
+   les recettes de build. Les secrets en dur du repo ont déjà été signalés sur le plan par le
+   CMP. gitleaks et <code>trivy fs</code>, prévus au design, ne tournent pas aujourd'hui.</li>
+<li>Le job <code>build</code> n'a ni secret ni identité. Il construit chaque image avec le BuildKit
+   rootless propre au job, la scanne avec Trivy, bloque sur une vulnérabilité critique qui a un
+   correctif, et produit son SBOM.</li>
 <li>Le job <code>publish</code> pousse les images par digest. Il rappelle ensuite le CMP, qui vérifie le
    jeton OIDC de GitHub : repo, workflow à une révision épinglée, run, tentative.</li>
-<li>Le CMP revérifie les droits de l'utilisateur. Il écrit en un seul commit les valeurs, les
-   digests et les liens dans cnp-projects.</li>
+<li>Le CMP revérifie les droits de l'utilisateur. Il écrit les secrets générés de chaque app
+   dans Vault (<code>project-&lt;projet&gt;/&lt;app&gt;/imports</code>), puis crée son rôle <code>&lt;projet&gt;-&lt;app&gt;-role</code>. Il écrit
+   ensuite en un seul commit les valeurs, les digests et les liens dans cnp-projects.</li>
 <li>Argo CD synchronise. Le CMP attend Synced et Healthy sur les révisions exactes, puis lance le
    test fonctionnel.</li>
-<li>Le suivi montre chaque service. Un échec sur un service n'arrête pas les autres et dit quoi
-   faire.</li>
+<li>Le suivi montre chaque service. Un échec dit à quelle étape, sur quelles apps et pourquoi,
+   avec un extrait de log nettoyé, et propose une action : corriger dans le repo, relancer,
+   réanalyser ou contacter la plateforme. Un workflow mort est marqué en échec en quelques
+   minutes. Le détail est dans <a href="../09-exploitation/#quand-un-import-echoue">Exploitation</a>.</li>
 </ol>
 <p><img alt="Appliquer un import" src="../../01-architecture/diagrams/import-apply.light.png#only-light" />
 <img alt="Appliquer un import" src="../../01-architecture/diagrams/import-apply.dark.png#only-dark" /></p>

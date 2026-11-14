@@ -3121,10 +3121,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ou-on-en-est-13112026-au-soir" class="md-nav__link">
+  <a href="#ou-on-en-est-14112026" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Où on en est (13/11/2026 au soir)
+        Où on en est (14/11/2026)
       
     </span>
   </a>
@@ -3397,6 +3397,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3431,10 +3459,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#ou-on-en-est-13112026-au-soir" class="md-nav__link">
+  <a href="#ou-on-en-est-14112026" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Où on en est (13/11/2026 au soir)
+        Où on en est (14/11/2026)
       
     </span>
   </a>
@@ -3492,8 +3520,8 @@
 
 
 <h1 id="import-de-repos-microservices-et-topologie">Import de repos, microservices et topologie<a class="headerlink" href="#import-de-repos-microservices-et-topologie" title="Permanent link">&para;</a></h1>
-<p><strong>Statut : validé le 13/11/2026, implémentation en cours.</strong> Ticket parent
-<a href="https://3istors.atlassian.net/browse/CNP-158">CNP-158</a>, sous-tâches CNP-237 à CNP-246.</p>
+<p><strong>Statut : validé le 13/11/2026, en prod depuis le 14/11/2026.</strong> Ticket parent
+<a href="https://3istors.atlassian.net/browse/CNP-158">CNP-158</a>, sous-tâches CNP-237 à CNP-246 et CNP-268.</p>
 <p>Une équipe arrive avec son code existant : un repo GitHub, parfois un monorepo de
 microservices avec son docker-compose et ses bases. La CNP le lit à un commit figé et propose un
 plan d'import sur la carte du projet. Après validation, elle construit chaque service, lance les
@@ -3502,7 +3530,7 @@ Le repo de l'utilisateur reste la source de vérité. La carte montre aussi les 
 template ; les relier viendra en v2, le schéma du registre ne l'accepte pas encore.</p>
 <p>La démonstration est epitweet : 6 services Quarkus, un front React, MongoDB, Redis, Neo4j et
 Elasticsearch, importés tels quels.</p>
-<h2 id="ou-on-en-est-13112026-au-soir">Où on en est (13/11/2026 au soir)<a class="headerlink" href="#ou-on-en-est-13112026-au-soir" title="Permanent link">&para;</a></h2>
+<h2 id="ou-on-en-est-14112026">Où on en est (14/11/2026)<a class="headerlink" href="#ou-on-en-est-14112026" title="Permanent link">&para;</a></h2>
 <table>
 <thead>
 <tr>
@@ -3523,19 +3551,29 @@ Elasticsearch, importés tels quels.</p>
 <td>En prod</td>
 </tr>
 <tr>
+<td>Rôle et chemin Vault dérivés de l'ApplicationSet</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/infra-templates/issues/26" title="GitHub Issue: squidfunk/infra-templates #26">infra-templates#26</a></td>
+<td>En prod</td>
+</tr>
+<tr>
 <td>Analyseur v2 et workflow central</td>
-<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/extern-project-analyzer/issues/43" title="GitHub Issue: squidfunk/extern-project-analyzer #43">extern-project-analyzer#43</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/44" title="GitHub Issue: squidfunk/mkdocs-material #44">#44</a></td>
-<td>Mergé</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/extern-project-analyzer/issues/43" title="GitHub Issue: squidfunk/extern-project-analyzer #43">extern-project-analyzer#43</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/44" title="GitHub Issue: squidfunk/mkdocs-material #44">#44</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/45" title="GitHub Issue: squidfunk/mkdocs-material #45">#45</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/47" title="GitHub Issue: squidfunk/mkdocs-material #47">#47</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/49" title="GitHub Issue: squidfunk/mkdocs-material #49">#49</a></td>
+<td>En prod</td>
 </tr>
 <tr>
 <td>Backend d'import, liaison GitHub OAuth</td>
-<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/217" title="GitHub Issue: squidfunk/CMP #217">CMP#217</a></td>
-<td>En prod (v0.3.105), import désactivé</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/217" title="GitHub Issue: squidfunk/CMP #217">CMP#217</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/223" title="GitHub Issue: squidfunk/mkdocs-material #223">#223</a></td>
+<td>En prod</td>
 </tr>
 <tr>
 <td>Onglet Topologie, assistant d'import</td>
 <td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/220" title="GitHub Issue: squidfunk/CMP #220">CMP#220</a></td>
-<td>En prod (v0.3.105)</td>
+<td>En prod</td>
+</tr>
+<tr>
+<td>Outils MCP et rebuild</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/222" title="GitHub Issue: squidfunk/CMP #222">CMP#222</a></td>
+<td>En prod</td>
 </tr>
 <tr>
 <td>Métriques de flux Hubble</td>
@@ -3543,14 +3581,64 @@ Elasticsearch, importés tels quels.</p>
 <td>En prod</td>
 </tr>
 <tr>
-<td>Configuration de l'import, clé de chiffrement</td>
-<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/189" title="GitHub Issue: squidfunk/K3s #189">K3s#189</a></td>
+<td>Configuration de l'import, clé de chiffrement, secret du webhook</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/189" title="GitHub Issue: squidfunk/K3s #189">K3s#189</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/191" title="GitHub Issue: squidfunk/mkdocs-material #191">#191</a></td>
 <td>Appliqué</td>
 </tr>
 <tr>
-<td>Runners des repos privés, réglages de CNP-Portal, premier import d'epitweet</td>
+<td>Import activé, runners éphémères acceptés, commits de l'analyseur autorisés</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/192" title="GitHub Issue: squidfunk/K3s #192">K3s#192</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/193" title="GitHub Issue: squidfunk/mkdocs-material #193">#193</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/194" title="GitHub Issue: squidfunk/mkdocs-material #194">#194</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/196" title="GitHub Issue: squidfunk/mkdocs-material #196">#196</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/199" title="GitHub Issue: squidfunk/mkdocs-material #199">#199</a></td>
+<td>Appliqué</td>
+</tr>
+<tr>
+<td>Route dédiée aux rappels du workflow</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/195" title="GitHub Issue: squidfunk/K3s #195">K3s#195</a></td>
+<td>En prod</td>
+</tr>
+<tr>
+<td>Runners auto-hébergés : persistant, éphémères, renfort</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/Cloud/issues/46" title="GitHub Issue: squidfunk/Cloud #46">Cloud#46</a> à <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/49" title="GitHub Issue: squidfunk/mkdocs-material #49">#49</a>, cnp-dev-runners, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/extern-project-analyzer/issues/46" title="GitHub Issue: squidfunk/extern-project-analyzer #46">extern-project-analyzer#46</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/infra-templates/issues/28" title="GitHub Issue: squidfunk/infra-templates #28">infra-templates#28</a></td>
+<td>En prod</td>
+</tr>
+<tr>
+<td>Échecs compréhensibles et actionnables (CNP-268)</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/224" title="GitHub Issue: squidfunk/CMP #224">CMP#224</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/extern-project-analyzer/issues/48" title="GitHub Issue: squidfunk/extern-project-analyzer #48">extern-project-analyzer#48</a></td>
+<td>En prod</td>
+</tr>
+<tr>
+<td>Secrets et rôle Vault par app importée</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/225" title="GitHub Issue: squidfunk/CMP #225">CMP#225</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/226" title="GitHub Issue: squidfunk/mkdocs-material #226">#226</a></td>
+<td>En prod</td>
+</tr>
+<tr>
+<td>Neo4j démarre malgré les variables de service</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/227" title="GitHub Issue: squidfunk/CMP #227">CMP#227</a></td>
+<td>En prod</td>
+</tr>
+<tr>
+<td>Requests du cluster alignées sur l'usage, deux lots</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/197" title="GitHub Issue: squidfunk/K3s #197">K3s#197</a> <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/198" title="GitHub Issue: squidfunk/mkdocs-material #198">#198</a></td>
+<td>Appliqué</td>
+</tr>
+<tr>
+<td>Couches d'images partagées envoyées une fois par groupe</td>
+<td><a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/extern-project-analyzer/issues/49" title="GitHub Issue: squidfunk/extern-project-analyzer #49">extern-project-analyzer#49</a></td>
+<td>En prod</td>
+</tr>
+<tr>
+<td>Premier import d'epitweet, recette de bout en bout</td>
 <td></td>
+<td>Fait le 14/11, voir <a href="../05-epitweet/">Epitweet</a></td>
+</tr>
+<tr>
+<td>Ordre de déploiement, causes d'échec de déploiement, suites de l'envoi d'images et des requests</td>
+<td>CNP-269 à CNP-272</td>
 <td>À faire</td>
+</tr>
+<tr>
+<td>Runner persistant sur la VM des imports</td>
+<td></td>
+<td>Risque ouvert, voir <a href="../04-roles-et-securite/#risque-ouvert-le-runner-persistant-partage-la-vm-des-imports">Rôles et sécurité</a></td>
 </tr>
 </tbody>
 </table>
@@ -3581,7 +3669,7 @@ Elasticsearch, importés tels quels.</p>
 </tr>
 <tr>
 <td><a href="../05-epitweet/">Epitweet</a></td>
-<td>Ce que contient epitweet, ce que la CNP ajoute, budget mémoire</td>
+<td>Ce que contient epitweet, ce que la CNP ajoute, budget mémoire, recette du 14/11</td>
 </tr>
 <tr>
 <td><a href="../06-audit-travail-existant/">Audit du premier import</a></td>
@@ -3594,6 +3682,10 @@ Elasticsearch, importés tels quels.</p>
 <tr>
 <td><a href="../08-audit-securite/">Audit de sécurité</a></td>
 <td>Rapport complet, méthode du skill <code>security-audit</code> de Cloudflare</td>
+</tr>
+<tr>
+<td><a href="../09-exploitation/">Exploitation</a></td>
+<td>Runners, rappels du workflow, autoriser un commit de l'analyseur, rôles Vault, échecs, suites</td>
 </tr>
 </tbody>
 </table>

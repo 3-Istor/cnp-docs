@@ -16,6 +16,8 @@
         <link rel="prev" href="../07-plan-et-recette/">
       
       
+        <link rel="next" href="../09-exploitation/">
+      
       
         
       
@@ -3456,6 +3458,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3614,8 +3644,8 @@
 <h1 id="audit-de-securite-import-de-depots-externes-dans-cnp">Audit de sécurité : import de dépôts externes dans CNP<a class="headerlink" href="#audit-de-securite-import-de-depots-externes-dans-cnp" title="Permanent link">&para;</a></h1>
 <p>Date : 2026-11-13. Méthode : skill <code>security-audit</code> de Cloudflare, mode scoped. Les 14 constats existent aussi au format JSON du skill, validés par son script <code>validate-findings.cjs</code>.</p>
 <h2 id="decisions-posterieures-a-laudit">Décisions postérieures à l'audit<a class="headerlink" href="#decisions-posterieures-a-laudit" title="Permanent link">&para;</a></h2>
-<p>Le 13/11, après cet audit, Brian a tranché autrement sur trois points. Le corps du rapport est
-laissé tel qu'il a été écrit.</p>
+<p>Le 13/11, après cet audit, Brian a tranché autrement sur trois points, et la mise en prod du
+14/11 en a ajouté un quatrième. Le corps du rapport est laissé tel qu'il a été écrit.</p>
 <ul>
 <li><strong>Une seule app GitHub, CNP-Portal.</strong> L'audit recommandait une app CNP-Import en lecture
   seule. Les utilisateurs installent finalement CNP-Portal, dont les permissions sont réduites au
@@ -3630,6 +3660,11 @@ laissé tel qu'il a été écrit.</p>
   valeurs générées par le CMP (D3).</li>
 <li><strong>GitLab est retiré du périmètre.</strong> Le constat D2, sur le jeton GitLab transmis à la CI, ne
   s'applique plus.</li>
+<li><strong>Runners auto-hébergés éphémères (14/11).</strong> Sans minutes GitHub pour les repos privés, le
+  workflow tourne sur des runners à usage unique de la VM du lab, chacun avec son BuildKit
+  rootless et un réseau sans accès au lab ni à l'hôte. Le job <code>prepare</code> du rapport s'appelle
+  <code>claim</code>. Le risque « runners GitHub hébergés » de la section 5 se lit donc sur ces runners. Le
+  détail est dans <a href="../09-exploitation/">Exploitation</a>.</li>
 </ul>
 <h2 id="1-synthese">1. Synthèse<a class="headerlink" href="#1-synthese" title="Permanent link">&para;</a></h2>
 <p>Le design v2 corrige le défaut majeur du design de Joe : il crée une GitHub App dédiée <code>CNP-Import</code> en lecture seule au lieu d'installer <code>CNP-Portal</code> sur les comptes des utilisateurs. Il faut garder cette décision. L'audit du code montre qu'installer CNP-Portal chez les utilisateurs serait exploitable dès aujourd'hui par un admin de n'importe quel projet. <code>POST /api/deployments</code> accepte un <code>github_installation_id</code> et un <code>github_owner</code> fournis par le client, puis Terraform agit sur ce compte avec les droits complets de CNP-Portal.</p>

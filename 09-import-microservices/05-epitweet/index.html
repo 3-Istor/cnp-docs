@@ -3294,10 +3294,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ce-qui-reste-a-valider" class="md-nav__link">
+  <a href="#recette-du-1411" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ce qui reste à valider
+        Recette du 14/11
       
     </span>
   </a>
@@ -3397,6 +3397,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3464,10 +3492,10 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#ce-qui-reste-a-valider" class="md-nav__link">
+  <a href="#recette-du-1411" class="md-nav__link">
     <span class="md-ellipsis">
       
-        Ce qui reste à valider
+        Recette du 14/11
       
     </span>
   </a>
@@ -3633,11 +3661,16 @@ démonstration contient aussi <code>seed.sh</code>, <code>k8s/frontend.yaml</cod
 <td><code>node.store.allow_mmap=false</code> dans le preset</td>
 <td>Pas de réglage noyau sur les nœuds</td>
 </tr>
+<tr>
+<td>Kubernetes injecte <code>NEO4J_PORT_7687_TCP_PORT</code> et voisines pour le Service <code>neo4j</code>, que la validation stricte de Neo4j refuse</td>
+<td><code>NEO4J_server_config_strict__validation_enabled=false</code> dans le preset (<a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/227" title="GitHub Issue: squidfunk/CMP #227">CMP#227</a>)</td>
+<td>Le nom d'origine <code>neo4j</code> reste celui du Service</td>
+</tr>
 </tbody>
 </table>
 <h2 id="budget-memoire">Budget mémoire<a class="headerlink" href="#budget-memoire" title="Permanent link">&para;</a></h2>
-<p>Le cluster on-prem a environ 4 Gio de requests libres (deux nœuds, 20 Go et 8 Go, requests à
-environ 85 %). Epitweet tient en réglant chaque composant :</p>
+<p>Valeurs déployées le 14/11 (cnp-projects <code>apps/epitweet/*/values.yaml</code>). Epitweet tient en
+réglant chaque composant :</p>
 <table>
 <thead>
 <tr>
@@ -3656,9 +3689,9 @@ environ 85 %). Epitweet tient en réglant chaque composant :</p>
 </tr>
 <tr>
 <td>MongoDB</td>
-<td>384 Mio</td>
-<td>768 Mio</td>
-<td>cache WiredTiger 0,25 Go</td>
+<td>256 Mio</td>
+<td>512 Mio</td>
+<td></td>
 </tr>
 <tr>
 <td>Neo4j</td>
@@ -3675,7 +3708,7 @@ environ 85 %). Epitweet tient en réglant chaque composant :</p>
 <tr>
 <td>Redis</td>
 <td>64 Mio</td>
-<td>128 Mio</td>
+<td>256 Mio</td>
 <td></td>
 </tr>
 <tr>
@@ -3686,19 +3719,37 @@ environ 85 %). Epitweet tient en réglant chaque composant :</p>
 </tr>
 <tr>
 <td><strong>Total</strong></td>
-<td><strong>environ 3,4 Gio</strong></td>
+<td><strong>environ 3,2 Gio</strong></td>
 <td></td>
 <td></td>
 </tr>
 </tbody>
 </table>
-<p>C'est juste. Environ 4 Gio pour epitweet sont acceptés depuis le 13/11. L'aperçu d'import
+<p>C'est juste. Environ 4 Gio pour epitweet sont acceptés depuis le 13/11. Le 14/11, le cluster
+réservait 95 % des requests mémoire du worker pour la moitié réellement utilisée, et
+Elasticsearch ne trouvait pas de place. Un premier lot de requests a été aligné sur l'usage
+mesuré (<a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/197" title="GitHub Issue: squidfunk/K3s #197">K3s#197</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/198" title="GitHub Issue: squidfunk/K3s #198">K3s#198</a>), la suite est CNP-272. L'aperçu d'import
 affiche cette jauge avant l'application, et l'offhours endort le projet la nuit. Si ça ne passe pas, tout est prêt pour un projet sur cloud public, mais rien n'est
 lancé sans l'accord de Brian.</p>
-<h2 id="ce-qui-reste-a-valider">Ce qui reste à valider<a class="headerlink" href="#ce-qui-reste-a-valider" title="Permanent link">&para;</a></h2>
+<h2 id="recette-du-1411">Recette du 14/11<a class="headerlink" href="#recette-du-1411" title="Permanent link">&para;</a></h2>
+<p>Epitweet est importé dans le projet <code>epitweet</code>, on-prem, et servi sur
+<code>frontend-epitweet.3istor.com</code>. Vérifié de bout en bout depuis l'URL publique :</p>
 <ul>
-<li>La recette fonctionnelle : créer un compte, poster, suivre, liker et chercher depuis l'URL
-  publique, avec les arêtes qui apparaissent sur la carte du projet.</li>
+<li>comptes utilisateurs, stockés dans MongoDB ;</li>
+<li>abonnements, dans le graphe Neo4j ;</li>
+<li>posts et likes ;</li>
+<li>fil d'actualité, alimenté par les événements Redis ;</li>
+<li>recherche, sur Elasticsearch.</li>
+</ul>
+<p>Ce que ce premier import a montré, et qui reste à faire :</p>
+<ul>
+<li>le front nginx démarrait avant ses services et le run passait en échec : ordre de
+  déploiement à suivre les liens (CNP-269) ;</li>
+<li>les échecs de déploiement remontaient sans cause ni message (CNP-270) ;</li>
+<li>le premier groupe de build envoyait environ 1 Go d'images et a calé sur une coupure réseau
+  (CNP-271 ; les couches partagées partent une fois par groupe depuis <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/extern-project-analyzer/issues/49" title="GitHub Issue: squidfunk/extern-project-analyzer #49">extern-project-analyzer#49</a>) ;</li>
+<li>les requests du cluster bloquaient le déploiement (CNP-272 ; deux lots passés, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/197" title="GitHub Issue: squidfunk/K3s #197">K3s#197</a> et
+  <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/198" title="GitHub Issue: squidfunk/K3s #198">K3s#198</a>).</li>
 </ul>
 
 

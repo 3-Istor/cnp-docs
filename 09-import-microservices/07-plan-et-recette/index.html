@@ -3364,6 +3364,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3428,7 +3456,9 @@
 <h1 id="plan-et-recette">Plan et recette<a class="headerlink" href="#plan-et-recette" title="Permanent link">&para;</a></h1>
 <p>Le travail est découpé en dix sous-tâches de
 <a href="https://3istors.atlassian.net/browse/CNP-158">CNP-158</a>. L'ordre fait tourner epitweet de bout en
-bout le plus tôt possible, puis industrialise l'import.</p>
+bout le plus tôt possible, puis industrialise l'import. Au 14/11, les étapes 1 à 8 sont réalisées
+et epitweet a été importé et déployé on-prem ; l'étape 9 est en cours (CNP-245, CNP-246). Les
+suites de la recette sont CNP-269 à CNP-272, voir <a href="../09-exploitation/#suites-connues">Exploitation</a>.</p>
 <table>
 <thead>
 <tr>
@@ -3500,7 +3530,7 @@ bout le plus tôt possible, puis industrialise l'import.</p>
 <p><strong>Epitweet</strong></p>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Le plan liste 7 apps, 4 bases et les liens du front vers les 6 services, et signale api-gateway comme non supporté.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Créer un compte, poster, suivre, liker et chercher fonctionnent depuis l'URL publique.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled checked/><span class="task-list-indicator"></span></label> Créer un compte, poster, suivre, liker et chercher fonctionnent depuis l'URL publique (14/11, <code>frontend-epitweet.3istor.com</code>).</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Les arêtes observées apparaissent sur la carte en moins de 2 minutes.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Les mots de passe du repo ne sont pas utilisés : les secrets viennent de Vault.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> La suppression du projet ne laisse ni namespace, ni volume, ni image.</li>

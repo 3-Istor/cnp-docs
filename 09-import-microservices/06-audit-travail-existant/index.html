@@ -3375,6 +3375,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3622,7 +3650,7 @@ modèle lui-même bloque :</p>
 </table>
 <p>Ce qu'on abandonne : la PR obligatoire et la reprise manuelle, l'égalité stricte des values, les
 credentials Argo par repo, les introspections de la plateforme à chaque requête et les scanners à
-regex comme barrière bloquante, remplacés par gitleaks et <code>trivy fs</code>.</p>
+regex comme barrière bloquante, remplacés au design par gitleaks et <code>trivy fs</code>. En prod, seul le scan Trivy des images bloque (voir <a href="../03-parcours/#3-appliquer-limport">Parcours</a>).</p>
 <p>Les six PRs seront fermées avec un commentaire qui renvoie vers les nouvelles et dit ce qui a été
 repris (<a href="https://3istors.atlassian.net/browse/CNP-246">CNP-246</a>).</p>
 

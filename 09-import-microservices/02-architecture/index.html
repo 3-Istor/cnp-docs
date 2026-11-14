@@ -3386,6 +3386,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3472,7 +3500,9 @@
 <h1 id="architecture">Architecture<a class="headerlink" href="#architecture" title="Permanent link">&para;</a></h1>
 <p>Le code reste chez l'utilisateur ; tout ce qui sert à déployer vit côté plateforme. Seule la CI de
 build lit le repo source, en lecture seule, à un commit figé. Argo CD ne lit jamais le repo de
-l'utilisateur. Tout ce qui est décrit ici est <strong>prévu</strong> et en cours d'implémentation, sauf mention contraire.</p>
+l'utilisateur. Tout ce qui est décrit ici est en prod depuis le 14/11/2026, sauf Hubble Relay.
+Les runners, les rappels du workflow et les gestes d'exploitation sont dans
+<a href="../09-exploitation/">Exploitation</a>.</p>
 <p><img alt="Ce que l'import ajoute à la plateforme" src="../../01-architecture/diagrams/import-overview.light.png#only-light" />
 <img alt="Ce que l'import ajoute à la plateforme" src="../../01-architecture/diagrams/import-overview.dark.png#only-dark" /></p>
 <h2 id="ce-qui-est-ajoute-composant-par-composant">Ce qui est ajouté, composant par composant<a class="headerlink" href="#ce-qui-est-ajoute-composant-par-composant" title="Permanent link">&para;</a></h2>
@@ -3506,8 +3536,8 @@ l'utilisateur. Tout ce qui est décrit ici est <strong>prévu</strong> et en cou
 </tr>
 <tr>
 <td>Analyseur</td>
-<td>CMP (module Python)</td>
-<td>Lit le repo à un SHA figé et produit un plan d'import</td>
+<td>extern-project-analyzer (<code>cnp_analyzer</code>)</td>
+<td>Lit le repo à un SHA figé et produit un plan d'import. Tourne dans le job <code>claim</code> du workflow central, pas dans le CMP</td>
 <td>CNP-237</td>
 </tr>
 <tr>
@@ -3519,8 +3549,32 @@ l'utilisateur. Tout ce qui est décrit ici est <strong>prévu</strong> et en cou
 <tr>
 <td>Workflow de build central</td>
 <td>extern-project-analyzer</td>
-<td>Jobs <code>prepare</code>, <code>build</code>, <code>publish</code> ; images <code>ghcr.io/3-istor/imports/&lt;projet&gt;/&lt;app&gt;</code> par digest</td>
+<td>Jobs <code>claim</code> (analyse ou préparation du build), <code>build</code>, <code>publish</code>, <code>report-failure</code>, <code>cleanup</code> ; images <code>ghcr.io/3-istor/imports/&lt;projet&gt;/&lt;app&gt;</code> par digest</td>
 <td>CNP-238</td>
+</tr>
+<tr>
+<td>Runners de l'import</td>
+<td>Cloud (VM du lab), cnp-dev-runners</td>
+<td>Un runner éphémère et un BuildKit rootless par job, réseau isolé, pare-feu de sortie</td>
+<td>CNP-246</td>
+</tr>
+<tr>
+<td>Route des rappels</td>
+<td>K3s</td>
+<td>HTTPRoute <code>cmp-api-import-worker</code> et SecurityPolicy JWT GitHub Actions, audience <code>cmp-import</code></td>
+<td>CNP-246</td>
+</tr>
+<tr>
+<td>Rôles Vault par app</td>
+<td>CMP, infra-templates</td>
+<td>Rôle <code>&lt;projet&gt;-&lt;app&gt;-role</code> créé et supprimé par le CMP, chemin <code>project-&lt;projet&gt;/&lt;app&gt;</code> imposé par le chart</td>
+<td>CNP-239</td>
+</tr>
+<tr>
+<td>Suivi des échecs</td>
+<td>CMP, extern-project-analyzer</td>
+<td>Cause structurée, actions proposées, surveillance des workflows morts</td>
+<td>CNP-268</td>
 </tr>
 <tr>
 <td>Écriture du registre</td>
@@ -3542,7 +3596,7 @@ l'utilisateur. Tout ce qui est décrit ici est <strong>prévu</strong> et en cou
 </tr>
 <tr>
 <td>Catalogue de bases</td>
-<td>infra-templates</td>
+<td>CMP (<code>services/imports/catalogue</code>), infra-templates</td>
 <td>MongoDB, Redis, Neo4j, Elasticsearch épinglés par digest, non root, secrets Vault générés</td>
 <td>CNP-239</td>
 </tr>
@@ -3688,9 +3742,9 @@ l'utilisateur. Tout ce qui est décrit ici est <strong>prévu</strong> et en cou
 </tr>
 <tr>
 <td>D10</td>
-<td>Jeton de CI émis dans le workflow, jamais en entrée ; callback authentifié par OIDC GitHub</td>
+<td>Jeton de CI émis dans le workflow, jamais en entrée ; callback authentifié par OIDC GitHub, sur une route Envoy dédiée</td>
 <td>Jeton passé en <code>workflow_dispatch</code></td>
-<td>Les entrées sont lisibles dans le run</td>
+<td>Les entrées sont lisibles dans le run. La SecurityPolicy de la route principale du CMP refuse un JWT d'un autre émetteur que Keycloak</td>
 </tr>
 <tr>
 <td>D11</td>

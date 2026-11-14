@@ -3276,6 +3276,17 @@
   
 </li>
       
+        <li class="md-nav__item">
+  <a href="#risque-ouvert-le-runner-persistant-partage-la-vm-des-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risque ouvert : le runner persistant partage la VM des imports
+      
+    </span>
+  </a>
+  
+</li>
+      
     </ul>
   
 </nav>
@@ -3397,6 +3408,34 @@
 
               
             
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
           </ul>
         </nav>
       
@@ -3468,6 +3507,17 @@
     <span class="md-ellipsis">
       
         Risques acceptés
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#risque-ouvert-le-runner-persistant-partage-la-vm-des-imports" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Risque ouvert : le runner persistant partage la VM des imports
       
     </span>
   </a>
@@ -3634,15 +3684,33 @@ il agit, avec en plus une confirmation dans le portail pour toute écriture (voi
 </tr>
 <tr>
 <td>CMP</td>
-<td>Émettre pour une installation utilisateur un jeton CNP-Portal d'une heure, <code>contents:read</code> et <code>metadata:read</code>, limité à un repo, après vérification OIDC du workflow ; écrire cnp-projects</td>
+<td>Émettre pour une installation utilisateur un jeton CNP-Portal d'une heure, <code>contents:read</code> et <code>metadata:read</code>, limité à un repo, après vérification OIDC du workflow ; écrire cnp-projects ; créer et supprimer le rôle Vault <code>&lt;projet&gt;-&lt;app&gt;-role</code> de chaque app importée, en lecture sur <code>project-&lt;projet&gt;</code></td>
 <td>Demander un jeton non restreint pour une installation utilisateur</td>
 <td>Vault (rôle Kubernetes <code>cmp-backend</code>)</td>
 </tr>
 <tr>
 <td>Workflow de build central</td>
-<td>Job <code>prepare</code> : recevoir le jeton du CMP. Job <code>publish</code> : pousser <code>ghcr.io/3-istor/imports/&lt;projet&gt;/&lt;app&gt;</code></td>
-<td>Aucun secret durable ; aucun <code>id-token</code> dans le job qui exécute le code importé</td>
-<td>Aucun, identité OIDC GitHub</td>
+<td>Job <code>claim</code> : recevoir le jeton du CMP. Job <code>publish</code> : pousser <code>ghcr.io/3-istor/imports/&lt;projet&gt;/&lt;app&gt;</code>. Appeler l'API worker du CMP par sa route dédiée</td>
+<td>Aucun secret durable ; aucun <code>id-token</code> dans le job qui exécute le code importé ; être accepté sur un commit absent de <code>IMPORT_WORKFLOW_SHAS</code></td>
+<td>Aucun, identité OIDC GitHub, audience <code>cmp-import</code></td>
+</tr>
+<tr>
+<td>App GitHub <strong>cnp-import-runners-3istor</strong></td>
+<td>Inscrire des runners JIT dans le groupe <code>cnp-import-ephemeral</code></td>
+<td>Lire ou écrire un repo, lancer un workflow</td>
+<td>Clé privée sur la VM des runners, lisible par root, donc aussi par un job du runner persistant</td>
+</tr>
+<tr>
+<td>Runners d'import éphémères</td>
+<td>Exécuter un seul job du workflow d'import, joindre Internet</td>
+<td>Joindre le lab, l'hôte ou le service de métadonnées ; garder un état d'un job à l'autre</td>
+<td>Aucun, configuration JIT à usage unique</td>
+</tr>
+<tr>
+<td>Runner <code>epimac-github-runner</code></td>
+<td>Exécuter la CI de tous les repos privés de l'org, y compris les repos d'apps des projets. Sur sa VM : <code>sudo</code> sans mot de passe et groupe Docker, donc root</td>
+<td>Prendre un job d'import tant que la variable de repo <code>CNP_IMPORT_RUNS_ON</code> demande le label <code>cnp-import-ephemeral</code>, qu'il n'a pas. Le CMP ne le distingue pas : <code>runner_environment</code> vaut <code>self-hosted</code> pour les deux</td>
+<td>Inscription sur l'org, sur la VM</td>
 </tr>
 <tr>
 <td>Argo CD</td>
@@ -3675,7 +3743,7 @@ il agit, avec en plus une confirmation dans le portail pour toute écriture (voi
 </tr>
 <tr>
 <td>D14</td>
-<td>La clé de CNP-Portal reste dans le CMP. Le job <code>prepare</code> reçoit un jeton d'une heure, en lecture, limité à un repo, en échange de son jeton OIDC</td>
+<td>La clé de CNP-Portal reste dans le CMP. Le job <code>claim</code> reçoit un jeton d'une heure, en lecture, limité à un repo, en échange de son jeton OIDC</td>
 <td>Une clé d'app dans le dépôt de CI pourrait lire les repos de tous les tenants</td>
 </tr>
 <tr>
@@ -3721,13 +3789,27 @@ il agit, avec en plus une confirmation dans le portail pour toute écriture (voi
   que l'utilisateur accorde à l'installation. La plateforme n'en utilise que la lecture, par des
   jetons restreints. Une fuite de la clé privée donnerait ces droits complets : la clé ne sort
   pas de Vault et du CMP. Accepté par Brian le 13/11.</li>
-<li>Le code importé a accès au réseau pendant son build, sur un runner GitHub éphémère. Il ne peut
-  nuire qu'à lui-même, borné par les délais.</li>
-<li>Les métriques Hubble d'un projet peuvent montrer le nom d'une charge d'un autre projet qu'il a
-  tenté de joindre et qui a été refusée. Divulgation faible.</li>
-<li>Un webhook reçu pendant le sommeil du CMP (01:00 à 07:00) est perdu ; le rattrapage au réveil le
-  compense.</li>
+<li>Le code importé a accès à Internet pendant son build, sur un runner éphémère de la VM des
+  runners. Le pare-feu lui ferme le lab, l'hôte et les métadonnées. Il ne peut nuire qu'à
+  lui-même, borné par les délais.</li>
+<li>Les runners d'import de <code>cnp-dev-runners</code> partagent un BuildKit privilégié et n'ont pas de
+  filtre de sortie. Ils servent aux périodes de test, sur du code de l'équipe.</li>
 </ul>
+<h2 id="risque-ouvert-le-runner-persistant-partage-la-vm-des-imports">Risque ouvert : le runner persistant partage la VM des imports<a class="headerlink" href="#risque-ouvert-le-runner-persistant-partage-la-vm-des-imports" title="Permanent link">&para;</a></h2>
+<p>Non accepté à ce jour, à traiter. <code>epimac-github-runner</code> exécute la CI des repos d'apps des
+projets, qui sont privés dans l'org 3-Istor et ciblent <code>self-hosted, Linux, X64</code> par défaut. Un
+member d'un projet peut y pousser du code (outil MCP <code>push_files</code>). Ce code tourne en root sur la
+VM : <code>sudo</code> sans mot de passe et groupe Docker. Or ce Docker est celui des runners d'import
+éphémères, et la clé de l'app <code>cnp-import-runners-3istor</code> est sur la même VM. Un tel job pourrait
+lire cette clé, inscrire son propre runner dans <code>cnp-import-ephemeral</code> et recevoir les jobs
+d'import des autres projets, avec leur jeton OIDC et leur jeton de lecture de repo, ou entrer
+dans un conteneur d'import en cours.</p>
+<p>Pistes : sortir la CI des tenants de la VM des imports, retirer <code>sudo</code> et le groupe Docker à
+<code>github-runner</code>, ou donner aux runners d'import une VM à eux.
+- Les métriques Hubble d'un projet peuvent montrer le nom d'une charge d'un autre projet qu'il a
+  tenté de joindre et qui a été refusée. Divulgation faible.
+- Un webhook reçu pendant le sommeil du CMP (01:00 à 07:00) est perdu ; le rattrapage au réveil le
+  compense.</p>
 
 
 
