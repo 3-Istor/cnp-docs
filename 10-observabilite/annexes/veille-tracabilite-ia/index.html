@@ -1,0 +1,4989 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation technique et d'architecture de la Cloud Native Platform">
+      
+      
+        <meta name="author" content="3-Istor Team">
+      
+      
+      
+        <link rel="prev" href="../veille-observabilite-datadog/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Veille traçabilité IA - Cloud Native Platform (CNP) Docs ⚡</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#ai-traceability-for-cnp-legal-map-eufrance-and-victoriastack-implementation" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-header__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cloud Native Platform (CNP) Docs ⚡
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Veille traçabilité IA
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passer au mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passer au mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../developer-onboarding-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Guide Développeur
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../README_ROADMAP/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../01-architecture/00-diagram-index/" class="md-tabs__link">
+          
+  
+  
+  1. Architecture & Topologies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../02-core-components/01-cmp-dashboard/" class="md-tabs__link">
+          
+  
+  
+  2. Composants Clés
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-tabs__link">
+          
+  
+  
+  3. Pipelines & Workflows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../04-templates/00-github-repositories-landscape/" class="md-tabs__link">
+          
+  
+  
+  4. Modèles & Templates
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../05-cmp-backend-api/00-global-api-standards/" class="md-tabs__link">
+          
+  
+  
+  5. Spécifications API CMP
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../06-multicloud/00-index/" class="md-tabs__link">
+          
+  
+  
+  6. Chantier Multicloud
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../07-ai-landing-zone/00-index/" class="md-tabs__link">
+          
+  
+  
+  7. Landing zone IA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../08-finops/00-index/" class="md-tabs__link">
+          
+  
+  
+  8. FinOps
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../09-conformite/01-registre-rgpd/" class="md-tabs__link">
+          
+  
+  
+  9. Conformité
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../09-import-microservices/00-index/" class="md-tabs__link">
+          
+  
+  
+  10. Import et microservices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../00-index/" class="md-tabs__link">
+          
+  
+  
+  11. Observabilité
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-nav__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    Cloud Native Platform (CNP) Docs ⚡
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developer-onboarding-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide Développeur
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../README_ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Architecture & Topologies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1. Architecture & Topologies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/00-diagram-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index des schémas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/01-system-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble du système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/02-tenancy-and-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-tenancerie & Isolation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/03-network-topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topologie Réseau & Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/04-disaster-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan de Reprise d'Activité (PRA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/06-audit-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Journaux d'audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/07-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observabilité multicluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/08-database-backups/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sauvegarde des bases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/09-static-secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets statiques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/10-compliance-cis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conformité CIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Composants Clés
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2. Composants Clés
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/01-cmp-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Portail & Dashboard CMP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/02-identity-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identités & Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/03-secrets-vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets & HashiCorp Vault
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/04-gitops-argocd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synchronisation GitOps ArgoCD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/05-github-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intégration GitHub App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/06-database-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schéma Base de Données
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/07-frontend-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Frontend (Next.js)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/08-deletion-protection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protection contre la suppression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Pipelines & Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3. Pipelines & Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisioning Day-0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/02-ci-cd-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines de CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/03-developer-configuration-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Développeur (cnp.yaml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/04-system-flows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrammes de Flux Système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/05-testing-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stratégie de Test & Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/06-release-canary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion et canary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/07-runner-fallback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runner de secours (quota Actions)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Modèles & Templates
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    4. Modèles & Templates
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/00-github-repositories-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dépôts GitHub & Cartographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/01-git-app-templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modèles d'Applications (Git)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/02-helm-generic-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart Helm Umbrella Générique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/03-terraform-provisioner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisionneur Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Spécifications API CMP
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    5. Spécifications API CMP
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/00-global-api-standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standards Globaux & Sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/01-cmp-deployment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Déploiement (Contracts)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/02-cmp-phase3-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Évolutions de Phase 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/03-cmp-frontend-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide d'Intégration Frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/04-cmp-projects-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Projets & RBAC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/05-cmp-catalog-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/06-cmp-infra-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Infrastructure & Santé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/07-cmp-account-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Compte & Liaison GitHub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/08-cmp-local-development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spécification Dev Local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/09-cmp-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conteneurisation & Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/10-cmp-onboarding-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbook d'Onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/11-environment-variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tableau des Variables d'Env
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/11-cmp-mcp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistants IA (MCP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Chantier Multicloud
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    6. Chantier Multicloud
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/01-invariants-et-perimetre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Invariants & Périmètre
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/02-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décisions D-01 à D-13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/03-contrat-equipe-cluster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contrat Équipe Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/04-chantiers-et-sequencement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chantiers & Séquencement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/05-nettoyage-et-decommissionnement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nettoyage & Décommissionnement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/06-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schémas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/07-procedures-operateur/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Procédures opérateur EKS/GKE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/08-placement-cloud-public/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décision D-15 (placement)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Landing zone IA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    7. Landing zone IA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/01-stack-cible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stack cible et compromis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/02-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec de référence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/03-phases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phases et vérifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/04-cmp-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    La CMP et les agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/05-plan-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan d'implémentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/06-finops-ia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FinOps de l'IA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/07-flux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Les flux pas à pas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. FinOps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    8. FinOps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/01-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décision D-14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/02-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/03-methodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Méthodes de calcul
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/04-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Conformité
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    9. Conformité
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-conformite/01-registre-rgpd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registre RGPD (brouillon)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-conformite/02-matrice-owasp-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matrice OWASP MCP et agentique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-conformite/03-reversibilite-portabilite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Réversibilité et portabilité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Import et microservices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    10. Import et microservices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/01-valeur/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Valeur pour les utilisateurs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/02-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/03-parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/04-roles-et-securite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rôles et sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/05-epitweet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Epitweet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/06-audit-travail-existant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audit du premier import
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/07-plan-et-recette/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan et recette
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/08-audit-securite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audit de sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Observabilité
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    11. Observabilité
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-existant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Existant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-etat-de-l-art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    État de l'art
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture cible
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-offre-projets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offre aux projets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-dashboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboards et vues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-alerting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alerting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-ia-et-conformite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IA et conformité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-plan-et-recette/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan et recette
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-idees-et-revue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Idées et revue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/slo-burn-rate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbook : budget d'erreur
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_14_12" id="__nav_14_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Annexes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_14_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_14_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Annexes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../veille-victoriametrics/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille VictoriaMetrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../veille-observabilite-datadog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille observabilité et Datadog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille traçabilité IA
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille traçabilité IA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-a-legal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PART A. LEGAL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PART A. LEGAL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a1-eu-ai-act-reg-20241689-as-amended-by-the-digital-omnibus-on-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A1. EU AI Act (Reg. 2024/1689) as amended by the Digital Omnibus on AI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2-gdpr-and-cnil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A2. GDPR and CNIL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a3-other-instruments-short" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A3. Other instruments (short)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a4-practical-table-requirement-record-retention-readers-applicability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A4. Practical table: requirement, record, retention, readers, applicability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-b-technical-state-of-the-art-nov-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PART B. TECHNICAL STATE OF THE ART (Nov 2026)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PART B. TECHNICAL STATE OF THE ART (Nov 2026)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#b1-opentelemetry-genai-semantic-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B1. OpenTelemetry GenAI semantic conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b2-who-emits-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B2. Who emits what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b3-storage-and-query-on-the-victoria-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B3. Storage and query on the Victoria stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b4-open-source-llm-observability-tools-vs-victoria-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B4. Open-source LLM observability tools vs Victoria stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b5-what-impressive-and-compliant-looks-like-for-the-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B5. What "impressive and compliant" looks like for the demo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b6-open-questions-and-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B6. Open questions and conflicts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources-accessed-2026-11-13-unless-noted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources (accessed 2026-11-13 unless noted)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#part-a-legal" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PART A. LEGAL
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PART A. LEGAL">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#a1-eu-ai-act-reg-20241689-as-amended-by-the-digital-omnibus-on-ai" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A1. EU AI Act (Reg. 2024/1689) as amended by the Digital Omnibus on AI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a2-gdpr-and-cnil" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A2. GDPR and CNIL
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a3-other-instruments-short" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A3. Other instruments (short)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#a4-practical-table-requirement-record-retention-readers-applicability" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        A4. Practical table: requirement, record, retention, readers, applicability
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#part-b-technical-state-of-the-art-nov-2026" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PART B. TECHNICAL STATE OF THE ART (Nov 2026)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PART B. TECHNICAL STATE OF THE ART (Nov 2026)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#b1-opentelemetry-genai-semantic-conventions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B1. OpenTelemetry GenAI semantic conventions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b2-who-emits-what" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B2. Who emits what
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b3-storage-and-query-on-the-victoria-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B3. Storage and query on the Victoria stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b4-open-source-llm-observability-tools-vs-victoria-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B4. Open-source LLM observability tools vs Victoria stack
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b5-what-impressive-and-compliant-looks-like-for-the-demo" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B5. What "impressive and compliant" looks like for the demo
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#b6-open-questions-and-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        B6. Open questions and conflicts
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources-accessed-2026-11-13-unless-noted" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources (accessed 2026-11-13 unless noted)
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="ai-traceability-for-cnp-legal-map-eufrance-and-victoriastack-implementation">AI traceability for CNP: legal map (EU/France) and VictoriaStack implementation<a class="headerlink" href="#ai-traceability-for-cnp-legal-map-eufrance-and-victoriastack-implementation" title="Permanent link">&para;</a></h1>
+<p>Research date: 2026-11-13. This is a factual map, not legal advice.
+Convention: "LAW SAYS" = binding text. "GUIDANCE" = non-binding official text. "BEST PRACTICE" = my synthesis or practitioner advice.
+Confidence: [HIGH] primary source read this session. [MED] secondary source or primary source only partly read. [LOW] inferred or unverified.
+Stale flag: anything older than 12 months (before 2025-11-13) is marked [STALE - date].</p>
+<p>Access caveat: eur-lex.europa.eu pages do not render through my fetcher (JS-only). For AI Act article text I used the European Commission "AI Act Service Desk" article pages, which state they follow the EUR-Lex consolidated version of 2026-07-27 and flag Omnibus changes with NEW/AMENDED markers. The EUR-Lex consolidated text exists at CELEX 02024R1689-20260727 (seen in search results, not rendered). Treat EUR-Lex as the binding source and re-check anything load-bearing there.</p>
+<hr />
+<h2 id="part-a-legal">PART A. LEGAL<a class="headerlink" href="#part-a-legal" title="Permanent link">&para;</a></h2>
+<h3 id="a1-eu-ai-act-reg-20241689-as-amended-by-the-digital-omnibus-on-ai">A1. EU AI Act (Reg. 2024/1689) as amended by the Digital Omnibus on AI<a class="headerlink" href="#a1-eu-ai-act-reg-20241689-as-amended-by-the-digital-omnibus-on-ai" title="Permanent link">&para;</a></h3>
+<p><strong>Omnibus status in Nov 2026: adopted, in force, high-risk postponed.</strong> [HIGH on dates/content, MED on OJ publication day]
+- Regulation (EU) 2026/1744, dated 2026-07-08, amends Reg. 2024/1689, 2018/1139 and 2023/1230. ELI: <a href="http://data.europa.eu/eli/reg/2026/1744/oj">http://data.europa.eu/eli/reg/2026/1744/oj</a>. Search result metadata from eur-lex.europa.eu/eli/reg/2026/1744 confirms title and date. Publication in the OJ on 2026-07-24 and entry into force 2026-07-27 come from law-firm sources [MED].
+- Political deal 2026-05-07, Parliament vote 2026-06-16, Council adoption 2026-06-29 (secondary sources) [MED].
+- Dates per the Commission's AI Act Service Desk timeline (accessed 2026-11-13) [HIGH]:</p>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>What applies</th>
+<th>Changed by Omnibus</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>2025-02-02</td>
+<td>Chapters I-II: definitions, Art. 4 AI literacy, Art. 5 prohibitions</td>
+<td>No</td>
+</tr>
+<tr>
+<td>2025-08-02</td>
+<td>GPAI provider obligations (Art. 53-55), governance, national authorities and penalties</td>
+<td>No</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Most rules incl. Art. 50 transparency, Commission enforcement powers on GPAI</td>
+<td>No</td>
+</tr>
+<tr>
+<td>2026-12-02</td>
+<td>New Art. 5 prohibitions (non-consensual intimate deepfakes, CSAM). Transition for Art. 50(2) marking for generative systems already on the market before 2026-08-02 (Art. 111(4))</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>2027-08-02</td>
+<td>Sandboxes; legacy GPAI models placed before 2025-08-02 must comply</td>
+<td>Sandbox date yes</td>
+</tr>
+<tr>
+<td>2027-12-02</td>
+<td>High-risk Annex III (Art. 6(2)) rules</td>
+<td>Yes (was 2026-08-02)</td>
+</tr>
+<tr>
+<td>2028-08-02</td>
+<td>High-risk Annex I products (Art. 6(1))</td>
+<td>Yes (was 2027-08-02)</td>
+</tr>
+</tbody>
+</table>
+<p>Sources: <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act">https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act</a> and <a href="https://artificialintelligenceact.eu/ai-act-explorer/digital-omnibus/">https://artificialintelligenceact.eu/ai-act-explorer/digital-omnibus/</a> (the latter is an unofficial but text-verified tracker) [HIGH/MED].
+- Art. 4 AI literacy was rewritten: providers and deployers "shall take measures to support the development of AI literacy", no specific individual level required (Service Desk page, all 3 paragraphs marked AMENDED). Still in force since 2025-02-02. [HIGH]
+- Art. 12, 19, 21, 26, 72(1) text is NOT amended by the Omnibus (no AMENDED markers on the Service Desk pages; Omnibus summary page says Arts. 12/19/26 are untouched). [HIGH]
+- Art. 25 was amended (value chain). Art. 27 FRIA may reuse a GDPR DPIA. [HIGH]
+- Art. 72: Service Desk page says the Commission template/guidance for the post-market monitoring plan is due by 2027-09-02. Not cross-checked on EUR-Lex. [MED]
+- Not found: whether the 2027-12-02 date can slip again. Annex III content itself unchanged on the page I read.</p>
+<p><strong>Article-by-article (LAW SAYS)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Article</th>
+<th>What it says</th>
+<th>Applies to</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Art. 12(1)-(2)</td>
+<td>High-risk systems must technically allow automatic recording of events (logs) over the system lifetime, at a level enabling traceability for: (a) identifying risk situations or substantial modification, (b) post-market monitoring (Art. 72), &copy; monitoring of operation by deployers (Art. 26(5)). Art. 12(3) lists minimum fields only for remote biometric identification: start/end time of each use, reference database, input data that led to a match, identity of persons verifying results.</td>
+<td>Provider design duty, high-risk only</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-12">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-12</a></td>
+</tr>
+<tr>
+<td>Art. 19</td>
+<td>Providers keep Art. 12(1) logs under their control for a period appropriate to the intended purpose, at least 6 months, "without prejudice to applicable Union or national law" (data protection law named).</td>
+<td>High-risk providers</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-19">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-19</a></td>
+</tr>
+<tr>
+<td>Art. 21(2)</td>
+<td>On reasoned request, provider gives the competent authority access to Art. 12(1) logs under its control. Confidentiality per Art. 78.</td>
+<td>High-risk providers</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-21">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-21</a></td>
+</tr>
+<tr>
+<td>Art. 26(1)-(2)</td>
+<td>Deployer uses system per instructions; assigns human oversight to persons with competence, training, authority, support.</td>
+<td>High-risk deployers</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-26">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-26</a></td>
+</tr>
+<tr>
+<td>Art. 26(5)</td>
+<td>Deployer monitors operation on basis of instructions for use; if risk, informs provider/distributor and market surveillance authority without undue delay and suspends use; serious incidents reported to provider first, then importer/distributor and authorities.</td>
+<td>High-risk deployers</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Art. 26(6)</td>
+<td>Deployer keeps automatically generated logs under its control at least 6 months, unless other Union/national law (esp. data protection) provides otherwise.</td>
+<td>High-risk deployers</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Art. 26(7)</td>
+<td>Employer-deployers inform workers' representatives and affected workers before using a high-risk system at work.</td>
+<td>High-risk deployers</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Art. 26(11)</td>
+<td>Deployers of Annex III systems that decide or assist decisions on natural persons inform them they are subject to a high-risk system.</td>
+<td>High-risk deployers</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Art. 50(1)</td>
+<td>Providers design systems that interact directly with natural persons so people are informed they interact with AI, unless obvious to a reasonably well-informed person.</td>
+<td>Any AI system provider, in force since 2026-08-02</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-50">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-50</a></td>
+</tr>
+<tr>
+<td>Art. 50(2)</td>
+<td>Providers of systems (including GPAI systems) generating synthetic audio, image, video or text mark outputs in machine-readable, detectable format. Exempt: assistive function for standard editing or no substantial alteration of input. Transition to 2026-12-02 for systems on market before 2026-08-02.</td>
+<td>Providers of generative systems</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Art. 50(4)</td>
+<td>Deployers disclose deepfakes and AI text published to inform the public on matters of public interest, unless human review and editorial responsibility.</td>
+<td>Deployers publishing content</td>
+<td>same</td>
+</tr>
+<tr>
+<td>Art. 53, 55</td>
+<td>GPAI model providers: technical documentation, downstream information (53(1)(b)), copyright policy, training-data summary; systemic-risk models add evaluation, incident reporting to AI Office (55(1)&copy;).</td>
+<td>GPAI model providers (Anthropic, Google, Meta, Mistral...), not downstream deployers</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>Art. 72</td>
+<td>Providers of high-risk systems run documented post-market monitoring collecting performance data over lifetime (deployers' data included).</td>
+<td>High-risk providers</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-72">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-72</a></td>
+</tr>
+<tr>
+<td>Art. 73</td>
+<td>Providers of high-risk systems report serious incidents to market surveillance authority of the Member State: general case at most 15 days after awareness; widespread infringement or Art. 3(49)(b) at most 2 days; death at most 10 days; incomplete initial report allowed.</td>
+<td>High-risk providers</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-73">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-73</a></td>
+</tr>
+<tr>
+<td>Art. 25</td>
+<td>A deployer or third party becomes provider of a high-risk system if it rebrands it, substantially modifies it, or changes the intended purpose (including of a GPAI system) so that it becomes high-risk. 25(4): written agreement between high-risk provider and third-party suppliers of tools/models/components, FOSS tools excluded, GPAI models not covered by that exemption.</td>
+<td>Tenant app builders and the platform as supplier</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-25">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-25</a></td>
+</tr>
+<tr>
+<td>Art. 3(3), 3(4), 3(11)</td>
+<td>Provider includes whoever develops a system and puts it into service under its own name, "putting into service" includes in-house first use. Deployer uses a system under its authority.</td>
+<td>Role qualification</td>
+<td><a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-3">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-3</a></td>
+</tr>
+</tbody>
+</table>
+<p>All rows [HIGH] except where noted, with the caveat that the service desk summaries paraphrase; verbatim text is on EUR-Lex.</p>
+<p><strong>What applies to CNP today (my reading, not legal advice)</strong> [LOW to MED, role qualification is a legal judgment]
+- LAW SAYS: the AI Act has no general logging duty for non-high-risk systems. Art. 12/19/26(6)/72/73 are scoped to high-risk systems, which apply from 2027-12-02 at the earliest for Annex III.
+- CNP as a platform deploying Claude/Gemini/Ollama models: the model providers carry Art. 53/55. CNP becomes a GPAI model provider only if it substantially modifies a model. The Commission guidelines (2025-07-18, secondary summaries) use a one-third-of-original-training-compute test. Primary text not read in full. [MED]
+- CNP-built assistants and hosted agents (portal MCP server, kagent agents): CNP is probably the "provider" of those AI systems, since in-house putting into service counts (Art. 3(3), 3(11)). They are most likely not high-risk. Duties then: Art. 4 (support literacy), Art. 5 (prohibitions), Art. 50(1) disclosure unless obvious, possibly Art. 50(2) marking of generated text if the exemption for assistive editing does not fit. Whether Art. 50(2) bites on internal dev agents is an open reading. [LOW]
+- Tenant app in Annex III (4(a) recruiting/CV screening, 4(b) performance monitoring, 3(a)-(d) education admission/grading/proctoring): the tenant is provider or deployer and carries Art. 12/19/26/72/73. CNP is at most a supplier under Art. 25(4) and gets a contractual duty to give information and technical access. Annex III list: <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/annex-3">https://ai-act-service-desk.ec.europa.eu/en/ai-act/annex-3</a> [HIGH]. Art. 6(3) derogation not checked.
+- Enforcement authority in France: designation still unsettled. A DGE/DGCCRF scheme was published Sept 2025, a Senate vote on the DDADUE bill on 2026-02-18 was reported, final adoption not found. Sources conflict on CNIL's role. [LOW]. <a href="https://www.entreprises.gouv.fr/priorites-et-actions/transition-numerique/soutenir-le-developpement-de-lia-au-service-de-0">https://www.entreprises.gouv.fr/priorites-et-actions/transition-numerique/soutenir-le-developpement-de-lia-au-service-de-0</a></p>
+<p><strong>Harmonised standards and logging</strong> [MED]
+- CEN-CENELEC JTC 21 is working on 10 Commission-requested areas, including record keeping, human oversight, transparency, cybersecurity. Source: <a href="https://digital-strategy.ec.europa.eu/en/policies/ai-act-standardisation">https://digital-strategy.ec.europa.eu/en/policies/ai-act-standardisation</a> [HIGH].
+- The first one to reach the OJ is EN 18286 (quality management, Art. 17), via Implementing Decision (EU) 2026/2274, per the same Commission page. Not about logging. [HIGH on Commission page; the 2026-10-14 OJ date is from a secondary source]
+- prEN ISO/IEC 24970 "AI system logging": ISO/IEC SC 42 DIS 24970:2025 adopted as CEN draft. CEN public enquiry 2025-11-28 to 2026-01-25 (Lithuanian tracker). DIN lists a follow-on FprEN ISO/IEC 24970:2026 under CEN/CLC/JTC 21/WG 3. ISO page shows "Under publication". I could not confirm final publication nor whether it is cited in the OJ as a harmonised standard. [MED]. Sources: <a href="https://standards.iteh.ai/catalog/standards/cen/38472bd6-ab5c-4908-ac64-6990f45027e6/pren-iso-iec-24970">https://standards.iteh.ai/catalog/standards/cen/38472bd6-ab5c-4908-ac64-6990f45027e6/pren-iso-iec-24970</a> , <a href="https://www.iso.org/standard/88723.html">https://www.iso.org/standard/88723.html</a> (403 to my fetcher, status taken from search snippet).
+- ISO/IEC 42001:2023 Annex A control A.6.2.8 (AI system recording of event logs): organisation decides in which lifecycle phases logging is enabled, minimum when in use. Control text is paywalled, wording from vendor sites. Claims of mandatory integrity or immutability are vendor additions. [MED/LOW]
+- Practical consequence: no harmonised logging standard gives presumption of conformity yet. Anything built now is a reasonable design, not a presumption of conformity.</p>
+<h3 id="a2-gdpr-and-cnil">A2. GDPR and CNIL<a class="headerlink" href="#a2-gdpr-and-cnil" title="Permanent link">&para;</a></h3>
+<p><strong>LAW SAYS (GDPR, Reg. 2016/679; ELI <a href="https://eur-lex.europa.eu/eli/reg/2016/679/oj">https://eur-lex.europa.eu/eli/reg/2016/679/oj</a>, not re-fetched this session, article numbers from standard knowledge) [MED]</strong>
+- Art. 5(1)&copy; minimisation, 5(1)(e) storage limitation, 5(1)(f) integrity and confidentiality, 5(2) accountability, Art. 25 by design, Art. 32 security, Art. 30 register, Art. 35 DPIA, Art. 15 access, Art. 22 automated decisions, Art. 33-34 breach notification (72 h to supervisory authority).
+- Prompts and agent traces routinely contain personal data (names, emails, code with data, tickets). So prompt/response logs are personal data processing with CNP or the tenant as controller. A controller needs a purpose and a legal basis for the log processing itself.</p>
+<p><strong>CNIL logging recommendation: deliberation no. 2021-122 of 2021-10-14 [HIGH, read in full] [STALE - 2021-10-14, still the reference]</strong>
+PDF: <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/recommandation_-_journalisation.pdf">https://www.cnil.fr/sites/cnil/files/atoms/files/recommandation_-_journalisation.pdf</a> . Legifrance JORFTEXT000044272396.
+- Scope: application logs, not perimeter logs (para. 2). Non-prescriptive (para. 1).
+- Para. 6: record creation, consultation, modification, deletion with individually identified author, timestamp, nature of operation, reference of the data concerned. "Avoid duplicating the processed data within the logs."
+- Para. 7: store segregated from the main system, write-only for the applications, no overwrite; access rights to logs based on strict necessity.
+- Para. 8: retain 6 months to 1 year. Para. 9: purpose is mainly active security (alerts, detection), formalise alert processing. Para. 10: ex post breach investigation.
+- Para. 11: reuse for another purpose may be a purpose diversion; use a usage charter or alert on modification access.
+- Para. 12: minimise personal data in logs; ensure confidentiality, availability, integrity; recommends to timestamp and sign logs at creation.
+- Para. 13: inform authorised users of logging, data and duration. Data subject rights on logs are exercised with the controller of the main processing.
+- Paras. 16-17: more than one year can be justified for internal control if risk of misuse is demonstrated (sensitive data at scale, systematic surveillance) and documented investigation procedures exist.
+- Para. 18: do not collect sensitive or highly personal data in logs that is not already in the processing.</p>
+<p><strong>CNIL AI recommendations</strong> [MED, STALE for 2024-2025 fiches]
+- Fiches IA (2024-04 to 2025-07) cover development of AI systems: legal basis, DPIA, security, rights, annotation, model status. No fiche on logs, none dedicated to deployment. List: <a href="https://www.cnil.fr/fr/les-fiches-pratiques-ia">https://www.cnil.fr/fr/les-fiches-pratiques-ia</a> . [HIGH] [STALE - 2025-07]
+- Rights over prompts: CNIL states GDPR applies to use of models through prompts, and rights requests should say whether they target training data or the model. <a href="https://www.cnil.fr/fr/ia-respecter-lexercice-des-droits-des-personnes">https://www.cnil.fr/fr/ia-respecter-lexercice-des-droits-des-personnes</a> [MED, STALE]
+- EDPB Opinion 28/2024 (2024-12-17): models are not automatically anonymous, legitimate interest needs a three-step test. [MED, STALE - 2024-12-17]
+- <strong>CNIL/CIANum note "IA agentique et protection des donnees personnelles", July 2026</strong> [HIGH, read]. <a href="https://www.cnil.fr/sites/default/files/2026-07/ia-cianum-cnil.pdf">https://www.cnil.fr/sites/default/files/2026-07/ia-cianum-cnil.pdf</a> . This is an analysis note, not a formal CNIL deliberation, and says the AI Act (full application 2027) has no specific agent rules. It proposes:
+  - Traceability so that for each task the user can identify personal data used, agents involved, third-party services called, exchanges and their chronology. This also builds a chain of responsibility.
+  - Data minimisation and purpose limitation per task, user control over accessible data.
+  - Art. 22 GDPR remains fully applicable. CJEU SCHUFA ruling: human intervention must be meaningful.
+  - Memory partitioned per agent, expiry or size limits, one session per processing.
+  - Sandboxing, human validation for critical actions classified by risk (data access, modification, deletion, outbound data), kill switch, filtering of inputs/outputs, evaluation.
+  - Notes that joint EDPB/Commission guidelines on AI Act and GDPR interplay are expected by end 2026 (not found published). [LOW]
+- <strong>ANSSI "Les essentiels: Securiser un systeme IA agentique" v1.0, October 2026</strong> [HIGH, read]. <a href="https://messervices.cyber.gouv.fr/documents-guides/anssi_essentiels_ia_agentique_1.0.pdf">https://messervices.cyber.gouv.fr/documents-guides/anssi_essentiels_ia_agentique_1.0.pdf</a> . Seven principles. Directly relevant items:
+  - Classify agent actions as autonomous, mandatory human approval, or forbidden. Human approval for critical actions, sensitive data access, identity or rights changes, production deployments. Keep the approval mechanism out of the agent's reach. Show the approver the exact action, purpose, expected effects. Execute only the approved action.
+  - Deterministic authorisation independent of the agent, default deny.
+  - Keep secrets out of model context, memory and logs.
+  - Keep agent logs out of reach of agent modification, so the full sequence "request, authorisation, action, result" can be reconstructed after an incident.
+  - Monitor in production against the documented mission (UEBA), emergency stop with access revocation, per-tenant and per-environment memory.
+  - Cites the AI Act Art. 6 for high-risk systems.
+- ANSSI "Recommandations de securite pour un systeme d'IA generative" ANSSI-PA-102, 2024-04-29 [STALE - 2024-04-29]: R9, no automatic execution of critical IS actions. [MED, from search snippet]</p>
+<p><strong>Tension "log everything" vs "minimise" and how it resolves</strong> [BEST PRACTICE]
+- The AI Act has no logging duty for CNP today, and for high-risk the 6-month floor in Art. 19/26(6) is explicitly subject to data protection law. So the legal floor for content logging is zero for CNP, and the GDPR sets a ceiling by purpose.
+- Pattern: always log metadata and decisions (who, what, when, model, tokens, tool, approval, outcome, hashes), never content by default, content capture opt-in per project with a stated purpose, short retention for content, redaction at the gateway or collector, hash of content so integrity and non-repudiation hold without the text.
+- This matches the OTel spec default (content capture off) and CNIL para. 6, 12, 18.</p>
+<h3 id="a3-other-instruments-short">A3. Other instruments (short)<a class="headerlink" href="#a3-other-instruments-short" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Instrument</th>
+<th>Status Nov 2026</th>
+<th>Relevance to CNP</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NIS2 (Dir. 2022/2555) France transposition</td>
+<td>Not in force. "Projet de loi Resilience" in Assemblee nationale plenary scheduled 2026-11-09 to 2026-11-13 after being withdrawn on 2026-10-06. Outcome not found. EU deadline was 2024-10-17, Commission action before the CJEU reported. ANSSI expects entity compliance around end 2028. Source: <a href="https://www.leto.legal/news/nis-2-projet-loi-resilience-assemblee-nationale-9-novembre-2026">https://www.leto.legal/news/nis-2-projet-loi-resilience-assemblee-nationale-9-novembre-2026</a> (2026-11-05) [MED]</td>
+<td>Applies only if CNP or a client company is an essential/important entity. Art. 23(4) timelines: early warning 24 h, notification 72 h, final report 1 month. [MED]</td>
+</tr>
+<tr>
+<td>Cyber Resilience Act (Reg. 2024/2847)</td>
+<td>Art. 14 reporting of actively exploited vulnerabilities and severe incidents applies since 2026-09-11 via ENISA Single Reporting Platform. Remaining obligations from 2027-12-11. Sources: <a href="https://digital-strategy.ec.europa.eu/en/policies/cra-reporting">https://digital-strategy.ec.europa.eu/en/policies/cra-reporting</a> plus law-firm notes [MED]</td>
+<td>Only for products with digital elements placed on the EU market by a manufacturer. An internal demo platform is likely out of scope. A tenant shipping a product is not.</td>
+</tr>
+<tr>
+<td>DORA (Reg. 2022/2554)</td>
+<td>Applies since 2025-01-17</td>
+<td>Only if a client is a financial entity. ICT logging and incident duties then cascade. Art. 19(2) AI Act and 26(6) let financial institutions keep logs inside their financial-law documentation.</td>
+</tr>
+<tr>
+<td>Data Act (Reg. 2023/2854)</td>
+<td>Applies since 2025-09-12</td>
+<td>Marginal for self-hosted. Relevant for switching and data sharing clauses if CNP is sold as a service. Not researched further. [LOW]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="a4-practical-table-requirement-record-retention-readers-applicability">A4. Practical table: requirement, record, retention, readers, applicability<a class="headerlink" href="#a4-practical-table-requirement-record-retention-readers-applicability" title="Permanent link">&para;</a></h3>
+<p>Retention figures marked (L) are legal floors or caps, (BP) are best-practice proposals.
+Applicability columns: NOW = CNP as it stands. HR = if a tenant app is high-risk (Annex III). N/A = not applicable.</p>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Source</th>
+<th>What must be recorded</th>
+<th>Retention</th>
+<th>Who may read</th>
+<th>CNP now</th>
+<th>If tenant app high-risk</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Automatic event logs of the AI system</td>
+<td>AI Act Art. 12, 19, 26(6)</td>
+<td>Per use: timestamp start/end, system and model version, input reference, output or decision reference, identity of human reviewer, anomalies. Art. 12(3) gives explicit minimum only for biometric ID. Content only as far as traceability for risk, post-market monitoring and operation monitoring needs.</td>
+<td>At least 6 months (L), subject to GDPR. Suggest 12 months metadata (BP)</td>
+<td>Provider, deployer, competent authority on reasoned request (Art. 21(2)); internal: security and compliance role only</td>
+<td>N/A (not high-risk). Recommended as BP</td>
+<td>Yes. Tenant is provider/deployer. CNP offers the capability</td>
+</tr>
+<tr>
+<td>Human oversight evidence</td>
+<td>AI Act Art. 14, 26(2); ANSSI principle 3; CNIL note 2026</td>
+<td>Action proposed (exact), approver identity, approval/rejection, timestamp, channel (CMP), what was executed vs approved</td>
+<td>Same as logs (BP)</td>
+<td>Security, compliance, auditors</td>
+<td>Not legally required. Strong BP and already modelled by needs_user_confirmation / needs_cmp_approval</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Deployer monitoring and incident handling</td>
+<td>Art. 26(5)</td>
+<td>Alerts, risk signals, suspension decisions, notifications to provider and authority</td>
+<td>Duration of system plus at least 6 months (BP)</td>
+<td>Incident team, DPO, authorities</td>
+<td>N/A</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Serious incident reporting</td>
+<td>Art. 73</td>
+<td>Incident timeline, causal link analysis, affected persons, corrective action. Needs the logs above</td>
+<td>Keep report and evidence at least as long as logs (BP)</td>
+<td>Provider, authorities</td>
+<td>N/A</td>
+<td>Yes. Providers 15/10/2 day clocks. Deployer must inform provider first</td>
+</tr>
+<tr>
+<td>Post-market monitoring</td>
+<td>Art. 72</td>
+<td>Performance data collected from deployers over lifetime, evaluation scores, drift</td>
+<td>Lifetime of system (BP)</td>
+<td>Provider</td>
+<td>N/A</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Transparency to persons</td>
+<td>Art. 50(1), 26(11); GDPR Art. 13-14, 22</td>
+<td>Evidence that disclosure was shown (banner version, timestamp). For Art. 26(11), that the person was informed</td>
+<td>Same as logs (BP)</td>
+<td>Compliance</td>
+<td>Art. 50(1): likely for assistants, unless obvious. Record the disclosure config</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Marking of generated content</td>
+<td>Art. 50(2), Code of Practice (final 2026-06-10, voluntary, adequate per Commission 2026-07-08 per one secondary source)</td>
+<td>Marking method and version applied to outputs</td>
+<td>Config history (BP)</td>
+<td>Compliance</td>
+<td>Open question for internal dev agents [LOW]. Upstream model providers carry marking for their own systems</td>
+<td>Case by case</td>
+</tr>
+<tr>
+<td>AI literacy</td>
+<td>Art. 4 (amended)</td>
+<td>Training attendance, awareness material, dates</td>
+<td>3 years (BP)</td>
+<td>HR, compliance</td>
+<td>Yes, as a support measure</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Application logs for personal data processing</td>
+<td>GDPR Art. 5(2), 32; CNIL 2021-122</td>
+<td>Individually identified author, timestamp, operation type, reference of data; no duplication of data</td>
+<td>6 to 12 months (CNIL para. 8). Over 1 year only with documented justification (para. 16-17)</td>
+<td>Segregated, strict-necessity access (para. 7), usage charter (para. 11)</td>
+<td>Yes, for any log containing personal data</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Integrity of logs</td>
+<td>CNIL para. 12; ANSSI principle 7</td>
+<td>Signed or hash-chained records, logs outside agent write reach</td>
+<td>Same as the log</td>
+<td>n/a</td>
+<td>BP, strongly recommended (agents are an adversarial writer)</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Content capture (prompts, outputs, tool args and results)</td>
+<td>GDPR minimisation, CNIL para. 18, OTel opt-in default</td>
+<td>Redacted or hashed content, project-level consent and purpose</td>
+<td>Short: 7 to 30 days (BP), not a legal figure</td>
+<td>Project owner, DPO on request</td>
+<td>Opt-in only</td>
+<td>Opt-in, justified by Art. 12(2) purposes and DPIA</td>
+</tr>
+<tr>
+<td>Access and erasure requests over logs</td>
+<td>GDPR Art. 15, 17; CNIL para. 13</td>
+<td>Ability to find records by data subject identifier</td>
+<td>Within response delay</td>
+<td>DPO</td>
+<td>Yes. Hash user IDs consistently, keep an index</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Incident and breach notification</td>
+<td>GDPR Art. 33; NIS2 Art. 23 if in scope</td>
+<td>Timeline, scope, containment</td>
+<td>Per policy</td>
+<td>Security lead</td>
+<td>GDPR yes. NIS2 only if entity in scope and law in force</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>GPAI provider duties</td>
+<td>Art. 53, 55</td>
+<td>Documentation, training summary, incident reports to AI Office</td>
+<td>n/a</td>
+<td>n/a</td>
+<td>N/A, CNP is not a model provider. Request provider documentation under Art. 53(1)(b) as deployer BP</td>
+<td>N/A</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="part-b-technical-state-of-the-art-nov-2026">PART B. TECHNICAL STATE OF THE ART (Nov 2026)<a class="headerlink" href="#part-b-technical-state-of-the-art-nov-2026" title="Permanent link">&para;</a></h2>
+<h3 id="b1-opentelemetry-genai-semantic-conventions">B1. OpenTelemetry GenAI semantic conventions<a class="headerlink" href="#b1-opentelemetry-genai-semantic-conventions" title="Permanent link">&para;</a></h3>
+<p><strong>Status: all Development, not Stable.</strong> [HIGH]
+- GenAI and MCP conventions moved out of the main repo in semantic-conventions v1.42.0 (2026-06-12) to <a href="https://github.com/open-telemetry/semantic-conventions-genai">https://github.com/open-telemetry/semantic-conventions-genai</a> . No tagged release, CHANGELOG has only "Unreleased", README gives no stability level, Schema URL "TODO". Latest commits seen: 2026-11-06 (<a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/692" title="GitHub Issue: squidfunk/mkdocs-material #692">#692</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/513" title="GitHub Issue: squidfunk/mkdocs-material #513">#513</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/144" title="GitHub Issue: squidfunk/mkdocs-material #144">#144</a>), so it is moving daily.
+- Third-party posts claiming "stable" exist (one dated 2026-06-22). They conflict with the registry badges reported in dev.to (2026-07-16) and my reading of the repo. Treat "stable" claims as wrong. [MED]
+- Practical rule: pin the instrumentation versions and expect renames. Opt-in env for latest names: OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental (secondary sources, John Hodge post updated 2026-11-03 and Coralogix doc) [MED].</p>
+<p><em><em>Content in the repo docs (docs/gen-ai/<em>.md), read from raw.githubusercontent.com on 2026-11-13</em></em> [HIGH]
+- Spans: inference client spans (client-inference.md), embeddings, <code>invoke_agent</code> (INTERNAL for in-process agents, CLIENT variant for remote agent services, <code>invoke_workflow</code> when the app controls the flow), <code>create_agent</code>, <code>execute_tool</code> (INTERNAL, name <code>execute_tool {gen_ai.tool.name}</code>), retrieval, a2a, realtime.
+- Agent identity: gen_ai.agent.name, gen_ai.agent.id, gen_ai.agent.version, gen_ai.conversation.id (only when a real ID exists), gen_ai.main_agent resource entity.
+- Tool attributes: gen_ai.tool.name (required), gen_ai.tool.type, gen_ai.tool.call.id, and opt-in sensitive gen_ai.tool.call.arguments and gen_ai.tool.call.result. execute-tool.md defines NO approval, permission or user-confirmation attributes. Agent-as-tool adds gen_ai.transfer.mode and target. Skills add gen_ai.skill.</em>, process.executable.*, process.exit.code.
+- MCP (mcp.md): span name <code>{mcp.method.name} {target}</code>, attributes mcp.method.name, mcp.session.id, mcp.protocol.version, jsonrpc.request.id, error.type (<code>tool_error</code> when isError), context propagated in <code>params._meta</code> as unprefixed traceparent/tracestate/baggage. Metrics mcp.client|server.operation.duration and session.duration. MCP tool-call spans should merge into an existing <code>execute_tool</code> span when detectable.
+- Metrics (gen-ai-metrics.md): gen_ai.client.operation.duration, gen_ai.server.request.duration, gen_ai.server.time_per_output_token, gen_ai.server.time_to_first_token, gen_ai.invoke_agent.duration, .inference_calls, .tool_calls, gen_ai.execute_tool.duration.
+- <strong>Conflict on token metric name.</strong> The metrics page no longer lists gen_ai.client.token.usage. gen-ai-token-metrics.md defines counters gen_ai.client.inference.usage.input_tokens, .output_tokens, .cache_read.input_tokens, .cache_write.input_tokens, .reasoning.output_tokens and histograms gen_ai.client.inference.operation.input_tokens / output_tokens. Yet agentgateway (agentgateway_gen_ai_client_token_usage), the VictoriaMetrics/OpenLIT blog (gen_ai_client_token_usage_sum) and most SDKs still emit the older histogram. Expect both generations to coexist in your data for a while. Counters are the better base for cost sums. [HIGH on spec, HIGH on agentgateway docs]
+- Events: gen_ai.evaluation.result (gen_ai.evaluation.name, score.value, score.label, explanation, gen_ai.response.id), parented to the evaluated operation span when possible. Exception events gen_ai.invoke_agent.exception, gen_ai.execute_tool.exception (WARN severity). Inference-operation events are in client-inference.md (not read).
+- <strong>Content capture</strong> (gen-ai-spans.md): opt-in. Env var OTEL_INSTRUMENTATION_GENAI_CAPTURE_CONTENT with NO_CONTENT (default), SPAN_ONLY, EVENT_ONLY, SPAN_AND_EVENT. Governs gen_ai.input.messages, gen_ai.output.messages, gen_ai.system_instructions, tool call args and results, retrieval queries, prompt variables, memory records. <code>_ref</code> variants (for example gen_ai.input.messages_ref) store a URI to external storage instead of inline content, which suits a "content in the Object Lock bucket, pointer in the trace" design. Docs warn the attributes "likely contain sensitive information including user/PII data".
+- Events vs span attributes: since v1.37.0 (2025-08) messages moved from per-message events to span attributes (secondary: John Hodge). The current spec lets you choose where content goes (span, event, both). Evaluation results are events. [MED]
+- <strong>Not found in spec:</strong> attributes for human approval, guardrail verdict, prompt-injection detection, user identity on GenAI spans. Use your own namespace (for example <code>cnp.approval.*</code>, <code>cnp.guardrail.*</code>) plus standard enduser.id and tenant attributes. This is a gap to document, not a standard to cite.</p>
+<h3 id="b2-who-emits-what">B2. Who emits what<a class="headerlink" href="#b2-who-emits-what" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>What it emits</th>
+<th>Content capture</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>agentgateway (Apache-2.0, 6.2k stars, pushed 2026-11-13; latest v1.7.0 2026-10-27)</td>
+<td>Traces via OTLP (policy-enabled, off by default on Kubernetes via AgentgatewayPolicy). Default span attrs: HTTP set, gen_ai.operation.name, provider.name, request.model, response.model, usage.input_tokens/output_tokens, agw.ai.original_model, mcp.method.name, mcp.target, mcp.session.id, mcp.resource.<em>, gen_ai.tool.name, mcp.error.</em>; conditional jwt.sub, src.identity. Access logs per request with gen_ai.* fields and agw.ai.usage.cost.total, exportable as OTLP LogRecords. Prometheus: agentgateway_gen_ai_client_token_usage (labels token type, operation, system, request/response model, user_id when per-user API key rate limiting), agentgateway_cost_catalog_lookups_total. v1.7.0 adds cache, reasoning tokens, TTFT, session detection (x-claude-code-session-id), CEL MCP guardrails, guard scopes covering tool outputs by default. Guardrail verdicts and audit-mode detections go to metrics and the structured access log (not documented for traces).</td>
+<td>Prompt/completion logging not documented on the pages read. Tool calls opt-in via llm.toolCalls in access-log and tracing attributes (adds overhead). Guard audit mode still calls the provider (cost, latency)</td>
+<td><a href="https://agentgateway.dev/docs/kubernetes/latest/documentation/llm/observability/">https://agentgateway.dev/docs/kubernetes/latest/documentation/llm/observability/</a> , <a href="https://agentgateway.dev/docs/standalone/latest/documentation/observability/traces/attribute-reference/">https://agentgateway.dev/docs/standalone/latest/documentation/observability/traces/attribute-reference/</a> , <a href="https://agentgateway.dev/docs/kubernetes/main/documentation/llm/guardrails/overview/">https://agentgateway.dev/docs/kubernetes/main/documentation/llm/guardrails/overview/</a> , release v1.7.0 on GitHub [HIGH]</td>
+</tr>
+<tr>
+<td>kagent (Apache-2.0, 4.3k stars, v1.0.0 released 2026-11-09, v1.0.1 2026-11-12)</td>
+<td>v1.0.0 notes: OTEL via SDK-spec env vars, Weaver registry as telemetry contract, chat and execute_tool spans from runtimes, Python runtimes on upstream GenAI instrumentation, semconv metrics exported, legacy ADK spans dropped, trace context propagated on outbound LLM and MCP calls, harness invocation identity, trusted user as user.id, HITL pause on input-required. PR <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/1433" title="GitHub Issue: squidfunk/mkdocs-material #1433">#1433</a> (merged 2026-03-10): controller tracing, A2A propagation, invoke_agent span with GenAI attributes. Docs page for 0.10.x showed span <code>agent_run [agent]</code> only and says 0.10.x is superseded by 1.0.</td>
+<td>v1.0.1 backport "honor runtime content capture settings" implies content capture is runtime-configurable. Exact setting not found</td>
+<td><a href="https://api.github.com/repos/kagent-dev/kagent/releases">https://api.github.com/repos/kagent-dev/kagent/releases</a> , <a href="https://github.com/kagent-dev/kagent/pull/1433">https://github.com/kagent-dev/kagent/pull/1433</a> [HIGH on release notes, docs for 1.0 tracing not found]</td>
+</tr>
+<tr>
+<td>MCP servers (yours)</td>
+<td>Only if instrumented. Spec defines mcp.* conventions and <code>_meta</code> propagation. Not researched per server SDK.</td>
+<td>opt-in args/results</td>
+<td>mcp.md [HIGH on spec]</td>
+</tr>
+<tr>
+<td>Ollama</td>
+<td>Not found: no native OTel. PRs open: <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/14203" title="GitHub Issue: squidfunk/mkdocs-material #14203">#14203</a> (traces), <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/6537" title="GitHub Issue: squidfunk/mkdocs-material #6537">#6537</a> (OTel metrics), <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/16998" title="GitHub Issue: squidfunk/mkdocs-material #16998">#16998</a> (Prometheus metrics endpoint). None merged as of 2026-11-13. Third-party opentelemetry-instrumentation-ollama (OpenLLMetry) instruments the Python client only.</td>
+<td>n/a</td>
+<td>GitHub issues search 2026-11-13 [HIGH]. So measure local-model calls at agentgateway, not at Ollama. GPU metrics need a separate exporter [LOW, not verified]</td>
+</tr>
+<tr>
+<td>LiteLLM proxy</td>
+<td>OTel callback <code>callbacks: ["otel"]</code>; default is legacy span format, newer GenAI names behind OTEL_SEMCONV_STABILITY_OPT_IN=gen_ai_latest_experimental; behavior changed in v1.81.0 (litellm_request span collapsed by default). Enterprise-gated: key redaction in logs, audit logs, SSO. Licence boundary for OTel itself not confirmed.</td>
+<td>via callback config</td>
+<td>docs.litellm.ai, Coralogix, Fiddler pages [MED]. Not needed if agentgateway stays the gateway</td>
+</tr>
+<tr>
+<td>OpenLIT SDK</td>
+<td>Python/TS auto-instrumentation of 50+ libraries incl. MCP, emits GenAI attributes plus own cost extension (gen_ai.usage.cost). Evals scored through OpenLIT platform. Apache-2.0, 3.1k stars, pushed 2026-11-11.</td>
+<td>configurable</td>
+<td><a href="https://victoriametrics.com/blog/victoriametrics-openlit-agents-observability/">https://victoriametrics.com/blog/victoriametrics-openlit-agents-observability/</a> (2026-07-03) [HIGH for the claims in that post]</td>
+</tr>
+<tr>
+<td>OpenLLMetry / Traceloop SDK</td>
+<td>Apache-2.0, 7.5k stars, pushed 2026-11-09. One secondary analysis says it still emits deprecated gen_ai.prompt/gen_ai.completion in places and adds traceloop.* attributes. Ownership claim (ServiceNow acquisition 2026-03) unverified.</td>
+<td>configurable</td>
+<td>futureagi.com, traceloop docs [LOW/MED]</td>
+</tr>
+<tr>
+<td>Claude Code and Claude Agent SDK</td>
+<td>CLAUDE_CODE_ENABLE_TELEMETRY=1 plus OTEL_METRICS_EXPORTER, OTEL_LOGS_EXPORTER, OTEL_TRACES_EXPORTER (+CLAUDE_CODE_ENHANCED_TELEMETRY_BETA=1 for traces, beta), standard OTEL_EXPORTER_OTLP_<em>. Metrics: claude_code.token.usage, cost.usage, session.count, code_edit_tool.decision, active_time.total, lines_of_code, commit, pull_request counts. Log events: user_prompt, api_request (model, cost_usd, tokens, request_id), tool_result, tool_decision (decision plus source: config, hook, user_permanent, user_abort), api_error, mcp_server_connection, permission_mode_changed. Spans: claude_code.interaction &gt; llm_request, tool (&gt; tool.blocked_on_user, tool.execution), hook. W3C TRACEPARENT in and out, forwarded to Bash. Attributes: session.id, prompt.id, user.id (random local ID), user.email when authed. Agent SDK doc: inject enduser.id and tenant.id through OTEL_RESOURCE_ATTRIBUTES to get a per-user audit trail. Does NOT use gen_ai.</em> names.</td>
+<td>Off by default. Opt-in: OTEL_LOG_USER_PROMPTS, OTEL_LOG_TOOL_DETAILS, OTEL_LOG_TOOL_CONTENT (needs tracing), OTEL_LOG_ASSISTANT_RESPONSES, OTEL_LOG_RAW_API_BODIES (high sensitivity). Repo settings cannot enable telemetry, only managed settings</td>
+<td><a href="https://code.claude.com/docs/en/monitoring-usage">https://code.claude.com/docs/en/monitoring-usage</a> , <a href="https://code.claude.com/docs/en/agent-sdk/observability">https://code.claude.com/docs/en/agent-sdk/observability</a> [HIGH]</td>
+</tr>
+</tbody>
+</table>
+<h3 id="b3-storage-and-query-on-the-victoria-stack">B3. Storage and query on the Victoria stack<a class="headerlink" href="#b3-storage-and-query-on-the-victoria-stack" title="Permanent link">&para;</a></h3>
+<p>State of the stack (from existing scratchpad file research-vm-ecosystem.md, same date, plus this session) [HIGH]
+- VictoriaTraces v0.13.0 (2026-11-05) is pre-GA, data structure not frozen. OTLP HTTP and gRPC ingest, Jaeger query API for Grafana, per-day partitions, default retention 7d, tenant by AccountID/ProjectID headers with vmauth for authorization. Docs page: <a href="https://docs.victoriametrics.com/victoriatraces/">https://docs.victoriametrics.com/victoriatraces/</a>
+- VictoriaLogs v1.54.0 (2026-11-13) GA since v1.0.0, OTLP logs at /insert/opentelemetry/v1/logs, no S3 storage, no per-stream or per-tenant retention. Use several instances with different retention for audit logs (30d content, 12m metadata, for example). vmalert supports rule type vlogs.
+- VictoriaMetrics: OTLP at /opentelemetry. <code>-opentelemetry.usePrometheusNaming</code> turns gen_ai.usage.cost into gen_ai_usage_cost_USD_sum (VM/OpenLIT blog).
+- Official reference pipeline: <a href="https://victoriametrics.com/blog/victoriametrics-openlit-agents-observability/">https://victoriametrics.com/blog/victoriametrics-openlit-agents-observability/</a> (2026-07-03) and companion repo <a href="https://github.com/VictoriaMetrics/ai-observability">https://github.com/VictoriaMetrics/ai-observability</a> (Apache-2.0, 9 commits, docker-compose with VM, VL, VT, Grafana, vmalert, rules/llm.yml, otelcol.yaml, one dashboard). Collector pattern: metrics pipeline strips high-cardinality labels (conversation, response and tool-call IDs, user.id); logs pipeline to VictoriaLogs with optional prompt capture; traces pipeline with tail sampling (keep errors, expensive runs, runs over 10 s, 5% of the rest). The post estimates 80 to 95% trace volume drop. OpenLIT's own destination doc lists the three OTLP endpoints (/opentelemetry, /insert/opentelemetry for logs and traces) and Grafana datasources: Prometheus type, VictoriaLogs plugin, Jaeger type.
+- Audit consequence of tail sampling: tail sampling is right for ops traces and wrong for the compliance record. Run two paths. Ops path sampled. Audit path unsampled but metadata-only, as log records.</p>
+<p>Mapping of your needs [BEST PRACTICE unless marked]
+- GenAI dashboards: tokens, cost, latency, TTFT, errors from agentgateway Prometheus metrics and gen_ai.* metrics in VictoriaMetrics. Datasource prometheus type or victoriametrics-metrics-datasource. Traces via Jaeger datasource on VictoriaTraces, logs via victoriametrics-logs-datasource.
+- Cost per project, agent, user: agentgateway gives cost per request in logs and spans (agw.ai.usage.cost.total) and per-user token series when user_id label is on. A per-project label is not a default metric label. Add it as a custom access-log and span attribute through the policy CEL attributes (documented mechanism), then aggregate in LogsQL stats, and keep metrics labels bounded. Per-project label in metrics: not verified. Claude Code cost per user/team: claude_code.cost.usage with OTEL_RESOURCE_ATTRIBUTES team.id.
+- Tool-call audit trail: agentgateway MCP spans and access logs (mcp.method.name, gen_ai.tool.name, session id, jwt.sub) for gateway-routed calls. kagent execute_tool spans. Claude Code tool_decision and tool_result events. All carry trace IDs, so one LogsQL query by trace_id joins logs and spans.
+- Guardrail and prompt-injection events: agentgateway guardrail detections land in metrics and the access log. Alert with vmalert type vlogs on a verdict field. Exact field name not found, check a live log line.
+- Human-approval events: no OTel standard (confirmed absent in execute-tool.md). Emit one structured log record or span event per decision from CMP and the MCP server: <code>cnp.approval.state</code> (requested, confirmed, denied, cmp_pending, cmp_approved), <code>cnp.approval.approver</code> (Keycloak sub), <code>cnp.action.hash</code> (hash of exact action and parameters), <code>cnp.approval.channel</code>, trace context of the run. This mirrors the ANSSI principle of showing the exact action and executing only what was approved.
+- Evaluation scores: spec event gen_ai.evaluation.result, or metric gen_ai_evaluation_score as in the VM/OpenLIT blog. A nightly eval job writing these into VM is cheaper than a platform.
+- Per-run trace: propagate one traceparent from the CMP request, through MCP <code>params._meta</code> (spec), agentgateway, kagent (1.0 propagates on outbound LLM and MCP calls), sandbox processes (Claude Code forwards TRACEPARENT to Bash). Whether agentgateway extracts and continues an inbound traceparent: not verified in docs read, test it.</p>
+<p><strong>Tamper-evident audit trail options for a small stack</strong> [BEST PRACTICE, tools unevaluated]
+1. S3 Object Lock in compliance mode (you already have it) as the system of record for the per-run "AI Act record", written at run end as a signed JSON object. This is WORM by storage guarantee. Matches CNIL para. 7 (write-only, segregated) and ANSSI principle 7 (outside agent reach).
+2. Hash chaining: each run record includes prev_hash and its own SHA-256; write the daily chain head into Object Lock. Cheap, detects deletion and edit. Matches CNIL para. 12 "timestamp and sign at creation".
+3. Signing: sign the daily manifest with a key held in Vault transit (you run Vault) or cosign. Key never visible to agents.
+4. Transparency log: Sigstore Rekor v2 is tile-based, needs rekor-tiles plus a timestamp authority, no online inclusion proof API, so it is heavy for a small team. Single-binary Merkle logs such as Etchlog (RFC 6962, single-node) exist, maturity unchecked. Source: Sigstore docs and project READMEs via search. [LOW]. I would skip this for the demo.
+5. VictoriaLogs and VictoriaTraces are mutable operational stores. Do not present them as the evidence store. Present them as the query layer, with the Object Lock copy as evidence.</p>
+<h3 id="b4-open-source-llm-observability-tools-vs-victoria-stack">B4. Open-source LLM observability tools vs Victoria stack<a class="headerlink" href="#b4-open-source-llm-observability-tools-vs-victoria-stack" title="Permanent link">&para;</a></h3>
+<p>Stars and push dates from GitHub API 2026-11-13.</p>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Licence</th>
+<th>Weight (self-host)</th>
+<th>Adds over Victoria stack</th>
+<th>Status notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Langfuse</td>
+<td>MIT core, ee features with license key (GitHub reports NOASSERTION), 37.4k stars</td>
+<td>Web + worker (docs: at least 2 CPU and 4 GB RAM for all app containers) plus Postgres, ClickHouse, Redis/Valkey, S3. DB sizing not documented on pages read</td>
+<td>Prompt management, datasets, eval runs, annotation UI, session views. OTLP over HTTP only at /api/public/otel (v3.22.0+), no gRPC; maps gen_ai.*</td>
+<td>Acquired by ClickHouse 2026-01-16, ClickHouse states MIT core stays. One site claims AGPL, contradicted by official statements.</td>
+</tr>
+<tr>
+<td>Phoenix (Arize)</td>
+<td>Elastic License 2.0 per secondary sources, GitHub NOASSERTION, 12.3k stars</td>
+<td>Not found on pages read</td>
+<td>Evals, datasets, experiments, OTel/OpenInference tracing</td>
+<td>Arize independent per Hackernoon 2026-08-27, one site claims a Dynatrace deal, unresolved. Source-available, not OSI. [MED]</td>
+</tr>
+<tr>
+<td>Opik (Comet)</td>
+<td>Apache-2.0, 23.4k stars</td>
+<td>Not found</td>
+<td>Evals, datasets, online scoring, dashboards</td>
+<td>Independent.</td>
+</tr>
+<tr>
+<td>OpenLIT</td>
+<td>Apache-2.0, 3.1k stars</td>
+<td>SDK plus optional platform; VM official post shows the pipeline without its UI</td>
+<td>Auto-instrumentation, cost, evals (server side in platform)</td>
+<td>Active, officially paired with VM stack.</td>
+</tr>
+<tr>
+<td>Helicone</td>
+<td>Apache-2.0, 6.3k stars</td>
+<td>Not checked</td>
+<td>Proxy-based logging, caching</td>
+<td>Acquired by Mintlify 2026-03-03, "maintenance mode". Avoid.</td>
+</tr>
+<tr>
+<td>Lunary</td>
+<td>Licence conflicting in sources (Apache-2.0 vs source-available)</td>
+<td>Not checked</td>
+<td>Prompt management, evals</td>
+<td>GitHub API returned 404 for lunary-ai/lunary on 2026-11-13, status unclear. Avoid.</td>
+</tr>
+<tr>
+<td>OpenLLMetry (instrumentation only)</td>
+<td>Apache-2.0, 7.5k stars</td>
+<td>Library</td>
+<td>Python/TS instrumentation, not a backend</td>
+<td>Emits some deprecated attribute names per one secondary source.</td>
+</tr>
+</tbody>
+</table>
+<p>Sources: <a href="https://langfuse.com/self-hosting">https://langfuse.com/self-hosting</a> , <a href="https://langfuse.com/self-hosting/deployment/infrastructure/containers">https://langfuse.com/self-hosting/deployment/infrastructure/containers</a> , <a href="https://langfuse.com/integrations/native/opentelemetry">https://langfuse.com/integrations/native/opentelemetry</a> , <a href="https://clickhouse.com/blog/clickhouse-acquires-langfuse-open-source-llm-observability">https://clickhouse.com/blog/clickhouse-acquires-langfuse-open-source-llm-observability</a> , <a href="https://hackernoon.com/two-acquisitions-deep-two-still-standing-whats-really-happening-to-open-source-llm-observability">https://hackernoon.com/two-acquisitions-deep-two-still-standing-whats-really-happening-to-open-source-llm-observability</a></p>
+<p>Recommendation for a RAM-scarce cluster [BEST PRACTICE]
+- Stay on the Victoria stack plus one OTel Collector. It already gives cost, latency, tool-call audit, guardrail alerts and a join through trace IDs, with no extra datastore. Every tool above brings its own database tier, and the heaviest (Langfuse: ClickHouse + Postgres + Redis + S3) duplicates what you already run.
+- Add Langfuse only if a concrete need appears: prompt versioning, datasets, human annotation or eval workflows that tenants ask for. Treat it as an optional per-tenant add-on, not a platform dependency. agentgateway has a documented Langfuse integration (blog 2026-02-17), so you can fan out later.
+- Do not adopt Helicone or Lunary.
+- Evals: start with a scheduled Go or Python job that replays sampled runs and emits gen_ai.evaluation.result events or a gen_ai_evaluation_score metric.</p>
+<h3 id="b5-what-impressive-and-compliant-looks-like-for-the-demo">B5. What "impressive and compliant" looks like for the demo<a class="headerlink" href="#b5-what-impressive-and-compliant-looks-like-for-the-demo" title="Permanent link">&para;</a></h3>
+<p>One run, one trace, one record:
+1. Root span at the CMP/MCP entry: Keycloak user (sub, hashed email), project/tenant, assistant client, requested action, correlation id. Disclosure shown to the user (Art. 50(1) evidence).
+2. Child spans: invoke_agent (kagent), chat spans per model call through agentgateway (provider, model, tokens, cost, guardrail verdicts), execute_tool spans per MCP call (tool name, argument hash), sandbox exec span (command hash, exit code, egress policy hits), then the deployment span (Argo CD sync, commit SHA, image digest).
+3. Approval events in the same trace: needs_user_confirmation asked, answered by whom, needs_cmp_approval pending, approved by whom in CMP, the exact action hash executed. The Kubernetes, Vault, Keycloak and Argo CD audit logs already exist and join on user and time. Link them by commit SHA, deployment name and Keycloak sub.
+4. Grafana "run view" dashboard: trace waterfall, cost, approval timeline, guardrail hits, link to the evidence object.
+5. "AI Act record" export per run: a signed JSON (and optional PDF) produced by a small Go tool querying VictoriaTraces and VictoriaLogs by trace_id. Fields: run id, time window, user, project, system and model versions (agent version, gateway version, model name and provider, local model digest), disclosure version, list of model calls with token and cost, list of tool calls with argument hashes, approvals with approver identity, guardrail verdicts, resulting artefacts (commit, image digest, deployment), content references (pointer to opt-in content object or "not captured"), prev_hash and hash. Stored in the Object Lock bucket. Same fields map to Art. 12(2) purposes and the CNIL "demande, autorisation, action, resultat" sequence of ANSSI.
+6. Privacy posture to show: content capture off by default, per-project opt-in switch, redaction at the gateway, retention dashboard, a DSAR search by hashed user id.
+7. Label it honestly: "built to the Art. 12/19/26(6) shape, not a conformity claim, no harmonised standard yet".</p>
+<h3 id="b6-open-questions-and-conflicts">B6. Open questions and conflicts<a class="headerlink" href="#b6-open-questions-and-conflicts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>OTel token metric naming (older gen_ai.client.token.usage vs new gen_ai.client.inference.usage.*) differs between spec main and emitters. Pin versions.</li>
+<li>Content-capture env var: spec says OTEL_INSTRUMENTATION_GENAI_CAPTURE_CONTENT, a secondary source says Python instrumentation still reads OTEL_INSTRUMENTATION_GENAI_CAPTURE_MESSAGE_CONTENT. Verify per library.</li>
+<li>agentgateway: prompt/completion content logging not documented on pages read, guardrail verdict field names, inbound traceparent continuation, per-project metric labels. Check live.</li>
+<li>kagent 1.0 tracing docs and the exact content-capture switch not found.</li>
+<li>NIS2 France: outcome of the 2026-11-09 to 2026-11-13 Assemblee session unknown.</li>
+<li>Art. 50(2) applicability to internal dev agents and Art. 72 plan deadline (2027-09-02) not cross-checked on EUR-Lex.</li>
+<li>France AI Act authority designation unsettled.</li>
+<li>EN 18286 OJ date (2026-10-14) from a secondary source. Commission page says it was published as Implementing Decision (EU) 2026/2274.</li>
+<li>prEN ISO/IEC 24970 final status unknown.</li>
+</ul>
+<hr />
+<h2 id="sources-accessed-2026-11-13-unless-noted">Sources (accessed 2026-11-13 unless noted)<a class="headerlink" href="#sources-accessed-2026-11-13-unless-noted" title="Permanent link">&para;</a></h2>
+<p>Legal, primary or official
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act">https://ai-act-service-desk.ec.europa.eu/en/ai-act/timeline/timeline-implementation-eu-ai-act</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-3">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-3</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-4">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-4</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-12">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-12</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-19">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-19</a> (search result summary)
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-21">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-21</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-25">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-25</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-26">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-26</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-50">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-50</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-72">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-72</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-73">https://ai-act-service-desk.ec.europa.eu/en/ai-act/article-73</a>
+- <a href="https://ai-act-service-desk.ec.europa.eu/en/ai-act/annex-3">https://ai-act-service-desk.ec.europa.eu/en/ai-act/annex-3</a>
+- <a href="https://eur-lex.europa.eu/eli/reg/2026/1744">https://eur-lex.europa.eu/eli/reg/2026/1744</a> (search metadata only, page not rendered)
+- <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02024R1689-20260727">https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX%3A02024R1689-20260727</a> (search metadata only, not rendered)
+- <a href="https://artificialintelligenceact.eu/ai-act-explorer/digital-omnibus/">https://artificialintelligenceact.eu/ai-act-explorer/digital-omnibus/</a> (unofficial tracker)
+- <a href="https://digital-strategy.ec.europa.eu/en/policies/ai-act-standardisation">https://digital-strategy.ec.europa.eu/en/policies/ai-act-standardisation</a>
+- <a href="https://digital-strategy.ec.europa.eu/en/policies/guidelines-gpai-providers">https://digital-strategy.ec.europa.eu/en/policies/guidelines-gpai-providers</a>
+- <a href="https://digital-strategy.ec.europa.eu/en/policies/cra-reporting">https://digital-strategy.ec.europa.eu/en/policies/cra-reporting</a> (search result)
+- <a href="https://www.entreprises.gouv.fr/priorites-et-actions/transition-numerique/soutenir-le-developpement-de-lia-au-service-de-0">https://www.entreprises.gouv.fr/priorites-et-actions/transition-numerique/soutenir-le-developpement-de-lia-au-service-de-0</a> (search result)
+- <a href="https://www.cnil.fr/sites/cnil/files/atoms/files/recommandation_-_journalisation.pdf">https://www.cnil.fr/sites/cnil/files/atoms/files/recommandation_-_journalisation.pdf</a>
+- <a href="https://www.cnil.fr/fr/les-fiches-pratiques-ia">https://www.cnil.fr/fr/les-fiches-pratiques-ia</a>
+- <a href="https://www.cnil.fr/fr/ia-respecter-lexercice-des-droits-des-personnes">https://www.cnil.fr/fr/ia-respecter-lexercice-des-droits-des-personnes</a> (search result)
+- <a href="https://www.cnil.fr/sites/default/files/2026-07/ia-cianum-cnil.pdf">https://www.cnil.fr/sites/default/files/2026-07/ia-cianum-cnil.pdf</a>
+- <a href="https://messervices.cyber.gouv.fr/documents-guides/anssi_essentiels_ia_agentique_1.0.pdf">https://messervices.cyber.gouv.fr/documents-guides/anssi_essentiels_ia_agentique_1.0.pdf</a>
+- <a href="https://messervices.cyber.gouv.fr/documents-guides/Recommandations_de_s%C3%A9curit%C3%A9_pour_un_syst%C3%A8me_d_IA_g%C3%A9n%C3%A9rative.pdf">https://messervices.cyber.gouv.fr/documents-guides/Recommandations_de_s%C3%A9curit%C3%A9_pour_un_syst%C3%A8me_d_IA_g%C3%A9n%C3%A9rative.pdf</a> (search snippet only)
+- <a href="https://standards.iteh.ai/catalog/standards/cen/38472bd6-ab5c-4908-ac64-6990f45027e6/pren-iso-iec-24970">https://standards.iteh.ai/catalog/standards/cen/38472bd6-ab5c-4908-ac64-6990f45027e6/pren-iso-iec-24970</a> (search result)
+- <a href="https://www.iso.org/standard/88723.html">https://www.iso.org/standard/88723.html</a> (403, search snippet only)</p>
+<p>Legal, secondary
+- <a href="https://technology.org/2026/10/13/eu-ai-act-deadlines-after-the-digital-omnibus-what-applies-from-december-2026-to-august-2028/">https://technology.org/2026/10/13/eu-ai-act-deadlines-after-the-digital-omnibus-what-applies-from-december-2026-to-august-2028/</a> (403 to fetcher, search snippet only)
+- <a href="https://www.leto.legal/news/nis-2-projet-loi-resilience-assemblee-nationale-9-novembre-2026">https://www.leto.legal/news/nis-2-projet-loi-resilience-assemblee-nationale-9-novembre-2026</a>
+- <a href="https://www.jonesday.com/en/insights/2026/06/european-commission-publishes-final-code-of-practice-on-marking-and-labelling-aigenerated-content">https://www.jonesday.com/en/insights/2026/06/european-commission-publishes-final-code-of-practice-on-marking-and-labelling-aigenerated-content</a>
+- <a href="https://www.wilmerhale.com/en/insights/blogs/wilmerhale-privacy-and-cybersecurity-law/20250724-european-commission-issues-guidelines-for-providers-of-general-purpose-ai-models">https://www.wilmerhale.com/en/insights/blogs/wilmerhale-privacy-and-cybersecurity-law/20250724-european-commission-issues-guidelines-for-providers-of-general-purpose-ai-models</a>
+- <a href="https://cms.law/en/int/legal-updates/edpb-opinion-28-2024-key-takeaways-on-processing-personal-data-in-the-context-of-ai-models">https://cms.law/en/int/legal-updates/edpb-opinion-28-2024-key-takeaways-on-processing-personal-data-in-the-context-of-ai-models</a>
+- <a href="https://www.isms.online/iso-42001/annex-a-controls/a-6-ai-system-life-cycle/a-6-2-8-ai-system-recording-of-event-logs/">https://www.isms.online/iso-42001/annex-a-controls/a-6-ai-system-life-cycle/a-6-2-8-ai-system-recording-of-event-logs/</a>
+- <a href="https://www.mccannfitzgerald.com/knowledge/data-privacy-and-cyber-risk/cyber-resilience-act-reporting-obligations-apply-from-11-september-2026">https://www.mccannfitzgerald.com/knowledge/data-privacy-and-cyber-risk/cyber-resilience-act-reporting-obligations-apply-from-11-september-2026</a></p>
+<p>Technical
+- <a href="https://github.com/open-telemetry/semantic-conventions-genai">https://github.com/open-telemetry/semantic-conventions-genai</a> (and raw docs: docs/gen-ai/gen-ai-metrics.md, gen-ai-token-metrics.md, gen-ai-spans.md, gen-ai-agent-spans.md, gen-ai-events.md, execute-tool.md, mcp.md; commits API)
+- <a href="https://opentelemetry.io/docs/specs/semconv/gen-ai/">https://opentelemetry.io/docs/specs/semconv/gen-ai/</a> (moved notice)
+- <a href="https://john-hodge.com/blog/opentelemetry-genai-semantic-conventions/">https://john-hodge.com/blog/opentelemetry-genai-semantic-conventions/</a>
+- <a href="https://dev.to/azena-ai/opentelemetrys-genai-semantic-conventions-are-not-stable-yet-heres-what-actually-shipped-in-2026-3mke">https://dev.to/azena-ai/opentelemetrys-genai-semantic-conventions-are-not-stable-yet-heres-what-actually-shipped-in-2026-3mke</a>
+- <a href="https://agentgateway.dev/docs/kubernetes/latest/documentation/llm/observability/">https://agentgateway.dev/docs/kubernetes/latest/documentation/llm/observability/</a>
+- <a href="https://agentgateway.dev/docs/standalone/latest/documentation/observability/traces/attribute-reference/">https://agentgateway.dev/docs/standalone/latest/documentation/observability/traces/attribute-reference/</a>
+- <a href="https://agentgateway.dev/docs/standalone/main/documentation/llm/observability/">https://agentgateway.dev/docs/standalone/main/documentation/llm/observability/</a>
+- <a href="https://agentgateway.dev/docs/kubernetes/main/documentation/llm/guardrails/overview/">https://agentgateway.dev/docs/kubernetes/main/documentation/llm/guardrails/overview/</a>
+- <a href="https://api.github.com/repos/agentgateway/agentgateway">https://api.github.com/repos/agentgateway/agentgateway</a> and /releases
+- <a href="https://api.github.com/repos/kagent-dev/kagent">https://api.github.com/repos/kagent-dev/kagent</a> and /releases
+- <a href="https://github.com/kagent-dev/kagent/pull/1433">https://github.com/kagent-dev/kagent/pull/1433</a>
+- <a href="https://kagent.dev/docs/kagent/observability/tracing">https://kagent.dev/docs/kagent/observability/tracing</a>
+- <a href="https://code.claude.com/docs/en/monitoring-usage">https://code.claude.com/docs/en/monitoring-usage</a>
+- <a href="https://code.claude.com/docs/en/agent-sdk/observability">https://code.claude.com/docs/en/agent-sdk/observability</a>
+- <a href="https://api.github.com/search/issues?q=repo:ollama/ollama+opentelemetry">https://api.github.com/search/issues?q=repo:ollama/ollama+opentelemetry</a>
+- <a href="https://docs.victoriametrics.com/victoriatraces/">https://docs.victoriametrics.com/victoriatraces/</a>
+- <a href="https://victoriametrics.com/blog/victoriametrics-openlit-agents-observability/">https://victoriametrics.com/blog/victoriametrics-openlit-agents-observability/</a>
+- <a href="https://docs.openlit.io/latest/sdk/destinations/victoriametrics-stack.md">https://docs.openlit.io/latest/sdk/destinations/victoriametrics-stack.md</a>
+- <a href="https://github.com/VictoriaMetrics/ai-observability">https://github.com/VictoriaMetrics/ai-observability</a>
+- <a href="https://langfuse.com/self-hosting">https://langfuse.com/self-hosting</a> , /self-hosting/deployment/infrastructure/containers , /integrations/native/opentelemetry
+- <a href="https://clickhouse.com/blog/clickhouse-acquires-langfuse-open-source-llm-observability">https://clickhouse.com/blog/clickhouse-acquires-langfuse-open-source-llm-observability</a>
+- <a href="https://hackernoon.com/two-acquisitions-deep-two-still-standing-whats-really-happening-to-open-source-llm-observability">https://hackernoon.com/two-acquisitions-deep-two-still-standing-whats-really-happening-to-open-source-llm-observability</a>
+- GitHub API repo metadata for langfuse/langfuse, Arize-ai/phoenix, comet-ml/opik, openlit/openlit, Helicone/helicone, traceloop/openllmetry, lunary-ai/lunary (404)
+- <a href="https://pistack.xyz/posts/2026-04-25-self-hosted-log-integrity-tamper-evident-audit-logging-guide-2026/">https://pistack.xyz/posts/2026-04-25-self-hosted-log-integrity-tamper-evident-audit-logging-guide-2026/</a> and Sigstore docs (search results only)
+- Local file: scratchpad/research-vm-ecosystem.md (prior research, same date)</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>

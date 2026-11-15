@@ -1,0 +1,5397 @@
+
+<!doctype html>
+<html lang="fr" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Documentation technique et d'architecture de la Cloud Native Platform">
+      
+      
+        <meta name="author" content="3-Istor Team">
+      
+      
+      
+        <link rel="prev" href="../../runbooks/slo-burn-rate/">
+      
+      
+        <link rel="next" href="../veille-observabilite-datadog/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+    
+    
+      
+        <title>Veille VictoriaMetrics - Cloud Native Platform (CNP) Docs ⚡</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.57a0d79d.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.fb2fffe2.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Roboto";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#victoriametrics-ecosystem-state-of-the-art-as-of-2026-11-13" class="md-skip">
+          Aller au contenu
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="En-tête">
+    <a href="../../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-header__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Cloud Native Platform (CNP) Docs ⚡
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Veille VictoriaMetrics
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: light)" data-md-color-scheme="default" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode sombre"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Passer au mode sombre" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 7a5 5 0 0 1 5 5 5 5 0 0 1-5 5 5 5 0 0 1-5-5 5 5 0 0 1 5-5m0 2a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3m0-7 2.39 3.42C13.65 5.15 12.84 5 12 5s-1.65.15-2.39.42zM3.34 7l4.16-.35A7.2 7.2 0 0 0 5.94 8.5c-.44.74-.69 1.5-.83 2.29zm.02 10 1.76-3.77a7.131 7.131 0 0 0 2.38 4.14zM20.65 7l-1.77 3.79a7.02 7.02 0 0 0-2.38-4.15zm-.01 10-4.14.36c.59-.51 1.12-1.14 1.54-1.86.42-.73.69-1.5.83-2.29zM12 22l-2.41-3.44c.74.27 1.55.44 2.41.44.82 0 1.63-.17 2.37-.44z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="(prefers-color-scheme: dark)" data-md-color-scheme="slate" data-md-color-primary="indigo" data-md-color-accent="indigo"  aria-label="Passer au mode clair"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Passer au mode clair" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="m17.75 4.09-2.53 1.94.91 3.06-2.63-1.81-2.63 1.81.91-3.06-2.53-1.94L12.44 4l1.06-3 1.06 3zm3.5 6.91-1.64 1.25.59 1.98-1.7-1.17-1.7 1.17.59-1.98L15.75 11l2.06-.05L18.5 9l.69 1.95zm-2.28 4.95c.83-.08 1.72 1.1 1.19 1.85-.32.45-.66.87-1.08 1.27C15.17 23 8.84 23 4.94 19.07c-3.91-3.9-3.91-10.24 0-14.14.4-.4.82-.76 1.27-1.08.75-.53 1.93.36 1.85 1.19-.27 2.86.69 5.83 2.89 8.02a9.96 9.96 0 0 0 8.02 2.89m-1.64 2.02a12.08 12.08 0 0 1-7.8-3.47c-2.17-2.19-3.33-5-3.49-7.82-2.81 3.14-2.7 7.96.31 10.98 3.02 3.01 7.84 3.12 10.98.31"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Rechercher" placeholder="Rechercher" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Recherche">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Effacer" aria-label="Effacer" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initialisation de la recherche
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Onglets" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Accueil
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../developer-onboarding-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Guide Développeur
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../README_ROADMAP/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Roadmap
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../01-architecture/00-diagram-index/" class="md-tabs__link">
+          
+  
+  
+  1. Architecture & Topologies
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../02-core-components/01-cmp-dashboard/" class="md-tabs__link">
+          
+  
+  
+  2. Composants Clés
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-tabs__link">
+          
+  
+  
+  3. Pipelines & Workflows
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../04-templates/00-github-repositories-landscape/" class="md-tabs__link">
+          
+  
+  
+  4. Modèles & Templates
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../05-cmp-backend-api/00-global-api-standards/" class="md-tabs__link">
+          
+  
+  
+  5. Spécifications API CMP
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../06-multicloud/00-index/" class="md-tabs__link">
+          
+  
+  
+  6. Chantier Multicloud
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../07-ai-landing-zone/00-index/" class="md-tabs__link">
+          
+  
+  
+  7. Landing zone IA
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../08-finops/00-index/" class="md-tabs__link">
+          
+  
+  
+  8. FinOps
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../09-conformite/01-registre-rgpd/" class="md-tabs__link">
+          
+  
+  
+  9. Conformité
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../09-import-microservices/00-index/" class="md-tabs__link">
+          
+  
+  
+  10. Import et microservices
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../../00-index/" class="md-tabs__link">
+          
+  
+  
+  11. Observabilité
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Cloud Native Platform (CNP) Docs ⚡" class="md-nav__button md-logo" aria-label="Cloud Native Platform (CNP) Docs ⚡" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M0 224c0 53 43 96 96 96h38.6l124.1-111c12.2-10.9 28-17 44.4-17 44.6 0 76.5 43 63.7 85.7L354.1 320H416c53 0 96-43 96-96s-43-96-96-96h-1.6c1.1-5.2 1.6-10.5 1.6-16 0-44.2-35.8-80-80-80-24.3 0-46.1 10.9-60.8 28C256.5 24.3 219.1 0 176 0 114.1 0 64 50.1 64 112c0 7.1.7 14.1 1.9 20.8C27.6 145.4 0 181.5 0 224m160.6 176h61.8l-31.2 104.1C187.6 516 196.5 528 209 528c4.6 0 9-1.7 12.4-4.7l141.1-126.4c3.5-3.1 5.5-7.6 5.5-12.4 0-9.2-7.4-16.6-16.6-16.6h-61.8l31.2-104.1c3.6-11.9-5.3-23.9-17.8-23.9-4.6 0-9 1.7-12.4 4.7L149.5 371.1c-3.5 3.1-5.5 7.6-5.5 12.4 0 9.2 7.4 16.6 16.6 16.6z"/></svg>
+
+    </a>
+    Cloud Native Platform (CNP) Docs ⚡
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Accueil
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../developer-onboarding-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide Développeur
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../README_ROADMAP/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Roadmap
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    1. Architecture & Topologies
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    1. Architecture & Topologies
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/00-diagram-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Index des schémas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/01-system-overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble du système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/02-tenancy-and-isolation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi-tenancerie & Isolation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/03-network-topology/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Topologie Réseau & Ingress
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/04-disaster-recovery/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan de Reprise d'Activité (PRA)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/05-access-segregation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Ségrégation des accès
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/06-audit-logging/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Journaux d'audit
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/07-observability/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Observabilité multicluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/08-database-backups/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Sauvegarde des bases
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/09-static-secrets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets statiques
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../01-architecture/10-compliance-cis/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conformité CIS
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_5" >
+        
+          
+          <label class="md-nav__link" for="__nav_5" id="__nav_5_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    2. Composants Clés
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_5_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_5">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    2. Composants Clés
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/01-cmp-dashboard/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Portail & Dashboard CMP
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/02-identity-keycloak/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Identités & Keycloak
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/03-secrets-vault/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Secrets & HashiCorp Vault
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/04-gitops-argocd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Synchronisation GitOps ArgoCD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/05-github-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Intégration GitHub App
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/06-database-schema/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schéma Base de Données
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/07-frontend-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture Frontend (Next.js)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../02-core-components/08-deletion-protection/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Protection contre la suppression
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    3. Pipelines & Workflows
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    3. Pipelines & Workflows
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/01-app-provisioning-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisioning Day-0
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/02-ci-cd-pipelines/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pipelines de CI/CD
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/03-developer-configuration-flow/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Configuration Développeur (cnp.yaml)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/04-system-flows/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Diagrammes de Flux Système
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/05-testing-strategy/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stratégie de Test & Mocking
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/06-release-canary/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Promotion et canary
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../03-pipelines-and-workflows/07-runner-fallback/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runner de secours (quota Actions)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_7" >
+        
+          
+          <label class="md-nav__link" for="__nav_7" id="__nav_7_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    4. Modèles & Templates
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_7_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_7">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    4. Modèles & Templates
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/00-github-repositories-landscape/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dépôts GitHub & Cartographie
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/01-git-app-templates/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Modèles d'Applications (Git)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/02-helm-generic-chart/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chart Helm Umbrella Générique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../04-templates/03-terraform-provisioner/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Provisionneur Terraform
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_8" >
+        
+          
+          <label class="md-nav__link" for="__nav_8" id="__nav_8_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    5. Spécifications API CMP
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_8_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_8">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    5. Spécifications API CMP
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/00-global-api-standards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Standards Globaux & Sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/01-cmp-deployment-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Déploiement (Contracts)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/02-cmp-phase3-changes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Évolutions de Phase 3
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/03-cmp-frontend-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide d'Intégration Frontend
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/04-cmp-projects-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Projets & RBAC
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/05-cmp-catalog-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Catalogue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/06-cmp-infra-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Infrastructure & Santé
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/07-cmp-account-api/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Compte & Liaison GitHub
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/08-cmp-local-development/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spécification Dev Local
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/09-cmp-containers/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Conteneurisation & Compose
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/10-cmp-onboarding-runbook/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbook d'Onboarding
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/11-environment-variables/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Tableau des Variables d'Env
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../05-cmp-backend-api/11-cmp-mcp-integration/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Assistants IA (MCP)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_9" >
+        
+          
+          <label class="md-nav__link" for="__nav_9" id="__nav_9_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    6. Chantier Multicloud
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_9_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_9">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    6. Chantier Multicloud
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/01-invariants-et-perimetre/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Invariants & Périmètre
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/02-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décisions D-01 à D-13
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/03-contrat-equipe-cluster/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Contrat Équipe Cluster
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/04-chantiers-et-sequencement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Chantiers & Séquencement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/05-nettoyage-et-decommissionnement/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Nettoyage & Décommissionnement
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/06-schemas/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Schémas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/07-procedures-operateur/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Procédures opérateur EKS/GKE
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../06-multicloud/08-placement-cloud-public/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décision D-15 (placement)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_10" >
+        
+          
+          <label class="md-nav__link" for="__nav_10" id="__nav_10_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    7. Landing zone IA
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_10_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_10">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    7. Landing zone IA
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/01-stack-cible/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Stack cible et compromis
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/02-spec/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Spec de référence
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/03-phases/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Phases et vérifications
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/04-cmp-agents/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    La CMP et les agents
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/05-plan-implementation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan d'implémentation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/06-finops-ia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    FinOps de l'IA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../07-ai-landing-zone/07-flux/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Les flux pas à pas
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_11" >
+        
+          
+          <label class="md-nav__link" for="__nav_11" id="__nav_11_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    8. FinOps
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_11_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_11">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    8. FinOps
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/01-decisions/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Décision D-14
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/02-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/03-methodes/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Méthodes de calcul
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../08-finops/04-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_12" >
+        
+          
+          <label class="md-nav__link" for="__nav_12" id="__nav_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    9. Conformité
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_12_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    9. Conformité
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-conformite/01-registre-rgpd/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Registre RGPD (brouillon)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-conformite/02-matrice-owasp-mcp/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Matrice OWASP MCP et agentique
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-conformite/03-reversibilite-portabilite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Réversibilité et portabilité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_13" >
+        
+          
+          <label class="md-nav__link" for="__nav_13" id="__nav_13_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    10. Import et microservices
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_13_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_13">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    10. Import et microservices
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/01-valeur/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Valeur pour les utilisateurs
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/02-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/03-parcours/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Parcours
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/04-roles-et-securite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Rôles et sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/05-epitweet/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Epitweet
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/06-audit-travail-existant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audit du premier import
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/07-plan-et-recette/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan et recette
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/08-audit-securite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Audit de sécurité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../09-import-microservices/09-exploitation/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Exploitation
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_14" id="__nav_14_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    11. Observabilité
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_14_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_14">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    11. Observabilité
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../00-index/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Vue d'ensemble
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../01-existant/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Existant
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../02-etat-de-l-art/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    État de l'art
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../03-architecture/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Architecture cible
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../04-offre-projets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Offre aux projets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../05-dashboards/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Dashboards et vues
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../06-alerting/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Alerting
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../07-ia-et-conformite/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    IA et conformité
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../08-plan-et-recette/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Plan et recette
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../09-idees-et-revue/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Idées et revue
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../runbooks/slo-burn-rate/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Runbook : budget d'erreur
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_14_12" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_14_12" id="__nav_14_12_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Annexes
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_14_12_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_14_12">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Annexes
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille VictoriaMetrics
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille VictoriaMetrics
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-executive-conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. Executive conclusions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-operator-vs-helm-charts-k8s-stack-vmsingle-vs-vmcluster-tenancy-oss-vs-enterprise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Operator vs Helm charts, k8s-stack, VMSingle vs VMCluster, tenancy, OSS vs Enterprise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Operator vs Helm charts, k8s-stack, VMSingle vs VMCluster, tenancy, OSS vs Enterprise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-operator-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Operator status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-operator-vs-plain-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Operator vs plain charts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-victoria-metrics-k8s-stack-0981-contents-read-from-chartyaml-and-valuesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 victoria-metrics-k8s-stack 0.98.1 contents (read from Chart.yaml and values.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-vmsingle-vs-vmcluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 VMSingle vs VMCluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-multitenancy-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Multitenancy options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-open-source-vs-enterprise-victoriametrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 Open source vs Enterprise (VictoriaMetrics)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-version-and-bug-watchlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 Version and bug watchlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-victorialogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. VictoriaLogs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. VictoriaLogs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-maturity-and-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Maturity and versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-single-vs-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Single vs cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-storage-s3-retention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Storage, S3, retention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-multitenancy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Multitenancy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-query-language-and-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Query language and Grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-ingestion-protocols-and-collectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Ingestion protocols and collectors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-benchmarks-all-vendor-or-single-author-treat-as-directional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Benchmarks, all vendor or single-author, treat as directional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-migration-path-from-loki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 Migration path from Loki
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-victoriatraces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. VictoriaTraces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-collection-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Collection layer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Collection layer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Benchmarks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-best-combination-for-this-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Best combination for this platform
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ebpf-zero-code-instrumentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. eBPF zero-code instrumentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-continuous-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Continuous profiling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-victoriametrics-native-tooling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. VictoriaMetrics-native tooling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ram-and-cpu-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. RAM and CPU budget
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-recommended-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Recommended stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-open-questions-and-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Open questions and gaps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources-accessed-2026-11-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources accessed 2026-11-13
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../veille-observabilite-datadog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille observabilité et Datadog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../veille-tracabilite-ia/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Veille traçabilité IA
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table des matières">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table des matières
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#0-executive-conclusions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        0. Executive conclusions
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#1-operator-vs-helm-charts-k8s-stack-vmsingle-vs-vmcluster-tenancy-oss-vs-enterprise" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Operator vs Helm charts, k8s-stack, VMSingle vs VMCluster, tenancy, OSS vs Enterprise
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Operator vs Helm charts, k8s-stack, VMSingle vs VMCluster, tenancy, OSS vs Enterprise">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#11-operator-status" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.1 Operator status
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#12-operator-vs-plain-charts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.2 Operator vs plain charts
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#13-victoria-metrics-k8s-stack-0981-contents-read-from-chartyaml-and-valuesyaml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.3 victoria-metrics-k8s-stack 0.98.1 contents (read from Chart.yaml and values.yaml)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#14-vmsingle-vs-vmcluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.4 VMSingle vs VMCluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#15-multitenancy-options" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.5 Multitenancy options
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#16-open-source-vs-enterprise-victoriametrics" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.6 Open source vs Enterprise (VictoriaMetrics)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#17-version-and-bug-watchlist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1.7 Version and bug watchlist
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#2-victorialogs" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. VictoriaLogs
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. VictoriaLogs">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#21-maturity-and-versions" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.1 Maturity and versions
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#22-single-vs-cluster" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.2 Single vs cluster
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#23-storage-s3-retention" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.3 Storage, S3, retention
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#24-multitenancy" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.4 Multitenancy
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#25-query-language-and-grafana" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.5 Query language and Grafana
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#26-ingestion-protocols-and-collectors" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.6 Ingestion protocols and collectors
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#27-benchmarks-all-vendor-or-single-author-treat-as-directional" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.7 Benchmarks, all vendor or single-author, treat as directional
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#28-migration-path-from-loki" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2.8 Migration path from Loki
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#3-victoriatraces" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. VictoriaTraces
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#4-collection-layer" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Collection layer
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="4. Collection layer">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#41-benchmarks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.1 Benchmarks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#42-best-combination-for-this-platform" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4.2 Best combination for this platform
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#5-ebpf-zero-code-instrumentation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        5. eBPF zero-code instrumentation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#6-continuous-profiling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        6. Continuous profiling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#7-victoriametrics-native-tooling" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        7. VictoriaMetrics-native tooling
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#8-ram-and-cpu-budget" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        8. RAM and CPU budget
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#9-recommended-stack" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        9. Recommended stack
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#10-open-questions-and-gaps" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        10. Open questions and gaps
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#sources-accessed-2026-11-13" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sources accessed 2026-11-13
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="victoriametrics-ecosystem-state-of-the-art-as-of-2026-11-13">VictoriaMetrics ecosystem, state of the art as of 2026-11-13<a class="headerlink" href="#victoriametrics-ecosystem-state-of-the-art-as-of-2026-11-13" title="Permanent link">&para;</a></h1>
+<p>Target: small k3s platform, 2 nodes, 28 GB RAM, 8 vCPU, Ceph RBD plus Ceph RGW S3. About 70 pods, up to 200k active series, 5 to 20 GB logs/day.
+Confidence tags: [HIGH] primary source read in full or in relevant part, [MED] secondary or vendor benchmark, [LOW] inferred or estimate.
+Data older than 12 months is flagged [STALE].
+All GitHub figures below were read from the GitHub API or release pages on 2026-11-13.</p>
+<h2 id="0-executive-conclusions">0. Executive conclusions<a class="headerlink" href="#0-executive-conclusions" title="Permanent link">&para;</a></h2>
+<ol>
+<li>Use the operator, installed through victoria-metrics-k8s-stack 0.98.1 (appVersion v1.156.0), with VMSingle, not VMCluster. Your multitenancy is already label based through vmauth extra_filters, so VMCluster brings no isolation gain at this scale. [HIGH]</li>
+<li>VictoriaLogs single-node is production ready (GA since v1.0.0, current v1.54.0 released 2026-11-13). It cannot use S3 yet and cannot do per-stream or per-tenant retention. Both are real regressions against your Loki setup. [HIGH]</li>
+<li>VictoriaTraces is still pre-GA (v0.13.0, 2026-11-05). Its roadmap says the data structure is not yet frozen. Usable on a tiny cluster, but treat it as beta. [HIGH]</li>
+<li>Replace Alloy with vmagent for metrics and vlagent for logs. Zero-code traces and RED metrics: OBI v1.0.0 (stable, 2026-10-30). [HIGH]</li>
+<li>Enterprise-only items that matter to you: retention filters, downsampling, vmanomaly, multi-tenant vmalert and VMRule tenant field, vmbackupmanager, vmauth IP filters. Everything else you need is open source. [HIGH]</li>
+<li>Realistic RAM for the whole target stack is about 4 to 6 GB, against roughly 1.8 GB for Alloy alone today. See section 8. Most figures are estimates and must be measured. [LOW]</li>
+</ol>
+<h2 id="1-operator-vs-helm-charts-k8s-stack-vmsingle-vs-vmcluster-tenancy-oss-vs-enterprise">1. Operator vs Helm charts, k8s-stack, VMSingle vs VMCluster, tenancy, OSS vs Enterprise<a class="headerlink" href="#1-operator-vs-helm-charts-k8s-stack-vmsingle-vs-vmcluster-tenancy-oss-vs-enterprise" title="Permanent link">&para;</a></h2>
+<h3 id="11-operator-status">1.1 Operator status<a class="headerlink" href="#11-operator-status" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Operator latest v0.75.2 (released 28 Oct 2026). v0.75.0 released 25 Sep 2026. Helm chart victoria-metrics-operator 0.68.2 (2026-10-28). Repo 600 stars, Apache-2.0. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/operator/releases">https://github.com/VictoriaMetrics/operator/releases</a></li>
+<li>CRDs listed in the docs: VMSingle, VMCluster, VMAgent, VMAlert, VMAlertmanager, VMAlertmanagerConfig, VMAuth, VMUser, VMRule, VMServiceScrape, VMPodScrape, VMNodeScrape, VMStaticScrape, VMScrapeConfig, VMProbe, VMAnomaly, VLSingle, VLCluster, VLAgent, VTSingle, VTCluster, VTAgent, VMDistributed, plus VLDistributed. [HIGH]
+  <a href="https://docs.victoriametrics.com/operator/resources/">https://docs.victoriametrics.com/operator/resources/</a></li>
+<li>New in 2026: VLDistributed (v0.74.0), VTAgent (v0.75.0). [HIGH]</li>
+<li>Breaking or update notes to read before upgrading: v0.75.0 config-reloader argument change rolls many pods once. VMCluster vmstorage serviceSpec that makes the Service non-headless is rejected. VTAgent needs extra RBAC or the operator shuts down. v0.74.0 needs NetworkPolicy permissions in the ClusterRole and disables prometheus-operator validation webhooks by default. [HIGH]</li>
+<li>VMAgent has daemonSetMode since operator v0.55.0, but it supports only VMPodScrape and cannot combine with statefulMode. Not useful for you, a single Deployment replica is enough at 200k series. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/operator/blob/master/docs/api.md">https://github.com/VictoriaMetrics/operator/blob/master/docs/api.md</a> (field daemonSetMode)</li>
+<li>VMAnomaly CRD (since operator v0.60.0) is Enterprise only: "VMAnomaly is enterprise only, license is required for this CRD". [HIGH]
+  <a href="https://docs.victoriametrics.com/operator/resources/vmanomaly/">https://docs.victoriametrics.com/operator/resources/vmanomaly/</a></li>
+<li>VMAlertmanagerConfig has an enforced namespace matcher: alerts need a namespace label equal to the config's namespace, unless VMAlertmanager spec.disableNamespaceMatcher is true. Useful for per-project routing to Discord. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/operator/blob/master/docs/resources/vmalertmanagerconfig.md">https://github.com/VictoriaMetrics/operator/blob/master/docs/resources/vmalertmanagerconfig.md</a></li>
+<li>VMRule tenant field is Enterprise only. [HIGH]
+  <a href="https://docs.victoriametrics.com/operator/enterprise/">https://docs.victoriametrics.com/operator/enterprise/</a></li>
+</ul>
+<h3 id="12-operator-vs-plain-charts">1.2 Operator vs plain charts<a class="headerlink" href="#12-operator-vs-plain-charts" title="Permanent link">&para;</a></h3>
+<ul>
+<li>The operator buys you CRD-driven config: VMServiceScrape/VMPodScrape/VMNodeScrape/VMProbe, VMRule per namespace, VMUser per project, VMAlertmanagerConfig per namespace. These match the "project = set of namespaces" model, and prometheus-operator CRDs can be converted automatically (docs list a conversion path). [HIGH]</li>
+<li>Plain charts (victoria-metrics-single 0.51.0, victoria-metrics-cluster 0.55.0, victoria-metrics-agent 0.52.0, victoria-metrics-alert 0.53.0, victoria-metrics-auth 0.46.0, victoria-logs-single 0.13.12, victoria-traces-single 0.1.13) were all published 2026-11-09. They remain maintained. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/helm-charts/releases">https://github.com/VictoriaMetrics/helm-charts/releases</a></li>
+<li>Operator cost: one extra controller pod. Memory not measured. [LOW]</li>
+<li>Recommendation: operator, because per-project VMUser, VMRule and scrape CRDs are exactly the self-service surface an IDP needs.</li>
+</ul>
+<h3 id="13-victoria-metrics-k8s-stack-0981-contents-read-from-chartyaml-and-valuesyaml">1.3 victoria-metrics-k8s-stack 0.98.1 contents (read from Chart.yaml and values.yaml)<a class="headerlink" href="#13-victoria-metrics-k8s-stack-0981-contents-read-from-chartyaml-and-valuesyaml" title="Permanent link">&para;</a></h3>
+<ul>
+<li>appVersion v1.156.0, kubeVersion &gt;= 1.25. Dependencies: victoria-metrics-operator 0.68.<em>, kube-state-metrics 9.0.</em>, prometheus-node-exporter 4.60.<em>, grafana 14.4.</em> from the grafana-community chart repo. [HIGH]
+  <a href="https://raw.githubusercontent.com/VictoriaMetrics/helm-charts/master/charts/victoria-metrics-k8s-stack/Chart.yaml">https://raw.githubusercontent.com/VictoriaMetrics/helm-charts/master/charts/victoria-metrics-k8s-stack/Chart.yaml</a></li>
+<li>Enabled by default: vmsingle (retention 1 month, 20Gi RWO PVC), vmagent, vmalert, alertmanager, grafana, defaultRules, defaultDashboards via a sync job, scrape of kubelet, kubeApiServer, kubeControllerManager, kubeEtcd, kubeScheduler. Disabled by default: vmcluster, vmauth, vlsingle, vlcluster, vlagent, vtsingle, vtcluster, kubeProxy. [HIGH]
+  <a href="https://raw.githubusercontent.com/VictoriaMetrics/helm-charts/master/charts/victoria-metrics-k8s-stack/values.yaml">https://raw.githubusercontent.com/VictoriaMetrics/helm-charts/master/charts/victoria-metrics-k8s-stack/values.yaml</a></li>
+<li>The chart can provision Grafana datasources for VictoriaMetrics (prometheus type and victoriametrics-metrics-datasource), VictoriaLogs (victoriametrics-logs-datasource) and VictoriaTraces (jaeger type). The plugins must be listed in grafana.plugins, and Grafana needs internet access to install them. [HIGH]</li>
+<li>Caveats for your setup:</li>
+<li>You run your own Grafana 12.3 with one org per project. The chart's dashboard sidecar provider is bound to orgid 1, so default dashboards land in org 1 only. Disable the bundled grafana and provision dashboards per org yourself. [LOW, inferred from values.yaml provider.orgid: 1]</li>
+<li>kubeControllerManager, kubeEtcd and kubeScheduler scrapes are on by default. k3s embeds these in one process and does not expose them as separate pods, so expect down targets and noisy default alerts unless you disable them. [LOW, inferred]</li>
+<li>kube-state-metrics and node-exporter are bundled, you can drop your standalone copies.</li>
+</ul>
+<h3 id="14-vmsingle-vs-vmcluster">1.4 VMSingle vs VMCluster<a class="headerlink" href="#14-vmsingle-vs-vmcluster" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Vendor guidance: use single-node below one million data points per second. Single node needs less CPU and RAM than cluster for the same workload, is easier to operate, and supports HA. [HIGH]
+  <a href="https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/">https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/</a> and <a href="https://docs.victoriametrics.com/victoriametrics/faq/">https://docs.victoriametrics.com/victoriametrics/faq/</a></li>
+<li>The FAQ lists cluster as preferable mainly for native multitenancy or for workloads beyond what one node handles. It also states multitenancy can be done with labels and vmauth enforced query args on single node. [HIGH]</li>
+<li>Your load is 200k active series, which is about 0.2 percent of the 100M series single-node scale claim in the docs. [HIGH]</li>
+<li>Migration cluster to single: data formats differ. The documented path is to run both in parallel until old data ages out, or use vmctl native export/import. The docs describe single to cluster explicitly. Cluster to single is the reverse via vmctl. [MED]
+  <a href="https://docs.victoriametrics.com/victoriametrics/faq/">https://docs.victoriametrics.com/victoriametrics/faq/</a></li>
+<li>Recommendation: VMSingle, one replica, PVC on Ceph RBD, 30 to 90 day retention. Backups with vmbackup to RGW S3 (open source, supports any S3 compatible store including Ceph). [HIGH]
+  <a href="https://docs.victoriametrics.com/victoriametrics/vmbackup/">https://docs.victoriametrics.com/victoriametrics/vmbackup/</a></li>
+</ul>
+<h3 id="15-multitenancy-options">1.5 Multitenancy options<a class="headerlink" href="#15-multitenancy-options" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Needs</th>
+<th>Works on</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Label filtering with vmauth extra_filters and extra_label</td>
+<td>vmauth user per project</td>
+<td>VMSingle and VMCluster</td>
+<td>Open source. Your current model. Isolation is only as strong as the label provenance, enforce at both write and read. [HIGH]</td>
+</tr>
+<tr>
+<td>accountID/projectID tenants</td>
+<td>VMCluster</td>
+<td>VMCluster only</td>
+<td>Single node has no multitenancy. Headers AccountID and ProjectID work since v1.143.0, on by default since v1.150.0. [HIGH]</td>
+</tr>
+<tr>
+<td>vm_account_id and vm_project_id labels with the multitenant endpoints</td>
+<td>VMCluster</td>
+<td>VMCluster</td>
+<td>Lets one writer or reader span tenants. Restrict access to these endpoints. [HIGH]</td>
+</tr>
+<tr>
+<td>Per-tenant retention, per-tenant stats, per-tenant rate limits</td>
+<td>Enterprise</td>
+<td>VMCluster</td>
+<td>-retentionFilter with vm_account_id, vmgateway. [HIGH]</td>
+</tr>
+</tbody>
+</table>
+<p>Sources: <a href="https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/">https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/</a> , <a href="https://docs.victoriametrics.com/victoriametrics/vmauth/">https://docs.victoriametrics.com/victoriametrics/vmauth/</a>
+- vmauth templating from JWT claims (metrics_extra_filters, metrics_extra_labels, logs_extra_filters, logs_extra_stream_filters) is open source and exists since v1.137.0. OIDC discovery, JWT claim matching and deny_paths are open source. So Grafana per-org datasources can use a JWT or basic-auth user per project. [HIGH]
+- Project label at write time: vmagent kubernetes_sd supports attach_metadata namespace true, exposing _<em>meta_kubernetes_namespace_label</em><name>. You can stamp a project label from a namespace label during relabeling. [HIGH]
+  <a href="https://docs.victoriametrics.com/victoriametrics/sd_configs/">https://docs.victoriametrics.com/victoriametrics/sd_configs/</a>
+- Cardinality control: cardinality explorer in vmui, vmagent -remoteWrite.maxHourlySeries and maxDailySeries, per-scrape series_limit and sample_limit, vmstorage or VMSingle -storage.maxHourlySeries and -storage.maxDailySeries. These limits are global. Per-tenant limits are Enterprise (vmgateway). [HIGH for flags, MED for the per-tenant claim]
+  <a href="https://docs.victoriametrics.com/victoriametrics/vmagent/">https://docs.victoriametrics.com/victoriametrics/vmagent/</a> and <a href="https://docs.victoriametrics.com/victoriametrics/enterprise/">https://docs.victoriametrics.com/victoriametrics/enterprise/</a>
+- Per-project alert rules with one open source vmalert: groups can carry params with extra_label or extra_filters for the project, or run one vmalert per tenant. The group tenant field and -clusterMode are Enterprise. [HIGH]
+  <a href="https://docs.victoriametrics.com/victoriametrics/vmalert/">https://docs.victoriametrics.com/victoriametrics/vmalert/</a></p>
+<h3 id="16-open-source-vs-enterprise-victoriametrics">1.6 Open source vs Enterprise (VictoriaMetrics)<a class="headerlink" href="#16-open-source-vs-enterprise-victoriametrics" title="Permanent link">&para;</a></h3>
+<p>Enterprise only: downsampling, retention filters (multiple retentions), vmbackupmanager, vmanomaly, advanced per-tenant stats, query execution stats, vmgateway, mTLS and auto TLS, vmauth mTLS routing and IP filters, vmalert multitenancy and reading rules from object storage, Kafka and PubSub integration, vmstorage auto discovery, FIPS builds. [HIGH]
+<a href="https://docs.victoriametrics.com/victoriametrics/enterprise/">https://docs.victoriametrics.com/victoriametrics/enterprise/</a>
+Open source and relevant: vmbackup and vmrestore to S3, vmctl, stream aggregation and deduplication, vmalert, vmalert-tool, cardinality explorer, vmauth including JWT and OIDC, vmagent cardinality limiter, relabeling debugger. [HIGH]
+Licensing changes: from v1.156.0 (2026-11-09) Enterprise components take an -eula flag and license keys are no longer verified. Production use still requires an enterprise contract. Evaluation use is allowed non-production. [HIGH]
+LTS lines are published for Enterprise only. Currently v1.148.x and v1.136.x. Open source users are told to track the latest release. [HIGH]
+<a href="https://docs.victoriametrics.com/victoriametrics/lts-releases/">https://docs.victoriametrics.com/victoriametrics/lts-releases/</a>
+Implication: you cannot get VM-native per-tenant retention, so give every project the same retention, or run a second VMSingle for long-lived data and route with vmauth.</p>
+<h3 id="17-version-and-bug-watchlist">1.7 Version and bug watchlist<a class="headerlink" href="#17-version-and-bug-watchlist" title="Permanent link">&para;</a></h3>
+<ul>
+<li>v1.154.0 carried an OOM risk on long-range series and label queries and connection churn with -search.skipSlowReplicas. Fixed in v1.155.0 and v1.156.0. v1.154.0 also fixed a vmauth token brute-force issue and a vmui XSS. v1.152.0 fixed a vmauth JWT authorization bypass. v1.151.0 fixed an HTTP Basic Auth bypass on suffixed paths. Run at least v1.156.0 when exposing vmauth. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/VictoriaMetrics/releases">https://github.com/VictoriaMetrics/VictoriaMetrics/releases</a></li>
+<li>v1.155.0: /admin/tenants returns only the current day without start and end. v1.150.0: -enableMultitenancyViaHeaders defaults to true. v1.148.1: delete_series is POST only. [HIGH]</li>
+</ul>
+<h2 id="2-victorialogs">2. VictoriaLogs<a class="headerlink" href="#2-victorialogs" title="Permanent link">&para;</a></h2>
+<h3 id="21-maturity-and-versions">2.1 Maturity and versions<a class="headerlink" href="#21-maturity-and-versions" title="Permanent link">&para;</a></h3>
+<ul>
+<li>VictoriaLogs repo created 2025-07-06 (split out from the main repo), 2500 stars, Apache-2.0. Latest v1.54.0 (2026-11-13), v1.53.0 (2026-10-01), LTS line v1.52.x (v1.52.2, Enterprise-targeted). [HIGH]
+  <a href="https://github.com/VictoriaMetrics/VictoriaLogs/releases">https://github.com/VictoriaMetrics/VictoriaLogs/releases</a></li>
+<li>FAQ: "Yes. VictoriaLogs is ready for production use starting from v1.0.0." [HIGH]
+  <a href="https://docs.victoriametrics.com/victorialogs/faq/">https://docs.victoriametrics.com/victorialogs/faq/</a></li>
+<li>Release cadence is fast and includes breaking changes within minor versions. Examples: v1.51.0 rejects filter pipes without the filter prefix, v1.53.0 requires POST on /internal/*, mixed-version cluster queries fail during rolling upgrades in several releases. Pin versions and read the changelog on each bump. [HIGH]
+  <a href="https://docs.victoriametrics.com/victorialogs/changelog/">https://docs.victoriametrics.com/victorialogs/changelog/</a></li>
+</ul>
+<h3 id="22-single-vs-cluster">2.2 Single vs cluster<a class="headerlink" href="#22-single-vs-cluster" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Docs: use single-node if one host can handle the load. It is simpler and faster on the same hardware. Cluster mode (vlinsert, vlselect, vlstorage, same binary with -storageNode) only for vertical scaling limits. Cluster shards, it does not replicate. [HIGH]
+  <a href="https://docs.victoriametrics.com/victorialogs/cluster/">https://docs.victoriametrics.com/victorialogs/cluster/</a></li>
+<li>At 5 to 20 GB/day, single node. [HIGH on the guidance, LOW on the exact threshold]</li>
+</ul>
+<h3 id="23-storage-s3-retention">2.3 Storage, S3, retention<a class="headerlink" href="#23-storage-s3-retention" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Local disk only today. Data lives in per-day partitions under one directory. [HIGH]
+  <a href="https://docs.victoriametrics.com/victorialogs/">https://docs.victoriametrics.com/victorialogs/</a></li>
+<li>Object storage: still on the roadmap. Issue <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/48" title="GitHub Issue: squidfunk/mkdocs-material #48">#48</a> open. PR <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/1155" title="GitHub Issue: squidfunk/mkdocs-material #1155">#1155</a> "introduce object storage support" open. On 2026-10-08 valyala wrote the merge ETA is November 2026. Design: per-day partitions older than -offloadPeriod (minimum one day) move to object storage, recent data stays local, moved data remains queryable. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/VictoriaLogs/issues/48">https://github.com/VictoriaMetrics/VictoriaLogs/issues/48</a>
+  Open bug reports on the PR build: on 2026-11-02 a user reported queries on data older than 7 days crash the process on any S3 error and stop ingestion, and an interrupted offload can cause a restart loop until the day folder is removed by hand. On 2026-11-05 the author said an unavailable object store causes the restart loop because startup treats a failed remote listing as fatal. Do not plan on S3 offload before it ships and stabilises. [HIGH, dates as quoted]</li>
+<li>Backups: snapshots plus rclone to S3 or GCS are documented. Native backup tooling is a roadmap item (issue <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/123" title="GitHub Issue: squidfunk/mkdocs-material #123">#123</a>). [HIGH]
+  <a href="https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/docs/victorialogs/Roadmap.md">https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/docs/victorialogs/Roadmap.md</a></li>
+<li>Retention: global -retentionPeriod (default 7d) and disk-based -retention.maxDiskSpaceUsageBytes or -retention.maxDiskUsagePercent, mutually exclusive. No per-tenant, per-stream or per-level retention flag exists in the open source flag list or in the Enterprise flag list. [HIGH]
+  <a href="https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/docs/victorialogs/victoria_logs_enterprise_flags.md">https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/docs/victorialogs/victoria_logs_enterprise_flags.md</a></li>
+<li>Issue <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/15" title="GitHub Issue: squidfunk/mkdocs-material #15">#15</a> "retentionPeriod for different streams" is closed (last update 2025-12-05). The maintainer position: VM Enterprise retention filters were "a mistake" because of reliability and resource cost. The supported pattern is several independent VictoriaLogs instances with different retentions, fronted by vmauth routing, plus the victoria-logs-multilevel Helm chart (0.2.10 as of 2026-11-02) for querying them together. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/VictoriaLogs/issues/15">https://github.com/VictoriaMetrics/VictoriaLogs/issues/15</a>
+  <a href="https://docs.victoriametrics.com/victorialogs/security-and-lb/">https://docs.victoriametrics.com/victorialogs/security-and-lb/</a></li>
+<li>Consequence for you: your Loki per-stream retention rules must become two or three VLSingle instances (for example 7d, 30d, 90d), with the collector or vmauth deciding the destination. Each extra instance costs RAM. [LOW on cost]</li>
+</ul>
+<h3 id="24-multitenancy">2.4 Multitenancy<a class="headerlink" href="#24-multitenancy" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Tenant is (AccountID, ProjectID), 32-bit each, set by request headers on ingest and query. Thousands of tenants per instance is described as fine. VictoriaLogs does no authorization itself, use vmauth. [HIGH]</li>
+<li>vmauth can force headers per user, route by tenant header, and apply extra_filters and extra_stream_filters query args to restrict access. Both args are documented on the query API. [HIGH]
+  <a href="https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/docs/victorialogs/querying/README.md">https://raw.githubusercontent.com/VictoriaMetrics/VictoriaLogs/master/docs/victorialogs/querying/README.md</a></li>
+<li>vlagent Kubernetes collector: documented tenant selection is per remoteWrite through -remoteWrite.headers, or the /insert/multitenant/native endpoint for mixed tenants arriving via ingestion protocols. I found no documented per-namespace tenant routing in the Kubernetes collector. Log transformation in vlagent is still a roadmap item (<a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/858" title="GitHub Issue: squidfunk/mkdocs-material #858">#858</a>). [HIGH for what is documented, LOW for the absence claim]</li>
+<li>Practical design: ship everything to one tenant and enforce project isolation in vmauth with extra_stream_filters on kubernetes.pod_namespace, which is a default stream field. This mirrors your current extra_filters model for metrics. [MED, design inference from docs]</li>
+<li>Per-tenant stats and quotas on ingest rate, stream cardinality and query cost are Enterprise roadmap items, not shipped. [HIGH]</li>
+</ul>
+<h3 id="25-query-language-and-grafana">2.5 Query language and Grafana<a class="headerlink" href="#25-query-language-and-grafana" title="Permanent link">&para;</a></h3>
+<ul>
+<li>LogsQL. LogQL conversion guide and playground exist; no migration tool yet (roadmap issue <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/mkdocs-material/issues/521" title="GitHub Issue: squidfunk/mkdocs-material #521">#521</a>). I found no native Loki query API in VictoriaLogs; a third-party Loki-VL-proxy exists but I did not verify it. [HIGH for the guide, LOW for the proxy]
+  <a href="https://docs.victoriametrics.com/victorialogs/logql-to-logsql/">https://docs.victoriametrics.com/victorialogs/logql-to-logsql/</a></li>
+<li>Grafana plugin victoriametrics-logs-datasource: v0.34.0 (2026-11-06), Apache-2.0, 204 stars, has a Drilldown view. Grafana's Logs Drilldown for Loki does not apply. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/victorialogs-datasource">https://github.com/VictoriaMetrics/victorialogs-datasource</a></li>
+<li>Rules on logs: vmalert with rule type vlogs, enabled per group or with -rule.defaultRuleType=vlogs. v1.51.0 added limit and offset pipes in stats_query for rules. Rules on logs and metrics need separate vmalert instances or typed groups. [HIGH]
+  <a href="https://docs.victoriametrics.com/victorialogs/vmalert/">https://docs.victoriametrics.com/victorialogs/vmalert/</a></li>
+</ul>
+<h3 id="26-ingestion-protocols-and-collectors">2.6 Ingestion protocols and collectors<a class="headerlink" href="#26-ingestion-protocols-and-collectors" title="Permanent link">&para;</a></h3>
+<ul>
+<li>HTTP endpoints: Elasticsearch bulk /insert/elasticsearch/_bulk, JSON lines /insert/jsonline, Loki push /insert/loki/api/v1/push, OTLP /insert/opentelemetry/v1/logs. Also Syslog, Filebeat, Fluent Bit, Fluentd, Logstash, Vector, Promtail, Alloy, Telegraf, OTel Collector, Journald, Datadog, Splunk (Splunk added v1.50.0). [HIGH]
+  <a href="https://docs.victoriametrics.com/victorialogs/data-ingestion/">https://docs.victoriametrics.com/victorialogs/data-ingestion/</a></li>
+<li>vlagent: log collector with Kubernetes pod log discovery (-kubernetesCollector, DaemonSet), file collector by glob, replication, disk buffering. Deployed by the victoria-logs-collector chart (0.3.8) or the VLAgent CRD. No journald collector in vlagent docs I read, use journald forwarding or Fluent Bit for node journals. [HIGH, journald absence LOW]
+  <a href="https://docs.victoriametrics.com/victorialogs/vlagent/">https://docs.victoriametrics.com/victorialogs/vlagent/</a></li>
+<li>vmagent does not collect logs. [HIGH by omission in vmagent docs]</li>
+</ul>
+<h3 id="27-benchmarks-all-vendor-or-single-author-treat-as-directional">2.7 Benchmarks, all vendor or single-author, treat as directional<a class="headerlink" href="#27-benchmarks-all-vendor-or-single-author-treat-as-directional" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Date</th>
+<th>Conditions</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VictoriaMetrics docs</td>
+<td>current</td>
+<td>not stated</td>
+<td>"up to 30x less RAM, up to 15x less disk than Elasticsearch and Loki" [MED, vendor claim]</td>
+</tr>
+<tr>
+<td>TrueFoundry author, dev.to mirror of harshit.cloud post</td>
+<td>2025-11-19</td>
+<td>4 vCPU 8 GiB nodes, about 500 GB over 7 days, 65 MB/s via flog and Vector, block cache off, versions unstated</td>
+<td>Loki 6 to 7 GB RAM vs about 1.3 GB, disk 501 GB vs 318 GB, needle query 12 s vs 0.9 s. Internal inconsistencies noted in the post [MED]</td>
+</tr>
+<tr>
+<td><a href="https://dev.to/sachincool/victorialogs-vs-loki-real-world-benchmarking-results-26bg">https://dev.to/sachincool/victorialogs-vs-loki-real-world-benchmarking-results-26bg</a></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- Your volume is far below those test loads, so absolute numbers will not transfer. The FAQ advises ingesting 1 to 10 percent of production logs and measuring. [HIGH]</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="28-migration-path-from-loki">2.8 Migration path from Loki<a class="headerlink" href="#28-migration-path-from-loki" title="Permanent link">&para;</a></h3>
+<ol>
+<li>Deploy VLSingle (or several, see 2.3) and a vlagent DaemonSet. Dual-ship during the longest retention window, or point Alloy loki.write at the VictoriaLogs Loki endpoint for a quick start.</li>
+<li>Rewrite dashboards and alerts from LogQL to LogsQL, Loki ruler rules to vmalert vlogs groups.</li>
+<li>Keep Loki read-only until its retention expires, then remove it and its RGW bucket.</li>
+<li>Disk: logs compress about 10x or more per the docs, so 5 to 20 GB/day raw is roughly 0.5 to 2 GB/day on disk. 30 days is about 15 to 60 GB on RBD. [MED]
+Steps are my synthesis of the cited docs. [LOW]</li>
+</ol>
+<h2 id="3-victoriatraces">3. VictoriaTraces<a class="headerlink" href="#3-victoriatraces" title="Permanent link">&para;</a></h2>
+<ul>
+<li>v0.13.0 (2026-11-05). Repo 521 stars, Apache-2.0, created 2025-07-07. Releases are 0.x. Roadmap states GA requires "Finalize the data structure and commit to backward compatibility". [HIGH]
+  <a href="https://raw.githubusercontent.com/VictoriaMetrics/VictoriaTraces/master/docs/victoriatraces/roadmap.md">https://raw.githubusercontent.com/VictoriaMetrics/VictoriaTraces/master/docs/victoriatraces/roadmap.md</a></li>
+<li>Breaking behaviours already seen: v0.9.4 changed the internal vtselect/vtstorage protocol so mixed versions fail, v0.12.0 replaced the UI and required POST on some internal endpoints. [HIGH]</li>
+<li>Ingestion: OTLP over HTTP at /insert/opentelemetry/v1/traces and OTLP/gRPC. vtagent exists (operator CRD VTAgent). Multitenancy through AccountID and ProjectID headers, auth via vmauth. [HIGH]
+  <a href="https://docs.victoriametrics.com/victoriatraces/data-ingestion/">https://docs.victoriametrics.com/victoriatraces/data-ingestion/</a></li>
+<li>Query: Jaeger Query Service JSON API, Tempo HTTP API marked experimental, TraceQL fuzzy and regex matching appears in the v0.9.1 release notes. Grafana uses the Jaeger datasource. [HIGH]</li>
+<li>Service graph: /select/jaeger/api/dependencies is experimental and needs -servicegraph.enableTask=true. [HIGH]
+  <a href="https://raw.githubusercontent.com/VictoriaMetrics/VictoriaTraces/master/docs/victoriatraces/querying/README.md">https://raw.githubusercontent.com/VictoriaMetrics/VictoriaTraces/master/docs/victoriatraces/querying/README.md</a></li>
+<li>RED metrics derived from traces: not found in the VictoriaTraces docs. Use OBI span_metrics and service_graph_metrics, or the OTel Collector spanmetrics connector, and send the result to vmagent. [LOW on absence, HIGH that OBI offers it, see section 5]</li>
+<li>Storage: local disk only, retention global (-retentionPeriod default 7d), no S3, same per-day partition design as VictoriaLogs. [HIGH]</li>
+<li>Alerting through vmalert. [HIGH]</li>
+<li>Benchmark [STALE - 2025-06-09], vendor, proof of concept predating VictoriaTraces: at 10k spans/s with 4 CPU and 8 GiB, VictoriaLogs-based tracing used 0.50 vCPU and 1.15 GiB, ClickHouse 0.69 vCPU and 1.12 GiB, Tempo 1.35 vCPU and 4.26 GiB and ran out of memory. Jaeger plus Elasticsearch was unstable above about 5,000 spans/s. Versions not stated. [MED]
+  <a href="https://victoriametrics.com/blog/dev-note-distributed-tracing-with-victorialogs/">https://victoriametrics.com/blog/dev-note-distributed-tracing-with-victorialogs/</a></li>
+</ul>
+<p>Comparison for a tiny cluster
+| | VictoriaTraces 0.13 | Tempo 3.1.1 (2026-10-21) | Jaeger 2.23.0 (2026-11-05) |
+|---|---|---|---|
+| Maturity | pre-GA | GA, AGPL-3.0 | GA, Apache-2.0 |
+| Storage | local disk | object storage, fits your RGW | Badger (dev scale), Elasticsearch, Cassandra, ClickHouse experimental per one third-party source [LOW] |
+| Footprint | lowest in vendor test | monolithic mode, no Kafka needed in 3.0 | collector plus query plus a store |
+| Query | Jaeger API, Tempo API experimental | TraceQL, TraceQL metrics GA in 3.0 | Jaeger UI |
+| Multitenancy | headers via vmauth | native tenant header | limited |
+Tempo 3.0 microservices mode requires a Kafka-compatible system, monolithic mode does not. [HIGH]
+<a href="https://grafana.com/docs/tempo/latest/release-notes/v3-0/">https://grafana.com/docs/tempo/latest/release-notes/v3-0/</a>
+Recommendation: VictoriaTraces if you accept pre-GA and want one vendor stack. Tempo monolithic if you need frozen formats and TraceQL metrics. [LOW, judgement]</p>
+<h2 id="4-collection-layer">4. Collection layer<a class="headerlink" href="#4-collection-layer" title="Permanent link">&para;</a></h2>
+<h3 id="41-benchmarks">4.1 Benchmarks<a class="headerlink" href="#41-benchmarks" title="Permanent link">&para;</a></h3>
+<ul>
+<li>Log collectors, VictoriaMetrics benchmark dated 2026-03-20, GCP n2-highcpu-32 single-node kind, about 10k logs/s at 216 bytes, 1 CPU and 1 GiB limits, default Helm values. vlagent v1.48.0, Vector v0.53.0, Alloy v1.13.2, Fluent Bit v4.2.3, OTel Collector v0.146.1. [MED, vendor]
+  <a href="https://victoriametrics.com/blog/log-collectors-benchmark-2026/">https://victoriametrics.com/blog/log-collectors-benchmark-2026/</a>
+| Collector | CPU cores | Mean memory MiB |
+|---|---|---|
+| vlagent | 0.062 | 27.9 |
+| Fluent Bit | 0.260 | 78.1 |
+| Vector | 0.412 | 153.5 |
+| OTel Collector | 0.491 | 106.8 |
+| Grafana Alloy | 0.578 | 66.4 |
+Filebeat and Fluentd dropped logs and were excluded.</li>
+<li>Metrics agents, VictoriaMetrics post [STALE - 2025-02-05]: scraping 1,200 node exporters on 2 vCPU 2 GB instances. vmagent v1.108.0 used 3.2x less CPU and 2.7x less memory than OTel Collector v0.115.0, 1.6x less CPU and 3.0x less memory than Prometheus 3.x agent mode. Alloy not tested. Figures only in charts. [MED]
+  <a href="https://victoriametrics.com/blog/opentelemetry-prometheus-and-more/">https://victoriametrics.com/blog/opentelemetry-prometheus-and-more/</a></li>
+<li>Alloy official sizing: about 0.4 CPU and 11 GiB RAM per 1M active series, and about 1 CPU and 120 MiB per 1 MiB/s of logs. Applies to its Prometheus pipeline, which keeps a WAL. This explains why a DaemonSet that both scrapes metrics and tails logs reaches 900 MB per node. [MED]
+  <a href="https://grafana.com/docs/alloy/latest/set-up/estimate-resource-usage/">https://grafana.com/docs/alloy/latest/set-up/estimate-resource-usage/</a>
+  A community report of 742 MiB growing over days exists but has no confirmed fix. [LOW]</li>
+</ul>
+<h3 id="42-best-combination-for-this-platform">4.2 Best combination for this platform<a class="headerlink" href="#42-best-combination-for-this-platform" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Collector</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Metrics</td>
+<td>vmagent as one VMAgent Deployment</td>
+<td>Lowest footprint in vendor tests, native relabeling, stream aggregation, series limits, kubernetes_sd namespace metadata. DaemonSet mode only supports VMPodScrape so avoid it.</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td>vlagent DaemonSet (victoria-logs-collector chart 0.3.8)</td>
+<td>28 MiB and 0.06 CPU at 10k logs/s in vendor test, native Kubernetes metadata, checkpoint file, disk buffer.</td>
+</tr>
+<tr>
+<td>Traces from SDKs</td>
+<td>OTLP direct to VictoriaTraces</td>
+<td>OTel Operator Instrumentation CRD injects the SDK and points it at VT.</td>
+</tr>
+<tr>
+<td>Traces and RED without code change</td>
+<td>OBI DaemonSet</td>
+<td>See section 5.</td>
+</tr>
+<tr>
+<td>Gateway</td>
+<td>OTel Collector only if you need tail sampling, spanmetrics connector, or attribute processing</td>
+<td>Otherwise skip, it costs roughly 100 MiB or more.</td>
+</tr>
+<tr>
+<td>- Fluent Bit is the fallback for node journald or per-namespace tenant routing, at about 78 MiB in the same test. Vector at 154 MiB is the heaviest of the viable options. [MED]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- OTel Operator v0.163.0 (2026-11-11). Auto-instrumentation supports Apache HTTPD, DotNet, Go, Java, Nginx, NodeJS, PHP, Python, Ruby. The Instrumentation CRD is still apiVersion opentelemetry.io/v1alpha1. Injection is by pod or namespace annotation. [HIGH]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/README.md">https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/README.md</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- vmagent accepts OTLP metrics at /opentelemetry/v1/metrics. VictoriaLogs and VictoriaTraces accept OTLP natively, so no vendor-specific exporter is required. [HIGH]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>- Stream aggregation, deduplication and relabeling are open source in vmagent and VMSingle. [HIGH]</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td><a href="https://docs.victoriametrics.com/victoriametrics/stream-aggregation/">https://docs.victoriametrics.com/victoriametrics/stream-aggregation/</a></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="5-ebpf-zero-code-instrumentation">5. eBPF zero-code instrumentation<a class="headerlink" href="#5-ebpf-zero-code-instrumentation" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Status 2026-11-13</th>
+<th>Outputs</th>
+<th>Fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>OpenTelemetry eBPF Instrumentation (OBI)</td>
+<td>v1.0.0 stable 2026-10-30. Repo 639 stars, Apache-2.0 [HIGH]</td>
+<td>OTLP traces, RED metrics, runtime metrics, network flow metrics, span metrics, service graph metrics, built-in Prometheus endpoint</td>
+<td>Best fit</td>
+</tr>
+<tr>
+<td>Grafana Beyla</td>
+<td>v3.41.0 2026-11-04, v3.42.0 pre-release, 2153 stars [HIGH]</td>
+<td>Same family, Grafana distribution</td>
+<td>Redundant with OBI</td>
+</tr>
+<tr>
+<td>Coroot</td>
+<td>v1.29.2 2026-11-04, 8018 stars [HIGH]</td>
+<td>Own UI, service map, SLOs, profiling</td>
+<td>Needs ClickHouse plus a Prometheus-compatible store. Supports VictoriaMetrics as a drop-in. Too many moving parts for 2 nodes [HIGH on requirements, LOW on cost]</td>
+</tr>
+<tr>
+<td>Pixie</td>
+<td>CNCF sandbox, Vizier pre-releases only in 2026 [HIGH]</td>
+<td>Own UI</td>
+<td>Docs minimum 1 GiB per node, no more than 25 percent of node RAM. Rule out [HIGH]</td>
+</tr>
+<tr>
+<td>Odigos</td>
+<td>Not verified. GitHub API returned 404 for odigos-io/odigos. A third-party page lists v1.31.1 from July 2026 [LOW]</td>
+<td>OTel format</td>
+<td>Not assessed</td>
+</tr>
+<tr>
+<td>Cilium Hubble L7</td>
+<td>Cilium v1.20.4 stable [HIGH]</td>
+<td>http_requests_total, http_request_duration_seconds, dns, flow, tcp, drop</td>
+<td>L7 metrics only for pods with L7 protocol visibility, disabled by default. No traces. Complement, not substitute [HIGH]</td>
+</tr>
+</tbody>
+</table>
+<p>OBI details
+- Requirements: Linux 5.8 or newer, BTF, amd64 or arm64, root or specific capabilities. Validated kernels include 5.15, 6.1, 6.6, 6.12, 6.18. [HIGH]
+  <a href="https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/v1.0.0/SUPPORT_MATRIX.md">https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/v1.0.0/SUPPORT_MATRIX.md</a>
+- Languages: Java, .NET, Go, Python, Ruby, Node.js, C, C++, Rust. Protocols include HTTP/S, gRPC, Kafka, PostgreSQL, MySQL, Redis, MongoDB. [HIGH]
+  <a href="https://opentelemetry.io/docs/zero-code/obi/">https://opentelemetry.io/docs/zero-code/obi/</a>
+- RED metric names in Prometheus form: http_server_request_duration_seconds, http_client_request_duration_seconds. Span metrics and service graph metrics are enabled through the features option. [HIGH, exact feature keys not confirmed]
+  <a href="https://opentelemetry.io/docs/zero-code/obi/metrics/">https://opentelemetry.io/docs/zero-code/obi/metrics/</a>
+- Known v1.0.0 limitations: application metrics can go missing after pod restart until OBI restarts, child spans can start before parents, port-based discovery can pick a helper process, service graph needs the instance label preserved across multiple OBI instances. [HIGH]
+  <a href="https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/tag/v1.0.0">https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/tag/v1.0.0</a>
+- Resource cost: no official numbers. Blog figures range from 40 to 80 MB per node to a 512 MiB limit and are unsourced. Measure on your nodes. [LOW]
+- Interaction with Cilium eBPF programs: not researched. Test on one node first. [LOW]
+- Output to the VM stack: OTLP traces to VictoriaTraces, Prometheus endpoint scraped by a VMPodScrape. No collector needed. [MED, design inference]</p>
+<h2 id="6-continuous-profiling">6. Continuous profiling<a class="headerlink" href="#6-continuous-profiling" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Status</th>
+<th>Cost and fit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grafana Pyroscope</td>
+<td>v2.4.3 (2026-11-03), 11.7k stars, AGPL-3.0 [HIGH]</td>
+<td>Single-binary mode with local filesystem exists but docs say not recommended for production and has no HA. Distributed mode requires object storage. No official small-cluster sizing found. Alloy pyroscope.ebpf figures not found.</td>
+</tr>
+<tr>
+<td>Parca</td>
+<td>v0.30.0 (2026-11-06), 5017 stars, Apache-2.0 [HIGH]</td>
+<td>Polar Signals was acquired by Dash0 on 2026-08-17. Both companies say Parca stays open source and maintained. Direction risk. Sizing not found.</td>
+</tr>
+<tr>
+<td>OTel profiling signal</td>
+<td>Public alpha since March 2026, not stable in OTLP, no production backends [HIGH]</td>
+<td>Do not build on it yet</td>
+</tr>
+<tr>
+<td>Coroot</td>
+<td>Built-in profiling</td>
+<td>Needs the full Coroot stack</td>
+</tr>
+<tr>
+<td>VictoriaMetrics</td>
+<td>No profile store exists [HIGH by absence]</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Sources: <a href="https://grafana.com/docs/pyroscope/latest/reference-pyroscope-v2-architecture/deployment-modes/">https://grafana.com/docs/pyroscope/latest/reference-pyroscope-v2-architecture/deployment-modes/</a> , <a href="https://opentelemetry.io/blog/2026/profiles-alpha">https://opentelemetry.io/blog/2026/profiles-alpha</a> , <a href="https://blog.polarsignals.com/blog/posts/2026/08/17/polar-signals-is-joining-dash0">https://blog.polarsignals.com/blog/posts/2026/08/17/polar-signals-is-joining-dash0</a></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Recommendation: defer profiling. If wanted later, a single Pyroscope or Parca pod with its own PVC, accept no HA. [LOW]</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="7-victoriametrics-native-tooling">7. VictoriaMetrics-native tooling<a class="headerlink" href="#7-victoriametrics-native-tooling" title="Permanent link">&para;</a></h2>
+<ul>
+<li>SLOs: no native SLO engine found. Generate Prometheus-format rules with Sloth (v0.16.0, 2026-04-04) or Pyrra (v0.10.2, 2026-09-18) and wrap them in VMRule. A Pyrra pull request for VictoriaMetrics support from June 2025 exists, merge status not confirmed. [LOW]
+  <a href="https://github.com/pyrra-dev/pyrra/pull/1472">https://github.com/pyrra-dev/pyrra/pull/1472</a></li>
+<li>vmalert-tool unittest: open source, Prometheus-compatible test format except the field name metricsql_expr_test replacing promql_expr_test. Starts an isolated VictoriaMetrics instance. Fits CI for VMRule. [HIGH]
+  <a href="https://docs.victoriametrics.com/victoriametrics/vmalert-tool/">https://docs.victoriametrics.com/victoriametrics/vmalert-tool/</a></li>
+<li>Anomaly detection: vmanomaly is Enterprise only and needs a license. Chart victoria-metrics-anomaly 1.12.21. Open source alternatives: MetricsQL zscore, outliers_mad, outliersk, mad plus vmalert. [HIGH]
+  <a href="https://docs.victoriametrics.com/anomaly-detection/">https://docs.victoriametrics.com/anomaly-detection/</a></li>
+<li>Grafana plugins: victoriametrics-metrics-datasource v1.0.0 (2026-11-02, AGPL-3.0 licence per GitHub API) and victoriametrics-logs-datasource v0.34.0 (Apache-2.0). The metrics plugin is optional since the Prometheus datasource type works, but the plugin gives MetricsQL support and the Drilldown. Check the AGPL licence against your distribution policy. [HIGH]</li>
+<li>Perses has VictoriaLogs and VictoriaMetrics datasource integrations if you ever leave Grafana. [MED]
+  <a href="https://docs.victoriametrics.com/victorialogs/integrations/perses/">https://docs.victoriametrics.com/victorialogs/integrations/perses/</a></li>
+<li>MCP servers, all Apache-2.0: mcp-victoriametrics v1.21.0 (2026-11-12, 245 stars), mcp-victorialogs v1.9.0 (2026-04-10, 111 stars), mcp-victoriatraces v1.5.0 (2025-12-15, 19 stars). The metrics server exposes read-only APIs, supports stdio, SSE and streamable HTTP, a Helm chart, VM_DEFAULT_TENANT_ID, and header passthrough via MCP_PASSTHROUGH_HEADERS so you can put it behind vmauth per project. [HIGH]
+  <a href="https://github.com/VictoriaMetrics/mcp-victoriametrics">https://github.com/VictoriaMetrics/mcp-victoriametrics</a></li>
+<li>OpenCost works against VictoriaMetrics: blog guidance sets prometheus.external to the vmselect or vmsingle URL, based on a feature in OpenCost v1.110.0. Current OpenCost v1.121.4 (2026-11-10). No dedicated OpenCost reference page found. [MED]
+  <a href="https://opencost.io/blog/victoria-metrics">https://opencost.io/blog/victoria-metrics</a></li>
+</ul>
+<h2 id="8-ram-and-cpu-budget">8. RAM and CPU budget<a class="headerlink" href="#8-ram-and-cpu-budget" title="Permanent link">&para;</a></h2>
+<p>Assumptions: 2 nodes, about 70 pods, 200k active series at peak, 10 GB/day logs at the middle of your range, a few dozen spans per second. Only rows marked with a source have a published anchor. Everything else is my estimate and must be measured with vmagent and process metrics before sizing requests. All [LOW] unless stated.
+Requests are what I would start with, limits are where OOM becomes acceptable.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Replicas</th>
+<th>Request RAM</th>
+<th>Limit RAM</th>
+<th>CPU request</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>VM operator</td>
+<td>1</td>
+<td>64 Mi</td>
+<td>256 Mi</td>
+<td>20m</td>
+<td>Estimate</td>
+</tr>
+<tr>
+<td>VMSingle</td>
+<td>1</td>
+<td>768 Mi</td>
+<td>1.5 Gi</td>
+<td>300m</td>
+<td>Docs: under 1 KB per active series, keep 50 percent RAM free. 200k series is about 200 MB resident plus caches and queries. [MED anchor]</td>
+</tr>
+<tr>
+<td>VMAgent</td>
+<td>1</td>
+<td>256 Mi</td>
+<td>768 Mi</td>
+<td>100m</td>
+<td>Estimate. Vendor says it uses less than Prometheus agent, no absolute number. Alloy rule of 11 GiB per 1M series does not apply to vmagent.</td>
+</tr>
+<tr>
+<td>vmalert</td>
+<td>1 or 2</td>
+<td>64 Mi</td>
+<td>256 Mi</td>
+<td>20m</td>
+<td>Estimate</td>
+</tr>
+<tr>
+<td>Alertmanager or VMAlertmanager</td>
+<td>1</td>
+<td>48 Mi</td>
+<td>128 Mi</td>
+<td>10m</td>
+<td>Estimate</td>
+</tr>
+<tr>
+<td>vmauth</td>
+<td>1</td>
+<td>48 Mi</td>
+<td>128 Mi</td>
+<td>20m</td>
+<td>Estimate</td>
+</tr>
+<tr>
+<td>kube-state-metrics</td>
+<td>1</td>
+<td>96 Mi</td>
+<td>256 Mi</td>
+<td>20m</td>
+<td>Estimate</td>
+</tr>
+<tr>
+<td>node-exporter</td>
+<td>2</td>
+<td>24 Mi</td>
+<td>64 Mi</td>
+<td>10m</td>
+<td>Estimate</td>
+</tr>
+<tr>
+<td>OpenCost</td>
+<td>1</td>
+<td>96 Mi</td>
+<td>256 Mi</td>
+<td>20m</td>
+<td>Estimate</td>
+</tr>
+<tr>
+<td>VictoriaLogs single</td>
+<td>1</td>
+<td>512 Mi</td>
+<td>1.5 Gi</td>
+<td>250m</td>
+<td>Vendor test shows 1.3 GB at 65 MB/s, you ingest about 0.1 MB/s on average. Heavy queries are the risk. [MED anchor]</td>
+</tr>
+<tr>
+<td>Extra VLSingle for long retention</td>
+<td>1 or 2</td>
+<td>256 Mi</td>
+<td>768 Mi</td>
+<td>100m</td>
+<td>Needed if you keep per-class retention. Estimate</td>
+</tr>
+<tr>
+<td>vlagent</td>
+<td>2</td>
+<td>48 Mi</td>
+<td>128 Mi</td>
+<td>25m</td>
+<td>Vendor test: 28 MiB and 0.062 CPU at 10k logs/s. Yours is lower per node. [MED anchor]</td>
+</tr>
+<tr>
+<td>VictoriaTraces single</td>
+<td>1</td>
+<td>256 Mi</td>
+<td>768 Mi</td>
+<td>100m</td>
+<td>Vendor PoC: 1.15 GiB at 10k spans/s, you send a small fraction. [STALE anchor]</td>
+</tr>
+<tr>
+<td>OBI DaemonSet</td>
+<td>2</td>
+<td>128 Mi</td>
+<td>384 Mi</td>
+<td>50m</td>
+<td>Unverified blog range 40 to 512 MiB</td>
+</tr>
+<tr>
+<td>Grafana 12.3</td>
+<td>1</td>
+<td>256 Mi</td>
+<td>512 Mi</td>
+<td>100m</td>
+<td>Existing</td>
+</tr>
+<tr>
+<td>OTel Collector gateway, optional</td>
+<td>1</td>
+<td>128 Mi</td>
+<td>256 Mi</td>
+<td>50m</td>
+<td>Vendor test 107 MiB at 10k logs/s</td>
+</tr>
+<tr>
+<td>Pyroscope or Parca, optional</td>
+<td>1</td>
+<td>512 Mi</td>
+<td>1 Gi</td>
+<td>100m</td>
+<td>No official sizing found</td>
+</tr>
+</tbody>
+</table>
+<p>Totals, sum of requests
+- Core without optional rows: about 3.2 GiB requested, about 8 GiB of limits. [LOW]
+- With optional rows: about 4.0 GiB requested. [LOW]
+- Today: Alloy alone is about 1.8 GB across two nodes (900 MB each, your figure), plus VMCluster with three components, Loki SingleBinary, and standalone Alertmanager. [HIGH for Alloy, from your report]
+- Expected saving: Alloy replaced by vmagent plus vlagent plus OBI is roughly 1.5 GB lower on the collection side, and VMCluster to VMSingle removes two components. Net saving of 2 to 4 GB is plausible but unmeasured. [LOW]</p>
+<p>Disk, at 200k series and 10 GB/day logs
+- Metrics: VM compresses to roughly a byte or two per sample. At 200k series and a 30s scrape interval that is about 576M samples per day, so about 0.6 to 1.2 GB/day, 20 to 40 GB for 30 days before dedup. [LOW, estimate]
+- Logs: about 0.5 to 2 GB/day on disk at 10x or better compression, 15 to 60 GB at 30 days. [MED, docs compression claim]
+- Traces: small at your span rate. [LOW]
+- All on Ceph RBD PVCs. VictoriaLogs and VictoriaTraces cannot use RGW until the object storage PR lands. [HIGH]
+- Docs advise keeping 20 percent disk free and 50 percent spare RAM and CPU for VictoriaMetrics. On 28 GB total you have room, but the limits column above should not all be reached together.</p>
+<h2 id="9-recommended-stack">9. Recommended stack<a class="headerlink" href="#9-recommended-stack" title="Permanent link">&para;</a></h2>
+<ol>
+<li>victoria-metrics-k8s-stack 0.98.x with operator, VMSingle, VMAgent, VMAlert, VMAlertmanager or your existing Alertmanager, VMAuth. Bundled Grafana off, bundled KSM and node-exporter on.</li>
+<li>VLSingle plus VLAgent (or the victoria-logs-collector chart). Add a second VLSingle only for the retention classes you cannot drop.</li>
+<li>VTSingle plus OTLP from SDKs and OBI. Accept pre-GA or fall back to Tempo monolithic.</li>
+<li>vmauth per project: metrics_extra_filters on the project label, logs extra_stream_filters on pod namespace, trace access by tenant header.</li>
+<li>vmalert-tool unit tests in CI for VMRule. Sloth or Pyrra output wrapped in VMRule for SLOs.</li>
+<li>Hubble stays for network flows and DNS. Enable L7 only on selected pods.</li>
+<li>Skip: VMCluster, vmanomaly, Coroot, Pixie, profiling, until a concrete need shows up.</li>
+</ol>
+<h2 id="10-open-questions-and-gaps">10. Open questions and gaps<a class="headerlink" href="#10-open-questions-and-gaps" title="Permanent link">&para;</a></h2>
+<ul>
+<li>No official RAM figures for vmagent at 200k series, VictoriaTraces, OBI or Pyroscope. Measure.</li>
+<li>Per-namespace tenant routing in vlagent not documented. Confirm by test or accept the single-tenant plus vmauth filter design.</li>
+<li>Whether OBI coexists cleanly with Cilium eBPF on your kernel, not researched.</li>
+<li>Odigos status not verified.</li>
+<li>Whether the k8s-stack default dashboards can be provisioned into several Grafana orgs without custom work, not verified.</li>
+<li>VictoriaLogs S3 offload release date, only a stated ETA of November 2026 with open bug reports.</li>
+<li>Alloy and Loki sizing on your cluster come from your own report, not measured here.</li>
+</ul>
+<h2 id="sources-accessed-2026-11-13">Sources accessed 2026-11-13<a class="headerlink" href="#sources-accessed-2026-11-13" title="Permanent link">&para;</a></h2>
+<p>GitHub releases and repo metadata
+- <a href="https://github.com/VictoriaMetrics/VictoriaMetrics/releases">https://github.com/VictoriaMetrics/VictoriaMetrics/releases</a>
+- <a href="https://github.com/VictoriaMetrics/VictoriaLogs/releases">https://github.com/VictoriaMetrics/VictoriaLogs/releases</a>
+- <a href="https://github.com/VictoriaMetrics/VictoriaTraces/releases">https://github.com/VictoriaMetrics/VictoriaTraces/releases</a>
+- <a href="https://github.com/VictoriaMetrics/operator/releases">https://github.com/VictoriaMetrics/operator/releases</a>
+- <a href="https://github.com/VictoriaMetrics/helm-charts/releases">https://github.com/VictoriaMetrics/helm-charts/releases</a>
+- <a href="https://github.com/VictoriaMetrics/VictoriaLogs/issues/48">https://github.com/VictoriaMetrics/VictoriaLogs/issues/48</a>
+- <a href="https://github.com/VictoriaMetrics/VictoriaLogs/issues/15">https://github.com/VictoriaMetrics/VictoriaLogs/issues/15</a>
+- <a href="https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/tag/v1.0.0">https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/releases/tag/v1.0.0</a>
+- <a href="https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/v1.0.0/SUPPORT_MATRIX.md">https://github.com/open-telemetry/opentelemetry-ebpf-instrumentation/blob/v1.0.0/SUPPORT_MATRIX.md</a>
+- <a href="https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/README.md">https://github.com/open-telemetry/opentelemetry-operator/blob/main/docs/auto-instrumentation/README.md</a>
+- <a href="https://github.com/VictoriaMetrics/mcp-victoriametrics">https://github.com/VictoriaMetrics/mcp-victoriametrics</a>
+- <a href="https://github.com/VictoriaMetrics/victorialogs-datasource">https://github.com/VictoriaMetrics/victorialogs-datasource</a>
+- <a href="https://github.com/pyrra-dev/pyrra/pull/1472">https://github.com/pyrra-dev/pyrra/pull/1472</a>
+- GitHub API for stars, licenses and latest tags of VictoriaMetrics, VictoriaLogs, VictoriaTraces, operator, helm-charts, victorialogs-datasource, victoriametrics-datasource, mcp-victoriametrics, mcp-victorialogs, mcp-victoriatraces, OBI, grafana/beyla, coroot, pixie, parca, pyroscope, otel operator, otel collector, alloy, vector, fluent-bit, cilium, loki, tempo, jaeger, opencost, sloth, pyrra, perses</p>
+<p>Raw docs read from raw.githubusercontent.com master branches
+- VictoriaMetrics docs: README.md, Cluster-VictoriaMetrics.md, FAQ.md, enterprise.md, vmagent.md, vmauth.md, vmalert.md, vmalert-tool.md, vmbackup.md, sd_configs.md, MetricsQL.md, LTS-releases.md, stream-aggregation/README.md, and the enterprise flag files
+- VictoriaLogs docs: README.md, cluster.md, FAQ.md, Roadmap.md, LTS-releases.md, vlagent.md, vmalert.md, security-and-lb.md, querying/README.md, logql-to-logsql.md, victoria_logs_enterprise_flags.md
+- VictoriaTraces docs: README.md, roadmap.md, querying/README.md, keyConcepts.md, data-ingestion/README.md
+- operator docs: api.md, enterprise.md, resources/vmanomaly.md, resources/vmalertmanagerconfig.md, resources/vmrule.md, backups.md
+- helm-charts: victoria-metrics-k8s-stack Chart.yaml and values.yaml</p>
+<p>Docs sites
+- <a href="https://docs.victoriametrics.com/victorialogs/">https://docs.victoriametrics.com/victorialogs/</a>
+- <a href="https://docs.victoriametrics.com/victorialogs/cluster/">https://docs.victoriametrics.com/victorialogs/cluster/</a>
+- <a href="https://docs.victoriametrics.com/victorialogs/data-ingestion/">https://docs.victoriametrics.com/victorialogs/data-ingestion/</a>
+- <a href="https://docs.victoriametrics.com/victorialogs/changelog/">https://docs.victoriametrics.com/victorialogs/changelog/</a>
+- <a href="https://docs.victoriametrics.com/victorialogs/roadmap/">https://docs.victoriametrics.com/victorialogs/roadmap/</a>
+- <a href="https://docs.victoriametrics.com/victorialogs/logsql/">https://docs.victoriametrics.com/victorialogs/logsql/</a>
+- <a href="https://docs.victoriametrics.com/victoriametrics/enterprise/">https://docs.victoriametrics.com/victoriametrics/enterprise/</a>
+- <a href="https://docs.victoriametrics.com/operator/resources/">https://docs.victoriametrics.com/operator/resources/</a>
+- <a href="https://docs.victoriametrics.com/helm/victoria-logs-collector/">https://docs.victoriametrics.com/helm/victoria-logs-collector/</a>
+- <a href="https://docs.victoriametrics.com/anomaly-detection/">https://docs.victoriametrics.com/anomaly-detection/</a>
+- <a href="https://opentelemetry.io/docs/zero-code/obi/">https://opentelemetry.io/docs/zero-code/obi/</a>
+- <a href="https://opentelemetry.io/docs/zero-code/obi/metrics/">https://opentelemetry.io/docs/zero-code/obi/metrics/</a>
+- <a href="https://docs.cilium.io/en/stable/observability/metrics/">https://docs.cilium.io/en/stable/observability/metrics/</a>
+- <a href="https://docs.coroot.com/">https://docs.coroot.com/</a> , <a href="https://docs.coroot.com/configuration/prometheus">https://docs.coroot.com/configuration/prometheus</a> , <a href="https://docs.coroot.com/installation/requirements">https://docs.coroot.com/installation/requirements</a>
+- <a href="https://grafana.com/docs/alloy/latest/set-up/estimate-resource-usage/">https://grafana.com/docs/alloy/latest/set-up/estimate-resource-usage/</a>
+- <a href="https://grafana.com/docs/pyroscope/latest/reference-pyroscope-v2-architecture/deployment-modes/">https://grafana.com/docs/pyroscope/latest/reference-pyroscope-v2-architecture/deployment-modes/</a>
+- <a href="https://www.dash0.com/knowledge/what-is-continuous-profiling">https://www.dash0.com/knowledge/what-is-continuous-profiling</a></p>
+<p>Blogs and benchmarks
+- <a href="https://victoriametrics.com/blog/log-collectors-benchmark-2026/">https://victoriametrics.com/blog/log-collectors-benchmark-2026/</a>
+- <a href="https://victoriametrics.com/blog/opentelemetry-prometheus-and-more/">https://victoriametrics.com/blog/opentelemetry-prometheus-and-more/</a>
+- <a href="https://victoriametrics.com/blog/dev-note-distributed-tracing-with-victorialogs/">https://victoriametrics.com/blog/dev-note-distributed-tracing-with-victorialogs/</a>
+- <a href="https://dev.to/sachincool/victorialogs-vs-loki-real-world-benchmarking-results-26bg">https://dev.to/sachincool/victorialogs-vs-loki-real-world-benchmarking-results-26bg</a></p>
+<p>Search results consulted without full fetch, lower weight
+- Tempo 3.0 release notes <a href="https://grafana.com/docs/tempo/latest/release-notes/v3-0/">https://grafana.com/docs/tempo/latest/release-notes/v3-0/</a>
+- OpenTelemetry Profiles alpha <a href="https://opentelemetry.io/blog/2026/profiles-alpha">https://opentelemetry.io/blog/2026/profiles-alpha</a>
+- Polar Signals joins Dash0 <a href="https://blog.polarsignals.com/blog/posts/2026/08/17/polar-signals-is-joining-dash0">https://blog.polarsignals.com/blog/posts/2026/08/17/polar-signals-is-joining-dash0</a>
+- OpenCost with VictoriaMetrics <a href="https://opencost.io/blog/victoria-metrics">https://opencost.io/blog/victoria-metrics</a>
+- Pixie requirements <a href="https://docs.px.dev/installing-pixie/requirements/">https://docs.px.dev/installing-pixie/requirements/</a>
+- Odigos third-party listings, Jaeger storage comparisons, VM sizing rule of thumb from mirrored docs, Alloy community memory thread</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Retour en haut de la page
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "navigation.tabs.sticky", "navigation.top", "navigation.tracking", "search.suggest", "search.highlight", "content.code.copy"], "search": "../../../assets/javascripts/workers/search.a7633da7.min.js", "tags": null, "translations": {"clipboard.copied": "Copi\u00e9 dans le presse-papier", "clipboard.copy": "Copier dans le presse-papier", "search.result.more.one": "1 de plus sur cette page", "search.result.more.other": "# de plus sur cette page", "search.result.none": "Aucun document trouv\u00e9", "search.result.one": "1 document trouv\u00e9", "search.result.other": "# documents trouv\u00e9s", "search.result.placeholder": "Taper pour d\u00e9marrer la recherche", "search.result.term.missing": "Non trouv\u00e9", "select.version": "S\u00e9lectionner la version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.a5f9d56c.min.js"></script>
+      
+    
+  </body>
+</html>
