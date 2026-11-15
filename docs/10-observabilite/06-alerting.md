@@ -66,7 +66,9 @@ moyen d'apprendre que vmalert ou Alertmanager sont tombés : en octobre, vmstora
 lecture seule 5 jours sans que personne le sache.
 
 Choix proposé : healthchecks.io, gratuit jusqu'à 20 contrôles. Alternative auto-hébergée : un
-Gatus hors du cluster (sur pae-node-1), plus de travail. Retenu : healthchecks.io (Q5).
+Gatus hors du cluster (sur pae-node-1), plus de travail. Retenu : healthchecks.io (Q5). Terraform
+crée le check (provider `healthchecksio`) et écrit son URL de ping dans Vault : personne ne la
+recopie à la main.
 
 ## On-call et PagerDuty
 

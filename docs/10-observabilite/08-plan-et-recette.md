@@ -52,23 +52,36 @@ Brian prend V0, V1 et V3. V4 et V5 se répartissent après V3. CNP-191 (GitOps b
 touche les mêmes fichiers : V1 se fait dans la nouvelle structure si CNP-191 est prêt, sinon
 CNP-191 reprend les fichiers après V1.
 
-## Livraison (PR ouvertes le 14/11)
+## Livraison
 
-Toutes en draft, rien n'est déployé. Ordre de merge et de déploiement :
+Ordre de merge et de déploiement, avec l'état au 15/11 au soir. La suite est suivie dans
+[CNP-274](https://3istors.atlassian.net/browse/CNP-274) (bascule, V3, flags),
+[CNP-275](https://3istors.atlassian.net/browse/CNP-275) (clouds) et
+[CNP-276](https://3istors.atlassian.net/browse/CNP-276) (retrait de l'ancienne stack).
 
-| # | PR | Vague | Avant le merge | Après le merge |
-| --- | --- | --- | --- | --- |
-| 1 | CMP#229, cnp-project-base#37, K3s#200 | V0 | Rien | Release du CMP ; test d'isolation avec un compte `demo-*` |
-| 2 | K3s#202 | V1 métriques | `terraform apply` (clé admin VMSingle) | Sync : la nouvelle stack s'ajoute. Bascule des Services (`cutover-v1.yaml`) quand les dashboards sont identiques côte à côte |
-| 3 | K3s#204 | V2 logs | `terraform apply` (clé VictoriaLogs) ; rebase sur `main` après #202 | 14 jours de double envoi, comparaison d'audit sur 48 h, puis retrait de Loki et Alloy |
-| 4 | K3s#205 | V3 alertes | Bascule V1 faite depuis au moins un jour ; `terraform apply` (clés vmauth, healthchecks.io, policies Vault par cloud) ; réglage manuel de healthchecks.io | Garder la suppression de `values-alertmanager.yaml` et de `alertmanager-networkpolicy.yaml` en cas de conflit avec #200 et #204 |
-| 5 | CMP#230 | V3 SLO et routage | K3s#205 déployé | `OBS_V3_ENABLED=true` |
-| 6 | K3s#203 | V4 traces | `terraform apply` (clé VictoriaTraces, redirection Hubble UI) | Le collecteur démarre sans table de routage |
-| 7 | CMP#231 | V4 tenants, vmauth logs et traces | K3s#203 déployé | Renseigner les URL `OBS_*`, `LOGS_BACKEND=vl` après V2 |
-| 8 | infra-templates#29, template FastAPI#70, app-templates#51 | V4 apps | Collecteur déployé | Les nouvelles apps naissent instrumentées ; les apps existantes ne changent pas |
-| 9 | CMP V5 | V5 portail | #231 | Derrière les flags |
-| 10 | Cloud#50 | V6 clouds | K3s#205 (vmauth des clouds, relais) ; un cloud allumé | Vérifier R10 et R11 |
+| # | PR | Vague | Avant le merge | Après le merge | État |
+| --- | --- | --- | --- | --- | --- |
+| 1 | CMP#229, cnp-project-base#37, K3s#200 | V0 | Rien | Release du CMP ; test d'isolation avec un compte projet | **En prod** (CMP v0.3.113), test réel OK |
+| 2 | K3s#202 | V1 métriques | `terraform apply` (clé admin VMSingle) | Double envoi. Bascule des Services (`cutover-v1.yaml`) après au moins un jour | **En prod** depuis le 15/11 08:50 UTC. Bascule à faire (CNP-274) |
+| 3 | K3s#204 | V2 logs | `terraform apply` (clé VictoriaLogs) | 14 jours de double envoi, comparaison d'audit sur 48 h, puis retrait de Loki et Alloy | **En prod**, test d'usurpation OK. Retrait le 29/11 au plus tôt (CNP-276) |
+| 4 | K3s#205 | V3 alertes | Bascule V1 faite ; `terraform apply` (clés vmauth, policies Vault par cloud, check healthchecks.io créé par Terraform avec son URL dans Vault) | VMAlert et VMAlertmanager remplacent les charts Helm | Rebasée, à merger (CNP-274). Pré-requis : clé API healthchecks.io dans les tfvars |
+| 5 | CMP#230 | V3 SLO et routage | K3s#205 déployé pour l'activer | `OBS_V3_ENABLED=true` | Mergée (v0.3.116), flag éteint |
+| 6 | K3s#203, #206, #207 | V4 traces | `terraform apply` (clé VictoriaTraces, Hubble UI : DNS et redirection Keycloak) | Le CMP écrit la table de routage et redémarre le collecteur | **En prod**, un tenant par projet, test réel OK |
+| 7 | CMP#231 | V4 tenants, vmauth logs et traces | K3s#203 déployé | `OBS_TRACES_ROUTING_ENABLED` (fait) ; URL `OBS_*` après la bascule V1, `LOGS_BACKEND=vl` | Mergée (v0.3.116) |
+| 8 | infra-templates#29, template FastAPI#70, app-templates#51 | V4 apps | Collecteur déployé | Les nouvelles apps naissent instrumentées | **Mergées**, apps existantes inchangées |
+| 9 | CMP#232 | V5 portail | #231 | Derrière les flags | Mergée (v0.3.116), flags éteints |
+| 10 | Cloud#50 | V6 clouds | K3s#205 ; un cloud allumé | Vérifier R10 et R11 | À faire (CNP-275) |
 
-Les PR K3s #203, #204 et #205 partent toutes de #202 : chacune devra être rebasée sur `main` après
-le merge de la précédente. Leurs ajouts au `kustomization.yaml` sont des blocs séparés, marqués par
-vague, pour que ces rebases restent mécaniques.
+Les URL des stores (`OBS_VMSINGLE_URL`, `OBS_VLOGS_URL`, `OBS_VTRACES_URL`) attendent la bascule
+V1 : avant elle, les projets lisent par l'ancien vmauth, que les NetworkPolicies de VictoriaLogs
+et VictoriaTraces n'admettent pas.
+
+Écarts trouvés au déploiement, corrigés :
+
+- Alertmanager était scrapé deux fois (annotation de #200 et VMPodScrape de V1), et sa
+  NetworkPolicy n'admettait pas vmagent.
+- `hubble.3istor.com` manquait dans le tunnel Cloudflare.
+- La policy d'admission `cmp-app-restart-only` refusait au CMP le redémarrage du collecteur
+  (HTTP 422) : seul `observability/otelcol-gateway` est ajouté en exception.
+- Un pod qui envoie un span dans sa première seconde n'est pas encore connu du collecteur : le
+  span part en « projet inconnu ». Sans effet sur une vraie app.

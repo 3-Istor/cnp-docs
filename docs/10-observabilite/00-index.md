@@ -1,6 +1,6 @@
 # Observabilité : full VictoriaMetrics et offre aux projets
 
-**Statut : proposition à valider, rien n'est déployé.** Ticket [CNP-185](https://3istors.atlassian.net/browse/CNP-185)
+**Statut : en déploiement.** V0, V1, V2 et V4 sont en prod depuis le 15/11 ; la suite est dans la section « Livraison » du plan. Ticket [CNP-185](https://3istors.atlassian.net/browse/CNP-185)
 (epic de Hugo), dont ce dossier élargit le périmètre.
 
 ## En bref
