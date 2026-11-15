@@ -1,0 +1,11 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: catalog
+title: "CNP · Observability · What a project gets"
+subtitle: "What does every app get from the platform, without code, and what does it take to get it?"
+meta:
+  - "Scope: offer to tenant projects once the observability target ships (waves V1 to V6)"
+  - "Out of scope: platform-only dashboards, options not planned (profiling, RUM)"
+  - "v0.1 (2026-11-13, proposal, CNP-185) · source: cnp-docs/architecture/cnp"
+include: [off-golden, off-logs, off-slo, off-alerts, off-traces, off-status, off-cost, off-ai]
+columns: 2

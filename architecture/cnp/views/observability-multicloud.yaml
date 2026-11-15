@@ -1,0 +1,119 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+state: diff
+title: "CNP · Observability · Target: public clouds"
+subtitle: "How do metrics, logs and traces of EKS and GKE reach the on-prem stores, who vouches for the cluster label, and what happens while a cloud is off?"
+meta:
+  - "Scope: the public cloud target drawn once for EKS cnp-eks and GKE cnp-gke (same platform base, cluster=aws|gcp), the WireGuard tunnel, the on-prem doors (vmauth, collector) and the alert chain · proposal of 2026-11-14 (CNP-185, D22, wave V6)"
+  - "One door for every signal: metrics, logs and spans of a cloud enter through vmauth (relay 18080 for writes, 18083 for reads), with one user per cloud whose password Vault hands to the cloud. vmauth forces cluster=<cloud> on writes (extra_label, VL-Extra-Fields, a header the gateway turns into the cluster attribute) and pins reads to that cloud: no sender is trusted for its own label."
+  - "Clouds are off most of the time. vmagent and Fluent Bit queue on disk while the tunnel is down and drain when it comes back; cnp.sh down waits for empty queues. CloudTelemetryMissing fires when Argo CD says a cloud is up and no sample arrived for 10 min."
+  - "Out of scope: OpenCost (relay 18081, on-prem to cloud) · dual run: relay 18082 keeps feeding Loki until V2 ends, then is removed · per-project Grafana orgs · current stack: views observability and multicloud-links"
+  - "v0.1 (2026-11-14, proposal) · source: cnp-docs/architecture/cnp"
+include:
+  - z-cloud-a
+  - g-b-platform
+  - b-obs-targets
+  - vo-c-vmagent
+  - vo-c-vlagent
+  - vo-c-otelcol
+  - b-rollouts
+  - b-wireguard
+  - b-apiserver
+  - z-cluster
+  - g-vpn
+  - wireguard-onprem
+  - g-gitops
+  - argocd
+  - g-vo
+  - g-vo-read
+  - vo-vmauth
+  - g-vo-collect
+  - vo-otelcol
+  - g-vo-store
+  - vo-vmsingle
+  - vo-vlogs
+  - vo-vtraces
+  - g-vo-alert
+  - vo-vmalert
+  - vo-alertmanager
+  - z-internet
+  - discord
+steps: [c-vo-mc-vmagent-targets, c-vo-mc-vmagent-relay, c-bwg-onprem-vm, c-vo-mc-wg-vmauth, c-vo-vmauth-vmsingle, c-vo-vmalert-vmsingle, c-vo-vmalert-am, c-vo-am-discord]
+background: [c-wg-eks, c-argocd-b, c-vo-mc-vlagent-targets, c-vo-mc-vlagent-relay, c-vo-vmauth-vlogs, c-vo-mc-apps-otelcol, c-vo-mc-otel-relay, c-vo-vmauth-otelcol, c-vo-otelcol-vtraces, c-brollouts-relay-select, c-bwg-onprem-select, c-bwg-onprem-loki, c-vo-vmauth-vtraces, c-vo-vmalert-vlogs]
+labels:
+  c-vo-mc-vmagent-targets: ""
+  c-vo-mc-vlagent-targets: ""
+  c-vo-mc-apps-otelcol: ""
+  c-vo-mc-vmagent-relay: ""
+  c-vo-mc-vlagent-relay: ""
+  c-vo-mc-otel-relay: ""
+  c-brollouts-relay-select: ""
+  c-bwg-onprem-vm: ""
+  c-bwg-onprem-loki: ""
+  c-bwg-onprem-select: ""
+  c-wg-eks: ""
+  c-argocd-b: ""
+  c-vo-mc-wg-vmauth: ""
+  c-vo-vmauth-otelcol: ""
+  c-vo-vmauth-vmsingle: ""
+  c-vo-vmauth-vlogs: ""
+  c-vo-vmauth-vtraces: ""
+  c-vo-otelcol-vtraces: ""
+  c-vo-vmalert-vmsingle: ""
+  c-vo-vmalert-vlogs: ""
+  c-vo-vmalert-am: ""
+  c-vo-am-discord: ""
+cards:
+  - {id: card-legend, title: "Legend", color: slate, legend: true}
+  - id: card-steps
+    title: "Request path · a pod fails on EKS, Discord says so with cluster=aws"
+    color: emerald
+    lines:
+      - "[1] vmagent on the cloud scrapes kubelet, kube-state-metrics, node-exporter, Envoy and annotated pods every 30 s."
+      - "[2] It remote_writes to the cloud end of the tunnel on 18080 as user cloud-aws. While the tunnel is down, samples wait in a 2 GiB disk queue."
+      - "[3] socat relays the bytes through WireGuard, opened from on-prem (keepalive 25 s, the hub is behind NAT)."
+      - "[4] The on-prem end forwards to vmauth, the one door of the stores (two replicas)."
+      - "[5] vmauth checks the cloud's password, keeps only write paths for that user and adds cluster=aws to every sample: a cloud cannot write as another cluster."
+      - "[6] [7] [8] vmalert evaluates the same rules for every cluster; Alertmanager groups by cluster too, so one Discord message names the cloud, the app and its runbook."
+  - id: card-bg
+    title: "Background"
+    color: orange
+    lines:
+      - "[A] The hub opens the tunnel; the cloud end listens on NodePort UDP 31820. [B] Argo CD (platform-clouds ApplicationSet) installs the collectors on each cloud from the Cloud repo."
+      - "[C] [D] [E] Fluent Bit tails pod logs, queues on disk, and writes through the same door; vmauth sets VL-Extra-Fields cluster=aws."
+      - "[F] [G] [H] [I] Apps send OTLP to a collector on the cloud, which resolves pods there (the hub cannot: the relay hides the source IP). It forwards through vmauth, which adds X-CNP-Cluster; the gateway trusts only that header and routes each project to its own VictoriaTraces tenant."
+      - "[J] [K] Argo Rollouts and OpenCost on the cloud read through relay 18083, as reader cloud-aws: read paths only, filters pinned to cluster=aws."
+      - "[L] Relay 18082 still feeds Loki during the dual run of V2, then goes away."
+      - "[M] Project Grafana orgs read traces through vmauth, tenant forced (Q9). [N] vmalert also runs log rules."
+      - "New alerts: CloudTelemetryMissing (Argo CD says the cloud is up, no sample for 10 min), CloudQueueBacklog (disk queue over 500 MB). cnp.sh down waits for empty queues."
+hidden_annotations:
+  GO3: "targets vmauth (word also used by vo-vmauth), the current vmauth is not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"
