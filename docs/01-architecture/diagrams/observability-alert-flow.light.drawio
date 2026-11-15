@@ -1,0 +1,197 @@
+<mxfile host="archgen">
+  <diagram id="observability-alert-flow-light" name="CNP · Observability · From a burning error budget to Discord (light)">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="2394" pageHeight="972" background="#f8fafc" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMzk0IiBoZWlnaHQ9Ijk3MiI+PGRlZnM+PHBhdHRlcm4gaWQ9ImciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UyZThmMCIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2cpIi8+PC9zdmc+;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="2394" height="972" as="geometry" />
+        </mxCell>
+        <mxCell id="header-dot" value="" style="ellipse;fillColor=#059669;strokeColor=none;" vertex="1" parent="1">
+          <mxGeometry x="40" y="44" width="12" height="12" as="geometry" />
+        </mxCell>
+        <mxCell id="header-title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;CNP · Observability · From a burning error budget to Discord&lt;/b&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=24;fontColor=#0f172a;" vertex="1" parent="1">
+          <mxGeometry x="64" y="30" width="1994" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:13px&quot;&gt;What happens, in order, when an app starts failing, until a developer mutes the alert from the portal?&lt;/font&gt;&lt;br&gt;Scope: one fast-burn SLO alert for a prod app, routing, mute, dead man&amp;#39;s switch (proposal, waves V1 and V3)&lt;br&gt;Out of scope: canary analysis and rollback, log-based rules (same path from vmalert on)&lt;br&gt;v0.1 (2026-11-13, proposal, CNP-185) · source: cnp-docs/architecture/cnp&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#475569;" vertex="1" parent="1">
+          <mxGeometry x="64" y="74" width="1994" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="life-vo-vmagent" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="256" as="sourcePoint" />
+            <mxPoint x="140" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-vo-vmsingle" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="435" y="256" as="sourcePoint" />
+            <mxPoint x="435" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-vo-vmalert" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="795" y="256" as="sourcePoint" />
+            <mxPoint x="795" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-vo-alertmanager" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1131" y="256" as="sourcePoint" />
+            <mxPoint x="1131" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-discord" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1485" y="256" as="sourcePoint" />
+            <mxPoint x="1485" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-dev-a" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1730" y="256" as="sourcePoint" />
+            <mxPoint x="1730" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-cmp-backend" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1994" y="256" as="sourcePoint" />
+            <mxPoint x="1994" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="life-vo-deadman" value="" style="html=1;endArrow=none;strokeColor=#475569;strokeWidth=1;dashed=1;dashPattern=4 4;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2254" y="256" as="sourcePoint" />
+            <mxPoint x="2254" y="932" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;1&lt;/span&gt; remote_write Envoy series, 30 s&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="140" y="316" as="sourcePoint" />
+            <mxPoint x="435" y="316" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;2&lt;/span&gt; evaluate SLO rules, extra_filters of the project&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="795" y="412" as="sourcePoint" />
+            <mxPoint x="435" y="412" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-reply-s2-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;3&lt;/span&gt; burn rate 14.4 over 1 h and 5 min&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="435" y="460" as="sourcePoint" />
+            <mxPoint x="795" y="460" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;4&lt;/span&gt; SLOFastBurn{app, project, severity=critical}&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="795" y="508" as="sourcePoint" />
+            <mxPoint x="1131" y="508" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s4" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;5&lt;/span&gt; one message: value, runbook, portal link, @here&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1131" y="604" as="sourcePoint" />
+            <mxPoint x="1485" y="604" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s5" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;6&lt;/span&gt; Mute 1 h (member of the project)&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1730" y="652" as="sourcePoint" />
+            <mxPoint x="1994" y="652" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s6" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;7&lt;/span&gt; POST silence, matcher project=&amp;lt;p&amp;gt; forced&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1994" y="700" as="sourcePoint" />
+            <mxPoint x="1131" y="700" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-reply-s6-8" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;8&lt;/span&gt; silence id, shown in the Alerts tab&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;dashed=1;dashPattern=6 4;endArrow=open;endFill=0;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1131" y="748" as="sourcePoint" />
+            <mxPoint x="1994" y="748" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s7" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;9&lt;/span&gt; Watchdog ping every 5 min&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="1131" y="796" as="sourcePoint" />
+            <mxPoint x="2254" y="796" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="msg-s8" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;10&lt;/span&gt; platform alert, outside the cluster&lt;/span&gt;" style="html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=block;endFill=1;endSize=7;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="2254" y="892" as="sourcePoint" />
+            <mxPoint x="1485" y="892" as="targetPoint" />
+            <mxPoint x="0" y="-12" as="offset" />
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="vo-vmagent" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;vmagent&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[VMAgent · 1 replica]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="200" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-vmagent__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjNjIxNzczIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VmljdG9yaWFNZXRyaWNzPC90aXRsZT48cGF0aCBkPSJNMS44OTMgMy4wNzhDLjIzOSAxLjUzNyA0Ljg0Ni4wMDkgMTEuOTYzIDBoLjA3NmM3LjExNi4wMDkgMTEuNzIzIDEuNTM3IDEwLjA2NyAzLjA3OCAwIDAtNi4xNjggNS42NTUtOC4zMDEgNy40NzMtLjQwNC4zNDYtMS4wODQuNjA3LTEuNzY2LjYxNmgtLjA3NmMtLjY4Mi0uMDA5LTEuMzYyLS4yNzEtMS43NjctLjYxNi0yLjEzMi0xLjgxOC04LjMwMS03LjQ3My04LjMwMy03LjQ3M1ptMjAuNTQ5IDIuNzcxVjguNThjMCAuMy0uMTE1LjY5OC0uMzE5Ljg4NS0xLjMzMiAxLjIyMi02LjQ3IDUuOTI1LTguMzE5IDcuNTAyLS40MDUuMzQ1LTEuMDg1LjYwNi0xLjc2Ny42MTVoLS4wNzJjLS42ODMtLjAwOS0xLjM2Mi0uMjctMS43NjctLjYxNS0xLjg0OS0xLjU3Ny02Ljk4Ny02LjI4LTguMzItNy41MDItLjIwNC0uMTg3LS4zMTgtLjU4NS0uMzE4LS44ODVWNS44NDljMS45NiAxLjc4OCA3LjE2MyA2LjUwNSA4LjYzOCA3Ljc2NC40MDQuMzQ2IDEuMDg0LjYwNyAxLjc2Ny42MTZoLjA3MmMuNjgyLS4wMDkgMS4zNjItLjI3MSAxLjc2Ny0uNjE2IDEuNDc0LTEuMjU4IDYuNjc4LTUuOTczIDguNjM4LTcuNzY0Wm0wIDYuNDE4djIuNzNjMCAuMzAxLS4xMTUuNjk4LS4zMTkuODg1LTEuMzMyIDEuMjIyLTYuNDcgNS45MjYtOC4zMTkgNy41MDItLjQwNS4zNDYtMS4wODUuNjA3LTEuNzY3LjYxNmgtLjA3MmMtLjY4My0uMDA5LTEuMzYyLS4yNzEtMS43NjctLjYxNi0xLjg0OS0xLjU3Ni02Ljk4Ny02LjI4LTguMzItNy41MDItLjIwNC0uMTg3LS4zMTgtLjU4NS0uMzE4LS44ODV2LTIuNzNjMS45NiAxLjc4OCA3LjE2MyA2LjUwNSA4LjYzOCA3Ljc2NC40MDQuMzQ2IDEuMDg0LjYwNiAxLjc2Ny42MTVoLjA3MmMuNjgyLS4wMDkgMS4zNjItLjI3IDEuNzY3LS42MTUgMS40NzQtMS4yNTggNi42NzgtNS45NzYgOC42MzgtNy43NjRaIi8+PC9zdmc+;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="vo-vmagent">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-vmsingle" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;VMSingle&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[metrics · 30 d · &amp;lt; 150k series]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#f5f3ff;html=1;whiteSpace=wrap;strokeColor=#7c3aed;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="300" y="200" width="270" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-vmsingle__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjNjIxNzczIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VmljdG9yaWFNZXRyaWNzPC90aXRsZT48cGF0aCBkPSJNMS44OTMgMy4wNzhDLjIzOSAxLjUzNyA0Ljg0Ni4wMDkgMTEuOTYzIDBoLjA3NmM3LjExNi4wMDkgMTEuNzIzIDEuNTM3IDEwLjA2NyAzLjA3OCAwIDAtNi4xNjggNS42NTUtOC4zMDEgNy40NzMtLjQwNC4zNDYtMS4wODQuNjA3LTEuNzY2LjYxNmgtLjA3NmMtLjY4Mi0uMDA5LTEuMzYyLS4yNzEtMS43NjctLjYxNi0yLjEzMi0xLjgxOC04LjMwMS03LjQ3My04LjMwMy03LjQ3M1ptMjAuNTQ5IDIuNzcxVjguNThjMCAuMy0uMTE1LjY5OC0uMzE5Ljg4NS0xLjMzMiAxLjIyMi02LjQ3IDUuOTI1LTguMzE5IDcuNTAyLS40MDUuMzQ1LTEuMDg1LjYwNi0xLjc2Ny42MTVoLS4wNzJjLS42ODMtLjAwOS0xLjM2Mi0uMjctMS43NjctLjYxNS0xLjg0OS0xLjU3Ny02Ljk4Ny02LjI4LTguMzItNy41MDItLjIwNC0uMTg3LS4zMTgtLjU4NS0uMzE4LS44ODVWNS44NDljMS45NiAxLjc4OCA3LjE2MyA2LjUwNSA4LjYzOCA3Ljc2NC40MDQuMzQ2IDEuMDg0LjYwNyAxLjc2Ny42MTZoLjA3MmMuNjgyLS4wMDkgMS4zNjItLjI3MSAxLjc2Ny0uNjE2IDEuNDc0LTEuMjU4IDYuNjc4LTUuOTczIDguNjM4LTcuNzY0Wm0wIDYuNDE4djIuNzNjMCAuMzAxLS4xMTUuNjk4LS4zMTkuODg1LTEuMzMyIDEuMjIyLTYuNDcgNS45MjYtOC4zMTkgNy41MDItLjQwNS4zNDYtMS4wODUuNjA3LTEuNzY3LjYxNmgtLjA3MmMtLjY4My0uMDA5LTEuMzYyLS4yNzEtMS43NjctLjYxNi0xLjg0OS0xLjU3Ni02Ljk4Ny02LjI4LTguMzItNy41MDItLjIwNC0uMTg3LS4zMTgtLjU4NS0uMzE4LS44ODV2LTIuNzNjMS45NiAxLjc4OCA3LjE2MyA2LjUwNSA4LjYzOCA3Ljc2NC40MDQuMzQ2IDEuMDg0LjYwNiAxLjc2Ny42MTVoLjA3MmMuNjgyLS4wMDkgMS4zNjItLjI3IDEuNzY3LS42MTUgMS40NzQtMS4yNTggNi42NzgtNS45NzYgOC42MzgtNy43NjRaIi8+PC9zdmc+;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="vo-vmsingle">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-vmalert" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;vmalert ×2&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[metrics rules · vlogs rules]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="670" y="200" width="250" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-vmalert__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjNjIxNzczIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+VmljdG9yaWFNZXRyaWNzPC90aXRsZT48cGF0aCBkPSJNMS44OTMgMy4wNzhDLjIzOSAxLjUzNyA0Ljg0Ni4wMDkgMTEuOTYzIDBoLjA3NmM3LjExNi4wMDkgMTEuNzIzIDEuNTM3IDEwLjA2NyAzLjA3OCAwIDAtNi4xNjggNS42NTUtOC4zMDEgNy40NzMtLjQwNC4zNDYtMS4wODQuNjA3LTEuNzY2LjYxNmgtLjA3NmMtLjY4Mi0uMDA5LTEuMzYyLS4yNzEtMS43NjctLjYxNi0yLjEzMi0xLjgxOC04LjMwMS03LjQ3My04LjMwMy03LjQ3M1ptMjAuNTQ5IDIuNzcxVjguNThjMCAuMy0uMTE1LjY5OC0uMzE5Ljg4NS0xLjMzMiAxLjIyMi02LjQ3IDUuOTI1LTguMzE5IDcuNTAyLS40MDUuMzQ1LTEuMDg1LjYwNi0xLjc2Ny42MTVoLS4wNzJjLS42ODMtLjAwOS0xLjM2Mi0uMjctMS43NjctLjYxNS0xLjg0OS0xLjU3Ny02Ljk4Ny02LjI4LTguMzItNy41MDItLjIwNC0uMTg3LS4zMTgtLjU4NS0uMzE4LS44ODVWNS44NDljMS45NiAxLjc4OCA3LjE2MyA2LjUwNSA4LjYzOCA3Ljc2NC40MDQuMzQ2IDEuMDg0LjYwNyAxLjc2Ny42MTZoLjA3MmMuNjgyLS4wMDkgMS4zNjItLjI3MSAxLjc2Ny0uNjE2IDEuNDc0LTEuMjU4IDYuNjc4LTUuOTczIDguNjM4LTcuNzY0Wm0wIDYuNDE4djIuNzNjMCAuMzAxLS4xMTUuNjk4LS4zMTkuODg1LTEuMzMyIDEuMjIyLTYuNDcgNS45MjYtOC4zMTkgNy41MDItLjQwNS4zNDYtMS4wODUuNjA3LTEuNzY3LjYxNmgtLjA3MmMtLjY4My0uMDA5LTEuMzYyLS4yNzEtMS43NjctLjYxNi0xLjg0OS0xLjU3Ni02Ljk4Ny02LjI4LTguMzItNy41MDItLjIwNC0uMTg3LS4zMTgtLjU4NS0uMzE4LS44ODV2LTIuNzNjMS45NiAxLjc4OCA3LjE2MyA2LjUwNSA4LjYzOCA3Ljc2NC40MDQuMzQ2IDEuMDg0LjYwNiAxLjc2Ny42MTVoLjA3MmMuNjgyLS4wMDkgMS4zNjItLjI3IDEuNzY3LS42MTUgMS40NzQtMS4yNTggNi42NzgtNS45NzYgOC42MzgtNy43NjRaIi8+PC9zdmc+;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="vo-vmalert">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-alertmanager" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;Alertmanager&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[VMAlertmanager · route by app]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1001" y="200" width="260" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-alertmanager__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHJvbGU9ImltZyIgdmlld0JveD0iLTMuOTQgLTEuNDQgNDM4LjYyIDQzMi44NyI+PHBhdGggZmlsbD0iI0U3NTIyNSIgZD0iTTIxNS45MjYgNy4wNjhjMTE1LjY4NC4wMjQgMjEwLjYzOCA5My43ODQgMjEwLjQ5MyAyMDcuODQ0LS4xNDggMTE1Ljc5My05NC43MTMgMjA4LjI1Mi0yMTIuOTEyIDIwOC4xNjlDOTcuOTUgNDIzIDQuNTIgMzI5LjE0MyA0LjYwMSAyMTMuMjIxIDQuNjggOTkuODY3IDk5LjgzMyA3LjA0NCAyMTUuOTI2IDcuMDY4em0tNjMuOTQ3IDczLjAwMWMyLjY1MiAxMi45NzguMDc2IDI1LjA4Mi0zLjg0NiAzNi45ODgtMi43MTYgOC4yNDQtNi40NyAxNi4xODMtOC43MTEgMjQuNTM5LTMuNjk0IDEzLjc2OS03Ljg4NSAyNy42MTktOS40MjIgNDEuNzAxLTIuMjEgMjAuMjUgNS43OTUgMzguMDg2IDE5LjQ5MyA1NS44MjJMODYuNTI3IDIyNS45NGMuMTEgMS45NzgtLjAwNyAyLjcyNy4yMSAzLjM2MSA1Ljk2OCAxNy40MyAxNi40NzEgMzIuMTE1IDI4LjI0MyA0NS45NTcgMS4yNDYgMS40NjUgNC4wODIgMi4yMTcgNi4xODIgMi4yMjEgNjIuNzgyLjExNSAxMjUuNTY1LjEwOSAxODguMzQ3LjAyOCAxLjk0OC0uMDAzIDQuNTQ2LS4zNjkgNS43NDEtMS42MTggMTMuNDU2LTE0LjA2MyAyMy43NDYtMzAuMDc5IDMwLjE3OS01MC4yNTdsLTY2LjY1OCAxMi45NzZjNC4zOTctOC41NjcgOS40MTctMTYuMSAxMi4zMDItMjQuMzc3IDkuODY5LTI4LjMxNSA1Ljc3OS01NS42OS04LjM4Ny04MS41MDktMTEuMzY4LTIwLjcyLTIxLjg1NC00MS4zNDktMTYuMTgzLTY2LjMyLTEyLjAwNSAxMS43ODYtMTYuNjE1IDI2Ljc5LTE5LjU0MSA0Mi4yNTMtMi44ODIgMTUuMjMtNC41OCAzMC42ODQtNi44MTEgNDYuMTM2LS4zMTctLjQ2Ny0uNzI4LS44MTEtLjc5Mi0xLjIxMi0uMjU4LTEuNjIxLS40OTktMy4yNTUtLjU4Ny00Ljg5My0xLjM1NS0yNS4zMS02LjMyOC00OS42OTYtMTYuODIzLTcyLjk4Ny02LjE3OC0xMy43MS0xMi45OS0yNy43MjctNi42MjItNDQuMDgxLTQuMzEgMi4yNTktOC4yMDUgNC41MDUtMTAuOTk3IDcuNzExLTguMzMzIDkuNTY5LTExLjc3OSAyMS4wNjItMTIuNjY2IDMzLjY0NS0uNzU3IDEwLjc1LTEuNzk2IDIxLjU1Mi0zLjgwMSAzMi4xMjMtMi4xMDcgMTEuMTA5LTUuNDQ4IDIxLjk5OC0xMi45NTYgMzIuMjA5LTMuMDMzLTIxLjgxLTMuMzctNDMuMzgtMjIuOTI4LTU3LjIzN3ptMTYxLjg3NyAyMTYuNTIzSDExNi45NDJ2MzQuMDA3aDE5Ni45MTR2LTM0LjAwN3ptLTE1Ny44NzEgNTEuNTc1Yy0uMTYzIDI4LjMxNyAyOC44NTEgNDkuNDE0IDY0LjcwOSA0Ny44ODMgMjkuNzE2LTEuMjY5IDU2LjAxNi0yNC41MSA1My43NTUtNDcuODgzSDE1NS45ODV6Ii8+PC9zdmc+;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="vo-alertmanager">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="discord" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;Discord&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[webhooks]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#f1f5f9;html=1;whiteSpace=wrap;strokeColor=#64748b;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1395" y="200" width="180" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="discord__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjNTg2NWYyIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+RGlzY29yZDwvdGl0bGU+PHBhdGggZD0iTTIwLjMxNyA0LjM2OThhMTkuNzkxMyAxOS43OTEzIDAgMDAtNC44ODUxLTEuNTE1Mi4wNzQxLjA3NDEgMCAwMC0uMDc4NS4wMzcxYy0uMjExLjM3NTMtLjQ0NDcuODY0OC0uNjA4MyAxLjI0OTUtMS44NDQ3LS4yNzYyLTMuNjgtLjI3NjItNS40ODY4IDAtLjE2MzYtLjM5MzMtLjQwNTgtLjg3NDItLjYxNzctMS4yNDk1YS4wNzcuMDc3IDAgMDAtLjA3ODUtLjAzNyAxOS43MzYzIDE5LjczNjMgMCAwMC00Ljg4NTIgMS41MTUuMDY5OS4wNjk5IDAgMDAtLjAzMjEuMDI3N0MuNTMzNCA5LjA0NTgtLjMxOSAxMy41Nzk5LjA5OTIgMTguMDU3OGEuMDgyNC4wODI0IDAgMDAuMDMxMi4wNTYxYzIuMDUyOCAxLjUwNzYgNC4wNDEzIDIuNDIyOCA1Ljk5MjkgMy4wMjk0YS4wNzc3LjA3NzcgMCAwMC4wODQyLS4wMjc2Yy40NjE2LS42MzA0Ljg3MzEtMS4yOTUyIDEuMjI2LTEuOTk0MmEuMDc2LjA3NiAwIDAwLS4wNDE2LS4xMDU3Yy0uNjUyOC0uMjQ3Ni0xLjI3NDMtLjU0OTUtMS44NzIyLS44OTIzYS4wNzcuMDc3IDAgMDEtLjAwNzYtLjEyNzdjLjEyNTgtLjA5NDMuMjUxNy0uMTkyMy4zNzE4LS4yOTE0YS4wNzQzLjA3NDMgMCAwMS4wNzc2LS4wMTA1YzMuOTI3OCAxLjc5MzMgOC4xOCAxLjc5MzMgMTIuMDYxNCAwYS4wNzM5LjA3MzkgMCAwMS4wNzg1LjAwOTVjLjEyMDIuMDk5LjI0Ni4xOTgxLjM3MjguMjkyNGEuMDc3LjA3NyAwIDAxLS4wMDY2LjEyNzYgMTIuMjk4NiAxMi4yOTg2IDAgMDEtMS44NzMuODkxNC4wNzY2LjA3NjYgMCAwMC0uMDQwNy4xMDY3Yy4zNjA0LjY5OC43NzE5IDEuMzYyOCAxLjIyNSAxLjk5MzJhLjA3Ni4wNzYgMCAwMC4wODQyLjAyODZjMS45NjEtLjYwNjcgMy45NDk1LTEuNTIxOSA2LjAwMjMtMy4wMjk0YS4wNzcuMDc3IDAgMDAuMDMxMy0uMDU1MmMuNTAwNC01LjE3Ny0uODM4Mi05LjY3MzktMy41NDg1LTEzLjY2MDRhLjA2MS4wNjEgMCAwMC0uMDMxMi0uMDI4NnpNOC4wMiAxNS4zMzEyYy0xLjE4MjUgMC0yLjE1NjktMS4wODU3LTIuMTU2OS0yLjQxOSAwLTEuMzMzMi45NTU1LTIuNDE4OSAyLjE1Ny0yLjQxODkgMS4yMTA4IDAgMi4xNzU3IDEuMDk1MiAyLjE1NjggMi40MTkgMCAxLjMzMzItLjk1NTUgMi40MTg5LTIuMTU2OSAyLjQxODl6bTcuOTc0OCAwYy0xLjE4MjUgMC0yLjE1NjktMS4wODU3LTIuMTU2OS0yLjQxOSAwLTEuMzMzMi45NTU0LTIuNDE4OSAyLjE1NjktMi40MTg5IDEuMjEwOCAwIDIuMTc1NyAxLjA5NTIgMi4xNTY4IDIuNDE5IDAgMS4zMzMyLS45NDYgMi40MTg5LTIuMTU2OCAyLjQxODlaIi8+PC9zdmc+;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="discord">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="dev-a" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;&amp;lt;project-a&amp;gt; dev&lt;/font&gt;&lt;/b&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfeff;html=1;whiteSpace=wrap;strokeColor=#0891b2;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1635" y="200" width="190" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="dev-a__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIyMCIgcj0iMTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA4OTFiMiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTEwIDU4YzAtMTIuMiA5LjgtMjIgMjItMjJzMjIgOS44IDIyIDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiMwODkxYjIiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+Cg==;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="dev-a">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="cmp-backend" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;CMP backend&lt;/font&gt;&lt;/b&gt; &lt;b&gt;&lt;font color=&quot;#c2410c&quot; style=&quot;font-size:10px&quot;&gt;⚠ G7&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[FastAPI · arcl-cmp]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="1894" y="200" width="200" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="cmp-backend__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjMDA5Njg4IiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+RmFzdEFQSTwvdGl0bGU+PHBhdGggZD0iTTEyIC4wMzg3QzUuMzcyOS4wMzg0LjAwMDMgNS4zOTMxIDAgMTEuOTk4OGMtLjAwMSA2LjYwNjYgNS4zNzIgMTEuOTYyOCAxMiAxMS45NjI1IDYuNjI4LjAwMDMgMTIuMDAxLTUuMzU1OSAxMi0xMS45NjI1LS4wMDAzLTYuNjA1Ny01LjM3MjktMTEuOTYwNC0xMi0xMS45Nm0tLjgyOSA1LjQxNTNoNy41NWwtNy41ODA1IDUuMzI4NGg1LjE4MjhMNS4yNzkgMTguNTQzNnEyLjk0NjYtNi41NDQ0IDUuODkyLTEzLjA4OTYiLz48L3N2Zz4=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="cmp-backend">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-deadman" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;Dead man&amp;#39;s switch&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[healthchecks.io]&lt;/font&gt;&lt;/i&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#f1f5f9;html=1;whiteSpace=wrap;strokeColor=#64748b;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="2154" y="200" width="200" height="56" as="geometry" />
+        </mxCell>
+        <mxCell id="vo-deadman__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDc1NTY5IiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIvPjxwYXRoIGQ9Ik0yIDEyaDIwTTEyIDJhMTUgMTUgMCAwIDEgMCAyME0xMiAyYTE1IDE1IDAgMCAwIDAgMjAiLz48L3N2Zz4K;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="vo-deadman">
+          <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-1" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;5xx of &amp;lt;app&amp;gt; rises to 4 %&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="344" y="350" width="182" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-2" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;route app webhook, else project, else platform; group 30 s&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="941" y="542" width="380" height="28" as="geometry" />
+        </mxCell>
+        <mxCell id="note-3" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;no ping for 15 min: the alert chain is down&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=8;html=1;fillColor=#ffffff;strokeColor=#475569;strokeWidth=1;align=center;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" vertex="1" parent="1">
+          <mxGeometry x="2109" y="830" width="290" height="28" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
