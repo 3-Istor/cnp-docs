@@ -69,7 +69,7 @@ lignes partent dans Loki avec les logs du pod.
 | Utilisateurs de la plateforme | Toute personne qui se connecte à la CMP via Keycloak | `get_current_user`, `keycloak_service.py` |
 | Membres de projet | Owner, admins, membres, invités d'un projet | `projects.owner_username`, groupes Keycloak `project-*` |
 | Identités plateforme | Groupes `infra`, `security-auditor`, `finops` | `services/authz.py` |
-| Personnes ayant connecté un assistant IA | Utilisateur qui a approuvé un client MCP | `agent_grants`, `agent_confirmations` |
+| Personnes ayant connecté un assistant IA | Utilisateur qui a approuvé un client MCP | `agent_grants`, `agent_confirmations`, `issue_reports` |
 | Auteurs d'événements d'audit | Toute personne ou compte qui modifie la plateforme, y compris via `kubectl`, Vault ou Keycloak | `audit_events`, `activity_events`, flux Loki d'audit |
 | Utilisateurs finaux des apps hébergées | Personnes qui utilisent une app déployée sur CNP | Indirect : leurs données peuvent apparaître dans les logs d'app que la CMP relit (`get_app_logs`) |
 
@@ -121,6 +121,19 @@ légale** sont des propositions à valider.
 | Stockage **[Code]** | Postgres `agent_clients`, `agent_auth_requests`, `agent_auth_codes`, `agent_grants`, `agent_access_tokens`, `agent_confirmations`, `project_agent_settings` ([`agent.py`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/models/agent.py)) ; GitHub : chaque commit poussé par un assistant porte « Requested by `<username>` via `<assistant>` » ([`mcp_server.py:795`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/mcp_server.py#L795)) |
 | Durée configurée **[Code]** | Demande d'autorisation 10 min, code 5 min, token d'accès 15 min (purgés au passage suivant). Grant : 30 j glissants (`AGENT_REFRESH_TTL_DAYS`), révoqué si le compte Keycloak est désactivé. Les grants révoqués et les approbations restent en base sans purge |
 | Durée cible **[Décision]** | À fixer pour les grants révoqués et `agent_confirmations` |
+
+### T4 bis. Retours des assistants à l'équipe plateforme (CNP-310)
+
+Ajouté avec la PR CMP [#262](https://github.com/3-Istor/CMP/pull/262), pas encore fusionnée : les liens pointent sur sa branche.
+
+| | |
+|---|---|
+| Finalité **[Décision]** | Proposition : connaître les difficultés que les assistants rencontrent sur la plateforme (outil manquant, erreur, documentation absente) pour l'améliorer |
+| Base légale **[Décision]** | Proposition : 6.1.f ; l'utilisateur voit le texte exact et accepte avant chaque envoi |
+| Données **[Code]** | Nom d'utilisateur (`preferred_username`) de chaque personne qui envoie le même retour, nom du client déclaré par l'assistant, catégorie, résumé (300 caractères), outil concerné, étapes (4 000 caractères), projet facultatif. Les valeurs de secrets sont masquées avant l'enregistrement ([`issue_reports.py`](https://github.com/3-Istor/CMP/blob/feat/cnp-310-report-issue/backend/app/services/issue_reports.py)). L'outil demande de ne pas y mettre de code ni de données de l'app, sans pouvoir le vérifier |
+| Stockage **[Code]** | Postgres `issue_reports`, `issue_report_submissions` (nom d'utilisateur et heure de chaque envoi, pour le quota de 10 par jour) ([`issue_report.py`](https://github.com/3-Istor/CMP/blob/feat/cnp-310-report-issue/backend/app/models/issue_report.py)). Lus par le groupe `infra` dans la CMP ; copiés à la main dans Jira (Atlassian, hors UE) quand un admin les exporte |
+| Durée configurée **[Code]** | Aucune purge : les retours restent jusqu'à suppression manuelle, les envois aussi |
+| Durée cible **[Décision]** | À fixer ; `issue_report_submissions` ne sert qu'au quota du jour et peut être purgée après 24 h |
 
 ### T5. Notifications et alertes
 
@@ -175,9 +188,9 @@ Tiré du code, détaillé dans [Ségrégation des accès](../01-architecture/05-
 ## À décider
 
 - [ ] Responsable de traitement et contact DPO.
-- [ ] Finalité et base légale de T1 à T6.
+- [ ] Finalité et base légale de T1 à T6 et T4 bis.
 - [ ] Durées cibles, en particulier : T1 au départ d'une personne, T2, T4 (grants
-      révoqués, approbations), T6, et l'expiration de l'archive d'audit après le verrou.
+      révoqués, approbations), T4 bis (retours et envois), T6, et l'expiration de l'archive d'audit après le verrou.
 - [ ] Statut et contrat de chaque destinataire hors UE, en premier lieu les assistants IA.
 - [ ] Politique d'usage des assistants IA : quels assistants sont autorisés, et si les
       logs d'apps manipulant des données d'utilisateurs finaux peuvent leur être envoyés.
