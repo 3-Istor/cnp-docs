@@ -51,6 +51,9 @@ Elasticsearch, importés tels quels.
 | [Plan et recette](07-plan-et-recette.md) | Ordre de livraison, jalons, critères de recette |
 | [Audit de sécurité](08-audit-securite.md) | Rapport complet, méthode du skill `security-audit` de Cloudflare |
 | [Exploitation](09-exploitation.md) | Runners, rappels du workflow, autoriser un commit de l'analyseur, rôles Vault, échecs, suites |
+| [Cycle de vie : template](10-cycle-template.md) | Ce que crée une app de template, où changer ses valeurs, mise à jour, veille, suppression, orphelins |
+| [Cycle de vie : import](11-cycle-import.md) | Ce que crée un import, où changer ses valeurs, rebuild, veille, suppression, et ce que changent CNP-303 et CNP-304 |
+| [Providers](12-providers.md) | Postgres CNPG, bucket S3, conteneurs d'appui, recommandations, ce qui n'est pas fourni |
 
 ## Comment ce dossier a été construit
 

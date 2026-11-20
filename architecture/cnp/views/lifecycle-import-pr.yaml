@@ -1,0 +1,52 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · App lifecycle · Imported repo after its standard PR (CNP-303, coming)"
+subtitle: "Once the import's pull request is merged, where do the values live and who builds and deploys?"
+meta:
+  - "Scope: open PRs CMP#269, K3s#251, cnp-projects#21, cnp-project-base#43, behind IMPORT_STANDARD_PR_ENABLED (off) · repos of the 3-Istor org only"
+  - "Out of scope: the closed values schema and quota check of CNP-304"
+  - "v0.1 (proposal) · source: cnp-docs/architecture/cnp"
+participants: [lc-user, lc-import, lc-user-repo, lc-registry, lc-import-ci, lc-ghcr, lc-updater, lc-argocd, lc-kapi]
+steps:
+  - {note: lc-import, text: "after the first successful deploy"}
+  - {id: pr, from: lc-import, to: lc-user-repo, over: c-lc-import-user-repo, text: "PR cnp/standard-deploy-<sha8>: deploy/values-<app>.yaml, .github/workflows/ci.yml, security, dependabot · nothing else"}
+  - {note: lc-user-repo, text: "a developer reviews and merges · until then the app runs as today"}
+  - {id: sw, from: lc-import, to: lc-registry, over: c-lc-import-registry, text: "on merge: repoURL on each app, delete apps/<p>/<app>/values.yaml"}
+  - {note: lc-import, text: "auto_rebuild off · rebuild and apply answer 409"}
+  - {id: ci, from: lc-import-ci, to: lc-ghcr, over: c-lc-import-ci-ghcr, text: "push on main: imports/<p>/<app>/ci:main"}
+  - {id: dig, from: lc-updater, to: lc-ghcr, over: c-lc-updater-ghcr, text: "follow ci:main by digest"}
+  - {id: wb, from: lc-updater, to: lc-user-repo, over: c-lc-updater-user-repo, text: "write the digest in deploy/values-<app>.yaml"}
+  - {id: rd, from: lc-argocd, to: lc-user-repo, over: c-lc-argocd-user-repo, text: "$values: deploy/values-<app>.yaml @HEAD"}
+  - {id: sync, from: lc-argocd, to: lc-kapi, over: c-lc-argocd-kapi, text: "network.allowFrom stays inline, computed from the record"}
+hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"

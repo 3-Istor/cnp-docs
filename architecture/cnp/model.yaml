@@ -833,6 +833,27 @@ elements:
   - {id: vo-ai-gw, kind: security, parent: g-vo, icon: k8s-deploy, title: "agentgateway", tech: "[models · MCP]", desc: "Budget, guardrails, token counts", status: planned, target: V6}
   - {id: vo-ai-model, kind: external, parent: z-internet, icon: globe, title: "Model", tech: "[Claude · Gemini · Ollama]", desc: "Answers"}
 
+  # Lifecycle sequences of template and imported apps (CNP-312). Own participants, like seq-*,
+  # so their connections never reach a topology layout.
+  - {id: lc-user, kind: frontend, shape: actor, icon: user, title: "Project admin", desc: "portal or MCP"}
+  - {id: lc-cmp, kind: backend, icon: fastapi, title: "CMP backend", tech: "[FastAPI · Terraform runner]", desc: "Creates, changes, deletes apps", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: lc-app-repo, kind: external, icon: github, title: "3-Istor/<app>", tech: "[app repo · from a template]", desc: "Code, deploy/values*.yaml, CI", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: lc-keycloak, kind: security, icon: keycloak, title: "Keycloak", tech: "[realm <p>]", desc: "One OIDC client per app", ports: [{name: http, protocol: TCP, port: 80}]}
+  - {id: lc-vault, kind: database, icon: vault, title: "Vault", tech: "[mount project-<p>]", desc: "Secrets, per-app policy and role", ports: [{name: http, protocol: TCP, port: 8200}]}
+  - {id: lc-cf, kind: cloud, icon: cloudflare, title: "Cloudflare API", tech: "[DNS]", desc: "CNAME to the project tunnel"}
+  - {id: lc-registry, kind: external, icon: github, title: "cnp-projects", tech: "[registry · apps/<p>/<app>]", desc: "Project record, imported values", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: lc-argocd, kind: backend, icon: argo, title: "Argo CD", tech: "[ApplicationSets]", desc: "Renders and syncs every app"}
+  - {id: lc-chart, kind: external, icon: github, title: "infra-templates", tech: "[Helm chart · HEAD]", desc: "One chart for every app", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: lc-kapi, kind: backend, icon: kubernetes, title: "kube-apiserver", tech: "[K3s]", desc: "Namespaces <p>-<app>", ports: [{name: https, protocol: TCP, port: 6443}]}
+  - {id: lc-app-ci, kind: backend, icon: github-actions, title: "App repo CI", tech: "[GitHub Actions]", desc: "Builds and signs on a tag"}
+  - {id: lc-ghcr, kind: external, icon: github, title: "GHCR", tech: "[ghcr.io/3-istor]", desc: "App images", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: lc-updater, kind: backend, icon: argo, title: "Image Updater", tech: "[semver · write-back]", desc: "Follows new tags"}
+  - {id: lc-guard, kind: backend, icon: k8s-deploy, title: "offhours-guard", tech: "[OffhoursSchedule]", desc: "Sleeps and wakes workloads"}
+  - {id: lc-import, kind: backend, icon: fastapi, title: "CMP import module", tech: "[/api/projects/<p>/imports]", desc: "Plans, deploys, removes imports", ports: [{name: http, protocol: TCP, port: 8000}]}
+  - {id: lc-user-repo, kind: external, icon: github, title: "<owner>/<repo>", tech: "[imported repo]", desc: "Stays the source of the code", ports: [{name: https, protocol: TCP, port: 443}]}
+  - {id: lc-workflow, kind: backend, icon: github-actions, title: "Import workflow", tech: "[extern-project-analyzer · import.yml]", desc: "claim, build, publish"}
+  - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
+  - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
@@ -1398,6 +1419,36 @@ connections:
   - {id: c-vo-gw-cmp, from: vo-ai-gw, to: cmp-backend, kind: flow, protocol: MCP, verb: "tool call"}
   - {id: c-vo-gw-otelcol, from: vo-ai-gw, to: vo-otelcol, kind: flow, port: otlp, protocol: OTLP, verb: spans}
 
+  # Lifecycle sequences (CNP-312).
+  - {id: c-lc-user-cmp, from: lc-user, to: lc-cmp, port: http, protocol: HTTPS, verb: "/api", kind: flow}
+  - {id: c-lc-cmp-repo, from: lc-cmp, to: lc-app-repo, port: https, protocol: HTTPS, verb: "create, commit, tag", kind: flow}
+  - {id: c-lc-cmp-keycloak, from: lc-cmp, to: lc-keycloak, port: http, protocol: HTTP, verb: "Terraform · client", kind: flow}
+  - {id: c-lc-cmp-vault, from: lc-cmp, to: lc-vault, port: http, protocol: HTTP, verb: "secrets, policy, role", kind: flow}
+  - {id: c-lc-cmp-cf, from: lc-cmp, to: lc-cf, protocol: HTTPS, verb: "CNAME", kind: flow}
+  - {id: c-lc-cmp-registry, from: lc-cmp, to: lc-registry, port: https, protocol: HTTPS, verb: "commit the registry", kind: flow}
+  - {id: c-lc-cmp-kapi, from: lc-cmp, to: lc-kapi, port: https, protocol: HTTPS, verb: "patch schedules", kind: flow}
+  - {id: c-lc-argocd-registry, from: lc-argocd, to: lc-registry, port: https, protocol: HTTPS, verb: "poll", kind: async}
+  - {id: c-lc-argocd-repo, from: lc-argocd, to: lc-app-repo, port: https, protocol: HTTPS, verb: "read values", kind: async}
+  - {id: c-lc-argocd-chart, from: lc-argocd, to: lc-chart, port: https, protocol: HTTPS, verb: "render chart", kind: async}
+  - {id: c-lc-argocd-kapi, from: lc-argocd, to: lc-kapi, port: https, protocol: HTTPS, verb: "sync, prune", kind: async}
+  - {id: c-lc-ci-ghcr, from: lc-app-ci, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push, sign", kind: flow}
+  - {id: c-lc-updater-ghcr, from: lc-updater, to: lc-ghcr, port: https, protocol: HTTPS, verb: "list tags", kind: async}
+  - {id: c-lc-updater-repo, from: lc-updater, to: lc-app-repo, port: https, protocol: HTTPS, verb: "write back", kind: async}
+  - {id: c-lc-guard-kapi, from: lc-guard, to: lc-kapi, port: https, protocol: HTTPS, verb: "scale", kind: async}
+  - {id: c-lc-user-import, from: lc-user, to: lc-import, port: http, protocol: HTTPS, verb: "/api/projects/<p>/imports", kind: flow}
+  - {id: c-lc-import-workflow, from: lc-import, to: lc-workflow, protocol: HTTPS, verb: "workflow_dispatch", kind: flow}
+  - {id: c-lc-workflow-repo, from: lc-workflow, to: lc-user-repo, port: https, protocol: HTTPS, verb: "tarball @SHA", kind: flow}
+  - {id: c-lc-workflow-import, from: lc-workflow, to: lc-import, port: http, protocol: HTTPS, verb: "callback, GitHub OIDC", kind: flow}
+  - {id: c-lc-workflow-ghcr, from: lc-workflow, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push by digest, sign", kind: flow}
+  - {id: c-lc-import-vault, from: lc-import, to: lc-vault, port: http, protocol: HTTP, verb: "secrets, policy, role", kind: flow}
+  - {id: c-lc-import-registry, from: lc-import, to: lc-registry, port: https, protocol: HTTPS, verb: "commit per wave", kind: flow}
+  - {id: c-lc-import-cf, from: lc-import, to: lc-cf, protocol: HTTPS, verb: "CNAME of public apps", kind: flow}
+  - {id: c-lc-import-kapi, from: lc-import, to: lc-kapi, port: https, protocol: HTTPS, verb: "health, namespaces", kind: flow}
+  - {id: c-lc-portal-import, from: lc-portal, to: lc-import, port: http, protocol: HTTPS, verb: "push webhook, HMAC", kind: async}
+  - {id: c-lc-import-user-repo, from: lc-import, to: lc-user-repo, port: https, protocol: HTTPS, verb: "open the standard PR", kind: flow, status: planned, target: CNP-303}
+  - {id: c-lc-import-ci-ghcr, from: lc-import-ci, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push ci:main, sign", kind: flow, status: planned, target: CNP-303}
+  - {id: c-lc-argocd-user-repo, from: lc-argocd, to: lc-user-repo, port: https, protocol: HTTPS, verb: "read deploy/values-<app>.yaml", kind: async, status: planned, target: CNP-303}
+  - {id: c-lc-updater-user-repo, from: lc-updater, to: lc-user-repo, port: https, protocol: HTTPS, verb: "write back the digest", kind: async, status: planned, target: CNP-303}
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
@@ -1742,3 +1793,7 @@ offerings:
   - {id: off-status, title: "Status page and checks", icon: gatus, summary: "Probes generated from the app catalogue, public page per project", provides: ["status-<project>.3istor.com", "uptime history"], request: "Turn on the public page in project Settings", backed_by: [gatus], status: planned, target: V4}
   - {id: off-cost, title: "Cost per request", icon: opencost, summary: "Daily cost, cost per 1,000 requests, requests vs real usage", provides: ["Costs tab", "rightsizing hints"], request: "Nothing", backed_by: [opencost, vo-vmsingle], status: planned, target: V5}
   - {id: off-ai, title: "AI agent runs", icon: opentelemetry, summary: "Every agent task as one trace, approvals included, signed audit record", provides: ["trace per run", "tokens and cost", "exportable record, 180 days"], request: "Agents hosted on CNP: automatic", backed_by: [vo-ai-gw, vo-otelcol, vo-vtraces, vo-audit-record], status: planned, target: V6}
+  - {id: off-pg, title: "Managed PostgreSQL", icon: cnpg, summary: "One CloudNativePG cluster per app, PostgreSQL 18, daily backup to Ceph RGW", provides: ["DB_HOST, DB_PORT, DB_NAME, DB_USER, DB_PASSWORD", "PgBouncer pooler, transaction or session", "backup and restore from the CMP"], request: "Template: db.enabled. Import: a postgres in the compose file", backed_by: [cnpg-operator, ceph-rgw]}
+  - {id: off-bucket, title: "S3 bucket", icon: ceph, summary: "One bucket per app on Ceph RGW through an ObjectBucketClaim, internal only", provides: ["S3_ENDPOINT, S3_BUCKET, S3_REGION", "AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY", "one RGW user per bucket"], request: "bucket.enabled: true in the values file, no CMP switch yet", backed_by: [rook-ceph, ceph-rgw]}
+  - {id: off-backing, title: "Backing containers", icon: k8s-deploy, summary: "MongoDB, Redis, Neo4j, Elasticsearch from the import catalogue, as black boxes", provides: ["StatefulSet and volume, image pinned by digest", "generic alerts: restarts, OOM, volume full", "no backup, no engine recipe"], request: "Import only: detected in the compose file", backed_by: [im-backing]}
+  - {id: off-reco, title: "Recommendations", icon: python, summary: "Rules that point a backing container or local files to a managed provider", provides: ["advised or evaluate, with the evidence line", "memory saved and effort", "dismissed per project"], request: "Nothing: on the plan, in the CMP and in MCP get_import", backed_by: [im-analyzer]}

@@ -45,6 +45,10 @@ one diagram, and `layouts/` places the topology views.
 | `access-matrix-import` | Who may touch the user's code, the import, the images and the registry? | Import et microservices |
 | `import-runners` | Where do import builds and private-repo CI run, and what can an import job reach? | Import et microservices (Exploitation) |
 | `import-callback` | How does an import job reach the CMP, who checks its identity, and what does the CMP then write? | Import et microservices (Exploitation) |
+| `lifecycle-template` | Who creates what for a template app, where its values live, and what update, sleep and deletion touch? (CNP-312) | Import et microservices (Cycle de vie : template) |
+| `lifecycle-import` | Who creates what for an imported repo, where its values live, and what rebuild, sleep and deletion touch? (CNP-312) | Import et microservices (Cycle de vie : import) |
+| `lifecycle-import-pr` | Once the import's pull request is merged, where do the values live and who builds and deploys? (CNP-303, coming) | Import et microservices (Cycle de vie : import) |
+| `providers-catalog` | Which data services does the platform run for an app, how does the app receive them, and how is one asked for? (CNP-312) | Import et microservices (Providers) |
 | `observability-target` | What replaces Loki, Alloy and the VictoriaMetrics cluster, who writes and reads each signal, and how an alert reaches Discord? (CNP-185) | Observabilité |
 | `observability-alert-flow` | What happens, in order, when an app starts failing, until a developer mutes the alert from the portal? | Observabilité |
 | `observability-ai-run` | What is recorded when a hosted agent fixes an app, who approves, and where the audit record ends up? | Observabilité |

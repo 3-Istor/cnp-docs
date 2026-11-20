@@ -1,0 +1,76 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · App lifecycle · Created from a template"
+subtitle: "Who creates what for a template app, where its values live, and what update, sleep and deletion touch?"
+meta:
+  - "Scope: one static or fullstack app in an existing project, on-prem, without staging · CMP, app-templates k3s-gitops-app, K3s ApplicationSets, infra-templates and offhours-guard as on main 2026-11-20 (CNP-312)"
+  - "Out of scope: project bootstrap (Keycloak realm, Vault mount, tunnel), staging and promotions, canary"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+participants: [lc-user, lc-cmp, lc-app-repo, lc-keycloak, lc-vault, lc-cf, lc-registry, lc-argocd, lc-chart, lc-kapi, lc-app-ci, lc-ghcr, lc-updater, lc-guard]
+steps:
+  - {note: lc-user, text: "**Create**"}
+  - {id: create, from: lc-user, to: lc-cmp, over: c-lc-user-cmp, text: "POST /api/deployments · template, name · project admin"}
+  - {note: lc-cmp, text: "Terraform module k3s-gitops-app, state cnp/projects/<p>/<app>"}
+  - {id: repo, from: lc-cmp, to: lc-app-repo, over: c-lc-cmp-repo, text: "repo 3-Istor/<app> from the template · deploy/values*.yaml, security.yml"}
+  - {id: kc, from: lc-cmp, to: lc-keycloak, over: c-lc-cmp-keycloak, text: "client cnp-<p>-<app> in realm <p>"}
+  - {id: vlt, from: lc-cmp, to: lc-vault, over: c-lc-cmp-vault, text: "project-<p>/<app>, <app>/registry · policy project-<p>-app-<app>-policy · role <p>-<app>-role"}
+  - {id: dns, from: lc-cmp, to: lc-cf, over: c-lc-cmp-cf, text: "CNAME <app>-<p> to the project tunnel"}
+  - {id: reg, from: lc-cmp, to: lc-registry, over: c-lc-cmp-registry, text: "add {name, type, repoURL, hostnames} to spec.apps"}
+  - {id: poll, from: lc-argocd, to: lc-registry, over: c-lc-argocd-registry, text: "git generator · cnp-apps, cnp-project-systems, cnp-image-updaters"}
+  - {id: vals, from: lc-argocd, to: lc-app-repo, over: c-lc-argocd-repo, text: "$values: deploy/values.yaml or values-<component>.yaml"}
+  - {id: chart, from: lc-argocd, to: lc-chart, over: c-lc-argocd-chart, text: "chart @HEAD · cnp.* parameters win over the file"}
+  - {id: sync, from: lc-argocd, to: lc-kapi, over: c-lc-argocd-kapi, text: "<p>-<app>-<component> in ns <p>-<app>: Deployment, VaultSecret, CNPG Cluster, OffhoursSchedule, HTTPRoute"}
+  - {note: lc-kapi, text: "namespace, ResourceQuota, LimitRange come from <p>-bootstrap (cnp-project-base)"}
+  - {note: lc-user, text: "**Update**"}
+  - {id: cfg, from: lc-user, to: lc-cmp, over: c-lc-user-cmp, text: "PATCH /api/deployments/{id}/config · allow-listed keys"}
+  - {id: commit, from: lc-cmp, to: lc-app-repo, over: c-lc-cmp-repo, text: "commit deploy/values*.yaml on main (or the developer pushes it)"}
+  - {id: tag, from: lc-user, to: lc-cmp, over: c-lc-user-cmp, text: "cut release vX.Y.Z"}
+  - {id: mktag, from: lc-cmp, to: lc-app-repo, over: c-lc-cmp-repo, text: "create tag vX.Y.Z"}
+  - {id: push, from: lc-app-ci, to: lc-ghcr, over: c-lc-ci-ghcr, text: "build on the tag, push 3-istor/<app>:X.Y.Z, sign"}
+  - {id: tags, from: lc-updater, to: lc-ghcr, over: c-lc-updater-ghcr, text: "newest X.Y.Z (semver)"}
+  - {id: wb, from: lc-updater, to: lc-app-repo, over: c-lc-updater-repo, text: "write image.tag in deploy/values*.yaml on main"}
+  - {note: lc-argocd, text: "auto-sync, prune and selfHeal: every commit on main is deployed"}
+  - {note: lc-user, text: "**Sleep**"}
+  - {id: sleep, from: lc-guard, to: lc-kapi, over: c-lc-guard-kapi, text: "01:00 scale Rollout, Deployment or StatefulSet to 0 · 07:00 restore"}
+  - {id: wake, from: lc-user, to: lc-cmp, over: c-lc-user-cmp, text: "Sleep / Wake now · project member"}
+  - {id: manual, from: lc-cmp, to: lc-kapi, over: c-lc-cmp-kapi, text: "status.currentState on the schedules of ns <p>-<app>"}
+  - {note: lc-user, text: "**Delete**"}
+  - {id: del, from: lc-user, to: lc-cmp, over: c-lc-user-cmp, text: "DELETE /api/deployments/{id} · admin, step-up, no deletion protection"}
+  - {id: destroy, from: lc-cmp, to: lc-app-repo, over: c-lc-cmp-repo, text: "terraform destroy: repo with its history, GHCR images"}
+  - {note: lc-cmp, text: "same destroy removes the Keycloak client, Vault secrets, policy, role and the CNAME"}
+  - {id: unreg, from: lc-cmp, to: lc-registry, over: c-lc-cmp-registry, text: "remove the app from spec.apps"}
+  - {id: prune, from: lc-argocd, to: lc-kapi, over: c-lc-argocd-kapi, text: "prune Applications and namespace <p>-<app>, CNPG and volumes included"}
+  - {id: orph, from: lc-user, to: lc-cmp, over: c-lc-user-cmp, text: "GET /api/orphans · platform admin"}
+  - {note: lc-cmp, text: "CMP rows vs registry, namespaces, Vault KV, roles, policies, Terraform states"}
+hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"
