@@ -3543,27 +3543,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a-venir" class="md-nav__link">
+  <a href="#apres-la-pr-standard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        À venir
+        Après la PR standard
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="À venir">
+    <nav class="md-nav" aria-label="Après la PR standard">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cnp-303-le-repo-importe-devient-la-source-des-valeurs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CNP-303 : le repo importé devient la source des valeurs
-      
-    </span>
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#cnp-304-schema-ferme-et-ecritures-tracees" class="md-nav__link">
@@ -4225,27 +4214,16 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#a-venir" class="md-nav__link">
+  <a href="#apres-la-pr-standard" class="md-nav__link">
     <span class="md-ellipsis">
       
-        À venir
+        Après la PR standard
       
     </span>
   </a>
   
-    <nav class="md-nav" aria-label="À venir">
+    <nav class="md-nav" aria-label="Après la PR standard">
       <ul class="md-nav__list">
-        
-          <li class="md-nav__item">
-  <a href="#cnp-303-le-repo-importe-devient-la-source-des-valeurs" class="md-nav__link">
-    <span class="md-ellipsis">
-      
-        CNP-303 : le repo importé devient la source des valeurs
-      
-    </span>
-  </a>
-  
-</li>
         
           <li class="md-nav__item">
   <a href="#cnp-304-schema-ferme-et-ecritures-tracees" class="md-nav__link">
@@ -4283,8 +4261,9 @@
 <h1 id="cycle-de-vie-import-dun-repo">Cycle de vie : import d'un repo<a class="headerlink" href="#cycle-de-vie-import-dun-repo" title="Permanent link">&para;</a></h1>
 <p>Cette page suit un repo importé, de l'analyse à la suppression. Elle décrit ce qui est sur
 <code>main</code> le 20/11/2026 : CMP <code>services/imports</code>, workflow <code>import.yml</code> d'extern-project-analyzer,
-ApplicationSet <code>cnp-apps</code> de K3s et chart infra-templates. Deux chantiers ouverts changent ce
-modèle. Ils sont décrits à la fin, dans <a href="#a-venir">À venir</a>.</p>
+ApplicationSet <code>cnp-apps</code> de K3s et chart infra-templates. Le passage d'un repo importé au
+modèle des templates, en service depuis le 20/11, est décrit à la fin, dans
+<a href="#apres-la-pr-standard">Après la PR standard</a>.</p>
 <p>Les étapes d'analyse et d'application sont détaillées dans <a href="../03-parcours/">Parcours</a>. Le parcours
 d'une app créée par template est dans <a href="../10-cycle-template/">Cycle de vie : template</a>.</p>
 <p><img alt="Cycle de vie d'un repo importé" src="../../01-architecture/diagrams/lifecycle-import.light.png#only-light" />
@@ -4503,34 +4482,40 @@ refusé.</p>
 namespaces et entrées de registre sans app vivante. Il ne voit ni les images GHCR ni les CNAME.
 Il est décrit dans <a href="../10-cycle-template/#controle-dorphelins">Cycle de vie : template</a>.</p>
 <p>Un projet qui a encore un import ne se supprime pas : il faut d'abord supprimer ses imports.</p>
-<h2 id="a-venir">À venir<a class="headerlink" href="#a-venir" title="Permanent link">&para;</a></h2>
-<p>Ces changements sont dans des PRs ouvertes, non fusionnées le 20/11/2026.</p>
-<h3 id="cnp-303-le-repo-importe-devient-la-source-des-valeurs">CNP-303 : le repo importé devient la source des valeurs<a class="headerlink" href="#cnp-303-le-repo-importe-devient-la-source-des-valeurs" title="Permanent link">&para;</a></h3>
-<p>PRs : <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/269" title="GitHub Issue: squidfunk/CMP #269">CMP#269</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/K3s/issues/251" title="GitHub Issue: squidfunk/K3s #251">K3s#251</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/cnp-projects/issues/21" title="GitHub Issue: squidfunk/cnp-projects #21">cnp-projects#21</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/cnp-project-base/issues/43" title="GitHub Issue: squidfunk/cnp-project-base #43">cnp-project-base#43</a>. Activé par
-<code>IMPORT_STANDARD_PR_ENABLED</code>, coupé par défaut. Seuls les repos de l'organisation 3-Istor sont
-éligibles.</p>
+<h2 id="apres-la-pr-standard">Après la PR standard<a class="headerlink" href="#apres-la-pr-standard" title="Permanent link">&para;</a></h2>
+<p>Depuis le 20/11/2026, une app importée passe au modèle des templates par une PR dans son repo
+(CNP-303). EpiTweet a fait le cycle complet le 20/11 : PR <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/3-Istor/epitweet/issues/1" title="GitHub Issue: 3-Istor/epitweet #1">3-Istor/epitweet#1</a>, puis release
+<code>v0.1.0</code>. Seuls les repos de l'organisation 3-Istor sont éligibles.</p>
 <p><img alt="Repo importé après sa PR standard" src="../../01-architecture/diagrams/lifecycle-import-pr.light.png#only-light" />
 <img alt="Repo importé après sa PR standard" src="../../01-architecture/diagrams/lifecycle-import-pr.dark.png#only-dark" /></p>
 <ul>
 <li>Après le premier déploiement réussi, le CMP ouvre une PR <code>cnp/standard-deploy-&lt;sha8&gt;</code> dans le
-  repo importé. Elle ajoute <code>deploy/values-&lt;app&gt;.yaml</code> pour chaque app, la CI des templates dans
-  <code>.github/workflows/ci.yml</code>, plus <code>security.yml</code>, <code>dependabot.yml</code> et <code>cnp-verify.yml</code>. Elle ne
-  touche pas au code de l'app.</li>
+  repo importé. Elle ajoute <code>deploy/values-&lt;app&gt;.yaml</code> pour chaque app, les Dockerfiles réparés
+  par l'analyseur dans <code>cnp/docker/</code>, la CI des templates dans <code>.github/workflows/ci.yml</code>, plus
+  <code>security.yml</code>, <code>dependabot.yml</code> et <code>cnp-verify.yml</code>. Elle ne touche pas au code de l'app.</li>
+<li>Tous ces workflows tournent sur les runners éphémères des imports, jamais sur un runner
+  persistant. La CI construit au plus deux images à la fois. Le scan d'image de <code>security.yml</code>
+  est coupé : l'analyseur scanne déjà les images, puis Trivy dans le cluster.</li>
 <li>Tant que la PR n'est pas fusionnée, rien ne change. Les apps tournent sur la copie de la
   plateforme.</li>
-<li>À la fusion, un commit dans cnp-projects pose <code>repoURL</code> sur chaque app et supprime son
-  <code>apps/&lt;p&gt;/&lt;app&gt;/values.yaml</code>.</li>
-<li>Argo CD lit alors <code>deploy/values-&lt;app&gt;.yaml</code> dans le repo importé. <code>network.allowFrom</code> reste
-  calculé depuis le registre et écrit en ligne : le repo ne peut pas l'élargir.</li>
-<li>La CI du repo construit <code>ghcr.io/3-istor/imports/&lt;p&gt;/&lt;app&gt;/ci:main</code>. Un Image Updater suit ce
-  tag par digest et écrit le digest dans le fichier de valeurs.</li>
+<li>À la fusion, un seul commit dans cnp-projects pose <code>repoURL</code> sur chaque app, supprime son
+  <code>apps/&lt;p&gt;/&lt;app&gt;/values.yaml</code> et écrit <code>apps/&lt;p&gt;/&lt;app&gt;/release.yaml</code> : l'image importée,
+  épinglée par digest jusqu'à la première release.</li>
+<li>Argo CD lit alors <code>deploy/values-&lt;app&gt;.yaml</code> sur la branche par défaut du repo importé, puis
+  <code>release.yaml</code> dans cnp-projects. La release ne peut pas vivre dans une autre branche du même
+  repo : Argo CD refuse deux révisions d'un même repo dans une application.</li>
+<li><code>network.allowFrom</code> reste calculé depuis le registre et écrit en ligne : le repo ne peut pas
+  l'élargir.</li>
+<li>Une release est un tag <code>vX.Y.Z</code> du repo importé. La CI publie et signe
+  <code>ghcr.io/3-istor/imports/&lt;p&gt;/&lt;app&gt;/ci:X.Y.Z</code>. Un Image Updater écrit ce tag dans
+  <code>release.yaml</code> de cnp-projects. La plateforme n'écrit jamais dans le repo importé.</li>
 <li>Le rebuild de la plateforme s'arrête. <code>rebuild</code> et <code>apply</code> répondent 409.</li>
 </ul>
 <p>Après la fusion, on change une valeur d'une app importée comme pour une app de template : par
-un commit dans <code>deploy/values-&lt;app&gt;.yaml</code> du repo importé.</p>
+un commit dans <code>deploy/values-&lt;app&gt;.yaml</code> du repo importé. On la met en production par un tag.</p>
 <h3 id="cnp-304-schema-ferme-et-ecritures-tracees">CNP-304 : schéma fermé et écritures tracées<a class="headerlink" href="#cnp-304-schema-ferme-et-ecritures-tracees" title="Permanent link">&para;</a></h3>
-<p>PRs : <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/infra-templates/issues/36" title="GitHub Issue: squidfunk/infra-templates #36">infra-templates#36</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/268" title="GitHub Issue: squidfunk/CMP #268">CMP#268</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/template-app-webapp-python-fastapi-react/issues/77" title="GitHub Issue: squidfunk/template-app-webapp-python-fastapi-react #77">template-app-webapp-python-fastapi-react#77</a>,
-<a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/template-html-css/issues/23" title="GitHub Issue: squidfunk/template-html-css #23">template-html-css#23</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/cnp-docs/issues/57" title="GitHub Issue: squidfunk/cnp-docs #57">cnp-docs#57</a>.</p>
+<p>En service depuis le 20/11/2026 : <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/infra-templates/issues/36" title="GitHub Issue: squidfunk/infra-templates #36">infra-templates#36</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/CMP/issues/268" title="GitHub Issue: squidfunk/CMP #268">CMP#268</a>,
+<a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/template-app-webapp-python-fastapi-react/issues/77" title="GitHub Issue: squidfunk/template-app-webapp-python-fastapi-react #77">template-app-webapp-python-fastapi-react#77</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/template-html-css/issues/23" title="GitHub Issue: squidfunk/template-html-css #23">template-html-css#23</a>, <a class="magiclink magiclink-github magiclink-issue" href="https://github.com/squidfunk/cnp-docs/issues/57" title="GitHub Issue: squidfunk/cnp-docs #57">cnp-docs#57</a>.</p>
 <ul>
 <li><code>values.schema.json</code> du chart devient fermé. Une clé inconnue ou une valeur hors bornes fait
   échouer la CI de l'app et le rendu d'Argo CD.</li>
