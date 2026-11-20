@@ -165,6 +165,9 @@ nav:
       - Plan et recette: 09-import-microservices/07-plan-et-recette.md
       - Audit de sécurité: 09-import-microservices/08-audit-securite.md
       - Exploitation: 09-import-microservices/09-exploitation.md
+      - "Cycle de vie : template": 09-import-microservices/10-cycle-template.md
+      - "Cycle de vie : import": 09-import-microservices/11-cycle-import.md
+      - Providers: 09-import-microservices/12-providers.md
   - 11. Observabilité:
       - Vue d'ensemble: 10-observabilite/00-index.md
       - Existant: 10-observabilite/01-existant.md

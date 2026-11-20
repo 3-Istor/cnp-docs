@@ -1,0 +1,73 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: sequence
+title: "CNP · App lifecycle · Imported from a repository"
+subtitle: "Who creates what for an imported repo, where its values live, and what rebuild, sleep and deletion touch?"
+meta:
+  - "Scope: one GitHub repo with services, a compose Postgres and backing containers, on-prem · CMP services/imports, extern-project-analyzer import.yml, K3s cnp-apps, infra-templates as on main 2026-11-20 (CNP-312)"
+  - "Out of scope: GitHub linking (S1), plan review details (S3), the standard PR of CNP-303 (lifecycle-import-pr)"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+participants: [lc-user, lc-import, lc-workflow, lc-user-repo, lc-portal, lc-ghcr, lc-vault, lc-registry, lc-cf, lc-argocd, lc-chart, lc-kapi, lc-guard]
+steps:
+  - {note: lc-user, text: "**Analyze and apply**"}
+  - {id: an, from: lc-user, to: lc-import, over: c-lc-user-import, text: "POST …/imports · repo, branch · project admin"}
+  - {id: d1, from: lc-import, to: lc-workflow, over: c-lc-import-workflow, text: "dispatch ANALYZE · run_id, attempt_id only"}
+  - {id: src, from: lc-workflow, to: lc-user-repo, over: c-lc-workflow-repo, text: "tarball @SHA · token read-only, this repo"}
+  - {id: plan, from: lc-workflow, to: lc-import, over: c-lc-workflow-import, text: "/plan: services, backing, managed Postgres, recommendations"}
+  - {id: ap, from: lc-user, to: lc-import, over: c-lc-user-import, text: "apply with edits (exclude, rename, public, memory, port, probe, links, pooler, offhours) · step-up"}
+  - {id: d2, from: lc-import, to: lc-workflow, over: c-lc-import-workflow, text: "dispatch BUILD"}
+  - {id: push, from: lc-workflow, to: lc-ghcr, over: c-lc-workflow-ghcr, text: "imports/<p>/<app>@sha256 · Trivy, SBOM, cosign"}
+  - {id: pub, from: lc-workflow, to: lc-import, over: c-lc-workflow-import, text: "/publish: digests"}
+  - {id: vlt, from: lc-import, to: lc-vault, over: c-lc-import-vault, text: "<app>/imports, system/registry · policy project-<p>-app-<app>-policy · role <p>-<app>-role"}
+  - {id: reg, from: lc-import, to: lc-registry, over: c-lc-import-registry, text: "one commit per wave (backing, services, public): spec.apps entry + apps/<p>/<app>/values.yaml"}
+  - {id: dns, from: lc-import, to: lc-cf, over: c-lc-import-cf, text: "CNAME <app>-<p> for public apps"}
+  - {id: poll, from: lc-argocd, to: lc-registry, over: c-lc-argocd-registry, text: "cnp-apps: $values from cnp-projects, never the user repo"}
+  - {id: chart, from: lc-argocd, to: lc-chart, over: c-lc-argocd-chart, text: "chart @HEAD · links, ingress, pull secret inline"}
+  - {id: sync, from: lc-argocd, to: lc-kapi, over: c-lc-argocd-kapi, text: "<p>-<app>-app in ns <p>-<app>: Deployment or StatefulSet, CNPG Cluster and Pooler, VaultSecret, OffhoursSchedule"}
+  - {id: health, from: lc-import, to: lc-kapi, over: c-lc-import-kapi, text: "Synced, Healthy, exact image · then GET / on public apps"}
+  - {note: lc-user, text: "**Update**"}
+  - {id: hook, from: lc-portal, to: lc-import, over: c-lc-portal-import, text: "push on the branch · only if auto_rebuild"}
+  - {note: lc-import, text: "rebuilds the services whose folder, Dockerfile or shared manifest changed · catch-up every 10 min"}
+  - {id: d3, from: lc-import, to: lc-workflow, over: c-lc-import-workflow, text: "dispatch BUILD for those services"}
+  - {id: reg2, from: lc-import, to: lc-registry, over: c-lc-import-registry, text: "new image.digest in values.yaml, file rewritten from the plan"}
+  - {id: edit, from: lc-user, to: lc-import, over: c-lc-user-import, text: "change a value: edit the plan and apply again · config panel answers 409"}
+  - {note: lc-user, text: "**Sleep**"}
+  - {id: sleep, from: lc-guard, to: lc-kapi, over: c-lc-guard-kapi, text: "staggered by wave, 5 min apart: backing apps wake first at 07:00 and sleep last at 01:30"}
+  - {note: lc-user, text: "**Delete**"}
+  - {id: del, from: lc-user, to: lc-import, over: c-lc-user-import, text: "DELETE …/imports/{id} · step-up · one app alone: 409"}
+  - {id: rm, from: lc-import, to: lc-registry, over: c-lc-import-registry, text: "one commit: entries, values files, dependsOn on them"}
+  - {id: rmdns, from: lc-import, to: lc-cf, over: c-lc-import-cf, text: "delete the CNAMEs"}
+  - {id: rmv, from: lc-import, to: lc-vault, over: c-lc-import-vault, text: "delete role and policy · KV <app>/imports stays"}
+  - {id: rmns, from: lc-import, to: lc-kapi, over: c-lc-import-kapi, text: "delete ns <p>-<app> after the Application is gone: PVC and CNPG data"}
+  - {note: lc-ghcr, text: "images imports/<p>/<app> stay"}
+hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"

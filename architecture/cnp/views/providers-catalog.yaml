@@ -1,0 +1,11 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: catalog
+title: "CNP · Providers · What an app gets for its data"
+subtitle: "Which data services does the platform run for an app, how does the app receive them, and how is one asked for?"
+meta:
+  - "Scope: infra-templates db and bucket blocks, the import catalogue and the analyzer rules, as on main 2026-11-20 (CNP-312)"
+  - "Out of scope: what is not provided (FerretDB, other engines, backups of backing containers, per-PR environments, cron, SMTP, PG extensions)"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+include: [off-pg, off-bucket, off-backing, off-reco]
+columns: 2
