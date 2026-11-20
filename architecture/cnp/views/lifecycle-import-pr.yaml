@@ -1,23 +1,24 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: sequence
-title: "CNP · App lifecycle · Imported repo after its standard PR (CNP-303, coming)"
+title: "CNP · App lifecycle · Imported repo after its standard PR (CNP-303)"
 subtitle: "Once the import's pull request is merged, where do the values live and who builds and deploys?"
 meta:
-  - "Scope: open PRs CMP#269, K3s#251, cnp-projects#21, cnp-project-base#43, behind IMPORT_STANDARD_PR_ENABLED (off) · repos of the 3-Istor org only"
+  - "Scope: live since 2026-11-20 (IMPORT_STANDARD_PR_ENABLED on) · repos of the 3-Istor org only · first run: 3-Istor/epitweet#1, v0.1.0"
   - "Out of scope: the closed values schema and quota check of CNP-304"
-  - "v0.1 (proposal) · source: cnp-docs/architecture/cnp"
+  - "v0.2 · source: cnp-docs/architecture/cnp"
 participants: [lc-user, lc-import, lc-user-repo, lc-registry, lc-import-ci, lc-ghcr, lc-updater, lc-argocd, lc-kapi]
 steps:
   - {note: lc-import, text: "after the first successful deploy"}
-  - {id: pr, from: lc-import, to: lc-user-repo, over: c-lc-import-user-repo, text: "PR cnp/standard-deploy-<sha8>: deploy/values-<app>.yaml, .github/workflows/ci.yml, security, dependabot · nothing else"}
+  - {id: pr, from: lc-import, to: lc-user-repo, over: c-lc-import-user-repo, text: "PR cnp/standard-deploy-<sha8>: deploy/values-<app>.yaml, cnp/docker/, CI on the ephemeral import runners · no app code"}
   - {note: lc-user-repo, text: "a developer reviews and merges · until then the app runs as today"}
-  - {id: sw, from: lc-import, to: lc-registry, over: c-lc-import-registry, text: "on merge: repoURL on each app, delete apps/<p>/<app>/values.yaml"}
+  - {id: sw, from: lc-import, to: lc-registry, over: c-lc-import-registry, text: "on merge: repoURL on each app, delete values.yaml, write release.yaml (imported image by digest)"}
   - {note: lc-import, text: "auto_rebuild off · rebuild and apply answer 409"}
-  - {id: ci, from: lc-import-ci, to: lc-ghcr, over: c-lc-import-ci-ghcr, text: "push on main: imports/<p>/<app>/ci:main"}
-  - {id: dig, from: lc-updater, to: lc-ghcr, over: c-lc-updater-ghcr, text: "follow ci:main by digest"}
-  - {id: wb, from: lc-updater, to: lc-user-repo, over: c-lc-updater-user-repo, text: "write the digest in deploy/values-<app>.yaml"}
+  - {id: ci, from: lc-import-ci, to: lc-ghcr, over: c-lc-import-ci-ghcr, text: "tag vX.Y.Z: imports/<p>/<app>/ci:X.Y.Z, signed"}
+  - {id: dig, from: lc-updater, to: lc-ghcr, over: c-lc-updater-ghcr, text: "follow ci semver tags"}
+  - {id: wb, from: lc-updater, to: lc-registry, over: c-lc-updater-registry, text: "write X.Y.Z in apps/<p>/<app>/release.yaml · never the user's repo"}
   - {id: rd, from: lc-argocd, to: lc-user-repo, over: c-lc-argocd-user-repo, text: "$values: deploy/values-<app>.yaml @HEAD"}
+  - {id: rd2, from: lc-argocd, to: lc-registry, over: c-lc-argocd-registry, text: "$release: release.yaml in cnp-projects"}
   - {id: sync, from: lc-argocd, to: lc-kapi, over: c-lc-argocd-kapi, text: "network.allowFrom stays inline, computed from the record"}
 hidden_annotations:
   GB1: "targets bk-secret, not drawn in this view"
