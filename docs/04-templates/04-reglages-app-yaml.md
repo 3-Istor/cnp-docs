@@ -48,7 +48,7 @@ Légende de la colonne YAML : **oui** la clé existe dans le fichier de l'app et
 
 ### Réglages du YAML sans écran dans le CMP
 
-`ingress.hostname`, `ingress.publicPaths`, `workload.*` (apps importées), `image.repository`, `secrets.vaultPath`. Ils ne sont pas éditables dans le CMP : le dépôt est leur seul éditeur, sous le schéma et les contrôles de rendu.
+`ingress.hostname` (borné, voir plus bas), `ingress.publicPaths`, `workload.*` (apps importées), `image.repository`, `secrets.vaultPath`. Ils ne sont pas éditables dans le CMP : le dépôt est leur seul éditeur, sous le schéma et les contrôles de rendu.
 
 ### Réglages qui restent dans le CMP seulement, volontairement
 
@@ -85,6 +85,7 @@ secrets:
 | --- | --- | --- |
 | Clé inconnue, valeur hors schéma | `values.schema.json` | Échec de la CI du dépôt, refus du CMP (422) avant le commit, échec du rendu Argo CD (l'ancienne version reste en place). |
 | Image d'une autre app | Rendu du chart (`cnp-generic-app.checkImageOwner`) | Une image `ghcr.io/3-istor/...` doit être `ghcr.io/3-istor/<app>[/...]` ou `ghcr.io/3-istor/imports/<projet>/...`. Même règle que la politique Kyverno `restrict-tenant-images`, qui reste le contrôle à l'admission. |
+| Nom d'hôte d'une autre app | Rendu du chart (`cnp-generic-app.checkHostname`) | `ingress.hostname` doit être exactement `<app>-<projet>.3istor.com` en prod, `<app>-<projet>-staging.3istor.com` en staging, comme le CMP les dérive. Pas un suffixe `-<projet>` : les noms de projet contiennent des tirets (`iot` pourrait prendre `shop-b-iot.3istor.com` du projet `b-iot`) et il couvrirait `auth-`, `status-` et `offhours-<projet>`. |
 | Quota du namespace dépassé | Rendu du chart (`templates/quota-report.yaml`) et `ci/check-app-values.sh` | Voir ci-dessous. |
 
 ### Le quota : pourquoi au rendu
@@ -122,5 +123,5 @@ Aucun commit quand rien ne change. Les écrans dédiés (release, sauvegardes, e
 ## Limites connues
 
 - Les dépôts déjà générés gardent la CI de leur création : ils n'ont pas le workflow `Deploy values` tant qu'on ne le leur ajoute pas. Le schéma et les contrôles de rendu s'appliquent quand même à leur synchronisation Argo CD.
-- infra-templates est privé : le workflow lit le chart avec le secret d'organisation `CNP_INFRA_TEMPLATES_TOKEN` (lecture seule du contenu d'infra-templates).
+- infra-templates est public : le workflow le lit sans jeton.
 - Une modification du CMP est un commit sur `main` : la CI tourne en même temps que la synchronisation. Le CMP valide le schéma avant de commiter ; le quota et le propriétaire de l'image sont contrôlés par le rendu Argo CD, qui refuse sans rien déployer.
