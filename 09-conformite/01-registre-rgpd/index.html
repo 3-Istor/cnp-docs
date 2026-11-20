@@ -23,7 +23,7 @@
       
       
       <link rel="icon" href="../../assets/images/favicon.png">
-      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.1">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.8.2">
     
     
       
@@ -3106,6 +3106,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#t4-bis-retours-des-assistants-a-lequipe-plateforme-cnp-310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        T4 bis. Retours des assistants à l'équipe plateforme (CNP-310)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#t5-notifications-et-alertes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4214,6 +4225,17 @@
 </li>
         
           <li class="md-nav__item">
+  <a href="#t4-bis-retours-des-assistants-a-lequipe-plateforme-cnp-310" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        T4 bis. Retours des assistants à l'équipe plateforme (CNP-310)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
   <a href="#t5-notifications-et-alertes" class="md-nav__link">
     <span class="md-ellipsis">
       
@@ -4468,7 +4490,7 @@ lignes partent dans Loki avec les logs du pod.</p>
 <tr>
 <td>Personnes ayant connecté un assistant IA</td>
 <td>Utilisateur qui a approuvé un client MCP</td>
-<td><code>agent_grants</code>, <code>agent_confirmations</code></td>
+<td><code>agent_grants</code>, <code>agent_confirmations</code>, <code>issue_reports</code></td>
 </tr>
 <tr>
 <td>Auteurs d'événements d'audit</td>
@@ -4622,6 +4644,42 @@ légale</strong> sont des propositions à valider.</p>
 <tr>
 <td>Durée cible <strong>[Décision]</strong></td>
 <td>À fixer pour les grants révoqués et <code>agent_confirmations</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="t4-bis-retours-des-assistants-a-lequipe-plateforme-cnp-310">T4 bis. Retours des assistants à l'équipe plateforme (CNP-310)<a class="headerlink" href="#t4-bis-retours-des-assistants-a-lequipe-plateforme-cnp-310" title="Permanent link">&para;</a></h3>
+<p>Ajouté avec la PR CMP <a href="https://github.com/3-Istor/CMP/pull/262">#262</a>, pas encore fusionnée : les liens pointent sur sa branche.</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Finalité <strong>[Décision]</strong></td>
+<td>Proposition : connaître les difficultés que les assistants rencontrent sur la plateforme (outil manquant, erreur, documentation absente) pour l'améliorer</td>
+</tr>
+<tr>
+<td>Base légale <strong>[Décision]</strong></td>
+<td>Proposition : 6.1.f ; l'utilisateur voit le texte exact et accepte avant chaque envoi</td>
+</tr>
+<tr>
+<td>Données <strong>[Code]</strong></td>
+<td>Nom d'utilisateur (<code>preferred_username</code>) de chaque personne qui envoie le même retour, nom du client déclaré par l'assistant, catégorie, résumé (300 caractères), outil concerné, étapes (4 000 caractères), projet facultatif. Les valeurs de secrets sont masquées avant l'enregistrement (<a href="https://github.com/3-Istor/CMP/blob/feat/cnp-310-report-issue/backend/app/services/issue_reports.py"><code>issue_reports.py</code></a>). L'outil demande de ne pas y mettre de code ni de données de l'app, sans pouvoir le vérifier</td>
+</tr>
+<tr>
+<td>Stockage <strong>[Code]</strong></td>
+<td>Postgres <code>issue_reports</code>, <code>issue_report_submissions</code> (nom d'utilisateur et heure de chaque envoi, pour le quota de 10 par jour) (<a href="https://github.com/3-Istor/CMP/blob/feat/cnp-310-report-issue/backend/app/models/issue_report.py"><code>issue_report.py</code></a>). Lus par le groupe <code>infra</code> dans la CMP ; copiés à la main dans Jira (Atlassian, hors UE) quand un admin les exporte</td>
+</tr>
+<tr>
+<td>Durée configurée <strong>[Code]</strong></td>
+<td>Aucune purge : les retours restent jusqu'à suppression manuelle, les envois aussi</td>
+</tr>
+<tr>
+<td>Durée cible <strong>[Décision]</strong></td>
+<td>À fixer ; <code>issue_report_submissions</code> ne sert qu'au quota du jour et peut être purgée après 24 h</td>
 </tr>
 </tbody>
 </table>
@@ -4781,9 +4839,9 @@ destinataire) et l'existence d'un contrat ou de clauses types sont <strong>[Déc
 <h2 id="a-decider">À décider<a class="headerlink" href="#a-decider" title="Permanent link">&para;</a></h2>
 <ul class="task-list">
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Responsable de traitement et contact DPO.</li>
-<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Finalité et base légale de T1 à T6.</li>
+<li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Finalité et base légale de T1 à T6 et T4 bis.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Durées cibles, en particulier : T1 au départ d'une personne, T2, T4 (grants
-      révoqués, approbations), T6, et l'expiration de l'archive d'audit après le verrou.</li>
+      révoqués, approbations), T4 bis (retours et envois), T6, et l'expiration de l'archive d'audit après le verrou.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Statut et contrat de chaque destinataire hors UE, en premier lieu les assistants IA.</li>
 <li class="task-list-item"><label class="task-list-control"><input type="checkbox" disabled/><span class="task-list-indicator"></span></label> Politique d'usage des assistants IA : quels assistants sont autorisés, et si les
       logs d'apps manipulant des données d'utilisateurs finaux peuvent leur être envoyés.</li>
