@@ -1445,10 +1445,10 @@ connections:
   - {id: c-lc-import-cf, from: lc-import, to: lc-cf, protocol: HTTPS, verb: "CNAME of public apps", kind: flow}
   - {id: c-lc-import-kapi, from: lc-import, to: lc-kapi, port: https, protocol: HTTPS, verb: "health, namespaces", kind: flow}
   - {id: c-lc-portal-import, from: lc-portal, to: lc-import, port: http, protocol: HTTPS, verb: "push webhook, HMAC", kind: async}
-  - {id: c-lc-import-user-repo, from: lc-import, to: lc-user-repo, port: https, protocol: HTTPS, verb: "open the standard PR", kind: flow, status: planned, target: CNP-303}
-  - {id: c-lc-import-ci-ghcr, from: lc-import-ci, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push ci:main, sign", kind: flow, status: planned, target: CNP-303}
-  - {id: c-lc-argocd-user-repo, from: lc-argocd, to: lc-user-repo, port: https, protocol: HTTPS, verb: "read deploy/values-<app>.yaml", kind: async, status: planned, target: CNP-303}
-  - {id: c-lc-updater-user-repo, from: lc-updater, to: lc-user-repo, port: https, protocol: HTTPS, verb: "write back the digest", kind: async, status: planned, target: CNP-303}
+  - {id: c-lc-import-user-repo, from: lc-import, to: lc-user-repo, port: https, protocol: HTTPS, verb: "open the standard PR", kind: flow}
+  - {id: c-lc-import-ci-ghcr, from: lc-import-ci, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push ci:X.Y.Z on a vX.Y.Z tag, sign", kind: flow}
+  - {id: c-lc-argocd-user-repo, from: lc-argocd, to: lc-user-repo, port: https, protocol: HTTPS, verb: "read deploy/values-<app>.yaml", kind: async}
+  - {id: c-lc-updater-registry, from: lc-updater, to: lc-registry, port: https, protocol: HTTPS, verb: "write the release in apps/<p>/<app>/release.yaml", kind: async}
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}

@@ -2,8 +2,9 @@
 
 Cette page suit un repo importé, de l'analyse à la suppression. Elle décrit ce qui est sur
 `main` le 20/11/2026 : CMP `services/imports`, workflow `import.yml` d'extern-project-analyzer,
-ApplicationSet `cnp-apps` de K3s et chart infra-templates. Deux chantiers ouverts changent ce
-modèle. Ils sont décrits à la fin, dans [À venir](#a-venir).
+ApplicationSet `cnp-apps` de K3s et chart infra-templates. Le passage d'un repo importé au
+modèle des templates, en service depuis le 20/11, est décrit à la fin, dans
+[Après la PR standard](#apres-la-pr-standard).
 
 Les étapes d'analyse et d'application sont détaillées dans [Parcours](03-parcours.md). Le parcours
 d'une app créée par template est dans [Cycle de vie : template](10-cycle-template.md).
@@ -121,40 +122,44 @@ Il est décrit dans [Cycle de vie : template](10-cycle-template.md#controle-dorp
 
 Un projet qui a encore un import ne se supprime pas : il faut d'abord supprimer ses imports.
 
-## À venir
+## Après la PR standard
 
-Ces changements sont dans des PRs ouvertes, non fusionnées le 20/11/2026.
-
-### CNP-303 : le repo importé devient la source des valeurs
-
-PRs : CMP#269, K3s#251, cnp-projects#21, cnp-project-base#43. Activé par
-`IMPORT_STANDARD_PR_ENABLED`, coupé par défaut. Seuls les repos de l'organisation 3-Istor sont
-éligibles.
+Depuis le 20/11/2026, une app importée passe au modèle des templates par une PR dans son repo
+(CNP-303). EpiTweet a fait le cycle complet le 20/11 : PR 3-Istor/epitweet#1, puis release
+`v0.1.0`. Seuls les repos de l'organisation 3-Istor sont éligibles.
 
 ![Repo importé après sa PR standard](../01-architecture/diagrams/lifecycle-import-pr.light.png#only-light)
 ![Repo importé après sa PR standard](../01-architecture/diagrams/lifecycle-import-pr.dark.png#only-dark)
 
 - Après le premier déploiement réussi, le CMP ouvre une PR `cnp/standard-deploy-<sha8>` dans le
-  repo importé. Elle ajoute `deploy/values-<app>.yaml` pour chaque app, la CI des templates dans
-  `.github/workflows/ci.yml`, plus `security.yml`, `dependabot.yml` et `cnp-verify.yml`. Elle ne
-  touche pas au code de l'app.
+  repo importé. Elle ajoute `deploy/values-<app>.yaml` pour chaque app, les Dockerfiles réparés
+  par l'analyseur dans `cnp/docker/`, la CI des templates dans `.github/workflows/ci.yml`, plus
+  `security.yml`, `dependabot.yml` et `cnp-verify.yml`. Elle ne touche pas au code de l'app.
+- Tous ces workflows tournent sur les runners éphémères des imports, jamais sur un runner
+  persistant. La CI construit au plus deux images à la fois. Le scan d'image de `security.yml`
+  est coupé : l'analyseur scanne déjà les images, puis Trivy dans le cluster.
 - Tant que la PR n'est pas fusionnée, rien ne change. Les apps tournent sur la copie de la
   plateforme.
-- À la fusion, un commit dans cnp-projects pose `repoURL` sur chaque app et supprime son
-  `apps/<p>/<app>/values.yaml`.
-- Argo CD lit alors `deploy/values-<app>.yaml` dans le repo importé. `network.allowFrom` reste
-  calculé depuis le registre et écrit en ligne : le repo ne peut pas l'élargir.
-- La CI du repo construit `ghcr.io/3-istor/imports/<p>/<app>/ci:main`. Un Image Updater suit ce
-  tag par digest et écrit le digest dans le fichier de valeurs.
+- À la fusion, un seul commit dans cnp-projects pose `repoURL` sur chaque app, supprime son
+  `apps/<p>/<app>/values.yaml` et écrit `apps/<p>/<app>/release.yaml` : l'image importée,
+  épinglée par digest jusqu'à la première release.
+- Argo CD lit alors `deploy/values-<app>.yaml` sur la branche par défaut du repo importé, puis
+  `release.yaml` dans cnp-projects. La release ne peut pas vivre dans une autre branche du même
+  repo : Argo CD refuse deux révisions d'un même repo dans une application.
+- `network.allowFrom` reste calculé depuis le registre et écrit en ligne : le repo ne peut pas
+  l'élargir.
+- Une release est un tag `vX.Y.Z` du repo importé. La CI publie et signe
+  `ghcr.io/3-istor/imports/<p>/<app>/ci:X.Y.Z`. Un Image Updater écrit ce tag dans
+  `release.yaml` de cnp-projects. La plateforme n'écrit jamais dans le repo importé.
 - Le rebuild de la plateforme s'arrête. `rebuild` et `apply` répondent 409.
 
 Après la fusion, on change une valeur d'une app importée comme pour une app de template : par
-un commit dans `deploy/values-<app>.yaml` du repo importé.
+un commit dans `deploy/values-<app>.yaml` du repo importé. On la met en production par un tag.
 
 ### CNP-304 : schéma fermé et écritures tracées
 
-PRs : infra-templates#36, CMP#268, template-app-webapp-python-fastapi-react#77,
-template-html-css#23, cnp-docs#57.
+En service depuis le 20/11/2026 : infra-templates#36, CMP#268,
+template-app-webapp-python-fastapi-react#77, template-html-css#23, cnp-docs#57.
 
 - `values.schema.json` du chart devient fermé. Une clé inconnue ou une valeur hors bornes fait
   échouer la CI de l'app et le rendu d'Argo CD.
