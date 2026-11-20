@@ -111,6 +111,7 @@ nav:
       - Modèles d'Applications (Git): 04-templates/01-git-app-templates.md
       - Chart Helm Umbrella Générique: 04-templates/02-helm-generic-chart.md
       - Provisionneur Terraform: 04-templates/03-terraform-provisioner.md
+      - "Réglages d'app : CMP et YAML": 04-templates/04-reglages-app-yaml.md
   - 5. Spécifications API CMP:
       - Standards Globaux & Sécurité: 05-cmp-backend-api/00-global-api-standards.md
       - API Déploiement (Contracts): 05-cmp-backend-api/01-cmp-deployment-api.md
