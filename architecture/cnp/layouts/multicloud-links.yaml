@@ -24,25 +24,26 @@ elements:
   vault-auth: {x: 40, y: 304, w: 300, h: 80}
   g-vpn: {x: 40, y: 654, w: 380, h: 254}
   wireguard-onprem: {x: 40, y: 60, w: 300, h: 170}
-  g-observability: {x: 40, y: 968, w: 380, h: 530}
-  vm-vminsert: {x: 40, y: 90, w: 300, h: 80}
-  loki-gateway: {x: 40, y: 250, w: 300, h: 80}
-  vm-vmselect: {x: 40, y: 410, w: 300, h: 80}
+  g-observability: {x: 40, y: 968, w: 380, h: 230}
+  g-vo-read: {x: 20, y: 50, w: 340, h: 160}
+  vo-vmauth: {x: 20, y: 50, w: 300, h: 100}
   g-gitops: {x: 40, y: 1558, w: 380, h: 274}
   argocd: {x: 40, y: 60, w: 300, h: 80}
   image-updater: {x: 40, y: 164, w: 300, h: 80}
   g-cmp: {x: 40, y: 1892, w: 380, h: 170}
   cmp-backend: {x: 40, y: 60, w: 300, h: 80}
 
-  z-cloud-a: {x: 1500, y: 260, w: 700, h: 920}
+  z-cloud-a: {x: 1500, y: 260, w: 700, h: 1170}
   b-apiserver: {x: 40, y: 60, w: 260, h: 170}
-  b-wireguard: {x: 40, y: 270, w: 260, h: 150}
-  b-allow: {x: 400, y: 90, w: 260, h: 220}
+  b-wireguard: {x: 40, y: 270, w: 300, h: 150}
+  b-allow: {x: 400, y: 90, w: 270, h: 220}
   b-nodes: {x: 400, y: 360, w: 260, h: 90}
-  g-b-platform: {x: 20, y: 480, w: 360, h: 410}
-  b-secret-op: {x: 20, y: 60, w: 260, h: 90}
-  alloy-aws: {x: 20, y: 174, w: 260, h: 90}
-  b-rollouts: {x: 20, y: 288, w: 260, h: 90}
+  g-b-platform: {x: 20, y: 480, w: 360, h: 660}
+  b-secret-op: {x: 20, y: 60, w: 280, h: 90}
+  vo-c-vmagent: {x: 20, y: 174, w: 290, h: 100}
+  vo-c-vlagent: {x: 20, y: 298, w: 280, h: 90}
+  vo-c-otelcol: {x: 20, y: 412, w: 290, h: 100}
+  b-rollouts: {x: 20, y: 536, w: 280, h: 90}
   z-github: {x: 1500, y: 1810, w: 420, h: 410}
   github: {x: 30, y: 60, w: 360, h: 150}
   ghcr: {x: 30, y: 240, w: 360, h: 130}
@@ -71,22 +72,13 @@ edges:
 
   # Relays inside the tunnel: the cloud socat opens TCP to the on-prem tunnel IP.
   c-bwg-onprem-vm: {from: b-wireguard.left@60px, to: wireguard-onprem.right@45px, waypoints: [[1300, 590], [1300, 1019]], against_flow: true}
-  c-bwg-onprem-loki: {from: b-wireguard.left@85px, to: wireguard-onprem.right@65px, waypoints: [[1316, 615], [1316, 1039]], against_flow: true}
   c-bwg-onprem-select: {from: b-wireguard.left@110px, to: wireguard-onprem.right@85px, waypoints: [[1332, 640], [1332, 1059]], against_flow: true}
 
   # On-prem end of the relays, down the hub's right margin into the observability group.
-  c-wgonprem-vmselect: {from: wireguard-onprem.right@110px, to: vm-vmselect.top@160px, waypoints: [[1112, 1084], [1112, 1598], [840, 1598]]}
-  c-wgonprem-lokigw: {from: wireguard-onprem.right@128px, to: loki-gateway.top@160px, waypoints: [[1076, 1102], [1076, 1436], [840, 1436]]}
-  c-wgonprem-vminsert: {from: wireguard-onprem.right@146px, to: vm-vminsert.top@150px, waypoints: [[1040, 1120], [1040, 1280], [830, 1280]]}
 
   # The CMP reads metrics and logs (Environments, Activity) from the hub.
-  c-cmp-lokigw: {from: cmp-backend.right@40px, to: loki-gateway.top@70px, waypoints: [[1165, 2252], [1165, 1418], [750, 1418]]}
-  c-cmp-vmselect: {from: cmp-backend.right@68px, to: vm-vmselect.top@70px, waypoints: [[1180, 2280], [1180, 1580], [750, 1580]]}
 
   # Cloud clients of the relays: agents calling home, up into the cloud WireGuard pod.
-  c-alloyaws-relay-vm: {from: alloy-aws.right@30px, to: b-wireguard.bottom@50px, waypoints: [[1816, 944], [1816, 724], [1590, 724]], against_flow: true}
-  c-alloyaws-relay-loki: {from: alloy-aws.right@60px, to: b-wireguard.bottom@130px, waypoints: [[1834, 974], [1834, 708], [1670, 708]], against_flow: true}
-  c-brollouts-relay-select: {from: b-rollouts.right@45px, to: b-wireguard.bottom@210px, waypoints: [[1852, 1073], [1852, 692], [1750, 692]], against_flow: true}
 
   # To GitHub, under the clouds.
   c-argocd-github: {from: argocd.right@60px, to: github.left@68px, label_at: [1250, 1938]}
@@ -97,8 +89,14 @@ edges:
   r-b-allow-api: {from: b-allow.left@30px, to: b-apiserver.right@60px, waypoints: []}
   r-b-allow-wg: {from: b-allow.left@200px, to: b-wireguard.right@20px, waypoints: []}
 
+  c-vo-mc-wg-vmauth: {from: wireguard-onprem.right@128px, to: vo-vmauth.top@270px, waypoints: [[1076, 1102], [1076, 1200], [950, 1200]]}
+  c-vo-mc-vmagent-relay: {from: vo-c-vmagent.right@50px, to: b-wireguard.bottom@70px, waypoints: [[1836, 964], [1836, 728], [1610, 728]], against_flow: true}
+  c-vo-mc-vlagent-relay: {from: vo-c-vlagent.right@45px, to: b-wireguard.bottom@135px, waypoints: [[1852, 1083], [1852, 716], [1675, 716]], against_flow: true}
+  c-vo-mc-otel-relay: {from: vo-c-otelcol.right@50px, to: b-wireguard.bottom@200px, waypoints: [[1868, 1202], [1868, 704], [1740, 704]], against_flow: true}
+  c-brollouts-relay-select: {from: b-rollouts.right@45px, to: b-wireguard.bottom@265px, waypoints: [[1884, 1321], [1884, 692], [1805, 692]], against_flow: true}
+
 cards:
-  card-legend: {x: 40, y: 2490, w: 520, h: 460}
+  card-legend: {x: 40, y: 2490, w: 580, h: 460}
   card-bg: {x: 590, y: 2490, w: 820, h: 460}
   card-allow: {x: 1440, y: 2490, w: 520, h: 460}
   card-tunnel: {x: 1990, y: 2490, w: 450, h: 460}

@@ -5,9 +5,9 @@ title: "CNP · Project Topology · Where the data comes from"
 subtitle: "Where does the project Topology view get its nodes and edges?"
 meta:
   - "Scope: the Topology tab of one project, on-prem · in prod since 2026-11-14 (CNP-242) · hatched: Hubble Relay, later"
-  - "Sources: import design spec v2 · K3s k8s/config/kube-system/values.yaml (Hubble), observability/values-{vm,alloy}.yaml · CMP services/{kube_client,activity_sources}.py"
+  - "Sources: import design spec v2 · K3s k8s/config/kube-system/values.yaml (Hubble), observability/{vmagent,vmagent-scrapes,fluent-bit,vmsingle}.yaml · CMP services/{kube_client,activity_sources}.py"
   - "Out of scope: linking two apps (sequence app-link) · public clouds (no Hubble metrics there yet) · Grafana"
-  - "v0.1 · source: cnp-docs/architecture/cnp"
+  - "v0.2 (2026-11-21: vmagent and VMSingle, no Alloy) · source: cnp-docs/architecture/cnp"
 
 include:
   - z-internet
@@ -20,10 +20,11 @@ include:
   - g-ag-kapi
   - kube-apiserver
   - g-observability
-  - vm-vmselect
-  - vm-vmstorage
-  - alloy-onprem
-  - vm-vminsert
+  - g-vo-store
+  - vo-vmsingle
+  - g-vo-collect
+  - vo-vlagent
+  - vo-vmagent
   - tp-g-cilium
   - tp-hubble-relay
   - tp-hubble-metrics
@@ -31,14 +32,13 @@ include:
   - z-github
   - pa-registry
 
-steps: [c-tp-canvas-api, c-tp-api-registry, c-tp-api-kapi, c-tp-api-vmselect, c-vmselect-vmstorage]
-background: [c-pa-argocd-registry, c-argocd-apiserver, c-tp-alloy-hubble, c-alloy-vminsert, c-vminsert-vmstorage, c-tp-alloy-export]
+steps: [c-tp-canvas-api, c-tp-api-registry, c-tp-api-kapi, c-tp-api-vmsingle]
+background: [c-pa-argocd-registry, c-argocd-apiserver, c-tp-vmagent-hubble, c-vo-vmagent-vmsingle, c-tp-fluentbit-export]
 
 labels:
-  c-vmselect-vmstorage: ""
-  c-vminsert-vmstorage: ""
   r-tp-relay-metrics: ""
-  c-alloy-vminsert: ""
+  c-vo-vmagent-vmsingle: ""
+  c-tp-api-vmsingle: ""
   c-tp-canvas-api: ""
   c-argocd-apiserver: ""
   c-tp-api-kapi: ""
@@ -55,14 +55,14 @@ cards:
       - "[1] The tab asks the CMP for the project's topology; the user needs member or above."
       - "[2] **Nodes and declared edges.** The registry record lists the apps and their dependsOn links."
       - "[3] **Node state.** Application health and sync from Argo CD, offhours state from the OffhoursSchedule, both read through the API."
-      - "[4] **Observed edges.** Flow counters by source and destination workload and verdict, over the last minutes, [5] from vmstorage."
+      - "[4] **Observed edges.** Flow counters by source and destination workload and verdict, over the last minutes, from VMSingle."
   - id: card-bg
     title: "Background"
     color: violet
     lines:
       - "[A] Argo CD polls the registry and [B] applies, then writes Application health."
-      - "[C] Alloy scrapes the Hubble flow metrics on each cilium-agent (:9965), [D] remote-writes them, [E] vminsert stores them."
-      - "[F] Today only dropped flows leave Cilium, as logs to Loki; the CMP already reads POLICY_DENIED from there."
+      - "[C] vmagent scrapes the Hubble flow metrics on each cilium-agent (:9965) and [D] remote-writes them to VMSingle."
+      - "[E] Dropped flows also leave Cilium as logs: Fluent Bit sends them to VictoriaLogs, where POLICY_DENIED lines can be searched."
   - id: card-edges
     title: "Edge states on the canvas"
     color: indigo
@@ -75,9 +75,7 @@ cards:
     title: "Gaps between docs and code"
     color: orange
     lines:
-      - "!!GI3!! **No vmagent.** The design has vmagent scrape Hubble; the cluster runs none: Alloy scrapes and writes to VictoriaMetrics."
-      - "!!GO1!! **vminsert has no auth.** Cloud writes carry no credential (see observability views)."
-      - "**No allowed-flow data today.** Hubble metrics, relay and UI are all off: the Topology can show declared links only until CNP-242 turns metrics on."
+      - "**Live flows.** Hubble metrics are scraped by vmagent; the drawer of live flows through Hubble Relay is still to build."
 
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"
@@ -99,8 +97,7 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
@@ -108,3 +105,4 @@ hidden_annotations:
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"

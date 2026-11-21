@@ -4,6 +4,14 @@
 > au modèle Noodle portent `status: planned` et une cible : `P0`–`P2` pour les écarts de la
 > landing zone actuelle, `IA-1`–`IA-3` pour la landing zone IA.
 
+> **Observabilité, mise à jour du 2026-11-21.** Alloy et Loki ont été retirés de la plateforme
+> ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)). Les décisions D7, D14, D24 et D30
+> de la spec sont remplacées par la décision D20 du dossier
+> [Observabilité](../10-observabilite/07-ia-et-conformite.md) : OpenTelemetry → collecteur
+> OpenTelemetry (`otelcol-gateway`, déjà en place) → VictoriaTraces, Tempo en repli ; logs
+> d'accès → Fluent Bit → VictoriaLogs, enregistrement signé en archive 180 jours. Le texte de
+> la v1.0 est gardé tel quel.
+
 > **La spec de référence est validée (v1.0, 2026-10-25).** Les décisions D1 à D37 sont dans
 > [02-spec.md](02-spec.md) (§3 et §9), les phases et vérifications dans [03-phases.md](03-phases.md),
 > la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md), le plan d'implémentation dans
@@ -48,7 +56,7 @@ Ce qui tourne aujourd'hui, estompé, et toute la landing zone IA en clair, dans 
 
 ### Vue d'ensemble détaillée : tous les zooms sur une seule carte
 
-Le hub on-prem tel qu'il tourne aujourd'hui (estompé) et toute la landing zone IA (en clair), au niveau de détail des zooms : politiques et CRDs d'agentgateway, contrôleur, proxy, clients Keycloak, pipeline Alloy. Les trois niveaux d'isolation du sandbox sont trois nœuds distincts côte à côte (gVisor, Kata, runc standard) : la plateforme peut en proposer un, deux ou les trois, selon que l'agent exécute du code ou non. EKS et GKE restent résumés à leur API server. Grande image : l'ouvrir dans draw.io (`platform-detailed.*.drawio`) pour zoomer.
+Le hub on-prem tel qu'il tourne aujourd'hui (estompé) et toute la landing zone IA (en clair), au niveau de détail des zooms : politiques et CRDs d'agentgateway, contrôleur, proxy, clients Keycloak, pipeline du collecteur OpenTelemetry (Alloy dans la v1.0, retiré le 2026-11-21). Les trois niveaux d'isolation du sandbox sont trois nœuds distincts côte à côte (gVisor, Kata, runc standard) : la plateforme peut en proposer un, deux ou les trois, selon que l'agent exécute du code ou non. EKS et GKE restent résumés à leur API server. Grande image : l'ouvrir dans draw.io (`platform-detailed.*.drawio`) pour zoomer.
 
 ![Platform overview, detailed](../01-architecture/diagrams/platform-detailed.light.png)
 
@@ -105,7 +113,7 @@ Gemini en premier (plusieurs clés, quota gratuit par projet Google), repli sur 
 
 ### Observabilité GenAI : vue détaillée
 
-De l'appel d'un agent à une trace et des compteurs de tokens par projet : les sources, le pipeline Alloy, Tempo, VictoriaMetrics et Grafana.
+De l'appel d'un agent à une trace et des compteurs de tokens par projet : les sources, le collecteur OpenTelemetry, Tempo, VictoriaMetrics, VictoriaLogs et Grafana.
 
 ![GenAI observability internals](../01-architecture/diagrams/genai-observability-internals.light.png#only-light)
 ![GenAI observability internals](../01-architecture/diagrams/genai-observability-internals.dark.png#only-dark)

@@ -1,121 +1,137 @@
 apiVersion: noodle/v1alpha1
 kind: View
 type: topology
-title: "CNP · Observability · Collection from three clusters"
-subtitle: "How do metrics, logs and audit events of on-prem and the public clouds reach the on-prem stores?"
+title: "CNP · Observability · Full VictoriaMetrics on the hub"
+subtitle: "Who writes and reads metrics, logs and traces on the hub, and how does an alert reach Discord?"
 meta:
-  - "Scope: write path of the three clusters (the public cloud target is drawn once for EKS and GKE: same stack), the WireGuard relays, VictoriaMetrics, Loki, Ceph RGW and the audit archive · main as of 2026-10-29 · derived from code (K3s/k8s/config/{observability,wireguard}, K3s/terraform/{loki,audit}.tf, Cloud/terraform/public/platform)"
-  - "Out of scope: read side (observability-read) · OpenCost internals · Kyverno, Trivy, dashboards"
-  - "v0.2 (2026-10-29: EKS and GKE drawn once) · source: cnp-docs/architecture/cnp"
-
+  - "Scope: on-prem hub, write path of metrics, logs and traces, reads by projects and platform, the single alert chain, the audit archive and the planned AI audit record · main as of 2026-11-21 (CNP-185 waves V1 to V4; Loki, Alloy and the VictoriaMetrics cluster removed by CNP-276) · derived from code (K3s/k8s/config/observability, K3s/k8s/config/arcl-cmp/cmp-values.yaml)"
+  - "Out of scope: public clouds (view observability-multicloud), NetworkPolicies (one per store, D8), Gatus and OpenCost internals, dashboards"
+  - "v1.0 (2026-11-21: the 2026-11-13 target is the platform) · source: cnp-docs/architecture/cnp"
 include:
-  - z-cloud-a
-  - g-b-platform
-  - alloy-aws
-  - b-obs-targets
-  - b-wireguard
   - z-cluster
   - g-obs-sources
   - o-hub-targets
   - o-audit-sources
-  - g-vpn
-  - wireguard-onprem
+  - vo-app-otel
+  - vo-ai-sources
   - g-observability
-  - alloy-onprem
-  - vm-vminsert
-  - vm-vmstorage
-  - loki-gateway
-  - loki
+  - g-vo-collect
+  - vo-vmagent
+  - vo-vlagent
+  - vo-otelcol
+  - g-vo-store
+  - vo-vmsingle
+  - vo-vlogs
+  - vo-vtraces
+  - g-vo-read
+  - grafana
+  - vo-vmauth
+  - g-vo-alert
+  - vo-vmalert
+  - vo-alertmanager
+  - vo-backup
   - audit-archive-job
+  - vo-audit-record
+  - g-cmp
+  - cmp-backend
+  - g-rollouts
+  - argo-rollouts
+  - z-internet
+  - discord
+  - vo-deadman
   - z-ceph
   - ceph-rgw
-  - loki-bucket
   - audit-bucket
-
-steps: [c-alloyaws-relay-vm, c-bwg-onprem-vm, c-wgonprem-vminsert, c-vminsert-vmstorage]
-background: [c-wg-eks, c-alloyaws-targets, c-alloyaws-relay-loki, c-bwg-onprem-loki, c-wgonprem-lokigw, c-alloy-hubtargets, c-alloy-auditsrc, c-alloy-vminsert, c-alloy-lokigw, c-lokigw-loki, c-loki-bucket, c-archive-lokigw, c-archive-rgw, c-bwg-onprem-select]
-
+steps: [c-vo-vmagent-targets, c-vo-vmagent-vmsingle, c-vo-vmalert-vmsingle, c-vo-vmalert-am, c-vo-am-discord]
+background: [c-cmp-grafana, c-archive-vlogs, c-vo-vlagent-audit, c-vo-vlagent-vlogs, c-vo-vmagent-appotel, c-vo-appotel-otelcol, c-vo-ai-otelcol, c-vo-otelcol-vtraces, c-vo-grafana-vmauth, c-vo-grafana-vmsingle, c-vo-vmauth-vmsingle, c-vo-vmauth-vlogs, c-vo-cmp-vmsingle, c-vo-cmp-vlogs, c-vo-cmp-vtraces, c-vo-rollouts-vmsingle, c-vo-vmalert-vlogs, c-vo-cmp-am, c-cmp-discord, c-vo-am-deadman, c-vo-deadman-discord, c-vo-backup-rgw, c-vo-audit-vtraces, c-vo-audit-rgw, c-vo-vmauth-vtraces, c-vo-vmauth-otelcol]
 labels:
-  c-wg-eks: ""
-  c-alloyaws-relay-vm: ""
-  c-alloyaws-relay-loki: ""
-  c-bwg-onprem-vm: ""
-  c-bwg-onprem-loki: ""
-  c-bwg-onprem-select: ""
-  c-wgonprem-vminsert: ""
-  c-wgonprem-lokigw: ""
-  c-alloy-vminsert: ""
-  c-alloy-lokigw: ""
-  c-alloy-hubtargets: ""
-  c-alloy-auditsrc: ""
-  c-archive-lokigw: ""
+  c-cmp-grafana: ""
+  c-archive-vlogs: ""
   c-archive-rgw: ""
-  c-loki-bucket: ""
-  c-lokigw-loki: ""
-  c-vminsert-vmstorage: ""
-
+  c-vo-vmauth-otelcol: ""
+  c-vo-vmauth-vtraces: ""
+  c-vo-vmagent-targets: ""
+  c-vo-vmagent-vmsingle: ""
+  c-vo-vmalert-vmsingle: ""
+  c-vo-vmalert-am: ""
+  c-vo-am-discord: ""
+  c-vo-vlagent-audit: ""
+  c-vo-vlagent-vlogs: ""
+  c-vo-vmagent-appotel: ""
+  c-vo-appotel-otelcol: ""
+  c-vo-ai-otelcol: ""
+  c-vo-otelcol-vtraces: ""
+  c-vo-grafana-vmauth: ""
+  c-vo-grafana-vmsingle: ""
+  c-vo-vmauth-vmsingle: ""
+  c-vo-vmauth-vlogs: ""
+  c-vo-cmp-vmsingle: ""
+  c-vo-cmp-vlogs: ""
+  c-vo-cmp-vtraces: ""
+  c-vo-rollouts-vmsingle: ""
+  c-vo-vmalert-vlogs: ""
+  c-vo-cmp-am: ""
+  c-cmp-discord: ""
+  c-vo-am-deadman: ""
+  c-vo-deadman-discord: ""
+  c-vo-backup-rgw: ""
+  c-vo-audit-vtraces: ""
+  c-vo-audit-rgw: ""
 cards:
   - {id: card-legend, title: "Legend", color: slate, legend: true}
   - id: card-steps
-    title: "Request path · a metric from a public cloud"
+    title: "Request path · a failing app becomes a Discord message"
     color: emerald
     lines:
-      - "[1] Alloy (cluster=aws|gcp) remote_writes to onprem-apps.cnp-vpn :18080, the cloud end of the tunnel."
-      - "[2] socat in the cloud WireGuard pod relays it to the on-prem tunnel IP (100.96.0.2 for AWS, .6 for GCP) :18080."
-      - "[3] The on-prem WireGuard pod relays it to vminsert :8480 (/insert/0/prometheus)."
-      - "[4] vminsert writes to vmstorage :8400: 20 GiB on ceph-block, 14 days."
-      - "Logs and audit events take the same road as the lettered flows below."
+      - "[1] vmagent scrapes Envoy, kubelet, kube-state-metrics, Hubble and annotated pods every 30 s, and forces the namespace label."
+      - "[2] It remote_writes to VMSingle :8429: 30 days, cluster=onprem."
+      - "[3] vmalert cnp evaluates platform rules and the VMRules the CMP writes per project, each group pinned to the project's namespaces."
+      - "[4] It sends firing alerts to Alertmanager :9093, which groups them and picks the app webhook, else the project's, else the platform's."
+      - "[5] One Discord message per group: value, runbook, portal link."
   - id: card-bg
     title: "Background"
     color: orange
     lines:
-      - "[A] The on-prem pod (one per cloud) opens the tunnel (UDP 31820). [B] The cloud Alloy scrapes its pods, node-exporter and kube-state-metrics, and tails pod logs."
-      - "[C] [D] [E] Logs take the same road on :18082 to the Loki gateway (basic auth alloy, password from Vault via observability-role)."
-      - "[F] [G] On-prem Alloy (cluster=onprem) scrapes the hub and tails K3s audit.log, Vault audit, Keycloak events and Hubble policy drops."
-      - "[H] [I] It writes straight to vminsert and the Loki gateway. [J] Alloy sets the tenant (project label, else default); the gateway checks the client and passes it to Loki. [K] Loki keeps chunks in loki-data on Ceph RGW."
-      - "[L] [M] Every hour audit-archive exports the audit streams and puts them in cnp-audit-archive (Object Lock, 30 days)."
-      - "[N] :18083 carries reads of vmselect for Argo Rollouts: see observability-read."
-  - id: card-allow
-    title: "Who may write"
+      - "[A] The CMP provisions each project org in Grafana. [B] Every hour audit-archive-vlogs exports the audit streams with LogsQL and puts them in cnp-audit-archive on Ceph RGW (Object Lock, 180 days)."
+      - "[C] [D] Fluent Bit tails pod logs and the k3s audit.log, and inserts into VictoriaLogs :9428 (30 days, 16 GiB cap)."
+      - "[E] [F] [G] [H] Template apps expose /metrics and send OTLP spans; the AI landing zone will send GenAI spans. The collector matches the pod from the connection, strips client k8s.* attributes and PII, and exports each project to its own VictoriaTraces tenant."
+      - "[I] to [P] Reads: project Grafana orgs go through vmauth (one user per project, read paths only, filters forced). Org 1, the CMP and Argo Rollouts read the stores directly, behind NetworkPolicies, so a vmauth outage never aborts a canary."
+      - "[Q] vmalert vlogs runs the LogsQL security rules. [R] [S] The CMP mutes alerts (project matcher forced) and posts its own events in the same format."
+      - "[T] [U] A Watchdog alert pings the dead man's switch every 5 min; silence for 15 min means the alert chain is down."
+      - "[V] vmbackup (planned) would copy metrics to Ceph RGW daily. [W] [X] audit-record (V6) reads each finished agent run, signs it with Vault transit, and puts it under Object Lock for 180 days."
+      - "[Y] Project Grafana orgs read their traces through vmauth, which forces the project's tenant (Q9). [Z] Cloud spans come in through vmauth (view observability-multicloud)."
+  - id: card-replaces
+    title: "Removed on 2026-11-21 (CNP-276)"
     color: rose
     lines:
-      - "**Clouds**: NetworkPolicy onprem-apps (ns cnp-vpn) admits ns observability on 18080, 18082 and ns argo-rollouts on 18083."
-      - "**vminsert**: vminsert-writers admits Alloy, vmalert and the on-prem wireguard pods."
-      - "**vmstorage**: vmstorage-cluster-only admits vminsert and vmselect."
-      - "**Loki**: loki-gateway-only admits the gateway. Each client has its own basic-auth user (alloy, grafana, archive, cmp, grafana-projects)."
-      - "**Retention**: Loki 14 days by default, 7 or 30 days by label; audit streams 30 days."
-  - id: card-gaps
-    title: "Gaps"
-    color: orange
-    lines:
-      - "!!GO1!! vminsert has no auth: the cloud cluster label is set by the client. Any pod of ns observability on a cloud may write."
-      - "!!GO2!! The Loki gateway :80 has no NetworkPolicy: basic auth alone protects it."
-      - "!!GO4!! EKS and GKE API server audit, cloud Vault and Keycloak events are not collected."
+      - "**Alloy** (1.8 GiB on two nodes) → vmagent + Fluent Bit."
+      - "**Loki**, its nginx gateway and per-project tenants → VictoriaLogs + vmauth filters; the logcli audit archive → LogsQL."
+      - "**VM cluster** (vminsert, vmselect, vmstorage) → VMSingle."
+      - "**Grafana-managed project alerts**, the Loki ruler → vmalert. Custom Grafana rules of projects stay."
+      - "History: Loki logs of 22/10 to 15/11 copied into VictoriaLogs (source=loki), VM cluster series of 01/11 to 15/11 into VMSingle."
 hidden_annotations:
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
   G1: "targets x-cross-tenant, not drawn in this view"
-  G10: "targets httproute, not drawn in this view"
-  G13: "targets b-secret-op, not drawn in this view"
-  G15: "targets vault-root-token, not drawn in this view"
-  G16: "targets cf-token, not drawn in this view"
-  G17: "targets gh-base, not drawn in this view"
-  G18: "targets c-argocd-b, not drawn in this view"
-  G19: "targets b1-front, not drawn in this view"
   G2: "targets security-policy, not drawn in this view"
-  G20: "targets b1-back, not drawn in this view"
   G3: "targets cf-edge, not drawn in this view"
   G4: "targets envoy-shared-gateway, not drawn in this view"
   G5: "targets cloudflared-app, not drawn in this view"
   G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
-  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
   G8: "targets app-pods, not drawn in this view"
   G9: "targets security-policy, not drawn in this view"
-  GB1: "targets bk-secret, not drawn in this view"
-  GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
-  G23: "targets gh-owner, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

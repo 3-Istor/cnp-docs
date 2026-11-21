@@ -27,7 +27,8 @@ include:
   - g-secrets
   - vault
   - g-observability
-  - vm-vmselect
+  - g-vo-store
+  - vo-vmsingle
   - g-gitops
   - argocd
   - pa-appproject
@@ -64,14 +65,14 @@ background:
   - c-im-analyzer-repo
   - c-im-gh-webhook
   - c-im-import-vault
-  - c-cmp-vmselect
+  - c-vo-cmp-vmsingle
   - c-im-user-wizard
   - c-im-service-backing
 
 # "" keeps the step badge alone in the dense band and corridors: the cards carry the text.
 labels:
   c-im-user-import: "POST apply · step-up"
-  c-cmp-vmselect: "Topology: observed flows · HTTP"
+  c-vo-cmp-vmsingle: "Topology: observed flows · HTTP"
   c-im-prepare-repo: ""
   c-im-analyzer-repo: ""
   c-im-import-gh-api: "mint · read, 1 repo"
@@ -115,7 +116,7 @@ cards:
       - "[A] The user installs CNP-Portal on chosen repos; the CMP proves it with the OAuth user token and GET /user/installations, over the same connection as [4] (S1)."
       - "[B] Analysis (S3), an analyze run of the build workflow: [C] the analyzer downloads a size-capped tarball at the SHA with a down-scoped token; it parses compose, Dockerfiles, poms and nginx, and executes nothing."
       - "[D] GitHub push webhook from CNP-Portal (HMAC) starts a rebuild; at wake-up the CMP compares each tracked branch HEAD (S5)."
-      - "[E] After the build, the CMP writes each app's generated secrets to Vault (mount project-<p>, path <app>/imports) and its role <project>-<app>-role. [F] The CMP already reads VictoriaMetrics; the Topology tab adds observed flows (view topology-data)."
+      - "[E] After the build, the CMP writes each app's generated secrets to Vault (mount project-<p>, path <app>/imports) and its role <project>-<app>-role. [F] The CMP already reads VMSingle; the Topology tab adds observed flows (view topology-data)."
       - "[G] The wizard and the draft canvas. [H] An imported service reaches its backing app through a dependsOn alias."
   - id: card-trust
     title: "Who touches the user's code"
@@ -153,11 +154,9 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G23: "targets gh-owner, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"

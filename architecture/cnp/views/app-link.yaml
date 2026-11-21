@@ -8,7 +8,7 @@ meta:
   - "The isolation: links mode (one ingress rule per dependsOn) comes later; until then the project policy already lets apps of a project talk."
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
-participants: [tp-canvas, tp-api, pa-registry, argocd, im-chart, kube-apiserver, vm-vmselect]
+participants: [tp-canvas, tp-api, pa-registry, argocd, im-chart, kube-apiserver, vo-vmsingle]
 
 steps:
   - {note: tp-canvas, text: "user draws A → B, port 8081, alias user-service"}
@@ -21,15 +21,14 @@ steps:
   - {id: sync, from: argocd, to: kube-apiserver, over: c-argocd-apiserver, text: "apply the alias in A's namespace"}
   - {note: kube-apiserver, text: "A calls B by its original hostname"}
   - {id: read, from: tp-canvas, to: tp-api, over: c-tp-canvas-api, text: "GET topology (refresh)"}
-  - {id: obs, from: tp-api, to: vm-vmselect, over: c-tp-api-vmselect, text: "flows A → B by verdict"}
+  - {id: obs, from: tp-api, to: vo-vmsingle, over: c-tp-api-vmsingle, text: "flows A → B by verdict"}
   - {reply: obs, text: "FORWARDED > 0"}
   - {reply: read, text: "edge declared and observed: solid"}
 hidden_annotations:
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G1: "targets x-cross-tenant, not drawn in this view"
   G2: "targets security-policy, not drawn in this view"
@@ -53,5 +52,4 @@ hidden_annotations:
   G20: "targets b1-back, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

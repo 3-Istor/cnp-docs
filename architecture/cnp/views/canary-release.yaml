@@ -5,11 +5,11 @@ title: "CNP · Delivery · From staging to a prod canary"
 subtitle: "What happens, in order, when a dev promotes a release from staging to prod with a canary?"
 meta:
   - "Scope: one app with staging on and release.strategy=canary, preset safe · main as of 2026-10-29 · derived from code (CMP routers/environments.py, services/environments/{promotion,loop}.py, routers/releases.py, services/release; infra-templates rollout.yaml; K3s argo-rollouts analysis-templates, applicationset-apps, helm/cnp-image-updaters/templates/imageupdaters.yaml)"
-  - "On EKS / GKE the same flow runs against the cloud API, and the analysis reads vmselect through the tunnel (onprem-apps.cnp-vpn :18083)."
+  - "On EKS / GKE the same flow runs against the cloud API, and the analysis reads VMSingle through the tunnel (onprem-apps.cnp-vpn :18083, then vmauth-clouds)."
   - "Out of scope: blue-green (not supported) · emergency and rollback promotions (they skip soak and approval) · end-user traffic through Cloudflare"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
-participants: [dev-a, admin-a, cmp-backend, image-updater, bk-app-repo, argocd, hub-kapi, argo-rollouts, bk-smoke, app-service, vm-vmselect]
+participants: [dev-a, admin-a, cmp-backend, image-updater, bk-app-repo, argocd, hub-kapi, argo-rollouts, bk-smoke, app-service, vo-vmsingle]
 
 steps:
   # Staging follows every build.
@@ -33,14 +33,14 @@ steps:
   - {id: smoke, from: bk-smoke, to: app-service, over: c-rl-smoke-svc, text: "GET <app>-canary /healthz, expects 2xx"}
   - {id: w10, from: argo-rollouts, to: hub-kapi, over: c-rl-rollouts-kapi, text: "patch HTTPRoute weights: stable 90, canary 10"}
   - {note: argo-rollouts, text: "Envoy Gateway applies the weights · cookie stickiness"}
-  - {id: q, from: argo-rollouts, to: vm-vmselect, over: c-rollouts-vmselect, text: "cnp-error-rate: ≥ 50 requests, ≤ 1 % errors, every 20 s"}
+  - {id: q, from: argo-rollouts, to: vo-vmsingle, over: c-vo-rollouts-vmsingle, text: "cnp-error-rate: ≥ 50 requests, ≤ 1 % errors, every 20 s"}
   - {reply: q, text: "successful"}
   - {id: w25, from: argo-rollouts, to: hub-kapi, over: c-rl-rollouts-kapi, text: "weights 75 / 25, then pause"}
   - {note: dev-a, text: "Release tab follows the rollout (SSE)"}
   - {id: promote, from: dev-a, to: cmp-backend, over: c-rl-dev-cmp, text: "POST /release/promote"}
   - {id: patch, from: cmp-backend, to: hub-kapi, over: c-bk-cmp-kapi, text: "merge-patch rollouts/status: next step"}
   - {id: w50, from: argo-rollouts, to: hub-kapi, over: c-rl-rollouts-kapi, text: "50 %, analysis, then 100 %: canary becomes stable"}
-  - {note: argo-rollouts, text: "no data = Inconclusive, never promotes on silence · vmselect unreachable = abort · Abort in the CMP patches status.abort"}
+  - {note: argo-rollouts, text: "no data = Inconclusive, never promotes on silence · VMSingle unreachable = abort · Abort in the CMP patches status.abort"}
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"
   G10: "targets httproute, not drawn in this view"
@@ -60,14 +60,12 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G23: "targets gh-owner, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

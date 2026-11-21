@@ -53,7 +53,6 @@ labels:
   c-pol-api: "allow (K3s IP)"
   c-pol-operator-api: "allow (K3s egress, SOCKS)"
   c-pol-c-obs: "allow 18080"
-  c-pol-c-obs-loki: "allow 18082"
   c-pol-c-rollouts: "allow 18083"
   c-pol-c-other: "denied 18080-18083 (onprem-apps)"
 
@@ -73,10 +72,10 @@ cards:
     title: "Tunnel relays and cloud guardrails"
     color: amber
     lines:
-      - "**onprem-apps (ns cnp-vpn, EKS and GKE):** 18080 and 18082 from ns observability only, 18083 from ns argo-rollouts only, UDP 51820 from anywhere (the SG / firewall keeps it to the K3s egress). Namespace selectors: any pod in those namespaces qualifies."
+      - "**onprem-apps (ns cnp-vpn, EKS and GKE):** 18080 from ns observability only, 18083 from ns argo-rollouts only, UDP 51820 from anywhere (the SG / firewall keeps it to the K3s egress). Namespace selectors: any pod in those namespaces qualifies."
       - "**Guardrails:** three ValidatingAdmissionPolicies, Deny and failurePolicy Fail: cnp-deny-loadbalancer, cnp-deny-ingress, cnp-local-path-only (PVCs). Reason: no paid cloud resource."
-      - "**On-prem end:** vminsert-writers and vmselect-readers admit the wireguard and wireguard-gcp pods; vmstorage takes only vminsert and vmselect."
-      - "!!Gap!! The Loki gateway has no NetworkPolicy: any pod reaches it, basic auth is the only check. vminsert takes the relayed writes with no credential."
+      - "**On-prem end:** vmauth-clouds-clients admits the wireguard and wireguard-gcp pods; vmauth-clouds checks one password per cloud and forces cluster=<cloud> on every write (D22)."
+      - "!!GO1!! The K3s relays 18080 and 18083 still point to the old vminsert and vmselect names (compat vmauth, no credential): until they point to vmauth-clouds, cloud telemetry does not land as drawn."
       - "**Kyverno on clouds:** disallow-latest-and-untagged-images, pod-security-restricted, require-resources-and-memory-limits. Enforce or Audit: not checked."
   - id: card-guard
     title: "GitOps guard rails"
@@ -111,14 +110,12 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G23: "targets gh-owner, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

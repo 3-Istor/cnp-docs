@@ -34,7 +34,6 @@ edges:
   c-s2-cmp-loki: {from: s2-cmp.left@60px, to: s2-loki.right@50px, waypoints: [[940, 450], [940, 470]], against_flow: true}
   c-s2-alerts-loki: {from: s2-alerts.left@60px, to: s2-loki.right@80px, waypoints: [[980, 690], [980, 500]], against_flow: true}
   # To Discord: outer lane for the highest source, so nothing crosses.
-  c-s2-grafana-discord: {from: s2-grafana.right@45px, to: s2-discord.left@15px, waypoints: [[1480, 315], [1480, 675]]}
   c-s2-cmp-discord: {from: s2-cmp.right@45px, to: s2-discord.left@35px, waypoints: [[1460, 435], [1460, 695]]}
   c-s2-alerts-discord: {from: s2-alerts.right@40px, to: s2-discord.left@55px, waypoints: [[1440, 670], [1440, 715]]}
 

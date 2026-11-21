@@ -78,7 +78,7 @@
         <div class="l">Proxy <b>LLM</b> · Proxy <b>MCP</b> · Proxy <b>A2A</b> : un seul data plane pour tout le trafic IA</div>
         <div class="l">AuthN : <b>JWT Keycloak</b> · policy par outil : <b>CEL</b> (AgentgatewayPolicy) + <b>Cedar</b> (ToolHive)</div>
         <div class="l">Guardrails : <b>regex intégrée</b> (masque PII et secrets) · <span class="o"><span class="n">1</span>Llama Guard sur Ollama, via un webhook maison</span></div>
-        <div class="l">Budgets en tokens par agent : <b>rate limit global</b> (envoy-ratelimit + Redis) · <span class="o"><span class="n">2</span>Audit : logs → Loki</span></div>
+        <div class="l">Budgets en tokens par agent : <b>rate limit global</b> (envoy-ratelimit + Redis) · <span class="o"><span class="n">2</span>Audit : logs → VictoriaLogs</span></div>
         <div class="l" style="font-size:13.5px">Envoy Gateway reste l'entrée des apps ; agentgateway est une GatewayClass à part</div>
       </div>
       <div class="fan" id="fan"><i style="left:16.4%"></i><i style="left:50%"></i><i style="left:83.6%"></i></div>
@@ -113,14 +113,14 @@
       </div>
       <div class="box" id="s-obs">
         <h3>Observabilité</h3>
-        <div class="l">OTel GenAI → <b>Alloy</b> → <b>Tempo</b> + <b>VictoriaMetrics</b></div>
+        <div class="l">OTel GenAI → <b>collecteur OTel</b> → <b>Tempo</b> + <b>VictoriaMetrics</b></div>
         <div class="l"><span class="o"><span class="n">5</span>Vue LLM dans Grafana, pas Langfuse</span></div>
         <div class="l">Évals : <b>promptfoo</b> en CI GitHub</div>
       </div>
       <div class="box" id="s-net">
         <h3>Réseau</h3>
         <div class="l"><b>Cilium</b> default-deny · allowlist FQDN</div>
-        <div class="l"><b>Hubble</b> → Loki · edge <b>Cloudflare</b></div>
+        <div class="l"><b>Hubble</b> → VictoriaLogs · edge <b>Cloudflare</b></div>
       </div>
       <div class="box" id="s-fin">
         <h3>FinOps</h3>

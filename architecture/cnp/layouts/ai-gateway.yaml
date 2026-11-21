@@ -26,7 +26,7 @@ elements:
   observability: {x: 30, y: 70, w: 280, h: 100}
   tempo: {x: 30, y: 230, w: 280, h: 100}
   z-google-ai: {x: 1760, y: 260, w: 340, h: 200}
-  gemini: {x: 30, y: 70, w: 280, h: 100}
+  gemini: {x: 30, y: 70, w: 290, h: 100}
   z-homelab-gpu: {x: 1760, y: 560, w: 380, h: 220}
   gpu-server: {x: 30, y: 80, w: 320, h: 110}
 edges:

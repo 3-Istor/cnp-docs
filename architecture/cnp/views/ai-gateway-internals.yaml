@@ -130,7 +130,7 @@ cards:
       - "[7] [8] The route match picks the HTTPRoute and its AgentgatewayBackend; promptGuard masks PII and secrets, then asks the guardrail adapter (IA-2)."
       - "[9] [10] The provider choice takes a healthy Gemini key of group 1; the LLM proxy speaks the provider's API with the key from the Secret."
       - "[11] [12] The call goes to Gemini over HTTPS through the Cilium FQDN egress rule. After a 429 the health policy evicts the key and the GPU server answers."
-      - "[13] [14] The LLM proxy hands the token usage to the telemetry module, which sends the spans to Alloy over OTLP."
+      - "[13] [14] The LLM proxy hands the token usage to the telemetry module, which sends the spans to the OpenTelemetry collector over OTLP."
   - id: card-background
     title: "Background · control plane"
     color: amber
@@ -141,7 +141,7 @@ cards:
       - "[D] The proxy keeps an ADS stream open to the xDS server and receives its configuration as deltas."
       - "[E] The proxy fetches Keycloak's JWKS and caches it."
       - "[F] Before [1], the agent gets a 5-minute JWT from Keycloak with its own client (client_credentials, or token exchange for a user)."
-      - "[G] Alloy scrapes the metrics endpoint (:15020) for token and cost series."
+      - "[G] vmagent scrapes the metrics endpoint (:15020) for token and cost series."
   - id: card-objects
     title: "Objects · who points at whom"
     color: sky
@@ -174,14 +174,12 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G23: "targets gh-owner, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

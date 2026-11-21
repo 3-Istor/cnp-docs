@@ -7,7 +7,7 @@ subtitle: "How does an agent's call reach a model or a tool, and what checks it 
 meta:
   - "Scope: proposal for the on-prem K3s cluster, 2026-10-25 · drawn in full: what the proposal adds (IA-1, IA-2) · faded: what already runs"
   - "Out of scope: external assistants (agent-kit view) · the same gateway on EKS and GKE · admission policies · what runs on the GPU server"
-  - "Assumed: agentgateway on its own GatewayClass, beside Envoy Gateway; Alloy receives OTLP"
+  - "Assumed: agentgateway on its own GatewayClass, beside Envoy Gateway; the OpenTelemetry collector of the hub receives OTLP"
   - "v0.2 · source: cnp-docs/architecture/cnp"
 
 include:
@@ -72,8 +72,8 @@ cards:
       - "[A] The proxy fetches Keycloak's JWKS and caches it."
       - "[B] The secrets operator reads the Gemini key from Vault."
       - "[C] It writes the Secrets that the AgentgatewayBackend references."
-      - "[D] The proxy pushes GenAI spans and token metrics to Alloy over OTLP."
-      - "[E] Alloy writes the traces to Tempo; Grafana shows tokens, cost and latency per project."
+      - "[D] The proxy pushes GenAI spans and token metrics to the OpenTelemetry collector over OTLP."
+      - "[E] The collector writes the traces to Tempo; Grafana shows tokens, cost and latency per project."
   - id: card-plan
     title: "What this proposal adds · targets"
     color: sky
@@ -102,14 +102,12 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G23: "targets gh-owner, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

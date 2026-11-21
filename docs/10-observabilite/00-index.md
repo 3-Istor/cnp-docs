@@ -1,15 +1,15 @@
 # Observabilité : full VictoriaMetrics et offre aux projets
 
-**Statut : en déploiement.** V0, V1, V2 et V4 sont en prod depuis le 15/11 ; la suite est dans la section « Livraison » du plan. Ticket [CNP-185](https://3istors.atlassian.net/browse/CNP-185)
+**Statut : en prod, sauf V6.** V0, V1, V2 et V4 sont en prod depuis le 15/11, V3 depuis ; V2 est close le 21/11 avec le retrait de Loki, d'Alloy et du cluster VictoriaMetrics ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)). V6 (clouds) attend [Cloud#50](https://github.com/3-Istor/Cloud/pull/50) ; la suite est dans la section « Livraison » du plan. Ticket [CNP-185](https://3istors.atlassian.net/browse/CNP-185)
 (epic de Hugo), dont ce dossier élargit le périmètre.
 
 ## En bref
 
-Aujourd'hui l'observabilité de la CNP est un mélange : Alloy fait tout et pèse 1,8 Gio, les logs
-sont dans Loki mais leurs alertes dans VictoriaMetrics, quatre chemins mènent à Discord, la stack
-ne se surveille pas, et les apps n'exposent ni métriques, ni traces, ni logs structurés.
+Avant la migration (13/11), l'observabilité de la CNP était un mélange : Alloy faisait tout et pesait 1,8 Gio, les logs
+étaient dans Loki mais leurs alertes dans VictoriaMetrics, quatre chemins menaient à Discord, la stack
+ne se surveillait pas, et les apps n'exposaient ni métriques, ni traces, ni logs structurés.
 
-La cible :
+La cible, en place sur l'on-prem depuis le 21/11 :
 
 - **Trois bases VictoriaMetrics** (métriques, logs, traces), **deux collecteurs légers**, **une
   chaîne d'alerte** routée par app vers Discord, Grafana pour les dashboards. Moins de RAM
@@ -30,7 +30,7 @@ La cible :
 | --- | --- |
 | [Existant](01-existant.md) | Inventaire mesuré, le « mix », 8 constats à corriger tout de suite |
 | [État de l'art](02-etat-de-l-art.md) | Études 2026, besoins par rôle, Datadog fonction par fonction, écosystème VictoriaMetrics |
-| [Architecture cible](03-architecture.md) | Décisions D1 à D21, avant et après, budget RAM et CPU |
+| [Architecture cible](03-architecture.md) | Décisions D1 à D22, avant et après, budget RAM et CPU |
 | [Offre aux projets](04-offre-projets.md) | Ce qu'une app obtient à chaque niveau, qui voit quoi |
 | [Dashboards et vues](05-dashboards.md) | Portail, Grafana plateforme par rôle, orgs projet |
 | [Alerting](06-alerting.md) | Chaîne unique, salons, qualité, dead man's switch |

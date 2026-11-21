@@ -8,9 +8,9 @@ meta:
   - "Sources: CMP services/clusters/state.py, kube_client.py, routers/deployments.py, frontend NotConnected.tsx"
   - "Out of scope: on-prem projects (no state check) · how Argo CD syncs the cloud · Grafana"
   - "Gaps: G7 the CMP API does not check the JWT audience"
-  - "v0.1 · source: cnp-docs/architecture/cnp"
+  - "v0.2 (2026-11-21: logs read from VictoriaLogs, CNP-276) · source: cnp-docs/architecture/cnp"
 
-participants: [dev-a, cmp-frontend, cmp-backend, seq-k3s-api, cloud-api, seq-loki]
+participants: [dev-a, cmp-frontend, cmp-backend, seq-k3s-api, cloud-api, vo-vlogs]
 
 steps:
   # The cluster state cache: refreshed lazily, never on the request path.
@@ -38,8 +38,8 @@ steps:
   - {note: cmp-frontend, text: "« Cluster AWS non connecté » in the tab"}
 
   # Activity does not touch the cluster.
-  - {id: logs, from: cmp-backend, to: seq-loki, over: c-seq-cmp-loki, text: "Activity tab: query tenant <project>"}
-  - {note: seq-loki, text: "logs pushed earlier through WireGuard: readable while the cloud is down"}
+  - {id: logs, from: cmp-backend, to: vo-vlogs, over: c-vo-cmp-vlogs, text: "Activity tab: LogsQL on the project's namespaces"}
+  - {note: vo-vlogs, text: "logs pushed earlier through WireGuard: readable while the cloud is down"}
 
   # Deploy guard, on app creation and environment actions.
   - {id: deploy, from: dev-a, to: cmp-backend, over: c-dev-cmpapi, text: "POST deployment on <cloud>"}
@@ -67,14 +67,12 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G23: "targets gh-owner, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"
