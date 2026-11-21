@@ -8,19 +8,19 @@ elements:
   z-internet: {x: 40, y: 200, w: 320, h: 200}
   user: {x: 132, y: 80, w: 56, h: 56}
   z-cloudflare: {x: 40, y: 460, w: 320, h: 220}
-  ar-cf: {x: 20, y: 70, w: 280, h: 110}
+  ar-cf: {x: 20, y: 70, w: 300, h: 110}
 
   z-ar-target: {x: 440, y: 200, w: 1660, h: 860}
   g-ar-system: {x: 30, y: 60, w: 360, h: 470}
   ar-tunnel: {x: 40, y: 70, w: 300, h: 90}
   ar-gateway: {x: 40, y: 220, w: 300, h: 110}
-  ar-isolation: {x: 30, y: 360, w: 320, h: 100}
+  ar-isolation: {x: 30, y: 360, w: 330, h: 100}
   g-ar-app: {x: 480, y: 60, w: 1150, h: 510}
   ar-route: {x: 40, y: 70, w: 300, h: 90}
   ar-secret: {x: 440, y: 70, w: 300, h: 90}
   ar-frontend: {x: 40, y: 220, w: 320, h: 110}
   ar-backend: {x: 440, y: 220, w: 320, h: 90}
-  ar-db: {x: 820, y: 210, w: 280, h: 110}
+  ar-db: {x: 820, y: 210, w: 290, h: 110}
   ar-migrate: {x: 820, y: 380, w: 280, h: 90}
   g-ar-other: {x: 30, y: 590, w: 280, h: 190}
   ar-other: {x: 30, y: 70, w: 220, h: 90}
@@ -60,8 +60,8 @@ edges:
 
 cards:
   card-legend: {x: 40, y: 1490, w: 460, h: 470}
-  card-steps: {x: 540, y: 1490, w: 560, h: 230}
-  card-bg: {x: 540, y: 1750, w: 560, h: 210}
+  card-steps: {x: 540, y: 1490, w: 560, h: 240}
+  card-bg: {x: 540, y: 1750, w: 560, h: 220}
   card-contract: {x: 1140, y: 1490, w: 560, h: 280}
   card-clouds: {x: 1740, y: 1490, w: 500, h: 280}
   card-gaps: {x: 1140, y: 1800, w: 1100, h: 160}

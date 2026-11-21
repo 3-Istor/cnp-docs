@@ -85,7 +85,7 @@ D'après les notes de remédiation du profil `k3s-cis-1.9` et la configuration d
 
 | Contrôles | Pourquoi |
 | --- | --- |
-| 1.2.17, 1.2.18 (`audit-log-maxage`, `audit-log-maxbackup`) | Le fichier d'audit local n'est qu'un tampon (2 jours, 3 fichiers) : Alloy l'envoie dans Loki (30 jours) puis dans l'archive verrouillée (180 jours). |
+| 1.2.17, 1.2.18 (`audit-log-maxage`, `audit-log-maxbackup`) | Le fichier d'audit local n'est qu'un tampon (2 jours, 3 fichiers) : Fluent Bit l'envoie dans VictoriaLogs (30 jours) puis dans l'archive verrouillée (180 jours). |
 | 1.2.11 (`AlwaysPullImages`) | Le profil K3s le classe « permissif » : chaque démarrage de pod dépendrait du registre. |
 | Version du profil | kube-bench v0.16.0 n'a pas de profil K3s plus récent que `k3s-cis-1.9` (CIS 1.9, Kubernetes 1.27) ; le cluster est en 1.34. Les objets de l'API sont couverts en CIS 1.12 par Kubescape. |
 | Kubescape C-0212 (CIS 5.6.4) | Le scanner ne lit pas les Secrets : la partie « Secrets dans `default` » n'est pas évaluée. |

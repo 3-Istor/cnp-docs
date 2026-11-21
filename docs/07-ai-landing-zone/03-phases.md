@@ -58,9 +58,9 @@ audit. Pas de kagent, de sandbox, d'outils MCP ni de guardrails.
    429 et route Local.
 5. Politique de la gateway : JWT obligatoire, règle CEL sur `project`, deny par défaut ;
    budget en tokens par agent et par jour.
-6. Traces OpenTelemetry GenAI vers Alloy et Tempo, métriques dans VictoriaMetrics, tableau
+6. Traces OpenTelemetry GenAI vers le collecteur OpenTelemetry et Tempo (VictoriaTraces selon D20 de l'observabilité), métriques dans VictoriaMetrics, tableau
    Grafana par projet et par agent, alerte à 80 % du budget.
-7. Logs d'accès de la gateway dans Loki avec les champs de D14, namespace à 30 jours, ajouté à
+7. Logs d'accès de la gateway dans VictoriaLogs avec les champs de D14 (30 jours pour tous), ajoutés à
    l'export de l'archive d'audit.
 8. L'agent UC7 : une app du chart générique, dans un namespace verrouillé, avec un RAG
    pgvector sur CloudNativePG, déclenchée depuis la CMP.
@@ -79,7 +79,7 @@ audit. Pas de kagent, de sandbox, d'outils MCP ni de guardrails.
 | V1.7d | Rate limit injoignable | Arrêter le service de rate limit, puis une requête | Refusée (fail-closed) |
 | V1.7e | `max_tokens` trop grand | Requête avec `max_tokens` = 100 000 | Plafonnée à 4 096 ou refusée |
 | V1.8 | Trace | Une requête, puis la trace dans Grafana | Attributs `project`, agent, modèle, tokens en entrée et en sortie, latence ; aucun prompt |
-| V1.9 | Audit | Une requête refusée et une acceptée, puis LogQL sur Loki | Les deux lignes ont utilisateur, agent, projet, modèle, tokens et décision |
+| V1.9 | Audit | Une requête refusée et une acceptée, puis LogsQL sur VictoriaLogs | Les deux lignes ont utilisateur, agent, projet, modèle, tokens et décision |
 | V1.10 | Repli | Forcer un 429 de Gemini (quota simulé ou clé invalide) | L'appel bascule sur le serveur GPU et aboutit |
 | V1.11 | Projet Local | Projet `local`, egress vers Gemini coupé | La requête aboutit par le serveur GPU ; aucune connexion vers Gemini |
 | V1.12 | Panne du serveur GPU | Arrêter le service texte, puis requête d'un projet Local, puis d'un projet Cloud | Local : « service indisponible » en moins de 10 s *(seuil proposé)* ; Cloud : réponse normale |

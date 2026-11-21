@@ -1,5 +1,11 @@
 # Existant : ce qui tourne le 13/11/2026
 
+!!! note "Instantané d'avant la migration"
+    Cette page décrit la stack du 13/11/2026. Alloy, Loki et le cluster VictoriaMetrics ont été
+    retirés le 21/11/2026 ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)) ; ce qui tourne
+    aujourd'hui est dans [Architecture cible](03-architecture.md) et
+    [Observabilité multicluster](../01-architecture/07-observability.md).
+
 Mesures prises en lecture seule sur le cluster de production et sur `origin/main` des dépôts K3s,
 CMP, app-templates, infra-templates, cnp-project-base et Cloud.
 

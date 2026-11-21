@@ -19,7 +19,7 @@ visible au projet, avec le reste de ses dépenses.
 ## 2. D'où viennent les chiffres
 
 La gateway compte les tokens de chaque appel et les expose en métriques OpenTelemetry GenAI,
-qui arrivent dans VictoriaMetrics par Alloy (D7). C'est la source unique de la consommation
+qui arrivent dans VictoriaMetrics par le collecteur OpenTelemetry (D7, revue par D20 de l'observabilité). C'est la source unique de la consommation
 d'IA : elle est plus précise qu'une facture de fournisseur, qui ne connaît ni l'agent ni le
 projet.
 

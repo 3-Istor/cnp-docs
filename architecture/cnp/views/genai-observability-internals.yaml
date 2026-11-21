@@ -5,10 +5,10 @@ state: diff
 title: "CNP · AI landing zone · GenAI observability internals"
 subtitle: "How does one agent call become a trace and token counts per project, and what keeps prompts out of the storage?"
 meta:
-  - "Scope: OpenTelemetry GenAI and MCP conventions (status Development) through the existing Alloy, to Tempo and VictoriaMetrics, read in Grafana, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
+  - "Scope: OpenTelemetry GenAI and MCP conventions (status Development) through the existing OpenTelemetry collector (otelcol-gateway), to Tempo and VictoriaMetrics, read in Grafana, proposal of 2026-10-23 · drawn in full: what the proposal adds (IA-1) · faded: what already runs"
   - "Out of scope: Langfuse (about 21.5 GB of memory minimum, not for this cluster) · OpenCost for cluster cost · the GPU server's own metrics"
-  - "Assumed: VictoriaMetrics already runs and takes Alloy's remote write; Tempo in monolithic mode"
-  - "v0.1 · source: cnp-docs/architecture/cnp · OpenTelemetry GenAI semantic conventions, Grafana Alloy components"
+  - "Assumed: VictoriaMetrics already runs and takes the collector's remote write; Tempo in monolithic mode (D20 of the observability file prefers VictoriaTraces, Tempo stays the fallback)"
+  - "v0.2 (2026-11-21: Alloy and Loki removed, CNP-276) · source: cnp-docs/architecture/cnp · OpenTelemetry GenAI semantic conventions, OpenTelemetry Collector components"
 
 include:
   - z-cluster
@@ -26,7 +26,6 @@ include:
   - ob-transform
   - ob-batch
   - ob-logsrc
-  - ob-lokiw
   - ob-exp-otlp
   - ob-exp-prom
   - g-ob-store
@@ -38,7 +37,7 @@ include:
   - ob-alerts
 
 steps: [c-ob-agent, c-ob-gw, c-ob-th, c-ob-1, c-ob-2, c-ob-3, c-ob-4, c-ob-5, c-ob-6, c-ob-7, c-ob-8, c-ob-9]
-background: [c-ob-10, c-ob-11, c-ob-12]
+background: [c-ob-11, c-ob-12]
 
 labels:
   c-ob-agent: "OTLP"
@@ -53,7 +52,6 @@ labels:
   c-ob-7: ""
   c-ob-8: ""
   c-ob-9: ""
-  c-ob-10: ""
   c-ob-11: ""
   c-ob-12: ""
   r-ob-alerts: ""
@@ -68,15 +66,15 @@ cards:
     title: "Request path · one agent call, three sources"
     color: emerald
     lines:
-      - "[1] The agent's SDK sends its spans (invoke_agent, chat, execute_tool) to Alloy over OTLP. [2] The gateway sends its spans over OTLP; Alloy scrapes its token and cost metrics on :15020. [3] The ToolHive proxy sends mcp.* spans and metrics."
-      - "[4]–[6] Alloy adds namespace and project from the pod, drops message content unless opted in, then batches."
+      - "[1] The agent's SDK sends its spans (invoke_agent, chat, execute_tool) to the collector over OTLP. [2] The gateway sends its spans and token metrics over OTLP; vmagent can also scrape them on :15020. [3] The ToolHive proxy sends mcp.* spans and metrics."
+      - "[4]–[6] The collector adds namespace and project from the pod, drops message content unless opted in, then batches."
       - "[7] [8] Traces go to Tempo. [9] [10] Metrics become Prometheus series and reach VictoriaMetrics by remote write."
       - "[11] [12] Grafana reads traces with TraceQL and metrics with MetricsQL: tokens per project and model, latency, 429s, share of calls that fell back to the GPU server. Alert rules run on the same series."
   - id: card-background
     title: "Background · logs, already in place"
     color: amber
     lines:
-      - "[A] Alloy tails pod logs, including the gateway's access logs, [B] pushes them to Loki, [C] where Grafana reads them next to the traces."
+      - "[A] Fluent Bit tails pod logs, including the gateway's access logs, and inserts them into VictoriaLogs, [B] where Grafana reads them next to the traces."
   - id: card-objects
     title: "FinOps with a free tier"
     color: sky
@@ -104,14 +102,12 @@ hidden_annotations:
   G9: "targets security-policy, not drawn in this view"
   GB1: "targets bk-secret, not drawn in this view"
   GB2: "targets c-bk-db-rgw, not drawn in this view"
-  GO1: "targets vm-vminsert, not drawn in this view"
-  GO2: "targets loki-gateway, not drawn in this view"
-  GO3: "targets vmauth, not drawn in this view"
+  GO1: "targets c-vo-mc-wg-vmauth, not drawn in this view"
+  GO3: "targets vo-vmauth, not drawn in this view"
   GO4: "targets o-audit-sources, not drawn in this view"
   G21: "targets iam-3istors, not drawn in this view"
   G22: "targets gcp-project, not drawn in this view"
   G23: "targets gh-owner, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

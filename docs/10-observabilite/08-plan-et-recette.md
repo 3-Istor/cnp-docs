@@ -23,7 +23,8 @@ explicitement :
 - **OpenCost** et **FinOps** du CMP (vmselect, `extra_filters[]` sur `cluster`).
 - **Datasources des orgs projet** créées par Terraform (`…-vmauth:8427`) : rien à rejouer.
 - **Relais WireGuard** des clouds (:18080, :18082, :18083) : cibles mises à jour en V1 et V2,
-  même si les clouds sont éteints.
+  même si les clouds sont éteints. 18082 (Loki) est retiré le 21/11 ; 18080 et 18083 visent encore
+  les anciens noms de Service, à repointer sur `vmauth-clouds` avec V6 (CNP-275).
 - **CMP** : `activity_sources.py`, `activity_collector.py`, `app_overview.py`, `alerts_catalog.py`,
   `alerts_grafana.py`, MCP `get_app_logs`.
 - **Archive d'audit** horaire et alerte `AuditArchiveFailed`.
@@ -54,7 +55,7 @@ CNP-191 reprend les fichiers après V1.
 
 ## Livraison
 
-Ordre de merge et de déploiement, avec l'état au 15/11 au soir. La suite est suivie dans
+Ordre de merge et de déploiement, avec l'état au 21/11. La suite est suivie dans
 [CNP-274](https://3istors.atlassian.net/browse/CNP-274) (bascule, V3, flags),
 [CNP-275](https://3istors.atlassian.net/browse/CNP-275) (clouds) et
 [CNP-276](https://3istors.atlassian.net/browse/CNP-276) (retrait de l'ancienne stack).
@@ -62,18 +63,19 @@ Ordre de merge et de déploiement, avec l'état au 15/11 au soir. La suite est s
 | # | PR | Vague | Avant le merge | Après le merge | État |
 | --- | --- | --- | --- | --- | --- |
 | 1 | CMP#229, cnp-project-base#37, K3s#200 | V0 | Rien | Release du CMP ; test d'isolation avec un compte projet | **En prod** (CMP v0.3.113), test réel OK |
-| 2 | K3s#202 | V1 métriques | `terraform apply` (clé admin VMSingle) | Double envoi. Bascule des Services (`cutover-v1.yaml`) après au moins un jour | **En prod** depuis le 15/11 08:50 UTC. Bascule à faire (CNP-274) |
-| 3 | K3s#204 | V2 logs | `terraform apply` (clé VictoriaLogs) | 14 jours de double envoi, comparaison d'audit sur 48 h, puis retrait de Loki et Alloy | **En prod**, test d'usurpation OK. Retrait le 29/11 au plus tôt (CNP-276) |
-| 4 | K3s#205 | V3 alertes | Bascule V1 faite ; `terraform apply` (clés vmauth, policies Vault par cloud, check healthchecks.io créé par Terraform avec son URL dans Vault) | VMAlert et VMAlertmanager remplacent les charts Helm | Rebasée, à merger (CNP-274). Pré-requis : clé API healthchecks.io dans les tfvars |
-| 5 | CMP#230 | V3 SLO et routage | K3s#205 déployé pour l'activer | `OBS_V3_ENABLED=true` | Mergée (v0.3.116), flag éteint |
+| 2 | K3s#202 | V1 métriques | `terraform apply` (clé admin VMSingle) | Double envoi. Bascule des Services (`cutover-v1.yaml`) après au moins un jour | **En prod** depuis le 15/11 08:50 UTC, bascule faite (`cutover-v1.yaml`). Ancien cluster VictoriaMetrics retiré le 21/11, son historique du 01/11 au 15/11 copié dans VMSingle (CNP-276) |
+| 3 | K3s#204 | V2 logs | `terraform apply` (clé VictoriaLogs) | 14 jours de double envoi, comparaison d'audit sur 48 h, puis retrait de Loki et Alloy | **Fait, V2 close le 21/11** : test d'usurpation OK, règles `vlogs` en service, Alloy (K3s#260) puis Loki et l'archive `logcli` retirés ; logs Loki du 22/10 au 15/11 copiés dans VictoriaLogs (`source=loki`). CNP-276 fait |
+| 4 | K3s#205 | V3 alertes | Bascule V1 faite ; `terraform apply` (clés vmauth, policies Vault par cloud, check healthchecks.io créé par Terraform avec son URL dans Vault) | VMAlert et VMAlertmanager remplacent les charts Helm | **En prod** (K3s#205, puis #253 et #255) |
+| 5 | CMP#230 | V3 SLO et routage | K3s#205 déployé pour l'activer | `OBS_V3_ENABLED=true` | **En prod**, flag allumé (K3s#254) |
 | 6 | K3s#203, #206, #207 | V4 traces | `terraform apply` (clé VictoriaTraces, Hubble UI : DNS et redirection Keycloak) | Le CMP écrit la table de routage et redémarre le collecteur | **En prod**, un tenant par projet, test réel OK |
-| 7 | CMP#231 | V4 tenants, vmauth logs et traces | K3s#203 déployé | `OBS_TRACES_ROUTING_ENABLED` (fait) ; URL `OBS_*` après la bascule V1, `LOGS_BACKEND=vl` | Mergée (v0.3.116) |
+| 7 | CMP#231 | V4 tenants, vmauth logs et traces | K3s#203 déployé | `OBS_TRACES_ROUTING_ENABLED` (fait) ; URL `OBS_*` après la bascule V1, `LOGS_BACKEND=vl` | **En prod** : `OBS_*` et `LOGS_BACKEND=vl` posés dans K3s |
 | 8 | infra-templates#29, template FastAPI#70, app-templates#51 | V4 apps | Collecteur déployé | Les nouvelles apps naissent instrumentées | **Mergées**, apps existantes inchangées |
 | 9 | CMP#232 | V5 portail | #231 | Derrière les flags | Mergée (v0.3.116), flags éteints |
-| 10 | Cloud#50 | V6 clouds | K3s#205 ; un cloud allumé | Vérifier R10 et R11 | À faire (CNP-275) |
+| 10 | Cloud#50 | V6 clouds | K3s#205 ; un cloud allumé | Vérifier R10 et R11 | En revue, rebasée le 21/11 sans Alloy ni relais 18082 ; clouds éteints (CNP-275). Pré-requis K3s : relais 18080 et 18083 vers `vmauth-clouds` |
+| 11 | K3s#260 et suivantes, Cloud#50, cnp-docs | Sortie de V2, retrait (CNP-276) | Règles `vlogs` en service, archive d'audit LogsQL en place, historique copié | Plus de Loki, d'Alloy ni de cluster VictoriaMetrics ; doc et schémas à jour | **Fait** le 21/11 (Cloud#50 en revue) |
 
-Les URL des stores (`OBS_VMSINGLE_URL`, `OBS_VLOGS_URL`, `OBS_VTRACES_URL`) attendent la bascule
-V1 : avant elle, les projets lisent par l'ancien vmauth, que les NetworkPolicies de VictoriaLogs
+Les URL des stores (`OBS_VMSINGLE_URL`, `OBS_VLOGS_URL`, `OBS_VTRACES_URL`) attendaient la bascule
+V1, faite depuis ; avant elle, les projets lisent par l'ancien vmauth, que les NetworkPolicies de VictoriaLogs
 et VictoriaTraces n'admettent pas.
 
 Écarts trouvés au déploiement, corrigés :

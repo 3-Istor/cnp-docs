@@ -49,7 +49,10 @@ one diagram, and `layouts/` places the topology views.
 | `lifecycle-import` | Who creates what for an imported repo, where its values live, and what rebuild, sleep and deletion touch? (CNP-312) | Import et microservices (Cycle de vie : import) |
 | `lifecycle-import-pr` | Once the import's pull request is merged, where do the values live and who builds and deploys? (CNP-303, coming) | Import et microservices (Cycle de vie : import) |
 | `providers-catalog` | Which data services does the platform run for an app, how does the app receive them, and how is one asked for? (CNP-312) | Import et microservices (Providers) |
-| `observability-target` | What replaces Loki, Alloy and the VictoriaMetrics cluster, who writes and reads each signal, and how an alert reaches Discord? (CNP-185) | Observabilité |
+| `observability` | Who writes and reads metrics, logs and traces on the hub, and how does an alert reach Discord? Full VictoriaMetrics since Loki, Alloy and the VictoriaMetrics cluster were removed on 2026-11-21 (CNP-185, CNP-276) | Observability multicluster, Observabilité |
+| `observability-read` | Who reads metrics, logs and traces, and how does each project see only its own? | Observability multicluster |
+| `observability-simple` | Where do the metrics and logs of every cluster go, and who reads them? | Observability multicluster |
+| `observability-metric-path` | What happens, in order, between a pod on a public cloud and the panel a project dev reads in Grafana? | Observability multicluster |
 | `observability-alert-flow` | What happens, in order, when an app starts failing, until a developer mutes the alert from the portal? | Observabilité |
 | `observability-ai-run` | What is recorded when a hosted agent fixes an app, who approves, and where the audit record ends up? | Observabilité |
 | `observability-catalog` | What does every app get from the platform, without code, and what does it take to get it? | Observabilité |

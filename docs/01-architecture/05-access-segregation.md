@@ -18,7 +18,7 @@ Where it stands on 2026-11-11:
 
 | Phase | Done | Still to do |
 |---|---|---|
-| **P1** | Vault root token revoked, generated again from the unseal keys for break-glass; kubectl over OIDC (`k3s-admin`), the committed kubeconfig is gone; Vault, K3s, Keycloak and Argo CD audit logs in Loki with an Object Lock archive | Keycloak realm roles for `infra` and the master admin kept offline; a second GitHub owner kept offline (one owner today, `G23`); Cloudflare super admin |
+| **P1** | Vault root token revoked, generated again from the unseal keys for break-glass; kubectl over OIDC (`k3s-admin`), the committed kubeconfig is gone; Vault, K3s, Keycloak and Argo CD audit logs in VictoriaLogs (Loki until 2026-11-21) with an Object Lock archive | Keycloak realm roles for `infra` and the master admin kept offline; a second GitHub owner kept offline (one owner today, `G23`); Cloudflare super admin |
 | **P2** | The CMP logs into Vault as Kubernetes auth role `cmp-backend` (1-hour token) | Removing the static `VAULT_TOKEN`, kept in the CMP values as a rollback path until a create and delete test passes (`G15`); Keycloak client `cmp-provisioner` in place of the master admin; scoped Cloudflare tokens |
 | **P3** | Members read and admins write their project's secrets; kubectl per project; no global Argo CD read for members | Just-in-time access and `vault_data_admin`; GitHub ruleset on `main`; `k3s-dev` and `k3s-view` removed; the auditor's Vault, Keycloak, kubectl and audit log reads |
 | **P4** | Nothing | AWS organization (none yet: one account); Terraform state role |

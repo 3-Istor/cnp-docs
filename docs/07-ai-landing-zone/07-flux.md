@@ -16,7 +16,7 @@
 | **Serveurs d'outils (MCP)** | Serveur MCP de la CMP ; serveurs tiers lancés par ToolHive dans `mcp-tools` | Exécutent les outils : lire des logs, ouvrir une PR, chercher sur le web, générer une image. |
 | **Sandbox** | Pod gVisor (ou Kata) créé à la demande dans le namespace de l'agent (phase 2) | Exécute le code que l'agent a écrit, sans réseau. |
 | **Keycloak** | Déjà en place sur le cluster | Donne à l'agent un jeton de 5 minutes. |
-| **Alloy, Tempo, VictoriaMetrics, Loki, Grafana** | Namespace `observability` | Traces, métriques de tokens, logs d'audit, tableaux. |
+| **Collecteur OpenTelemetry, Fluent Bit, Tempo, VictoriaMetrics, VictoriaLogs, Grafana** | Namespace `observability` | Traces, métriques de tokens, logs d'audit, tableaux. |
 
 ## 2. Un appel de modèle
 
@@ -35,7 +35,7 @@ C'est le flux de base, déjà en phase 1. Chaque étape dit ce qui se passe quan
 | 9 | La réponse revient, en streaming si demandé | — | — |
 | 10 | Guardrails de sortie (phase 2) : masquage des secrets et données personnelles dans la réponse | agentgateway (`promptGuard`, côté réponse) | Passage masqué |
 | 11 | Comptage : la gateway lit l'usage réel (tokens en entrée et en sortie) et remplace l'estimation de l'étape 5 | agentgateway + service de rate limit | — |
-| 12 | Trace OpenTelemetry, métriques de tokens, ligne d'audit (utilisateur, agent, projet, modèle, tokens, décision) | Alloy → Tempo, VictoriaMetrics, Loki | — |
+| 12 | Trace OpenTelemetry, métriques de tokens, ligne d'audit (utilisateur, agent, projet, modèle, tokens, décision) | Collecteur OpenTelemetry → Tempo, VictoriaMetrics ; Fluent Bit → VictoriaLogs | — |
 | 13 | La réponse arrive à l'agent | — | — |
 
 ## 3. Comment un agent utilise un outil

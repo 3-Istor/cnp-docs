@@ -27,7 +27,7 @@ Les runners, les rappels du workflow et les gestes d'exploitation sont dans
 | Types `service` et `backing` | cnp-projects, K3s, infra-templates | Schéma, ApplicationSet, chart (`workload`, StatefulSet). Rendu identique pour les apps existantes, vérifié avant chaque merge | CNP-239 |
 | Liens `dependsOn` | cnp-projects, infra-templates, cnp-project-base | Alias ExternalName dans le namespace appelant ; plus tard, règles réseau par lien | CNP-240 |
 | Catalogue de bases | CMP (`services/imports/catalogue`), infra-templates | MongoDB, Redis, Neo4j, Elasticsearch épinglés par digest, non root, secrets Vault générés | CNP-239 |
-| Métriques Hubble | K3s (Cilium, Alloy) | Flux par workload et verdict, dans VictoriaMetrics | CNP-242 |
+| Métriques Hubble | K3s (Cilium, vmagent) | Flux par workload et verdict, dans VictoriaMetrics | CNP-242 |
 | Topologie | CMP | API et onglet du projet, canevas React Flow | CNP-242 |
 | Outils MCP | CMP, cnp-agent-kit | `analyze_repo`, `get_topology`, `import_repo`, `link_apps`, `unlink_apps` | CNP-243 |
 | Rebuild | CMP | Webhook signé de CNP-Portal, rattrapage au réveil | CNP-244 |

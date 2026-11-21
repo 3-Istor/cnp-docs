@@ -141,14 +141,6 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-bwg-onprem-loki" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.3333;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="b-wireguard" target="wireguard-onprem__port_right_410_1040">
-          <mxGeometry x="0.5260" relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="714" y="800" />
-              <mxPoint x="714" y="1040" />
-            </Array>
-          </mxGeometry>
-        </mxCell>
         <mxCell id="c-bwg-onprem-select" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.5000;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="b-wireguard" target="wireguard-onprem__port_right_410_1055">
           <mxGeometry x="0.5020" relative="1" as="geometry">
             <Array as="points">
@@ -164,11 +156,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-a-tunnel-edge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#d97706;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.5000;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#b45309;dashed=1;dashPattern=3 3;" edge="1" parent="1" source="a-tunnel" target="cf-edge__port_right_450_425">
-          <mxGeometry x="-0.0927" relative="1" as="geometry">
+        <mxCell id="c-a-tunnel-edge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#d97706;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.5000;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#b45309;dashed=1;dashPattern=3 3;" edge="1" parent="1" source="a-tunnel" target="cf-edge__port_right_450_460">
+          <mxGeometry x="-0.1363" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="510" y="395" />
-              <mxPoint x="510" y="425" />
+              <mxPoint x="510" y="460" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -188,11 +180,11 @@
           <mxGeometry x="-0.0000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-b-tunnel-edge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#d97706;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.5000;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#b45309;dashed=1;dashPattern=3 3;" edge="1" parent="1" source="b-tunnel" target="cf-edge__port_right_450_460">
-          <mxGeometry x="-0.3575" relative="1" as="geometry">
+        <mxCell id="c-b-tunnel-edge" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#d97706;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.5000;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#b45309;dashed=1;dashPattern=3 3;" edge="1" parent="1" source="b-tunnel" target="cf-edge__port_right_450_490">
+          <mxGeometry x="-0.3365" relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="530" y="745" />
-              <mxPoint x="530" y="460" />
+              <mxPoint x="530" y="490" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -258,7 +250,7 @@
           <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
         </mxCell>
         <mxCell id="a-tunnel" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;&amp;lt;project-a&amp;gt;-tunnel&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[cloudflared · Deployment]&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Outbound to Cloudflare&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#fffbeb;html=1;whiteSpace=wrap;strokeColor=#d97706;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1140" y="350" width="220" height="90" as="geometry" />
+          <mxGeometry x="1140" y="350" width="230" height="90" as="geometry" />
         </mxCell>
         <mxCell id="a-tunnel__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjRjM4MDIwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+Q2xvdWRmbGFyZTwvdGl0bGU+PHBhdGggZD0iTTE2LjUwODggMTYuODQ0N2MuMTQ3NS0uNTA2OC4wOTA4LS45NzA3LS4xNTUzLTEuMzE1NC0uMjI0Ni0uMzE2NC0uNjA0NS0uNDk5LTEuMDYxNS0uNTIwNWwtOC42NTkyLS4xMTIzYS4xNTU5LjE1NTkgMCAwIDEtLjEzMzMtLjA3MTNjLS4wMjgzLS4wNDItLjAzNTEtLjA5ODYtLjAyMS0uMTU1My4wMjc4LS4wODQuMTEyMy0uMTQ4NC4yMDM2LS4xNTYybDguNzM1OS0uMTEyM2MxLjAzNTEtLjA0ODkgMi4xNjAxLS44ODY4IDIuNTUzNy0xLjkxMzZsLjQ5OS0xLjMwMTNjLjAyMTUtLjA1NjEuMDI5My0uMTEyOC4wMTQ3LS4xNjgtLjU2MjUtMi41NDYzLTIuODM1LTQuNDQ1My01LjU0OTktNC40NDUzLTIuNTAzOSAwLTQuNjI4NCAxLjYxNzctNS4zODc2IDMuODYxNC0uNDkyNy0uMzY1OC0xLjExODctLjU2MjUtMS43OTQtLjQ5OS0xLjIwMjYuMTE5LTIuMTY2NSAxLjA4My0yLjI4NjEgMi4yODU2LS4wMjgzLjMxLS4wMDY5LjYxMjguMDYzNS44OTRDMS41NjgzIDEzLjE3MSAwIDE0Ljc3NTQgMCAxNi43NTJjMCAuMTc0OC4wMTQyLjM1MTUuMDM1Mi41MjczLjAxNDEuMDgzLjA4NDQuMTQ3NS4xNjg5LjE0NzVoMTUuOTgxNGMuMDkwOSAwIC4xNzU4LS4wNjQ1LjIwMzItLjE1NTNsLjEyLS40MjY4em0yLjc1NjgtNS41NjM0Yy0uMDc3MSAwLS4xNjExIDAtLjIzODMuMDExMi0uMDU2NiAwLS4xMDU0LjA0MTUtLjEyNy4wOTc2bC0uMzM3OCAxLjE3NDRjLS4xNDc1LjUwNjgtLjA5MTguOTcwNy4xNTQzIDEuMzE2NC4yMjU2LjMxNjQuNjA1NS40OTggMS4wNjI1LjUxOTVsMS44NDM3LjExMzNjLjA1NTcgMCAuMTA1NS4wMjYzLjEzMjkuMDcwMy4wMjgzLjA0My4wMzUxLjEwNzQuMDIxNC4xNTYyLS4wMjgzLjA4NC0uMTEzMi4xNDg1LS4yMDQuMTU1M2wtMS45MjEuMTEyM2MtMS4wNDEuMDQ4OC0yLjE1ODIuODg2Ny0yLjU1MjcgMS45MTRsLS4xNDA2LjM1ODVjLS4wMjgzLjA3MTMuMDIxNS4xNDE2LjA5ODYuMTQxNmg2LjU5NzdjLjA3NzEgMCAuMTQ3NC0uMDQ4OS4xNjktLjEyNi4xMTIyLS40MDgyLjE3NTctLjgzNy4xNzU3LTEuMjgwMyAwLTIuNjAyNS0yLjEyNS00LjcyNy00LjczNDQtNC43MjciLz48L3N2Zz4=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="a-tunnel">
           <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
@@ -288,7 +280,7 @@
           <mxGeometry x="12" y="20" width="28" height="28" as="geometry" />
         </mxCell>
         <mxCell id="b-tunnel" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;&amp;lt;project&amp;gt;-tunnel&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[cloudflared · Deployment]&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Outbound to Cloudflare&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#fffbeb;html=1;whiteSpace=wrap;strokeColor=#d97706;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=50;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1140" y="700" width="220" height="90" as="geometry" />
+          <mxGeometry x="1140" y="700" width="230" height="90" as="geometry" />
         </mxCell>
         <mxCell id="b-tunnel__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyBmaWxsPSIjRjM4MDIwIiByb2xlPSJpbWciIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48dGl0bGU+Q2xvdWRmbGFyZTwvdGl0bGU+PHBhdGggZD0iTTE2LjUwODggMTYuODQ0N2MuMTQ3NS0uNTA2OC4wOTA4LS45NzA3LS4xNTUzLTEuMzE1NC0uMjI0Ni0uMzE2NC0uNjA0NS0uNDk5LTEuMDYxNS0uNTIwNWwtOC42NTkyLS4xMTIzYS4xNTU5LjE1NTkgMCAwIDEtLjEzMzMtLjA3MTNjLS4wMjgzLS4wNDItLjAzNTEtLjA5ODYtLjAyMS0uMTU1My4wMjc4LS4wODQuMTEyMy0uMTQ4NC4yMDM2LS4xNTYybDguNzM1OS0uMTEyM2MxLjAzNTEtLjA0ODkgMi4xNjAxLS44ODY4IDIuNTUzNy0xLjkxMzZsLjQ5OS0xLjMwMTNjLjAyMTUtLjA1NjEuMDI5My0uMTEyOC4wMTQ3LS4xNjgtLjU2MjUtMi41NDYzLTIuODM1LTQuNDQ1My01LjU0OTktNC40NDUzLTIuNTAzOSAwLTQuNjI4NCAxLjYxNzctNS4zODc2IDMuODYxNC0uNDkyNy0uMzY1OC0xLjExODctLjU2MjUtMS43OTQtLjQ5OS0xLjIwMjYuMTE5LTIuMTY2NSAxLjA4My0yLjI4NjEgMi4yODU2LS4wMjgzLjMxLS4wMDY5LjYxMjguMDYzNS44OTRDMS41NjgzIDEzLjE3MSAwIDE0Ljc3NTQgMCAxNi43NTJjMCAuMTc0OC4wMTQyLjM1MTUuMDM1Mi41MjczLjAxNDEuMDgzLjA4NDQuMTQ3NS4xNjg5LjE0NzVoMTUuOTgxNGMuMDkwOSAwIC4xNzU4LS4wNjQ1LjIwMzItLjE1NTNsLjEyLS40MjY4em0yLjc1NjgtNS41NjM0Yy0uMDc3MSAwLS4xNjExIDAtLjIzODMuMDExMi0uMDU2NiAwLS4xMDU0LjA0MTUtLjEyNy4wOTc2bC0uMzM3OCAxLjE3NDRjLS4xNDc1LjUwNjgtLjA5MTguOTcwNy4xNTQzIDEuMzE2NC4yMjU2LjMxNjQuNjA1NS40OTggMS4wNjI1LjUxOTVsMS44NDM3LjExMzNjLjA1NTcgMCAuMTA1NS4wMjYzLjEzMjkuMDcwMy4wMjgzLjA0My4wMzUxLjEwNzQuMDIxNC4xNTYyLS4wMjgzLjA4NC0uMTEzMi4xNDg1LS4yMDQuMTU1M2wtMS45MjEuMTEyM2MtMS4wNDEuMDQ4OC0yLjE1ODIuODg2Ny0yLjU1MjcgMS45MTRsLS4xNDA2LjM1ODVjLS4wMjgzLjA3MTMuMDIxNS4xNDE2LjA5ODYuMTQxNmg2LjU5NzdjLjA3NzEgMCAuMTQ3NC0uMDQ4OS4xNjktLjEyNi4xMTIyLS40MDgyLjE3NTctLjgzNy4xNzU3LTEuMjgwMyAwLTIuNjAyNS0yLjEyNS00LjcyNy00LjczNDQtNC43MjciLz48L3N2Zz4=;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="b-tunnel">
           <mxGeometry x="12" y="12" width="28" height="28" as="geometry" />
@@ -368,17 +360,14 @@
         <mxCell id="wireguard-onprem__port_right_410_1025" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 18080&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="wireguard-onprem">
           <mxGeometry x="271.7" y="37" width="56.6" height="16" as="geometry" />
         </mxCell>
-        <mxCell id="wireguard-onprem__port_right_410_1040" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 18082&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="wireguard-onprem">
-          <mxGeometry x="271.7" y="52" width="56.6" height="16" as="geometry" />
-        </mxCell>
         <mxCell id="wireguard-onprem__port_right_410_1055" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 18083&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="wireguard-onprem">
           <mxGeometry x="271.7" y="67" width="56.6" height="16" as="geometry" />
         </mxCell>
         <mxCell id="cf-edge__port_top_445_410" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 443&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="cf-edge">
           <mxGeometry x="352.1" y="-8" width="45.8" height="16" as="geometry" />
         </mxCell>
-        <mxCell id="cf-edge__port_right_450_425" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;UDP 7844&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="cf-edge">
-          <mxGeometry x="354.4" y="7" width="51.199999999999996" height="16" as="geometry" />
+        <mxCell id="cf-edge__port_right_450_460" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;UDP 7844&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="cf-edge">
+          <mxGeometry x="354.4" y="42" width="51.199999999999996" height="16" as="geometry" />
         </mxCell>
         <mxCell id="a-gateway__port_left_1520_420" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 80&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#059669;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="a-gateway">
           <mxGeometry x="-20.200000000000045" y="62" width="40.4" height="16" as="geometry" />
@@ -392,8 +381,8 @@
         <mxCell id="a1-db__port_left_2470_410" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 5432&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#7c3aed;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="a1-db">
           <mxGeometry x="-25.59999999999991" y="52" width="51.199999999999996" height="16" as="geometry" />
         </mxCell>
-        <mxCell id="cf-edge__port_right_450_460" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;UDP 7844&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="cf-edge">
-          <mxGeometry x="354.4" y="42" width="51.199999999999996" height="16" as="geometry" />
+        <mxCell id="cf-edge__port_right_450_490" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;UDP 7844&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#d97706;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="cf-edge">
+          <mxGeometry x="354.4" y="72" width="51.199999999999996" height="16" as="geometry" />
         </mxCell>
         <mxCell id="b-gateway__port_left_1520_770" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 80&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#059669;strokeColor=#f8fafc;strokeWidth=1;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;movable=0;resizable=0;" vertex="1" parent="b-gateway">
           <mxGeometry x="-20.200000000000045" y="62" width="40.4" height="16" as="geometry" />
@@ -417,88 +406,88 @@
           <mxGeometry x="-28.299999999999955" y="57" width="56.6" height="16" as="geometry" />
         </mxCell>
         <mxCell id="card-legend" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#64748b&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Legend&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="40" y="1430" width="560" height="340" as="geometry" />
+          <mxGeometry x="40" y="1430" width="580" height="340" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-frontend" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#ecfeff;strokeColor=#0891b2;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry x="60" y="1486" width="22" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-frontend-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;client / frontend&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="92" y="1482" width="220" height="22" as="geometry" />
+          <mxGeometry x="92" y="1482" width="230" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-backend" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#ecfdf5;strokeColor=#059669;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry x="60" y="1512" width="22" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-backend-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;service / routing&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="92" y="1508" width="220" height="22" as="geometry" />
+          <mxGeometry x="92" y="1508" width="230" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-database" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#f5f3ff;strokeColor=#7c3aed;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry x="60" y="1538" width="22" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-database-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;data / secrets&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="92" y="1534" width="220" height="22" as="geometry" />
+          <mxGeometry x="92" y="1534" width="230" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-cloud" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#fffbeb;strokeColor=#d97706;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry x="60" y="1564" width="22" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-cloud-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;edge / tunnel / cloud&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="92" y="1560" width="220" height="22" as="geometry" />
+          <mxGeometry x="92" y="1560" width="230" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-security" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#fff1f2;strokeColor=#e11d48;strokeWidth=1.5;" vertex="1" parent="1">
           <mxGeometry x="60" y="1590" width="22" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-node-security-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;security / identity&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="92" y="1586" width="220" height="22" as="geometry" />
+          <mxGeometry x="92" y="1586" width="230" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-steps" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;1&lt;/span&gt; request step · &lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;A&lt;/span&gt; background step&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="60" y="1620" width="260" height="22" as="geometry" />
+          <mxGeometry x="60" y="1620" width="270" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-port" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;TCP 80&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=6;html=1;fillColor=#059669;strokeColor=none;align=center;verticalAlign=middle;fontStyle=1;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=9;fontColor=#ffffff;" vertex="1" parent="1">
           <mxGeometry x="60" y="1649" width="40.4" height="16" as="geometry" />
         </mxCell>
         <mxCell id="legend-port-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;listening port on the server&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="112" y="1646" width="210" height="22" as="geometry" />
+          <mxGeometry x="112" y="1646" width="220" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-edge-flow" value="" style="edgeStyle=none;html=1;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=6;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="330" y="1493" as="sourcePoint" />
-            <mxPoint x="370" y="1493" as="targetPoint" />
+            <mxPoint x="340" y="1493" as="sourcePoint" />
+            <mxPoint x="380" y="1493" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="legend-edge-flow-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;connection, client → server&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="382" y="1482" width="208" height="22" as="geometry" />
+          <mxGeometry x="392" y="1482" width="218" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-edge-tunnel" value="" style="edgeStyle=none;html=1;strokeColor=#d97706;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=6;dashed=1;dashPattern=3 3;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="330" y="1519" as="sourcePoint" />
-            <mxPoint x="370" y="1519" as="targetPoint" />
+            <mxPoint x="340" y="1519" as="sourcePoint" />
+            <mxPoint x="380" y="1519" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="legend-edge-tunnel-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;outbound tunnel, opened in advance&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="382" y="1508" width="208" height="22" as="geometry" />
+          <mxGeometry x="392" y="1508" width="218" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-edge-async" value="" style="edgeStyle=none;html=1;strokeColor=#7c3aed;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=6;dashed=1;dashPattern=6 4;" edge="1" parent="1">
           <mxGeometry relative="1" as="geometry">
-            <mxPoint x="330" y="1545" as="sourcePoint" />
-            <mxPoint x="370" y="1545" as="targetPoint" />
+            <mxPoint x="340" y="1545" as="sourcePoint" />
+            <mxPoint x="380" y="1545" as="targetPoint" />
           </mxGeometry>
         </mxCell>
         <mxCell id="legend-edge-async-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;background sync&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="382" y="1534" width="208" height="22" as="geometry" />
+          <mxGeometry x="392" y="1534" width="218" height="22" as="geometry" />
         </mxCell>
         <mxCell id="legend-stack-20-2" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#f1f5f9;strokeColor=#64748b;strokeWidth=1.5;dashed=1;dashPattern=4 3;" vertex="1" parent="1">
-          <mxGeometry x="336" y="1558" width="34" height="14" as="geometry" />
+          <mxGeometry x="346" y="1558" width="34" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-stack-20-1" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#f1f5f9;strokeColor=#64748b;strokeWidth=1.5;dashed=1;dashPattern=4 3;" vertex="1" parent="1">
-          <mxGeometry x="333" y="1561" width="34" height="14" as="geometry" />
+          <mxGeometry x="343" y="1561" width="34" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-stack-20-0" value="" style="rounded=1;absoluteArcSize=1;arcSize=6;fillColor=#f1f5f9;strokeColor=#64748b;strokeWidth=1.5;" vertex="1" parent="1">
-          <mxGeometry x="330" y="1564" width="34" height="14" as="geometry" />
+          <mxGeometry x="340" y="1564" width="34" height="14" as="geometry" />
         </mxCell>
         <mxCell id="legend-stack-20-text" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;one per cloud&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="382" y="1560" width="208" height="22" as="geometry" />
+          <mxGeometry x="392" y="1560" width="218" height="22" as="geometry" />
         </mxCell>
         <mxCell id="card-legend-notes" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;Large dashed frame: infra perimeter · small: functional group&lt;br&gt;&lt;font color=&quot;#c2410c&quot;&gt;&lt;b&gt;⚠ Gx&lt;/b&gt;&lt;/font&gt;: docs and code disagree, see &quot;Gaps&quot;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;whiteSpace=wrap;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10.5;fontColor=#475569;" vertex="1" parent="1">
-          <mxGeometry x="60" y="1720" width="520" height="40" as="geometry" />
+          <mxGeometry x="60" y="1720" width="540" height="40" as="geometry" />
         </mxCell>
         <mxCell id="card-status" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#d97706&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Where things stand (2026-10-29)&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;One Argo CD&lt;/font&gt;&lt;/b&gt; on the K3s hub drives onprem, EKS and GKE. Vault and the central Keycloak stay on the hub, which is also the onprem target.&lt;br&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;The public cloud target&lt;/font&gt;&lt;/b&gt; stands for EKS and GKE: same platform base (Envoy Gateway, secret operator, CNPG, local-path) and same project layout. One live project on each today (letestaws, letestgcp).&lt;br&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;The operator&lt;/font&gt;&lt;/b&gt; creates the clusters by hand with cnp.sh; Argo CD then syncs by itself, in under a minute.&lt;br&gt;• User traffic reaches the app only through the project&amp;#39;s own outbound tunnel, never through the hub. onprem follows the same path, unnumbered.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="630" y="1430" width="520" height="340" as="geometry" />
@@ -506,7 +495,7 @@
         <mxCell id="card-steps" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#0891b2&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Request path · data plane (public cloud)&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;1&lt;/span&gt; The user opens &amp;lt;app&amp;gt;-&amp;lt;project&amp;gt;.3istor.com on Cloudflare (HTTPS 443).&lt;br&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;2&lt;/span&gt; Cloudflare relays the request to the &amp;lt;project&amp;gt;-gateway Service (Envoy, HTTP 80) through the tunnel opened outbound by &amp;lt;project&amp;gt;-tunnel.&lt;br&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;3&lt;/span&gt; HTTPRoute to the frontend Service :80 (nginx :3001).&lt;br&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;4&lt;/span&gt; nginx proxies /api/ to the backend :8000.&lt;br&gt;&lt;span style=&quot;background-color:#0f172a;color:#ffffff;border-radius:3px;padding:0px 4px;font-weight:bold;&quot;&gt;5&lt;/span&gt; The backend queries CNPG &amp;lt;app&amp;gt;-db-rw :5432, on a local-path PVC.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="1180" y="1430" width="500" height="340" as="geometry" />
         </mxCell>
-        <mxCell id="card-background" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#ea580c&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Background · control plane&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;A&lt;/span&gt; Argo CD syncs the cloud API server (:443).&lt;br&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;B&lt;/span&gt; The cloud secret operator logs in to Vault at vault.3istor.com :443, public, through Cloudflare.&lt;br&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;C&lt;/span&gt; The on-prem WireGuard pod (one per cloud) initiates UDP 31820 to the cloud node. Unlettered: three relays carry cloud metrics, logs and canary queries home (TCP 18080, 18082, 18083, see multicloud-links).&lt;br&gt;• Unlettered: each project tunnel is opened outbound to Cloudflare (QUIC 7844).&lt;br&gt;• Letters follow multicloud-links, which lists every link: &lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;D&lt;/span&gt; to &lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;S&lt;/span&gt; are there.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
+        <mxCell id="card-background" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#ea580c&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Background · control plane&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;A&lt;/span&gt; Argo CD syncs the cloud API server (:443).&lt;br&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;B&lt;/span&gt; The cloud secret operator logs in to Vault at vault.3istor.com :443, public, through Cloudflare.&lt;br&gt;&lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;C&lt;/span&gt; The on-prem WireGuard pod (one per cloud) initiates UDP 31820 to the cloud node. Unlettered: three relays carry cloud metrics, logs and canary queries home (TCP 18080, 18083, see multicloud-links).&lt;br&gt;• Unlettered: each project tunnel is opened outbound to Cloudflare (QUIC 7844).&lt;br&gt;• Letters follow multicloud-links, which lists every link: &lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;D&lt;/span&gt; to &lt;span style=&quot;border:1px solid #0f172a;color:#0f172a;border-radius:3px;padding:0px 3px;font-weight:bold;&quot;&gt;S&lt;/span&gt; are there.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="1710" y="1430" width="560" height="340" as="geometry" />
         </mxCell>
         <mxCell id="card-gaps" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#ea580c&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Gaps between the plan and the code&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;&lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;G18&lt;/font&gt;&lt;/b&gt; Cloud Applications retry forever with refresh (CNP-112); deleting one while its cluster is down hangs on the finalizer.&lt;br&gt;&lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;G19&lt;/font&gt;&lt;/b&gt; nginx crashes until the backend Service exists (CNP-114).&lt;br&gt;&lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;G20&lt;/font&gt;&lt;/b&gt; app-registry VaultSecret rendered twice, one OutOfSync (CNP-115).&lt;br&gt;&lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;G13&lt;/font&gt;&lt;/b&gt; Ricoberger operator: behaviour in a Vault outage untested.&lt;br&gt;&lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;G3&lt;/font&gt;&lt;/b&gt; TLS ends at Cloudflare; behind the tunnel, plain HTTP.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">

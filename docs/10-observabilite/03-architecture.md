@@ -1,12 +1,14 @@
 # Architecture cible
 
-Tout ce qui est décrit ici est **proposé**, rien n'est déployé. Les décisions D1 à D21 ont été
+Décisions du 13/11/2026, **livrées en vagues V0 à V4** ; Loki, Alloy et le cluster
+VictoriaMetrics ont été retirés le 21/11/2026 ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)),
+V6 (clouds) attend [Cloud#50](https://github.com/3-Istor/Cloud/pull/50). Les décisions D1 à D21 ont été
 écrites, puis confrontées au code par une revue contradictoire indépendante (33 constats, dont
 3 bloquants). La version ci-dessous intègre ses corrections ; les points encore ouverts sont dans
 [Décisions de Brian](00-index.md#decisions-de-brian-1411).
 
-![Architecture cible de l'observabilité](../01-architecture/diagrams/observability-target.light.png#only-light)
-![Architecture cible de l'observabilité](../01-architecture/diagrams/observability-target.dark.png#only-dark)
+![Architecture de l'observabilité](../01-architecture/diagrams/observability.light.png#only-light)
+![Architecture de l'observabilité](../01-architecture/diagrams/observability.dark.png#only-dark)
 
 ## En une phrase
 
@@ -16,7 +18,7 @@ signaux sans qu'il code. Le tout pour moins de RAM qu'aujourd'hui.
 
 ## Avant, après
 
-| Fonction | Aujourd'hui | Cible |
+| Fonction | Avant (13/11) | Cible, en place depuis le 21/11 |
 | --- | --- | --- |
 | Collecte des métriques | Alloy (DaemonSet, 1,8 Gio) | **vmagent** (1 Deployment) |
 | Collecte des logs | Alloy | **Fluent Bit** (DaemonSet léger) |
@@ -116,8 +118,9 @@ depuis le dépôt Cloud. Tout ce qu'un cloud envoie ou lit passe par **vmauth**,
 de Vault. vmauth ajoute lui-même `cluster=aws|gcp` : `extra_label` sur les métriques,
 `VL-Extra-Fields` sur les logs, un en-tête que la passerelle OpenTelemetry transforme en attribut
 sur les spans. Un cloud ne peut donc pas écrire au nom d'un autre cluster, et les lectures
-d'Argo Rollouts et d'OpenCost restent bornées à leur cloud. Aujourd'hui, les relais vont droit sur
-vminsert et vmselect sans authentification : le pare-feu de namespaces du cloud est la seule
+d'Argo Rollouts et d'OpenCost restent bornées à leur cloud. Au 21/11, les relais de K3s visent
+encore les anciens noms vminsert et vmselect (le vmauth de compatibilité, sans authentification) :
+tant qu'ils ne pointent pas vers `vmauth-clouds`, le pare-feu de namespaces du cloud reste la seule
 barrière.
 *Pourquoi un collecteur de traces sur le cloud* : la passerelle de l'on-prem associe un span à
 son pod par l'adresse source, que le relais masque. Le collecteur du cloud fait cette association
@@ -128,7 +131,7 @@ tunnel et la vident au retour ; `cnp.sh down` attend que les files soient vides.
 `CloudQueueBacklog` (file au-delà de 500 Mo). Les alertes de nœud, aujourd'hui limitées à
 `cluster="onprem"`, s'appliquent aux clouds en `warning`. Alertmanager groupe aussi par `cluster`.
 *Relais* : 18080 et 18083 vont vers vmauth, 18082 continue d'alimenter Loki jusqu'à la fin de V2
-puis disparaît. Le relais 18081 (on-prem vers OpenCost du cloud) ne change pas.
+puis disparaît (fait le 21/11/2026 avec CNP-276, côté Cloud dans Cloud#50). Le relais 18081 (on-prem vers OpenCost du cloud) ne change pas.
 
 ### Traces et instrumentation
 
@@ -210,7 +213,7 @@ déploiement, redémarrages, erreurs fréquentes) sans dépenser de tokens.
 
 Estimations à confirmer par la mesure. Requests, en Mio.
 
-| Brique | Aujourd'hui (utilisé) | Cible (request) |
+| Brique | Avant, 13/11 (utilisé) | Cible (request) |
 | --- | --- | --- |
 | Alloy | 1 826 | 0 |
 | Loki + gateway | 916 | 0 |

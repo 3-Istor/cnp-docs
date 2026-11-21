@@ -4,44 +4,43 @@ type: sequence
 title: "CNP · Observability · A metric and a log line from a public cloud"
 subtitle: "What happens, in order, between a pod on a public cloud and the panel a project dev reads in Grafana?"
 meta:
-  - "Scope: one metric and one log line of an app on the public cloud target (EKS or GKE, same steps), then the dev's dashboard query · main as of 2026-10-29 · derived from code (Cloud/terraform/public/platform/observability/values-alloy.yaml, K3s/k8s/config/{wireguard,observability}, CMP metrics_isolation.py)"
-  - "Out of scope: on-prem collection and audit (see observability) · alerting · OpenCost"
+  - "Scope: one metric and one log line of an app on the public cloud target (EKS or GKE, same steps), then the dev's dashboard query · cloud side as in Cloud#50 (wave V6, open), hub side as on K3s main of 2026-11-21 · derived from code (Cloud/terraform/public/platform/observability, K3s/k8s/config/{wireguard,observability}/vmauth-clouds.yaml)"
+  - "Out of scope: on-prem collection and audit (see observability) · traces (observability-multicloud) · alerting · OpenCost"
   - "Arrows: plain = request, dashed = reply. Notes in grey say what checks or rewrites the data."
-  - "v0.2 (2026-10-29: EKS and GKE drawn once) · source: cnp-docs/architecture/cnp"
+  - "v0.3 (2026-11-21: vmagent, Fluent Bit, vmauth-clouds and VMSingle replace Alloy, Loki and the VictoriaMetrics cluster, CNP-276) · source: cnp-docs/architecture/cnp"
 
-participants: [b-obs-targets, alloy-aws, b-wireguard, wireguard-onprem, vm-vminsert, vm-vmstorage, vm-vmselect, vmauth, loki-gateway, loki, grafana]
+participants: [b-obs-targets, vo-c-vmagent, vo-c-vlagent, b-wireguard, wireguard-onprem, vo-vmauth, vo-vmsingle, vo-vlogs, grafana]
 
 steps:
   # Write: a metric.
-  - {id: scrape, from: alloy-aws, to: b-obs-targets, over: c-alloyaws-targets, text: "GET /metrics (pod annotations)"}
+  - {id: scrape, from: vo-c-vmagent, to: b-obs-targets, over: c-vo-mc-vmagent-targets, text: "GET /metrics (pod annotations)"}
   - {reply: scrape, text: "samples"}
-  - {note: alloy-aws, text: "adds cluster=aws|gcp, namespace, pod"}
-  - {id: rw, from: alloy-aws, to: b-wireguard, over: c-alloyaws-relay-vm, text: "POST /insert/0/prometheus/api/v1/write · onprem-apps:18080"}
+  - {id: rw, from: vo-c-vmagent, to: b-wireguard, over: c-vo-mc-vmagent-relay, text: "POST /api/v1/write · onprem-apps:18080 · user cloud-<c>"}
   - {note: b-wireguard, text: "NetworkPolicy onprem-apps: only ns observability on 18080"}
   - {id: relay, from: b-wireguard, to: wireguard-onprem, over: c-bwg-onprem-vm, text: "socat to the on-prem tunnel IP (.2 aws, .6 gcp) :18080"}
-  - {id: ins, from: wireguard-onprem, to: vm-vminsert, over: c-wgonprem-vminsert, text: "socat to vminsert:8480"}
-  - {note: vm-vminsert, text: "no credential: NetworkPolicy vminsert-writers admits the wireguard pods"}
-  - {id: store, from: vm-vminsert, to: vm-vmstorage, over: c-vminsert-vmstorage, text: "write series · :8400"}
-  - {note: alloy-aws, text: "tunnel down: the write fails and Alloy retries; no disk buffer yet (CNP-89)"}
+  - {id: door, from: wireguard-onprem, to: vo-vmauth, over: c-vo-mc-wg-vmauth, text: "socat to vmauth-clouds:8427"}
+  - {note: vo-vmauth, text: "checks the cloud's password, keeps write paths only, adds cluster=<c>"}
+  - {id: store, from: vo-vmauth, to: vo-vmsingle, over: c-vo-vmauth-vmsingle, text: "write series · :8429"}
+  - {note: vo-c-vmagent, text: "tunnel down: samples wait in a 2 GiB disk queue, then drain"}
 
   # Write: a log line.
-  - {note: alloy-aws, text: "tails the pod log; tenant = namespace label cnp.3istor.com/project"}
-  - {id: push, from: alloy-aws, to: b-wireguard, over: c-alloyaws-relay-loki, text: "POST /loki/api/v1/push · :18082 · basic auth alloy"}
-  - {id: relay2, from: b-wireguard, to: wireguard-onprem, over: c-bwg-onprem-loki, text: "socat to the on-prem tunnel IP :18082"}
-  - {id: gw, from: wireguard-onprem, to: loki-gateway, over: c-wgonprem-lokigw, text: "socat to loki-gateway:80"}
-  - {note: loki-gateway, text: "checks the alloy password (htpasswd from Vault)"}
-  - {id: ingest, from: loki-gateway, to: loki, over: c-lokigw-loki, text: "push, tenant set by Alloy, passed on"}
+  - {id: tail, from: vo-c-vlagent, to: b-obs-targets, over: c-vo-mc-vlagent-targets, text: "tail /var/log/containers"}
+  - {note: vo-c-vlagent, text: "rebuilds the record from Kubernetes metadata only"}
+  - {id: push, from: vo-c-vlagent, to: b-wireguard, over: c-vo-mc-vlagent-relay, text: "POST /insert/jsonline · :18080 · user cloud-<c>"}
+  - {id: relay2, from: b-wireguard, to: wireguard-onprem, over: c-bwg-onprem-vm, text: "same relay, same tunnel"}
+  - {id: door2, from: wireguard-onprem, to: vo-vmauth, over: c-vo-mc-wg-vmauth, text: "socat to vmauth-clouds:8427"}
+  - {id: ingest, from: vo-vmauth, to: vo-vlogs, over: c-vo-vmauth-vlogs, text: "insert, VL-Extra-Fields cluster=<c>"}
 
   # Read: the dev opens the project dashboard.
   - {note: grafana, text: "dev opens a dashboard of the project org"}
-  - {id: q, from: grafana, to: vmauth, over: c-grafana-vmauth, text: "query as project-<p>"}
-  - {note: vmauth, text: "adds extra_filters namespace=~<project namespaces>"}
-  - {id: q2, from: vmauth, to: vm-vmselect, over: c-vmauth-vmselect, text: "filtered query"}
-  - {id: q3, from: vm-vmselect, to: vm-vmstorage, over: c-vmselect-vmstorage, text: "read series · :8401"}
+  - {id: q, from: grafana, to: vo-vmauth, over: c-vo-grafana-vmauth, text: "query as project-<p>"}
+  - {note: vo-vmauth, text: "adds extra_filters namespace=~<project namespaces>"}
+  - {id: q2, from: vo-vmauth, to: vo-vmsingle, over: c-vo-vmauth-vmsingle, text: "filtered query"}
   - {reply: q, text: "series of the project only, every cluster"}
-  - {id: lq, from: grafana, to: loki-gateway, over: c-grafana-lokigw, text: "query as grafana-projects, X-Scope-OrgID=<p>"}
-  - {id: lq2, from: loki-gateway, to: loki, over: c-lokigw-loki, text: "query tenant <p>"}
+  - {id: lq, from: grafana, to: vo-vmauth, over: c-vo-grafana-vmauth, text: "LogsQL as project-<p>"}
+  - {id: lq2, from: vo-vmauth, to: vo-vlogs, over: c-vo-vmauth-vlogs, text: "query with the namespace filter"}
   - {reply: lq, text: "log lines of the project only"}
+  - {note: wireguard-onprem, text: "!!GO1!! until K3s points relay 18080 to vmauth-clouds, steps door and door2 land on the compat vmauth, which has no route for them"}
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"
   G10: "targets httproute, not drawn in this view"
@@ -68,5 +67,4 @@ hidden_annotations:
   G23: "targets gh-owner, not drawn in this view"
   GI1: "targets github-app, not drawn in this view"
   GI2: "targets c-im-user-import, not drawn in this view"
-  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
   GI4: "targets x-im-argocd-user-repo, not drawn in this view"

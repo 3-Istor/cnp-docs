@@ -50,7 +50,7 @@ nouvelle table de la CMP n'y est pas classée.
 |---|---|---|---|---|---|
 | Projet, apps, environnements, promotions, vérifications, releases | Base CMP | Client | Oui | `cmp/<table>.jsonl` | JSON Lines |
 | Journal d'audit des actions sur le projet | Base CMP `audit_events` | Client | Oui | `cmp/audit_events.jsonl` | JSON Lines |
-| Activité (Argo CD, Loki) | Base CMP `activity_events` | Client | Oui | `cmp/activity_events.jsonl` | JSON Lines |
+| Activité (Argo CD, journaux d'audit) | Base CMP `activity_events` | Client | Oui | `cmp/activity_events.jsonl` | JSON Lines |
 | FinOps : budgets, alertes, lignes de coût, centres de coût, économies, recommandations | Base CMP | Client | Oui | `cmp/<table>.jsonl` | JSON Lines |
 | Sécurité : constats, scans, exceptions, historique | Base CMP | Client | Oui | `cmp/security_*.jsonl` | JSON Lines |
 | Revues d'accès du projet | Base CMP `access_review_items` | Client | Oui | `cmp/access_review_items.jsonl` | JSON Lines |
@@ -65,10 +65,17 @@ nouvelle table de la CMP n'y est pas classée.
 | Secrets du projet (Vault `project-<nom>`) | Vault | Client | Chemins et noms des clés ; les valeurs restent dans Vault ([pourquoi](#secrets-les-valeurs-restent-dans-vault)) | `secrets/names.json` | JSON |
 | Realms Keycloak du projet (`<projet>`, `<projet>-staging`) | Keycloak | Client | Configuration sans secrets, utilisateurs sans mots de passe | `identity/<realm>/realm.json`, `users.jsonl` | JSON, JSON Lines |
 | Membres du projet et leur rôle | Groupes Keycloak de la plateforme | Client | Oui | `identity/members.json` | JSON |
-| Journaux applicatifs | Loki, namespaces exacts du projet | Client | Oui, ce que Loki conserve (14 jours) | `logs/<projet>.jsonl` | JSON Lines |
+| Journaux applicatifs | VictoriaLogs (Loki jusqu'au 21/11/2026), namespaces exacts du projet | Client | Oui, ce que VictoriaLogs conserve (30 jours) | `logs/<projet>.jsonl` | JSON Lines |
 | Images de conteneurs | GHCR | Client | Références avec digest, pas les couches | `images.json` | JSON |
-| Métriques | Prometheus | Client | Non, sur demande | | |
+| Métriques | VMSingle | Client | Non, sur demande | | |
 | Volumes de StatefulSet (ex. MongoDB) | Cluster | Client | Non, copie à la demande | | |
+
+!!! warning "Journaux : lecteur à porter vers VictoriaLogs"
+    Loki a été retiré le 21/11/2026 ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)).
+    Sur `main` de la CMP à cette date, le lecteur de l'export (`LokiLogReader`) et le
+    collecteur d'activité lisent encore Loki : tant qu'ils ne lisent pas VictoriaLogs,
+    `logs/<projet>.jsonl` et les nouvelles entrées d'activité issues des journaux d'audit
+    restent vides.
 
 ### Secrets : les valeurs restent dans Vault
 
@@ -144,7 +151,7 @@ L'archive est un `.tar.gz`. `manifest.json`, à sa racine, décrit chaque fichie
 | `object` | Contenu brut, `metadata.bucket` et `metadata.key` | `aws s3 cp`, `mc cp` |
 | `vault.secret-names` | `{chemin: [clés]}` | Recopier les valeurs depuis Vault |
 | `keycloak.realm`, `keycloak.users` | Export partiel Keycloak, secrets masqués | Import de realm Keycloak |
-| `loki.logs` | `{time, labels, line}` par ligne | `jq`, import Loki |
+| `loki.logs` (nom hérité) | `{time, labels, line}` par ligne | `jq`, tout outil de logs (VictoriaLogs `/insert/jsonline`, Loki) |
 
 Les manifestes Kubernetes sont en JSON et non en YAML : `kubectl` lit le YAML 1.1, où un
 `on` ou un `no` non cité devient un booléen. L'exercice de restauration est tombé
@@ -310,7 +317,7 @@ apps supprimées.
 | Base Keycloak du projet (realm dédié, option) | `Database`/`DatabaseRole` CNPG en `reclaimPolicy: delete` | Supprimée |
 | Groupes Keycloak, politiques Vault, AppProject, organisation Grafana, tunnel et DNS | Terraform du bootstrap | Supprimés |
 | Lignes de la base CMP | `delete_project_row` ne retire que la ligne `projects` | **Reste** : apps (`deployments` en `deleted`, avec leur configuration), environnements, promotions, releases, FinOps, sécurité, alertes, réglages assistants, revues d'accès ; audit et activité jusqu'à leur rétention |
-| Journaux Loki | Rétention | Expirent sous 14 jours |
+| Journaux applicatifs (VictoriaLogs) | Rétention | Expirent sous 30 jours |
 | Archive d'audit (`audit-archive`) | Rétention | Conservée 180 jours (preuve d'audit) |
 | Archives d'export | Boucle de rétention de la CMP | Supprimées au bout de 30 jours |
 

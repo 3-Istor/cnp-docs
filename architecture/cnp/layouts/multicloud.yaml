@@ -13,7 +13,7 @@ elements:
 
   z-onprem-target: {x: 740, y: 220, w: 2020, h: 290}
   g-a-system: {x: 360, y: 70, w: 680, h: 170}
-  a-tunnel: {x: 40, y: 60, w: 220, h: 90}
+  a-tunnel: {x: 40, y: 60, w: 230, h: 90}
   a-gateway: {x: 420, y: 60, w: 220, h: 90}
   g-a-app-a: {x: 1100, y: 70, w: 880, h: 170}
   a1-front: {x: 40, y: 60, w: 240, h: 90}
@@ -22,7 +22,7 @@ elements:
 
   z-cloud-a: {x: 740, y: 570, w: 2020, h: 560}
   g-b-system: {x: 360, y: 70, w: 680, h: 170}
-  b-tunnel: {x: 40, y: 60, w: 220, h: 90}
+  b-tunnel: {x: 40, y: 60, w: 230, h: 90}
   b-gateway: {x: 420, y: 60, w: 220, h: 90}
   g-b-app: {x: 1100, y: 70, w: 880, h: 170}
   b1-front: {x: 40, y: 60, w: 240, h: 90}
@@ -47,8 +47,8 @@ elements:
 
 edges:
   e-1-browser-edge: {from: user.right@28px, to: cf-edge.top@375px, waypoints: [[445, 248]]}
-  c-a-tunnel-edge: {from: a-tunnel.left, to: cf-edge.right@15px, waypoints: [[510, 395], [510, 425]], against_flow: true}
-  c-b-tunnel-edge: {from: b-tunnel.left, to: cf-edge.right@50px, waypoints: [[530, 745], [530, 460]], against_flow: true}
+  c-a-tunnel-edge: {from: a-tunnel.left, to: cf-edge.right@50px, waypoints: [[510, 395], [510, 460]], against_flow: true}
+  c-b-tunnel-edge: {from: b-tunnel.left, to: cf-edge.right@80px, waypoints: [[530, 745], [530, 490]], against_flow: true}
   c-b-tunnel-gw: {from: b-tunnel.right@70px, to: b-gateway.left@70px}
   c-b-gw-b1: {from: b-gateway.right@60px, to: b1-front.left@60px}
   c-b1-front-back: {from: b1-front.right@60px, to: b1-back.left@60px}
@@ -62,11 +62,10 @@ edges:
   c-wg-eks: {from: wireguard-onprem.right@30px, to: b-wireguard.left@65px, waypoints: [[672, 1010], [672, 835]], label_at: [672, 920]}
   # Tunnel relays, cloud to on-prem observability (TCP 18080, 18082, 18083).
   c-bwg-onprem-vm: {from: b-wireguard.left@15px, to: wireguard-onprem.right@45px, waypoints: [[700, 785], [700, 1025]], against_flow: true}
-  c-bwg-onprem-loki: {from: b-wireguard.left@30px, to: wireguard-onprem.right@60px, waypoints: [[714, 800], [714, 1040]], against_flow: true}
   c-bwg-onprem-select: {from: b-wireguard.left@45px, to: wireguard-onprem.right@75px, waypoints: [[728, 815], [728, 1055]], against_flow: true}
 
 cards:
-  card-legend: {x: 40, y: 1430, w: 560, h: 340}
+  card-legend: {x: 40, y: 1430, w: 580, h: 340}
   card-status: {x: 630, y: 1430, w: 520, h: 340}
   card-steps: {x: 1180, y: 1430, w: 500, h: 340}
   card-background: {x: 1710, y: 1430, w: 560, h: 340}

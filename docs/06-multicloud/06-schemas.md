@@ -19,7 +19,7 @@ Six vues, générées depuis le code avec noodle. EKS et GKE ont la même platef
 ![CNP multicloud links](../01-architecture/diagrams/multicloud-links.light.png)
 
 - Chaque flèche part de l'initiateur : WireGuard est ouvert depuis l'on-prem (UDP 31820), jamais depuis le cloud.
-- Argo CD, Vault et le trafic applicatif passent par Internet. Le tunnel porte trois relais cloud → on-prem : 18080 (métriques), 18082 (logs), 18083 (lecture des métriques pour Argo Rollouts).
+- Argo CD, Vault et le trafic applicatif passent par Internet. Le tunnel porte deux relais cloud → on-prem vers `vmauth-clouds` : 18080 (métriques, logs et traces) et 18083 (lecture des métriques pour Argo Rollouts). Le relais 18082 (logs vers Loki) a été retiré le 21/11/2026.
 - Les API des clusters ne répondent qu'à l'IP de sortie on-prem (`api_allowed_cidrs`). L'opérateur y passe par le proxy SOCKS de `pae-node-1`, le CMP avec le jeton du Secret Argo CD `cluster-<cloud>`.
 
 ## Qui peut atteindre un projet

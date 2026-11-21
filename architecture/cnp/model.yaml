@@ -78,7 +78,7 @@ elements:
   - {id: kyverno, kind: security, parent: g-ops, icon: kyverno, title: "Kyverno", tech: "[admission · Audit]", desc: "Resource limits, warn only"}
   - {id: gatus, kind: backend, parent: g-ops, icon: k8s-deploy, title: "Gatus", tech: "[status.3istor.com]", desc: "Status page, health probes"}
   - {id: offhours-guard, kind: backend, parent: g-ops, icon: k8s-deploy, title: "offhours-guard", tech: "[scale-to-zero]", desc: "Scales apps down off hours"}
-  - {id: observability, kind: backend, parent: g-ops, icon: grafana-alloy, title: "Observability", tech: "[Grafana · Loki · Alloy]", desc: "Logs, metrics, alerts"}
+  - {id: observability, kind: backend, parent: g-ops, icon: victoriametrics, title: "Observability", tech: "[VictoriaMetrics · Grafana]", desc: "Metrics, logs, traces, alerts"}
 
 
   - {id: a-tunnel, kind: cloud, parent: g-a-system, icon: cloudflare, title: "<project-a>-tunnel", tech: "[cloudflared · Deployment]", desc: "Outbound to Cloudflare"}
@@ -125,7 +125,7 @@ elements:
   - {id: grp-a-guests, kind: security, parent: g-identity, icon: keycloak, title: "project-<a>-guests", tech: "[Keycloak group]", desc: Made by the CMP}
   # Portal resources: what a person reaches through the CMP, by capability (CNP-228)
   - {id: cmp-apps-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> apps", tech: "[CMP]", desc: "Deploy, operate, releases"}
-  - {id: cmp-logs-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> logs", tech: "[CMP · Loki]", desc: "Application logs"}
+  - {id: cmp-logs-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> logs", tech: "[CMP · VictoriaLogs]", desc: "Application logs"}
   - {id: cmp-security-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> security", tech: "[CMP]", desc: "Findings, CVE exceptions"}
   - {id: cmp-costs-a, kind: frontend, parent: g-cmp, icon: react, title: "<project-a> costs", tech: "[CMP · FinOps]", desc: "Costs, recommendations, budget"}
   - {id: cmp-project-b, kind: frontend, parent: g-cmp, icon: react, title: "<project-b> in the portal", tech: "[CMP]", desc: "Any page of another project"}
@@ -174,7 +174,7 @@ elements:
   - {id: gh-project-repos, kind: external, parent: z-github, icon: github, title: App repos, tech: "[GitHub · one per project]", desc: Created by the CMP from templates, ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: grp-infra-elevated, kind: security, parent: g-identity, icon: keycloak, title: Just-in-time access, tech: "[CMP portal · JIT]", desc: "Second infra approves, expires itself", status: planned, target: P3}
   - {id: policy-vault-data, kind: database, parent: g-secrets, icon: vault, title: vault_data_admin, tech: "[Vault policy]", desc: "project-*/*, audited", status: planned, target: P3}
-  - {id: audit-logs, kind: database, parent: g-ops, shape: cylinder, icon: grafana-alloy, title: Audit logs, tech: "[Loki · append-only]", desc: "Vault, K3s, Keycloak, Argo CD; Object Lock archive"}
+  - {id: audit-logs, kind: database, parent: g-ops, shape: cylinder, icon: victoriametrics, title: Audit logs, tech: "[VictoriaLogs · 30 d]", desc: "Vault, K3s, Keycloak, Argo CD; Object Lock archive"}
   - {id: grp-k3s-admin, kind: security, parent: g-identity, icon: keycloak, title: k3s-admin, tech: "[Keycloak group]", desc: kubectl cluster-admin over OIDC}
   - {id: crb-admin, kind: security, parent: g-rbac, icon: k8s-crd, title: oidc-admin-binding, tech: "[ClusterRoleBinding]", desc: "k3s-admin: cluster-admin"}
   - {id: crb-argocd, kind: security, parent: g-rbac, icon: k8s-crd, title: argocd-application-controller, tech: "[ClusterRoleBinding]", desc: Argo CD deploys anywhere}
@@ -193,7 +193,7 @@ elements:
   - {id: b-envoy, kind: backend, parent: g-b-platform, icon: envoy-gateway, title: "Envoy Gateway", tech: "[1.9.0 · GatewayClass eg]", desc: "One Gateway per project"}
   - {id: b-cnpg, kind: database, parent: g-b-platform, icon: cnpg, title: "CloudNativePG", tech: "[operator 0.29.0]", desc: "One PG cluster per app"}
   - {id: b-localpath, kind: database, parent: g-b-platform, icon: k8s-ns, title: "local-path", tech: "[StorageClass]", desc: "Node disk, lost on down"}
-  - {id: b-wireguard, kind: cloud, parent: z-cloud-a, icon: k8s-pod, title: "wireguard", tech: "[ns cnp-vpn · NodePort]", desc: "Cloud end of the tunnel", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
+  - {id: b-wireguard, kind: cloud, parent: z-cloud-a, icon: k8s-pod, title: "wireguard", tech: "[ns cnp-vpn · NodePort]", desc: "Cloud end of the tunnel", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-select, protocol: TCP, port: 18083}]}
   - {id: appsets, kind: backend, parent: g-gitops, icon: argo, title: "Registry ApplicationSets", tech: "[cnp-projects · aws, gcp]", desc: "Projects, apps, platform, VPN"}
   - {id: image-updater, kind: tool, parent: g-gitops, icon: argo, title: "Image Updater", tech: "[X.Y.Z prod · X.Y.Z-rc.N staging]", desc: "Writes new tags back to Git"}
   - {id: vault-auth, kind: security, parent: g-secrets, icon: vault, title: "Kubernetes auth", tech: "[kubernetes · -aws · -gcp]", desc: "TokenReview per cloud, SA vault-auth"}
@@ -201,7 +201,7 @@ elements:
   - {id: b-allow, kind: security, parent: z-cloud-a, icon: k8s-crd, title: "Allow-list", tech: "[API allow-list · SG · firewall]", desc: "K3s egress 176.186.130.237/32<br>API: public_access_cidrs (EKS),<br>authorized networks (GKE)<br>UDP 31820: SG · firewall"}
   - {id: b-nodes, kind: backend, parent: z-cloud-a, icon: kubernetes, title: "Worker node", tech: "[containerd]", desc: "Pulls app images, app-registry"}
   - {id: g-vpn, kind: group, parent: z-cluster, color: amber, icon: k8s-ns, title: "WIREGUARD", sub: "ns wireguard"}
-  - {id: wireguard-onprem, kind: cloud, parent: g-vpn, icon: k8s-pod, title: "wireguard-<cloud>", tech: "[100.96.0.0/30 · .4/30]", desc: "Initiates, keepalive 25 s", multiplicity: "one per cloud", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
+  - {id: wireguard-onprem, kind: cloud, parent: g-vpn, icon: k8s-pod, title: "wireguard-<cloud>", tech: "[100.96.0.0/30 · .4/30]", desc: "Initiates, keepalive 25 s", multiplicity: "one per cloud", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-select, protocol: TCP, port: 18083}]}
   - {id: tfstate-s3, kind: database, parent: z-aws-shared, shape: cylinder, icon: terraform, title: "istor-cnp-tfstate", tech: "[S3 bucket]", desc: "EKS, K3s, CMP and endpoints state", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: endpoint-bucket, kind: database, parent: z-aws-shared, shape: cylinder, icon: k8s-ns, title: "cnp-wireguard-endpoints", tech: "[S3 bucket · public read]", desc: "Objects aws, gcp = IP:31820", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: z-gcp-shared, kind: region, color: sky, icon: globe, title: "GOOGLE CLOUD", sub: "project cnp"}
@@ -220,7 +220,7 @@ elements:
   - {id: pol-same-ns, kind: backend, parent: z-pol-in, icon: k8s-ns, title: "Same project", tech: "[<p>-system, <p>-<app>]", desc: "Pods of the project's namespaces"}
   - {id: pol-gateway, kind: backend, parent: z-pol-in, icon: envoy-gateway, title: "envoy-gateway-system", tech: "[Envoy proxy]", desc: "Routes traffic to the project"}
   - {id: pol-cnpg, kind: database, parent: z-pol-in, icon: cnpg, title: "cnpg-system", tech: "[operator]", desc: "Manages the database pods"}
-  - {id: pol-obs, kind: backend, parent: z-pol-in, icon: grafana-alloy, title: "observability", tech: "[Alloy · Loki]", desc: "Scrapes metrics and logs"}
+  - {id: pol-obs, kind: backend, parent: z-pol-in, icon: victoriametrics, title: "observability", tech: "[vmagent · Fluent Bit]", desc: "Scrapes metrics, tails logs"}
   - {id: pol-kubelet, kind: backend, parent: z-pol-in, icon: kubernetes, title: "kubelet · node", tech: "[probes]", desc: "Liveness and readiness checks"}
   - {id: pol-other-proj, kind: backend, parent: z-pol-in, icon: k8s-ns, title: "Another project", tech: "[<q>-system, <q>-<app>]", desc: "A different tenant"}
   - {id: pol-default, kind: backend, parent: z-pol-in, icon: k8s-ns, title: "default namespace", tech: "[ns default]", desc: "Anything run by hand"}
@@ -229,7 +229,7 @@ elements:
   - {id: pol-wg-onprem, kind: cloud, parent: z-pol-out, icon: k8s-pod, title: "On-prem WireGuard pod", tech: "[K3s egress IP]", desc: "Opens the tunnel to the cloud"}
   - {id: pol-argo-op, kind: backend, parent: z-pol-out, icon: argo, title: "Argo CD", tech: "[K3s egress IP]", desc: "Sync (K3s egress IP)"}
   - {id: pol-workloads, kind: backend, parent: z-pol-target, icon: k8s-pod, title: "Project workloads", tech: "[Pods · all ports]", desc: "Gateway, tunnel, apps, databases"}
-  - {id: pol-wg, kind: cloud, parent: z-pol-perim, icon: k8s-pod, title: "Cloud WireGuard", tech: "[ns cnp-vpn · NodePort]", desc: "Clouds only", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
+  - {id: pol-wg, kind: cloud, parent: z-pol-perim, icon: k8s-pod, title: "Cloud WireGuard", tech: "[ns cnp-vpn · NodePort]", desc: "Clouds only", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-select, protocol: TCP, port: 18083}]}
   - {id: pol-api, kind: backend, parent: z-pol-perim, icon: kubernetes, title: "Cloud API server", tech: "[EKS · GKE]", desc: "Clouds only", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: pol-ccnp, kind: security, parent: z-pol-enf, icon: cilium, title: "On-prem · Cilium", tech: "[CiliumClusterwideNetworkPolicy]", desc: "cnp-project-<p>-ingress, with host rule"}
   - {id: pol-np-eks, kind: security, parent: z-pol-enf, icon: k8s-crd, title: "EKS · NetworkPolicy", tech: "[VPC CNI agent]", desc: "cnp-project-ingress per namespace"}
@@ -241,8 +241,8 @@ elements:
   - {id: cloud-control, kind: cloud, icon: globe, title: "AWS / GCP API", tech: "[cloud control plane]", desc: "Creates cluster, nodes, firewall", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: cloud-api, kind: backend, icon: kubernetes, title: "<cloud> API", tech: "[Kubernetes API]", desc: "EKS or GKE API server", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: cloud-vso, kind: security, icon: vault, title: "Cloud VSO", tech: "[platform-<cloud>]", desc: "Logs in at kubernetes-<cloud>"}
-  - {id: cloud-wg, kind: cloud, icon: k8s-pod, title: "Cloud WireGuard", tech: "[wireguard-<cloud>]", desc: "Listens on the node", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
-  - {id: up-wg-onprem, kind: cloud, icon: k8s-pod, title: "On-prem WireGuard", tech: "[ns wireguard]", desc: "Initiates, keepalive 25 s", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-loki, protocol: TCP, port: 18082}, {name: relay-select, protocol: TCP, port: 18083}]}
+  - {id: cloud-wg, kind: cloud, icon: k8s-pod, title: "Cloud WireGuard", tech: "[wireguard-<cloud>]", desc: "Listens on the node", ports: [{name: wg, protocol: UDP, port: 31820}, {name: relay-vm, protocol: TCP, port: 18080}, {name: relay-select, protocol: TCP, port: 18083}]}
+  - {id: up-wg-onprem, kind: cloud, icon: k8s-pod, title: "On-prem WireGuard", tech: "[ns wireguard]", desc: "Initiates, keepalive 25 s", ports: [{name: relay-vm, protocol: TCP, port: 18080}, {name: relay-select, protocol: TCP, port: 18083}]}
 
   # AI assistants through the CMP's MCP server (CMP v0.3.45, CMP#95, K3s#128).
   - {id: z-assistants, kind: region, color: violet, icon: claude, title: "AI ASSISTANTS", sub: "the user's own subscription"}
@@ -321,7 +321,7 @@ elements:
   - {id: ag-pol-guard, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy guard", tech: "[backend.ai.promptGuard]", desc: "Regex masks PII and secrets, then the<br>webhook; no answer: refused.<br>Why: check the prompt before the model.", status: planned, target: IA-2}
   - {id: ag-pol-failover, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy failover", tech: "[backend.health · traffic.retry]", desc: "Evicts a provider on 429 so the next<br>group takes over; retry resends.<br>Why: free quota spent, GPU answers.", status: planned, target: IA-1}
   - {id: ag-pol-tools, kind: security, parent: g-ag-polb, icon: k8s-crd, title: "AgentgatewayPolicy tools", tech: "[backend.mcp.authorization]", desc: "CEL on the claims and mcp.tool.name:<br>which agent may call which tool.<br>Why: per-tool rights, no extra service.", status: planned, target: IA-2}
-  - {id: ag-pol-trace, kind: backend, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy trace", tech: "[frontend.tracing · OTLP gRPC]", desc: "Sends the spans to Alloy.<br>Why: one trace from agent to tool.", status: planned, target: IA-1}
+  - {id: ag-pol-trace, kind: backend, parent: g-ag-pol, icon: k8s-crd, title: "AgentgatewayPolicy trace", tech: "[frontend.tracing · OTLP gRPC]", desc: "Sends the spans to the OTel<br>collector. Why: one trace<br>from agent to tool.", status: planned, target: IA-1}
   - {id: ag-c-krt, kind: backend, parent: g-ag-ctrl, icon: k8s-deploy, title: "Translator", tech: "[krt collections]", desc: "Turns Gateway API and agentgateway<br>objects into proxy configuration.<br>Why: you edit intent, not plumbing.", status: planned, target: IA-1}
   - {id: ag-c-xds, kind: backend, parent: g-ag-ctrl, icon: k8s-deploy, title: "xDS server", tech: "[gRPC ADS · delta updates]", desc: "Streams the configuration to the proxy,<br>applied without a restart.", status: planned, target: IA-1}
   - {id: ag-c-deploy, kind: backend, parent: g-ag-ctrl, icon: k8s-deploy, title: "Deployer", tech: "[one proxy per Gateway]", desc: "Creates the proxy Deployment for each<br>Gateway of the agentgateway class.<br>Why: no proxy to run by hand.", status: planned, target: IA-1}
@@ -409,7 +409,7 @@ elements:
   - {id: th-mcpserver, kind: backend, parent: g-th-crd, icon: k8s-crd, title: "MCPServer github", tech: "[image · transport stdio]", desc: "Image, transport and secrets of<br>one tool server.<br>Why: one object per tool server.", status: planned, target: IA-2}
   - {id: th-toolconfig, kind: security, parent: g-th-crd, icon: k8s-crd, title: "MCPToolConfig", tech: "[toolConfigRef]", desc: "Allow-list and renaming of tools.<br>Why: expose reads, hide writes.", status: planned, target: IA-2}
   - {id: th-oidc, kind: security, parent: g-th-crd, icon: k8s-crd, title: "MCPOIDCConfig", tech: "[oidcConfigRef · Keycloak]", desc: "Issuer and audience the proxy<br>checks on every call.<br>Why: tools don't trust the network.", status: planned, target: IA-2}
-  - {id: th-telemetry, kind: backend, parent: g-th-crd, icon: k8s-crd, title: "MCPTelemetryConfig", tech: "[telemetryConfigRef · OTLP]", desc: "Where the proxy sends spans and<br>metrics: Alloy.<br>Why: one trace, agent to tool.", status: planned, target: IA-2}
+  - {id: th-telemetry, kind: backend, parent: g-th-crd, icon: k8s-crd, title: "MCPTelemetryConfig", tech: "[telemetryConfigRef · OTLP]", desc: "Where the proxy sends spans and<br>metrics: the OTel collector.<br>Why: one trace, agent to tool.", status: planned, target: IA-2}
   - {id: th-secret, kind: database, parent: g-th-crd, icon: k8s-secret, title: "Secret github-token", tech: "[synced by VSO from Vault]", desc: "The tool's own API credential,<br>injected as an env var.<br>Why: agents never see it.", status: planned, target: IA-2}
   - {id: th-deploy, kind: backend, parent: g-th-gen, icon: k8s-deploy, title: "Deployment github", tech: "[ToolHive proxy]", desc: "Runs the proxy for this server.<br>Why: auth, policy and telemetry<br>in one place per tool.", status: planned, target: IA-2}
   - {id: th-svc, kind: backend, parent: g-th-gen, icon: k8s-svc, title: "Service mcp-github-proxy", tech: "[ClusterIP :8080]", desc: "Stable address of the proxy.<br>Why: the MCPRoute points here.", status: planned, target: IA-2}
@@ -451,19 +451,19 @@ elements:
   - {id: md-guard, kind: security, parent: z-homelab-gpu, icon: rack, title: "Guard · llama-guard3:1b", tech: "[Ollama · classifier]", desc: "Always loaded; classifies prompts and<br>answers for the guardrail adapter.<br>Down: the request is refused.", status: planned, target: IA-2}
   - {id: md-ollama-cfg, kind: tool, parent: z-homelab-gpu, icon: ollama, title: "Ollama settings", tech: "[server environment]", desc: "MAX_LOADED_MODELS 3, NUM_PARALLEL 2,<br>KEEP_ALIVE -1, CONTEXT_LENGTH 8192,<br>KV cache q8_0.", status: planned, target: IA-1}
 
-  # GenAI observability zoom (proposal, 2026-10-23): OTel GenAI conventions through Alloy to Tempo and VictoriaMetrics.
-  - {id: g-ob-alloy, kind: group, parent: g-ops, color: orange, icon: grafana-alloy, title: "ALLOY PIPELINE", sub: "otelcol components"}
+  # GenAI observability zoom (proposal, 2026-10-23): OTel GenAI conventions through the OTel collector to Tempo and VictoriaMetrics.
+  # Alloy and Loki were removed on 2026-11-21 (CNP-276): the pipeline runs in the otelcol-gateway, logs come from Fluent Bit.
+  - {id: g-ob-alloy, kind: group, parent: g-ops, color: orange, icon: opentelemetry, title: "COLLECT", sub: "OTel Collector · Fluent Bit"}
   - {id: g-ob-store, kind: group, parent: g-ops, color: violet, icon: grafana, title: "STORAGE"}
   - {id: g-ob-read, kind: group, parent: g-ops, color: emerald, icon: grafana, title: "READ · ALERT"}
-  - {id: ob-recv, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "otelcol.receiver.otlp", tech: "[gRPC 4317 · HTTP 4318]", desc: "Receives spans and metrics from<br>agents, gateway and tool proxies.<br>Why: one entry for all telemetry.", status: planned, target: IA-1}
-  - {id: ob-k8s, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "processor.k8sattributes", tech: "[pod → namespace, labels]", desc: "Adds namespace and project label<br>to every span and metric.<br>Why: cost and errors per project.", status: planned, target: IA-1}
-  - {id: ob-transform, kind: security, parent: g-ob-alloy, icon: opentelemetry, title: "processor.transform", tech: "[OTTL]", desc: "Drops gen_ai.input/output.messages<br>unless the project opted in.<br>Why: prompts are user data.", status: planned, target: IA-1}
-  - {id: ob-batch, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "processor.batch", tech: "[after memory_limiter]", desc: "Groups data before export.<br>Why: fewer, larger writes on a<br>small cluster.", status: planned, target: IA-1}
-  - {id: ob-exp-otlp, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "exporter.otlp", tech: "[→ Tempo :4317]", desc: "Sends the traces to Tempo.", status: planned, target: IA-1}
-  - {id: ob-exp-prom, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "exporter.prometheus", tech: "[→ prometheus.remote_write]", desc: "Turns OTel metrics into Prometheus<br>series, adds the scraped gateway ones<br>and pushes them to VictoriaMetrics.", status: planned, target: IA-1}
-  - {id: ob-logsrc, kind: backend, parent: g-ob-alloy, icon: grafana-alloy, title: "loki.source.kubernetes", tech: "[pod logs]", desc: "Tails pod logs, gateway access<br>logs included."}
-  - {id: ob-lokiw, kind: backend, parent: g-ob-alloy, icon: grafana-alloy, title: "loki.write", tech: "[push API]", desc: "Pushes log lines to Loki."}
-  - {id: ob-loki, kind: database, parent: g-ob-store, icon: loki, title: "Loki", tech: "[logs]", desc: "Logs, Vault audit, policy<br>refusals."}
+  - {id: ob-recv, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "receiver otlp", tech: "[gRPC 4317 · HTTP 4318]", desc: "Receives spans and metrics from<br>agents, gateway and tool proxies.<br>Why: one entry for all telemetry.", status: planned, target: IA-1}
+  - {id: ob-k8s, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "processor k8sattributes", tech: "[pod → namespace, labels]", desc: "Adds namespace and project label<br>to every span and metric.<br>Why: cost and errors per project.", status: planned, target: IA-1}
+  - {id: ob-transform, kind: security, parent: g-ob-alloy, icon: opentelemetry, title: "processor transform", tech: "[OTTL]", desc: "Drops gen_ai.input/output.messages<br>unless the project opted in.<br>Why: prompts are user data.", status: planned, target: IA-1}
+  - {id: ob-batch, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "processor batch", tech: "[after memory_limiter]", desc: "Groups data before export.<br>Why: fewer, larger writes on a<br>small cluster.", status: planned, target: IA-1}
+  - {id: ob-exp-otlp, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "exporter otlp", tech: "[→ Tempo :4317]", desc: "Sends the traces to Tempo.", status: planned, target: IA-1}
+  - {id: ob-exp-prom, kind: backend, parent: g-ob-alloy, icon: opentelemetry, title: "exporter prometheusremotewrite", tech: "[→ VictoriaMetrics]", desc: "Turns OTel metrics into Prometheus<br>series and pushes them to<br>VictoriaMetrics.", status: planned, target: IA-1}
+  - {id: ob-logsrc, kind: backend, parent: g-ob-alloy, icon: fluentbit, title: "Fluent Bit", tech: "[DaemonSet · pod logs]", desc: "Tails pod logs, gateway access<br>logs included."}
+  - {id: ob-loki, kind: database, parent: g-ob-store, icon: victoriametrics, title: "VictoriaLogs", tech: "[logs · 30 d]", desc: "Logs, Vault audit, policy<br>refusals."}
   - {id: ob-prom, kind: database, parent: g-ob-store, icon: grafana, title: "VictoriaMetrics", tech: "[remote write receiver]", desc: "Token, latency and 429 series per<br>project and model.<br>Why: dashboards and alerts.", status: planned, target: IA-1}
   - {id: ob-grafana, kind: frontend, parent: g-ob-read, icon: grafana, title: "Grafana", tech: "[dashboards]", desc: "Tokens, latency, 429s and share of<br>calls that fell back to the GPU server."}
   - {id: ob-alerts, kind: security, parent: g-ob-read, icon: grafana, title: "Alert rules", tech: "[Grafana alerting]", desc: "Budget at 80 %, 429s or refusals up.<br>Why: act before the budget is gone.", status: planned, target: IA-1}
@@ -507,7 +507,7 @@ elements:
   - {id: ov-kyverno, kind: security, parent: ov-g-guard, icon: kyverno, title: "Kyverno", tech: "[admission · Audit → Enforce]", desc: "+ PSS restricted, RuntimeClass per<br>tier, signed images only.", status: planned, target: IA-2}
   - {id: ov-cilium, kind: security, parent: ov-g-guard, icon: cilium, title: "Default-deny network", tech: "[Cilium policies · FQDN egress]", desc: "Tenants apart; agents and sandboxes<br>reach only what is allowed.", status: planned, target: P0}
   - {id: ov-g-obs, kind: group, parent: ov-z-cluster, color: amber, icon: grafana, title: "OBSERVABILITY", sub: "OpenTelemetry GenAI"}
-  - {id: ov-alloy, kind: backend, parent: ov-g-obs, icon: grafana-alloy, title: "Grafana Alloy", tech: "[OTel collector]", desc: "Logs today; + GenAI spans and<br>token metrics from the gateway."}
+  - {id: ov-alloy, kind: backend, parent: ov-g-obs, icon: opentelemetry, title: "Collectors", tech: "[Fluent Bit · OTel Collector]", desc: "Logs and traces today; + GenAI<br>spans and token metrics."}
   - {id: ov-tempo, kind: database, parent: ov-g-obs, icon: grafana, title: "Tempo", tech: "[traces]", desc: "One trace per agent task: model<br>calls, tool calls, sandbox runs.", status: planned, target: IA-1}
   - {id: ov-prom, kind: database, parent: ov-g-obs, icon: grafana, title: "VictoriaMetrics", tech: "[metrics · vmalert]", desc: "Metrics and alerts today; + GenAI<br>token series per project."}
   - {id: ov-grafana, kind: frontend, parent: ov-g-obs, icon: grafana, title: "Grafana", tech: "[dashboards · alerts]", desc: "Cost and quota per project;<br>alert at 80 % of the budget."}
@@ -529,12 +529,12 @@ elements:
   - {id: ov-kagent, kind: backend, parent: ov-g-kagent, icon: kubernetes, title: "kagent controller", tech: "[Agent · ModelConfig CRDs]", desc: "Deploys each Agent, publishes its<br>A2A endpoint and Agent Card."}
   - {id: ov-agent-2, kind: backend, parent: ov-g-tier-runc, icon: python, title: "Peer agent", tech: "[kagent BYO · A2A server]", desc: "Takes tasks other agents hand<br>over through the gateway."}
   - {id: ov-mcp-registry, kind: database, parent: ov-g-tools, icon: mcp, title: "MCP registry", tech: "[ToolHive · JSON in Git]", desc: "Approved servers with their<br>Sigstore provenance."}
-  - {id: ov-loki, kind: database, parent: ov-g-obs, icon: loki, title: "Loki", tech: "[logs · 14 to 30 days]", desc: "Logs, audit, denied flows;<br>+ gateway access logs."}
+  - {id: ov-loki, kind: database, parent: ov-g-obs, icon: victoriametrics, title: "VictoriaLogs", tech: "[logs · 30 days]", desc: "Logs, audit, denied flows;<br>+ gateway access logs."}
   - {id: ov-audit, kind: database, parent: ov-g-obs, icon: k8s-deploy, title: "Audit archive", tech: "[CronJob → RGW Object Lock]", desc: "Hourly copy of the audit logs,<br>locked for 30 days."}
   - {id: ov-opencost, kind: tool, parent: ov-g-obs, icon: opencost, title: "OpenCost", tech: "[cost per namespace]", desc: "Infra cost per project; token<br>cost computed in Grafana.", status: planned, target: P2}
   - {id: ov-cilium-agent, kind: security, parent: ov-g-guard, icon: cilium, title: "Cilium + Hubble", tech: "[CNI · eBPF]", desc: "Pod network today; Hubble exports<br>the flows a policy denies."}
   - {id: ov-g-data, kind: group, parent: ov-z-cluster, color: slate, icon: ceph, title: "DATA & STORAGE"}
-  - {id: ov-ceph, kind: database, parent: ov-g-data, icon: ceph, title: "Rook-Ceph", tech: "[block · file · RGW S3]", desc: "Volumes, Loki buckets and the<br>audit archive."}
+  - {id: ov-ceph, kind: database, parent: ov-g-data, icon: ceph, title: "Rook-Ceph", tech: "[block · file · RGW S3]", desc: "Volumes, backups and the<br>audit archive."}
   - {id: ov-garage, kind: database, parent: ov-g-data, icon: rack, title: "Garage", tech: "[S3 · s3.3istor.com]", desc: "Object storage for apps<br>and backups."}
   - {id: ov-g-ops, kind: group, parent: ov-z-cluster, color: slate, icon: k8s-ns, title: "OPERATIONS"}
   - {id: ov-gatus, kind: backend, parent: ov-g-ops, icon: k8s-deploy, title: "Gatus", tech: "[status.3istor.com]", desc: "Status page and health probes."}
@@ -564,7 +564,7 @@ elements:
   - {id: hl-ollama, kind: backend, parent: hl-z-homelab, icon: ollama, title: "Ollama + Llama Guard", tech: "[RTX 5080]", desc: "Modèles locaux, secours sur 429,<br>classifieur des guardrails."}
   - {id: hl-z-shared, kind: region, color: slate, icon: k8s-ns, title: "SERVICES TRANSVERSES"}
   - {id: hl-identity, kind: security, parent: hl-z-shared, icon: keycloak, title: "Keycloak + Vault", tech: "[OIDC · KV v2]", desc: "+ un client par agent, authentifié<br>par son ServiceAccount."}
-  - {id: hl-obs, kind: backend, parent: hl-z-shared, icon: grafana, title: "Observabilité", tech: "[OTel → Alloy → Tempo · Grafana]", desc: "+ traces GenAI, tokens et coût<br>par projet, à côté des logs.", status: planned, target: IA-1}
+  - {id: hl-obs, kind: backend, parent: hl-z-shared, icon: grafana, title: "Observabilité", tech: "[OTel → collecteur → Tempo · Grafana]", desc: "+ traces GenAI, tokens et coût<br>par projet, à côté des logs.", status: planned, target: IA-1}
   - {id: hl-net, kind: security, parent: hl-z-shared, icon: cilium, title: "Réseau et admission", tech: "[Cilium default-deny · Kyverno]", desc: "Tenants séparés ; pods restreints,<br>images signées seulement.", status: planned, target: P0}
   - {id: hl-finops, kind: tool, parent: hl-z-shared, icon: opencost, title: "FinOps", tech: "[budgets en tokens · OpenCost]", desc: "Budget par agent à la gateway ;<br>coût en euros dans Grafana.", status: planned, target: P2}
   - {id: hl-ops, kind: backend, parent: hl-z-shared, icon: k8s-deploy, title: "Exploitation", tech: "[Gatus · offhours-guard]", desc: "Page de statut et sondes ; apps<br>éteintes hors des heures."}
@@ -580,25 +580,14 @@ elements:
   # Shared core for the observability, backup and release views (2026-10-29).
   # Sources: K3s/k8s/config/{observability,wireguard,argo-rollouts,rook-ceph},
   # Cloud/terraform/public/{platform,aws/EKS,gcp/GKE}.
-  - {id: g-observability, kind: group, parent: z-cluster, color: orange, icon: grafana, title: "OBSERVABILITY", sub: "ns observability"}
+  - {id: g-observability, kind: group, parent: z-cluster, color: orange, icon: victoriametrics, title: "OBSERVABILITY", sub: "ns observability"}
   - {id: g-rollouts, kind: group, parent: z-cluster, color: indigo, icon: argo, title: "PROGRESSIVE DELIVERY", sub: "ns argo-rollouts"}
-  - {id: alloy-onprem, kind: backend, parent: g-observability, icon: grafana-alloy, title: "Alloy", tech: "[cluster=onprem]", desc: "Scrapes metrics, tails logs and audit"}
-  - {id: vm-vminsert, kind: backend, parent: g-observability, icon: k8s-deploy, title: "vminsert", tech: "[VictoriaMetrics cluster]", desc: "Metrics write, no auth", ports: [{name: write, protocol: TCP, port: 8480}]}
-  - {id: vm-vmstorage, kind: database, parent: g-observability, shape: cylinder, icon: k8s-deploy, title: "vmstorage", tech: "[20 GiB ceph-block · 14 d]", desc: "Metrics of the 3 clusters", ports: [{name: insert, protocol: TCP, port: 8400}, {name: select, protocol: TCP, port: 8401}]}
-  - {id: vm-vmselect, kind: backend, parent: g-observability, icon: k8s-deploy, title: "vmselect", tech: "[VictoriaMetrics cluster]", desc: "Metrics read, no auth", ports: [{name: read, protocol: TCP, port: 8481}]}
-  - {id: vmauth, kind: security, parent: g-observability, icon: k8s-deploy, title: "vmauth", tech: "[user per project]", desc: "Filters on the project namespaces", ports: [{name: http, protocol: TCP, port: 8427}]}
-  - {id: loki-gateway, kind: security, parent: g-observability, icon: loki, title: "Loki gateway", tech: "[nginx · basic auth]", desc: "One credential per client", ports: [{name: http, protocol: TCP, port: 80}]}
-  - {id: loki, kind: backend, parent: g-observability, icon: loki, title: "Loki", tech: "[single binary · multi-tenant]", desc: "Tenant per project, ruler", ports: [{name: http, protocol: TCP, port: 3100}]}
-  - {id: grafana, kind: frontend, parent: g-observability, icon: grafana, title: "Grafana", tech: "[org 1 + one org per project]", desc: "Dashboards and project alerts", ports: [{name: http, protocol: TCP, port: 3000}]}
-  - {id: vmalert, kind: backend, parent: g-observability, icon: k8s-deploy, title: "vmalert", tech: "[vmalert-rules]", desc: "Platform metric alerts"}
-  - {id: alertmanager, kind: backend, parent: g-observability, icon: k8s-deploy, title: "Alertmanager", tech: "[discord-default · -critical]", desc: "Routes alerts to Discord", ports: [{name: http, protocol: TCP, port: 9093}]}
-  - {id: audit-archive-job, kind: tool, parent: g-observability, icon: k8s-deploy, title: "audit-archive", tech: "[CronJob · hourly]", desc: "Copies audit streams to a locked bucket"}
+  - {id: grafana, kind: frontend, parent: g-vo-read, icon: grafana, title: "Grafana", tech: "[org 1 + one org per project]", desc: "Dashboards, one folder per role", ports: [{name: http, protocol: TCP, port: 3000}]}
+  - {id: audit-archive-job, kind: tool, parent: g-observability, icon: k8s-deploy, title: "audit-archive-vlogs", tech: "[CronJob · hourly]", desc: "Exports audit streams to RGW"}
   - {id: argo-rollouts, kind: backend, parent: g-rollouts, icon: argo, title: "Argo Rollouts", tech: "[gatewayAPI plugin 0.17.0]", desc: "Canary steps, weights, analysis"}
-  - {id: alloy-aws, kind: backend, parent: g-b-platform, icon: grafana-alloy, title: "Alloy", tech: "[cluster=aws|gcp · observability]", desc: "Pushes to on-prem via the tunnel"}
-  - {id: b-rollouts, kind: backend, parent: g-b-platform, icon: argo, title: "Argo Rollouts", tech: "[ns argo-rollouts]", desc: "Analysis reads on-prem vmselect"}
+  - {id: b-rollouts, kind: backend, parent: g-b-platform, icon: argo, title: "Argo Rollouts", tech: "[ns argo-rollouts]", desc: "Analysis reads on-prem VMSingle"}
   - {id: z-ceph, kind: region, color: violet, icon: ceph, title: "OPENSTACK CEPH", sub: "RGW 192.168.1.110 · pae-node-1 · outside K3s"}
   - {id: ceph-rgw, kind: database, parent: z-ceph, icon: ceph, title: "Ceph RGW", tech: "[S3 · plain HTTP]", desc: "Buckets made by Rook OBCs", ports: [{name: s3, protocol: TCP, port: 7480}]}
-  - {id: loki-bucket, kind: database, parent: z-ceph, shape: cylinder, icon: ceph, title: "loki-data", tech: "[bucket]", desc: "Log chunks, 7 / 14 / 30 d"}
   - {id: audit-bucket, kind: database, parent: z-ceph, shape: cylinder, icon: ceph, title: "cnp-audit-archive", tech: "[Object Lock · COMPLIANCE 180 d]", desc: "Nobody deletes before expiry"}
   - {id: discord, kind: external, parent: z-internet, icon: discord, title: "Discord", tech: "[webhooks]", desc: "Platform and project alerts"}
 
@@ -608,9 +597,9 @@ elements:
   - {id: pae-node-1, kind: cloud, parent: z-cluster, icon: openstack, title: "pae-node-1", tech: "[sshd · DynamicForward 1080]", desc: "SOCKS exit with the on-prem egress IP", ports: [{name: ssh, protocol: TCP, port: 22}]}
   - {id: up-cmp, kind: backend, icon: fastapi, title: "CMP backend", tech: "[arcl-cmp]", desc: "Caches the cluster state"}
   - {id: up-hub-api, kind: backend, icon: kubernetes, title: "K3s API", tech: "[hub · ns argocd]", desc: "Holds the Argo CD Applications", ports: [{name: https, protocol: TCP, port: 6443}]}
-  - {id: cloud-alloy, kind: backend, icon: grafana-alloy, title: "Cloud Alloy", tech: "[platform-<cloud> · ns observability]", desc: "Pushes metrics and logs home"}
+  - {id: cloud-alloy, kind: backend, icon: victoriametrics, title: "Cloud collectors", tech: "[vmagent · Fluent Bit · OTel]", desc: "Push metrics, logs, spans home"}
   - {id: z-pol-cloud-in, kind: region, color: sky, icon: kubernetes, title: "INSIDE A CLOUD CLUSTER", sub: "EKS, GKE · relay callers"}
-  - {id: pol-c-obs, kind: backend, parent: z-pol-cloud-in, icon: grafana-alloy, title: "ns observability", tech: "[Alloy]", desc: "Pushes metrics and logs"}
+  - {id: pol-c-obs, kind: backend, parent: z-pol-cloud-in, icon: victoriametrics, title: "ns observability", tech: "[vmagent · Fluent Bit · OTel]", desc: "Pushes metrics, logs, spans"}
   - {id: pol-c-rollouts, kind: backend, parent: z-pol-cloud-in, icon: argo, title: "ns argo-rollouts", tech: "[analysis runs]", desc: "Reads on-prem metrics"}
   - {id: pol-c-other, kind: backend, parent: z-pol-cloud-in, icon: k8s-ns, title: "Any other namespace", tech: "[projects, platform]", desc: "Tenant apps included"}
   - {id: pol-np-vpn, kind: security, parent: z-pol-enf, icon: k8s-crd, title: "Clouds · onprem-apps", tech: "[NetworkPolicy · ns cnp-vpn]", desc: "Relay ports by source namespace"}
@@ -620,16 +609,16 @@ elements:
   - {id: o-hub-targets, kind: backend, parent: g-obs-sources, icon: k8s-pod, title: "Scrape targets", tech: "[app pods · Envoy · exporters]", desc: "Annotated pods, kubelet, KSM"}
   - {id: o-audit-sources, kind: security, parent: g-obs-sources, icon: k8s-crd, title: "Audit sources", tech: "[audit.log · Vault · Keycloak · Hubble]", desc: "Tailed as pod logs or host file"}
   - {id: b-obs-targets, kind: backend, parent: g-b-platform, icon: k8s-pod, title: "Scrape targets", tech: "[app pods · node-exporter · KSM]", desc: "Pods and logs of the cloud"}
-  - {id: o-vmauth-secret, kind: database, parent: g-observability, icon: k8s-secret, title: "vmauth-projects", tech: "[Secret · auth.yml]", desc: "One user per project, from CMP"}
+  - {id: o-vmauth-secret, kind: database, parent: g-vo-read, icon: k8s-secret, title: "vmauth-projects", tech: "[Secret · auth.yml]", desc: "One user per project, from CMP"}
   - {id: s2-z-sources, kind: region, color: cyan, icon: kubernetes, title: "CLUSTERS"}
   - {id: s2-z-store, kind: region, color: violet, icon: rack, title: "STORE", sub: "on-prem"}
   - {id: s2-z-read, kind: region, color: emerald, icon: grafana, title: "READ"}
   - {id: s2-z-out, kind: region, color: slate, icon: globe, title: "INTERNET"}
-  - {id: s2-onprem, kind: backend, parent: s2-z-sources, icon: rack, title: "On-prem apps", tech: "[Alloy]"}
-  - {id: s2-cloud, kind: backend, parent: s2-z-sources, icon: kubernetes, title: "Public cloud apps", tech: "[AWS · GCP · Alloy · WireGuard]", multiplicity: "AWS and GCP"}
-  - {id: s2-vm, kind: database, parent: s2-z-store, shape: cylinder, icon: k8s-deploy, title: "Metrics", tech: "[VictoriaMetrics]"}
-  - {id: s2-loki, kind: database, parent: s2-z-store, shape: cylinder, icon: loki, title: "Logs", tech: "[Loki]"}
-  - {id: s2-ceph, kind: database, parent: s2-z-store, shape: cylinder, icon: ceph, title: "Object storage", tech: "[Ceph]"}
+  - {id: s2-onprem, kind: backend, parent: s2-z-sources, icon: rack, title: "On-prem apps", tech: "[vmagent · Fluent Bit · OTel]"}
+  - {id: s2-cloud, kind: backend, parent: s2-z-sources, icon: kubernetes, title: "Public cloud apps", tech: "[AWS · GCP · same collectors]", multiplicity: "AWS and GCP"}
+  - {id: s2-vm, kind: database, parent: s2-z-store, shape: cylinder, icon: victoriametrics, title: "Metrics, traces", tech: "[VMSingle · VictoriaTraces]"}
+  - {id: s2-loki, kind: database, parent: s2-z-store, shape: cylinder, icon: victoriametrics, title: "Logs", tech: "[VictoriaLogs]"}
+  - {id: s2-ceph, kind: database, parent: s2-z-store, shape: cylinder, icon: ceph, title: "Audit archive", tech: "[Ceph RGW · Object Lock]"}
   - {id: s2-grafana, kind: frontend, parent: s2-z-read, icon: grafana, title: "Grafana", tech: "[one org per project]"}
   - {id: s2-cmp, kind: frontend, parent: s2-z-read, icon: react, title: "CMP", tech: "[portal]"}
   - {id: s2-opencost, kind: tool, parent: s2-z-read, icon: opencost, title: "Costs", tech: "[OpenCost]"}
@@ -642,7 +631,6 @@ elements:
   - {id: seq-k3s-api, kind: backend, icon: kubernetes, title: "K3s API", tech: "[kube-apiserver · hub]", desc: "Argo CD objects and Secrets", ports: [{name: https, protocol: TCP, port: 6443}]}
   - {id: seq-keycloak, kind: security, icon: keycloak, title: "Keycloak", tech: "[admin API]", desc: "Groups, realms, clients", ports: [{name: http, protocol: TCP, port: 80}]}
   - {id: seq-vault, kind: database, icon: vault, title: "Vault", tech: "[KV v2 · auth roles]", desc: "Project mounts and roles", ports: [{name: http, protocol: TCP, port: 8200}]}
-  - {id: seq-loki, kind: security, icon: loki, title: "Loki gateway", tech: "[basic auth · tenant header]", desc: "Logs of the 3 clusters", ports: [{name: http, protocol: TCP, port: 80}]}
   - {id: seq-tfstate, kind: database, icon: terraform, title: "Terraform state", tech: "[S3 istor-cnp-tfstate]", desc: "One key per project and cloud", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: cf-api, kind: cloud, parent: z-cloudflare, icon: cloudflare, title: "Cloudflare API", tech: "[REST]", desc: "Tunnels and DNS records"}
   # S1: one box per actor or product, names only.
@@ -664,7 +652,7 @@ elements:
   - {id: s1-github, kind: external, parent: s1-z-git, icon: github, title: "GitHub", desc: "Project list and app code"}
   - {id: s1-onprem, kind: backend, parent: s1-z-clusters, icon: rack, title: "On-prem cluster"}
   - {id: s1-cloud, kind: backend, parent: s1-z-clusters, icon: kubernetes, title: "Public cloud clusters", desc: "AWS and Google Cloud, same setup", multiplicity: "AWS and GCP"}
-  - {id: s1-obs, kind: backend, parent: s1-z-obs, icon: grafana-alloy, title: "Metrics, logs, audit trail"}
+  - {id: s1-obs, kind: backend, parent: s1-z-obs, icon: victoriametrics, title: "Metrics, logs, audit trail"}
   # --- CNP-168 · G1 elements (backups) ---
   # Sources: infra-templates/templates/{cnpg-cluster,cnpg-backup,migrations}.yaml,
   # K3s/k8s/config/{cnp-projects-db,rook-ceph,cnpg}, CMP security_databases.py.
@@ -702,8 +690,8 @@ elements:
   - {id: pa-kc-realm, kind: security, parent: g-identity, icon: keycloak, title: "Realm <p>", tech: "[brokers the 3istor login]", desc: "App logins, one OIDC client per app"}
   - {id: pa-vault-mount, kind: database, parent: g-secrets, icon: vault, title: "KV project-<p>", tech: "[role: kubernetes / kubernetes-<cloud>]", desc: "Tunnel token, app secrets"}
   - {id: pa-grafana-org, kind: frontend, parent: g-observability, icon: grafana, title: "Grafana org <p>", tech: "[2 datasources · 2 dashboards]", desc: "Project dashboards and alerts"}
-  - {id: pa-vmauth-user, kind: security, parent: g-observability, icon: k8s-secret, title: "vmauth user project-<p>", tech: "[Secret vmauth-projects]", desc: "Metrics of its namespaces only"}
-  - {id: pa-loki-tenant, kind: database, parent: g-observability, icon: loki, title: "Loki tenant <p>", tech: "[X-Scope-OrgID]", desc: "Logs of its namespaces"}
+  - {id: pa-vmauth-user, kind: security, parent: g-observability, icon: k8s-secret, title: "vmauth user project-<p>", tech: "[Secret vmauth-projects]", desc: "Its namespaces only"}
+  - {id: pa-loki-tenant, kind: database, parent: g-observability, icon: victoriametrics, title: "Logs of <p>", tech: "[VictoriaLogs · vmauth filter]", desc: "Logs of its namespaces"}
   - {id: pa-kube-api, kind: backend, parent: z-pa-target, icon: kubernetes, title: "Kubernetes API", tech: "[target cluster]", desc: "Argo CD applies the project here", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: pa-registry, kind: external, parent: z-github, icon: github, title: "registry/projects/<p>.yaml", tech: "[cnp-projects]", desc: "targetCloud, apps, environments", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: pa-app-repos, kind: external, parent: z-github, icon: github, title: "<app> repos", tech: "[GitHub · deploy/values*.yaml]", desc: "Code and deployment values", multiplicity: "one per app", ports: [{name: https, protocol: TCP, port: 443}]}
@@ -724,17 +712,17 @@ elements:
   - {id: ar-migrate, kind: tool, parent: g-ar-app, icon: k8s-pod, title: "migrate Job", tech: "[Sync hook · after a backup]", desc: "Runs /app/migrate per version"}
   - {id: ar-secret, kind: database, parent: g-ar-app, icon: k8s-secret, title: "Secrets", tech: "[<fullname>-secrets · app-registry]", desc: "Written by the secret operator"}
   - {id: ar-vso, kind: security, parent: g-ar-platform, icon: vault, title: "Secret operator", tech: "[VaultSecret → Secret]", desc: "Logs in with the app's Vault role"}
-  - {id: ar-alloy, kind: backend, parent: g-ar-platform, icon: grafana-alloy, title: "Alloy", tech: "[annotated pods · pod logs]", desc: "Pushes to the hub, via tunnel on clouds"}
+  - {id: ar-alloy, kind: backend, parent: g-ar-platform, icon: victoriametrics, title: "vmagent · Fluent Bit", tech: "[annotated pods · pod logs]", desc: "Push to the hub, by tunnel on clouds"}
   - {id: ar-rollouts, kind: backend, parent: g-ar-platform, icon: argo, title: "Argo Rollouts", tech: "[canary in prod]", desc: "Smoke Job, error-rate analysis"}
   - {id: ar-other, kind: external, parent: g-ar-other, icon: k8s-pod, title: "Other project pods", tech: "[any of its namespaces]", desc: "Must not reach the app"}
   - {id: ar-cf, kind: cloud, parent: z-cloudflare, icon: cloudflare, title: "Cloudflare Edge", tech: "[project tunnel cnp-<project>-tunnel]", desc: "TLS ends here", ports: [{name: https, protocol: TCP, port: 443}, {name: quic, protocol: UDP, port: 7844}]}
   - {id: ar-keycloak, kind: security, parent: g-identity, icon: keycloak, title: "Keycloak", tech: "[auth.3istor.com · realm <project>]", desc: "Login and token endpoint", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: ar-vault, kind: database, parent: g-secrets, icon: vault, title: "Vault", tech: "[vault.vault.svc on-prem]", desc: "Mount project-<project>", ports: [{name: http, protocol: TCP, port: 8200}]}
-  - {id: ar-hub-obs, kind: database, parent: g-observability, icon: grafana, title: "VictoriaMetrics · Loki", tech: "[on-prem stores]", desc: "Metrics, logs, analysis queries"}
+  - {id: ar-hub-obs, kind: database, parent: g-observability, icon: victoriametrics, title: "VMSingle · VictoriaLogs", tech: "[on-prem stores]", desc: "Metrics, logs, analysis queries"}
 
   # CNP-158 repo import, in prod since 2026-11-14. Design: import spec v2 (2026-11-13). Existing parts
   # reused from above: user, cmp-frontend, cmp-backend, argocd, pa-appproject, kube-apiserver,
-  # github-app (CNP-Portal), pa-registry, ghcr, vault, vm-vmselect, alloy-onprem. Decided
+  # github-app (CNP-Portal), pa-registry, ghcr, vault, vo-vmsingle, vo-vmagent. Decided
   # 2026-11-13: one GitHub App only. Users install CNP-Portal on chosen repos; for a user
   # installation the CMP mints tokens down-scoped to contents:read, metadata:read and one repo.
   - {id: im-import, kind: backend, parent: g-cmp, icon: fastapi, title: "Import module", tech: "[CMP backend · /api/import]", desc: "Plans, builds, commits the registry", ports: [{name: http, protocol: TCP, port: 8000}]}
@@ -803,34 +791,33 @@ elements:
   - {id: ic-gh-oidc, kind: security, parent: z-github, icon: github-actions, title: "GitHub Actions OIDC", tech: "[token.actions.githubusercontent.com]", desc: "Signs job JWTs, serves the JWKS", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: ic-worker-route, kind: backend, parent: g-gateway, icon: k8s-crd, title: "HTTPRoute", tech: "[cmp-api-import-worker]", desc: "PathPrefix /api/import/worker"}
   - {id: ic-worker-jwt, kind: security, parent: g-gateway, icon: k8s-crd, title: "SecurityPolicy", tech: "[cmp-api-import-worker-jwt]", desc: "GitHub issuer, audience cmp-import"}
-  # Observability (CNP-185, 2026-11-13; V1, V2, V4 live on 2026-11-15): full VictoriaMetrics. Waves V0-V6 in docs/10-observabilite.
-  - {id: g-vo, kind: group, parent: z-cluster, color: orange, icon: victoriametrics, title: "OBSERVABILITY · TARGET", sub: "ns observability · VictoriaMetrics operator"}
-  - {id: g-vo-collect, kind: group, parent: g-vo, color: sky, icon: k8s-ns, title: "COLLECT"}
-  - {id: g-vo-store, kind: group, parent: g-vo, color: violet, icon: victoriametrics, title: "STORE", sub: "Ceph RBD volumes"}
-  - {id: g-vo-read, kind: group, parent: g-vo, color: emerald, icon: grafana, title: "READ"}
-  - {id: g-vo-alert, kind: group, parent: g-vo, color: rose, icon: prometheus, title: "ALERT"}
+  # Observability (CNP-185, 2026-11-13; V1, V2, V4 live on 2026-11-15, V3 after; Loki, Alloy and the VictoriaMetrics
+  # cluster removed on 2026-11-21, CNP-276): full VictoriaMetrics in g-observability. Waves V0-V6 in docs/10-observabilite.
+  - {id: g-vo-collect, kind: group, parent: g-observability, color: sky, icon: k8s-ns, title: "COLLECT"}
+  - {id: g-vo-store, kind: group, parent: g-observability, color: violet, icon: victoriametrics, title: "STORE", sub: "Ceph RBD volumes"}
+  - {id: g-vo-read, kind: group, parent: g-observability, color: emerald, icon: grafana, title: "READ"}
+  - {id: g-vo-alert, kind: group, parent: g-observability, color: rose, icon: prometheus, title: "ALERT"}
   - {id: vo-app-otel, kind: backend, parent: g-obs-sources, icon: opentelemetry, title: "Template apps", tech: "[OTel SDK · /metrics · JSON logs]", desc: "Traces, business metrics,<br>trace_id in every log line"}
   - {id: vo-ai-sources, kind: backend, parent: g-obs-sources, icon: opentelemetry, title: "AI landing zone", tech: "[agentgateway · kagent · MCP]", desc: "GenAI spans, tokens, decisions", status: planned, target: V6}
   - {id: vo-vmagent, kind: backend, parent: g-vo-collect, icon: victoriametrics, title: "vmagent", tech: "[VMAgent · 1 replica]", desc: "Scrapes every target, enforces<br>the namespace label"}
   - {id: vo-vlagent, kind: backend, parent: g-vo-collect, icon: fluentbit, title: "Fluent Bit", tech: "[DaemonSet · Lua rebuilds records]", desc: "Tails pod logs and k3s audit.log,<br>fields from metadata only"}
   - {id: vo-otelcol, kind: backend, parent: g-vo-collect, icon: opentelemetry, title: "OTel Collector", tech: "[gateway · 2 replicas]", desc: "Pod from the connection, tenant<br>per project, strips PII", ports: [{name: otlp, protocol: TCP, port: 4317}, {name: otlp-cloud, protocol: TCP, port: 4319}]}
-  - {id: vo-vmsingle, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VMSingle", tech: "[metrics · 30 d · < 150k series]", desc: "Replaces the VM cluster", ports: [{name: http, protocol: TCP, port: 8428}]}
-  - {id: vo-vlogs, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VictoriaLogs", tech: "[single · 30 d · disk cap]", desc: "Replaces Loki", ports: [{name: http, protocol: TCP, port: 9428}]}
+  - {id: vo-vmsingle, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VMSingle", tech: "[metrics · 30 d · 40 GiB]", desc: "Every cluster, label cluster", ports: [{name: http, protocol: TCP, port: 8429}]}
+  - {id: vo-vlogs, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VictoriaLogs", tech: "[VLSingle · 30 d · 16 GiB cap]", desc: "Logs and audit, one tenant", ports: [{name: http, protocol: TCP, port: 9428}]}
   - {id: vo-vtraces, kind: database, parent: g-vo-store, shape: cylinder, icon: victoriametrics, title: "VictoriaTraces", tech: "[single · 7 d · tenant per project]", desc: "Tempo stays the fallback", ports: [{name: http, protocol: TCP, port: 10428}]}
-  - {id: vo-vmauth, kind: security, parent: g-vo-read, icon: victoriametrics, title: "vmauth ×2", tech: "[one user per project and per cloud]", desc: "Forces filters, tenant<br>and cluster label", ports: [{name: http, protocol: TCP, port: 8427}]}
-  - {id: vo-grafana, kind: frontend, parent: g-vo-read, icon: grafana, title: "Grafana", tech: "[org 1 + one org per project]", desc: "Dashboards only, one folder per role"}
-  - {id: vo-vmalert, kind: backend, parent: g-vo-alert, icon: victoriametrics, title: "vmalert ×2", tech: "[metrics rules · vlogs rules]", desc: "Platform rules and CMP VMRules", status: planned, target: V3}
-  - {id: vo-alertmanager, kind: backend, parent: g-vo-alert, icon: prometheus, title: "Alertmanager", tech: "[VMAlertmanager · route by app]", desc: "App, then project, then platform", ports: [{name: http, protocol: TCP, port: 9093}], status: planned, target: V3}
-  - {id: vo-backup, kind: tool, parent: g-vo, icon: victoriametrics, title: "vmbackup", tech: "[daily]", desc: "Metrics backup to RGW", status: planned, target: V1}
-  - {id: vo-audit-record, kind: tool, parent: g-vo, icon: k8s-deploy, title: "audit-record", tech: "[Go job · Vault transit]", desc: "Signed, hash-chained record<br>per agent run", status: planned, target: V6}
-  - {id: vo-deadman, kind: external, parent: z-internet, icon: globe, title: "Dead man's switch", tech: "[healthchecks.io]", desc: "Tells Discord when pings stop", ports: [{name: https, protocol: TCP, port: 443}], status: planned, target: V3}
-  # Multi-cloud target (proposal, D22): same collectors on EKS and GKE, one identity per cloud at vmauth.
+  - {id: vo-vmauth, kind: security, parent: g-vo-read, icon: victoriametrics, title: "vmauth", tech: "[projects ×2 · clouds ×2]", desc: "One user per project or cloud;<br>forces filters, tenant, cluster", ports: [{name: http, protocol: TCP, port: 8427}]}
+  - {id: vo-vmalert, kind: backend, parent: g-vo-alert, icon: victoriametrics, title: "vmalert ×2", tech: "[metrics rules · vlogs rules]", desc: "Platform rules and CMP VMRules"}
+  - {id: vo-alertmanager, kind: backend, parent: g-vo-alert, icon: prometheus, title: "Alertmanager", tech: "[VMAlertmanager · route by app]", desc: "App, then project, then platform", ports: [{name: http, protocol: TCP, port: 9093}]}
+  - {id: vo-backup, kind: tool, parent: g-observability, icon: victoriametrics, title: "vmbackup", tech: "[daily]", desc: "Metrics backup to RGW", status: planned, target: later}
+  - {id: vo-audit-record, kind: tool, parent: g-observability, icon: k8s-deploy, title: "audit-record", tech: "[Go job · Vault transit]", desc: "Signed, hash-chained record<br>per agent run", status: planned, target: V6}
+  - {id: vo-deadman, kind: external, parent: z-internet, icon: globe, title: "Dead man's switch", tech: "[healthchecks.io]", desc: "Tells Discord when pings stop", ports: [{name: https, protocol: TCP, port: 443}]}
+  # Multi-cloud (D22, wave V6, Cloud#50): same collectors on EKS and GKE, one identity per cloud at vmauth.
   - {id: vo-c-vmagent, kind: backend, parent: g-b-platform, icon: victoriametrics, title: "vmagent", tech: "[cluster=aws|gcp · 2 GiB disk queue]", desc: "Scrapes the cloud, keeps<br>samples while the tunnel is down", status: planned, target: V6}
   - {id: vo-c-vlagent, kind: backend, parent: g-b-platform, icon: fluentbit, title: "Fluent Bit", tech: "[DaemonSet · disk queue]", desc: "Tails pod logs of the cloud", status: planned, target: V6}
   - {id: vo-c-otelcol, kind: backend, parent: g-b-platform, icon: opentelemetry, title: "OTel Collector", tech: "[agent · k8sattributes on the cloud]", desc: "Resolves pods where they run,<br>forwards OTLP", ports: [{name: otlp, protocol: TCP, port: 4317}], status: planned, target: V6}
   # AI run sequence participants (proposal, D20).
-  - {id: vo-ai-agent, kind: backend, parent: g-vo, icon: k8s-pod, title: "Hosted agent", tech: "[kagent]", desc: "Runs one task", status: planned, target: V6}
-  - {id: vo-ai-gw, kind: security, parent: g-vo, icon: k8s-deploy, title: "agentgateway", tech: "[models · MCP]", desc: "Budget, guardrails, token counts", status: planned, target: V6}
+  - {id: vo-ai-agent, kind: backend, parent: g-observability, icon: k8s-pod, title: "Hosted agent", tech: "[kagent]", desc: "Runs one task", status: planned, target: V6}
+  - {id: vo-ai-gw, kind: security, parent: g-observability, icon: k8s-deploy, title: "agentgateway", tech: "[models · MCP]", desc: "Budget, guardrails, token counts", status: planned, target: V6}
   - {id: vo-ai-model, kind: external, parent: z-internet, icon: globe, title: "Model", tech: "[Claude · Gemini · Ollama]", desc: "Answers"}
 
   # Lifecycle sequences of template and imported apps (CNP-312). Own participants, like seq-*,
@@ -856,62 +843,32 @@ elements:
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
-  - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
-  - {id: c-alloy-lokigw, from: alloy-onprem, to: loki-gateway, port: http, protocol: HTTP, verb: push logs, kind: flow}
-  - {id: c-lokigw-loki, from: loki-gateway, to: loki, port: http, protocol: HTTP, verb: proxy, kind: flow}
-  - {id: c-vminsert-vmstorage, from: vm-vminsert, to: vm-vmstorage, port: insert, protocol: TCP, verb: write, kind: flow}
-  - {id: c-vmselect-vmstorage, from: vm-vmselect, to: vm-vmstorage, port: select, protocol: TCP, verb: read, kind: flow}
-  - {id: c-loki-bucket, from: loki, to: ceph-rgw, port: s3, protocol: S3 HTTP, verb: store chunks, kind: flow}
-  - {id: c-alloyaws-relay-vm, from: alloy-aws, to: b-wireguard, port: relay-vm, protocol: HTTP, verb: remote_write, kind: flow}
-  - {id: c-alloyaws-relay-loki, from: alloy-aws, to: b-wireguard, port: relay-loki, protocol: HTTP, verb: push logs, kind: flow}
   - {id: c-brollouts-relay-select, from: b-rollouts, to: b-wireguard, port: relay-select, protocol: HTTP, verb: query, kind: flow}
   # Inside the tunnel: the cloud socat opens TCP to the on-prem tunnel IP.
   - {id: c-bwg-onprem-vm, from: b-wireguard, to: wireguard-onprem, port: relay-vm, protocol: TCP in tunnel, verb: relay, kind: flow}
-  - {id: c-bwg-onprem-loki, from: b-wireguard, to: wireguard-onprem, port: relay-loki, protocol: TCP in tunnel, verb: relay, kind: flow}
   - {id: c-bwg-onprem-select, from: b-wireguard, to: wireguard-onprem, port: relay-select, protocol: TCP in tunnel, verb: relay, kind: flow}
-  - {id: c-wgonprem-vminsert, from: wireguard-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: relay 18080, kind: flow}
-  - {id: c-wgonprem-lokigw, from: wireguard-onprem, to: loki-gateway, port: http, protocol: HTTP, verb: relay 18082, kind: flow}
-  - {id: c-wgonprem-vmselect, from: wireguard-onprem, to: vm-vmselect, port: read, protocol: HTTP, verb: relay 18083, kind: flow}
-  - {id: c-grafana-vmselect, from: grafana, to: vm-vmselect, port: read, protocol: HTTP, verb: "org 1, unfiltered", kind: flow}
-  - {id: c-grafana-vmauth, from: grafana, to: vmauth, port: http, protocol: HTTP, verb: "project org", kind: flow}
-  - {id: c-vmauth-vmselect, from: vmauth, to: vm-vmselect, port: read, protocol: HTTP, verb: "query + namespace filter", kind: flow}
-  - {id: c-grafana-lokigw, from: grafana, to: loki-gateway, port: http, protocol: HTTP, verb: "query, X-Scope-OrgID", kind: flow}
-  - {id: c-vmalert-vmselect, from: vmalert, to: vm-vmselect, port: read, protocol: HTTP, verb: evaluate, kind: flow}
-  - {id: c-vmalert-am, from: vmalert, to: alertmanager, port: http, protocol: HTTP, verb: fire, kind: flow}
-  - {id: c-loki-am, from: loki, to: alertmanager, port: http, protocol: HTTP, verb: "ruler fires", kind: flow}
-  - {id: c-am-discord, from: alertmanager, to: discord, protocol: HTTPS, verb: webhook, kind: flow}
-  - {id: c-rollouts-vmselect, from: argo-rollouts, to: vm-vmselect, port: read, protocol: HTTP, verb: analysis query, kind: flow}
 
   # --- CNP-168 · T1 T3 F1 connections ---
   - {id: c-op-pae, from: operator, to: pae-node-1, port: ssh, protocol: SSH, verb: "SOCKS 127.0.0.1:1080", kind: tunnel}
   - {id: c-cmp-b-api, from: cmp-backend, to: b-apiserver, port: https, protocol: HTTPS, verb: "read pods, rollouts, scans", kind: async}
   - {id: c-pol-c-obs, from: pol-c-obs, to: pol-wg, port: relay-vm, verb: allow, protocol: TCP, kind: flow}
-  - {id: c-pol-c-obs-loki, from: pol-c-obs, to: pol-wg, port: relay-loki, verb: allow, protocol: TCP, kind: flow}
   - {id: c-pol-c-rollouts, from: pol-c-rollouts, to: pol-wg, port: relay-select, verb: allow, protocol: TCP, kind: flow}
   - {id: c-pol-c-other, from: pol-c-other, to: pol-wg, verb: reach, protocol: TCP, kind: flow, denied: true, enforced_by: [pol-np-vpn]}
-  - {id: c-up-alloy-wg, from: cloud-alloy, to: cloud-wg, port: relay-vm, protocol: HTTP, verb: "remote_write, push logs", kind: flow}
+  - {id: c-up-alloy-wg, from: cloud-alloy, to: cloud-wg, port: relay-vm, protocol: HTTP, verb: "metrics, logs, spans", kind: flow}
   - {id: c-up-cwg-onprem, from: cloud-wg, to: up-wg-onprem, port: relay-vm, protocol: TCP in tunnel, verb: relay, kind: flow}
-  - {id: c-up-wg-vminsert, from: up-wg-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: "relay 18080", kind: flow}
-  - {id: c-up-wg-lokigw, from: up-wg-onprem, to: loki-gateway, port: http, protocol: HTTP, verb: "relay 18082", kind: flow}
+  - {id: c-up-wg-vmauth, from: up-wg-onprem, to: vo-vmauth, port: http, protocol: HTTP, verb: "relay 18080", kind: flow}
   - {id: c-up-cmp-state, from: up-cmp, to: up-hub-api, port: https, protocol: HTTPS, verb: "read Application wireguard-<cloud>", kind: async}
   # --- CNP-168 · T2 F3 S2 connections ---
-  - {id: c-alloyaws-targets, from: alloy-aws, to: b-obs-targets, protocol: HTTP, verb: scrape · tail, kind: flow}
-  - {id: c-alloy-hubtargets, from: alloy-onprem, to: o-hub-targets, protocol: HTTP, verb: scrape · tail, kind: flow}
-  - {id: c-alloy-auditsrc, from: alloy-onprem, to: o-audit-sources, protocol: file · K8s API, verb: tail, kind: flow}
-  - {id: c-archive-lokigw, from: audit-archive-job, to: loki-gateway, port: http, protocol: HTTP, verb: "logcli export, user archive", kind: flow}
   - {id: c-archive-rgw, from: audit-archive-job, to: ceph-rgw, port: s3, protocol: S3 HTTP, verb: put object, kind: flow}
-  - {id: c-cmp-vmselect, from: cmp-backend, to: vm-vmselect, port: read, protocol: HTTP, verb: "query, unfiltered", kind: flow}
-  - {id: c-cmp-lokigw, from: cmp-backend, to: loki-gateway, port: http, protocol: HTTP, verb: "query, user cmp", kind: flow}
-  - {id: c-grafana-discord, from: grafana, to: discord, protocol: HTTPS, verb: "project alert webhooks", kind: flow}
+  - {id: c-archive-vlogs, from: audit-archive-job, to: vo-vlogs, port: http, protocol: HTTP, verb: "LogsQL export", kind: flow}
   - {id: c-cmp-discord, from: cmp-backend, to: discord, protocol: HTTPS, verb: "app and budget alerts", kind: flow}
   - {id: c-s2-cmp-discord, from: s2-cmp, to: s2-discord, verb: notify, kind: flow}
-  - {id: c-s2-grafana-discord, from: s2-grafana, to: s2-discord, verb: notify, kind: flow}
   - {id: c-s2-alerts-loki, from: s2-alerts, to: s2-loki, verb: evaluate, kind: flow}
   - {id: c-s2-onprem-vm, from: s2-onprem, to: s2-vm, verb: metrics, kind: flow}
   - {id: c-s2-onprem-loki, from: s2-onprem, to: s2-loki, verb: logs, kind: flow}
   - {id: c-s2-cloud-vm, from: s2-cloud, to: s2-vm, verb: metrics, kind: flow}
   - {id: c-s2-cloud-loki, from: s2-cloud, to: s2-loki, verb: logs, kind: flow}
-  - {id: c-s2-loki-ceph, from: s2-loki, to: s2-ceph, verb: chunks, kind: flow}
+  - {id: c-s2-loki-ceph, from: s2-loki, to: s2-ceph, verb: audit export, kind: flow}
   - {id: c-s2-grafana-vm, from: s2-grafana, to: s2-vm, verb: query, kind: flow}
   - {id: c-s2-grafana-loki, from: s2-grafana, to: s2-loki, verb: query, kind: flow}
   - {id: c-s2-cmp-vm, from: s2-cmp, to: s2-vm, verb: query, kind: flow}
@@ -926,7 +883,6 @@ connections:
   - {id: c-cmp-k3s-api, from: cmp-backend, to: seq-k3s-api, port: https, protocol: HTTPS, verb: "read Application, Secret", kind: flow}
   - {id: c-cmp-k3s-state, from: cmp-backend, to: seq-k3s-api, port: https, protocol: HTTPS, verb: "refresh cluster state", kind: async}
   - {id: c-cmp-cloud-api, from: cmp-backend, to: cloud-api, port: https, protocol: HTTPS, verb: "bearer from cluster-<cloud>", kind: flow}
-  - {id: c-seq-cmp-loki, from: cmp-backend, to: seq-loki, port: http, protocol: HTTP, verb: "query, user cmp", kind: flow}
   - {id: c-cmp-keycloak, from: cmp-backend, to: seq-keycloak, port: http, protocol: HTTP, verb: "Terraform · admin API", kind: flow}
   - {id: c-cmp-vault, from: cmp-backend, to: seq-vault, port: http, protocol: HTTP, verb: "Terraform · write", kind: flow}
   - {id: c-cmp-cfapi, from: cmp-backend, to: cf-api, protocol: HTTPS, verb: "Terraform · tunnel, DNS", kind: flow}
@@ -1212,9 +1168,8 @@ connections:
   - {id: c-ob-7, from: ob-exp-prom, to: ob-prom, protocol: HTTP, verb: remote write, kind: flow, status: planned, target: IA-1}
   - {id: c-ob-8, from: ob-grafana, to: tempo, protocol: HTTP, verb: TraceQL, kind: flow, status: planned, target: IA-1}
   - {id: c-ob-9, from: ob-grafana, to: ob-prom, protocol: HTTP, verb: MetricsQL, kind: flow, status: planned, target: IA-1}
-  - {id: c-ob-10, from: ob-logsrc, to: ob-lokiw, protocol: in-process, verb: log lines, kind: flow}
-  - {id: c-ob-11, from: ob-lokiw, to: ob-loki, protocol: HTTP, verb: push, kind: flow}
-  - {id: c-ob-12, from: ob-grafana, to: ob-loki, protocol: HTTP, verb: LogQL, kind: flow}
+  - {id: c-ob-11, from: ob-logsrc, to: ob-loki, protocol: HTTP, verb: insert, kind: flow}
+  - {id: c-ob-12, from: ob-grafana, to: ob-loki, protocol: HTTP, verb: LogsQL, kind: flow}
 
   # Platform AI overview: one request path, the set-up around it, and what is refused.
   - {id: ov-c-user-cf, from: ov-user, to: ov-cf, protocol: HTTPS, verb: "open the app or the agent", kind: flow}
@@ -1264,7 +1219,7 @@ connections:
   - {id: ov-c-kagent-kapi, from: ov-kagent, to: ov-kapi, verb: "create agent Deployments", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-toolhive-registry, from: ov-toolhive, to: ov-mcp-registry, verb: "check provenance", kind: flow, status: planned, target: IA-2}
   - {id: ov-c-alloy-loki, from: ov-alloy, to: ov-loki, verb: "logs", kind: flow}
-  - {id: ov-c-grafana-loki, from: ov-grafana, to: ov-loki, verb: "LogQL", kind: flow}
+  - {id: ov-c-grafana-loki, from: ov-grafana, to: ov-loki, verb: "LogsQL", kind: flow}
   - {id: ov-c-audit-loki, from: ov-audit, to: ov-loki, verb: "hourly export", kind: flow}
   - {id: ov-c-hubble-alloy, from: ov-cilium-agent, to: ov-alloy, verb: "denied flows", kind: flow}
   # Vue haut niveau : le parcours d'une requête et la mise en place, rien d'autre.
@@ -1316,9 +1271,9 @@ connections:
   - {id: c-tp-canvas-api, from: tp-canvas, to: tp-api, port: http, protocol: HTTPS, verb: "GET topology", kind: flow}
   - {id: c-tp-api-registry, from: tp-api, to: pa-registry, port: https, protocol: HTTPS, verb: "apps, dependsOn", kind: flow}
   - {id: c-tp-api-kapi, from: tp-api, to: kube-apiserver, port: https, protocol: HTTPS, verb: "health, offhours state", kind: flow}
-  - {id: c-tp-api-vmselect, from: tp-api, to: vm-vmselect, port: read, protocol: HTTP, verb: "flows by workload", kind: flow}
-  - {id: c-tp-alloy-hubble, from: alloy-onprem, to: tp-hubble-metrics, port: metrics, protocol: HTTP, verb: "scrape", kind: async}
-  - {id: c-tp-alloy-export, from: alloy-onprem, to: tp-hubble-export, protocol: pod logs, verb: "tail, then Loki", kind: async}
+  - {id: c-tp-api-vmsingle, from: tp-api, to: vo-vmsingle, port: http, protocol: HTTP, verb: "flows by workload", kind: flow}
+  - {id: c-tp-vmagent-hubble, from: vo-vmagent, to: tp-hubble-metrics, port: metrics, protocol: HTTP, verb: "scrape", kind: async}
+  - {id: c-tp-fluentbit-export, from: vo-vlagent, to: tp-hubble-export, protocol: pod logs, verb: "tail, then VictoriaLogs", kind: async}
   - {id: c-tp-api-relay, from: tp-api, to: tp-hubble-relay, port: grpc, protocol: gRPC, verb: "live flows", kind: flow, status: planned, target: later}
   # CNP-158 import: epitweet runtime.
   - {id: c-et-gw-front, from: ar-gateway, to: et-frontend, port: http, protocol: HTTP, verb: "route frontend-epitweet", kind: flow}
@@ -1374,7 +1329,7 @@ connections:
   - {id: c-ic-import-jwks, from: im-import, to: ic-gh-oidc, port: https, protocol: HTTPS, verb: "fetch JWKS, 1 h cache", kind: async}
   - {id: c-ic-import-vault-role, from: im-import, to: vault-auth, protocol: HTTP, verb: "write <p>-<app>-role", kind: flow}
   - {id: c-ic-import-vault-kv, from: im-import, to: pa-vault-mount, protocol: HTTP, verb: "write <app>/imports", kind: flow}
-  # Observability target (proposal, CNP-185).
+  # Observability (CNP-185).
   - {id: c-vo-vmagent-targets, from: vo-vmagent, to: o-hub-targets, kind: flow, protocol: HTTP, verb: scrape}
   - {id: c-vo-vmagent-appotel, from: vo-vmagent, to: vo-app-otel, kind: flow, protocol: HTTP, verb: "scrape /metrics"}
   - {id: c-vo-vlagent-audit, from: vo-vlagent, to: o-audit-sources, kind: flow, protocol: file, verb: tail}
@@ -1383,10 +1338,10 @@ connections:
   - {id: c-vo-vmagent-vmsingle, from: vo-vmagent, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: remote_write}
   - {id: c-vo-vlagent-vlogs, from: vo-vlagent, to: vo-vlogs, kind: flow, port: http, protocol: HTTP, verb: insert}
   - {id: c-vo-otelcol-vtraces, from: vo-otelcol, to: vo-vtraces, kind: flow, port: http, protocol: OTLP, verb: export}
-  - {id: c-vo-grafana-vmauth, from: vo-grafana, to: vo-vmauth, kind: flow, port: http, protocol: HTTP, verb: "project orgs"}
+  - {id: c-vo-grafana-vmauth, from: grafana, to: vo-vmauth, kind: flow, port: http, protocol: HTTP, verb: "project orgs"}
   - {id: c-vo-vmauth-vmsingle, from: vo-vmauth, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: "query, cloud writes · filters forced"}
   - {id: c-vo-vmauth-vlogs, from: vo-vmauth, to: vo-vlogs, kind: flow, port: http, protocol: HTTP, verb: "query, cloud writes · filters forced"}
-  - {id: c-vo-grafana-vmsingle, from: vo-grafana, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: "org 1"}
+  - {id: c-vo-grafana-vmsingle, from: grafana, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: "org 1"}
   - {id: c-vo-cmp-vmsingle, from: cmp-backend, to: vo-vmsingle, kind: flow, port: http, protocol: HTTP, verb: query}
   - {id: c-vo-cmp-vlogs, from: cmp-backend, to: vo-vlogs, kind: flow, port: http, protocol: HTTP, verb: LogsQL}
   - {id: c-vo-cmp-vtraces, from: cmp-backend, to: vo-vtraces, kind: flow, port: http, protocol: HTTP, verb: "Jaeger API"}
@@ -1405,7 +1360,7 @@ connections:
   - {id: c-vo-cmp-agent, from: cmp-backend, to: vo-ai-agent, kind: flow, protocol: A2A, verb: "start task"}
   - {id: c-vo-agent-gw, from: vo-ai-agent, to: vo-ai-gw, kind: flow, protocol: HTTP, verb: "model and tool calls"}
   - {id: c-vo-gw-model, from: vo-ai-gw, to: vo-ai-model, kind: flow, protocol: HTTPS, verb: chat}
-  # Multi-cloud target (proposal, D22).
+  # Multi-cloud (D22, wave V6).
   - {id: c-vo-mc-vmagent-targets, from: vo-c-vmagent, to: b-obs-targets, kind: flow, protocol: HTTP, verb: scrape, status: planned, target: V6}
   - {id: c-vo-mc-vlagent-targets, from: vo-c-vlagent, to: b-obs-targets, kind: flow, protocol: file, verb: tail, status: planned, target: V6}
   - {id: c-vo-mc-apps-otelcol, from: b-obs-targets, to: vo-c-otelcol, port: otlp, kind: flow, protocol: OTLP, verb: spans, status: planned, target: V6}
@@ -1415,7 +1370,7 @@ connections:
   - {id: c-vo-mc-wg-vmauth, from: wireguard-onprem, to: vo-vmauth, port: http, kind: flow, protocol: HTTP, verb: "relay 18080 · 18083", status: planned, target: V6}
   - {id: c-vo-vmauth-otelcol, from: vo-vmauth, to: vo-otelcol, port: otlp-cloud, kind: flow, protocol: OTLP, verb: "cloud spans · cluster header", status: planned, target: V6}
   # Q9 (2026-11-14): project Grafana reads traces through vmauth, tenant forced per project.
-  - {id: c-vo-vmauth-vtraces, from: vo-vmauth, to: vo-vtraces, port: http, kind: flow, protocol: HTTP, verb: "Jaeger API · tenant forced", status: planned, target: V4}
+  - {id: c-vo-vmauth-vtraces, from: vo-vmauth, to: vo-vtraces, port: http, kind: flow, protocol: HTTP, verb: "Jaeger API · tenant forced"}
   - {id: c-vo-gw-cmp, from: vo-ai-gw, to: cmp-backend, kind: flow, protocol: MCP, verb: "tool call"}
   - {id: c-vo-gw-otelcol, from: vo-ai-gw, to: vo-otelcol, kind: flow, port: otlp, protocol: OTLP, verb: spans}
 
@@ -1524,10 +1479,9 @@ references:
   - {id: r-bk-rook-secret, from: rook-ceph, to: bk-secret, kind: creates}
 
   # CNP-168 T2
-  - {id: r-rgw-lokibucket, from: ceph-rgw, to: loki-bucket, kind: holds}
   - {id: r-rgw-auditbucket, from: ceph-rgw, to: audit-bucket, kind: holds}
   - {id: r-cmp-vmauthsecret, from: cmp-backend, to: o-vmauth-secret, kind: "patches (K8s API)"}
-  - {id: r-vmauth-secret, from: vmauth, to: o-vmauth-secret, kind: "reloads users (30 s)"}
+  - {id: r-vmauth-secret, from: vo-vmauth, to: o-vmauth-secret, kind: "reloads users (30 s)"}
 
   # CNP-169 project & app
   - {id: r-pa-appproject-apps, from: pa-appproject, to: pa-applications, kind: bounds}
@@ -1557,9 +1511,8 @@ annotations:
   - {id: GB1, severity: medium, title: "Backup credentials outside Vault", targets: [bk-secret]}
   - {id: GB2, severity: medium, title: "Backups over plain HTTP", targets: [c-bk-db-rgw]}
   # CNP-168 T2
-  - {id: GO1, severity: high, title: "Cloud writes carry no credential", targets: [vm-vminsert]}
-  - {id: GO2, severity: medium, title: "Loki gateway has no NetworkPolicy", targets: [loki-gateway]}
-  - {id: GO3, severity: medium, title: "Project filter is by namespace, not cluster", targets: [vmauth]}
+  - {id: GO1, severity: high, title: "Cloud relays not on vmauth yet", text: "K3s settings*.env still forwards 18080 and 18083 to the old vminsert and vmselect Service names (the compat vmauth, no credential, no cluster label forced), not to vmauth-clouds:8427, whose paths and passwords the cloud collectors of Cloud#50 use.", targets: [c-vo-mc-wg-vmauth]}
+  - {id: GO3, severity: medium, title: "Project filter is by namespace, not cluster", targets: [vo-vmauth]}
   - {id: GO4, severity: medium, title: "Cloud API server audit not collected", targets: [o-audit-sources]}
   - {id: G1, severity: high, title: "Network isolation", targets: [x-cross-tenant]}
   - {id: G2, severity: high, title: "Authorization", targets: [security-policy]}
@@ -1585,7 +1538,6 @@ annotations:
   # CNP-158 import: design spec v2 against the code (2026-11-13).
   - {id: GI1, severity: high, title: "CNP-Portal on user accounts", text: "Decided 2026-11-13: users install CNP-Portal on chosen repos (user_github_installations, routers/account.py), and the CMP must mint tokens for user installations down-scoped to contents:read, metadata:read and one repo. Today it mints full tokens. Residual risk accepted: the installation holds every CNP-Portal permission.", targets: [github-app]}
   - {id: GI2, severity: medium, title: "Step-up is off", text: "Apply relies on a passkey step-up, but STEP_UP_ENABLED defaults to false in the CMP: without it, Apply runs on a plain session.", targets: [c-im-user-import]}
-  - {id: GI3, severity: low, title: "No vmagent", text: "The design has vmagent scrape Hubble metrics. The cluster runs no vmagent: Alloy scrapes and remote-writes to VictoriaMetrics.", targets: [c-tp-alloy-hubble]}
   - {id: GI4, severity: high, title: "AppProject trusts every repoURL", text: "AppProject <p> sourceRepos lists every spec.apps[].repoURL. An imported app that kept the user repo as repoURL would let Argo CD read it: imported apps must carry source, not repoURL.", targets: [x-im-argocd-user-repo]}
 # Who may act on what, today and after the segregation plan. deprecated: the plan removes
 # it; planned: the plan adds it, target = its phase (P1 root accounts, P2 CMP rights,
@@ -1785,7 +1737,7 @@ grants:
   - {id: g-im-service-ghcr, subject: im-service, resource: ghcr, level: read, scope: "imports/<p>/* · one project pull credential", via: [vault], status: planned, target: CNP-239}
 
 offerings:
-  - {id: off-golden, title: "Golden signals", icon: envoy, summary: "Requests, errors and latency per route, with deploy markers", provides: ["Overview tab", "Grafana dashboard per app", "canary vs stable"], request: "Nothing: every app behind the gateway", backed_by: [vo-vmagent, vo-vmsingle, vo-grafana], status: planned, target: V1}
+  - {id: off-golden, title: "Golden signals", icon: envoy, summary: "Requests, errors and latency per route, with deploy markers", provides: ["Overview tab", "Grafana dashboard per app", "canary vs stable"], request: "Nothing: every app behind the gateway", backed_by: [vo-vmagent, vo-vmsingle, grafana], status: planned, target: V1}
   - {id: off-logs, title: "Logs and top errors", icon: victoriametrics, summary: "30 days of logs, full-text search, errors grouped by pattern", provides: ["Logs tab", "top 5 errors", "log to trace"], request: "Nothing: write to stdout, JSON preferred", backed_by: [vo-vlagent, vo-vlogs, vo-vmauth], status: planned, target: V2}
   - {id: off-slo, title: "SLO and error budget", icon: victoriametrics, summary: "Availability 99.5 % and p95 < 500 ms by default, burn-rate alerts", provides: ["error budget in Overview", "fast and slow burn alerts", "target set in Settings"], request: "Nothing for prod apps; tune the target in Settings", backed_by: [vo-vmalert, vo-vmsingle], status: planned, target: V3}
   - {id: off-alerts, title: "Alerts to Discord", icon: discord, summary: "One message per alert group, runbook link, mute from the portal", provides: ["app or project webhook", "critical, warning, daily digest", "dead man's switch"], request: "Paste the webhook in project or app Settings", backed_by: [vo-vmalert, vo-alertmanager, discord], status: planned, target: V3}

@@ -5,6 +5,14 @@
 > `00-index.md`, une vue ou un schéma, c'est elle qui prime. Les phases et leurs vérifications
 > sont dans [03-phases.md](03-phases.md).
 
+> **Observabilité, mise à jour du 2026-11-21.** Alloy et Loki ont été retirés de la plateforme
+> ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)). Les décisions D7, D14, D24 et D30
+> ci-dessous sont remplacées par la décision D20 du dossier
+> [Observabilité](../10-observabilite/07-ia-et-conformite.md) : OpenTelemetry → collecteur
+> OpenTelemetry (`otelcol-gateway`, déjà en place) → VictoriaTraces, Tempo en repli ; logs
+> d'accès → Fluent Bit → VictoriaLogs, enregistrement signé en archive 180 jours. Le texte de
+> la v1.0 est gardé tel quel.
+
 **Sources.** La page [Stack cible et compromis](01-stack-cible.md) ; le modèle Noodle
 (`architecture/cnp/model.yaml`), en particulier les éléments `ov-*` et `hl-*` de l'option B
 (agentgateway et kagent), qui sont la version la plus récente ; le doc de synthèse « Landing
@@ -362,7 +370,7 @@ vérifie ces points sur le cluster avant toute modification.
 | Default-deny entre tenants | Politique en entrée par projet dans `cnp-project-base`, derrière l'option `networkIsolation` ; egress ouvert | G1 partiellement traité : activer partout et fermer l'egress (T0.2) |
 | CloudNativePG | chart 0.29.0, plugin Barman Cloud 0.8.1 installé | Sauvegarde à configurer et tester par base d'app (T0.5) |
 | VictoriaMetrics | chart single 0.48.0, vmalert 0.46.0 | Base des métriques GenAI (D7) |
-| Alloy | chart 1.11.1 | Récepteur OTLP à ajouter (T1.3) |
-| Grafana, Loki | charts 10.5.15 et 7.3.0 | |
+| Alloy | chart 1.11.1 à la rédaction ; retiré le 2026-11-21 (CNP-276) | Remplacé par le collecteur OpenTelemetry `otelcol-gateway` (OTLP 4317 et 4318), déjà en place |
+| Grafana, Loki | charts 10.5.15 et 7.3.0 à la rédaction ; Loki retiré le 2026-11-21 | Logs dans VictoriaLogs (Fluent Bit) |
 | Tempo | absent | À installer (D30) |
 | CMP | décode les JWT du realm sans vérifier l'audience | G7 : à fermer en phase 1 (T1.9) |

@@ -1,6 +1,6 @@
 # Index des schémas
 
-Quel ticket a changé quoi, et quel schéma le montre. Tous les schémas sont générés depuis le code avec noodle : sources dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp), procédure dans [`architecture/README.md`](https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md). État au 29/10/2026. EKS et GKE ayant la même plateforme, les schémas les dessinent une seule fois (« cluster cloud public »).
+Quel ticket a changé quoi, et quel schéma le montre. Tous les schémas sont générés depuis le code avec noodle : sources dans [`architecture/cnp`](https://github.com/3-Istor/cnp-docs/tree/main/architecture/cnp), procédure dans [`architecture/README.md`](https://github.com/3-Istor/cnp-docs/blob/main/architecture/README.md). État au 29/10/2026, observabilité mise à jour le 21/11/2026. La colonne « Composants » décrit ce que le ticket a livré à l'époque. EKS et GKE ayant la même plateforme, les schémas les dessinent une seule fois (« cluster cloud public »).
 
 ## Par public
 
@@ -8,7 +8,7 @@ Quel ticket a changé quoi, et quel schéma le montre. Tous les schémas sont g�
 |---|---|
 | Soutenance, décideurs | [Qui utilise quoi](01-system-overview.md#who-uses-what), [Observabilité en un coup d'œil](07-observability.md), [Où tourne quoi](../06-multicloud/06-schemas.md#ou-tourne-quoi) |
 | Dev d'une équipe projet | [Un projet et une app sur un cloud public](../06-multicloud/06-schemas.md#un-projet-et-une-app-sur-un-cloud-public), [Promotion et canary](../03-pipelines-and-workflows/06-release-canary.md), [Sauvegarde des bases](08-database-backups.md) |
-| Équipe plateforme | [Liens hub / clouds](../06-multicloud/06-schemas.md#liens-hub-clouds), [Qui peut atteindre un projet](../06-multicloud/06-schemas.md#qui-peut-atteindre-un-projet), [Collecte](07-observability.md#collecte), [`cnp.sh up`](../06-multicloud/06-schemas.md#cnpsh-up) |
+| Équipe plateforme | [Liens hub / clouds](../06-multicloud/06-schemas.md#liens-hub-clouds), [Qui peut atteindre un projet](../06-multicloud/06-schemas.md#qui-peut-atteindre-un-projet), [Collecte](07-observability.md#collecte-stockage-et-alertes-sur-le-hub), [`cnp.sh up`](../06-multicloud/06-schemas.md#cnpsh-up) |
 
 ## Par ticket
 
@@ -24,8 +24,9 @@ Quel ticket a changé quoi, et quel schéma le montre. Tous les schémas sont g�
 | CNP-166 | API EKS/GKE via le proxy SOCKS on-prem | `cnp.sh`, `pae-node-1`, `api_allowed_cidrs` | `multicloud-links`, `cloud-up` |
 | CNP-120, 121 | Journaux d'audit, archive immuable | Alloy, Loki, ruler, bucket Object Lock | `observability`, [Journaux d'audit](06-audit-logging.md) |
 | CNP-122 | Logs et métriques isolés par projet, alertes | vmauth, tenants Loki, orgs Grafana, Alertmanager | `observability-read`, `observability-simple` |
+| CNP-185, 276 | Full VictoriaMetrics : remplace Alloy, Loki et le cluster VictoriaMetrics (retirés le 21/11/2026) | vmagent, Fluent Bit, collecteur OpenTelemetry, VMSingle, VictoriaLogs, VictoriaTraces, vmauth, VMAlert, VMAlertmanager | `observability`, `observability-read`, `observability-simple`, `observability-multicloud`, `observability-metric-path`, [Observabilité](../10-observabilite/00-index.md) |
 | CNP-118, 140 | Sauvegarde et restauration des bases | CloudNativePG, plugin barman, Ceph RGW, CMP | `app-backup`, `app-restore` |
-| CNP-123, 126 | Staging, promotion, canary | CMP, Argo Rollouts, HTTPRoute, vmselect | `canary-release` |
+| CNP-123, 126 | Staging, promotion, canary | CMP, Argo Rollouts, HTTPRoute, VMSingle (vmselect à l'époque) | `canary-release` |
 | — | Vue d'ensemble des acteurs | Dev, admin projet, finance, opérateur | `platform-actors` |
 | — | Ce qu'un projet reçoit, et une app vue de l'intérieur | `<p>-system`, namespaces d'apps, AppProjects, realm, mount Vault, org Grafana | `project-anatomy`, `app-runtime` |
 
@@ -36,5 +37,5 @@ Pas encore représenté : OpenCost sur les clouds (CNP-89, en cours).
 Chaque schéma a une carte *Gaps*. Les principaux :
 
 - La création d'un projet n'est pas bloquée quand le cluster cible est down, seul le déploiement d'une app l'est.
-- `vminsert` accepte les écritures des clouds sans authentification ; la Loki gateway n'a pas de NetworkPolicy.
+- Les relais WireGuard 18080 et 18083 de K3s visent encore les anciens noms `vminsert` et `vmselect` (vmauth de compatibilité, sans authentification) au lieu de `vmauth-clouds` : la télémétrie d'un cloud rallumé n'arrive pas comme dessiné (GO1).
 - Sauvegardes CNPG : HTTP clair vers Ceph RGW, identifiants générés par Rook (pas Vault), indisponibles sur EKS/GKE.

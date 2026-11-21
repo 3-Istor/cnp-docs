@@ -8,6 +8,13 @@
     statut des destinataires sont des **décisions humaines** à prendre par le
     responsable de traitement, avec le DPO s'il y en a un.
 
+!!! note "Mise à jour du 21/11/2026 : Loki retiré"
+    Loki et Alloy ont été retirés ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)).
+    Les logs des pods et les flux d'audit sont désormais dans VictoriaLogs (Fluent Bit),
+    avec une rétention unique de 30 jours, et l'archive horaire est écrite par
+    `audit-archive-vlogs` (Object Lock 180 jours). Les lignes de stockage et de durée
+    ci-dessous sont à jour ; les liens vers le code restent ceux du 13/11.
+
 Chaque information porte une étiquette :
 
 | Étiquette | Signification |
@@ -48,11 +55,11 @@ Chaque information porte une étiquette :
 Tiers détectés par Bearer : Cloudflare, Discord, GitHub, Google Cloud APIs, et AWS S3
 comme magasin de données. Bearer **ne voit pas** les clients MCP (les assistants IA
 appellent la CMP, la CMP ne les appelle pas) ni les services internes (Keycloak, Loki,
-Grafana) : ils sont ajoutés à la main ci-dessous.
+Grafana) : ils sont ajoutés à la main ci-dessous (Loki, cité à l'époque, est remplacé par VictoriaLogs).
 
 Le rapport dataflow signale aussi des journaux applicatifs qui contiennent des noms
 d'utilisateur, par exemple `routers/projects.py:652` (« X a mis Y au rôle Z »). Ces
-lignes partent dans Loki avec les logs du pod.
+lignes partent dans VictoriaLogs avec les logs du pod.
 
 ## Responsable et contacts
 
@@ -70,7 +77,7 @@ lignes partent dans Loki avec les logs du pod.
 | Membres de projet | Owner, admins, membres, invités d'un projet | `projects.owner_username`, groupes Keycloak `project-*` |
 | Identités plateforme | Groupes `infra`, `security-auditor`, `finops` | `services/authz.py` |
 | Personnes ayant connecté un assistant IA | Utilisateur qui a approuvé un client MCP | `agent_grants`, `agent_confirmations`, `issue_reports` |
-| Auteurs d'événements d'audit | Toute personne ou compte qui modifie la plateforme, y compris via `kubectl`, Vault ou Keycloak | `audit_events`, `activity_events`, flux Loki d'audit |
+| Auteurs d'événements d'audit | Toute personne ou compte qui modifie la plateforme, y compris via `kubectl`, Vault ou Keycloak | `audit_events`, `activity_events`, flux d'audit dans VictoriaLogs |
 | Utilisateurs finaux des apps hébergées | Personnes qui utilisent une app déployée sur CNP | Indirect : leurs données peuvent apparaître dans les logs d'app que la CMP relit (`get_app_logs`) |
 
 ## Traitements
@@ -107,8 +114,8 @@ légale** sont des propositions à valider.
 | Finalité **[Décision]** | Proposition : sécurité, traçabilité des changements, enquête après incident |
 | Base légale **[Décision]** | Proposition : 6.1.f (sécurité du SI), voire 6.1.c selon les obligations applicables |
 | Données **[Code]** | Auteur (`preferred_username` ou `sub`), action, cible, IP source (`X-Forwarded-For` ou IP du pair), détails filtrés (seuls les champs de `_SAFE_FIELDS` sont copiés, les clés qui ressemblent à un secret sont masquées), assistant IA en cause (`via`). Fil d'activité : mêmes champs plus `user_agent`, groupes et URI de la requête pour les événements Kubernetes, IP pour Keycloak |
-| Stockage **[Code]** | Postgres `audit_events` et `activity_events` ([`audit.py:16`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/models/audit.py#L16)) ; Loki : flux `{job="k8s-audit"}`, Vault, Keycloak (`org.keycloak.events`), Hubble, et les logs de tous les pods dont la CMP ; archive horaire des trois flux d'audit dans un bucket Ceph RGW |
-| Durée configurée **[Code]** | Postgres : 30 j, `AUDIT_RETENTION_DAYS` ([`config.py:151`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/core/config.py#L151)), purge toutes les 6 h ([`audit.py:551`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/services/audit.py#L551)), aucune surcharge dans K3s. Loki : 14 j par défaut ([`values-loki.yaml:80`](https://github.com/3-Istor/K3s/blob/205f439570e81dfa14d6b1e73dc113553854f2ab/k8s/config/observability/values-loki.yaml#L80)), 7 j ou 30 j par label `retention` ; les flux d'audit sont à 30 j (voir [Journaux d'audit](../01-architecture/06-audit-logging.md)). Archive : Object Lock COMPLIANCE 30 j ([`audit-archive.yaml:48`](https://github.com/3-Istor/K3s/blob/205f439570e81dfa14d6b1e73dc113553854f2ab/k8s/config/observability/audit-archive.yaml#L48)) ; **aucune règle d'expiration** : passé 30 j, les objets restent jusqu'à suppression manuelle |
+| Stockage **[Code]** | Postgres `audit_events` et `activity_events` ([`audit.py:16`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/models/audit.py#L16)) ; VictoriaLogs (Loki jusqu'au 21/11/2026) : flux `{job="k8s-audit"}`, Vault, Keycloak (`org.keycloak.events`), Hubble, et les logs de tous les pods dont la CMP ; archive horaire des trois flux d'audit dans un bucket Ceph RGW |
+| Durée configurée **[Code]** | Postgres : 30 j, `AUDIT_RETENTION_DAYS` ([`config.py:151`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/core/config.py#L151)), purge toutes les 6 h ([`audit.py:551`](https://github.com/3-Istor/CMP/blob/31b4486e33d700e507600fb157ccf03d102c46c0/backend/app/services/audit.py#L551)), aucune surcharge dans K3s. VictoriaLogs : 30 j pour tous les flux, rétention unique (`vlogs.yaml`, depuis le 21/11/2026 ; Loki gardait 14 j par défaut, 7 j ou 30 j par label) (voir [Journaux d'audit](../01-architecture/06-audit-logging.md)). Archive : Object Lock COMPLIANCE 30 j ([`audit-archive.yaml:48`](https://github.com/3-Istor/K3s/blob/205f439570e81dfa14d6b1e73dc113553854f2ab/k8s/config/observability/audit-archive.yaml#L48)) ; **aucune règle d'expiration** : passé 30 j, les objets restent jusqu'à suppression manuelle |
 | Durée cible **[Décision]** | À fixer, en particulier pour l'archive : 30 j de verrou n'est pas une durée de conservation |
 
 ### T4. Assistants IA connectés par MCP
@@ -171,7 +178,7 @@ destinataire) et l'existence d'un contrat ou de clauses types sont **[Décision]
 | AWS | Pas de donnée personnelle observée : facturation, état Terraform. Le client S3 `boto3` sert aussi aux avatars, mais vers `s3.3istor.com` | `services/finops/ingest/aws_focus.py`, `routers/account.py` | Bearer (S3) | Selon région |
 | Google Cloud | Pas de donnée personnelle observée : facturation via fédération d'identité | `services/finops/ingest/gcp_focus.py`, `federation.py` | Bearer | Selon région |
 | Grafana (interne) | Email et nom des membres, synchronisés dans les orgs Grafana | `services/grafana_service.py` | Bearer (email) | Non, hébergé sur CNP |
-| Keycloak, Loki, Vault, Ceph RGW (internes) | Voir T1 et T3 | | Lecture | Non, hébergés sur CNP |
+| Keycloak, VictoriaLogs, Vault, Ceph RGW (internes) | Voir T1 et T3 | | Lecture | Non, hébergés sur CNP |
 
 ## Mesures de sécurité (art. 32), résumé
 
@@ -195,4 +202,4 @@ Tiré du code, détaillé dans [Ségrégation des accès](../01-architecture/05-
 - [ ] Politique d'usage des assistants IA : quels assistants sont autorisés, et si les
       logs d'apps manipulant des données d'utilisateurs finaux peuvent leur être envoyés.
 - [ ] Photo de profil servie publiquement : acceptable ou non.
-- [ ] Noms d'utilisateur dans les logs applicatifs (Loki 14 j) : acceptables ou à retirer.
+- [ ] Noms d'utilisateur dans les logs applicatifs (VictoriaLogs 30 j) : acceptables ou à retirer.

@@ -1,27 +1,29 @@
 # Journaux d'audit
 
 Qui a fait quoi sur la plateforme, et qui est prévenu quand ça compte. Quatre sources
-écrivent une trace, Alloy les envoie toutes dans Loki, et le ruler de Loki alerte Discord
-à travers Alertmanager.
+écrivent une trace, Fluent Bit les envoie toutes dans VictoriaLogs, et VMAlert `vlogs`
+alerte Discord à travers VMAlertmanager. Jusqu'au 21/11/2026, le même chemin passait par
+Alloy, Loki et son ruler ([CNP-276](https://3istors.atlassian.net/browse/CNP-276)) ; les
+logs Loki du 22/10 au 15/11 sont copiés dans VictoriaLogs avec `source=loki`.
 
 | Source | Ce qui est tracé | Où c'est configuré | Rétention |
 |---|---|---|---|
 | API Kubernetes | Requêtes des personnes et des tokens : `exec`, lecture de secrets, écritures, RBAC | `K3s/node-config/k3s-server/audit-policy.yaml` | 30 j |
 | Vault | Chaque requête et réponse, secrets hachés en HMAC | `K3s/terraform/audit.tf` (`vault_audit.stdout`) | 30 j |
 | Keycloak | Logins, échecs, admin events, sur tous les realms | `K3s/terraform/audit.tf`, `project-bootstrap`, `cnp-project-base` | 30 j |
-| Cilium (Hubble) | Flux refusés par une network policy | `K3s/k8s/config/kube-system/values.yaml` | 14 j |
+| Cilium (Hubble) | Flux refusés par une network policy | `K3s/k8s/config/kube-system/values.yaml` | 30 j |
 
 Chaque heure d'audit Kubernetes, Vault et Keycloak est en plus copiée dans un bucket verrouillé 180 jours (voir [Archive immuable](#archive-immuable)).
 
 ```mermaid
 flowchart LR
-  api[kube-apiserver<br/>audit.log] -->|loki.source.file| alloy[Alloy]
-  vault[Vault<br/>audit stdout] -->|logs du pod| alloy
-  kc[Keycloak<br/>jboss-logging] -->|logs du pod| alloy
-  cil[cilium-agent<br/>Hubble export stdout] -->|logs du pod| alloy
-  alloy --> loki[(Loki<br/>bucket loki-data sur Ceph RGW)]
-  loki --> ruler[Loki ruler<br/>loki-security-rules]
-  ruler --> am[Alertmanager] --> discord[Discord]
+  api[kube-apiserver<br/>audit.log] -->|tail fichier| fb[Fluent Bit]
+  vault[Vault<br/>audit stdout] -->|logs du pod| fb
+  kc[Keycloak<br/>jboss-logging] -->|logs du pod| fb
+  cil[cilium-agent<br/>Hubble export stdout] -->|logs du pod| fb
+  fb -->|/insert/jsonline| vl[(VictoriaLogs<br/>vlogs-cnp, volume Ceph RBD)]
+  vl --> rules[VMAlert vlogs<br/>vlogs-rules.yaml]
+  rules --> am[VMAlertmanager] --> discord[Discord]
 ```
 
 ## Cycle de vie d'une politique d'audit Kubernetes
@@ -50,8 +52,8 @@ sienne.
    Ne jamais dépasser `Metadata` sur les secrets : leur contenu finirait en clair dans les logs.
 5. **Backend.** Un event JSON par ligne dans
    `/var/lib/rancher/k3s/server/logs/audit.log`. Ce fichier n'est qu'un tampon (100 Mo,
-   3 rotations, 2 jours) : Alloy le lit sur le nœud serveur et l'envoie à Loki avec
-   `job="k8s-audit"`.
+   3 rotations, 2 jours) : Fluent Bit le lit sur le nœud serveur et l'envoie à
+   VictoriaLogs avec `job="k8s-audit"`.
 
 Un event réel, un `kubectl exec` :
 
@@ -103,8 +105,9 @@ tracé.
 
 ## Alertes
 
-Règles Loki dans `K3s/k8s/config/observability/loki-security-rules.yaml`, chargées par le
-sidecar dans `/rules/default` (le seul tenant Loki) et évaluées chaque minute.
+Règles LogsQL dans `K3s/k8s/config/observability/vlogs-rules.yaml` (VMRule `vlogs-security`,
+label `cnp.3istor.com/rules: vlogs`), évaluées chaque minute par VMAlert `vlogs` sur les cinq
+dernières minutes. Elles remplacent depuis le 21/11/2026 les règles du ruler Loki.
 
 | Alerte | Sévérité | Déclenchée par | Bruit attendu |
 |---|---|---|---|
@@ -113,6 +116,7 @@ sidecar dans `/rules/default` (le seul tenant Loki) et évaluées chaque minute.
 | `KeycloakLoginFailureBurst` | critical | Plus de 10 `LOGIN_ERROR` en 5 min sur un realm | — |
 | `KeycloakPrivilegeChange` | warning | Admin event sur realm, rôles, role mappings ou identity providers | Une fois par création de projet (le tenant admin reçoit `realm-admin`) |
 | `KubernetesPodExec` | warning | `exec` ou `attach` réussi dans un pod | Chaque `kubectl exec` de débogage |
+| `KeycloakElevatedGroupChangedOutsideCmp` | critical | Entrée ou sortie d'un groupe `elevated-*` par autre chose que le CMP | — |
 | `KubernetesRbacChangeByHuman` | critical | Écriture RBAC par un utilisateur qui n'est ni un service account ni un composant système | — |
 
 ## Modifier et tester la politique
@@ -160,22 +164,18 @@ sidecar dans `/rules/default` (le seul tenant Loki) et évaluées chaque minute.
 
 ## Rétention
 
-Loki supprime par défaut après 14 jours. Le label `cnp.3istor.com/log-retention` (`7d`,
-`14d` ou `30d`) change la durée :
-
-- sur les pods d'une app : `logRetention` dans le chart `infra-templates` ;
-- sur tous les namespaces d'un projet : `spec.logRetention` dans le registry
-  `cnp-projects`. Une valeur de projet l'emporte sur celle des apps ;
-- les namespaces `vault` et `keycloak` sont à 30 jours, ainsi que l'audit Kubernetes.
-
-Toute autre valeur retombe sur 14 jours, pour garder le label à faible cardinalité.
+VictoriaLogs a une seule rétention, globale : 30 jours, avec un plafond disque de 16 Gio
+(`vlogs.yaml`). Les classes 7, 14 et 30 jours du label `cnp.3istor.com/log-retention`
+n'ont plus d'effet depuis le retrait de Loki (décision D5 du dossier
+[Observabilité](../10-observabilite/03-architecture.md)). L'audit garde son archive de
+180 jours ci-dessous.
 
 ## Archive immuable
 
-Le CronJob `observability/audit-archive` tourne à la minute 7 de chaque heure :
+Le CronJob `observability/audit-archive-vlogs` tourne à la minute 7 de chaque heure :
 
-1. `logcli` exporte l'heure précédente depuis Loki : `{job="k8s-audit"}`, les réponses Vault, les events Keycloak. L'export lit par lots de 1 000 lignes, car 5 000 events d'audit dépassent la taille des messages gRPC internes de Loki.
-2. `aws-cli` envoie les fichiers gzip dans le bucket RGW `cnp-audit-archive`, sous `audit/<source>/AAAA/MM/JJ/HH.jsonl.gz`.
+1. `curl` exporte l'heure précédente depuis VictoriaLogs (`/select/logsql/query`, par tranches de 10 minutes) : `{job="k8s-audit"}`, les réponses Vault, les events Keycloak, chaque ligne réduite à `_time`, `_stream` et `_msg`.
+2. `aws-cli` envoie les fichiers gzip dans le bucket RGW `cnp-audit-archive`, sous `audit/vlogs/<source>/AAAA/MM/JJ/HH.jsonl.gz`. Les heures archivées avant le 21/11/2026 par l'ancien job `logcli` restent sous `audit/<source>/`.
 3. Le bucket a l'Object Lock en mode COMPLIANCE, 180 jours : ni supprimer une version ni raccourcir sa rétention n'est possible, même avec la permission de contournement. Une règle de cycle de vie expire les objets à 190 jours, ce qui donne la rétention glissante de 6 mois recommandée par la CNIL pour les journaux d'accès. Le réglage est fait à la main par `K3s/k8s/config/observability/audit-archive-retention.sh`, pas par Argo CD : une rétention COMPLIANCE s'allonge mais ne se raccourcit jamais. Les versions écrites avant le 13/11/2026 étaient verrouillées 30 jours.
 4. L'utilisateur RGW vient d'un `CephObjectStoreUser` Rook, dont le secret `rook-ceph-object-user-openstack-rgw-audit-archive` est monté dans le job.
 5. Un passage en échec déclenche l'alerte vmalert `AuditArchiveFailed`.
@@ -187,26 +187,28 @@ Le CronJob `observability/audit-archive` tourne à la minute 7 de chaque heure :
     immuabilité demande une copie hors de notre contrôle, par exemple un bucket S3 AWS avec
     Object Lock dans un compte dédié.
 
-Relancer une heure à la main : `kubectl -n observability create job audit-archive-manual --from=cronjob/audit-archive`.
+Relancer une heure à la main : `kubectl -n observability create job audit-archive-manual --from=cronjob/audit-archive-vlogs`.
 Ré-envoyer une heure déjà archivée crée une nouvelle version ; l'ancienne reste verrouillée.
 
 ## Requêtes utiles
 
-```logql
+En LogsQL, dans Grafana (datasource VictoriaLogs) ou sur `vlogs-cnp:9428/select/logsql/query` :
+
+```text
 # Qui a ouvert un shell, et où
-{job="k8s-audit"} |= `"subresource":"exec"` | json | line_format "{{.user_username}} {{.objectRef_namespace}}/{{.objectRef_name}} {{.requestURI}}"
+_time:1d {job="k8s-audit"} "\"subresource\":\"exec\"" | unpack_json fields (user.username, objectRef.namespace, objectRef.name, requestURI) | fields _time, user.username, objectRef.namespace, objectRef.name, requestURI
 
 # Tout ce qu'a fait une personne
-{job="k8s-audit"} | json | user_username="alice@example.com"
+_time:1d {job="k8s-audit"} | unpack_json fields (user.username) | filter user.username:="alice@example.com"
 
 # Usages du root token Vault
-{namespace="vault", container="vault"} |= `"policies":["root"]`
+_time:1d {namespace="vault", container="vault"} "\"type\":\"response\"" "\"policies\":[\"root\"]"
 
 # Échecs de login Keycloak par realm
-sum by (realm) (count_over_time({namespace="keycloak"} |= `type="LOGIN_ERROR"` | regexp `realmName="(?P<realm>[^"]+)"` [1h]))
+_time:1h {namespace=~"keycloak|.+-system"} "type=\"LOGIN_ERROR\"" | extract "realmName=\"<realm>\"" | stats by (realm) count() as failures
 
 # Flux refusés par une network policy
-{namespace="kube-system", container="cilium-agent"} |= `"POLICY_DENIED"`
+_time:1h {namespace="kube-system", container="cilium-agent"} "POLICY_DENIED"
 ```
 
 ## Références

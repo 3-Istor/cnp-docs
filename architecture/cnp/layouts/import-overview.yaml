@@ -23,7 +23,8 @@ elements:
   g-secrets: {x: 860, y: 540, w: 300, h: 220}
   vault: {x: 20, y: 80, w: 260, h: 90}
   g-observability: {x: 1220, y: 540, w: 320, h: 220}
-  vm-vmselect: {x: 20, y: 80, w: 280, h: 90}
+  g-vo-store: {x: 10, y: 50, w: 300, h: 160}
+  vo-vmsingle: {x: 10, y: 50, w: 280, h: 100}
   g-gitops: {x: 40, y: 840, w: 760, h: 220}
   argocd: {x: 40, y: 80, w: 300, h: 90}
   pa-appproject: {x: 400, y: 80, w: 320, h: 90}
@@ -59,7 +60,7 @@ edges:
   c-im-import-smoke: {from: im-import.right@160px, to: im-service.top@260px, waypoints: [[1990, 940], [1990, 1165], [700, 1165]]}
   c-im-import-vault: {from: im-import.right@120px, to: vault.top@200px, waypoints: [[1960, 900], [1960, 1150], [1440, 1150]], label_at: [1440, 1240]}
   c-im-import-kapi: {from: im-import.right@140px, to: kube-apiserver.top@270px, waypoints: [[1975, 920], [1975, 1445], [1510, 1445]]}
-  c-cmp-vmselect: {from: cmp-backend.right@15px, to: vm-vmselect.top@240px, waypoints: [[1460, 805], [1460, 1135], [1840, 1135]], label_at: [1650, 1135]}
+  c-vo-cmp-vmsingle: {from: cmp-backend.right@15px, to: vo-vmsingle.top@240px, waypoints: [[1460, 805], [1460, 1135], [1840, 1135]], label_at: [1650, 1135]}
   c-im-import-analyzer: {from: im-import.bottom@160px, to: im-analyzer.top@160px}
   c-im-analyzer-repo: {from: im-analyzer.right@30px, to: im-user-repo.bottom@160px, waypoints: [[1880, 1020], [1880, 500], [960, 500]], against_flow: true}
   c-im-import-gh-api: {from: im-import.top@20px, to: github-app.bottom@40px, waypoints: [[1520, 560], [2260, 560]], label_at: [2060, 560], against_flow: true}

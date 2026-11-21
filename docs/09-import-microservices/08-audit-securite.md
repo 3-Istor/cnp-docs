@@ -202,7 +202,7 @@ Les risques principaux restants sont dans le design :
 
 - [ ] HMAC `X-Hub-Signature-256` comparé en temps constant sur le corps brut. Déduplication par `X-GitHub-Delivery`. Correspondance par `installation.id` et `repository.id`, pas par nom. Le webhook ne fait que déclencher une relecture du HEAD par CMP.
 - [ ] Requêtes VictoriaMetrics construites côté serveur avec des matchers de namespace issus de l'autorisation. Pas de PromQL utilisateur.
-- [ ] Port 9965 de Hubble joignable par Alloy seulement (fait : CiliumClusterwideNetworkPolicy de K3s#187 ; les pods en réseau hôte restent hors de son champ).
+- [ ] Port 9965 de Hubble joignable par le seul scraper (fait : CiliumClusterwideNetworkPolicy de K3s#187, Alloy à l'époque, aujourd'hui `hubble-metrics-vmagent-only` pour vmagent ; les pods en réseau hôte restent hors de son champ).
 
 **Agents IA**
 

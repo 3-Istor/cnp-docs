@@ -39,7 +39,7 @@ elements:
   ag-f-listener: {x: 30, y: 70, w: 340, h: 104}
   ag-f-jwt: {x: 440, y: 70, w: 340, h: 104}
   ag-f-authz: {x: 850, y: 70, w: 340, h: 104}
-  ag-f-rl: {x: 1260, y: 70, w: 340, h: 104}
+  ag-f-rl: {x: 1260, y: 70, w: 350, h: 104}
   ag-f-route: {x: 30, y: 244, w: 340, h: 104}
   ag-f-guard: {x: 440, y: 244, w: 340, h: 104}
   ag-f-pick: {x: 850, y: 244, w: 340, h: 104}
@@ -49,7 +49,7 @@ elements:
   ag-x-mcp: {x: 30, y: 70, w: 340, h: 104}
   ag-x-a2a: {x: 30, y: 198, w: 340, h: 104}
   g-ag-rl: {x: 2780, y: 1166, w: 800, h: 204}
-  ag-rl: {x: 30, y: 70, w: 340, h: 104}
+  ag-rl: {x: 30, y: 70, w: 350, h: 104}
   ag-redis: {x: 430, y: 70, w: 340, h: 104}
   g-cmp: {x: 2780, y: 1670, w: 400, h: 200}
   cmp-mcp: {x: 30, y: 70, w: 340, h: 104}
