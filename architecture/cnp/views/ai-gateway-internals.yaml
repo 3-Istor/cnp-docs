@@ -7,8 +7,8 @@ subtitle: "What is the AI gateway made of, and what happens inside it between an
 meta:
   - "Scope: agentgateway on its own GatewayClass, beside Envoy Gateway, on-prem K3s · drawn in full: what the proposal adds (IA-1, guardrails, MCP and A2A in IA-2) · faded: what already runs"
   - "Out of scope: Vault and the secrets operator (zoom 6) · OPA through extAuth (IA-3) · the Envoy Gateway that serves apps and users · the same gateway on EKS and GKE"
-  - "Assumed: Gemini through several keys in the first priority group, the GPU server in the second; one proxy replica. Resource names come from agentgateway.dev/docs/kubernetes/latest; the phase 1 trial confirms them"
-  - "v0.2 · source: cnp-docs/architecture/cnp · agentgateway docs (architecture, policy order, LLM, MCP, A2A)"
+  - "Assumed: one model provider, the Anthropic API with one key (decisions of 2026-11-22); one proxy replica. Resource names come from agentgateway.dev/docs/kubernetes/latest; the phase 1 trial confirms them"
+  - "v0.3 · source: cnp-docs/architecture/cnp · agentgateway docs (architecture, policy order, LLM, MCP, A2A)"
 
 include:
   - z-cluster
@@ -22,20 +22,16 @@ include:
   - ag-gateway
   - ag-gatewayclass
   - ag-route
-  - md-route-local
   - ag-mcproute
   - ag-a2aroute
   - g-ag-crd-agw
   - ag-be-llm
-  - ag-be-local
   - ag-be-mcp
   - ag-be-a2a
   - ag-secret
-  - ag-secret-gpu
   - ag-params
   - g-ag-polb
   - ag-pol-guard
-  - ag-pol-failover
   - ag-pol-tools
   - g-identity
   - keycloak
@@ -58,8 +54,6 @@ include:
   - g-ag-rl
   - ag-rl
   - ag-redis
-  - g-ag-hook
-  - ag-hook
   - g-ag-ctrl
   - ag-c-krt
   - ag-c-xds
@@ -73,13 +67,10 @@ include:
   - cmp-mcp
   - g-mcp-tools
   - toolhive
-  - z-google-ai
-  - gemini
-  - z-homelab-gpu
-  - gpu-server
-  - md-guard
+  - z-anthropic
+  - anthropic
 
-steps: [c-ag-agent, c-ag-chain-1, c-ag-chain-2, c-ag-chain-3, c-ag-rl-check, c-ag-rl-redis, c-ag-chain-4, c-ag-chain-5, c-ag-chain-6, c-ag-chain-7, c-ag-gemini, c-ag-gpu, c-ag-usage-otel, c-ag-otel]
+steps: [c-ag-agent, c-ag-chain-1, c-ag-chain-2, c-ag-chain-3, c-ag-rl-check, c-ag-rl-redis, c-ag-chain-4, c-ag-chain-5, c-ag-chain-6, c-ag-chain-7, c-ag-anthropic, c-ag-usage-otel, c-ag-otel]
 background: [c-ag-krt-kapi, c-ag-status-kapi, c-ag-deploy-kapi, c-ag-ads, c-ag-jwks, c-agent-keycloak, c-ag-scrape]
 
 labels:
@@ -93,12 +84,9 @@ labels:
   c-ag-chain-5: ""
   c-ag-chain-6: ""
   c-ag-chain-7: ""
-  c-ag-gemini: "generateContent · HTTPS"
-  c-ag-gpu: "after a 429 · HTTPS"
+  c-ag-anthropic: "POST /v1/messages · HTTPS"
   c-ag-usage-otel: ""
   c-ag-otel: "OTLP spans"
-  c-ag-guard-hook: "POST /request"
-  c-ag-hook-guard: "classify the prompt"
   c-ag-mcp: ""
   c-ag-mcp-cmp: ""
   c-ag-mcp-toolhive: ""
@@ -116,7 +104,7 @@ labels:
 
 notes:
   - {id: n-ag-order, text: "The docs run the traffic policies in a fixed order: JWT, authorization, rate limit, then the route and the backend policies, promptGuard among them. A prompt the guard refuses has therefore already passed the budget check."}
-  - {id: n-ag-failover, text: "On a 429 the health policy evicts the Gemini key that answered it; the load balancer then picks another key of group 1, and when all are evicted, group 2: the GPU server. Keys of one Google project share one quota, so only keys from different projects add capacity."}
+  - {id: n-ag-failover, text: "One provider, no failover: if the Anthropic API fails or its console spend limit is reached, the agent gets a clear error. Whether the Anthropic backend speaks the Messages API natively or through the OpenAI format is to check in trial T1.1."}
   - {id: n-ag-budget, text: "The budget is per agent and per day, keyed by a JWT claim (azp, to confirm in the phase 1 trial); cost per project is computed in Grafana. The check runs before the call; the real token count is known after the answer, and how the rate limit service receives it is for the trial to confirm. The 4,096 max_tokens cap, the 30 requests a minute and the refusal when the service is down (D32) are also verified in the trial (T1.1)."}
 
 cards:
@@ -124,13 +112,13 @@ cards:
     title: "Request path · an agent asks a model"
     color: emerald
     lines:
-      - "[1] The agent sends POST /v1/chat/completions with its Keycloak JWT to the listener of the Gateway ai-gateway."
+      - "[1] The agent sends its model call with its Keycloak JWT to the listener of the Gateway ai-gateway."
       - "[2] [3] jwtAuthentication checks the signature against the cached JWKS, iss and aud; authorization applies the CEL rules on the claims, deny by default."
       - "[4]–[6] rateLimit asks the rate limit service whether the agent's daily token budget is spent; the service counts in Redis. Over the budget: 429. rateLimit also applies the local limiter, 30 requests a minute per agent, and the max_tokens cap of 4,096 comes from the limits policy. If the rate limit service is down, the request is refused (fail-closed)."
-      - "[7] [8] The route match picks the HTTPRoute and its AgentgatewayBackend; promptGuard masks PII and secrets, then asks the guardrail adapter (IA-2)."
-      - "[9] [10] The provider choice takes a healthy Gemini key of group 1; the LLM proxy speaks the provider's API with the key from the Secret."
-      - "[11] [12] The call goes to Gemini over HTTPS through the Cilium FQDN egress rule. After a 429 the health policy evicts the key and the GPU server answers."
-      - "[13] [14] The LLM proxy hands the token usage to the telemetry module, which sends the spans to Alloy over OTLP."
+      - "[7] [8] The route match picks the HTTPRoute and its AgentgatewayBackend; promptGuard masks PII and secrets with its built-in regexes (IA-2); no external classifier."
+      - "[9] [10] The provider choice takes the Anthropic backend; the LLM proxy speaks the provider's API with the key from the Secret anthropic-api-key."
+      - "[11] The call goes to api.anthropic.com over HTTPS through the Cilium FQDN egress rule."
+      - "[12] [13] The LLM proxy hands the token usage to the telemetry module, which sends the spans to Alloy over OTLP."
   - id: card-background
     title: "Background · control plane"
     color: amber
@@ -146,13 +134,13 @@ cards:
     title: "Objects · who points at whom"
     color: sky
     lines:
-      - "Gateway ai-gateway → GatewayClass agentgateway. HTTPRoutes llm, llm-local, mcp and a2a → the Gateway (parentRef) and their AgentgatewayBackend (backendRef)."
-      - "AgentgatewayBackend llm: group 1 = Gemini providers, one Secret each; group 2 = the GPU server (openai provider with host and port, token Secret). llm-local: the GPU server only."
+      - "Gateway ai-gateway → GatewayClass agentgateway. HTTPRoutes llm, mcp and a2a → the Gateway (parentRef) and their AgentgatewayBackend (backendRef)."
+      - "AgentgatewayBackend llm: one provider, anthropic, with the Secret anthropic-api-key; models claude-sonnet-5-5 (default) and claude-haiku-5-5."
       - "Budget: the global rateLimit of the policy (unit Tokens) points at the rate limit service, whose ConfigMap sets the limit per day; the local limiter has no day unit, so it only holds the 30 requests a minute per agent."
-      - "AgentgatewayPolicy: auth, limits and trace → Gateway; budget → HTTPRoute llm; guard and failover → backend llm; tools → backend mcp (targetRefs)."
+      - "AgentgatewayPolicy: auth, limits and trace → Gateway; budget → HTTPRoute llm; guard → backend llm; tools → backend mcp (targetRefs)."
       - "Where the rules come from (D36): the gateway's rules (budget limits, tool allow-lists, CEL on the claims) are generated from the project's ProjectRecord in cnp-projects, written by the CMP; an app's own settings (blocks ai and agent of its deploy/values-*.yaml) never exceed it."
       - "Not drawn: extProc and extAuth hooks of the same policy kind. OPA would use extAuth (IA-3)."
-      - "Memory on the cluster: controller, proxy, rate limit service, Redis and the adapter should fit in a few hundred MB; to measure once deployed."
+      - "Memory on the cluster: controller, proxy, rate limit service and Redis should fit in a few hundred MB; to measure once deployed."
   - {id: card-legend, title: Legend, color: slate, legend: true}
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"

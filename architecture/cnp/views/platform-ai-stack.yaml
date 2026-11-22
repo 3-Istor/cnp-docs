@@ -8,7 +8,7 @@ meta:
   - "Scope: on-prem K3s hub, AI landing zone option B of 2026-10-23 (agentgateway + kagent) · in full: what the proposals add (P0–P2, IA-1–IA-2) · dimmed: what already runs · red: refused by design"
   - "Zones are isolation boundaries (namespace, runtime tier, network). Every box says what the tool does; zoom views hold the internals"
   - "Out of scope: EKS and GKE internals (multicloud views) · RBAC and grants (access matrix) · CI pipelines beyond evals and signing"
-  - "v1.0 · source: cnp-docs/architecture/cnp"
+  - "v1.1 (2026-11-22: Anthropic API only, no GPU server) · source: cnp-docs/architecture/cnp"
 
 include:
   - ov-z-clients
@@ -41,7 +41,6 @@ include:
   - ov-g-aigw
   - ov-aigw
   - ov-quota
-  - ov-guard-hook
   - ov-agw-policy
   - ov-agw-ctrl
   - ov-g-tools
@@ -69,11 +68,8 @@ include:
   - ov-gatus
   - ov-offhours
   - ov-z-cluster
-  - ov-z-google
-  - ov-gemini
-  - ov-z-homelab
-  - ov-ollama
-  - ov-llamaguard
+  - ov-z-anthropic
+  - ov-anthropic
   - ov-z-github
   - ov-repos
   - ov-promptfoo
@@ -81,7 +77,7 @@ include:
   - ov-z-clouds
   - ov-clouds
 
-steps: [ov-c-user-cf, ov-c-cf-envoy, ov-c-envoy-keycloak, ov-c-envoy-aigw, ov-c-aigw-agent, ov-c-agent-keycloak, ov-c-agent-aigw, ov-c-aigw-guard, ov-c-guard-llama, ov-c-aigw-quota, ov-c-aigw-gemini, ov-c-aigw-ollama, ov-c-aigw-tools, ov-c-aigw-agent2, ov-c-agent-sb, ov-c-sb-gvisor, ov-c-aigw-alloy, ov-c-alloy-tempo]
+steps: [ov-c-user-cf, ov-c-cf-envoy, ov-c-envoy-keycloak, ov-c-envoy-aigw, ov-c-aigw-agent, ov-c-agent-keycloak, ov-c-agent-aigw, ov-c-aigw-quota, ov-c-aigw-anthropic, ov-c-aigw-tools, ov-c-aigw-agent2, ov-c-agent-sb, ov-c-sb-gvisor, ov-c-aigw-alloy, ov-c-alloy-tempo]
 background: [ov-c-cmp-repos, ov-c-argocd-repos, ov-c-argocd-kapi, ov-c-kagent-kapi, ov-c-agwctrl-kapi, ov-c-agwctrl-aigw, ov-c-kapi-kyverno, ov-c-sb-kapi, ov-c-cmp-keycloak, ov-c-vault-aigw, ov-c-toolhive-registry, ov-c-argocd-clouds]
 
 cards:
@@ -92,11 +88,10 @@ cards:
       - "[1]–[3] The request enters through Cloudflare's tunnel and the shared Envoy Gateway, which logs the user in with Keycloak."
       - "[4] [5] Envoy hands it to agentgateway, which forwards it to the agent over A2A with the user's token."
       - "[6] The agent exchanges that token at Keycloak for its own, proving who it is with its ServiceAccount token: no secret in the pod."
-      - "[7] Every call the agent makes goes back through agentgateway, which checks the JWT and the CEL policy for this agent."
-      - "[8] [9] promptGuard first masks PII and secrets with regexes, then the webhook asks Llama Guard on the homelab GPU whether the prompt is safe."
-      - "[10]–[12] The rate limit server checks the agent's daily token budget; the call goes to Gemini, or to Ollama on 429 or for a Local project."
-      - "[13] [14] A tool call goes to the MCP server ToolHive runs; a task for another agent goes over A2A to the peer agent."
-      - "[15] [16] To run code, the agent claims a sandbox: gVisor by default, Kata for untrusted code. [17] [18] GenAI spans and token counts go to Alloy, then Tempo."
+      - "[7] Every call the agent makes goes back through agentgateway, which checks the JWT and the CEL policy for this agent; promptGuard masks PII and secrets with its built-in regexes."
+      - "[8] [9] The rate limit server checks the agent's daily token budget; the call goes to the Anthropic API, the only model provider."
+      - "[10] [11] A tool call goes to the MCP server ToolHive runs; a task for another agent goes over A2A to the peer agent."
+      - "[12] [13] To run code (code mode), the agent claims a sandbox: gVisor by default, Kata for the higher-risk tier. [14] [15] GenAI spans and token counts go to Alloy, then Tempo."
   - id: card-background
     title: "Set up before the request"
     color: amber
@@ -106,15 +101,15 @@ cards:
       - "[E] [F] The agentgateway controller turns routes and AgentgatewayPolicy into the proxy's configuration."
       - "[G] Kyverno checks every pod at admission: restricted security context, the right RuntimeClass per tier, signed images only."
       - "[H] agent-sandbox keeps one warm gVisor sandbox ready (none for Kata). [I] The CMP creates the agent's Keycloak client."
-      - "[J] The Secrets Operator mounts the Gemini keys in the gateway only. [K] ToolHive checks each MCP server against the registry. [L] Argo CD syncs EKS and GKE the same way."
+      - "[J] The Secrets Operator mounts the Anthropic key in the gateway only. [K] ToolHive checks each MCP server against the registry. [L] Argo CD syncs EKS and GKE the same way."
   - id: card-isolation
     title: "Isolation boundaries · what keeps what apart"
     color: rose
     lines:
-      - "Network: Cilium default-deny per namespace (P0); agents and sandboxes reach only the AI gateway. The two red arrows are refused: a direct call to Gemini, a sandbox reaching an app."
+      - "Network: Cilium default-deny per namespace (P0); agents and sandboxes reach only the AI gateway. The two red arrows are refused: a direct call to the Anthropic API, a sandbox reaching an app."
       - "Runtime, three tiers per agent: runc + seccomp for agents that don't run code, gVisor (user-space kernel) for generated code, Kata (micro-VM) for untrusted code."
       - "Identity: one Keycloak client per agent, federated with its ServiceAccount token; short tokens; CEL decides per tool and per agent at the gateway."
-      - "Keys and data: the Gemini keys live in Vault and the gateway only; promptGuard masks PII before any call; Local projects stay on Ollama."
+      - "Keys and data: the one Anthropic key lives in Vault and the gateway only; promptGuard masks PII before any call; a critical project cannot enable AI."
   - {id: card-legend, title: Legend, color: slate, legend: true}
 
 labels:

@@ -76,18 +76,14 @@ include:
   - ag-pol-trace
   - g-ag-crd-gw
   - ag-gatewayclass
-  - md-route-local
   - ag-a2aroute
   - g-ag-crd-agw
   - ag-be-llm
-  - ag-be-local
   - ag-be-mcp
   - ag-be-a2a
-  - ag-secret-gpu
   - ag-params
   - g-ag-polb
   - ag-pol-guard
-  - ag-pol-failover
   - ag-pol-tools
   - g-ag-ctrl
   - ag-c-xds
@@ -99,8 +95,6 @@ include:
   - ag-x-llm
   - g-ag-proto
   - ag-x-a2a
-  - g-ag-hook
-  - ag-hook
   - ag-route
   - ag-mcproute
   - ag-gateway
@@ -210,26 +204,15 @@ include:
   - github
   - gh-project-repos
   - ghcr
-  - z-google-ai
-  - gemini
-  - md-quota
-  - md-project
-  - z-homelab-gpu
-  - gpu-server
-  - md-gpu
-  - md-ollama-cfg
-  - md-store
-  - md-guard
-  - md-svc-text
-  - md-svc-embed
-  - md-svc-image
+  - z-anthropic
+  - anthropic
   - z-cloud-a
   - b-apiserver
   - z-sb-compute
   - sb-hv
   - sb-nested
 
-steps: [c-id-login, c-id-ask, c-agent-keycloak, c-sb-claim, c-sb-run, c-sb-router-pod, c-ag-agent, c-ag-rl-check, c-ag-gemini, c-ag-gpu, c-ag-mcp, c-th-gw, c-th-run, c-ob-gw, c-ob-5]
+steps: [c-id-login, c-id-ask, c-agent-keycloak, c-sb-claim, c-sb-run, c-sb-router-pod, c-ag-agent, c-ag-rl-check, c-ag-anthropic, c-ag-mcp, c-th-gw, c-th-run, c-ob-gw, c-ob-5]
 background: [c-id-provision, c-id-vault, c-id-vso-read, c-id-vso, c-ag-ads, c-sb-core-kapi, c-th-op-kapi, c-argocd-apiserver]
 
 cards:
@@ -240,9 +223,9 @@ cards:
       - "[1] [2] The user signs in to Keycloak and asks the agent, sending a user token. [3] The agent exchanges it for its own short token (or uses client_credentials when it acts alone)."
       - "[4] The agent creates a SandboxClaim; the controller hands it the warm gVisor sandbox of the python pool (Kata has no pool and starts one). [5] [6] It sends commands through the sandbox router, which forwards them to the sandbox pod (gVisor here; Kata the same way)."
       - "[7] The agent asks a model at the AI gateway's internal listener; JWT and CEL checks run, then [8] the rate limit service checks the agent's daily token budget."
-      - "[9] The LLM proxy sends the request to Gemini; [10] after a 429 the failover policy sends it to the GPU server."
-      - "[11]–[13] A tool call on /mcp goes through the MCP proxy of the gateway to the ToolHive proxy, then to the MCP server over JSON-RPC."
-      - "[14] [15] The gateway exports GenAI spans to Alloy, which scrapes its metrics and writes traces to Tempo and metrics to VictoriaMetrics."
+      - "[9] The LLM proxy sends the request to the Anthropic API with the one key; no fallback."
+      - "[10]–[12] A tool call on /mcp goes through the MCP proxy of the gateway to the ToolHive proxy, then to the MCP server over JSON-RPC."
+      - "[13] [14] The gateway exports GenAI spans to Alloy, which scrapes its metrics and writes traces to Tempo and metrics to VictoriaMetrics."
   - id: card-background
     title: "Background · what is set up before the request"
     color: amber
@@ -251,7 +234,7 @@ cards:
       - "[C] [D] The secrets operator reads it and writes the Kubernetes Secret mounted by the agent."
       - "[E] [F] [G] The agentgateway controller, the sandbox controller and the ToolHive operator watch their CRDs and configure the proxy or write what they generate (pods, services)."
       - "[H] Argo CD applies everything from Git, the AI landing zone included."
-      - "[I] The GPU server sits on the same local network as the cluster; Cilium lets the gateway reach its /32 over HTTPS and nothing else."
+      - "Egress: Cilium lets the gateway reach api.anthropic.com:443 and nothing else; the Anthropic key lives in Vault and the gateway only (revised 2026-11-22)."
   - {id: card-legend, title: Legend, color: slate, legend: true}
 
 labels:
@@ -265,21 +248,16 @@ labels:
   c-agent-keycloak: ""
   r-ag-gw-class: ""
   r-ag-route-gw: ""
-  r-ag-local-gw: ""
   r-ag-mcproute-gw: ""
   r-ag-a2aroute-gw: ""
   r-ag-route-llm: ""
-  r-ag-local-be: ""
   r-ag-mcproute-be: ""
   r-ag-a2aroute-be: ""
   r-ag-be-secret: ""
-  r-ag-be-gpu-secret: ""
-  r-ag-local-secret: ""
   r-ag-pol-auth: ""
   r-ag-pol-trace: ""
   r-ag-pol-rate: ""
   r-ag-pol-guard: ""
-  r-ag-pol-failover: ""
   r-ag-pol-tools: ""
   c-ag-chain-5: ""
   c-ag-chain-6: ""
@@ -287,8 +265,6 @@ labels:
   c-ag-usage-otel: ""
   c-ag-a2a: ""
   c-ag-a2a-agent: ""
-  c-ag-guard-hook: ""
-  c-ag-hook-guard: ""
   c-ag-jwks: ""
   c-ag-mcp-cmp: ""
   r-th-route: ""
@@ -302,12 +278,6 @@ labels:
   c-ag-rl-redis: ""
   c-argocd-b: ""
   c-mcp-api: "call REST in-process"
-  c-md-gpu: ""
-  c-md-text: ""
-  c-md-embed: ""
-  c-md-guard: ""
-  c-md-image: ""
-  c-md-quota: ""
   c-ob-1: ""
   c-ob-10: ""
   c-ob-12: "LogQL"
@@ -336,7 +306,6 @@ labels:
   r-id-secret: ""
   r-id-svc: ""
   r-mcp-policy: ""
-  r-md-guard: ""
   r-ob-alerts: ""
   r-policy-secret: ""
   r-sb-nested-hv: ""
