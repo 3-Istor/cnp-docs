@@ -114,7 +114,7 @@ l'équipe plateforme.
    MCP dans le sandbox (D38) ; Kata pour le niveau élevé une fois `/dev/kvm` disponible dans
    les VM (D42) ; Kyverno impose la RuntimeClass.
 6. **Évals** : promptfoo dans GitHub Actions à chaque release d'agent.
-7. **Déclaration des agents** : bloc `agents:` des values rendu par infra-templates, champ
+7. **Déclaration des agents** : bloc `agent:` des values (une app de `type: agent` par agent) rendu par infra-templates, champ
    `trigger` (D29, D40), assistant de la CMP qui écrit le même YAML par PR, six templates (D26).
 8. **Cas** : UC3 (diagnostic de déploiement), UC11 (revue de PR infra), puis UC21 (Grok sur
    EpiTweet, [08-uc21-grok.md](08-uc21-grok.md)).

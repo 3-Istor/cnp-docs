@@ -59,7 +59,7 @@ puis il attend :
 
 | ID | Dépôt | Quoi | Fait quand |
 |---|---|---|---|
-| T1.1 | K3s (k3d local) | **Essai d'agentgateway**, 1 à 2 jours. Installer la dernière version stable, épinglée. Relever les noms exacts des ressources (GatewayClass, politique, backend Anthropic, rate limit, routes), la clé du rate limit par claim, la traduction du format OpenAI vers l'API Messages et le passage de `output_config.effort` et de l'adaptive thinking, la possibilité d'autoriser ou de retirer un outil serveur d'Anthropic (`web_search`) par agent (D41), le comportement si le service de rate limit est injoignable, la possibilité de plafonner `max_tokens`, et la mémoire (D32). Rapport : une PR sur cnp-docs qui complète la spec §4 et §5 avec ces noms et la §7 avec la mémoire. Décision de continuer ou de basculer sur le plan B (spec §8). | Rapport fusionné ; V1.3 à V1.8 passent sur le k3d local |
+| T1.1 | K3s (k3d local) | **Essai d'agentgateway**, 1 à 2 jours. Installer la dernière version stable, épinglée. Relever les noms exacts des ressources (GatewayClass, politique, backend Anthropic, rate limit, routes), la clé du rate limit par claim, la traduction du format OpenAI vers l'API Messages et le passage de `output_config.effort` et de l'adaptive thinking, la possibilité d'autoriser ou de retirer un outil serveur d'Anthropic (`web_search`) par agent (D41), le comportement si le service de rate limit est injoignable, la possibilité de plafonner `max_tokens`, et la mémoire (D32). Rapport : une PR sur cnp-docs qui complète la spec §4 et §5 avec ces noms et la §7 avec la mémoire. Décision de continuer ou de basculer sur le plan B (spec §8). | Rapport fusionné ; V1.3 à V1.8 passent sur le k3d local. **Fait le 2026-11-22** : essai étendu sur k3d, agentgateway 1.7.0 retenue, pas de plan B. Budget par `azp`, `max_tokens`, 30 req/min, fail-closed et `web_search` par agent passent ; masquage PII partiel (secrets seuls retenus) ; plafond global natif, message et alerte par `budget-guard`. kagent 0.10.6 (la 1.0 exige K8s 1.37), kmcp retenu, gVisor et agent-sandbox validés, Kata faisable sans reboot. Code mode réel avec Haiku 5.5 : 3 essais sur 3, 0,0262 $ dépensés. Écarts et noms exacts dans la spec (§4, §5, §7, §10) |
 | T1.2 | K3s | `k8s/config/ai-gateway/` : namespace, chart épinglé, GatewayClass et Gateway avec un listener interne (8080, jamais exposé), CiliumNetworkPolicy `ai-egress` (`api.anthropic.com:443` seulement), VaultSecret de la clé Anthropic (`kvv2/platform/ai/anthropic`, D23), backend Anthropic (`claude-sonnet-5-5` et `claude-haiku-5-5`), masquage regex `promptGuard`, rate limit. Ajout à `k8s/kustomization.yaml`. Le plafond de dépenses de la console est réglé par Brian. | V1.2, V1.5, V1.10, V1.12 |
 | T1.3 | K3s | Observabilité : Tempo (D30) dans `k8s/config/observability/` ; récepteur OTLP et pipeline GenAI dans `values-alloy.yaml` (`k8s.attributes`, suppression des `gen_ai.*.messages`) ; datasource Tempo et tableau « IA » dans Grafana ; règles vmalert : budget à 80 %, 429, refus. Logs d'accès de la gateway avec les champs de D14, rétention 30 jours, ajout à `audit-archive.yaml`. | V1.8, V1.9 |
 | T1.4 | K3s | Keycloak, par le même mécanisme que la configuration actuelle du realm `3istor` : client `ai-gateway` (audience seule), client scope `project` (mapper groupes → `project`), mapper d'audience `ai-gateway`, Client Policy `exchange-guard`, durée de jeton de 5 minutes pour les clients d'agent et d'app IA. Audience `cmp-api` pour la CMP (préparation de T1.9). | V1.3, V1.4, V1.6 |
@@ -79,11 +79,19 @@ locaux) est supprimée le 2026-11-22 : il n'y a plus de serveur GPU.
 
 ## 4. Versions retenues
 
-À remplir par l'agent d'implémentation, une ligne par brique installée.
+Une ligne par brique installée. Les lignes de l'essai T1.1 viennent du k3d local ; la production reprend les mêmes versions.
 
 | Brique | Version | Date | Tâche |
 |---|---|---|---|
-| agentgateway | | | T1.1 |
+| agentgateway (chart, contrôleur, proxy) | 1.7.0, avec les CRD Gateway API v1.6.3 | 2026-11-22 | T1.1 |
+| envoyproxy/ratelimit | `a7a61514` (l'amont ne publie que des commits) | 2026-11-22 | T1.1 |
+| Redis du rate limit | 8.4.8, AOF et PVC | 2026-11-22 | T1.1 |
+| kagent (kmcp 0.3.0 embarqué, Go ADK) | 0.10.6 (la 1.0 exige Kubernetes 1.37, le K3s est en 1.34.6) | 2026-11-22 | T1.1 |
+| agent-sandbox | v1.0.12, API `v1beta1` | 2026-11-22 | T1.1 |
+| gVisor (runsc et shim) | release-20261116.0 | 2026-11-22 | T1.1 |
+| Kata Containers | 4.4.0 (kata-deploy), pas encore installé | 2026-11-22 | T1.1 |
+| Kyverno | 1.20.0 (chart 3.10.0), politiques en CEL | 2026-11-22 | T1.1 |
+| Modèles | `claude-haiku-5-5` (défaut, effort low), `claude-sonnet-5-5` (effort medium) | 2026-11-22 | T1.1 |
 | Tempo | | | T1.3 |
 
 ## 5. Phases 2 et 3
@@ -100,7 +108,7 @@ de la phase 2 :
 | T2.2 | K3s | agent-sandbox, `SandboxTemplate` `python` (gVisor) et warm pool de 1 (D33) ; CiliumNetworkPolicy du sandbox : DNS et route MCP de la gateway seulement. | V2.8 |
 | T2.3 | infra-templates, cnp-agent-kit, K3s | **Code mode** (D38) : outil `run_python` (une `SandboxClaim` par tâche), module Python des outils MCP autorisés dans l'image du sandbox, token exchange vers un jeton restreint (outils en lecture, 5 minutes, Client Policy Keycloak), retour des fichiers produits en artefacts de tâche. Mécanisme d'injection du jeton et des artefacts : à vérifier à l'essai. | V2.8, V2.13 |
 | T2.4 | OpenStack (pae-node-*), K3s | **Kata** (D42) : vérifier si `/dev/kvm` existe dans les VM K3s ; sinon préparer la virtualisation imbriquée sur les hôtes de calcul et le passthrough du CPU. **Prévenir Brian avant tout redémarrage dur de VM** (arrêt du cluster). Puis RuntimeClass `kata` et `SandboxTemplate` `python-kata`, sans warm pool. | V2.15 ; ou plan B du §8 de la spec |
-| T2.5 | infra-templates, cnp-projects, CMP | Bloc `agents:` des values (D29) avec le champ `trigger` (D40), rendu en `Agent`, `ModelConfig`, ServiceAccount, NetworkPolicy et `RemoteMCPServer` ; validateur qui refuse un agent qui dépasse `spec.ai` ; assistant de la CMP qui écrit le même YAML par PR. | V2.1, V2.14 ; VC2.1, VC2.7 |
+| T2.5 | infra-templates, cnp-projects, CMP | Bloc `agent:` des values (`deploy/values-<agent>.yaml`, app de `type: agent`) (D29) avec le champ `trigger` (D40), rendu en `Agent`, `ModelConfig`, ServiceAccount, NetworkPolicy et `RemoteMCPServer` ; validateur qui refuse un agent qui dépasse `spec.ai` ; assistant de la CMP qui écrit le même YAML par PR. | V2.1, V2.14 ; VC2.1, VC2.7 |
 | T2.6 | EpiTweet, cnp-docs | **UC21** ([08-uc21-grok.md](08-uc21-grok.md)) : `epitweet-mcp` (outils publics en lecture et un outil d'écriture), `grok-bridge` (consommateur des événements `post.created` qui mentionnent @grok), agents `grok-reader` et `grok-actor` déclarés dans les values d'EpiTweet, scénario de démo. | V2.11 ; scénario de démo rejoué de bout en bout |
 
 ## 6. Prompt de lancement

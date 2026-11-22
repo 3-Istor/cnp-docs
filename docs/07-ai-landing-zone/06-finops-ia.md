@@ -15,13 +15,15 @@
 | Budget FinOps | euros par mois, par projet | CMP, module FinOps | Alerte à 70 % et 90 %, comme aujourd'hui | selon le plan FinOps |
 | Plafond de dépenses | dollars, pour toute la clé | Console Anthropic | L'API refuse ; la gateway répond « service indisponible » (D13) : fusible dur | 1 |
 
-Le budget de tokens protège la plateforme et le crédit (environ 10 $) d'un agent qui boucle.
+**Budget total de la démo : 5 $ cumulés**, dont 1,50 $ pour la construction et les tests. Le plafond global est natif à la gateway ; `budget-guard` ajoute le coût des recherches web, le message de refus et l'alerte à 80 % et 100 % (spec D32). Le budget de tokens protège la plateforme et le crédit (environ 10 $) d'un agent qui boucle.
 Le plafond de la console est le dernier fusible, au cas où les budgets de la gateway seraient
 mal réglés. Le budget FinOps rend le coût visible au projet, avec le reste de ses dépenses.
 
 **Ordre de grandeur.** Avec Haiku 5.5, le modèle par défaut, 10 $ couvrent environ 20 millions de tokens en
 sortie ou 100 millions en entrée ; avec Sonnet 5.5, vingt fois moins. La recherche web se
-paie en plus, 10 $ pour 1 000 recherches : c'est elle qui domine le coût d'une réponse de Grok. Les budgets quotidiens par `azp` se règlent pour que leur somme sur
+paie en plus, 10 $ pour 1 000 recherches : c'est elle qui domine le coût d'une réponse de Grok.
+
+**Coûts mesurés à l'essai du 2026-11-22** (Haiku 5.5, `effort: low`) : un fact-check avec une recherche web coûte 0,012 $ (19 081 tokens en entrée, 748 en sortie, dont 0,010 $ de recherche) ; un graphe en code mode coûte 0,0008 $. Avec 5 $, environ 400 fact-checks ou plus de 6 000 graphes. Les budgets quotidiens par `azp` se règlent pour que leur somme sur
 la durée de la démo reste sous le plafond de la console.
 
 ## 2. D'où viennent les chiffres
@@ -53,8 +55,7 @@ avec la console Anthropic sert à le vérifier. Le plan FinOps porte la même r�
 
 Coût affiché (`x_cost_eur`) = tokens en entrée × prix d'entrée + tokens en sortie × prix de
 sortie + tokens lus en cache × prix de cache, en dollars, puis en euros. Les tokens de
-l'adaptive thinking sont facturés comme des tokens de sortie. Le comptage des tokens de cache
-et de réflexion par la gateway est à vérifier à l'essai T1.1.
+l'adaptive thinking sont facturés comme des tokens de sortie. Le catalogue de prix de la gateway ne compte que les tokens : la recherche web (0,01 $ par recherche) est ajoutée par `budget-guard` (constaté à l'essai du 2026-11-22).
 
 Les prix vivent dans `finops/ai-prices.yaml`, à côté du TCO : par modèle, prix par million de
 tokens par type, devise (USD), date d'effet et lien vers la

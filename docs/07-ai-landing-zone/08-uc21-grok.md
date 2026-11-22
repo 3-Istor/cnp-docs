@@ -20,7 +20,7 @@ outils et son déclencheur, comme n'importe quelle app.
 | `grok-actor` | Agent kagent déclaratif, namespace `agent-<projet>-grok-actor` | Publie la réponse de @grok dans le fil, à partir de `grok_answer` seulement. |
 | Sandbox `run_python` | `SandboxClaim` gVisor dans le namespace du lecteur | Exécute le code du lecteur pour un graphe (D38). |
 
-Les deux agents sont déclarés dans `deploy/values-epitweet.yaml` (bloc `agents:`), leurs droits
+Les deux agents sont déclarés dans `deploy/values-grok-reader.yaml` et `deploy/values-grok-actor.yaml` (bloc `agent:`), leurs droits
 dans `spec.ai` du `ProjectRecord` : l'exemple complet est dans [04-cmp-agents.md](04-cmp-agents.md) §8.
 
 **Outils d'`epitweet-mcp`.** Les outils en lecture ne renvoient que du public : pas de
