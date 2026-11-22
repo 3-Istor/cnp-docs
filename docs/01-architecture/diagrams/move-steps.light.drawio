@@ -1,23 +1,23 @@
 <mxfile host="archgen">
   <diagram id="move-steps-light" name="CNP · Project move · Steps (light)">
-    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1850" pageHeight="950" background="#f8fafc" math="0" shadow="0">
+    <mxGraphModel grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="1920" pageHeight="950" background="#f8fafc" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
-        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxODUwIiBoZWlnaHQ9Ijk1MCI+PGRlZnM+PHBhdHRlcm4gaWQ9ImciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UyZThmMCIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2cpIi8+PC9zdmc+;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
-          <mxGeometry x="0" y="0" width="1850" height="950" as="geometry" />
+        <mxCell id="bg" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxOTIwIiBoZWlnaHQ9Ijk1MCI+PGRlZnM+PHBhdHRlcm4gaWQ9ImciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSA0MCAwIEwgMCAwIDAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2UyZThmMCIgc3Ryb2tlLXdpZHRoPSIwLjUiLz48L3BhdHRlcm4+PC9kZWZzPjxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIGZpbGw9IiNmOGZhZmMiLz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2cpIi8+PC9zdmc+;imageAspect=0;locked=1;editable=0;movable=0;resizable=0;deletable=0;" vertex="1" parent="1">
+          <mxGeometry x="0" y="0" width="1920" height="950" as="geometry" />
         </mxCell>
         <mxCell id="header-dot" value="" style="ellipse;fillColor=#059669;strokeColor=none;" vertex="1" parent="1">
           <mxGeometry x="40" y="44" width="12" height="12" as="geometry" />
         </mxCell>
         <mxCell id="header-title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;CNP · Project move · Steps&lt;/b&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=24;fontColor=#0f172a;" vertex="1" parent="1">
-          <mxGeometry x="64" y="30" width="1450" height="40" as="geometry" />
+          <mxGeometry x="64" y="30" width="1520" height="40" as="geometry" />
         </mxCell>
         <mxCell id="header-sub" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:13px&quot;&gt;Which steps of a move do users feel, and for how long?&lt;/font&gt;&lt;br&gt;Scope: the 8 steps of the CMP move engine, durations measured after CNP-292 (CMP v0.3.140, moves 9 and 10 on todo-move) · main as of 2026-11-22&lt;br&gt;Out of scope: failures, retry and cancel (a move can only be cancelled before stop_source) · components in move-components&lt;br&gt;v0.1 · source: cnp-docs/architecture/cnp · journals CNP-291 and CNP-292&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#475569;" vertex="1" parent="1">
-          <mxGeometry x="64" y="74" width="1450" height="80" as="geometry" />
+          <mxGeometry x="64" y="74" width="1520" height="80" as="geometry" />
         </mxCell>
         <mxCell id="mv-z-steps-a" value="" style="rounded=1;absoluteArcSize=1;arcSize=12;html=1;fillColor=#0284c7;fillOpacity=3;strokeColor=#0284c7;strokeWidth=1.2;dashed=1;dashPattern=8 4;container=0;collapsible=0;" vertex="1" parent="1">
-          <mxGeometry x="40" y="200" width="216" height="300" as="geometry" />
+          <mxGeometry x="40" y="200" width="224" height="300" as="geometry" />
         </mxCell>
         <mxCell id="mv-z-steps-a__title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;BEFORE THE CUT&lt;/b&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;spacing=0;spacingLeft=26;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#0284c7;movable=0;resizable=0;connectable=0;" vertex="1" parent="mv-z-steps-a">
           <mxGeometry x="12" y="4" width="130.39999999999998" height="24" as="geometry" />
@@ -26,7 +26,7 @@
           <mxGeometry x="12" y="7" width="18" height="18" as="geometry" />
         </mxCell>
         <mxCell id="mv-z-steps-b" value="" style="rounded=1;absoluteArcSize=1;arcSize=12;html=1;fillColor=#e11d48;fillOpacity=3;strokeColor=#e11d48;strokeWidth=1.2;dashed=1;dashPattern=8 4;container=0;collapsible=0;" vertex="1" parent="1">
-          <mxGeometry x="316" y="200" width="1016" height="300" as="geometry" />
+          <mxGeometry x="324" y="200" width="1056" height="300" as="geometry" />
         </mxCell>
         <mxCell id="mv-z-steps-b__title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;USER-VISIBLE CUT&lt;/b&gt;&amp;nbsp;&amp;nbsp;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;stop_source to cleanup_source&lt;/font&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;spacing=0;spacingLeft=26;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#e11d48;movable=0;resizable=0;connectable=0;" vertex="1" parent="mv-z-steps-b">
           <mxGeometry x="12" y="4" width="330.79999999999995" height="24" as="geometry" />
@@ -35,7 +35,7 @@
           <mxGeometry x="12" y="7" width="18" height="18" as="geometry" />
         </mxCell>
         <mxCell id="mv-z-steps-c" value="" style="rounded=1;absoluteArcSize=1;arcSize=12;html=1;fillColor=#059669;fillOpacity=3;strokeColor=#059669;strokeWidth=1.2;dashed=1;dashPattern=8 4;container=0;collapsible=0;" vertex="1" parent="1">
-          <mxGeometry x="1392" y="200" width="416" height="300" as="geometry" />
+          <mxGeometry x="1440" y="200" width="432" height="300" as="geometry" />
         </mxCell>
         <mxCell id="mv-z-steps-c__title" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;AFTER THE CUT&lt;/b&gt;&amp;nbsp;&amp;nbsp;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;target serving&lt;/font&gt;&lt;/span&gt;" style="text;html=1;align=left;verticalAlign=middle;spacing=0;spacingLeft=26;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#059669;movable=0;resizable=0;connectable=0;" vertex="1" parent="mv-z-steps-c">
           <mxGeometry x="12" y="4" width="221" height="24" as="geometry" />
@@ -44,43 +44,43 @@
           <mxGeometry x="12" y="7" width="18" height="18" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-prepare" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;1 · prepare&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[source still serving]&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Bootstrap targets the&lt;br&gt;target: system ns,&lt;br&gt;gateway, tunnel at 0,&lt;br&gt;app namespaces&lt;br&gt;CMP copies VaultSecrets&lt;br&gt;Image pre-pull on nodes&lt;br&gt;to on-prem 3m44&lt;br&gt;to AWS 2m17&lt;br&gt;(before: 35 to 51 s)&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="60" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="60" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-stop" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;2 · stop_source&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[cut starts]&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Apps to 0 replicas&lt;br&gt;Wait for pods gone&lt;br&gt;to on-prem 16 s&lt;br&gt;to AWS 24 s&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="336" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="344" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-backup" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;3 · final_backup&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;CNPG backup on the&lt;br&gt;source, into the&lt;br&gt;bucket&lt;br&gt;to on-prem 15 s&lt;br&gt;to AWS 30 s&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#f5f3ff;html=1;whiteSpace=wrap;strokeColor=#7c3aed;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="536" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="552" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-switch" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;4 · switch&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Registry commit:&lt;br&gt;targetCloud = target&lt;br&gt;Target tunnel 0 to 1&lt;br&gt;(applied in wait_target)&lt;br&gt;commit takes 3 s&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#fffbeb;html=1;whiteSpace=wrap;strokeColor=#d97706;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="736" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="760" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-wait" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;5 · wait_target&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Argo sync, first pod,&lt;br&gt;DB restore, migration,&lt;br&gt;CMP sees apps healthy&lt;br&gt;to on-prem 4m35&lt;br&gt;to AWS 2m47&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="936" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="968" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-persist" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;6 · persist_restores&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Commit db.restore&lt;br&gt;generation to the&lt;br&gt;app repo, wait for&lt;br&gt;Argo to render it&lt;br&gt;about 50 s&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1136" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="1176" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-cleanup" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;7 · cleanup_source&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;i&gt;&lt;font color=&quot;#1e293b&quot; style=&quot;font-size:10px&quot;&gt;[cut ends]&lt;/font&gt;&lt;/i&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;Source namespaces&lt;br&gt;deleted, &amp;lt;p&amp;gt;-backups&lt;br&gt;kept&lt;br&gt;Source tunnel goes&lt;br&gt;away here&lt;br&gt;1m47&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1412" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="1460" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="mv-s-finish" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:12px&quot;&gt;8 · finish&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;font color=&quot;#475569&quot; style=&quot;font-size:10px&quot;&gt;status.move cleared,&lt;br&gt;audit event,&lt;br&gt;notification&lt;br&gt;9 s&lt;/font&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=12;fillColor=#ecfdf5;html=1;whiteSpace=wrap;strokeColor=#059669;strokeWidth=1.5;align=left;verticalAlign=top;spacingLeft=10;spacingTop=6;spacingRight=8;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1612" y="270" width="176" height="200" as="geometry" />
+          <mxGeometry x="1668" y="270" width="184" height="200" as="geometry" />
         </mxCell>
         <mxCell id="n-cut-start" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;CUT STARTS&lt;/font&gt;&lt;/b&gt;: the apps stop serving.&lt;/span&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#475569;" vertex="1" parent="1">
-          <mxGeometry x="336" y="530" width="280" height="56" as="geometry" />
+          <mxGeometry x="344" y="530" width="280" height="56" as="geometry" />
         </mxCell>
         <mxCell id="n-cut-end" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;&lt;font color=&quot;#c2410c&quot;&gt;CUT ENDS&lt;/font&gt;&lt;/b&gt;: at cleanup_source. Until then Cloudflare still sends part of the requests to the stopped source.&lt;/span&gt;" style="text;html=1;whiteSpace=wrap;align=left;verticalAlign=top;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#475569;" vertex="1" parent="1">
-          <mxGeometry x="1412" y="530" width="380" height="70" as="geometry" />
+          <mxGeometry x="1460" y="530" width="400" height="70" as="geometry" />
         </mxCell>
         <mxCell id="card-cut" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#059669&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;The cut, before and after the optimisation&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;User-visible cut&lt;/font&gt;&lt;/b&gt; (stop_source to cleanup_source start)&lt;br&gt;• To on-prem: 6m31 / 7m36 before, &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;5m59&lt;/font&gt;&lt;/b&gt; after&lt;br&gt;• To AWS: 4m50 before, &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;4m35&lt;/font&gt;&lt;/b&gt; after&lt;br&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;Engine cut&lt;/font&gt;&lt;/b&gt; (stop_source to target healthy)&lt;br&gt;• To on-prem: 5m57 / 6m46 before, &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;5m09&lt;/font&gt;&lt;/b&gt; after&lt;br&gt;• To AWS: about 4m00 before, &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;3m44&lt;/font&gt;&lt;/b&gt; after&lt;br&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;Switch commit to first pod on the target&lt;/font&gt;&lt;/b&gt;&lt;br&gt;• To on-prem: about 2m30 before, &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;63 s&lt;/font&gt;&lt;/b&gt; after&lt;br&gt;• To AWS: 1m38 before, &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;55 s&lt;/font&gt;&lt;/b&gt; after&lt;br&gt;• Target setup and image pulls moved into prepare, before the cut: 35 to 51 s before, now 3m44 to on-prem, 2m17 to AWS, not felt by users.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="40" y="640" width="640" height="270" as="geometry" />
+          <mxGeometry x="40" y="640" width="660" height="270" as="geometry" />
         </mxCell>
         <mxCell id="card-wait" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#0284c7&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Inside wait_target, move 10 (to on-prem, 4m35)&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• Observed on Argo CD events and pods, not engine sub-steps.&lt;br&gt;• Argo CD sync starts: 25 s after the switch commit&lt;br&gt;• First pod: +38 s&lt;br&gt;• DB restore starts: +25 s&lt;br&gt;• DB restore and DB ready: 85 s&lt;br&gt;• Migration: 66 s&lt;br&gt;• Backend ready, CMP detects healthy: 37 s&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="720" y="640" width="540" height="270" as="geometry" />
+          <mxGeometry x="740" y="640" width="560" height="270" as="geometry" />
         </mxCell>
         <mxCell id="card-rpo" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#7c3aed&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;RPO 0 in every move&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• A test check, not an engine step: measured on the test app.&lt;br&gt;• md5 of the todo table on the source at stop equals the md5 on the target after the restore.&lt;br&gt;• Equal in all five moves (6 to 10).&lt;br&gt;• The final backup is taken once the apps are at 0, so nothing writes after it.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
-          <mxGeometry x="1300" y="640" width="508" height="270" as="geometry" />
+          <mxGeometry x="1340" y="640" width="540" height="270" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>

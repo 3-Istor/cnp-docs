@@ -1,23 +1,23 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 1850, height: 950}
+canvas: {width: 1920, height: 950}
 elements:
-  mv-z-steps-a: {x: 40, y: 200, w: 216, h: 300}
-  mv-s-prepare: {x: 20, y: 70, w: 176, h: 200}
-  mv-z-steps-b: {x: 316, y: 200, w: 1016, h: 300}
-  mv-s-stop: {x: 20, y: 70, w: 176, h: 200}
-  mv-s-backup: {x: 220, y: 70, w: 176, h: 200}
-  mv-s-switch: {x: 420, y: 70, w: 176, h: 200}
-  mv-s-wait: {x: 620, y: 70, w: 176, h: 200}
-  mv-s-persist: {x: 820, y: 70, w: 176, h: 200}
-  mv-z-steps-c: {x: 1392, y: 200, w: 416, h: 300}
-  mv-s-cleanup: {x: 20, y: 70, w: 176, h: 200}
-  mv-s-finish: {x: 220, y: 70, w: 176, h: 200}
+  mv-z-steps-a: {x: 40, y: 200, w: 224, h: 300}
+  mv-s-prepare: {x: 20, y: 70, w: 184, h: 200}
+  mv-z-steps-b: {x: 324, y: 200, w: 1056, h: 300}
+  mv-s-stop: {x: 20, y: 70, w: 184, h: 200}
+  mv-s-backup: {x: 228, y: 70, w: 184, h: 200}
+  mv-s-switch: {x: 436, y: 70, w: 184, h: 200}
+  mv-s-wait: {x: 644, y: 70, w: 184, h: 200}
+  mv-s-persist: {x: 852, y: 70, w: 184, h: 200}
+  mv-z-steps-c: {x: 1440, y: 200, w: 432, h: 300}
+  mv-s-cleanup: {x: 20, y: 70, w: 184, h: 200}
+  mv-s-finish: {x: 228, y: 70, w: 184, h: 200}
 edges: {}
 notes:
-  n-cut-start: {x: 336, y: 530, w: 280, h: 56}
-  n-cut-end: {x: 1412, y: 530, w: 380, h: 70}
+  n-cut-start: {x: 344, y: 530, w: 280, h: 56}
+  n-cut-end: {x: 1460, y: 530, w: 400, h: 70}
 cards:
-  card-cut: {x: 40, y: 640, w: 640, h: 270}
-  card-wait: {x: 720, y: 640, w: 540, h: 270}
-  card-rpo: {x: 1300, y: 640, w: 508, h: 270}
+  card-cut: {x: 40, y: 640, w: 660, h: 270}
+  card-wait: {x: 740, y: 640, w: 560, h: 270}
+  card-rpo: {x: 1340, y: 640, w: 540, h: 270}

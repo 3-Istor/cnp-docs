@@ -35,5 +35,5 @@ edges:
   c-mv-src-cf: {from: mv-src-conn.right@30px, to: mv-cf-tunnel.left, against_flow: true}
   c-mv-tgt-cf: {from: mv-tgt-conn.right, to: mv-cf-tunnel.left@60px, against_flow: true, waypoints: [[1190, 675], [1190, 300]]}
 cards:
-  card-legend: {x: 40, y: 1000, w: 560, h: 290}
-  card-read: {x: 640, y: 1000, w: 1040, h: 290}
+  card-legend: {x: 40, y: 1000, w: 600, h: 290}
+  card-read: {x: 680, y: 1000, w: 1000, h: 290}
