@@ -135,7 +135,7 @@ cards:
     color: sky
     lines:
       - "Gateway ai-gateway → GatewayClass agentgateway. HTTPRoutes llm, mcp and a2a → the Gateway (parentRef) and their AgentgatewayBackend (backendRef)."
-      - "AgentgatewayBackend llm: one provider, anthropic, with the Secret anthropic-api-key; models claude-sonnet-5-5 (default) and claude-haiku-5-5."
+      - "AgentgatewayBackend llm: one provider, anthropic, with the Secret anthropic-api-key; models claude-haiku-5-5 (default) and claude-sonnet-5-5."
       - "Budget: the global rateLimit of the policy (unit Tokens) points at the rate limit service, whose ConfigMap sets the limit per day; the local limiter has no day unit, so it only holds the 30 requests a minute per agent."
       - "AgentgatewayPolicy: auth, limits and trace → Gateway; budget → HTTPRoute llm; guard → backend llm; tools → backend mcp (targetRefs)."
       - "Where the rules come from (D36): the gateway's rules (budget limits, tool allow-lists, CEL on the claims) are generated from the project's ProjectRecord in cnp-projects, written by the CMP; an app's own settings (blocks ai and agent of its deploy/values-*.yaml) never exceed it."

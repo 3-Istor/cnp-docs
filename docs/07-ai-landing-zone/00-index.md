@@ -12,7 +12,7 @@
 > cas UC21 (Grok sur EpiTweet) dans [08-uc21-grok.md](08-uc21-grok.md).
 
 > **Ce qui change le 2026-11-22.** Un seul fournisseur de modèles, l'API Anthropic
-> (`claude-sonnet-5-5` par défaut, `claude-haiku-5-5` en économique), avec une clé et un
+> (`claude-haiku-5-5` par défaut, `claude-sonnet-5-5` sur demande), avec une clé et un
 > plafond de dépenses sur la console. Plus de Gemini, de serveur GPU, d'Ollama, de Llama
 > Guard, d'images ni d'embeddings ; plus de niveau de données Local. Nouveau : le code mode
 > (`run_python` dans un sandbox gVisor ou Kata, D38), kmcp ou ToolHive (D39), le champ

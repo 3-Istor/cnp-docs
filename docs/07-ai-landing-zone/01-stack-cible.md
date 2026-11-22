@@ -37,8 +37,8 @@ Source du schéma : `assets/ai-target-stack.html` (rendu en PNG avec Chromium).
 - **Métriques.** La base de métriques de CNP est VictoriaMetrics. Les vues qui dessinent
   « Prometheus » pour les métriques GenAI doivent lire VictoriaMetrics.
 - **Modèles (2026-11-22) : l'API Anthropic seule.** Plus de Gemini ni de serveur GPU : une clé
-  Anthropic dans la gateway, `claude-sonnet-5-5` par défaut et `claude-haiku-5-5` en
-  économique (spec D6, §5).
+  Anthropic dans la gateway, `claude-haiku-5-5` par défaut et `claude-sonnet-5-5` sur
+  demande (spec D6, §5).
 - **Code mode (2026-11-22).** Le modèle écrit du code qui appelle ses outils, exécuté par
   `run_python` dans un sandbox gVisor ou Kata ; les appels d'outils du code repassent par la
   gateway (spec D38).

@@ -103,7 +103,7 @@ la tentative ; aucune donnée privée n'est lue, aucune autre action n'a lieu.
 | # | Étape | Ce qu'on montre |
 |---|---|---|
 | 1 | Importer EpiTweet | L'import de la CMP crée le projet et l'app depuis le dépôt |
-| 2 | Activer l'IA | Onglet « IA » : budget, modèles autorisés (`claude-sonnet-5-5`, `claude-haiku-5-5`), état du backend Anthropic |
+| 2 | Activer l'IA | Onglet « IA » : budget, modèles autorisés (`claude-haiku-5-5`, `claude-sonnet-5-5`), état du backend Anthropic |
 | 3 | Créer un agent depuis un template | Template « Bot d'app » : la CMP calcule la Rule of Two, propose la paire lecteur et acteur, écrit les droits dans `spec.ai` et ouvre une PR sur `deploy/values-epitweet.yaml` ; Argo CD déploie après la fusion |
 | 4 | Chat de test | Page de `grok-reader`, onglet Tester : un événement d'exemple rejoué, chaque étape visible (modèle, outils, tokens) |
 | 5 | Fact-check | « @grok c'est vrai ? » sous un tweet : réponse avec sources (§2) |

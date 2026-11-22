@@ -16,7 +16,7 @@ steps:
   - {id: quota, from: ai-gw-proxy, to: ai-ratelimit, over: c-aigw-ratelimit, text: "tokens left for this agent (azp) today?"}
   - {reply: quota, text: "OK · estimate reserved"}
   - {note: ai-gw-proxy, text: "promptGuard: built-in regex masks PII and secrets"}
-  - {id: msg, from: ai-gw-proxy, to: anthropic, over: c-aigw-anthropic, text: "POST /v1/messages · claude-sonnet-5-5 · key from the Secret"}
+  - {id: msg, from: ai-gw-proxy, to: anthropic, over: c-aigw-anthropic, text: "POST /v1/messages · claude-haiku-5-5 · key from the Secret"}
   - {reply: msg, text: "token stream · usage"}
   - {note: ai-gw-proxy, text: "count real usage against the budget · emit the GenAI span"}
   - {reply: call, text: "SSE stream"}

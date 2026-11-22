@@ -44,7 +44,7 @@ labels:
 notes:
   - {id: n-md-terms, text: "Prompts and answers leave for Anthropic. promptGuard masks PII and secrets with its built-in regexes before the call; a critical project cannot enable AI at all. There is no Local data level any more."}
   - {id: n-md-local, text: "No fallback: if the API is down or the spend limit is reached, the call fails with a clear error, never a degraded mode (principle 6)."}
-  - {id: n-md-contract, text: "The model is a setting: claude-sonnet-5-5 by default (effort medium, adaptive thinking), claude-haiku-5-5 for cheap work such as a reader agent or a classification. Per MTok: Sonnet 5.5 $2 in, $10 out, $0.10 cache read; Haiku 5.5 $0.10 in, $0.50 out."}
+  - {id: n-md-contract, text: "The model is a setting: claude-haiku-5-5 by default (effort low), claude-sonnet-5-5 (effort medium) for an agent that needs more reasoning. Per MTok: Sonnet 5.5 $2 in, $10 out, $0.10 cache read; Haiku 5.5 $0.10 in, $0.50 out."}
 
 cards:
   - id: card-steps

@@ -19,8 +19,9 @@ Le budget de tokens protège la plateforme et le crédit (environ 10 $) d'un age
 Le plafond de la console est le dernier fusible, au cas où les budgets de la gateway seraient
 mal réglés. Le budget FinOps rend le coût visible au projet, avec le reste de ses dépenses.
 
-**Ordre de grandeur.** Avec Sonnet 5.5, 10 $ couvrent environ 1 million de tokens en sortie
-ou 5 millions en entrée. Les budgets quotidiens par `azp` se règlent pour que leur somme sur
+**Ordre de grandeur.** Avec Haiku 5.5, le modèle par défaut, 10 $ couvrent environ 20 millions de tokens en
+sortie ou 100 millions en entrée ; avec Sonnet 5.5, vingt fois moins. La recherche web se
+paie en plus, 10 $ pour 1 000 recherches : c'est elle qui domine le coût d'une réponse de Grok. Les budgets quotidiens par `azp` se règlent pour que leur somme sur
 la durée de la démo reste sous le plafond de la console.
 
 ## 2. D'où viennent les chiffres

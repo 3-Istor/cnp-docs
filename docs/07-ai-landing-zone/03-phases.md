@@ -55,7 +55,7 @@ audit. Pas de kagent, de sandbox, d'outils MCP ni de guardrails.
 2. Keycloak : client de l'agent UC7, client `ai-gateway`, mappers `project` et audience, Client
    Policy `exchange-guard`, jetons de 5 minutes ; secret client dans Vault.
 3. Clé Anthropic dans Vault (`kvv2/platform/ai/anthropic`), montée dans la seule gateway ;
-   backend Anthropic, `claude-sonnet-5-5` par défaut ; plafond de dépenses réglé sur la console
+   backend Anthropic, `claude-haiku-5-5` par défaut ; plafond de dépenses réglé sur la console
    Anthropic (spec §5).
 4. *(supprimé le 2026-11-22 : plus de serveur GPU ni de route Local)*
 5. Politique de la gateway : JWT obligatoire, règle CEL sur `project`, deny par défaut ;
