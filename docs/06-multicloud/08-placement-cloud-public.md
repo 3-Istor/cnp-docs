@@ -79,3 +79,9 @@ en anglais. Le comparatif ci-dessus vit ici, pas dans l'interface.
 |---|---|
 | On-prem | Cheapest. Data stays on our servers. |
 | Public cloud | Keeps running if on-prem is down. |
+
+### Schémas de la bascule
+
+![Bascule : composants](../01-architecture/diagrams/move-components.light.png)
+
+![Bascule : étapes et coupure](../01-architecture/diagrams/move-steps.light.png)

@@ -854,6 +854,36 @@ elements:
   - {id: lc-workflow, kind: backend, icon: github-actions, title: "Import workflow", tech: "[extern-project-analyzer · import.yml]", desc: "claim, build, publish"}
   - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
+  # Project move (CNP-292), from CMP backend/app/services/moves and K3s ApplicationSets.
+  - {id: mv-z-git, kind: region, color: sky, icon: github, title: "GITHUB", sub: "SaaS"}
+  - {id: mv-registry, kind: database, parent: mv-z-git, icon: github, title: "cnp-projects", tech: "[Git registry]", desc: "spec.targetCloud<br>status.move, restores"}
+  - {id: mv-z-hub, kind: region, color: cyan, icon: rack, title: "ON-PREM HUB", sub: "control plane, on the on-prem K3s"}
+  - {id: mv-cmp, kind: backend, parent: mv-z-hub, icon: fastapi, title: "CMP", tech: "[FastAPI · table project_moves]", desc: "Move engine: 8 idempotent steps<br>Placement view"}
+  - {id: mv-argocd, kind: backend, parent: mv-z-hub, icon: argo, title: "Argo CD", tech: "[ApplicationSets]", desc: "cnp-project-systems · cnp-apps<br><p>-bootstrap + app Applications"}
+  - {id: mv-z-src, kind: region, color: emerald, icon: kubernetes, title: "SOURCE CLUSTER", sub: "on-prem K3s or EKS/GKE"}
+  - {id: mv-src-conn, kind: cloud, parent: mv-z-src, icon: cloudflare, title: "<p>-system", tech: "[cloudflared connector]", desc: "Removed at clean-up"}
+  - {id: mv-src-apps, kind: backend, parent: mv-z-src, icon: k8s-ns, title: "<p>-<app>", tech: "[apps + CNPG database]", desc: "Stopped, then final backup"}
+  - {id: mv-z-tgt, kind: region, color: indigo, icon: kubernetes, title: "TARGET CLUSTER", sub: "on-prem K3s or EKS/GKE"}
+  - {id: mv-tgt-conn, kind: cloud, parent: mv-z-tgt, icon: cloudflare, title: "<p>-system", tech: "[cloudflared connector]", desc: "0 replicas until the switch"}
+  - {id: mv-tgt-apps, kind: backend, parent: mv-z-tgt, icon: k8s-ns, title: "<p>-<app>", tech: "[apps + CNPG database]", desc: "Prepared first, DB restored<br>at generation N+1"}
+  - {id: mv-z-cf, kind: region, color: orange, icon: cloudflare, title: "CLOUDFLARE", sub: "SaaS"}
+  - {id: mv-cf-tunnel, kind: cloud, parent: mv-z-cf, icon: cloudflare, title: "Project tunnel", tech: "[one tunnel]", desc: "One connector per cluster"}
+  - {id: mv-z-bk, kind: region, color: amber, icon: ceph, title: "BACKUP PATH", sub: "cloud to on-prem bucket"}
+  - {id: mv-wg, kind: cloud, parent: mv-z-bk, icon: k8s-pod, title: "WireGuard", tech: "[ns cnp-vpn · cloud end]", desc: "Cloud to on-prem tunnel,<br>backup endpoint for cloud DBs"}
+  - {id: mv-rgw, kind: database, parent: mv-z-bk, shape: cylinder, icon: ceph, title: "Ceph RGW bucket", tech: "[S3 · OBC]", desc: "Final backup and WAL,<br>restore source"}
+  - {id: mv-z-vault, kind: region, color: rose, icon: vault, title: "VAULT", sub: "on-prem"}
+  - {id: mv-vault, kind: database, parent: mv-z-vault, icon: vault, title: "Vault", tech: "[KV + VaultSecrets]", desc: "Bucket key, registry pull secret"}
+  - {id: mv-z-steps-a, kind: region, color: sky, icon: k8s-ns, title: "BEFORE THE CUT"}
+  - {id: mv-z-steps-b, kind: region, color: rose, icon: k8s-ns, title: "USER-VISIBLE CUT", sub: "stop_source to cleanup_source"}
+  - {id: mv-z-steps-c, kind: region, color: emerald, icon: k8s-ns, title: "AFTER THE CUT", sub: "target serving"}
+  - {id: mv-s-prepare, kind: backend, parent: mv-z-steps-a, title: "1 · prepare", tech: "[source still serving]", desc: "Bootstrap targets the<br>target: system ns,<br>gateway, tunnel at 0,<br>app namespaces<br>CMP copies VaultSecrets<br>Image pre-pull on nodes<br>to on-prem 3m44<br>to AWS 2m17<br>(before: 35 to 51 s)"}
+  - {id: mv-s-stop, kind: backend, parent: mv-z-steps-b, title: "2 · stop_source", tech: "[cut starts]", desc: "Apps to 0 replicas<br>Wait for pods gone<br>to on-prem 16 s<br>to AWS 24 s"}
+  - {id: mv-s-backup, kind: database, parent: mv-z-steps-b, title: "3 · final_backup", desc: "CNPG backup on the<br>source, into the<br>bucket<br>to on-prem 15 s<br>to AWS 30 s"}
+  - {id: mv-s-switch, kind: cloud, parent: mv-z-steps-b, title: "4 · switch", desc: "Registry commit:<br>targetCloud = target<br>Target tunnel 0 to 1<br>(applied in wait_target)<br>commit takes 3 s"}
+  - {id: mv-s-wait, kind: backend, parent: mv-z-steps-b, title: "5 · wait_target", desc: "Argo sync, first pod,<br>DB restore, migration,<br>CMP sees apps healthy<br>to on-prem 4m35<br>to AWS 2m47"}
+  - {id: mv-s-persist, kind: backend, parent: mv-z-steps-b, title: "6 · persist_restores", desc: "Commit db.restore<br>generation to the<br>app repo, wait for<br>Argo to render it<br>about 50 s"}
+  - {id: mv-s-cleanup, kind: backend, parent: mv-z-steps-c, title: "7 · cleanup_source", tech: "[cut ends]", desc: "Source namespaces<br>deleted, <p>-backups<br>kept<br>Source tunnel goes<br>away here<br>1m47"}
+  - {id: mv-s-finish, kind: backend, parent: mv-z-steps-c, title: "8 · finish", desc: "status.move cleared,<br>audit event,<br>notification<br>9 s"}
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
@@ -1449,6 +1479,20 @@ connections:
   - {id: c-lc-import-ci-ghcr, from: lc-import-ci, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push ci:X.Y.Z on a vX.Y.Z tag, sign", kind: flow}
   - {id: c-lc-argocd-user-repo, from: lc-argocd, to: lc-user-repo, port: https, protocol: HTTPS, verb: "read deploy/values-<app>.yaml", kind: async}
   - {id: c-lc-updater-registry, from: lc-updater, to: lc-registry, port: https, protocol: HTTPS, verb: "write the release in apps/<p>/<app>/release.yaml", kind: async}
+  # Project move (CNP-292)
+  - {id: c-mv-cmp-registry, from: mv-cmp, to: mv-registry, protocol: Git, verb: "commits status.move, targetCloud", kind: flow}
+  - {id: c-mv-cmp-argocd, from: mv-cmp, to: mv-argocd, protocol: "kube API", verb: "reads Application health", kind: flow}
+  - {id: c-mv-argocd-registry, from: mv-argocd, to: mv-registry, protocol: Git, verb: "reads (push webhook)", kind: async}
+  - {id: c-mv-cmp-src, from: mv-cmp, to: mv-src-apps, protocol: "kube API", verb: "stops apps, backs up, deletes", kind: flow}
+  - {id: c-mv-cmp-tgt, from: mv-cmp, to: mv-tgt-apps, protocol: "kube API", verb: "copies VaultSecrets, pre-pulls", kind: flow}
+  - {id: c-mv-argocd-src, from: mv-argocd, to: mv-src-apps, verb: "deploys", kind: async}
+  - {id: c-mv-argocd-tgt, from: mv-argocd, to: mv-tgt-apps, verb: "bootstraps, then deploys", kind: async}
+  - {id: c-mv-src-wg, from: mv-src-apps, to: mv-wg, protocol: S3, verb: "final backup", kind: flow}
+  - {id: c-mv-tgt-wg, from: mv-tgt-apps, to: mv-wg, protocol: S3, verb: "restore", kind: flow}
+  - {id: c-mv-wg-rgw, from: mv-wg, to: mv-rgw, protocol: S3, verb: "relays", kind: flow}
+  - {id: c-mv-tgt-vault, from: mv-tgt-apps, to: mv-vault, verb: "syncs VaultSecrets", kind: flow}
+  - {id: c-mv-src-cf, from: mv-src-conn, to: mv-cf-tunnel, verb: "tunnel", kind: tunnel}
+  - {id: c-mv-tgt-cf, from: mv-tgt-conn, to: mv-cf-tunnel, verb: "tunnel", kind: tunnel}
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}

@@ -26,6 +26,7 @@ Quel ticket a changé quoi, et quel schéma le montre. Tous les schémas sont g�
 | CNP-122 | Logs et métriques isolés par projet, alertes | vmauth, tenants Loki, orgs Grafana, Alertmanager | `observability-read`, `observability-simple` |
 | CNP-118, 140 | Sauvegarde et restauration des bases | CloudNativePG, plugin barman, Ceph RGW, CMP | `app-backup`, `app-restore` |
 | CNP-123, 126 | Staging, promotion, canary | CMP, Argo Rollouts, HTTPRoute, vmselect | `canary-release` |
+| CNP-132, 291, 292 | Bascule d'un projet entre on-prem et cloud : qui y participe, étapes et coupure | CMP (moteur de bascule), registre `cnp-projects`, Argo CD, CNPG, Ceph RGW, Vault, tunnel Cloudflare | `move-components`, `move-steps` |
 | — | Vue d'ensemble des acteurs | Dev, admin projet, finance, opérateur | `platform-actors` |
 | — | Ce qu'un projet reçoit, et une app vue de l'intérieur | `<p>-system`, namespaces d'apps, AppProjects, realm, mount Vault, org Grafana | `project-anatomy`, `app-runtime` |
 

@@ -1,0 +1,39 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 1720, height: 1330}
+elements:
+  mv-z-git: {x: 40, y: 310, w: 260, h: 140}
+  mv-registry: {x: 20, y: 44, w: 220, h: 80}
+  mv-z-hub: {x: 380, y: 250, w: 330, h: 500}
+  mv-cmp: {x: 30, y: 60, w: 270, h: 110}
+  mv-argocd: {x: 30, y: 270, w: 270, h: 110}
+  mv-z-src: {x: 800, y: 190, w: 380, h: 340}
+  mv-src-conn: {x: 30, y: 60, w: 320, h: 90}
+  mv-src-apps: {x: 30, y: 200, w: 320, h: 100}
+  mv-z-tgt: {x: 800, y: 590, w: 380, h: 340}
+  mv-tgt-conn: {x: 30, y: 60, w: 320, h: 90}
+  mv-tgt-apps: {x: 30, y: 200, w: 320, h: 100}
+  mv-z-cf: {x: 1280, y: 190, w: 400, h: 160}
+  mv-cf-tunnel: {x: 40, y: 50, w: 320, h: 80}
+  mv-z-bk: {x: 1280, y: 410, w: 400, h: 340}
+  mv-wg: {x: 40, y: 60, w: 320, h: 100}
+  mv-rgw: {x: 40, y: 210, w: 320, h: 100}
+  mv-z-vault: {x: 1280, y: 810, w: 400, h: 150}
+  mv-vault: {x: 40, y: 50, w: 320, h: 80}
+edges:
+  c-mv-cmp-registry: {from: mv-cmp.left@60px, to: mv-registry.right@16px, against_flow: true, label_at: [340, 370]}
+  c-mv-cmp-argocd: {from: mv-cmp.bottom, to: mv-argocd.top, label_at: [545, 470]}
+  c-mv-argocd-registry: {from: mv-argocd.left, to: mv-registry.right@60px, against_flow: true, waypoints: [[340, 575], [340, 414]], label_at: [340, 500]}
+  c-mv-cmp-src: {from: mv-cmp.right, to: mv-src-apps.left, waypoints: [[775, 365], [775, 440]]}
+  c-mv-cmp-tgt: {from: mv-cmp.right@80px, to: mv-tgt-apps.left, waypoints: [[740, 390], [740, 840]]}
+  c-mv-argocd-src: {from: mv-argocd.right, to: mv-src-apps.left@80px, waypoints: [[755, 575], [755, 470]]}
+  c-mv-argocd-tgt: {from: mv-argocd.right@80px, to: mv-tgt-apps.left@80px, waypoints: [[725, 600], [725, 870]]}
+  c-mv-src-wg: {from: mv-src-apps.right, to: mv-wg.left, waypoints: [[1230, 440], [1230, 520]]}
+  c-mv-tgt-wg: {from: mv-tgt-apps.right, to: mv-wg.left@80px, waypoints: [[1210, 840], [1210, 550]]}
+  c-mv-wg-rgw: {from: mv-wg.bottom, to: mv-rgw.top}
+  c-mv-tgt-vault: {from: mv-tgt-apps.right@80px, to: mv-vault.left, waypoints: [[1250, 870], [1250, 900]]}
+  c-mv-src-cf: {from: mv-src-conn.right@30px, to: mv-cf-tunnel.left, against_flow: true}
+  c-mv-tgt-cf: {from: mv-tgt-conn.right, to: mv-cf-tunnel.left@60px, against_flow: true, waypoints: [[1190, 675], [1190, 300]]}
+cards:
+  card-legend: {x: 40, y: 1000, w: 560, h: 290}
+  card-read: {x: 640, y: 1000, w: 1040, h: 290}
