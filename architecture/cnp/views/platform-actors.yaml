@@ -2,11 +2,11 @@ apiVersion: noodle/v1alpha1
 kind: View
 type: topology
 title: "CNP · Who uses what"
-subtitle: "Who uses the platform, through which tool, and where do the apps run?"
+subtitle: "Who uses CNP, through which tool, and where do the apps run?"
 meta:
-  - "Scope: people, the tools they open, the three clusters and what links them · main as of 2026-10-29 · one box per product, details in the other views"
+  - "Scope: people, the tools they open, the three clusters and what links them · main as of 2026-11-22 · one box per product (CMP features shown apart), details in the other views"
   - "Out of scope: ports, namespaces, secrets, security rules (see multicloud-links, multicloud-policies, observability)"
-  - "v0.2 · source: cnp-docs/architecture/cnp"
+  - "v0.3 · source: cnp-docs/architecture/cnp"
 
 include:
   - s1-z-people
@@ -15,10 +15,14 @@ include:
   - s1-padmin
   - s1-finance
   - s1-operator
+  - s1-assistant
   - s1-z-edge
   - s1-cloudflare
   - s1-z-hub
+  - s1-mcp
   - s1-cmp
+  - s1-import
+  - s1-placement
   - s1-grafana
   - s1-argocd
   - s1-z-git
@@ -31,6 +35,11 @@ include:
 
 labels:
   s1-c-cloud-cf: ""
+  s1-c-onprem-obs: ""
+  s1-c-import-github: ""
+  s1-c-dev-import: ""
+  s1-c-placement-onprem: ""
+  s1-c-operator-argocd: ""
 
 cards:
   - id: card-legend
@@ -49,6 +58,8 @@ cards:
       - "An operator starts and stops the cloud clusters to control costs."
       - "The public cloud box stands for AWS and Google Cloud: same setup on both."
       - "The public clouds send metrics and logs back to the on-prem hub."
+      - "An AI assistant works through the CMP MCP server, with the same rights as the user who approved it."
+      - "Repo import opens a pull request on the user's repo. The Placement view is for platform operators only."
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"
   G10: "targets httproute, not drawn in this view"

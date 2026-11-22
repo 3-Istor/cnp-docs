@@ -621,18 +621,17 @@ elements:
   - {id: o-audit-sources, kind: security, parent: g-obs-sources, icon: k8s-crd, title: "Audit sources", tech: "[audit.log · Vault · Keycloak · Hubble]", desc: "Tailed as pod logs or host file"}
   - {id: b-obs-targets, kind: backend, parent: g-b-platform, icon: k8s-pod, title: "Scrape targets", tech: "[app pods · node-exporter · KSM]", desc: "Pods and logs of the cloud"}
   - {id: o-vmauth-secret, kind: database, parent: g-observability, icon: k8s-secret, title: "vmauth-projects", tech: "[Secret · auth.yml]", desc: "One user per project, from CMP"}
-  - {id: s2-z-sources, kind: region, color: cyan, icon: kubernetes, title: "CLUSTERS"}
+  - {id: s2-z-sources, kind: region, color: emerald, icon: kubernetes, title: "CLUSTERS"}
   - {id: s2-z-store, kind: region, color: violet, icon: rack, title: "STORE", sub: "on-prem"}
-  - {id: s2-z-read, kind: region, color: emerald, icon: grafana, title: "READ"}
+  - {id: s2-z-read, kind: region, color: cyan, icon: grafana, title: "READ"}
   - {id: s2-z-out, kind: region, color: slate, icon: globe, title: "INTERNET"}
-  - {id: s2-onprem, kind: backend, parent: s2-z-sources, icon: rack, title: "On-prem apps", tech: "[Alloy]"}
-  - {id: s2-cloud, kind: backend, parent: s2-z-sources, icon: kubernetes, title: "Public cloud apps", tech: "[AWS · GCP · Alloy · WireGuard]", multiplicity: "AWS and GCP"}
-  - {id: s2-vm, kind: database, parent: s2-z-store, shape: cylinder, icon: k8s-deploy, title: "Metrics", tech: "[VictoriaMetrics]"}
-  - {id: s2-loki, kind: database, parent: s2-z-store, shape: cylinder, icon: loki, title: "Logs", tech: "[Loki]"}
-  - {id: s2-ceph, kind: database, parent: s2-z-store, shape: cylinder, icon: ceph, title: "Object storage", tech: "[Ceph]"}
+  - {id: s2-onprem, kind: backend, parent: s2-z-sources, icon: rack, title: "On-prem apps", tech: "[Fluent Bit · vmagent]"}
+  - {id: s2-cloud, kind: backend, parent: s2-z-sources, icon: kubernetes, title: "Public cloud apps", tech: "[AWS · GCP · WireGuard]", multiplicity: "AWS and GCP"}
+  - {id: s2-opencost, kind: backend, parent: s2-z-sources, icon: opencost, title: "Costs", tech: "[OpenCost · on-prem · AWS · GCP]"}
+  - {id: s2-vm, kind: database, parent: s2-z-store, shape: cylinder, icon: victoriametrics, title: "Metrics", tech: "[VMSingle]"}
+  - {id: s2-vlogs, kind: database, parent: s2-z-store, shape: cylinder, icon: victoriametrics, title: "Logs", tech: "[VictoriaLogs]"}
   - {id: s2-grafana, kind: frontend, parent: s2-z-read, icon: grafana, title: "Grafana", tech: "[one org per project]"}
   - {id: s2-cmp, kind: frontend, parent: s2-z-read, icon: react, title: "CMP", tech: "[portal]"}
-  - {id: s2-opencost, kind: tool, parent: s2-z-read, icon: opencost, title: "Costs", tech: "[OpenCost]"}
   - {id: s2-alerts, kind: backend, parent: s2-z-read, icon: k8s-deploy, title: "Alerts", tech: "[vmalert · Alertmanager]"}
   - {id: s2-discord, kind: external, parent: s2-z-out, icon: discord, title: "Discord"}
   # --- CNP-168 · F2 F4 S1 elements (CMP) ---
@@ -646,7 +645,7 @@ elements:
   - {id: seq-tfstate, kind: database, icon: terraform, title: "Terraform state", tech: "[S3 istor-cnp-tfstate]", desc: "One key per project and cloud", ports: [{name: https, protocol: TCP, port: 443}]}
   - {id: cf-api, kind: cloud, parent: z-cloudflare, icon: cloudflare, title: "Cloudflare API", tech: "[REST]", desc: "Tunnels and DNS records"}
   # S1: one box per actor or product, names only.
-  - {id: s1-z-people, kind: region, color: slate, icon: user, title: "PEOPLE"}
+  - {id: s1-z-people, kind: region, color: slate, icon: user, title: "PEOPLE AND ASSISTANTS"}
   - {id: s1-z-edge, kind: region, color: orange, icon: cloudflare, title: "INTERNET ENTRY"}
   - {id: s1-z-hub, kind: region, color: cyan, icon: rack, title: "PLATFORM TOOLS", sub: "in our data centre"}
   - {id: s1-z-git, kind: region, color: sky, icon: github, title: "CODE AND SETTINGS"}
@@ -657,14 +656,18 @@ elements:
   - {id: s1-padmin, kind: frontend, parent: s1-z-people, shape: actor, icon: user, title: "Project admin"}
   - {id: s1-finance, kind: frontend, parent: s1-z-people, shape: actor, icon: user, title: "Finance / decision makers"}
   - {id: s1-operator, kind: frontend, parent: s1-z-people, shape: actor, icon: user, title: "Platform operator"}
+  - {id: s1-assistant, kind: external, parent: s1-z-people, icon: claude, title: "AI assistants", tech: "[MCP clients]", desc: "Act as their user"}
   - {id: s1-cloudflare, kind: cloud, parent: s1-z-edge, icon: cloudflare, title: "Cloudflare", desc: "Front door for every app"}
   - {id: s1-cmp, kind: frontend, parent: s1-z-hub, icon: react, title: "CMP portal", desc: "Projects, apps, costs"}
   - {id: s1-grafana, kind: frontend, parent: s1-z-hub, icon: grafana, title: "Grafana", desc: "Dashboards per project"}
+  - {id: s1-mcp, kind: backend, parent: s1-z-hub, icon: mcp, title: "CMP MCP server", desc: "Acts as the user"}
+  - {id: s1-import, kind: backend, parent: s1-z-hub, icon: react, title: "Repo import", desc: "Turns a repo into an app"}
+  - {id: s1-placement, kind: frontend, parent: s1-z-hub, icon: react, title: "Placement view", desc: "Where each app runs"}
   - {id: s1-argocd, kind: backend, parent: s1-z-hub, icon: argo, title: "Argo CD", desc: "Deploys what Git describes"}
   - {id: s1-github, kind: external, parent: s1-z-git, icon: github, title: "GitHub", desc: "Project list and app code"}
   - {id: s1-onprem, kind: backend, parent: s1-z-clusters, icon: rack, title: "On-prem cluster"}
   - {id: s1-cloud, kind: backend, parent: s1-z-clusters, icon: kubernetes, title: "Public cloud clusters", desc: "AWS and Google Cloud, same setup", multiplicity: "AWS and GCP"}
-  - {id: s1-obs, kind: backend, parent: s1-z-obs, icon: grafana-alloy, title: "Metrics, logs, audit trail"}
+  - {id: s1-obs, kind: backend, parent: s1-z-obs, icon: victoriametrics, title: "Metrics, logs, audit trail"}
   # --- CNP-168 · G1 elements (backups) ---
   # Sources: infra-templates/templates/{cnpg-cluster,cnpg-backup,migrations}.yaml,
   # K3s/k8s/config/{cnp-projects-db,rook-ceph,cnpg}, CMP security_databases.py.
@@ -904,19 +907,16 @@ connections:
   - {id: c-cmp-lokigw, from: cmp-backend, to: loki-gateway, port: http, protocol: HTTP, verb: "query, user cmp", kind: flow}
   - {id: c-grafana-discord, from: grafana, to: discord, protocol: HTTPS, verb: "project alert webhooks", kind: flow}
   - {id: c-cmp-discord, from: cmp-backend, to: discord, protocol: HTTPS, verb: "app and budget alerts", kind: flow}
-  - {id: c-s2-cmp-discord, from: s2-cmp, to: s2-discord, verb: notify, kind: flow}
-  - {id: c-s2-grafana-discord, from: s2-grafana, to: s2-discord, verb: notify, kind: flow}
-  - {id: c-s2-alerts-loki, from: s2-alerts, to: s2-loki, verb: evaluate, kind: flow}
+  - {id: c-s2-alerts-vlogs, from: s2-alerts, to: s2-vlogs, verb: evaluate, kind: flow}
   - {id: c-s2-onprem-vm, from: s2-onprem, to: s2-vm, verb: metrics, kind: flow}
-  - {id: c-s2-onprem-loki, from: s2-onprem, to: s2-loki, verb: logs, kind: flow}
+  - {id: c-s2-onprem-vlogs, from: s2-onprem, to: s2-vlogs, verb: logs, kind: flow}
   - {id: c-s2-cloud-vm, from: s2-cloud, to: s2-vm, verb: metrics, kind: flow}
-  - {id: c-s2-cloud-loki, from: s2-cloud, to: s2-loki, verb: logs, kind: flow}
-  - {id: c-s2-loki-ceph, from: s2-loki, to: s2-ceph, verb: chunks, kind: flow}
+  - {id: c-s2-cloud-vlogs, from: s2-cloud, to: s2-vlogs, verb: logs, kind: flow}
   - {id: c-s2-grafana-vm, from: s2-grafana, to: s2-vm, verb: query, kind: flow}
-  - {id: c-s2-grafana-loki, from: s2-grafana, to: s2-loki, verb: query, kind: flow}
+  - {id: c-s2-grafana-vlogs, from: s2-grafana, to: s2-vlogs, verb: query, kind: flow}
   - {id: c-s2-cmp-vm, from: s2-cmp, to: s2-vm, verb: query, kind: flow}
-  - {id: c-s2-cmp-loki, from: s2-cmp, to: s2-loki, verb: query, kind: flow}
-  - {id: c-s2-opencost-vm, from: s2-opencost, to: s2-vm, verb: query, kind: flow}
+  - {id: c-s2-cmp-opencost, from: s2-cmp, to: s2-opencost, verb: read costs, kind: flow}
+  - {id: c-s2-cmp-vlogs, from: s2-cmp, to: s2-vlogs, verb: query, kind: flow}
   - {id: c-s2-alerts-vm, from: s2-alerts, to: s2-vm, verb: evaluate, kind: flow}
   - {id: c-s2-alerts-discord, from: s2-alerts, to: s2-discord, verb: notify, kind: flow}
   # --- CNP-168 · F2 F4 S1 connections ---
@@ -937,6 +937,12 @@ connections:
   - {id: s1-c-dev-cmp, from: s1-dev, to: s1-cmp, verb: "deploys apps", kind: flow}
   - {id: s1-c-padmin-cmp, from: s1-padmin, to: s1-cmp, verb: "manages", kind: flow}
   - {id: s1-c-finance-cmp, from: s1-finance, to: s1-cmp, verb: "reads costs", kind: flow}
+  - {id: s1-c-assistant-mcp, from: s1-assistant, to: s1-mcp, verb: "calls tools", kind: flow}
+  - {id: s1-c-dev-import, from: s1-dev, to: s1-import, verb: "imports a repo", kind: flow}
+  - {id: s1-c-import-github, from: s1-import, to: s1-github, verb: "opens a PR", kind: flow}
+  - {id: s1-c-operator-placement, from: s1-operator, to: s1-placement, verb: "sees placement", kind: flow}
+  - {id: s1-c-placement-onprem, from: s1-placement, to: s1-onprem, verb: "reads live state", kind: flow}
+  - {id: s1-c-placement-cloud, from: s1-placement, to: s1-cloud, verb: "reads live state", kind: flow}
   - {id: s1-c-operator-argocd, from: s1-operator, to: s1-argocd, verb: "watches deployments", kind: flow}
   - {id: s1-c-cmp-github, from: s1-cmp, to: s1-github, verb: "writes", kind: flow}
   - {id: s1-c-dev-grafana, from: s1-dev, to: s1-grafana, verb: "watches apps", kind: flow}
