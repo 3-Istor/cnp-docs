@@ -1,6 +1,7 @@
 # Phases et vérifications
 
-> **Statut : v1.0 du 2026-10-25, validée par Brian.** Les décisions (D1 à D16) et les
+> **Statut : v1.1 du 2026-11-22** (v1.0 validée par Brian le 2026-10-25, révisée selon ses
+> décisions du 2026-11-22 : API Anthropic seule, code mode). Les décisions (D1 à D42) et les
 > conventions sont dans [02-spec.md](02-spec.md). Une phase se termine quand toutes ses
 > vérifications passent. Les phases 0 et 1 sont détaillées ; les phases 2 et 3 le seront à
 > leur entrée, avec les mêmes règles.
@@ -50,25 +51,27 @@ audit. Pas de kagent, de sandbox, d'outils MCP ni de guardrails.
 **Livrables.**
 
 1. agentgateway (proxy et contrôleur) dans le namespace `ai-gateway`, listener interne, egress
-   limité à Gemini et au serveur GPU.
+   limité à `api.anthropic.com`.
 2. Keycloak : client de l'agent UC7, client `ai-gateway`, mappers `project` et audience, Client
    Policy `exchange-guard`, jetons de 5 minutes ; secret client dans Vault.
-3. Clé Gemini dans Vault, montée dans la seule gateway ; backend Gemini par défaut.
-4. Backend du serveur GPU dès qu'il répond au contrat (spec §5, services 1 et 2) : repli sur
-   429 et route Local.
+3. Clé Anthropic dans Vault (`kvv2/platform/ai/anthropic`), montée dans la seule gateway ;
+   backend Anthropic, `claude-sonnet-5-5` par défaut ; plafond de dépenses réglé sur la console
+   Anthropic (spec §5).
+4. *(supprimé le 2026-11-22 : plus de serveur GPU ni de route Local)*
 5. Politique de la gateway : JWT obligatoire, règle CEL sur `project`, deny par défaut ;
    budget en tokens par agent et par jour.
 6. Traces OpenTelemetry GenAI vers Alloy et Tempo, métriques dans VictoriaMetrics, tableau
    Grafana par projet et par agent, alerte à 80 % du budget.
 7. Logs d'accès de la gateway dans Loki avec les champs de D14, namespace à 30 jours, ajouté à
    l'export de l'archive d'audit.
-8. L'agent UC7 : une app du chart générique, dans un namespace verrouillé, avec un RAG
-   pgvector sur CloudNativePG, déclenchée depuis la CMP.
+8. L'agent UC7 : une app du chart générique, dans un namespace verrouillé, avec une recherche
+   agentique (plein texte PostgreSQL sur CloudNativePG, sans embeddings), déclenchée depuis la
+   CMP (D31).
 
 | ID | Vérification | Comment | Attendu |
 |---|---|---|---|
-| V1.1 | Aucune clé de provider dans le pod de l'agent | `kubectl exec <agent> -- env` et volumes montés | Aucune clé Gemini ou de provider |
-| V1.2 | Pas d'autre sortie que la gateway | Depuis le pod : `curl -m 5` vers `generativelanguage.googleapis.com`, puis vers `example.com` | Les deux échouent |
+| V1.1 | Aucune clé de provider dans le pod de l'agent | `kubectl exec <agent> -- env` et volumes montés | Aucune clé Anthropic ou de provider |
+| V1.2 | Pas d'autre sortie que la gateway | Depuis le pod : `curl -m 5` vers `api.anthropic.com`, puis vers `example.com` | Les deux échouent |
 | V1.3 | Pas d'appel sans jeton | Appel à la gateway sans en-tête `Authorization` | 401 |
 | V1.4 | Pas d'appel hors de son projet | Jeton valide d'un projet non autorisé | 403 |
 | V1.5 | Appel nominal | Jeton `client_credentials`, requête de chat en streaming | 200, réponse en flux |
@@ -80,16 +83,14 @@ audit. Pas de kagent, de sandbox, d'outils MCP ni de guardrails.
 | V1.7e | `max_tokens` trop grand | Requête avec `max_tokens` = 100 000 | Plafonnée à 4 096 ou refusée |
 | V1.8 | Trace | Une requête, puis la trace dans Grafana | Attributs `project`, agent, modèle, tokens en entrée et en sortie, latence ; aucun prompt |
 | V1.9 | Audit | Une requête refusée et une acceptée, puis LogQL sur Loki | Les deux lignes ont utilisateur, agent, projet, modèle, tokens et décision |
-| V1.10 | Repli | Forcer un 429 de Gemini (quota simulé ou clé invalide) | L'appel bascule sur le serveur GPU et aboutit |
-| V1.11 | Projet Local | Projet `local`, egress vers Gemini coupé | La requête aboutit par le serveur GPU ; aucune connexion vers Gemini |
-| V1.12 | Panne du serveur GPU | Arrêter le service texte, puis requête d'un projet Local, puis d'un projet Cloud | Local : « service indisponible » en moins de 10 s *(seuil proposé)* ; Cloud : réponse normale |
+| V1.10 | Plafond de dépenses | Plafond de la console Anthropic atteint (ou clé révoquée sur une clé de test) | « service indisponible » net, sans repli ; l'alerte part |
+| V1.11 | Projet critical | Activer l'IA sur un projet `critical` | Refusé par le validateur et par la CMP (D20) |
+| V1.12 | Masquage avant envoi | Prompt qui contient un secret factice et une adresse e-mail | Masqués dans la requête qui part chez Anthropic (vu dans la trace, sans le prompt en clair) |
 | V1.13 | Qualité d'UC7 | 10 questions de référence sur cnp-docs | Au moins 8 réponses correctes, avec la bonne source citée *(seuil proposé)* |
-| V1.15 | VRAM du serveur GPU | Les trois modèles du profil A chargés, deux requêtes de texte en parallèle avec 8 000 tokens de contexte, `nvidia-smi` | Moins de 15 Go utilisés ; aucun modèle déchargé |
-| V1.14 | Mémoire | Une semaine de trafic de démo | Résultats consignés dans la spec §7 et comparés aux 4 Go |
+| V1.14 | Mémoire | Une semaine de trafic de démo | Résultats consignés dans la spec §7 et comparés à la cible d'environ 4 Go (non bloquant) |
 
-**Sortie.** V1.1 à V1.9 (dont V1.7b à V1.7e), V1.13 et V1.14 passent. V1.10 à V1.12 et V1.15 passent dès que le serveur
-GPU répond au contrat : elles ne bloquent pas la phase 2, mais aucune route Local n'est
-ouverte avant.
+**Sortie.** V1.1 à V1.14 (dont V1.7b à V1.7e) passent. V1.15 (VRAM du serveur GPU) est
+supprimée le 2026-11-22.
 
 ## Phase 2 : agents et outils (IA-2)
 
@@ -102,18 +103,21 @@ l'équipe plateforme.
 1. **kagent** : CRD `Agent` (BYO) et `ModelConfig` pointé sur la gateway ; la CMP commit
    l'`Agent` dans Git et crée le client Keycloak ; l'agent s'authentifie par son jeton de
    ServiceAccount.
-2. **Outils MCP** : `/mcp` sur la gateway, serveur MCP de la CMP, un serveur tiers par
-   ToolHive (par exemple GitHub), registre signé dans Git, filtre d'outils par agent.
-3. **Guardrails** : `promptGuard` (regex), puis le webhook Llama Guard si le serveur GPU
-   répond au service 3 du contrat.
+2. **Outils MCP** : `/mcp` sur la gateway, serveur MCP de la CMP, un serveur tiers hébergé par
+   kmcp ou ToolHive selon l'essai (D39, par exemple GitHub), registre signé dans Git, filtre
+   d'outils par agent.
+3. **Guardrails** : `promptGuard` (regex) seulement ; la défense contre l'injection est
+   l'architecture (Rule of Two, lecteur et acteur, D10).
 4. **A2A** : un utilisateur s'adresse à un agent par Envoy Gateway puis agentgateway ; un
    agent en délègue à un autre par la gateway.
-5. **Sandbox** : agent-sandbox avec gVisor, et Kata pour le code non fiable, au premier cas qui
-   exécute du code (UC9 ou UC13) ; Kyverno impose la RuntimeClass.
+5. **Sandbox et code mode** : agent-sandbox avec gVisor, outil `run_python` et module d'outils
+   MCP dans le sandbox (D38) ; Kata pour le niveau élevé une fois `/dev/kvm` disponible dans
+   les VM (D42) ; Kyverno impose la RuntimeClass.
 6. **Évals** : promptfoo dans GitHub Actions à chaque release d'agent.
-7. **Outil `generate_image`** si le serveur GPU répond au service 4.
-8. **Cas** : UC3 (diagnostic de déploiement), UC11 (revue de PR infra), puis UC21
-   (assistant du clone de Twitter).
+7. **Déclaration des agents** : bloc `agents:` des values rendu par infra-templates, champ
+   `trigger` (D29, D40), assistant de la CMP qui écrit le même YAML par PR, six templates (D26).
+8. **Cas** : UC3 (diagnostic de déploiement), UC11 (revue de PR infra), puis UC21 (Grok sur
+   EpiTweet, [08-uc21-grok.md](08-uc21-grok.md)).
 
 **Vérifications prévues**, à détailler à l'entrée de la phase :
 
@@ -122,15 +126,19 @@ l'équipe plateforme.
 | V2.1 | Un agent déclaré dans la CMP | Il apparaît dans Git, Argo CD le déploie, son client Keycloak existe, son pod n'a aucun secret |
 | V2.2 | Appel d'un outil de la CMP par la gateway | La stake policy du projet s'applique (allow, ask, PR, approve, deny) |
 | V2.3 | Outil exclu par le filtre de l'agent | Il n'apparaît pas dans la liste vue par l'agent, et son appel est refusé |
-| V2.4 | Serveur MCP absent du registre signé | ToolHive refuse de le lancer |
+| V2.4 | Serveur MCP absent du registre signé | kmcp ou ToolHive (D39) refuse de le lancer, ou la gateway refuse de le router : mécanisme à vérifier à l'essai |
 | V2.5 | Secret dans un prompt | Masqué avant d'atteindre le modèle |
-| V2.6 | Webhook Llama Guard injoignable | La requête est refusée |
+| V2.6 | *(supprimée le 2026-11-22 : plus de webhook Llama Guard)* | |
 | V2.7 | Délégation A2A | La trace relie les deux agents ; l'agent délégué n'a pas plus de droits que l'appelant |
-| V2.8 | Code exécuté dans le sandbox | Il tourne sous gVisor et n'a aucun accès réseau sauf le DNS |
+| V2.8 | Code exécuté dans le sandbox (`run_python`) | Il tourne sous gVisor ; il ne joint que le DNS et la route MCP de la gateway ; son jeton n'ouvre que des outils en lecture et expire en 5 minutes |
 | V2.9 | Agent qui exécute du code déclaré sur runc | Kyverno refuse le déploiement |
 | V2.10 | Log de déploiement piégé (UC3) | L'agent n'exécute pas l'instruction injectée ; il n'a aucun droit de release |
 | V2.11 | Tweet piégé (UC21) | L'agent lecteur n'a accès à aucune donnée privée ; l'instruction injectée reste sans effet |
 | V2.12 | Release d'un agent | promptfoo tourne en CI et bloque la release sous le seuil fixé pour le cas |
+| V2.13 | Appel d'outil depuis le code mode | Visible dans la trace de l'agent, compté dans son budget, refusé s'il vise un outil d'écriture |
+| V2.14 | Agent déclaré en YAML puis modifié depuis la CMP | La CMP ouvre une PR sur le même fichier `deploy/values-*.yaml` ; aucune autre source de vérité |
+| V2.15 | Sandbox Kata | `/dev/kvm` présent dans les VM K3s ; un `run_python` du niveau élevé tourne dans une micro-VM |
+| V2.16 | Recherche web d'un agent qui n'y a pas droit | L'outil serveur `web_search` est absent ou refusé (D41) ; si la gateway ne sait pas le filtrer, la recherche web est coupée pour tous |
 
 ## Phase 3 : maturité (IA-3)
 

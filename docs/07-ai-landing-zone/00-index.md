@@ -1,19 +1,29 @@
 # Landing zone IA
 
-> **Statut : spec validée le 2026-10-25, rien n'est encore déployé.** Tous les éléments ajoutés
+> **Statut : spec validée le 2026-10-25, révisée le 2026-11-22, rien n'est encore déployé.** Tous les éléments ajoutés
 > au modèle Noodle portent `status: planned` et une cible : `P0`–`P2` pour les écarts de la
 > landing zone actuelle, `IA-1`–`IA-3` pour la landing zone IA.
 
-> **La spec de référence est validée (v1.0, 2026-10-25).** Les décisions D1 à D37 sont dans
+> **La spec de référence est en v1.1 (2026-11-22).** Les décisions D1 à D42 sont dans
 > [02-spec.md](02-spec.md) (§3 et §9), les phases et vérifications dans [03-phases.md](03-phases.md),
 > la partie CMP dans [04-cmp-agents.md](04-cmp-agents.md), le plan d'implémentation dans
 > [05-plan-implementation.md](05-plan-implementation.md), le FinOps de l'IA dans
-> [06-finops-ia.md](06-finops-ia.md) et les flux pas à pas dans [07-flux.md](07-flux.md).
+> [06-finops-ia.md](06-finops-ia.md), les flux pas à pas dans [07-flux.md](07-flux.md) et le
+> cas UC21 (Grok sur EpiTweet) dans [08-uc21-grok.md](08-uc21-grok.md).
+
+> **Ce qui change le 2026-11-22.** Un seul fournisseur de modèles, l'API Anthropic
+> (`claude-sonnet-5-5` par défaut, `claude-haiku-5-5` en économique), avec une clé et un
+> plafond de dépenses sur la console. Plus de Gemini, de serveur GPU, d'Ollama, de Llama
+> Guard, d'images ni d'embeddings ; plus de niveau de données Local. Nouveau : le code mode
+> (`run_python` dans un sandbox gVisor ou Kata, D38), kmcp ou ToolHive (D39), le champ
+> `trigger` (D40), six templates d'agent génériques (D26) et des agents déclarés depuis la CMP
+> ou en YAML, à partir de la même source (D29).
 
 La landing zone IA se greffe sur la plateforme existante. Les appels des agents vers un
 modèle ou un outil passent par une AI gateway (agentgateway) posée à côté de l'Envoy Gateway
 déjà en place, avec sa propre GatewayClass. La gateway porte l'authentification Keycloak,
-l'autorisation par claims, le budget en tokens par agent et par jour, le choix du modèle et les traces.
+l'autorisation par claims, le budget en tokens par agent et par jour, la clé Anthropic (seul
+fournisseur) et les traces.
 
 ## Décisions
 
@@ -27,14 +37,14 @@ CloudNativePG.
 
 ### La plateforme et sa landing zone IA en un coup d'œil
 
-Toute la plateforme actuelle, estompée (entrée, CMP et GitOps, apps des tenants, données, GitHub, EKS et GKE, services transverses), et la landing zone IA en clair. Vingt et un flux : le parcours d'une requête, la mise en place, et les flux d'aujourd'hui.
+Toute la plateforme actuelle, estompée (entrée, CMP et GitOps, apps des tenants, données, GitHub, EKS et GKE, services transverses), et la landing zone IA en clair. Dix-neuf flux : le parcours d'une requête, la mise en place, et les flux d'aujourd'hui.
 
 ![La plateforme et sa landing zone IA en un coup d'œil](../01-architecture/diagrams/platform-ai-full.light.png#only-light)
 ![La plateforme et sa landing zone IA en un coup d'œil](../01-architecture/diagrams/platform-ai-full.dark.png#only-dark)
 
 ### La landing zone IA en un coup d'œil
 
-Une boîte par brique, quinze flux : le parcours d'une requête (numéros) et la mise en place (lettres). En clair ce que la landing zone IA ajoute, estompé ce qui tourne déjà.
+Une boîte par brique, treize flux : le parcours d'une requête (numéros) et la mise en place (lettres). En clair ce que la landing zone IA ajoute, estompé ce qui tourne déjà.
 
 ![La landing zone IA en un coup d'œil](../01-architecture/diagrams/platform-ai-simple.light.png#only-light)
 ![La landing zone IA en un coup d'œil](../01-architecture/diagrams/platform-ai-simple.dark.png#only-dark)
@@ -60,7 +70,7 @@ Toute la plateforme sur une seule toile : le hub on-prem, la landing zone IA pro
 
 ### AI gateway : vue détaillée
 
-L'AI gateway agentgateway ouverte : GatewayClass, Gateway et HTTPRoute, `AgentgatewayBackend` (LLM, MCP, A2A), `AgentgatewayPolicy`, contrôleur et proxy, avec le chemin d'une requête en 14 étapes dans l'ordre des politiques de la doc.
+L'AI gateway agentgateway ouverte : GatewayClass, Gateway et HTTPRoute, `AgentgatewayBackend` (LLM, MCP, A2A), `AgentgatewayPolicy`, contrôleur et proxy, avec le chemin d'une requête en 13 étapes dans l'ordre des politiques de la doc.
 
 ![AI gateway internals](../01-architecture/diagrams/ai-gateway-internals.light.png#only-light)
 ![AI gateway internals](../01-architecture/diagrams/ai-gateway-internals.dark.png#only-dark)
@@ -84,7 +94,7 @@ Niveau standard (agents sans exécution de code, runc) :
 
 ### Outils MCP : vue détaillée
 
-Comment un appel d'outil va de l'agent au serveur d'outils : le proxy MCP d'agentgateway (route et `AgentgatewayBackend` mcp, politique d'accès par outil), ToolHive pour les serveurs tiers, le serveur MCP du CMP et sa politique de stake.
+Comment un appel d'outil va de l'agent au serveur d'outils : le proxy MCP d'agentgateway (route et `AgentgatewayBackend` mcp, politique d'accès par outil), ToolHive pour les serveurs tiers (kmcp ou ToolHive, à trancher à l'essai, D39), le serveur MCP du CMP et sa politique de stake.
 
 ![MCP tools internals](../01-architecture/diagrams/mcp-tools-internals.light.png#only-light)
 ![MCP tools internals](../01-architecture/diagrams/mcp-tools-internals.dark.png#only-dark)
@@ -98,7 +108,7 @@ Un client Keycloak par agent, client_credentials quand l'agent agit seul, token 
 
 ### Modèles : vue détaillée
 
-Gemini en premier (plusieurs clés, quota gratuit par projet Google), repli sur le serveur GPU, un élément externe défini par son contrat et joint en HTTPS sur le réseau local, et la route réservée aux projets Local.
+Un seul backend, l'API Anthropic, élément externe derrière la gateway : une clé montée dans la seule gateway, egress limité à `api.anthropic.com`, budget en tokens par agent et plafond de dépenses sur la console.
 
 ![Models internals](../01-architecture/diagrams/models-internals.light.png#only-light)
 ![Models internals](../01-architecture/diagrams/models-internals.dark.png#only-dark)
