@@ -5,9 +5,9 @@ elements:
   s1-z-people: {x: 40, y: 200, w: 230, h: 800}
   s1-enduser: {x: 72, y: 52, w: 56, h: 56}
   s1-assistant: {x: 20, y: 180, w: 190, h: 72}
-  s1-dev: {x: 72, y: 290, w: 56, h: 56}
-  s1-padmin: {x: 72, y: 410, w: 56, h: 56}
-  s1-finance: {x: 72, y: 520, w: 56, h: 56}
+  s1-dev: {x: 72, y: 520, w: 56, h: 56}
+  s1-padmin: {x: 72, y: 290, w: 56, h: 56}
+  s1-finance: {x: 72, y: 410, w: 56, h: 56}
   s1-operator: {x: 72, y: 638, w: 56, h: 56}
   s1-z-hub: {x: 370, y: 330, w: 300, h: 700}
   s1-mcp: {x: 30, y: 50, w: 240, h: 72}
@@ -28,13 +28,13 @@ elements:
 edges:
   s1-c-enduser-cf: {from: s1-enduser.right, to: s1-cloudflare.top@220px, waypoints: [[285, 280], [285, 185], [1410, 185]], label_at: [800, 185]}
   s1-c-assistant-mcp: {from: s1-assistant.right, to: s1-mcp.left, label_at: [310, 416]}
-  s1-c-dev-cmp: {from: s1-dev.right@28px, to: s1-cmp.left@28px, label_at: [215, 518]}
-  s1-c-dev-import: {from: s1-dev.right@10px, to: s1-import.left@20px, waypoints: [[290, 500], [290, 620]]}
-  s1-c-dev-grafana: {from: s1-dev.right@46px, to: s1-grafana.left@36px, waypoints: [[305, 536], [305, 976]], label_at: [225, 536]}
-  s1-c-padmin-cmp: {from: s1-padmin.right@28px, to: s1-cmp.left@50px, waypoints: [[335, 638], [335, 540]]}
-  s1-c-finance-cmp: {from: s1-finance.right@28px, to: s1-cmp.left@60px, waypoints: [[350, 748], [350, 550]], label_at: [225, 748]}
-  s1-c-operator-placement: {from: s1-operator.right@28px, to: s1-placement.left@36px, label_at: [237, 866]}
-  s1-c-operator-argocd: {from: s1-operator.right@10px, to: s1-argocd.left@45px, waypoints: [[350, 848], [350, 755]], label_at: [237, 848]}
+  s1-c-dev-cmp: {from: s1-dev.right@6px, to: s1-cmp.left@62px, waypoints: [[320, 726], [320, 552]], label_at: [215, 726]}
+  s1-c-dev-import: {from: s1-dev.right@22px, to: s1-import.left@36px, waypoints: [[340, 742], [340, 636]]}
+  s1-c-dev-grafana: {from: s1-dev.right@50px, to: s1-grafana.left@36px, waypoints: [[360, 770], [360, 976]], label_at: [215, 770]}
+  s1-c-padmin-cmp: {from: s1-padmin.right@28px, to: s1-cmp.left@28px, label_at: [215, 518]}
+  s1-c-finance-cmp: {from: s1-finance.right@28px, to: s1-cmp.left@46px, waypoints: [[300, 638], [300, 536]], label_at: [215, 638]}
+  s1-c-operator-placement: {from: s1-operator.right@28px, to: s1-placement.left@36px, label_at: [220, 866]}
+  s1-c-operator-argocd: {from: s1-operator.right@10px, to: s1-argocd.left@48px, waypoints: [[300, 848], [300, 758]]}
   s1-c-cmp-github: {from: s1-cmp.right@20px, to: s1-github.left@16px, waypoints: [[700, 510], [700, 260]], label_at: [765, 260]}
   s1-c-import-github: {from: s1-import.right@20px, to: s1-github.left@36px, waypoints: [[715, 620], [715, 280]]}
   s1-c-argocd-github: {from: s1-argocd.right@15px, to: s1-github.left@56px, waypoints: [[730, 725], [730, 300]], label_at: [785, 300]}

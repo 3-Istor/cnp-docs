@@ -52,12 +52,8 @@
         <mxCell id="s2-z-out__icon" value="" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjNDc1NTY5IiBzdHJva2Utd2lkdGg9IjEuOCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj48Y2lyY2xlIGN4PSIxMiIgY3k9IjEyIiByPSIxMCIvPjxwYXRoIGQ9Ik0yIDEyaDIwTTEyIDJhMTUgMTUgMCAwIDEgMCAyME0xMiAyYTE1IDE1IDAgMCAwIDAgMjAiLz48L3N2Zz4K;imageAspect=1;editable=0;connectable=0;movable=0;resizable=0;" vertex="1" parent="s2-z-out">
           <mxGeometry x="12" y="7" width="18" height="18" as="geometry" />
         </mxCell>
-        <mxCell id="c-s2-alerts-vlogs" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.6667;exitPerimeter=0;entryX=1.0000;entryY=0.5556;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-alerts" target="s2-vlogs">
-          <mxGeometry x="-0.5000" relative="1" as="geometry">
-            <Array as="points">
-              <mxPoint x="940" y="450" />
-              <mxPoint x="940" y="470" />
-            </Array>
+        <mxCell id="c-s2-alerts-vlogs" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.8333;exitPerimeter=0;entryX=1.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-alerts" target="s2-vlogs">
+          <mxGeometry x="0.0000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
         <mxCell id="c-s2-onprem-vm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3333;exitPerimeter=0;entryX=0.0000;entryY=0.3333;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-onprem" target="s2-vm">
@@ -80,27 +76,27 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-s2-cloud-vlogs" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.6667;exitPerimeter=0;entryX=0.0000;entryY=0.6667;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-cloud" target="s2-vlogs">
+        <mxCell id="c-s2-cloud-vlogs" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;logs, planned&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.6667;exitPerimeter=0;entryX=0.0000;entryY=0.6667;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-cloud" target="s2-vlogs">
           <mxGeometry x="0.0000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-s2-grafana-vm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.3333;exitPerimeter=0;entryX=1.0000;entryY=0.3333;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-grafana" target="s2-vm">
+        <mxCell id="c-s2-grafana-vm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.2222;exitPerimeter=0;entryX=1.0000;entryY=0.2222;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-grafana" target="s2-vm">
           <mxGeometry x="0.0000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-s2-grafana-vlogs" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.7778;exitPerimeter=0;entryX=1.0000;entryY=0.2222;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-grafana" target="s2-vlogs">
-          <mxGeometry x="0.6333" relative="1" as="geometry">
+        <mxCell id="c-s2-grafana-vlogs" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.8889;exitPerimeter=0;entryX=1.0000;entryY=0.2222;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-grafana" target="s2-vlogs">
+          <mxGeometry x="-0.6552" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="960" y="340" />
-              <mxPoint x="960" y="440" />
+              <mxPoint x="950" y="350" />
+              <mxPoint x="950" y="440" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-s2-cmp-vm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.2222;exitPerimeter=0;entryX=1.0000;entryY=0.7778;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-cmp" target="s2-vm">
-          <mxGeometry x="0.2564" relative="1" as="geometry">
+        <mxCell id="c-s2-cmp-vm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.2778;exitPerimeter=0;entryX=1.0000;entryY=0.7111;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-cmp" target="s2-vm">
+          <mxGeometry x="0.1995" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="900" y="530" />
-              <mxPoint x="900" y="340" />
+              <mxPoint x="910" y="535" />
+              <mxPoint x="910" y="334" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -112,19 +108,19 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-s2-cmp-vlogs" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.6667;exitPerimeter=0;entryX=1.0000;entryY=0.8333;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-cmp" target="s2-vlogs">
-          <mxGeometry x="0.5273" relative="1" as="geometry">
+        <mxCell id="c-s2-cmp-vlogs" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.7222;exitPerimeter=0;entryX=1.0000;entryY=0.7778;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-cmp" target="s2-vlogs">
+          <mxGeometry x="-0.4035" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="980" y="570" />
-              <mxPoint x="980" y="495" />
+              <mxPoint x="880" y="575" />
+              <mxPoint x="880" y="490" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="c-s2-alerts-vm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.2222;exitPerimeter=0;entryX=1.0000;entryY=0.5556;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-alerts" target="s2-vm">
-          <mxGeometry x="-0.5517" relative="1" as="geometry">
+        <mxCell id="c-s2-alerts-vm" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.0000;exitY=0.2778;exitPerimeter=0;entryX=1.0000;entryY=0.4667;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s2-alerts" target="s2-vm">
+          <mxGeometry x="0.5380" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="920" y="410" />
-              <mxPoint x="920" y="320" />
+              <mxPoint x="990" y="415" />
+              <mxPoint x="990" y="312" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -195,7 +191,7 @@
         <mxCell id="card-legend" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#64748b&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;How to read&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;Green&lt;/font&gt;&lt;/b&gt;: where the apps run, or a service of the platform.&lt;br&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;Violet&lt;/font&gt;&lt;/b&gt;: where the data is kept.&lt;br&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;Cyan&lt;/font&gt;&lt;/b&gt;: what people open (Grafana, the CMP portal).&lt;br&gt;• &lt;b&gt;&lt;font color=&quot;#0f172a&quot;&gt;Grey&lt;/font&gt;&lt;/b&gt;: outside the platform.&lt;br&gt;• Arrows start where the exchange starts: apps push their data, readers pull it.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="40" y="820" width="760" height="200" as="geometry" />
         </mxCell>
-        <mxCell id="card-read" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#059669&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;In short&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• On-prem, Fluent Bit ships logs and vmagent ships metrics. The public clouds (AWS and GCP, same setup) send theirs through the WireGuard tunnels.&lt;br&gt;• Each project sees only its own metrics and logs in Grafana and in the CMP.&lt;br&gt;• Alerts go to Discord. OpenCost runs on all three clusters; the CMP reads it, through WireGuard for the clouds.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
+        <mxCell id="card-read" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#059669&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;In short&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• On-prem, Fluent Bit ships logs and vmagent ships metrics. The public clouds (AWS and GCP, same setup) send theirs through the WireGuard tunnels (cloud logs: planned, Cloud PR #50).&lt;br&gt;• Each project sees only its own metrics and logs in Grafana and in the CMP.&lt;br&gt;• Alerts go to Discord. OpenCost runs on all three clusters; the CMP reads it, through WireGuard for the clouds.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="840" y="820" width="1020" height="200" as="geometry" />
         </mxCell>
       </root>

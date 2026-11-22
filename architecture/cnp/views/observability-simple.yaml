@@ -28,7 +28,6 @@ labels:
   c-s2-onprem-vm: ""
   c-s2-onprem-vlogs: ""
   c-s2-cloud-vm: ""
-  c-s2-cloud-vlogs: ""
   c-s2-grafana-vm: ""
   c-s2-grafana-vlogs: ""
   c-s2-cmp-vm: ""
@@ -52,7 +51,7 @@ cards:
     title: "In short"
     color: emerald
     lines:
-      - "On-prem, Fluent Bit ships logs and vmagent ships metrics. The public clouds (AWS and GCP, same setup) send theirs through the WireGuard tunnels."
+      - "On-prem, Fluent Bit ships logs and vmagent ships metrics. The public clouds (AWS and GCP, same setup) send theirs through the WireGuard tunnels (cloud logs: planned, Cloud PR #50)."
       - "Each project sees only its own metrics and logs in Grafana and in the CMP."
       - "Alerts go to Discord. OpenCost runs on all three clusters; the CMP reads it, through WireGuard for the clouds."
 hidden_annotations:

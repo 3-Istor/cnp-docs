@@ -23,12 +23,12 @@ edges:
   c-s2-cloud-vm: {from: s2-cloud.right@30px, to: s2-vm.left@50px, waypoints: [[450, 450], [450, 320]]}
   c-s2-onprem-vlogs: {from: s2-onprem.right@60px, to: s2-vlogs.left@25px, waypoints: [[500, 330], [500, 445]]}
   c-s2-cloud-vlogs: {from: s2-cloud.right@60px, to: s2-vlogs.left@60px}
-  c-s2-grafana-vm: {from: s2-grafana.left@30px, to: s2-vm.right@30px, against_flow: true}
-  c-s2-grafana-vlogs: {from: s2-grafana.left@70px, to: s2-vlogs.right@20px, waypoints: [[960, 340], [960, 440]], against_flow: true}
-  c-s2-alerts-vm: {from: s2-alerts.left@20px, to: s2-vm.right@50px, waypoints: [[920, 410], [920, 320]], against_flow: true}
-  c-s2-alerts-vlogs: {from: s2-alerts.left@60px, to: s2-vlogs.right@50px, waypoints: [[940, 450], [940, 470]], against_flow: true}
-  c-s2-cmp-vm: {from: s2-cmp.left@20px, to: s2-vm.right@70px, waypoints: [[900, 530], [900, 340]], against_flow: true}
-  c-s2-cmp-vlogs: {from: s2-cmp.left@60px, to: s2-vlogs.right@75px, waypoints: [[980, 570], [980, 495]], against_flow: true}
+  c-s2-grafana-vm: {from: s2-grafana.left@20px, to: s2-vm.right@20px, against_flow: true}
+  c-s2-grafana-vlogs: {from: s2-grafana.left@80px, to: s2-vlogs.right@20px, waypoints: [[950, 350], [950, 440]], against_flow: true}
+  c-s2-alerts-vm: {from: s2-alerts.left@25px, to: s2-vm.right@42px, waypoints: [[990, 415], [990, 312]], against_flow: true}
+  c-s2-alerts-vlogs: {from: s2-alerts.left@75px, to: s2-vlogs.right@45px, against_flow: true}
+  c-s2-cmp-vm: {from: s2-cmp.left@25px, to: s2-vm.right@64px, waypoints: [[910, 535], [910, 334]], against_flow: true}
+  c-s2-cmp-vlogs: {from: s2-cmp.left@65px, to: s2-vlogs.right@70px, waypoints: [[880, 575], [880, 490]], against_flow: true}
   # Below the stores: the CMP reads OpenCost of every cluster.
   c-s2-cmp-opencost: {from: s2-cmp.bottom, to: s2-opencost.bottom@150px, waypoints: [[1200, 740], [220, 740]], against_flow: true}
   c-s2-alerts-discord: {from: s2-alerts.right@45px, to: s2-discord.left@15px}

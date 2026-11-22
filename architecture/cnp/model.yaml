@@ -911,7 +911,7 @@ connections:
   - {id: c-s2-onprem-vm, from: s2-onprem, to: s2-vm, verb: metrics, kind: flow}
   - {id: c-s2-onprem-vlogs, from: s2-onprem, to: s2-vlogs, verb: logs, kind: flow}
   - {id: c-s2-cloud-vm, from: s2-cloud, to: s2-vm, verb: metrics, kind: flow}
-  - {id: c-s2-cloud-vlogs, from: s2-cloud, to: s2-vlogs, verb: logs, kind: flow}
+  - {id: c-s2-cloud-vlogs, from: s2-cloud, to: s2-vlogs, verb: "logs, planned", kind: flow}
   - {id: c-s2-grafana-vm, from: s2-grafana, to: s2-vm, verb: query, kind: flow}
   - {id: c-s2-grafana-vlogs, from: s2-grafana, to: s2-vlogs, verb: query, kind: flow}
   - {id: c-s2-cmp-vm, from: s2-cmp, to: s2-vm, verb: query, kind: flow}
@@ -953,7 +953,7 @@ connections:
   - {id: s1-c-cloud-cf, from: s1-cloud, to: s1-cloudflare, verb: "secure tunnel", kind: tunnel}
   - {id: s1-c-operator-cloud, from: s1-operator, to: s1-cloud, verb: "starts and stops", kind: flow}
   - {id: s1-c-onprem-obs, from: s1-onprem, to: s1-obs, verb: "sends metrics and logs", kind: flow}
-  - {id: s1-c-cloud-obs, from: s1-cloud, to: s1-obs, verb: "sends metrics and logs", kind: flow}
+  - {id: s1-c-cloud-obs, from: s1-cloud, to: s1-obs, verb: "sends metrics · logs planned", kind: flow}
   - {id: s1-c-grafana-obs, from: s1-grafana, to: s1-obs, verb: "reads", kind: flow}
   # --- CNP-168 · G1 connections ---
   - {id: c-bk-db-kapi, from: bk-db, to: hub-kapi, port: https, protocol: HTTPS, verb: instance manager watches Backup, kind: async}

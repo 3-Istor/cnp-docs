@@ -79,23 +79,23 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="s1-c-dev-cmp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;deploys apps&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.3889;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-dev" target="s1-cmp">
-          <mxGeometry x="-0.5948" relative="1" as="geometry">
-          </mxGeometry>
-        </mxCell>
-        <mxCell id="s1-c-padmin-cmp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;manages&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.6944;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-padmin" target="s1-cmp">
-          <mxGeometry x="-0.4939" relative="1" as="geometry">
+        <mxCell id="s1-c-dev-cmp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;deploys apps&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.1071;exitPerimeter=0;entryX=0.0000;entryY=0.8611;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-dev" target="s1-cmp">
+          <mxGeometry x="-0.7685" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="335" y="638" />
-              <mxPoint x="335" y="540" />
+              <mxPoint x="320" y="726" />
+              <mxPoint x="320" y="552" />
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="s1-c-finance-cmp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;reads costs&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.8333;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-finance" target="s1-cmp">
-          <mxGeometry x="-0.7349" relative="1" as="geometry">
+        <mxCell id="s1-c-padmin-cmp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;manages&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.3889;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-padmin" target="s1-cmp">
+          <mxGeometry x="-0.5948" relative="1" as="geometry">
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="s1-c-finance-cmp" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;reads costs&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.6389;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-finance" target="s1-cmp">
+          <mxGeometry x="-0.7186" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="350" y="748" />
-              <mxPoint x="350" y="550" />
+              <mxPoint x="300" y="638" />
+              <mxPoint x="300" y="536" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -103,11 +103,11 @@
           <mxGeometry x="-0.2000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="s1-c-dev-import" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.1786;exitPerimeter=0;entryX=0.0000;entryY=0.2778;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-dev" target="s1-import">
-          <mxGeometry x="-0.6534" relative="1" as="geometry">
+        <mxCell id="s1-c-dev-import" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.3929;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-dev" target="s1-import">
+          <mxGeometry x="-0.4911" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="290" y="500" />
-              <mxPoint x="290" y="620" />
+              <mxPoint x="340" y="742" />
+              <mxPoint x="340" y="636" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -120,7 +120,7 @@
           </mxGeometry>
         </mxCell>
         <mxCell id="s1-c-operator-placement" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;sees placement&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.5000;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-operator" target="s1-placement">
-          <mxGeometry x="-0.4052" relative="1" as="geometry">
+          <mxGeometry x="-0.5517" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
         <mxCell id="s1-c-placement-onprem" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.2778;exitPerimeter=0;entryX=0.0000;entryY=0.7778;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-placement" target="s1-onprem">
@@ -141,11 +141,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="s1-c-operator-argocd" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.1786;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-operator" target="s1-argocd">
-          <mxGeometry x="-0.5754" relative="1" as="geometry">
+        <mxCell id="s1-c-operator-argocd" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;watches deployments&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.1786;exitPerimeter=0;entryX=0.0000;entryY=0.5333;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-operator" target="s1-argocd">
+          <mxGeometry x="-0.5901" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="350" y="848" />
-              <mxPoint x="350" y="755" />
+              <mxPoint x="300" y="848" />
+              <mxPoint x="300" y="758" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -157,11 +157,11 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="s1-c-dev-grafana" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;watches apps&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8214;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-dev" target="s1-grafana">
-          <mxGeometry x="-0.8304" relative="1" as="geometry">
+        <mxCell id="s1-c-dev-grafana" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;watches apps&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=1.0000;exitY=0.8929;exitPerimeter=0;entryX=0.0000;entryY=0.5000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-dev" target="s1-grafana">
+          <mxGeometry x="-0.7854" relative="1" as="geometry">
             <Array as="points">
-              <mxPoint x="305" y="536" />
-              <mxPoint x="305" y="976" />
+              <mxPoint x="360" y="770" />
+              <mxPoint x="360" y="976" />
             </Array>
           </mxGeometry>
         </mxCell>
@@ -217,7 +217,7 @@
           <mxGeometry x="0.7037" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
-        <mxCell id="s1-c-cloud-obs" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;sends metrics and logs&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.3333;exitY=1.0000;exitPerimeter=0;entryX=0.6585;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-cloud" target="s1-obs">
+        <mxCell id="s1-c-cloud-obs" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;sends metrics · logs planned&lt;/span&gt;" style="edgeStyle=orthogonalEdgeStyle;rounded=1;orthogonalLoop=1;html=1;jumpStyle=arc;jumpSize=10;strokeColor=#64748b;strokeWidth=1.5;endArrow=blockThin;endFill=1;endSize=7;exitX=0.3333;exitY=1.0000;exitPerimeter=0;entryX=0.6585;entryY=0.0000;entryPerimeter=0;labelBackgroundColor=#f8fafc;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=10;fontColor=#1e293b;" edge="1" parent="1" source="s1-cloud" target="s1-obs">
           <mxGeometry x="0.0000" relative="1" as="geometry">
           </mxGeometry>
         </mxCell>
@@ -233,13 +233,13 @@
           <mxGeometry x="112" y="252" width="56" height="56" as="geometry" />
         </mxCell>
         <mxCell id="s1-dev" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;Developer&lt;/b&gt;&lt;/span&gt;" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIyMCIgcj0iMTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA4OTFiMiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTEwIDU4YzAtMTIuMiA5LjgtMjIgMjItMjJzMjIgOS44IDIyIDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiMwODkxYjIiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+Cg==;imageAspect=1;html=1;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;spacingTop=6;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#0f172a;" vertex="1" parent="1">
-          <mxGeometry x="112" y="490" width="56" height="56" as="geometry" />
+          <mxGeometry x="112" y="720" width="56" height="56" as="geometry" />
         </mxCell>
         <mxCell id="s1-padmin" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;Project admin&lt;/b&gt;&lt;/span&gt;" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIyMCIgcj0iMTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA4OTFiMiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTEwIDU4YzAtMTIuMiA5LjgtMjIgMjItMjJzMjIgOS44IDIyIDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiMwODkxYjIiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+Cg==;imageAspect=1;html=1;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;spacingTop=6;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#0f172a;" vertex="1" parent="1">
-          <mxGeometry x="112" y="610" width="56" height="56" as="geometry" />
+          <mxGeometry x="112" y="490" width="56" height="56" as="geometry" />
         </mxCell>
         <mxCell id="s1-finance" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;Finance / decision makers&lt;/b&gt;&lt;/span&gt;" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIyMCIgcj0iMTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA4OTFiMiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTEwIDU4YzAtMTIuMiA5LjgtMjIgMjItMjJzMjIgOS44IDIyIDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiMwODkxYjIiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+Cg==;imageAspect=1;html=1;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;spacingTop=6;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#0f172a;" vertex="1" parent="1">
-          <mxGeometry x="112" y="720" width="56" height="56" as="geometry" />
+          <mxGeometry x="112" y="610" width="56" height="56" as="geometry" />
         </mxCell>
         <mxCell id="s1-operator" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;b&gt;Platform operator&lt;/b&gt;&lt;/span&gt;" style="shape=image;image=data:image/svg+xml,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PGNpcmNsZSBjeD0iMzIiIGN5PSIyMCIgcj0iMTEiIGZpbGw9Im5vbmUiIHN0cm9rZT0iIzA4OTFiMiIgc3Ryb2tlLXdpZHRoPSI0Ii8+PHBhdGggZD0iTTEwIDU4YzAtMTIuMiA5LjgtMjIgMjItMjJzMjIgOS44IDIyIDIyIiBmaWxsPSJub25lIiBzdHJva2U9IiMwODkxYjIiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PC9zdmc+Cg==;imageAspect=1;html=1;verticalLabelPosition=bottom;verticalAlign=top;labelPosition=center;align=center;spacingTop=6;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=12;fontColor=#0f172a;" vertex="1" parent="1">
           <mxGeometry x="112" y="838" width="56" height="56" as="geometry" />
@@ -325,7 +325,7 @@
         <mxCell id="card-legend" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#64748b&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;How to read the arrows&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• Solid grey: a person or a tool uses another one.&lt;br&gt;• Dashed purple: Argo CD works in the background, reading Git and deploying.&lt;br&gt;• Dashed orange: a cluster opens a secure tunnel to Cloudflare, so nothing enters it from the Internet.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="40" y="1120" width="800" height="220" as="geometry" />
         </mxCell>
-        <mxCell id="card-read" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#059669&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Reading it&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• Everyone logs in once, with the same company account, in every tool.&lt;br&gt;• The CMP writes to GitHub; Argo CD reads GitHub and deploys to the cluster chosen for the project.&lt;br&gt;• An operator starts and stops the cloud clusters to control costs.&lt;br&gt;• The public cloud box stands for AWS and Google Cloud: same setup on both.&lt;br&gt;• The public clouds send metrics and logs back to the on-prem hub.&lt;br&gt;• An AI assistant works through the CMP MCP server, with the same rights as the user who approved it.&lt;br&gt;• Repo import opens a pull request on the user&amp;#39;s repo. The Placement view is for platform operators only.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
+        <mxCell id="card-read" value="&lt;span style=&quot;font-variant-ligatures:none&quot;&gt;&lt;font color=&quot;#059669&quot;&gt;●&lt;/font&gt;&amp;nbsp;&lt;b&gt;&lt;font color=&quot;#0f172a&quot; style=&quot;font-size:13px&quot;&gt;Reading it&lt;/font&gt;&lt;/b&gt;&lt;br&gt;&lt;br&gt;&lt;div style=&quot;line-height:1.6&quot;&gt;• Everyone logs in once, with the same company account, in every tool.&lt;br&gt;• The CMP writes to GitHub; Argo CD reads GitHub and deploys to the cluster chosen for the project.&lt;br&gt;• An operator starts and stops the cloud clusters to control costs.&lt;br&gt;• The public cloud box stands for AWS and Google Cloud: same setup on both.&lt;br&gt;• The public clouds send metrics back to the on-prem hub; their logs follow with Cloud PR #50 (planned).&lt;br&gt;• An AI assistant works through the CMP MCP server, with the same rights as the user who approved it.&lt;br&gt;• Repo import opens a pull request on the user&amp;#39;s repo. The Placement view is for platform operators only.&lt;/div&gt;&lt;/span&gt;" style="rounded=1;absoluteArcSize=1;arcSize=16;html=1;whiteSpace=wrap;fillColor=#ffffff;strokeColor=#e2e8f0;align=left;verticalAlign=top;spacingLeft=20;spacingTop=14;spacingRight=16;fontFamily=JetBrains Mono,Noto Sans Mono,DejaVu Sans Mono,monospace;fontSize=11;fontColor=#1e293b;" vertex="1" parent="1">
           <mxGeometry x="880" y="1120" width="800" height="220" as="geometry" />
         </mxCell>
       </root>

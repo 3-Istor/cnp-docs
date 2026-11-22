@@ -39,7 +39,6 @@ labels:
   s1-c-import-github: ""
   s1-c-dev-import: ""
   s1-c-placement-onprem: ""
-  s1-c-operator-argocd: ""
 
 cards:
   - id: card-legend
@@ -57,7 +56,7 @@ cards:
       - "The CMP writes to GitHub; Argo CD reads GitHub and deploys to the cluster chosen for the project."
       - "An operator starts and stops the cloud clusters to control costs."
       - "The public cloud box stands for AWS and Google Cloud: same setup on both."
-      - "The public clouds send metrics and logs back to the on-prem hub."
+      - "The public clouds send metrics back to the on-prem hub; their logs follow with Cloud PR #50 (planned)."
       - "An AI assistant works through the CMP MCP server, with the same rights as the user who approved it."
       - "Repo import opens a pull request on the user's repo. The Placement view is for platform operators only."
 hidden_annotations:
