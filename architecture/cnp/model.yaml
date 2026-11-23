@@ -854,36 +854,25 @@ elements:
   - {id: lc-workflow, kind: backend, icon: github-actions, title: "Import workflow", tech: "[extern-project-analyzer · import.yml]", desc: "claim, build, publish"}
   - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
-  # Detailed observability (CNP-292): hub stack on main 2026-11-23. Cloud collectors, logs and traces planned until Cloud PR #50 merges.
+
 
   # Detailed observability (CNP-292), main 2026-11-23: cloud telemetry waits for Cloud PR #50.
   - {id: od-z-cloud, kind: region, color: indigo, icon: kubernetes, title: "PUBLIC CLOUD", sub: "EKS · GKE"}
   - {id: od-z-hub, kind: region, color: cyan, icon: rack, title: "ON-PREM HUB", sub: "K3s"}
   - {id: od-z-out, kind: region, color: slate, icon: globe, title: "INTERNET"}
-  - {id: od-g-gate, kind: group, parent: od-z-hub, color: amber, icon: wireguard, title: "CLOUD INTAKE"}
-  - {id: od-g-collect, kind: group, parent: od-z-hub, color: sky, icon: k8s-ns, title: "COLLECT"}
-  - {id: od-g-store, kind: group, parent: od-z-hub, color: violet, icon: victoriametrics, title: "STORE"}
-  - {id: od-g-iso, kind: group, parent: od-z-hub, color: rose, icon: victoriametrics, title: "ISOLATION"}
-  - {id: od-g-alert, kind: group, parent: od-z-hub, color: orange, icon: prometheus, title: "ALERTS"}
-  - {id: od-g-read, kind: group, parent: od-z-hub, color: emerald, icon: grafana, title: "READERS"}
   - {id: od-c-coll, kind: backend, parent: od-z-cloud, icon: victoriametrics, title: "Collectors", tech: "[metrics, logs, traces]", status: planned, target: "PR #50"}
-  - {id: od-c-readers, kind: tool, parent: od-z-cloud, icon: argo, title: "Readers", tech: "[Rollouts · OpenCost]", status: planned, target: "PR #50"}
   - {id: od-c-wg, kind: cloud, parent: od-z-cloud, icon: wireguard, title: "WireGuard", tech: "[EKS end · GKE end]"}
-  - {id: od-wg-hub, kind: cloud, parent: od-g-gate, icon: wireguard, title: "WireGuard hub", tech: "[1 tunnel per cloud]"}
-  - {id: od-vmauth-clouds, kind: security, parent: od-g-gate, icon: victoriametrics, title: "vmauth-clouds", tech: "[user per cloud]"}
-  - {id: od-otel, kind: backend, parent: od-g-collect, icon: opentelemetry, title: "OTel Collector", tech: "[gateway · app spans]"}
-  - {id: od-vmagent, kind: backend, parent: od-g-collect, icon: victoriametrics, title: "vmagent", tech: "[pods · Hubble]"}
-  - {id: od-fluent, kind: backend, parent: od-g-collect, icon: fluentbit, title: "Fluent Bit", tech: "[pod logs · audit]"}
-  - {id: od-vtraces, kind: database, parent: od-g-store, shape: cylinder, icon: victoriametrics, title: "VictoriaTraces", tech: "[7 d]"}
-  - {id: od-vmsingle, kind: database, parent: od-g-store, shape: cylinder, icon: victoriametrics, title: "VMSingle", tech: "[metrics · 30 d]"}
-  - {id: od-vlogs, kind: database, parent: od-g-store, shape: cylinder, icon: victoriametrics, title: "VictoriaLogs", tech: "[30 d]"}
-  - {id: od-vmauth-projects, kind: security, parent: od-g-iso, icon: victoriametrics, title: "vmauth-projects", tech: "[one user per project]"}
-  - {id: od-vmalert, kind: backend, parent: od-g-alert, icon: victoriametrics, title: "vmalert", tech: "[metrics · logs]"}
-  - {id: od-alertmanager, kind: backend, parent: od-g-alert, icon: prometheus, title: "Alertmanager", tech: "[routes alerts]"}
-  - {id: od-grafana, kind: frontend, parent: od-g-read, icon: grafana, title: "Grafana", tech: "[one org per project]"}
-  - {id: od-cmp, kind: frontend, parent: od-g-read, icon: react, title: "CMP", tech: "[portal]"}
-  - {id: od-opencost, kind: tool, parent: od-g-read, icon: opencost, title: "OpenCost", tech: "[on-prem]"}
-  - {id: od-rollouts, kind: tool, parent: od-g-read, icon: argo, title: "Argo Rollouts", tech: "[canary analysis]"}
+  - {id: od-c-readers, kind: tool, parent: od-z-cloud, icon: argo, title: "Readers", tech: "[Rollouts · OpenCost]", status: planned, target: "PR #50"}
+  - {id: od-wg-hub, kind: cloud, parent: od-z-hub, icon: wireguard, title: "WireGuard hub", tech: "[1 tunnel per cloud]"}
+  - {id: od-vmauth-clouds, kind: security, parent: od-z-hub, icon: victoriametrics, title: "vmauth-clouds", tech: "[user per cloud]"}
+  - {id: od-collectors, kind: backend, parent: od-z-hub, icon: fluentbit, title: "Collectors", tech: "[vmagent · Fluent Bit]", desc: "OTel gateway for app spans"}
+  - {id: od-stack, kind: database, parent: od-z-hub, shape: cylinder, icon: victoriametrics, title: "Victoria stack", tech: "[ceph-rbd volumes]", desc: "metrics · VMSingle · 30 d<br>logs · VictoriaLogs · 30 d<br>traces · VictoriaTraces · 7 d"}
+  - {id: od-vmauth-projects, kind: security, parent: od-z-hub, icon: victoriametrics, title: "vmauth-projects", tech: "[user per project]"}
+  - {id: od-cmp, kind: frontend, parent: od-z-hub, icon: react, title: "CMP", tech: "[portal]"}
+  - {id: od-rollouts, kind: tool, parent: od-z-hub, icon: argo, title: "Argo Rollouts", tech: "[canary analysis]"}
+  - {id: od-opencost, kind: tool, parent: od-z-hub, icon: opencost, title: "OpenCost", tech: "[on-prem]"}
+  - {id: od-alerts, kind: backend, parent: od-z-hub, icon: prometheus, title: "Alerts", tech: "[vmalert · Alertmanager]"}
+  - {id: od-grafana, kind: frontend, parent: od-z-hub, icon: grafana, title: "Grafana", tech: "[one org per project]"}
   - {id: od-discord, kind: external, parent: od-z-out, icon: discord, title: "Discord"}
 
 connections:
@@ -1481,32 +1470,21 @@ connections:
   - {id: c-lc-import-ci-ghcr, from: lc-import-ci, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push ci:X.Y.Z on a vX.Y.Z tag, sign", kind: flow}
   - {id: c-lc-argocd-user-repo, from: lc-argocd, to: lc-user-repo, port: https, protocol: HTTPS, verb: "read deploy/values-<app>.yaml", kind: async}
   - {id: c-lc-updater-registry, from: lc-updater, to: lc-registry, port: https, protocol: HTTPS, verb: "write the release in apps/<p>/<app>/release.yaml", kind: async}
-  # Detailed observability (CNP-292).
+
 
   - {id: c-od-coll-wg, from: od-c-coll, to: od-c-wg, verb: push, kind: flow}
   - {id: c-od-readers-wg, from: od-c-readers, to: od-c-wg, verb: read, kind: flow}
   - {id: c-od-tunnel, from: od-wg-hub, to: od-c-wg, verb: WireGuard tunnel, kind: tunnel}
   - {id: c-od-wg-vmauth, from: od-wg-hub, to: od-vmauth-clouds, verb: relay, kind: flow}
-  - {id: c-od-vmauth-otel, from: od-vmauth-clouds, to: od-otel, verb: traces, kind: flow}
-  - {id: c-od-vmauth-vmsingle, from: od-vmauth-clouds, to: od-vmsingle, verb: metrics, kind: flow}
-  - {id: c-od-vmauth-vlogs, from: od-vmauth-clouds, to: od-vlogs, verb: logs, kind: flow}
-  - {id: c-od-otel-vtraces, from: od-otel, to: od-vtraces, verb: traces, kind: flow}
-  - {id: c-od-vmagent-vmsingle, from: od-vmagent, to: od-vmsingle, verb: metrics, kind: flow}
-  - {id: c-od-fluent-vlogs, from: od-fluent, to: od-vlogs, verb: logs, kind: flow}
-  - {id: c-od-iso-vtraces, from: od-vmauth-projects, to: od-vtraces, verb: query, kind: flow}
-  - {id: c-od-iso-vmsingle, from: od-vmauth-projects, to: od-vmsingle, verb: query, kind: flow}
-  - {id: c-od-iso-vlogs, from: od-vmauth-projects, to: od-vlogs, verb: query, kind: flow}
+  - {id: c-od-vmauth-stack, from: od-vmauth-clouds, to: od-stack, verb: write, kind: flow}
+  - {id: c-od-collectors-stack, from: od-collectors, to: od-stack, verb: write, kind: flow}
   - {id: c-od-grafana-iso, from: od-grafana, to: od-vmauth-projects, verb: query, kind: flow}
-  - {id: c-od-cmp-vtraces, from: od-cmp, to: od-vtraces, verb: query, kind: flow}
-  - {id: c-od-cmp-vmsingle, from: od-cmp, to: od-vmsingle, verb: query, kind: flow}
-  - {id: c-od-cmp-vlogs, from: od-cmp, to: od-vlogs, verb: query, kind: flow}
-  - {id: c-od-cmp-am, from: od-cmp, to: od-alertmanager, verb: read alerts, kind: flow}
-  - {id: c-od-alert-vmsingle, from: od-vmalert, to: od-vmsingle, verb: evaluate, kind: flow}
-  - {id: c-od-alert-vlogs, from: od-vmalert, to: od-vlogs, verb: evaluate, kind: flow}
-  - {id: c-od-alert-am, from: od-vmalert, to: od-alertmanager, verb: fire, kind: flow}
-  - {id: c-od-am-discord, from: od-alertmanager, to: od-discord, verb: notify, kind: flow}
-  - {id: c-od-opencost-vmsingle, from: od-opencost, to: od-vmsingle, verb: query, kind: flow}
-  - {id: c-od-rollouts-vmsingle, from: od-rollouts, to: od-vmsingle, verb: query, kind: flow}
+  - {id: c-od-iso-stack, from: od-vmauth-projects, to: od-stack, verb: query, kind: flow}
+  - {id: c-od-cmp-stack, from: od-cmp, to: od-stack, verb: query, kind: flow}
+  - {id: c-od-rollouts-stack, from: od-rollouts, to: od-stack, verb: query, kind: flow}
+  - {id: c-od-opencost-stack, from: od-opencost, to: od-stack, verb: query, kind: flow}
+  - {id: c-od-alerts-stack, from: od-alerts, to: od-stack, verb: evaluate, kind: flow}
+  - {id: c-od-alerts-discord, from: od-alerts, to: od-discord, verb: notify, kind: flow}
 
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
