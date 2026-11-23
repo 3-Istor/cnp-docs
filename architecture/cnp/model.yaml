@@ -854,6 +854,25 @@ elements:
   - {id: lc-workflow, kind: backend, icon: github-actions, title: "Import workflow", tech: "[extern-project-analyzer · import.yml]", desc: "claim, build, publish"}
   - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
+  # Project move in three phases (CNP-292)
+  - {id: mp-z-prep, kind: region, color: sky, icon: k8s-ns, title: "1 · PREPARE THE TARGET", sub: "2m17 to AWS · 3m44 to on-prem"}
+  - {id: mp-z-switch, kind: region, color: rose, icon: k8s-ns, title: "2 · SWITCH", sub: "The cut · 3m44 to AWS · 5m09 to on-prem"}
+  - {id: mp-z-final, kind: region, color: emerald, icon: k8s-ns, title: "3 · FINALISE AND VERIFY", sub: "2m46 on move 9"}
+  - {id: mp-total, kind: external, icon: rack, title: "Total move duration", desc: "8m48 on-prem to AWS (move 9) · about 10m25 AWS to on-prem (move 10) · user-visible cut 4m35 / 5m59"}
+  - {id: mp-registry, kind: database, parent: mp-z-prep, icon: github, title: "Registry", desc: "Commit status.move"}
+  - {id: mp-argocd, kind: backend, parent: mp-z-prep, icon: argo, title: "Argo CD", desc: "Bootstrap on the target:<br>gateway, connector at 0"}
+  - {id: mp-vault, kind: database, parent: mp-z-prep, icon: vault, title: "CMP + Vault", desc: "Copy bucket key<br>and pull secret"}
+  - {id: mp-prepull, kind: backend, parent: mp-z-prep, icon: kubernetes, title: "Target nodes", desc: "Image pre-pull"}
+  - {id: mp-stop, kind: backend, parent: mp-z-switch, icon: fastapi, title: "CMP", desc: "Stop the apps<br>on the source"}
+  - {id: mp-backup, kind: database, parent: mp-z-switch, icon: cnpg, title: "CNPG backup", desc: "Final backup to the<br>on-prem bucket"}
+  - {id: mp-commit, kind: database, parent: mp-z-switch, icon: github, title: "Registry", desc: "Commit targetCloud"}
+  - {id: mp-connector, kind: cloud, parent: mp-z-switch, icon: cloudflare, title: "Cloudflare", desc: "Target connector<br>0 to 1"}
+  - {id: mp-sync, kind: backend, parent: mp-z-switch, icon: argo, title: "Argo CD", desc: "Sync the apps<br>on the target"}
+  - {id: mp-restore, kind: database, parent: mp-z-switch, icon: cnpg, title: "CNPG restore", desc: "Generation N+1,<br>migration, healthy"}
+  - {id: mp-persist, kind: backend, parent: mp-z-final, icon: fastapi, title: "CMP", desc: "Persist the restore<br>in the app repo · 50 s"}
+  - {id: mp-cleanup, kind: backend, parent: mp-z-final, icon: kubernetes, title: "Source cluster", desc: "Delete namespaces,<br>keep backups · 1m47"}
+  - {id: mp-finish, kind: backend, parent: mp-z-final, icon: github, title: "Registry", desc: "Cleared, audit event · 9 s"}
+  - {id: mp-rpo, kind: database, parent: mp-z-final, icon: cnpg, title: "RPO check", desc: "md5 source = target<br>RPO 0 in every move"}
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
