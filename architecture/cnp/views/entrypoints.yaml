@@ -20,9 +20,9 @@ include:
   - ep-z-platform
   - ep-platform
 labels:
-  ep-c-catalog: ""
-  ep-c-import: ""
-  ep-c-placement: ""
+  ep-c-portal: ""
+  ep-c-mcp: ""
+
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"
   G10: "targets httproute, not drawn in this view"

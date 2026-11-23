@@ -1,22 +1,20 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 1400, height: 820}
+canvas: {width: 1100, height: 700}
 elements:
-  ep-z-portal: {x: 40, y: 140, w: 780, h: 160}
-  ep-catalog: {x: 30, y: 60, w: 210, h: 80}
-  ep-import: {x: 264, y: 60, w: 210, h: 80}
-  ep-placement: {x: 498, y: 60, w: 210, h: 80}
-  ep-z-git: {x: 40, y: 370, w: 780, h: 150}
-  ep-repo: {x: 30, y: 60, w: 400, h: 80}
-  ep-z-ai: {x: 40, y: 590, w: 780, h: 160}
-  ep-assistants: {x: 30, y: 60, w: 280, h: 90}
-  ep-mcp: {x: 450, y: 60, w: 300, h: 90}
-  ep-z-platform: {x: 1020, y: 370, w: 340, h: 200}
-  ep-platform: {x: 20, y: 50, w: 300, h: 120}
+  ep-z-portal: {x: 40, y: 140, w: 640, h: 130}
+  ep-catalog: {x: 20, y: 50, w: 180, h: 60}
+  ep-import: {x: 224, y: 50, w: 170, h: 60}
+  ep-placement: {x: 418, y: 50, w: 195, h: 60}
+  ep-z-git: {x: 40, y: 330, w: 640, h: 130}
+  ep-repo: {x: 20, y: 50, w: 260, h: 60}
+  ep-z-ai: {x: 40, y: 520, w: 640, h: 130}
+  ep-assistants: {x: 20, y: 50, w: 250, h: 60}
+  ep-mcp: {x: 390, y: 50, w: 230, h: 60}
+  ep-z-platform: {x: 800, y: 330, w: 240, h: 140}
+  ep-platform: {x: 20, y: 50, w: 200, h: 70}
 edges:
-  ep-c-catalog: {from: ep-catalog.bottom, to: ep-platform.left@20px, waypoints: [[175,330],[920,330],[920,440]]}
-  ep-c-import: {from: ep-import.bottom, to: ep-platform.left@40px, waypoints: [[369,345],[905,345],[905,460]]}
-  ep-c-placement: {from: ep-placement.bottom, to: ep-platform.left@60px, waypoints: [[603,360],[890,360],[890,480]]}
-  ep-c-repo: {from: ep-repo.right@70px, to: ep-platform.left@80px, label_at: [700,500]}
-  ep-c-assistants: {from: ep-assistants.right, to: ep-mcp.left, label_at: [400,695]}
-  ep-c-mcp: {from: ep-mcp.right, to: ep-platform.left@100px, waypoints: [[960,695],[960,520]], label_at: [875,695]}
+  ep-c-portal: {from: ep-z-portal.right, to: ep-platform.left@12px, waypoints: [[750,205],[750,392]]}
+  ep-c-repo: {from: ep-repo.right@32px, to: ep-platform.left@32px, label_at: [550,412]}
+  ep-c-assistants: {from: ep-assistants.right, to: ep-mcp.left}
+  ep-c-mcp: {from: ep-mcp.right, to: ep-platform.left@58px, waypoints: [[770,600],[770,438]]}
