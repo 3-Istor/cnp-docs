@@ -5,7 +5,7 @@ title: "CNP · Observability · Detailed"
 subtitle: "Where do metrics, logs and traces of every cluster go, and who reads them?"
 meta:
   - "Scope: on-prem hub stack, the WireGuard tunnel, the public clouds (EKS and GKE drawn as one) · main as of 2026-11-23"
-  - "Out of scope: ports, credentials, retention details · hatched = not live until Cloud PR #50 is merged (Cloud main still pushes logs to a dead relay)"
+  - "Out of scope: ports, credentials, retention details · hatched = not live until Cloud PR #50 is merged (on Cloud main no cloud telemetry is accepted by vmauth-clouds)"
   - "v0.1 · source: cnp-docs/architecture/cnp"
 
 include:
@@ -14,12 +14,10 @@ include:
   - od-z-out/**
 
 labels:
-  c-od-metrics-wg: ""
-  c-od-logs-wg: ""
-  c-od-backup-wg: ""
+  c-od-coll-wg: ""
+  c-od-readers-wg: ""
   c-od-tunnel: "WireGuard tunnel"
-  c-od-wg-vmauth: ""
-  c-od-wg-rgw: "backups"
+  c-od-wg-vmauth: "PR #50"
   c-od-vmauth-otel: ""
   c-od-vmauth-vmsingle: ""
   c-od-vmauth-vlogs: ""
@@ -30,15 +28,16 @@ labels:
   c-od-iso-vmsingle: ""
   c-od-iso-vlogs: ""
   c-od-grafana-iso: ""
-  c-od-cmp-iso: ""
+  c-od-cmp-vtraces: ""
+  c-od-cmp-vmsingle: ""
+  c-od-cmp-vlogs: ""
+  c-od-cmp-am: ""
   c-od-alert-vmsingle: ""
   c-od-alert-vlogs: ""
   c-od-alert-am: ""
-  c-od-am-discord: "notify"
-  c-od-cmp-am: "read alerts"
+  c-od-am-discord: ""
   c-od-opencost-vmsingle: ""
-  c-od-cmp-opencost: ""
-  c-od-cmp-copencost: "read cloud costs through the tunnel"
+  c-od-rollouts-vmsingle: ""
 
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"

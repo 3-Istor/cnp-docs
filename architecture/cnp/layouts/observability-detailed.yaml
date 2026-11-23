@@ -1,64 +1,63 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 2280, height: 1271}
+canvas: {width: 2310, height: 1330}
 
-# Clouds | tunnel | hub: intake, collect, store, isolation and alerts, readers | Discord.
+# Clouds | tunnel | hub: intake and collect, store, isolation and alerts, readers | Discord.
 elements:
-  od-z-cloud: {x: 40, y: 200, w: 500, h: 372}
-  od-c-metrics: {x: 20, y: 60, w: 210, h: 76}
-  od-c-logs: {x: 20, y: 166, w: 210, h: 76}
-  od-c-backup: {x: 20, y: 272, w: 210, h: 76}
+  od-z-cloud: {x: 40, y: 200, w: 500, h: 290}
+  od-c-coll: {x: 20, y: 60, w: 210, h: 76}
+  od-c-readers: {x: 20, y: 170, w: 210, h: 76}
   od-c-wg: {x: 270, y: 106, w: 210, h: 76}
-  od-c-opencost: {x: 270, y: 250, w: 210, h: 76}
-  od-z-hub: {x: 700, y: 200, w: 1220, h: 892}
-  od-g-gate: {x: 20, y: 60, w: 250, h: 358}
+  od-z-hub: {x: 700, y: 200, w: 1250, h: 1062}
+  od-g-gate: {x: 20, y: 60, w: 250, h: 282}
   od-wg-hub: {x: 20, y: 46, w: 210, h: 76}
-  od-vmauth-clouds: {x: 20, y: 152, w: 210, h: 76}
-  od-otel: {x: 20, y: 258, w: 210, h: 76}
-  od-g-collect: {x: 20, y: 478, w: 250, h: 252}
-  od-vmagent: {x: 20, y: 46, w: 210, h: 76}
-  od-fluent: {x: 20, y: 152, w: 210, h: 76}
-  od-g-store: {x: 330, y: 60, w: 250, h: 670}
-  od-rgw: {x: 20, y: 46, w: 210, h: 76}
-  od-vtraces: {x: 20, y: 258, w: 210, h: 76}
-  od-vmsingle: {x: 20, y: 464, w: 210, h: 76}
-  od-vlogs: {x: 20, y: 570, w: 210, h: 76}
-  od-g-iso: {x: 640, y: 360, w: 250, h: 146}
+  od-vmauth-clouds: {x: 20, y: 182, w: 210, h: 76}
+  od-g-collect: {x: 20, y: 402, w: 250, h: 358}
+  od-otel: {x: 20, y: 46, w: 210, h: 76}
+  od-vmagent: {x: 20, y: 152, w: 210, h: 76}
+  od-fluent: {x: 20, y: 258, w: 210, h: 76}
+  od-g-store: {x: 330, y: 402, w: 250, h: 358}
+  od-vtraces: {x: 20, y: 46, w: 210, h: 76}
+  od-vmsingle: {x: 20, y: 152, w: 210, h: 76}
+  od-vlogs: {x: 20, y: 258, w: 210, h: 76}
+  od-g-iso: {x: 640, y: 200, w: 250, h: 146}
   od-vmauth-projects: {x: 20, y: 46, w: 210, h: 76}
-  od-g-alert: {x: 640, y: 600, w: 250, h: 252}
+  od-g-alert: {x: 640, y: 770, w: 250, h: 252}
   od-vmalert: {x: 20, y: 46, w: 210, h: 76}
   od-alertmanager: {x: 20, y: 152, w: 210, h: 76}
-  od-g-read: {x: 950, y: 360, w: 250, h: 358}
+  od-g-read: {x: 980, y: 200, w: 250, h: 464}
   od-grafana: {x: 20, y: 46, w: 210, h: 76}
   od-cmp: {x: 20, y: 152, w: 210, h: 76}
   od-opencost: {x: 20, y: 258, w: 210, h: 76}
-  od-z-out: {x: 1990, y: 870, w: 250, h: 170}
+  od-rollouts: {x: 20, y: 364, w: 210, h: 76}
+  od-z-out: {x: 2020, y: 1080, w: 250, h: 170}
   od-discord: {x: 20, y: 64, w: 210, h: 76}
 
 edges:
-  c-od-metrics-wg: {from: od-c-metrics.right@38px, to: od-c-wg.left@20px, waypoints: [[280, 298], [280, 326]]}
-  c-od-logs-wg: {from: od-c-logs.right@38px, to: od-c-wg.left@38px, waypoints: [[290, 404], [290, 344]]}
-  c-od-backup-wg: {from: od-c-backup.right@38px, to: od-c-wg.left@56px, waypoints: [[300, 510], [300, 362]]}
+  c-od-coll-wg: {from: od-c-coll.right@38px, to: od-c-wg.left@20px, waypoints: [[280, 298], [280, 326]]}
+  c-od-readers-wg: {from: od-c-readers.right@38px, to: od-c-wg.left@56px, waypoints: [[290, 408], [290, 362]]}
   # Tunnel: the hub initiates, so it runs against the reading direction.
   c-od-tunnel: {from: od-wg-hub.left, to: od-c-wg.right, against_flow: true}
   c-od-wg-vmauth: {from: od-wg-hub.bottom, to: od-vmauth-clouds.top}
-  c-od-wg-rgw: {from: od-wg-hub.right, to: od-rgw.left}
   c-od-vmauth-otel: {from: od-vmauth-clouds.bottom, to: od-otel.top}
-  c-od-vmauth-vmsingle: {from: od-vmauth-clouds.right@20px, to: od-vmsingle.left@20px, waypoints: [[985, 432], [985, 744]]}
-  c-od-vmauth-vlogs: {from: od-vmauth-clouds.right@45px, to: od-vlogs.left@15px, waypoints: [[1000, 457], [1000, 845]]}
+  c-od-vmauth-vmsingle: {from: od-vmauth-clouds.right@20px, to: od-vmsingle.left@20px, waypoints: [[985, 462], [985, 774]]}
+  c-od-vmauth-vlogs: {from: od-vmauth-clouds.right@45px, to: od-vlogs.left@15px, waypoints: [[1000, 487], [1000, 875]]}
   c-od-otel-vtraces: {from: od-otel.right, to: od-vtraces.left}
   c-od-vmagent-vmsingle: {from: od-vmagent.right, to: od-vmsingle.left@38px}
   c-od-fluent-vlogs: {from: od-fluent.right, to: od-vlogs.left@38px}
-  c-od-iso-vtraces: {from: od-vmauth-projects.left@20px, to: od-vtraces.right@52px, waypoints: [[1310, 626], [1310, 570]], against_flow: true}
-  c-od-iso-vmsingle: {from: od-vmauth-projects.left@44px, to: od-vmsingle.right@20px, waypoints: [[1320, 650], [1320, 744]], against_flow: true}
-  c-od-iso-vlogs: {from: od-vmauth-projects.left@64px, to: od-vlogs.right@10px, waypoints: [[1330, 670], [1330, 840]], against_flow: true}
+  # Project isolation (Grafana orgs) reads the three stores.
+  c-od-iso-vtraces: {from: od-vmauth-projects.left@20px, to: od-vtraces.right@20px, waypoints: [[1310, 466], [1310, 668]], against_flow: true}
+  c-od-iso-vmsingle: {from: od-vmauth-projects.left@44px, to: od-vmsingle.right@12px, waypoints: [[1320, 490], [1320, 766]], against_flow: true}
+  c-od-iso-vlogs: {from: od-vmauth-projects.left@64px, to: od-vlogs.right@12px, waypoints: [[1330, 510], [1330, 872]], against_flow: true}
   c-od-grafana-iso: {from: od-grafana.left@38px, to: od-vmauth-projects.right@38px, against_flow: true}
-  c-od-cmp-iso: {from: od-cmp.left@20px, to: od-vmauth-projects.right@58px, waypoints: [[1610, 732], [1610, 664]], against_flow: true}
-  c-od-alert-vmsingle: {from: od-vmalert.left@10px, to: od-vmsingle.right@50px, waypoints: [[1290, 856], [1290, 774]], against_flow: true}
-  c-od-alert-vlogs: {from: od-vmalert.left@38px, to: od-vlogs.right@54px, against_flow: true}
+  # The CMP reads the stores directly.
+  c-od-cmp-vtraces: {from: od-cmp.left@10px, to: od-vtraces.right@55px, waypoints: [[1600, 562], [1600, 703]], against_flow: true}
+  c-od-cmp-vmsingle: {from: od-cmp.left@25px, to: od-vmsingle.right@27px, waypoints: [[1612, 577], [1612, 781]], against_flow: true}
+  c-od-cmp-vlogs: {from: od-cmp.left@40px, to: od-vlogs.right@30px, waypoints: [[1624, 592], [1624, 890]], against_flow: true}
+  c-od-cmp-am: {from: od-cmp.left@55px, to: od-alertmanager.right@20px, waypoints: [[1660, 607], [1660, 1142]], against_flow: true}
+  c-od-opencost-vmsingle: {from: od-opencost.left@20px, to: od-vmsingle.right@42px, waypoints: [[1636, 678], [1636, 796]], against_flow: true}
+  c-od-rollouts-vmsingle: {from: od-rollouts.left@20px, to: od-vmsingle.right@57px, waypoints: [[1648, 784], [1648, 811]], against_flow: true}
+  c-od-alert-vmsingle: {from: od-vmalert.left@10px, to: od-vmsingle.right@69px, waypoints: [[1296, 1026], [1296, 823]], against_flow: true}
+  c-od-alert-vlogs: {from: od-vmalert.left@40px, to: od-vlogs.right@55px, waypoints: [[1306, 1056], [1306, 915]], against_flow: true}
   c-od-alert-am: {from: od-vmalert.bottom, to: od-alertmanager.top}
-  c-od-am-discord: {from: od-alertmanager.right@20px, to: od-discord.left@38px}
-  c-od-cmp-am: {from: od-cmp.left@50px, to: od-alertmanager.right@58px, waypoints: [[1620, 762], [1620, 1010]], against_flow: true}
-  c-od-opencost-vmsingle: {from: od-opencost.left@20px, to: od-vmsingle.right@65px, waypoints: [[1630, 838], [1630, 789]], against_flow: true}
-  c-od-cmp-opencost: {from: od-cmp.bottom, to: od-opencost.top}
-  c-od-cmp-copencost: {from: od-cmp.right@38px, to: od-c-opencost.bottom, waypoints: [[1955, 750], [1955, 1130], [375, 1130]], against_flow: true}
+  c-od-am-discord: {from: od-alertmanager.right@38px, to: od-discord.left@16px}
