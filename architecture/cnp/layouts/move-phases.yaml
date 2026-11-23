@@ -1,23 +1,23 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 1320, height: 900}
+canvas: {width: 1400, height: 760}
 elements:
-  mp-z-prep: {x: 20, y: 150, w: 290, h: 540}
-  mp-registry: {x: 20, y: 60, w: 250, h: 100}
-  mp-argocd: {x: 20, y: 184, w: 250, h: 100}
-  mp-vault: {x: 20, y: 308, w: 250, h: 100}
-  mp-prepull: {x: 20, y: 432, w: 250, h: 100}
-  mp-z-switch: {x: 370, y: 150, w: 570, h: 540}
-  mp-stop: {x: 20, y: 60, w: 250, h: 136}
-  mp-backup: {x: 300, y: 60, w: 250, h: 136}
-  mp-commit: {x: 20, y: 220, w: 250, h: 136}
-  mp-connector: {x: 300, y: 220, w: 250, h: 136}
-  mp-sync: {x: 20, y: 380, w: 250, h: 136}
-  mp-restore: {x: 300, y: 380, w: 250, h: 136}
-  mp-z-final: {x: 1000, y: 150, w: 290, h: 540}
-  mp-persist: {x: 20, y: 60, w: 250, h: 100}
-  mp-cleanup: {x: 20, y: 184, w: 250, h: 100}
-  mp-finish: {x: 20, y: 308, w: 250, h: 100}
-  mp-rpo: {x: 20, y: 432, w: 250, h: 100}
-  mp-total: {x: 20, y: 740, w: 1270, h: 70}
+  mp-z-prep: {x: 20, y: 150, w: 280, h: 440}
+  mp-registry: {x: 20, y: 56, w: 240, h: 72}
+  mp-argocd: {x: 20, y: 152, w: 240, h: 72}
+  mp-vault: {x: 20, y: 248, w: 240, h: 72}
+  mp-prepull: {x: 20, y: 344, w: 240, h: 72}
+  mp-z-switch: {x: 360, y: 150, w: 644, h: 440}
+  mp-stop: {x: 20, y: 56, w: 290, h: 100}
+  mp-backup: {x: 334, y: 56, w: 290, h: 100}
+  mp-commit: {x: 20, y: 180, w: 290, h: 100}
+  mp-connector: {x: 334, y: 180, w: 290, h: 100}
+  mp-sync: {x: 20, y: 304, w: 290, h: 100}
+  mp-restore: {x: 334, y: 304, w: 290, h: 100}
+  mp-z-final: {x: 1064, y: 150, w: 280, h: 440}
+  mp-persist: {x: 20, y: 56, w: 240, h: 72}
+  mp-cleanup: {x: 20, y: 152, w: 240, h: 72}
+  mp-finish: {x: 20, y: 248, w: 240, h: 72}
+  mp-rpo: {x: 20, y: 344, w: 240, h: 72}
+  mp-total: {x: 20, y: 630, w: 1324, h: 60}
 edges: {}
