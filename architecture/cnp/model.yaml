@@ -865,12 +865,12 @@ elements:
   - {id: pe-lg-ai, kind: region, parent: pe-z-legend, color: violet, icon: claude, title: "AI assistant"}
   - {id: pe-lg-mcp, kind: region, parent: pe-z-legend, color: orange, icon: mcp, title: "MCP door"}
   - {id: pe-lg-platform, kind: region, parent: pe-z-legend, color: emerald, icon: kubernetes, title: "The platform"}
-  - {id: pe-dev, kind: frontend, parent: pe-z-people, icon: user, title: "Developer", desc: "Apps: Overview, Logs, Traces, Releases"}
-  - {id: pe-lead, kind: frontend, parent: pe-z-people, icon: user, title: "Project lead", desc: "Members, Settings, Costs, Release approval"}
-  - {id: pe-finops, kind: frontend, parent: pe-z-people, icon: user, title: "FinOps / decision maker", desc: "FinOps: Overview, Savings, GreenOps, Budgets"}
-  - {id: pe-ciso, kind: frontend, parent: pe-z-people, icon: user, title: "CISO (RSSI)", desc: "Security, Access reviews, Activity"}
-  - {id: pe-operator, kind: frontend, parent: pe-z-people, icon: user, title: "Platform operator", desc: "Placement, Emergency, Access (admins only)"}
-  - {id: pe-assistant, kind: external, parent: pe-z-ai, icon: claude, title: "AI assistant", desc: "Claude, ChatGPT, Cursor"}
+  - {id: pe-dev, kind: frontend, parent: pe-z-people, icon: user, title: "Developer", desc: "Apps: Overview, Logs, Traces, Releases<br>Role: member · group project-<p>-members"}
+  - {id: pe-lead, kind: frontend, parent: pe-z-people, icon: user, title: "Project lead", desc: "Members, Settings, Costs, Release approval<br>Role: owner or admin · group project-<p>-admins"}
+  - {id: pe-finops, kind: frontend, parent: pe-z-people, icon: user, title: "FinOps / decision maker", desc: "FinOps: Overview, Savings, GreenOps, Budgets<br>Group finops (all costs) · or guest on one project"}
+  - {id: pe-ciso, kind: frontend, parent: pe-z-people, icon: user, title: "CISO (RSSI)", desc: "Security, Access reviews, Activity<br>Group security-auditor (read-only, no logs or secrets)"}
+  - {id: pe-operator, kind: frontend, parent: pe-z-people, icon: user, title: "Platform operator", desc: "Placement, Emergency, Access (admins only)<br>Group infra (admin on every project)"}
+  - {id: pe-assistant, kind: external, parent: pe-z-ai, icon: claude, title: "AI assistant", desc: "Claude, ChatGPT, Cursor<br>Takes the roles of its user, none of its own"}
   - {id: pe-front, kind: frontend, parent: pe-z-front, icon: nextjs, title: "CMP web front", desc: "Pages shown by role"}
   - {id: pe-mcp, kind: backend, parent: pe-z-mcp, icon: mcp, title: "CMP MCP server", desc: "Tools, same rights as the user"}
   - {id: pe-pl-rights, kind: backend, parent: pe-z-platform, icon: fastapi, title: "Same rights check", desc: "Project roles and admin groups"}

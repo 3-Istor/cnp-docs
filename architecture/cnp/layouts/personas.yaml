@@ -1,24 +1,24 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 1500, height: 1040}
+canvas: {width: 1580, height: 1160}
 elements:
-  pe-z-people: {x: 40, y: 140, w: 460, h: 480}
-  pe-dev: {x: 20, y: 52, w: 420, h: 56}
-  pe-lead: {x: 20, y: 134, w: 420, h: 56}
-  pe-finops: {x: 20, y: 216, w: 420, h: 56}
-  pe-ciso: {x: 20, y: 298, w: 420, h: 56}
-  pe-operator: {x: 20, y: 380, w: 420, h: 56}
-  pe-z-ai: {x: 40, y: 700, w: 460, h: 110}
-  pe-assistant: {x: 20, y: 52, w: 420, h: 56}
-  pe-z-front: {x: 600, y: 270, w: 320, h: 120}
+  pe-z-people: {x: 40, y: 140, w: 580, h: 560}
+  pe-dev: {x: 20, y: 52, w: 540, h: 70}
+  pe-lead: {x: 20, y: 148, w: 540, h: 70}
+  pe-finops: {x: 20, y: 244, w: 540, h: 70}
+  pe-ciso: {x: 20, y: 340, w: 540, h: 70}
+  pe-operator: {x: 20, y: 436, w: 540, h: 70}
+  pe-z-ai: {x: 40, y: 780, w: 580, h: 140}
+  pe-assistant: {x: 20, y: 52, w: 540, h: 70}
+  pe-z-front: {x: 680, y: 270, w: 320, h: 120}
   pe-front: {x: 20, y: 52, w: 280, h: 56}
-  pe-z-mcp: {x: 600, y: 700, w: 320, h: 110}
-  pe-mcp: {x: 20, y: 52, w: 280, h: 56}
-  pe-z-platform: {x: 1160, y: 270, w: 300, h: 550}
+  pe-z-mcp: {x: 680, y: 780, w: 320, h: 140}
+  pe-mcp: {x: 20, y: 52, w: 280, h: 70}
+  pe-z-platform: {x: 1240, y: 270, w: 300, h: 660}
   pe-pl-rights: {x: 20, y: 90, w: 260, h: 76}
   pe-pl-audit: {x: 20, y: 270, w: 260, h: 76}
   pe-pl-run: {x: 20, y: 450, w: 260, h: 76}
-  pe-z-legend: {x: 40, y: 880, w: 1020, h: 130}
+  pe-z-legend: {x: 40, y: 1000, w: 1020, h: 130}
   pe-lg-people: {x: 20, y: 56, w: 130, h: 44}
   pe-lg-front: {x: 210, y: 56, w: 160, h: 44}
   pe-lg-ai: {x: 430, y: 56, w: 150, h: 44}
@@ -28,4 +28,4 @@ edges:
   pe-c-people: {from: pe-z-people.right@210px, to: pe-front.left}
   pe-c-assistant: {from: pe-assistant.right, to: pe-mcp.left}
   pe-c-front: {from: pe-front.right, to: pe-z-platform.left@80px}
-  pe-c-mcp: {from: pe-mcp.right, to: pe-z-platform.left@510px}
+  pe-c-mcp: {from: pe-mcp.right, to: pe-z-platform.left@597px}
