@@ -21,6 +21,12 @@ include:
   - pe-z-mcp
   - pe-mcp
   - pe-z-platform
+  - pe-z-legend
+  - pe-lg-people
+  - pe-lg-front
+  - pe-lg-ai
+  - pe-lg-mcp
+  - pe-lg-platform
   - pe-platform
 labels:
   pe-c-people: ""

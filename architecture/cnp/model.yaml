@@ -859,6 +859,12 @@ elements:
   - {id: pe-z-front, kind: region, color: sky, icon: nextjs, title: "DOOR 1 · WEB FRONT"}
   - {id: pe-z-mcp, kind: region, color: orange, icon: mcp, title: "DOOR 2 · MCP"}
   - {id: pe-z-platform, kind: region, color: emerald, icon: kubernetes, title: "THE PLATFORM"}
+  - {id: pe-z-legend, kind: region, color: slate, icon: user, title: "LEGEND", sub: "arrow = uses, always with the user's own rights"}
+  - {id: pe-lg-people, kind: region, parent: pe-z-legend, color: cyan, icon: user, title: "People"}
+  - {id: pe-lg-front, kind: region, parent: pe-z-legend, color: sky, icon: nextjs, title: "Web front door"}
+  - {id: pe-lg-ai, kind: region, parent: pe-z-legend, color: violet, icon: claude, title: "AI assistant"}
+  - {id: pe-lg-mcp, kind: region, parent: pe-z-legend, color: orange, icon: mcp, title: "MCP door"}
+  - {id: pe-lg-platform, kind: region, parent: pe-z-legend, color: emerald, icon: kubernetes, title: "The platform"}
   - {id: pe-dev, kind: frontend, parent: pe-z-people, icon: user, title: "Developer", desc: "Apps: Overview, Logs, Traces, Releases"}
   - {id: pe-lead, kind: frontend, parent: pe-z-people, icon: user, title: "Project lead", desc: "Members, Settings, Costs, Release approval"}
   - {id: pe-finops, kind: frontend, parent: pe-z-people, icon: user, title: "FinOps / decision maker", desc: "FinOps: Overview, Savings, GreenOps, Budgets"}
@@ -1466,8 +1472,8 @@ connections:
   - {id: c-lc-updater-registry, from: lc-updater, to: lc-registry, port: https, protocol: HTTPS, verb: "write the release in apps/<p>/<app>/release.yaml", kind: async}
   - {id: pe-c-people, from: pe-z-people, to: pe-front, verb: "browse the views of their role", kind: flow}
   - {id: pe-c-assistant, from: pe-assistant, to: pe-mcp, verb: "calls tools", kind: flow}
-  - {id: pe-c-front, from: pe-front, to: pe-platform, verb: "acts as the user", kind: flow}
-  - {id: pe-c-mcp, from: pe-mcp, to: pe-platform, verb: "same checks and audit", kind: flow}
+  - {id: pe-c-front, from: pe-front, to: pe-platform, verb: "with the user's rights", kind: flow}
+  - {id: pe-c-mcp, from: pe-mcp, to: pe-platform, verb: "with the user's rights", kind: flow}
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
