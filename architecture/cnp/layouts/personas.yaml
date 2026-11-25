@@ -1,6 +1,6 @@
 apiVersion: noodle/v1alpha1
 kind: Layout
-canvas: {width: 1440, height: 960}
+canvas: {width: 1500, height: 1040}
 elements:
   pe-z-people: {x: 40, y: 140, w: 460, h: 480}
   pe-dev: {x: 20, y: 52, w: 420, h: 56}
@@ -14,16 +14,16 @@ elements:
   pe-front: {x: 20, y: 52, w: 280, h: 56}
   pe-z-mcp: {x: 600, y: 700, w: 320, h: 110}
   pe-mcp: {x: 20, y: 52, w: 280, h: 56}
-  pe-z-platform: {x: 1020, y: 420, w: 300, h: 120}
-  pe-platform: {x: 20, y: 52, w: 260, h: 56}
-  pe-z-legend: {x: 1020, y: 620, w: 400, h: 330}
-  pe-lg-people: {x: 20, y: 56, w: 160, h: 44}
-  pe-lg-front: {x: 240, y: 56, w: 140, h: 44}
-  pe-lg-ai: {x: 20, y: 160, w: 160, h: 44}
-  pe-lg-mcp: {x: 240, y: 160, w: 140, h: 44}
-  pe-lg-platform: {x: 20, y: 264, w: 160, h: 44}
+  pe-z-platform: {x: 1160, y: 270, w: 300, h: 550}
+  pe-platform: {x: 20, y: 52, w: 260, h: 490}
+  pe-z-legend: {x: 40, y: 880, w: 1020, h: 130}
+  pe-lg-people: {x: 20, y: 56, w: 130, h: 44}
+  pe-lg-front: {x: 210, y: 56, w: 160, h: 44}
+  pe-lg-ai: {x: 430, y: 56, w: 150, h: 44}
+  pe-lg-mcp: {x: 640, y: 56, w: 130, h: 44}
+  pe-lg-platform: {x: 830, y: 56, w: 150, h: 44}
 edges:
   pe-c-people: {from: pe-z-people.right@210px, to: pe-front.left}
   pe-c-assistant: {from: pe-assistant.right, to: pe-mcp.left}
-  pe-c-front: {from: pe-front.right, to: pe-platform.left, waypoints: [[960,350],[960,500]]}
-  pe-c-mcp: {label_at: [990,580], from: pe-mcp.right, to: pe-platform.left@48px, waypoints: [[990,780],[990,520]]}
+  pe-c-front: {from: pe-front.right, to: pe-platform.left@28px}
+  pe-c-mcp: {from: pe-mcp.right, to: pe-platform.left@458px}
