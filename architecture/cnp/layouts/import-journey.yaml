@@ -1,0 +1,37 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 1460, height: 1080}
+elements:
+  ij-z-connect: {x: 0, y: 150, w: 320, h: 270}
+  ij-pick: {x: 20, y: 56, w: 280, h: 84}
+  ij-app: {x: 20, y: 164, w: 280, h: 84}
+  ij-z-analyse: {x: 380, y: 150, w: 320, h: 270}
+  ij-analyzer: {x: 20, y: 56, w: 280, h: 84}
+  ij-leak: {x: 20, y: 164, w: 280, h: 84}
+  ij-z-approve: {x: 760, y: 150, w: 320, h: 270}
+  ij-plan: {x: 20, y: 56, w: 280, h: 84}
+  ij-passkey: {x: 20, y: 164, w: 280, h: 84}
+  ij-z-generate: {x: 1140, y: 150, w: 320, h: 270}
+  ij-files: {x: 20, y: 56, w: 280, h: 84}
+  ij-vault: {x: 20, y: 164, w: 280, h: 84}
+  ij-z-deploy: {x: 0, y: 480, w: 320, h: 270}
+  ij-build: {x: 20, y: 56, w: 280, h: 84}
+  ij-argo: {x: 20, y: 164, w: 280, h: 84}
+  ij-z-pr: {x: 380, y: 480, w: 320, h: 270}
+  ij-pr: {x: 20, y: 56, w: 280, h: 84}
+  ij-merge: {x: 20, y: 164, w: 280, h: 84}
+  ij-z-improve: {x: 760, y: 480, w: 320, h: 270}
+  ij-reco: {x: 20, y: 56, w: 280, h: 84}
+  ij-migrate: {x: 20, y: 164, w: 280, h: 84}
+  ij-z-security: {x: 0, y: 892, w: 1460, h: 176}
+  ij-s-code: {x: 20, y: 56, w: 320, h: 84}
+  ij-s-image: {x: 380, y: 56, w: 320, h: 84}
+  ij-s-kyverno: {x: 740, y: 56, w: 320, h: 84}
+  ij-s-run: {x: 1100, y: 56, w: 320, h: 84}
+  ij-z-legend: {x: 1140, y: 480, w: 320, h: 352}
+  ij-l-person: {x: 20, y: 56, w: 280, h: 36}
+  ij-l-platform: {x: 20, y: 116, w: 280, h: 36}
+  ij-l-github: {x: 20, y: 176, w: 280, h: 36}
+  ij-l-security: {x: 20, y: 236, w: 280, h: 36}
+  ij-l-hatched: {x: 20, y: 296, w: 280, h: 36}
+edges: {}

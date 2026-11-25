@@ -854,6 +854,40 @@ elements:
   - {id: lc-workflow, kind: backend, icon: github-actions, title: "Import workflow", tech: "[extern-project-analyzer · import.yml]", desc: "claim, build, publish"}
   - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
+  # Import journey (slide): zones are the stages, boxes the steps; no traffic drawn.
+  - {id: ij-z-connect, kind: region, color: sky, icon: github, title: "1 · CONNECT", sub: "You, once"}
+  - {id: ij-z-analyse, kind: region, color: cyan, icon: github-actions, title: "2 · ANALYSE", sub: "Nothing is run"}
+  - {id: ij-z-approve, kind: region, color: indigo, icon: keycloak, title: "3 · APPROVE", sub: "You decide"}
+  - {id: ij-z-generate, kind: region, color: violet, icon: vault, title: "4 · GENERATE", sub: "The platform"}
+  - {id: ij-z-deploy, kind: region, color: emerald, icon: argo, title: "5 · BUILD AND DEPLOY", sub: "Automatic"}
+  - {id: ij-z-pr, kind: region, color: amber, icon: github, title: "6 · PULL REQUEST", sub: "You merge"}
+  - {id: ij-z-improve, kind: region, color: orange, icon: cnpg, title: "7 · IMPROVE", sub: "Afterwards"}
+  - {id: ij-z-legend, kind: region, color: slate, icon: globe, title: "LEGEND", sub: "Colour = who acts"}
+  - {id: ij-l-person, kind: external, parent: ij-z-legend, icon: user, title: "A person acts"}
+  - {id: ij-l-platform, kind: backend, parent: ij-z-legend, icon: fastapi, title: "The platform acts"}
+  - {id: ij-l-github, kind: cloud, parent: ij-z-legend, icon: github, title: "GitHub or its machines"}
+  - {id: ij-l-security, kind: security, parent: ij-z-legend, icon: trivy, title: "A security check"}
+  - {id: ij-l-hatched, kind: security, parent: ij-z-legend, icon: keycloak, title: "Hatched: not enforced yet", status: planned, target: "off in prod"}
+  - {id: ij-z-security, kind: region, color: rose, icon: trivy, title: "SECURITY CHECKS", sub: "At every stage"}
+  - {id: ij-pick, kind: external, parent: ij-z-connect, icon: user, title: "1.1 · You pick a repo", desc: "Any GitHub repo and branch"}
+  - {id: ij-app, kind: cloud, parent: ij-z-connect, icon: github, title: "1.2 · GitHub App", desc: "Read-only, one repo at a time<br>You choose the repos it sees"}
+  - {id: ij-analyzer, kind: cloud, parent: ij-z-analyse, icon: github-actions, title: "2.1 · Analyzer", desc: "Reads the code, runs nothing<br>Finds services, databases, build"}
+  - {id: ij-leak, kind: security, parent: ij-z-analyse, icon: fastapi, title: "2.2 · Secret check", desc: "Passwords in the code are masked<br>and checked again by the platform"}
+  - {id: ij-plan, kind: external, parent: ij-z-approve, icon: user, title: "3.1 · You review the plan", desc: "Services, databases, memory<br>Rename, remove or change anything"}
+  - {id: ij-passkey, kind: security, parent: ij-z-approve, icon: keycloak, title: "3.2 · Passkey to approve", desc: "Nothing is created before this", status: planned, target: "off in prod"}
+  - {id: ij-files, kind: backend, parent: ij-z-generate, icon: fastapi, title: "4.1 · Deploy recipe", desc: "Dockerfiles, deploy values<br>and links between services"}
+  - {id: ij-vault, kind: backend, parent: ij-z-generate, icon: vault, title: "4.2 · New secrets in Vault", desc: "Generated passwords, never in Git<br>Repo passwords are dropped"}
+  - {id: ij-build, kind: cloud, parent: ij-z-deploy, icon: github-actions, title: "5.1 · Images are built", desc: "Isolated one-shot machines<br>Signed, kept by digest"}
+  - {id: ij-argo, kind: backend, parent: ij-z-deploy, icon: argo, title: "5.2 · Argo CD deploys", desc: "EpiTweet: 11 apps live<br>in 23 min 49 s"}
+  - {id: ij-pr, kind: cloud, parent: ij-z-pr, icon: github, title: "6.1 · Standard PR, your repo", desc: "Dockerfiles, deploy values, CI<br>EpiTweet: 27 files, 0 app code"}
+  - {id: ij-merge, kind: external, parent: ij-z-pr, icon: user, title: "6.2 · You merge it", desc: "Until then the app runs as is<br>After: your CI builds each version"}
+  - {id: ij-reco, kind: backend, parent: ij-z-improve, icon: fastapi, title: "7.1 · Platform suggests", desc: "Database container to managed<br>Postgres, local files to a bucket"}
+  - {id: ij-migrate, kind: cloud, parent: ij-z-improve, icon: github, title: "7.2 · Migration as a PR", desc: "You review it like the first one<br>EpiTweet: 114 files, 41 min"}
+  - {id: ij-s-code, kind: security, parent: ij-z-security, icon: github-actions, title: "Your CI · code", desc: "gitleaks for secrets<br>Trivy for dependencies, Dockerfiles"}
+  - {id: ij-s-image, kind: security, parent: ij-z-security, icon: trivy, title: "Build · images", desc: "A critical flaw with a fix<br>blocks the build; SBOM kept"}
+  - {id: ij-s-kyverno, kind: security, parent: ij-z-security, icon: kyverno, title: "Cluster · admission", desc: "Only the project's own<br>images are allowed to run"}
+  - {id: ij-s-run, kind: security, parent: ij-z-security, icon: trivy, title: "Running · rescan", desc: "Trivy operator rescans pods<br>Findings and score in the portal"}
+
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
