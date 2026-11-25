@@ -854,6 +854,36 @@ elements:
   - {id: lc-workflow, kind: backend, icon: github-actions, title: "Import workflow", tech: "[extern-project-analyzer · import.yml]", desc: "claim, build, publish"}
   - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
+  # Project move in plain words (move-v3)
+  - {id: mv3-z-prep, kind: region, color: sky, icon: k8s-ns, title: "1 · PREPARE THE TARGET", sub: "Users are still served"}
+  - {id: mv3-z-switch, kind: region, color: rose, icon: k8s-ns, title: "2 · THE SWITCH", sub: "The cut: users see it"}
+  - {id: mv3-z-final, kind: region, color: slate, icon: k8s-ns, title: "3 · FINISH AND CHECK", sub: "Users unaffected"}
+  - {id: mv3-check, kind: backend, parent: mv3-z-prep, icon: fastapi, title: "1.1 · Checks shown before you confirm", desc: "Time of the last archived backup (data at risk)<br>and room left on the target"}
+  - {id: mv3-registry-start, kind: frontend, parent: mv3-z-prep, icon: github, title: "1.2 · Git registry notes the move", desc: "The project is marked as moving"}
+  - {id: mv3-target-base, kind: backend, parent: mv3-z-prep, icon: argo, title: "1.3 · Target cluster is set up", desc: "Gateway installed, Internet tunnel<br>created but closed"}
+  - {id: mv3-secrets, kind: backend, parent: mv3-z-prep, icon: vault, title: "1.4 · Secrets are copied to the target", tech: "[best effort]", desc: "Bucket key and image-pull secret"}
+  - {id: mv3-prepull, kind: backend, parent: mv3-z-prep, icon: kubernetes, title: "1.5 · Images are downloaded early", tech: "[best effort]", desc: "On the target nodes, so apps start fast"}
+  - {id: mv3-stop, kind: backend, parent: mv3-z-switch, icon: kubernetes, title: "2.1 · Old apps are stopped", tech: "[best effort]", desc: "On the old cloud:<br>no more writes to the database"}
+  - {id: mv3-backup, kind: database, parent: mv3-z-switch, icon: cnpg, title: "2.2 · Last database backup", tech: "[best effort]", desc: "To the on-prem bucket<br>(via private tunnel from a cloud)"}
+  - {id: mv3-registry-cloud, kind: frontend, parent: mv3-z-switch, icon: github, title: "2.3 · Git registry: new cloud", desc: "The registry records<br>the project's new cloud"}
+  - {id: mv3-tunnel, kind: cloud, parent: mv3-z-switch, icon: cloudflare, title: "2.4 · Internet tunnel opens", desc: "It opens on the target:<br>users now arrive there"}
+  - {id: mv3-apps-start, kind: backend, parent: mv3-z-switch, icon: argo, title: "2.5 · Apps start on the target", desc: "Argo CD deploys them from Git"}
+  - {id: mv3-restore, kind: database, parent: mv3-z-switch, icon: cnpg, title: "2.6 · Database rebuilt on target", desc: "From that last backup; waits<br>until the database is healthy"}
+  - {id: mv3-persist, kind: frontend, parent: mv3-z-final, icon: github, title: "3.1 · Restore saved in app Git repo", desc: "So a redeploy keeps the data"}
+  - {id: mv3-cleanup, kind: backend, parent: mv3-z-final, icon: kubernetes, title: "3.2 · Old cloud is cleaned up", tech: "[best effort]", desc: "Namespaces deleted, backups kept;<br>postponed if the old cloud is down"}
+  - {id: mv3-registry-end, kind: frontend, parent: mv3-z-final, icon: github, title: "3.3 · Git registry marks it done", desc: "Audit event recorded"}
+  - {id: mv3-rpo, kind: database, parent: mv3-z-final, icon: cnpg, title: "3.4 · Measured: no data lost", desc: "Database fingerprint (md5) identical<br>on both clouds in every test move"}
+  - {id: mv3-d-prep, kind: external, parent: mv3-z-prep, icon: rack, title: "Phase time", desc: "2 min 17 s to AWS · 3 min 44 s to on-prem<br>Invisible to users"}
+  - {id: mv3-d-switch, kind: external, parent: mv3-z-switch, icon: rack, title: "Phase time", desc: "Engine 3 min 44 s to AWS · 5 min 09 s to on-prem<br>Seen by users (F5 test): 4 min 35 s · 5 min 59 s"}
+  - {id: mv3-d-final, kind: external, parent: mv3-z-final, icon: rack, title: "Phase time", desc: "About 2 min 46 s (to AWS)<br>Invisible to users"}
+  - {id: mv3-l-time, kind: external, parent: mv3-z-legend, icon: rack, title: "Time", desc: "duration of a phase"}
+  - {id: mv3-total, kind: external, icon: rack, title: "Whole move · 8 min 48 s to AWS · about 10 min 25 s to on-prem", desc: "Measured on the todo-move project, 22/11 · no data lost (RPO 0)"}
+  - {id: mv3-rule, kind: external, icon: rack, title: "The move goes ahead whatever the old cloud's state", desc: "[best effort] steps are skipped if it is unreachable;<br>the database then comes back from the last<br>archived backup. Protected projects can move."}
+  - {id: mv3-z-legend, kind: region, color: slate, icon: rack, title: "LEGEND", sub: "box colour = who acts · frame colour = phase"}
+  - {id: mv3-l-git, kind: frontend, parent: mv3-z-legend, icon: github, title: "Git", desc: "records the decision"}
+  - {id: mv3-l-eng, kind: backend, parent: mv3-z-legend, icon: kubernetes, title: "Platform", desc: "acts on a cluster"}
+  - {id: mv3-l-db, kind: database, parent: mv3-z-legend, icon: cnpg, title: "Database", desc: "backup, restore, check"}
+  - {id: mv3-l-net, kind: cloud, parent: mv3-z-legend, icon: cloudflare, title: "Internet", desc: "where users arrive"}
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
