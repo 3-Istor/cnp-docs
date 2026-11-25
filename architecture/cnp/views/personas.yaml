@@ -27,7 +27,9 @@ include:
   - pe-lg-ai
   - pe-lg-mcp
   - pe-lg-platform
-  - pe-platform
+  - pe-pl-rights
+  - pe-pl-audit
+  - pe-pl-run
 labels:
   pe-c-people: ""
 hidden_annotations:

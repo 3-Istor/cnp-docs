@@ -15,7 +15,9 @@ elements:
   pe-z-mcp: {x: 600, y: 700, w: 320, h: 110}
   pe-mcp: {x: 20, y: 52, w: 280, h: 56}
   pe-z-platform: {x: 1160, y: 270, w: 300, h: 550}
-  pe-platform: {x: 20, y: 52, w: 260, h: 490}
+  pe-pl-rights: {x: 20, y: 90, w: 260, h: 76}
+  pe-pl-audit: {x: 20, y: 270, w: 260, h: 76}
+  pe-pl-run: {x: 20, y: 450, w: 260, h: 76}
   pe-z-legend: {x: 40, y: 880, w: 1020, h: 130}
   pe-lg-people: {x: 20, y: 56, w: 130, h: 44}
   pe-lg-front: {x: 210, y: 56, w: 160, h: 44}
@@ -25,5 +27,5 @@ elements:
 edges:
   pe-c-people: {from: pe-z-people.right@210px, to: pe-front.left}
   pe-c-assistant: {from: pe-assistant.right, to: pe-mcp.left}
-  pe-c-front: {from: pe-front.right, to: pe-platform.left@28px}
-  pe-c-mcp: {from: pe-mcp.right, to: pe-platform.left@458px}
+  pe-c-front: {from: pe-front.right, to: pe-z-platform.left@80px}
+  pe-c-mcp: {from: pe-mcp.right, to: pe-z-platform.left@510px}

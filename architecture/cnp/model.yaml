@@ -873,7 +873,9 @@ elements:
   - {id: pe-assistant, kind: external, parent: pe-z-ai, icon: claude, title: "AI assistant", desc: "Claude, ChatGPT, Cursor"}
   - {id: pe-front, kind: frontend, parent: pe-z-front, icon: nextjs, title: "CMP web front", desc: "Pages shown by role"}
   - {id: pe-mcp, kind: backend, parent: pe-z-mcp, icon: mcp, title: "CMP MCP server", desc: "Tools, same rights as the user"}
-  - {id: pe-platform, kind: backend, parent: pe-z-platform, icon: kubernetes, title: "CNP platform", desc: "Runs the apps"}
+  - {id: pe-pl-rights, kind: backend, parent: pe-z-platform, icon: fastapi, title: "Same rights check", desc: "Project roles and admin groups"}
+  - {id: pe-pl-audit, kind: backend, parent: pe-z-platform, icon: fastapi, title: "Every action is journaled", desc: "One audit journal"}
+  - {id: pe-pl-run, kind: backend, parent: pe-z-platform, icon: kubernetes, title: "Runs the apps", desc: "On-prem, AWS and Google Cloud"}
 
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
@@ -1472,8 +1474,8 @@ connections:
   - {id: c-lc-updater-registry, from: lc-updater, to: lc-registry, port: https, protocol: HTTPS, verb: "write the release in apps/<p>/<app>/release.yaml", kind: async}
   - {id: pe-c-people, from: pe-z-people, to: pe-front, verb: "browse the views of their role", kind: flow}
   - {id: pe-c-assistant, from: pe-assistant, to: pe-mcp, verb: "calls tools", kind: flow}
-  - {id: pe-c-front, from: pe-front, to: pe-platform, verb: "with the user's rights", kind: flow}
-  - {id: pe-c-mcp, from: pe-mcp, to: pe-platform, verb: "with the user's rights", kind: flow}
+  - {id: pe-c-front, from: pe-front, to: pe-z-platform, verb: "with the user's rights", kind: flow}
+  - {id: pe-c-mcp, from: pe-mcp, to: pe-z-platform, verb: "with the user's rights", kind: flow}
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
