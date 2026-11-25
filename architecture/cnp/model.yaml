@@ -873,7 +873,7 @@ elements:
   - {id: ij-analyzer, kind: cloud, parent: ij-z-analyse, icon: github-actions, title: "2.1 · Analyzer", desc: "Reads the code, runs nothing<br>Finds services, databases, build"}
   - {id: ij-leak, kind: security, parent: ij-z-analyse, icon: fastapi, title: "2.2 · Secret check", desc: "Passwords in the code are masked<br>and checked again by the platform"}
   - {id: ij-plan, kind: external, parent: ij-z-approve, icon: user, title: "3.1 · You review the plan", desc: "Services, databases, memory<br>Rename, remove or change anything"}
-  - {id: ij-passkey, kind: security, parent: ij-z-approve, icon: keycloak, title: "3.2 · Passkey to approve", desc: "Hatched: switched off in prod<br>for now", status: planned, target: "off in prod"}
+  - {id: ij-passkey, kind: security, parent: ij-z-approve, icon: keycloak, title: "3.2 · Passkey to approve", desc: "Biometric or security key<br>confirms the apply"}
   - {id: ij-files, kind: backend, parent: ij-z-generate, icon: fastapi, title: "4.1 · Deploy recipe", desc: "Dockerfiles, deploy values<br>and links between services"}
   - {id: ij-vault, kind: backend, parent: ij-z-generate, icon: vault, title: "4.2 · New secrets in Vault", desc: "Generated passwords, never in Git<br>Repo passwords are dropped"}
   - {id: ij-build, kind: cloud, parent: ij-z-deploy, icon: github-actions, title: "5.1 · Images are built", desc: "Isolated one-shot machines<br>Signed, kept by digest"}
