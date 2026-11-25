@@ -855,26 +855,25 @@ elements:
   - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
   # Import journey (slide): zones are the stages, boxes the steps; no traffic drawn.
-  - {id: ij-z-connect, kind: region, color: sky, icon: github, title: "1 · CONNECT", sub: "You, once"}
-  - {id: ij-z-analyse, kind: region, color: cyan, icon: github-actions, title: "2 · ANALYSE", sub: "Nothing is run"}
-  - {id: ij-z-approve, kind: region, color: indigo, icon: keycloak, title: "3 · APPROVE", sub: "You decide"}
-  - {id: ij-z-generate, kind: region, color: violet, icon: vault, title: "4 · GENERATE", sub: "The platform"}
-  - {id: ij-z-deploy, kind: region, color: emerald, icon: argo, title: "5 · BUILD AND DEPLOY", sub: "Automatic"}
-  - {id: ij-z-pr, kind: region, color: amber, icon: github, title: "6 · PULL REQUEST", sub: "You merge"}
-  - {id: ij-z-improve, kind: region, color: orange, icon: cnpg, title: "7 · IMPROVE", sub: "Afterwards"}
-  - {id: ij-z-legend, kind: region, color: slate, icon: globe, title: "LEGEND", sub: "Colour = who acts"}
+  - {id: ij-z-connect, kind: region, color: slate, icon: github, title: "1 · CONNECT", sub: "You, once"}
+  - {id: ij-z-analyse, kind: region, color: slate, icon: github-actions, title: "2 · ANALYSE", sub: "Nothing is run"}
+  - {id: ij-z-approve, kind: region, color: slate, icon: keycloak, title: "3 · APPROVE", sub: "You decide"}
+  - {id: ij-z-generate, kind: region, color: slate, icon: vault, title: "4 · GENERATE", sub: "The platform"}
+  - {id: ij-z-deploy, kind: region, color: slate, icon: argo, title: "5 · BUILD AND DEPLOY", sub: "Automatic"}
+  - {id: ij-z-pr, kind: region, color: slate, icon: github, title: "6 · PULL REQUEST", sub: "You merge"}
+  - {id: ij-z-improve, kind: region, color: slate, icon: cnpg, title: "7 · IMPROVE", sub: "Afterwards"}
+  - {id: ij-z-legend, kind: region, color: slate, icon: globe, title: "LEGEND", sub: "Box colour = who acts"}
   - {id: ij-l-person, kind: external, parent: ij-z-legend, icon: user, title: "A person acts"}
   - {id: ij-l-platform, kind: backend, parent: ij-z-legend, icon: fastapi, title: "The platform acts"}
   - {id: ij-l-github, kind: cloud, parent: ij-z-legend, icon: github, title: "GitHub or its machines"}
-  - {id: ij-l-security, kind: security, parent: ij-z-legend, icon: trivy, title: "A security check"}
-  - {id: ij-l-hatched, kind: security, parent: ij-z-legend, icon: keycloak, title: "Hatched: not enforced yet", status: planned, target: "off in prod"}
+  - {id: ij-l-security, kind: security, parent: ij-z-legend, icon: trivy, title: "Red frame: security checks"}
   - {id: ij-z-security, kind: region, color: rose, icon: trivy, title: "SECURITY CHECKS", sub: "At every stage"}
   - {id: ij-pick, kind: external, parent: ij-z-connect, icon: user, title: "1.1 · You pick a repo", desc: "Any GitHub repo and branch"}
   - {id: ij-app, kind: cloud, parent: ij-z-connect, icon: github, title: "1.2 · GitHub App", desc: "Read-only, one repo at a time<br>You choose the repos it sees"}
   - {id: ij-analyzer, kind: cloud, parent: ij-z-analyse, icon: github-actions, title: "2.1 · Analyzer", desc: "Reads the code, runs nothing<br>Finds services, databases, build"}
   - {id: ij-leak, kind: security, parent: ij-z-analyse, icon: fastapi, title: "2.2 · Secret check", desc: "Passwords in the code are masked<br>and checked again by the platform"}
   - {id: ij-plan, kind: external, parent: ij-z-approve, icon: user, title: "3.1 · You review the plan", desc: "Services, databases, memory<br>Rename, remove or change anything"}
-  - {id: ij-passkey, kind: security, parent: ij-z-approve, icon: keycloak, title: "3.2 · Passkey to approve", desc: "Nothing is created before this", status: planned, target: "off in prod"}
+  - {id: ij-passkey, kind: security, parent: ij-z-approve, icon: keycloak, title: "3.2 · Passkey to approve", desc: "Hatched: switched off in prod<br>for now", status: planned, target: "off in prod"}
   - {id: ij-files, kind: backend, parent: ij-z-generate, icon: fastapi, title: "4.1 · Deploy recipe", desc: "Dockerfiles, deploy values<br>and links between services"}
   - {id: ij-vault, kind: backend, parent: ij-z-generate, icon: vault, title: "4.2 · New secrets in Vault", desc: "Generated passwords, never in Git<br>Repo passwords are dropped"}
   - {id: ij-build, kind: cloud, parent: ij-z-deploy, icon: github-actions, title: "5.1 · Images are built", desc: "Isolated one-shot machines<br>Signed, kept by digest"}
