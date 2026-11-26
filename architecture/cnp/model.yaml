@@ -665,6 +665,17 @@ elements:
   - {id: s1-onprem, kind: backend, parent: s1-z-clusters, icon: rack, title: "On-prem cluster"}
   - {id: s1-cloud, kind: backend, parent: s1-z-clusters, icon: kubernetes, title: "Public cloud clusters", desc: "AWS and Google Cloud, same setup", multiplicity: "AWS and GCP"}
   - {id: s1-obs, kind: backend, parent: s1-z-obs, icon: grafana-alloy, title: "Metrics, logs, audit trail"}
+  - {id: ep-z-portal, kind: region, color: cyan, icon: nextjs, title: "CMP PORTAL", sub: "web · all roles"}
+  - {id: ep-z-git, kind: region, color: sky, icon: github, title: "GIT ONLY", sub: "developers"}
+  - {id: ep-z-ai, kind: region, color: violet, icon: claude, title: "AI ASSISTANTS", sub: "same rights as the user"}
+  - {id: ep-z-platform, kind: region, color: emerald, icon: kubernetes, title: "THE PLATFORM"}
+  - {id: ep-catalog, kind: frontend, parent: ep-z-portal, icon: nextjs, title: "Catalog", desc: "From a template"}
+  - {id: ep-import, kind: frontend, parent: ep-z-portal, icon: nextjs, title: "Repo import", desc: "Existing repo"}
+  - {id: ep-placement, kind: frontend, parent: ep-z-portal, icon: nextjs, title: "Placement view", desc: "Platform admins only"}
+  - {id: ep-repo, kind: external, parent: ep-z-git, icon: github, title: "App repository", desc: "push · tag"}
+  - {id: ep-assistants, kind: external, parent: ep-z-ai, icon: claude, title: "AI assistants", desc: "Claude, ChatGPT, Cursor"}
+  - {id: ep-mcp, kind: backend, parent: ep-z-ai, icon: mcp, title: "CMP MCP server", desc: "Acts as the user"}
+  - {id: ep-platform, kind: backend, parent: ep-z-platform, icon: kubernetes, title: "CNP platform", desc: "Runs the apps"}
   # --- CNP-168 · G1 elements (backups) ---
   # Sources: infra-templates/templates/{cnpg-cluster,cnpg-backup,migrations}.yaml,
   # K3s/k8s/config/{cnp-projects-db,rook-ceph,cnpg}, CMP security_databases.py.
@@ -949,6 +960,10 @@ connections:
   - {id: s1-c-onprem-obs, from: s1-onprem, to: s1-obs, verb: "sends metrics and logs", kind: flow}
   - {id: s1-c-cloud-obs, from: s1-cloud, to: s1-obs, verb: "sends metrics and logs", kind: flow}
   - {id: s1-c-grafana-obs, from: s1-grafana, to: s1-obs, verb: "reads", kind: flow}
+  - {id: ep-c-portal, from: ep-z-portal, to: ep-platform, verb: "uses", kind: flow}
+  - {id: ep-c-repo, from: ep-repo, to: ep-platform, verb: "CI builds, platform deploys", kind: flow}
+  - {id: ep-c-assistants, from: ep-assistants, to: ep-mcp, verb: "calls tools", kind: flow}
+  - {id: ep-c-mcp, from: ep-mcp, to: ep-platform, verb: "acts as the user", kind: flow}
   # --- CNP-168 · G1 connections ---
   - {id: c-bk-db-kapi, from: bk-db, to: hub-kapi, port: https, protocol: HTTPS, verb: instance manager watches Backup, kind: async}
   - {id: c-bk-db-rgw, from: bk-db, to: ceph-rgw, port: s3, protocol: S3 HTTP, verb: base backup + WAL, kind: flow}
