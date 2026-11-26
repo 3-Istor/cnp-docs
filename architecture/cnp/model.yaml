@@ -950,6 +950,23 @@ elements:
   - {id: ij-s-image, kind: security, parent: ij-z-security, icon: trivy, title: "Build · images", desc: "A critical flaw with a fix<br>blocks the build; SBOM kept"}
   - {id: ij-s-kyverno, kind: security, parent: ij-z-security, icon: kyverno, title: "Cluster · admission", desc: "Only the project's own<br>images are allowed to run"}
   - {id: ij-s-run, kind: security, parent: ij-z-security, icon: trivy, title: "Running · rescan", desc: "Trivy operator rescans pods<br>Findings and score in the portal"}
+  - {id: obs3-z-cloud, kind: region, color: indigo, icon: kubernetes, title: "PUBLIC CLOUD", sub: "EKS · GKE"}
+  - {id: obs3-z-hub, kind: region, color: cyan, icon: rack, title: "ON-PREM HUB", sub: "K3s"}
+  - {id: obs3-z-out, kind: region, color: slate, icon: globe, title: "INTERNET"}
+  - {id: obs3-c-coll, kind: backend, parent: obs3-z-cloud, icon: victoriametrics, title: "Telemetry collectors", tech: "[vmagent · Fluent Bit · OTel]", desc: "Gather metrics, logs, traces", status: planned}
+  - {id: obs3-c-wg, kind: cloud, parent: obs3-z-cloud, icon: wireguard, title: "Private tunnel", tech: "[WireGuard · cloud end]"}
+  - {id: obs3-c-readers, kind: tool, parent: obs3-z-cloud, icon: argo, title: "Release and cost readers", tech: "[Argo Rollouts · OpenCost]", status: planned}
+  - {id: obs3-wg-hub, kind: cloud, parent: obs3-z-hub, icon: wireguard, title: "Private tunnel hub", tech: "[WireGuard · 1 per cloud]"}
+  - {id: obs3-vmauth-clouds, kind: security, parent: obs3-z-hub, icon: victoriametrics, title: "Cloud intake gate", tech: "[vmauth · 1 user per cloud]"}
+  - {id: obs3-collectors, kind: backend, parent: obs3-z-hub, icon: fluentbit, title: "On-prem collectors", tech: "[vmagent · Fluent Bit · OTel]", desc: "Gather metrics, logs, traces"}
+  - {id: obs3-stack, kind: database, parent: obs3-z-hub, shape: cylinder, icon: victoriametrics, title: "Observability store", tech: "[Victoria stack]", desc: "Metrics store · VictoriaMetrics · 30 d<br>Log store · VictoriaLogs · 30 d<br>Trace store · VictoriaTraces · 7 d"}
+  - {id: obs3-vmauth-projects, kind: security, parent: obs3-z-hub, icon: victoriametrics, title: "Project access gate", tech: "[vmauth · 1 user per project]"}
+  - {id: obs3-cmp, kind: frontend, parent: obs3-z-hub, icon: react, title: "CMP portal", tech: "[dashboards in the portal]"}
+  - {id: obs3-rollouts, kind: tool, parent: obs3-z-hub, icon: argo, title: "Safe release checks", tech: "[Argo Rollouts]"}
+  - {id: obs3-opencost, kind: tool, parent: obs3-z-hub, icon: opencost, title: "Cost tracking", tech: "[OpenCost]"}
+  - {id: obs3-alerts, kind: backend, parent: obs3-z-hub, icon: prometheus, title: "Alerting", tech: "[vmalert · Alertmanager]"}
+  - {id: obs3-grafana, kind: frontend, parent: obs3-z-hub, icon: grafana, title: "Dashboards", tech: "[Grafana · 1 org per project]"}
+  - {id: obs3-discord, kind: external, parent: obs3-z-out, icon: discord, title: "Discord", tech: "[team chat]"}
 
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
@@ -1554,6 +1571,20 @@ connections:
   - {id: pe-c-assistant, from: pe-assistant, to: pe-mcp, verb: "calls tools", kind: flow}
   - {id: pe-c-front, from: pe-front, to: pe-z-platform, verb: "with the user's rights", kind: flow}
   - {id: pe-c-mcp, from: pe-mcp, to: pe-z-platform, verb: "with the user's rights", kind: flow}
+  - {id: c-obs3-coll-wg, from: obs3-c-coll, to: obs3-c-wg, verb: push, kind: flow}
+  - {id: c-obs3-readers-wg, from: obs3-c-readers, to: obs3-c-wg, verb: read, kind: flow}
+  - {id: c-obs3-tunnel, from: obs3-wg-hub, to: obs3-c-wg, verb: WireGuard tunnel, kind: tunnel}
+  - {id: c-obs3-wg-vmauth, from: obs3-wg-hub, to: obs3-vmauth-clouds, verb: relay, kind: flow}
+  - {id: c-obs3-vmauth-stack, from: obs3-vmauth-clouds, to: obs3-stack, verb: write, kind: flow}
+  - {id: c-obs3-collectors-stack, from: obs3-collectors, to: obs3-stack, verb: write, kind: flow}
+  - {id: c-obs3-grafana-iso, from: obs3-grafana, to: obs3-vmauth-projects, verb: query, kind: flow}
+  - {id: c-obs3-iso-stack, from: obs3-vmauth-projects, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-cmp-stack, from: obs3-cmp, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-rollouts-stack, from: obs3-rollouts, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-opencost-stack, from: obs3-opencost, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-alerts-stack, from: obs3-alerts, to: obs3-stack, verb: evaluate, kind: flow}
+  - {id: c-obs3-alerts-discord, from: obs3-alerts, to: obs3-discord, verb: notify, kind: flow}
+
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}
