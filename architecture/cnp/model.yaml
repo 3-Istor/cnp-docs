@@ -1853,7 +1853,9 @@ grants:
   - {id: g-auditor-audit, subject: grp-auditor, resource: audit-logs, level: read, status: planned, target: P3}
   - {id: g-root-audit, subject: root, resource: audit-logs, level: breakglass}
   # CMP portal (CNP-228). L1 authz holes, L2 Keycloak groups, L3 roles in the portal,
-  # L4 Grafana and Argo CD, L5 cleanup. Platform admins come from a username list today.
+  # L4 Grafana and Argo CD, L5 cleanup. Platform admins come from the infra group.
+  # Infra is admin of every project on purpose (two admins, demo); the target is the
+  # just-in-time project grant below.
   - {id: g-infra-cmp-apps-a, subject: grp-infra, resource: cmp-apps-a, level: admin, via: [cmp-authz]}
   - {id: g-infra-cmp-logs-a, subject: grp-infra, resource: cmp-logs-a, level: read, via: [cmp-authz]}
   - {id: g-infra-cmp-security-a, subject: grp-infra, resource: cmp-security-a, level: admin, via: [cmp-authz]}
@@ -1861,32 +1863,34 @@ grants:
   - {id: g-infra-cmp-project-b, subject: grp-infra, resource: cmp-project-b, level: admin, via: [cmp-authz]}
   - {id: g-infra-cmp-platform-view, subject: grp-infra, resource: cmp-platform-view, level: read, via: [cmp-authz]}
   - {id: g-infra-cmp-finance, subject: grp-infra, resource: cmp-finance, level: admin, via: [cmp-authz]}
-  - {id: g-infra-cmp-settings, subject: grp-infra, resource: cmp-settings, level: admin, via: [cmp-authz]}
-  # Every signed-in user, today: catalog resync and the list of closed months
+  - {id: g-infra-cmp-settings, subject: grp-infra, resource: cmp-settings, level: admin, scope: "includes granting finops and security-auditor, passkey", via: [cmp-authz]}
+  - {id: g-infra-cmp-apps-a-jit, subject: grp-infra, resource: cmp-apps-a, level: admin, scope: "only through just-in-time access, second admin approves", via: [cmp-authz], status: planned, target: P3}
   # Project roles: unchanged, except critical CVE exceptions move to the auditor
   - {id: g-a-admins-cmp-apps, subject: grp-a-admins, resource: cmp-apps-a, level: admin}
   - {id: g-a-admins-cmp-logs, subject: grp-a-admins, resource: cmp-logs-a, level: read}
   - {id: g-a-admins-cmp-security-new, subject: grp-a-admins, resource: cmp-security-a, level: write, scope: approves exceptions below critical}
   - {id: g-a-admins-cmp-costs, subject: grp-a-admins, resource: cmp-costs-a, level: write, scope: applies recommendations}
   - {id: g-owner-a-cmp-costs, subject: owner-a, resource: cmp-costs-a, level: admin, scope: budget}
-  - {id: g-a-members-cmp-apps, subject: grp-a-members, resource: cmp-apps-a, level: write, scope: "operate, no deploy"}
+  - {id: g-a-members-cmp-apps, subject: grp-a-members, resource: cmp-apps-a, level: write, scope: "operate, no deploy, reads config"}
   - {id: g-a-members-cmp-logs, subject: grp-a-members, resource: cmp-logs-a, level: read}
   - {id: g-a-members-cmp-security, subject: grp-a-members, resource: cmp-security-a, level: write, scope: requests exceptions}
   - {id: g-a-members-cmp-costs, subject: grp-a-members, resource: cmp-costs-a, level: read}
-  - {id: g-a-guests-cmp-apps, subject: grp-a-guests, resource: cmp-apps-a, level: read}
+  - {id: g-a-guests-cmp-apps, subject: grp-a-guests, resource: cmp-apps-a, level: read, scope: "app list, overview, SLO status, releases"}
   - {id: g-a-guests-cmp-costs, subject: grp-a-guests, resource: cmp-costs-a, level: read}
-  # Auditor: reads every project, no logs, approves critical CVE exceptions
-  - {id: g-auditor-cmp-apps-a, subject: grp-auditor, resource: cmp-apps-a, level: read, via: [cmp-authz]}
-  - {id: g-auditor-cmp-security-a, subject: grp-auditor, resource: cmp-security-a, level: write, scope: approves critical exceptions, via: [cmp-authz]}
+  # Auditor: reads what a member reads except logs, traces and secrets; no action;
+  # approves and revokes critical CVE exceptions
+  - {id: g-auditor-cmp-apps-a, subject: grp-auditor, resource: cmp-apps-a, level: read, scope: "config, metrics, alerts, members, AI settings", via: [cmp-authz]}
+  - {id: g-auditor-cmp-security-a, subject: grp-auditor, resource: cmp-security-a, level: write, scope: approves and revokes critical exceptions, via: [cmp-authz]}
   - {id: g-auditor-cmp-costs-a, subject: grp-auditor, resource: cmp-costs-a, level: read, via: [cmp-authz]}
   - {id: g-auditor-cmp-project-b, subject: grp-auditor, resource: cmp-project-b, level: read, via: [cmp-authz]}
   - {id: g-auditor-cmp-platform-view, subject: grp-auditor, resource: cmp-platform-view, level: read, via: [cmp-authz]}
-  - {id: g-auditor-cmp-finance, subject: grp-auditor, resource: cmp-finance, level: read, via: [cmp-authz]}
-  # FinOps: every project's costs, exports and month close, nothing else
-  - {id: g-finops-cmp-apps-a, subject: grp-finops, resource: cmp-apps-a, level: read, scope: app list, via: [cmp-authz]}
+  - {id: g-auditor-cmp-finance, subject: grp-auditor, resource: cmp-finance, level: read, scope: "totals, exports", via: [cmp-authz]}
+  # FinOps: every project's costs, exports and month close, nothing else; on a project
+  # or an app it sees only the Costs tab
+  - {id: g-finops-cmp-apps-a, subject: grp-finops, resource: cmp-apps-a, level: read, scope: "app list, app header", via: [cmp-authz]}
   - {id: g-finops-cmp-costs-a, subject: grp-finops, resource: cmp-costs-a, level: read, via: [cmp-authz]}
   - {id: g-finops-cmp-project-b, subject: grp-finops, resource: cmp-project-b, level: read, scope: costs, via: [cmp-authz]}
-  - {id: g-finops-cmp-finance, subject: grp-finops, resource: cmp-finance, level: write, scope: "exports, month close", via: [cmp-authz]}
+  - {id: g-finops-cmp-finance, subject: grp-finops, resource: cmp-finance, level: write, scope: "month close, cost centres", via: [cmp-authz]}
   # Grafana platform org: open to every member today, it reads every namespace's metrics
   - {id: g-infra-grafana, subject: grp-infra, resource: grafana, level: admin, scope: org 1, via: [cmp-authz]}
   - {id: g-auditor-grafana, subject: grp-auditor, resource: grafana, level: read, scope: org 1, via: [cmp-authz]}
