@@ -5,10 +5,10 @@ state: diff
 title: "CNP · AI landing zone · AI gateway"
 subtitle: "How does an agent's call reach a model or a tool, and what checks it on the way?"
 meta:
-  - "Scope: proposal for the on-prem K3s cluster, 2026-10-25 · drawn in full: what the proposal adds (IA-1, IA-2) · faded: what already runs"
-  - "Out of scope: external assistants (agent-kit view) · the same gateway on EKS and GKE · admission policies · what runs on the GPU server"
+  - "Scope: proposal for the on-prem K3s cluster, revised 2026-11-22 (Anthropic API only) · drawn in full: what the proposal adds (IA-1, IA-2) · faded: what already runs"
+  - "Out of scope: external assistants (agent-kit view) · the same gateway on EKS and GKE · admission policies · Anthropic server tools"
   - "Assumed: agentgateway on its own GatewayClass, beside Envoy Gateway; Alloy receives OTLP"
-  - "v0.2 · source: cnp-docs/architecture/cnp"
+  - "v0.3 · source: cnp-docs/architecture/cnp"
 
 include:
   - z-cluster
@@ -34,12 +34,10 @@ include:
   - g-ops
   - observability
   - tempo
-  - z-google-ai
-  - gemini
-  - z-homelab-gpu
-  - gpu-server
+  - z-anthropic
+  - anthropic
 
-steps: [c-agent-aigw, c-aigw-ratelimit, c-aigw-gemini]
+steps: [c-agent-aigw, c-aigw-ratelimit, c-aigw-anthropic]
 background: [c-aigw-keycloak, e-a-vso-vault, c-vso-ai-secret, c-aigw-alloy, c-alloy-tempo]
 
 labels:
@@ -52,7 +50,7 @@ labels:
 
 notes:
   - {id: n-authz, text: "The AgentgatewayPolicy checks the JWT and applies CEL rules on its claims before routing: no match, 403. The route then picks the backend the project may use."}
-  - {id: n-fallback, text: "Gemini answers 429 when the free quota is spent: the gateway falls back to the GPU server. Projects marked Local never reach Gemini."}
+  - {id: n-fallback, text: "One provider, one key, no fallback. The money fuse is the spend limit on the Anthropic console; the gateway keeps a daily token budget per agent (azp)."}
 
 cards:
   - id: card-steps
@@ -60,9 +58,9 @@ cards:
     color: emerald
     lines:
       - "Before [1], the agent gets a short token from Keycloak by token exchange: see the ai-gateway-call sequence."
-      - "[1] The agent calls POST /v1/chat/completions on the internal listener with that token; the AgentgatewayPolicy validates it and checks its claims."
+      - "[1] The agent calls the model route on the internal listener with that token; the AgentgatewayPolicy validates it and checks its claims."
       - "[2] The gateway checks the agent's token budget in the rate limit service."
-      - "[3] It calls Gemini with a key from the Secrets, through the FQDN egress allow-list; on 429 or for Local projects it calls the GPU server instead."
+      - "[3] It calls the Anthropic API with the key from the Secret, through the FQDN egress allow-list (api.anthropic.com:443 only)."
       - "Tool calls take the same chain, then the mcp route sends them to the CMP's MCP server (stake policy) or to a ToolHive server."
       - "Tenant apps call the gateway like the agent, with their project's token."
   - id: card-background
@@ -70,18 +68,18 @@ cards:
     color: amber
     lines:
       - "[A] The proxy fetches Keycloak's JWKS and caches it."
-      - "[B] The secrets operator reads the Gemini key from Vault."
-      - "[C] It writes the Secrets that the AgentgatewayBackend references."
+      - "[B] The secrets operator reads the Anthropic key from Vault (kvv2/platform/ai/anthropic)."
+      - "[C] It writes the Secret anthropic-api-key, in ai-gateway only, that the AgentgatewayBackend references."
       - "[D] The proxy pushes GenAI spans and token metrics to Alloy over OTLP."
       - "[E] Alloy writes the traces to Tempo; Grafana shows tokens, cost and latency per project."
   - id: card-plan
     title: "What this proposal adds · targets"
     color: sky
     lines:
-      - "**IA-1** AI gateway (proxy, routes, AgentgatewayPolicy, rate limit), Gemini and GPU server backends, Tempo."
-      - "**IA-2** Hosted agents in sandboxed namespaces (Sandbox CRD, gVisor), ToolHive MCP servers, guardrails, A2A."
+      - "**IA-1** AI gateway (proxy, routes, AgentgatewayPolicy, rate limit), the Anthropic backend, Tempo."
+      - "**IA-2** Hosted agents in sandboxed namespaces (Sandbox CRD, gVisor), ToolHive MCP servers, guardrails (built-in regex masking), A2A, code mode in a sandbox."
       - "Prerequisites from the current platform: G1 default-deny between tenants, G8 pod security context, G17 protected GitOps branches."
-      - "Memory budget on this cluster: about 4 GB for the whole AI zone; to measure once deployed (spec section 7)."
+      - "Memory on this cluster: 6 to 8 GB available, target about 4 GB for the whole AI zone; to measure once deployed (spec section 7)."
   - {id: card-legend, title: Legend, color: slate, legend: true}
 hidden_annotations:
   G1: "targets x-cross-tenant, not drawn in this view"

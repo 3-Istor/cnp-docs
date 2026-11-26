@@ -15,20 +15,16 @@ elements:
   ag-gateway: {x: 30, y: 70, w: 340, h: 488}
   ag-gatewayclass: {x: 30, y: 602, w: 340, h: 104}
   ag-route: {x: 460, y: 70, w: 340, h: 104}
-  md-route-local: {x: 460, y: 198, w: 340, h: 104}
   ag-mcproute: {x: 460, y: 326, w: 340, h: 104}
   ag-a2aroute: {x: 460, y: 454, w: 340, h: 104}
   g-ag-crd-agw: {x: 1410, y: 130, w: 830, h: 736}
   ag-be-llm: {x: 30, y: 70, w: 340, h: 104}
-  ag-be-local: {x: 30, y: 198, w: 340, h: 104}
   ag-be-mcp: {x: 30, y: 326, w: 340, h: 104}
   ag-be-a2a: {x: 30, y: 454, w: 340, h: 104}
   ag-secret: {x: 460, y: 70, w: 340, h: 104}
-  ag-secret-gpu: {x: 460, y: 198, w: 340, h: 104}
   ag-params: {x: 460, y: 454, w: 340, h: 104}
   g-ag-polb: {x: 2310, y: 130, w: 400, h: 460}
   ag-pol-guard: {x: 30, y: 70, w: 340, h: 104}
-  ag-pol-failover: {x: 30, y: 198, w: 340, h: 104}
   ag-pol-tools: {x: 30, y: 326, w: 340, h: 104}
   g-identity: {x: 40, y: 1036, w: 400, h: 200}
   keycloak: {x: 30, y: 70, w: 340, h: 104}
@@ -55,8 +51,6 @@ elements:
   cmp-mcp: {x: 30, y: 70, w: 340, h: 104}
   g-mcp-tools: {x: 2780, y: 1940, w: 400, h: 200}
   toolhive: {x: 30, y: 70, w: 340, h: 104}
-  g-ag-hook: {x: 760, y: 2046, w: 400, h: 200}
-  ag-hook: {x: 30, y: 70, w: 340, h: 104}
   g-ops: {x: 1780, y: 2046, w: 400, h: 200}
   observability: {x: 30, y: 70, w: 340, h: 104}
   g-ag-ctrl: {x: 550, y: 2316, w: 1630, h: 204}
@@ -66,11 +60,8 @@ elements:
   ag-c-status: {x: 1260, y: 70, w: 340, h: 104}
   g-ag-kapi: {x: 1060, y: 2590, w: 520, h: 200}
   kube-apiserver: {x: 30, y: 70, w: 420, h: 104}
-  z-google-ai: {x: 3760, y: 1480, w: 420, h: 200}
-  gemini: {x: 30, y: 70, w: 340, h: 104}
-  z-homelab-gpu: {x: 3760, y: 1850, w: 420, h: 332}
-  gpu-server: {x: 30, y: 70, w: 340, h: 104}
-  md-guard: {x: 30, y: 212, w: 340, h: 104}
+  z-anthropic: {x: 3760, y: 1480, w: 420, h: 200}
+  anthropic: {x: 30, y: 70, w: 340, h: 104}
 edges:
   c-ag-agent: {from: hosted-agent.right@52px, to: ag-f-listener.left@52px, waypoints: [[520, 1638], [520, 1488]]}
   c-ag-chain-1: {from: ag-f-listener.right@52px, to: ag-f-jwt.left@52px}
@@ -82,13 +73,9 @@ edges:
   c-ag-chain-5: {from: ag-f-route.right@52px, to: ag-f-guard.left@52px}
   c-ag-chain-6: {from: ag-f-guard.right@52px, to: ag-f-pick.left@52px}
   c-ag-chain-7: {from: ag-f-pick.right@52px, to: ag-x-llm.left@52px}
-  c-ag-gemini: {from: ag-x-llm.right@25px, to: gemini.left@85px, label_at: [3100, 1635]}
-  c-ag-gpu: {from: ag-x-llm.right@75px, to: gpu-server.left@52px, waypoints: [[3720, 1685], [3720, 1972]], label_at: [3100, 1685]}
+  c-ag-anthropic: {from: ag-x-llm.right@25px, to: anthropic.left@85px, label_at: [3100, 1635]}
   c-ag-usage-otel: {from: ag-x-llm.bottom@170px, to: ag-x-otel.top@170px, label_at: [2020, 1837]}
   c-ag-otel: {from: ag-x-otel.bottom@170px, to: observability.top@170px, label_at: [2020, 2050]}
-  c-ag-guard-hook: {from: ag-f-guard.bottom@130px, to: ag-hook.top@330px, label_at: [1160, 2000]}
-  c-ag-hook-guard: {from: ag-hook.bottom@250px, to: gpu-server.left@80px, waypoints: [[1080, 2480], [3745, 2480], [3745, 2000]], label_at: [2900, 2480]}
-  c-md-guard: {from: gpu-server.bottom@170px, to: md-guard.top@170px}
   c-ag-mcp: {from: ag-f-route.bottom@290px, to: ag-x-mcp.left@52px, waypoints: [[910, 1770], [2280, 1770], [2280, 1936]], label_at: [1000, 1770]}
   c-ag-a2a: {from: ag-f-route.bottom@240px, to: ag-x-a2a.left@52px, waypoints: [[860, 1800], [2295, 1800], [2295, 2064]], label_at: [1700, 1800]}
   c-ag-mcp-cmp: {from: ag-x-mcp.right@90px, to: cmp-mcp.left@34px}
@@ -105,22 +92,17 @@ edges:
   c-ag-scrape: {from: observability.left@60px, to: ag-x-otel.left@52px, waypoints: [[1770, 2376], [1770, 1912]], against_flow: true}
   r-ag-gw-class: {from: ag-gateway.bottom@170px, to: ag-gatewayclass.top@170px}
   r-ag-route-gw: {from: ag-route.left@52px, to: ag-gateway.right@52px}
-  r-ag-local-gw: {from: md-route-local.left@52px, to: ag-gateway.right@180px}
   r-ag-mcproute-gw: {from: ag-mcproute.left@52px, to: ag-gateway.right@308px}
   r-ag-a2aroute-gw: {from: ag-a2aroute.left@52px, to: ag-gateway.right@436px}
   r-ag-route-llm: {from: ag-route.right@52px, to: ag-be-llm.left@52px}
-  r-ag-local-be: {from: md-route-local.right@52px, to: ag-be-local.left@52px}
   r-ag-mcproute-be: {from: ag-mcproute.right@52px, to: ag-be-mcp.left@52px}
   r-ag-a2aroute-be: {from: ag-a2aroute.right@52px, to: ag-be-a2a.left@52px}
   r-ag-be-secret: {from: ag-be-llm.right@25px, to: ag-secret.left@25px}
-  r-ag-be-gpu-secret: {from: ag-be-llm.right@85px, to: ag-secret-gpu.left@25px, waypoints: [[1905, 545], [1905, 613]]}
-  r-ag-local-secret: {from: ag-be-local.right@52px, to: ag-secret-gpu.left@52px}
   r-ag-pol-auth: {from: ag-pol-auth.right@52px, to: ag-gateway.left@180px}
   r-ag-pol-trace: {from: ag-pol-trace.right@52px, to: ag-gateway.left@308px}
   r-ag-pol-limits: {from: ag-pol-limits.right@52px, to: ag-gateway.left@436px}
   r-ag-pol-rate: {from: ag-pol-rate.top@330px, to: ag-route.top@170px, waypoints: [[480, 335], [1220, 335]]}
   r-ag-pol-guard: {from: ag-pol-guard.top@330px, to: ag-be-llm.top@300px, waypoints: [[2750, 360], [1820, 360]]}
-  r-ag-pol-failover: {from: ag-pol-failover.right@52px, to: ag-be-llm.top@330px, waypoints: [[2805, 640], [2805, 340], [1850, 340]]}
   r-ag-pol-tools: {from: ag-pol-tools.left@52px, to: ag-be-mcp.right@52px}
 notes:
   n-ag-order: {x: 3760, y: 260, w: 420, h: 170}

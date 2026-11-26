@@ -67,7 +67,7 @@
         <div class="t">Namespace d'agent · Cilium default-deny egress · Kyverno restricted</div>
         <div class="box">
           <h3>Agent (framework libre : LangGraph, ADK…)</h3>
-          <div class="l">Pod <b>runc + seccomp</b> ; le code généré part dans <b>agent-sandbox</b> : <b>gVisor</b> ou <b>Kata</b></div>
+          <div class="l">Pod <b>runc + seccomp</b> ; le code généré (<b>run_python</b>, code mode) part dans <b>agent-sandbox</b> : <b>gVisor</b> ou <b>Kata</b></div>
           <div class="l">Identité : token <b>ServiceAccount</b> → <b>Keycloak</b> (federated client auth)</div>
           <div class="l">Déployé par <b>kagent</b> · aucun secret ni clé API dans le pod</div>
         </div>
@@ -76,8 +76,8 @@
       <div class="box gw" id="gw">
         <h2>Gateway agentique : agentgateway (Linux Foundation · AAIF)</h2>
         <div class="l">Proxy <b>LLM</b> · Proxy <b>MCP</b> · Proxy <b>A2A</b> : un seul data plane pour tout le trafic IA</div>
-        <div class="l">AuthN : <b>JWT Keycloak</b> · policy par outil : <b>CEL</b> (AgentgatewayPolicy) + <b>Cedar</b> (ToolHive)</div>
-        <div class="l">Guardrails : <b>regex intégrée</b> (masque PII et secrets) · <span class="o"><span class="n">1</span>Llama Guard sur Ollama, via un webhook maison</span></div>
+        <div class="l">AuthN : <b>JWT Keycloak</b> · policy par outil : <b>CEL</b> (AgentgatewayPolicy)</div>
+        <div class="l">Guardrails : <b>regex intégrée</b> (masque PII et secrets) · <span class="r"><span class="n">1</span>pas de classifieur : Rule of Two, lecteur et acteur</span></div>
         <div class="l">Budgets en tokens par agent : <b>rate limit global</b> (envoy-ratelimit + Redis) · <span class="o"><span class="n">2</span>Audit : logs → Loki</span></div>
         <div class="l" style="font-size:13.5px">Envoy Gateway reste l'entrée des apps ; agentgateway est une GatewayClass à part</div>
       </div>
@@ -85,13 +85,13 @@
       <div class="row3">
         <div class="box">
           <h3>Modèles</h3>
-          <div class="l"><b>Gemini API</b> (free tier) : défaut</div>
-          <div class="l"><span class="o"><span class="n">3</span>Ollama sur le GPU, pas vLLM</span></div>
-          <div class="l">RTX 5080 du homelab, via <b>WireGuard</b></div>
+          <div class="l"><b>API Anthropic</b> : une clé, dans la gateway</div>
+          <div class="l"><b>claude-haiku-5-5</b> par défaut · <b>claude-sonnet-5-5</b></div>
+          <div class="l"><span class="r"><span class="n">3</span>pas de GPU ni de modèle local</span></div>
         </div>
         <div class="box">
           <h3>Serveurs MCP</h3>
-          <div class="l"><b>ToolHive</b> : un conteneur par outil</div>
+          <div class="l"><b>kmcp</b> ou <b>ToolHive</b> (essai) : un conteneur par outil</div>
           <div class="l">Registre privé · provenance <b>Sigstore</b></div>
           <div class="l"><b>cosign</b> + Kyverno <b>verifyImages</b></div>
         </div>
@@ -107,7 +107,7 @@
       <div class="t">Services transverses</div>
       <div class="box" id="s-id">
         <h3>Identité</h3>
-        <div class="l"><b>Keycloak</b> : un client par agent, jetons ≤ 15 min</div>
+        <div class="l"><b>Keycloak</b> : un client par agent, jetons de 5 min</div>
         <div class="l">token exchange · federated client auth</div>
         <div class="l"><span class="r"><span class="n">4</span>SPIRE / SPIFFE : non</span></div>
       </div>
@@ -134,7 +134,7 @@
     <span><span class="sw" style="background:var(--orange-bg);border:1.6px solid var(--orange-line)"></span>outil existant réutilisé, pas fait pour ça</span>
     <span><span class="sw" style="background:var(--red-bg);border:1.6px solid var(--red-line)"></span>rien, par choix</span>
     <span><span class="sw" style="background:var(--blue-bg);border:2px solid var(--blue)"></span>point de passage obligé</span>
-    <span>Source : cnp-docs, docs/07-ai-landing-zone · 2026-10-23</span>
+    <span>Source : cnp-docs, docs/07-ai-landing-zone · 2026-11-22</span>
   </div>
 </div>
 <script>

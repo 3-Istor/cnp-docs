@@ -7,7 +7,7 @@ subtitle: "Tout le trafic des agents passe par la gateway : identité, policy et
 meta:
   - "Périmètre : hub K3s on-prem, option B du 2026-10-23 (agentgateway + kagent) · en clair : ce que la landing zone IA ajoute · estompé : ce qui tourne déjà"
   - "Une boîte par brique ; le détail de chaque brique est dans platform-ai-stack et les vues zoom"
-  - "v1.0 · source : cnp-docs/architecture/cnp"
+  - "v1.1 (2026-11-22 : API Anthropic seule, plus de serveur GPU) · source : cnp-docs/architecture/cnp"
 
 include:
   - hl-z-users
@@ -24,19 +24,17 @@ include:
   - hl-z-agw
   - hl-agw
   - hl-guard
-  - hl-z-google
-  - hl-gemini
+  - hl-z-anthropic
+  - hl-anthropic
   - hl-z-tools
   - hl-tools
-  - hl-z-homelab
-  - hl-ollama
   - hl-z-shared
   - hl-identity
   - hl-obs
   - hl-net
   - hl-finops
 
-steps: [hl-c-user-entry, hl-c-entry-agw, hl-c-agw-agents, hl-c-agents-agw, hl-c-agw-guard, hl-c-guard-ollama, hl-c-agw-gemini, hl-c-agw-ollama, hl-c-agw-tools, hl-c-agw-peers, hl-c-agents-sandbox]
+steps: [hl-c-user-entry, hl-c-entry-agw, hl-c-agw-agents, hl-c-agents-agw, hl-c-agw-guard, hl-c-agw-anthropic, hl-c-agw-tools, hl-c-agw-peers, hl-c-agents-sandbox]
 background: [hl-c-portal-kagent, hl-c-kagent-agents, hl-c-agents-identity, hl-c-agw-obs]
 
 cards:
@@ -46,10 +44,10 @@ cards:
     lines:
       - "[1] [2] L'utilisateur entre par Cloudflare et Envoy, qui confie sa question à la gateway agentique."
       - "[3] [4] La gateway la transmet à l'agent ; tout ce que l'agent appelle ensuite repasse par elle."
-      - "[5] [6] Les guardrails masquent données personnelles et secrets, puis Llama Guard juge le prompt."
-      - "[7] [8] La gateway appelle Gemini, ou Ollama sur le GPU du homelab en secours et pour les projets Local."
-      - "[9] [10] Un appel d'outil va à ToolHive ; une tâche déléguée va à un autre agent, en A2A."
-      - "[11] Le code que l'agent écrit tourne dans un sandbox gVisor ou Kata, jamais dans son pod."
+      - "[5] Les guardrails masquent données personnelles et secrets (regex intégrée), sans classifieur externe."
+      - "[6] La gateway appelle l'API Anthropic, seul fournisseur de modèles, avec l'unique clé."
+      - "[7] [8] Un appel d'outil va à ToolHive ; une tâche déléguée va à un autre agent, en A2A."
+      - "[9] Le code que l'agent écrit (mode code) tourne dans un sandbox gVisor ou Kata, jamais dans son pod."
   - id: card-background
     title: "Mis en place avant"
     color: amber
@@ -62,7 +60,7 @@ cards:
     color: rose
     lines:
       - "Réseau : default-deny Cilium, l'agent ne sort que vers la gateway."
-      - "Clés : les clés Gemini n'existent que dans Vault et la gateway."
+      - "Clés : la clé Anthropic n'existe que dans Vault et la gateway ; le plafond de dépense de la console coupe au-delà."
       - "Exécution : runc pour l'agent, gVisor ou Kata pour le code qu'il génère."
       - "Admission : Kyverno n'accepte que des pods restreints et des images signées."
   - {id: card-legend, title: Légende, color: slate, legend: true}
