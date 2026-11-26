@@ -37,13 +37,20 @@ in five lots ([CNP-228](https://3istors.atlassian.net/browse/CNP-228)):
 
 | Identity | Keycloak group | In the portal |
 |---|---|---|
-| Platform admin | `infra` | Every project, platform views, security policy, catalog |
-| Auditor | `security-auditor` | Reads every project except logs and secrets; approves critical CVE exceptions |
-| FinOps | `finops` | Every project's costs, exports, month close |
+| Platform admin | `infra` | Admin of every project, budget included; platform views, security policy, catalog; grants `finops` and `security-auditor` from the portal |
+| Auditor | `security-auditor` | Reads what a member reads, except logs, traces and secrets; no action; approves and revokes critical CVE exceptions; exports costs |
+| FinOps | `finops` | Every project and app listed, only their Costs tab; exports, month close, cost centres |
 | Project owner | the project's creator, in its admins | Admin rights plus the budget |
 | Project admin | `<project>-admins` | Deploys, configures, manages members, approves CVE exceptions below critical |
-| Project developer | `<project>-members` | Operates apps, reads logs, requests CVE exceptions |
-| Project guest | `<project>-guests` | Sees apps, releases and costs |
+| Project developer | `<project>-members` | Operates apps, reads logs and config, requests CVE exceptions |
+| Project guest | `<project>-guests` | Sees apps, app overview and SLO status, releases and costs |
+
+Platform admins are admin of every project on purpose: two admins and the demo make a
+just-in-time grant per intervention too costly today. The target is project admin only
+through just-in-time access, approved by a second admin (`planned`).
+
+`infra` members stay in the K3s Terraform (a reviewed pull request); `finops` and
+`security-auditor` members are granted from the portal, with a passkey, in the audit log.
 
 OpenStack stays out of scope: it hosts the cluster and keeps one admin account to deploy it.
 
