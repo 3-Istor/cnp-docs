@@ -1,0 +1,70 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Project move in plain words"
+subtitle: "What happens, in order, when a project moves to another cloud, and how long does it take?"
+meta:
+  - "Scope: the CMP move engine on any pair of clusters (on-prem K3s, EKS, GKE) as of CMP v0.3.147 · durations measured on the todo-move project, 22/11, CMP v0.3.140"
+  - "Out of scope: retry and cancel · network paths · see move-steps and move-components"
+  - "v0.1 · source: cnp-docs/architecture/cnp · CMP backend/app/services/moves/steps.py"
+include:
+  - mv3-z-prep
+  - mv3-z-switch
+  - mv3-z-final
+  - mv3-check
+  - mv3-registry-start
+  - mv3-target-base
+  - mv3-secrets
+  - mv3-prepull
+  - mv3-stop
+  - mv3-backup
+  - mv3-registry-cloud
+  - mv3-tunnel
+  - mv3-apps-start
+  - mv3-restore
+  - mv3-persist
+  - mv3-cleanup
+  - mv3-registry-end
+  - mv3-rpo
+  - mv3-d-prep
+  - mv3-d-switch
+  - mv3-d-final
+  - mv3-total
+  - mv3-rule
+  - mv3-z-legend
+  - mv3-l-git
+  - mv3-l-eng
+  - mv3-l-db
+  - mv3-l-net
+  - mv3-l-time
+hidden_annotations:
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"

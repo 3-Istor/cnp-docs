@@ -1,0 +1,34 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 1780, height: 1080}
+elements:
+  mv3-z-prep: {x: 20, y: 150, w: 440, h: 640}
+  mv3-check: {x: 20, y: 64, w: 400, h: 72}
+  mv3-registry-start: {x: 20, y: 160, w: 400, h: 72}
+  mv3-target-base: {x: 20, y: 256, w: 400, h: 72}
+  mv3-secrets: {x: 20, y: 352, w: 400, h: 72}
+  mv3-prepull: {x: 20, y: 448, w: 400, h: 72}
+  mv3-d-prep: {x: 20, y: 544, w: 400, h: 70}
+  mv3-z-switch: {x: 520, y: 150, w: 740, h: 640}
+  mv3-stop: {x: 20, y: 64, w: 340, h: 110}
+  mv3-backup: {x: 384, y: 64, w: 340, h: 110}
+  mv3-registry-cloud: {x: 20, y: 198, w: 340, h: 110}
+  mv3-tunnel: {x: 384, y: 198, w: 340, h: 110}
+  mv3-apps-start: {x: 20, y: 332, w: 340, h: 110}
+  mv3-restore: {x: 384, y: 332, w: 340, h: 110}
+  mv3-d-switch: {x: 20, y: 544, w: 700, h: 70}
+  mv3-z-final: {x: 1320, y: 150, w: 440, h: 640}
+  mv3-persist: {x: 20, y: 64, w: 400, h: 90}
+  mv3-cleanup: {x: 20, y: 178, w: 400, h: 90}
+  mv3-registry-end: {x: 20, y: 292, w: 400, h: 90}
+  mv3-rpo: {x: 20, y: 406, w: 400, h: 90}
+  mv3-d-final: {x: 20, y: 544, w: 400, h: 70}
+  mv3-total: {x: 20, y: 820, w: 1740, h: 80}
+  mv3-z-legend: {x: 20, y: 930, w: 1200, h: 130}
+  mv3-l-git: {x: 16, y: 36, w: 214, h: 62}
+  mv3-l-eng: {x: 254, y: 36, w: 214, h: 62}
+  mv3-l-db: {x: 492, y: 36, w: 214, h: 62}
+  mv3-l-net: {x: 730, y: 36, w: 214, h: 62}
+  mv3-l-time: {x: 968, y: 36, w: 214, h: 62}
+  mv3-rule: {x: 1244, y: 930, w: 516, h: 130}
+edges: {}
