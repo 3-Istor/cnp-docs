@@ -665,6 +665,17 @@ elements:
   - {id: s1-onprem, kind: backend, parent: s1-z-clusters, icon: rack, title: "On-prem cluster"}
   - {id: s1-cloud, kind: backend, parent: s1-z-clusters, icon: kubernetes, title: "Public cloud clusters", desc: "AWS and Google Cloud, same setup", multiplicity: "AWS and GCP"}
   - {id: s1-obs, kind: backend, parent: s1-z-obs, icon: grafana-alloy, title: "Metrics, logs, audit trail"}
+  - {id: ep-z-portal, kind: region, color: cyan, icon: nextjs, title: "CMP PORTAL", sub: "web · all roles"}
+  - {id: ep-z-git, kind: region, color: sky, icon: github, title: "GIT ONLY", sub: "developers"}
+  - {id: ep-z-ai, kind: region, color: violet, icon: claude, title: "AI ASSISTANTS", sub: "same rights as the user"}
+  - {id: ep-z-platform, kind: region, color: emerald, icon: kubernetes, title: "THE PLATFORM"}
+  - {id: ep-catalog, kind: frontend, parent: ep-z-portal, icon: nextjs, title: "Catalog", desc: "From a template"}
+  - {id: ep-import, kind: frontend, parent: ep-z-portal, icon: nextjs, title: "Repo import", desc: "Existing repo"}
+  - {id: ep-placement, kind: frontend, parent: ep-z-portal, icon: nextjs, title: "Placement view", desc: "Platform admins only"}
+  - {id: ep-repo, kind: external, parent: ep-z-git, icon: github, title: "App repository", desc: "push · tag"}
+  - {id: ep-assistants, kind: external, parent: ep-z-ai, icon: claude, title: "AI assistants", desc: "Claude, ChatGPT, Cursor"}
+  - {id: ep-mcp, kind: backend, parent: ep-z-ai, icon: mcp, title: "CMP MCP server", desc: "Acts as the user"}
+  - {id: ep-platform, kind: backend, parent: ep-z-platform, icon: kubernetes, title: "CNP platform", desc: "Runs the apps"}
   # --- CNP-168 · G1 elements (backups) ---
   # Sources: infra-templates/templates/{cnpg-cluster,cnpg-backup,migrations}.yaml,
   # K3s/k8s/config/{cnp-projects-db,rook-ceph,cnpg}, CMP security_databases.py.
@@ -854,6 +865,109 @@ elements:
   - {id: lc-workflow, kind: backend, icon: github-actions, title: "Import workflow", tech: "[extern-project-analyzer · import.yml]", desc: "claim, build, publish"}
   - {id: lc-portal, kind: cloud, icon: github, title: "CNP-Portal", tech: "[GitHub App]", desc: "Sends push webhooks"}
   - {id: lc-import-ci, kind: backend, icon: github-actions, title: "Imported repo CI", tech: "[ci.yml from the CMP PR]", desc: "Builds imports/<p>/<app>/ci:main", status: planned, target: CNP-303}
+  - {id: pe-z-people, kind: region, color: cyan, icon: user, title: "PEOPLE", sub: "log in with their company account"}
+  - {id: pe-z-ai, kind: region, color: violet, icon: claude, title: "AI", sub: "works for one user"}
+  - {id: pe-z-front, kind: region, color: sky, icon: nextjs, title: "DOOR 1 · WEB FRONT"}
+  - {id: pe-z-mcp, kind: region, color: orange, icon: mcp, title: "DOOR 2 · MCP"}
+  - {id: pe-z-platform, kind: region, color: emerald, icon: kubernetes, title: "THE PLATFORM"}
+  - {id: pe-z-legend, kind: region, color: slate, icon: user, title: "LEGEND", sub: "arrow = uses, always with the user's own rights"}
+  - {id: pe-lg-people, kind: region, parent: pe-z-legend, color: cyan, icon: user, title: "People"}
+  - {id: pe-lg-front, kind: region, parent: pe-z-legend, color: sky, icon: nextjs, title: "Web front door"}
+  - {id: pe-lg-ai, kind: region, parent: pe-z-legend, color: violet, icon: claude, title: "AI assistant"}
+  - {id: pe-lg-mcp, kind: region, parent: pe-z-legend, color: orange, icon: mcp, title: "MCP door"}
+  - {id: pe-lg-platform, kind: region, parent: pe-z-legend, color: emerald, icon: kubernetes, title: "The platform"}
+  - {id: pe-dev, kind: frontend, parent: pe-z-people, icon: user, title: "Developer", desc: "Apps: Overview, Logs, Traces, Releases<br>Role: member · group project-<p>-members"}
+  - {id: pe-lead, kind: frontend, parent: pe-z-people, icon: user, title: "Project lead", desc: "Members, Settings, Costs, Release approval<br>Role: owner or admin · group project-<p>-admins"}
+  - {id: pe-finops, kind: frontend, parent: pe-z-people, icon: user, title: "FinOps / decision maker", desc: "FinOps: Overview, Savings, GreenOps, Budgets<br>Group finops (all costs) · or guest on one project"}
+  - {id: pe-ciso, kind: frontend, parent: pe-z-people, icon: user, title: "CISO (RSSI)", desc: "Security, Access reviews, Activity<br>Group security-auditor (read-only, no logs or secrets)"}
+  - {id: pe-operator, kind: frontend, parent: pe-z-people, icon: user, title: "Platform operator", desc: "Placement, Emergency, Access (admins only)<br>Group infra (admin on every project)"}
+  - {id: pe-assistant, kind: external, parent: pe-z-ai, icon: claude, title: "AI assistant", desc: "Claude, ChatGPT, Cursor<br>Takes the roles of its user, none of its own"}
+  - {id: pe-front, kind: frontend, parent: pe-z-front, icon: nextjs, title: "CMP web front", desc: "Pages shown by role"}
+  - {id: pe-mcp, kind: backend, parent: pe-z-mcp, icon: mcp, title: "CMP MCP server", desc: "Tools, same rights as the user"}
+  - {id: pe-pl-rights, kind: backend, parent: pe-z-platform, icon: fastapi, title: "Same rights check", desc: "Project roles and admin groups"}
+  - {id: pe-pl-audit, kind: backend, parent: pe-z-platform, icon: fastapi, title: "Every action is journaled", desc: "One audit journal"}
+  - {id: pe-pl-run, kind: backend, parent: pe-z-platform, icon: kubernetes, title: "Runs the apps", desc: "On-prem, AWS and Google Cloud"}
+
+  # Project move in plain words (move-v3)
+  - {id: mv3-z-prep, kind: region, color: sky, icon: k8s-ns, title: "1 · PREPARE THE TARGET", sub: "Users are still served"}
+  - {id: mv3-z-switch, kind: region, color: rose, icon: k8s-ns, title: "2 · THE SWITCH", sub: "The cut: users see it"}
+  - {id: mv3-z-final, kind: region, color: slate, icon: k8s-ns, title: "3 · FINISH AND CHECK", sub: "Users unaffected"}
+  - {id: mv3-check, kind: backend, parent: mv3-z-prep, icon: fastapi, title: "1.1 · Checks shown before you confirm", desc: "Time of the last archived backup (data at risk)<br>and room left on the target"}
+  - {id: mv3-registry-start, kind: frontend, parent: mv3-z-prep, icon: github, title: "1.2 · Git registry notes the move", desc: "The project is marked as moving"}
+  - {id: mv3-target-base, kind: backend, parent: mv3-z-prep, icon: argo, title: "1.3 · Target cluster is set up", desc: "Gateway installed, Internet tunnel<br>created but closed"}
+  - {id: mv3-secrets, kind: backend, parent: mv3-z-prep, icon: vault, title: "1.4 · Secrets are copied to the target", tech: "[best effort]", desc: "Bucket key and image-pull secret"}
+  - {id: mv3-prepull, kind: backend, parent: mv3-z-prep, icon: kubernetes, title: "1.5 · Images are downloaded early", tech: "[best effort]", desc: "On the target nodes, so apps start fast"}
+  - {id: mv3-stop, kind: backend, parent: mv3-z-switch, icon: kubernetes, title: "2.1 · Old apps are stopped", tech: "[best effort]", desc: "On the old cloud:<br>no more writes to the database"}
+  - {id: mv3-backup, kind: database, parent: mv3-z-switch, icon: cnpg, title: "2.2 · Last database backup", tech: "[best effort]", desc: "To the on-prem bucket<br>(via private tunnel from a cloud)"}
+  - {id: mv3-registry-cloud, kind: frontend, parent: mv3-z-switch, icon: github, title: "2.3 · Git registry: new cloud", desc: "The registry records<br>the project's new cloud"}
+  - {id: mv3-tunnel, kind: cloud, parent: mv3-z-switch, icon: cloudflare, title: "2.4 · Internet tunnel opens", desc: "It opens on the target:<br>users start arriving there"}
+  - {id: mv3-apps-start, kind: backend, parent: mv3-z-switch, icon: argo, title: "2.5 · Apps start on the target", desc: "Argo CD deploys them from Git"}
+  - {id: mv3-restore, kind: database, parent: mv3-z-switch, icon: cnpg, title: "2.6 · Database rebuilt on target", desc: "From that last backup; waits<br>until the database is healthy"}
+  - {id: mv3-persist, kind: frontend, parent: mv3-z-final, icon: github, title: "3.1 · Restore saved in app Git repo", desc: "So a redeploy keeps the data"}
+  - {id: mv3-cleanup, kind: backend, parent: mv3-z-final, icon: kubernetes, title: "3.2 · Old cloud is cleaned up", tech: "[best effort]", desc: "Old Internet tunnel removed: all users<br>on the target. Namespaces deleted, backups<br>kept; postponed if the old cloud is down"}
+  - {id: mv3-registry-end, kind: frontend, parent: mv3-z-final, icon: github, title: "3.3 · Git registry marks it done", desc: "Audit event recorded"}
+  - {id: mv3-rpo, kind: database, parent: mv3-z-final, icon: cnpg, title: "3.4 · Measured: no data lost", desc: "Database fingerprint (md5) identical<br>on both clouds in every test move"}
+  - {id: mv3-d-prep, kind: external, parent: mv3-z-prep, icon: rack, title: "Phase time", desc: "2 min 17 s to AWS · 3 min 44 s to on-prem<br>Invisible to users"}
+  - {id: mv3-d-switch, kind: external, parent: mv3-z-switch, icon: rack, title: "Phase time", desc: "Engine 3 min 44 s to AWS · 5 min 09 s to on-prem<br>Seen by users (F5 test): 4 min 35 s · 5 min 59 s"}
+  - {id: mv3-d-final, kind: external, parent: mv3-z-final, icon: rack, title: "Phase time", desc: "About 2 min 47 s to AWS · 1 min 22 s to on-prem<br>Invisible to users"}
+  - {id: mv3-l-time, kind: external, parent: mv3-z-legend, icon: rack, title: "Time", desc: "duration of a phase"}
+  - {id: mv3-total, kind: external, icon: rack, title: "Whole move · 8 min 48 s to AWS · about 10 min 25 s to on-prem", desc: "Measured on the todo-move project, 22/11 · no data lost (RPO 0)"}
+  - {id: mv3-rule, kind: external, icon: rack, title: "The move goes ahead whatever the old cloud's state", desc: "[best effort] steps are skipped if it is unreachable;<br>the database then comes back from the last<br>archived backup. Protected projects can move."}
+  - {id: mv3-z-legend, kind: region, color: slate, icon: rack, title: "LEGEND", sub: "box colour = who acts · frame: blue = users still served, red = the cut users see, grey = after the cut"}
+  - {id: mv3-l-git, kind: frontend, parent: mv3-z-legend, icon: github, title: "Git", desc: "records the decision"}
+  - {id: mv3-l-eng, kind: backend, parent: mv3-z-legend, icon: kubernetes, title: "Platform", desc: "acts on a cluster"}
+  - {id: mv3-l-db, kind: database, parent: mv3-z-legend, icon: cnpg, title: "Database", desc: "backup, restore, check"}
+  - {id: mv3-l-net, kind: cloud, parent: mv3-z-legend, icon: cloudflare, title: "Internet", desc: "where users arrive"}
+  # Import journey (slide): zones are the stages, boxes the steps; no traffic drawn.
+  - {id: ij-z-connect, kind: region, color: slate, icon: github, title: "1 · CONNECT", sub: "You, once"}
+  - {id: ij-z-analyse, kind: region, color: slate, icon: github-actions, title: "2 · ANALYSE", sub: "Nothing is run"}
+  - {id: ij-z-approve, kind: region, color: slate, icon: keycloak, title: "3 · APPROVE", sub: "You decide"}
+  - {id: ij-z-generate, kind: region, color: slate, icon: vault, title: "4 · GENERATE", sub: "The platform"}
+  - {id: ij-z-deploy, kind: region, color: slate, icon: argo, title: "5 · BUILD AND DEPLOY", sub: "Automatic"}
+  - {id: ij-z-pr, kind: region, color: slate, icon: github, title: "6 · PULL REQUEST", sub: "You merge"}
+  - {id: ij-z-improve, kind: region, color: slate, icon: cnpg, title: "7 · IMPROVE", sub: "Afterwards"}
+  - {id: ij-z-legend, kind: region, color: slate, icon: globe, title: "LEGEND", sub: "Box colour = who acts"}
+  - {id: ij-l-person, kind: external, parent: ij-z-legend, icon: user, title: "A person acts"}
+  - {id: ij-l-platform, kind: backend, parent: ij-z-legend, icon: fastapi, title: "The platform acts"}
+  - {id: ij-l-github, kind: cloud, parent: ij-z-legend, icon: github, title: "GitHub or its machines"}
+  - {id: ij-l-security, kind: security, parent: ij-z-legend, icon: trivy, title: "Red frame: security checks"}
+  - {id: ij-z-security, kind: region, color: rose, icon: trivy, title: "SECURITY CHECKS", sub: "At every stage"}
+  - {id: ij-pick, kind: external, parent: ij-z-connect, icon: user, title: "1.1 · You pick a repo", desc: "Any GitHub repo and branch"}
+  - {id: ij-app, kind: cloud, parent: ij-z-connect, icon: github, title: "1.2 · GitHub App", desc: "Read-only, one repo at a time<br>You choose the repos it sees"}
+  - {id: ij-analyzer, kind: cloud, parent: ij-z-analyse, icon: github-actions, title: "2.1 · Analyzer", desc: "Reads the code, runs nothing<br>Finds services, databases, build"}
+  - {id: ij-leak, kind: security, parent: ij-z-analyse, icon: fastapi, title: "2.2 · Secret check", desc: "Passwords in the code are masked<br>and checked again by the platform"}
+  - {id: ij-plan, kind: external, parent: ij-z-approve, icon: user, title: "3.1 · You review the plan", desc: "Services, databases, memory<br>Rename, remove or change anything"}
+  - {id: ij-passkey, kind: security, parent: ij-z-approve, icon: keycloak, title: "3.2 · Passkey to approve", desc: "Biometric or security key<br>confirms the apply"}
+  - {id: ij-files, kind: backend, parent: ij-z-generate, icon: fastapi, title: "4.1 · Deploy recipe", desc: "Dockerfiles, deploy values<br>and links between services"}
+  - {id: ij-vault, kind: backend, parent: ij-z-generate, icon: vault, title: "4.2 · New secrets in Vault", desc: "Generated passwords, never in Git<br>Repo passwords are dropped"}
+  - {id: ij-build, kind: cloud, parent: ij-z-deploy, icon: github-actions, title: "5.1 · Images are built", desc: "Isolated one-shot machines<br>Signed, kept by digest"}
+  - {id: ij-argo, kind: backend, parent: ij-z-deploy, icon: argo, title: "5.2 · Argo CD deploys", desc: "EpiTweet: 11 apps live<br>in 23 min 49 s"}
+  - {id: ij-pr, kind: cloud, parent: ij-z-pr, icon: github, title: "6.1 · Standard PR, your repo", desc: "Dockerfiles, deploy values, CI<br>EpiTweet: 27 files, 0 app code"}
+  - {id: ij-merge, kind: external, parent: ij-z-pr, icon: user, title: "6.2 · You merge it", desc: "Until then the app runs as is<br>After: your CI builds each version"}
+  - {id: ij-reco, kind: backend, parent: ij-z-improve, icon: fastapi, title: "7.1 · Platform suggests", desc: "Database container to managed<br>Postgres, local files to a bucket"}
+  - {id: ij-migrate, kind: cloud, parent: ij-z-improve, icon: github, title: "7.2 · Migration as a PR", desc: "You review it like the first one<br>EpiTweet: 114 files, 41 min"}
+  - {id: ij-s-code, kind: security, parent: ij-z-security, icon: github-actions, title: "Your CI · code", desc: "gitleaks for secrets<br>Trivy for dependencies, Dockerfiles"}
+  - {id: ij-s-image, kind: security, parent: ij-z-security, icon: trivy, title: "Build · images", desc: "A critical flaw with a fix<br>blocks the build; SBOM kept"}
+  - {id: ij-s-kyverno, kind: security, parent: ij-z-security, icon: kyverno, title: "Cluster · admission", desc: "Only the project's own<br>images are allowed to run"}
+  - {id: ij-s-run, kind: security, parent: ij-z-security, icon: trivy, title: "Running · rescan", desc: "Trivy operator rescans pods<br>Findings and score in the portal"}
+  - {id: obs3-z-cloud, kind: region, color: indigo, icon: kubernetes, title: "PUBLIC CLOUD", sub: "EKS · GKE"}
+  - {id: obs3-z-hub, kind: region, color: cyan, icon: rack, title: "ON-PREM HUB", sub: "K3s"}
+  - {id: obs3-z-out, kind: region, color: slate, icon: globe, title: "INTERNET"}
+  - {id: obs3-c-coll, kind: backend, parent: obs3-z-cloud, icon: victoriametrics, title: "Telemetry collectors", tech: "[vmagent · Fluent Bit · OTel]", desc: "Gather metrics, logs, traces", status: planned}
+  - {id: obs3-c-wg, kind: cloud, parent: obs3-z-cloud, icon: wireguard, title: "Private tunnel", tech: "[WireGuard · cloud end]"}
+  - {id: obs3-c-readers, kind: tool, parent: obs3-z-cloud, icon: argo, title: "Release and cost readers", tech: "[Argo Rollouts · OpenCost]", status: planned}
+  - {id: obs3-wg-hub, kind: cloud, parent: obs3-z-hub, icon: wireguard, title: "Private tunnel hub", tech: "[WireGuard · 1 per cloud]"}
+  - {id: obs3-vmauth-clouds, kind: security, parent: obs3-z-hub, icon: victoriametrics, title: "Cloud intake gate", tech: "[vmauth · 1 user per cloud]"}
+  - {id: obs3-collectors, kind: backend, parent: obs3-z-hub, icon: fluentbit, title: "On-prem collectors", tech: "[vmagent · Fluent Bit · OTel]", desc: "Gather metrics, logs, traces"}
+  - {id: obs3-stack, kind: database, parent: obs3-z-hub, shape: cylinder, icon: victoriametrics, title: "Observability store", tech: "[Victoria stack]", desc: "Metrics store · VictoriaMetrics · 30 d<br>Log store · VictoriaLogs · 30 d<br>Trace store · VictoriaTraces · 7 d"}
+  - {id: obs3-vmauth-projects, kind: security, parent: obs3-z-hub, icon: victoriametrics, title: "Project access gate", tech: "[vmauth · 1 user per project]"}
+  - {id: obs3-cmp, kind: frontend, parent: obs3-z-hub, icon: react, title: "CMP portal", tech: "[dashboards in the portal]"}
+  - {id: obs3-rollouts, kind: tool, parent: obs3-z-hub, icon: argo, title: "Safe release checks", tech: "[Argo Rollouts]"}
+  - {id: obs3-opencost, kind: tool, parent: obs3-z-hub, icon: opencost, title: "Cost tracking", tech: "[OpenCost]"}
+  - {id: obs3-alerts, kind: backend, parent: obs3-z-hub, icon: prometheus, title: "Alerting", tech: "[vmalert · Alertmanager]"}
+  - {id: obs3-grafana, kind: frontend, parent: obs3-z-hub, icon: grafana, title: "Dashboards", tech: "[Grafana · 1 org per project]"}
+  - {id: obs3-discord, kind: external, parent: obs3-z-out, icon: discord, title: "Discord", tech: "[team chat]"}
+
 connections:
   # Shared core (2026-10-29): collection, tunnel relays, storage, reads.
   - {id: c-alloy-vminsert, from: alloy-onprem, to: vm-vminsert, port: write, protocol: HTTP, verb: remote_write, kind: flow}
@@ -949,6 +1063,10 @@ connections:
   - {id: s1-c-onprem-obs, from: s1-onprem, to: s1-obs, verb: "sends metrics and logs", kind: flow}
   - {id: s1-c-cloud-obs, from: s1-cloud, to: s1-obs, verb: "sends metrics and logs", kind: flow}
   - {id: s1-c-grafana-obs, from: s1-grafana, to: s1-obs, verb: "reads", kind: flow}
+  - {id: ep-c-portal, from: ep-z-portal, to: ep-platform, verb: "uses", kind: flow}
+  - {id: ep-c-repo, from: ep-repo, to: ep-platform, verb: "CI builds, platform deploys", kind: flow}
+  - {id: ep-c-assistants, from: ep-assistants, to: ep-mcp, verb: "calls tools", kind: flow}
+  - {id: ep-c-mcp, from: ep-mcp, to: ep-platform, verb: "acts as the user", kind: flow}
   # --- CNP-168 · G1 connections ---
   - {id: c-bk-db-kapi, from: bk-db, to: hub-kapi, port: https, protocol: HTTPS, verb: instance manager watches Backup, kind: async}
   - {id: c-bk-db-rgw, from: bk-db, to: ceph-rgw, port: s3, protocol: S3 HTTP, verb: base backup + WAL, kind: flow}
@@ -1449,6 +1567,24 @@ connections:
   - {id: c-lc-import-ci-ghcr, from: lc-import-ci, to: lc-ghcr, port: https, protocol: HTTPS, verb: "push ci:X.Y.Z on a vX.Y.Z tag, sign", kind: flow}
   - {id: c-lc-argocd-user-repo, from: lc-argocd, to: lc-user-repo, port: https, protocol: HTTPS, verb: "read deploy/values-<app>.yaml", kind: async}
   - {id: c-lc-updater-registry, from: lc-updater, to: lc-registry, port: https, protocol: HTTPS, verb: "write the release in apps/<p>/<app>/release.yaml", kind: async}
+  - {id: pe-c-people, from: pe-z-people, to: pe-front, verb: "browse the views of their role", kind: flow}
+  - {id: pe-c-assistant, from: pe-assistant, to: pe-mcp, verb: "calls tools", kind: flow}
+  - {id: pe-c-front, from: pe-front, to: pe-z-platform, verb: "with the user's rights", kind: flow}
+  - {id: pe-c-mcp, from: pe-mcp, to: pe-z-platform, verb: "with the user's rights", kind: flow}
+  - {id: c-obs3-coll-wg, from: obs3-c-coll, to: obs3-c-wg, verb: push, kind: flow}
+  - {id: c-obs3-readers-wg, from: obs3-c-readers, to: obs3-c-wg, verb: read, kind: flow}
+  - {id: c-obs3-tunnel, from: obs3-wg-hub, to: obs3-c-wg, verb: WireGuard tunnel, kind: tunnel}
+  - {id: c-obs3-wg-vmauth, from: obs3-wg-hub, to: obs3-vmauth-clouds, verb: relay, kind: flow}
+  - {id: c-obs3-vmauth-stack, from: obs3-vmauth-clouds, to: obs3-stack, verb: write, kind: flow}
+  - {id: c-obs3-collectors-stack, from: obs3-collectors, to: obs3-stack, verb: write, kind: flow}
+  - {id: c-obs3-grafana-iso, from: obs3-grafana, to: obs3-vmauth-projects, verb: query, kind: flow}
+  - {id: c-obs3-iso-stack, from: obs3-vmauth-projects, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-cmp-stack, from: obs3-cmp, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-rollouts-stack, from: obs3-rollouts, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-opencost-stack, from: obs3-opencost, to: obs3-stack, verb: query, kind: flow}
+  - {id: c-obs3-alerts-stack, from: obs3-alerts, to: obs3-stack, verb: evaluate, kind: flow}
+  - {id: c-obs3-alerts-discord, from: obs3-alerts, to: obs3-discord, verb: notify, kind: flow}
+
 references:
   - {id: ov-r-policy, from: ov-agw-policy, to: ov-aigw, kind: targetRef, status: planned, target: IA-1}
   - {id: r-b-allow-api, from: b-allow, to: b-apiserver, kind: allows}

@@ -1,0 +1,64 @@
+apiVersion: noodle/v1alpha1
+kind: View
+type: topology
+title: "CNP · Observability"
+subtitle: "Where do the metrics, logs and traces of every cluster go, and who reads them?"
+meta:
+  - "Scope: on-prem hub stack, the WireGuard tunnel, the public clouds (EKS and GKE drawn as one) · main as of 2026-11-25"
+  - "Out of scope: ports, credentials, retention details · hatched = planned: cloud telemetry is not collected yet"
+  - "v0.1 · source: cnp-docs/architecture/cnp"
+
+include:
+  - obs3-z-cloud/**
+  - obs3-z-hub/**
+  - obs3-z-out/**
+
+cards:
+  - {id: card-legend, title: Legend, color: slate, legend: true}
+
+labels:
+  c-obs3-coll-wg: ""
+  c-obs3-readers-wg: ""
+  c-obs3-tunnel: "WireGuard tunnel"
+  c-obs3-wg-vmauth: ""
+  c-obs3-vmauth-stack: ""
+  c-obs3-collectors-stack: ""
+  c-obs3-grafana-iso: ""
+  c-obs3-iso-stack: ""
+  c-obs3-cmp-stack: ""
+  c-obs3-rollouts-stack: ""
+  c-obs3-opencost-stack: ""
+  c-obs3-alerts-stack: ""
+  c-obs3-alerts-discord: ""
+
+hidden_annotations:
+  G1: "targets x-cross-tenant, not drawn in this view"
+  G10: "targets httproute, not drawn in this view"
+  G13: "targets b-secret-op, not drawn in this view"
+  G15: "targets vault-root-token, not drawn in this view"
+  G16: "targets cf-token, not drawn in this view"
+  G17: "targets gh-base, not drawn in this view"
+  G18: "targets c-argocd-b, not drawn in this view"
+  G19: "targets b1-front, not drawn in this view"
+  G2: "targets security-policy, not drawn in this view"
+  G20: "targets b1-back, not drawn in this view"
+  G3: "targets cf-edge, not drawn in this view"
+  G4: "targets envoy-shared-gateway, not drawn in this view"
+  G5: "targets cloudflared-app, not drawn in this view"
+  G6: "targets envoy-shared-gateway, e-oidc-token-hairpin, not drawn in this view"
+  G7: "targets cmp-backend, c-envoy-cmp-backend, not drawn in this view"
+  G8: "targets app-pods, not drawn in this view"
+  G9: "targets security-policy, not drawn in this view"
+  GB1: "targets bk-secret, not drawn in this view"
+  GB2: "targets c-bk-db-rgw, not drawn in this view"
+  GO1: "targets vm-vminsert, not drawn in this view"
+  GO2: "targets loki-gateway, not drawn in this view"
+  GO3: "targets vmauth, not drawn in this view"
+  GO4: "targets o-audit-sources, not drawn in this view"
+  G21: "targets iam-3istors, not drawn in this view"
+  G22: "targets gcp-project, not drawn in this view"
+  G23: "targets gh-owner, not drawn in this view"
+  GI1: "targets github-app, not drawn in this view"
+  GI2: "targets c-im-user-import, not drawn in this view"
+  GI3: "targets c-tp-alloy-hubble, not drawn in this view"
+  GI4: "targets x-im-argocd-user-repo, not drawn in this view"

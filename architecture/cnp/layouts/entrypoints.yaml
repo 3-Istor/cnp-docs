@@ -1,0 +1,20 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 1100, height: 700}
+elements:
+  ep-z-portal: {x: 40, y: 140, w: 640, h: 130}
+  ep-catalog: {x: 20, y: 50, w: 180, h: 60}
+  ep-import: {x: 224, y: 50, w: 170, h: 60}
+  ep-placement: {x: 418, y: 50, w: 195, h: 60}
+  ep-z-git: {x: 40, y: 330, w: 640, h: 130}
+  ep-repo: {x: 20, y: 50, w: 260, h: 60}
+  ep-z-ai: {x: 40, y: 520, w: 640, h: 130}
+  ep-assistants: {x: 20, y: 50, w: 250, h: 60}
+  ep-mcp: {x: 390, y: 50, w: 230, h: 60}
+  ep-z-platform: {x: 800, y: 330, w: 240, h: 140}
+  ep-platform: {x: 20, y: 50, w: 200, h: 70}
+edges:
+  ep-c-portal: {from: ep-z-portal.right, to: ep-platform.left@12px, waypoints: [[750,205],[750,392]]}
+  ep-c-repo: {from: ep-repo.right@32px, to: ep-platform.left@32px, label_at: [550,412]}
+  ep-c-assistants: {from: ep-assistants.right, to: ep-mcp.left}
+  ep-c-mcp: {from: ep-mcp.right, to: ep-platform.left@58px, waypoints: [[770,600],[770,438]]}

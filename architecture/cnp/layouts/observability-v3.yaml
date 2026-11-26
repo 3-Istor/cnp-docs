@@ -1,0 +1,42 @@
+apiVersion: noodle/v1alpha1
+kind: Layout
+canvas: {width: 1920, height: 1100}
+
+# Clouds | tunnel | hub: intake and collect, store, readers | Discord. Legend under the clouds.
+elements:
+  obs3-z-cloud: {x: 30, y: 200, w: 300, h: 520}
+  obs3-c-coll: {x: 20, y: 106, w: 260, h: 90}
+  obs3-c-wg: {x: 20, y: 256, w: 260, h: 90}
+  obs3-c-readers: {x: 20, y: 406, w: 260, h: 90}
+  obs3-z-hub: {x: 640, y: 200, w: 940, h: 826}
+  obs3-wg-hub: {x: 20, y: 256, w: 260, h: 90}
+  obs3-vmauth-clouds: {x: 20, y: 406, w: 260, h: 90}
+  obs3-collectors: {x: 20, y: 706, w: 260, h: 90}
+  obs3-stack: {x: 320, y: 106, w: 300, h: 690}
+  obs3-grafana: {x: 660, y: 106, w: 260, h: 90}
+  obs3-vmauth-projects: {x: 660, y: 226, w: 260, h: 90}
+  obs3-cmp: {x: 660, y: 346, w: 260, h: 90}
+  obs3-rollouts: {x: 660, y: 466, w: 260, h: 90}
+  obs3-opencost: {x: 660, y: 586, w: 260, h: 90}
+  obs3-alerts: {x: 660, y: 706, w: 260, h: 90}
+  obs3-z-out: {x: 1660, y: 842, w: 240, h: 170}
+  obs3-discord: {x: 20, y: 64, w: 200, h: 90}
+
+edges:
+  c-obs3-coll-wg: {from: obs3-c-coll.bottom, to: obs3-c-wg.top}
+  c-obs3-readers-wg: {from: obs3-c-readers.top, to: obs3-c-wg.bottom, against_flow: true}
+  # Tunnel: the hub initiates, so it runs against the reading direction.
+  c-obs3-tunnel: {from: obs3-wg-hub.left, to: obs3-c-wg.right, against_flow: true}
+  c-obs3-wg-vmauth: {from: obs3-wg-hub.bottom, to: obs3-vmauth-clouds.top}
+  c-obs3-vmauth-stack: {from: obs3-vmauth-clouds.right@45px, to: obs3-stack.left@345px}
+  c-obs3-collectors-stack: {from: obs3-collectors.right@45px, to: obs3-stack.left@645px}
+  c-obs3-grafana-iso: {from: obs3-grafana.bottom, to: obs3-vmauth-projects.top}
+  c-obs3-iso-stack: {from: obs3-vmauth-projects.left@45px, to: obs3-stack.right@165px, against_flow: true}
+  c-obs3-cmp-stack: {from: obs3-cmp.left@45px, to: obs3-stack.right@285px, against_flow: true}
+  c-obs3-rollouts-stack: {from: obs3-rollouts.left@45px, to: obs3-stack.right@405px, against_flow: true}
+  c-obs3-opencost-stack: {from: obs3-opencost.left@45px, to: obs3-stack.right@525px, against_flow: true}
+  c-obs3-alerts-stack: {from: obs3-alerts.left@45px, to: obs3-stack.right@645px, against_flow: true}
+  c-obs3-alerts-discord: {from: obs3-alerts.right@45px, to: obs3-discord.left@45px}
+
+cards:
+  card-legend: {x: 20, y: 740, w: 580, h: 350}
