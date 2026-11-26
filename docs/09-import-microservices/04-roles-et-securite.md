@@ -16,15 +16,15 @@ ci-dessous.
 | Voir la carte du projet | | ✓ | ✓ | ✓ | ✓ | ✓ | |
 | Voir le statut d'un import, ses rapports de scan et son SBOM | | ✓ | ✓ | ✓ | ✓ | ✓ | |
 | Installer CNP-Portal sur ses repos et relier son compte GitHub | ✓ | ✓ | ✓ | ✓ | ✓ | | |
-| Analyser un repo, éditer le plan | | | ✓ | ✓ | | | |
-| Appliquer un import (passkey récente) | | | ✓ | ✓ | | | |
+| Analyser un repo, éditer le plan | | | ✓ | ✓ | ✓ | | |
+| Appliquer un import (passkey récente) | | | ✓ | ✓ | ✓ | | |
 | Relier ou délier deux apps | | | ✓ | ✓ | ✓ | | |
-| Reconstruire, supprimer une app importée (passkey) | | | ✓ | ✓ | | | |
+| Reconstruire, supprimer une app importée (passkey) | | | ✓ | ✓ | ✓ | | |
 | Coût par service importé | | ✓ | ✓ | ✓ | ✓ | | ✓ |
 | Activer l'import sur la plateforme, gérer le catalogue de bases | | | | | ✓ | | |
 
-Un membre peut lire la carte, mais pas les valeurs de configuration ni les secrets : même règle
-que l'onglet Settings d'aujourd'hui. Un agent IA a exactement les droits de la personne pour qui
+Un membre lit la carte et la configuration de l'app, jamais les secrets, qui restent dans
+Vault. Infra est admin de chaque projet, import compris. Un agent IA a exactement les droits de la personne pour qui
 il agit, avec en plus une confirmation dans le portail pour toute écriture (voir plus bas).
 
 ## Identités techniques
